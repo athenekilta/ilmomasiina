@@ -30,20 +30,20 @@ const payload = [{
     }
   ]
 },
-  {
-    id: 2,
-    name: 'Uusivuosi',
-    date: 1483221600,
-    quota: [
-      {
-        quotaName: 'Default',
-        signUpStarts: 1482697816,
-        signUpEnds: 1482697816,
-        going: 50,
-        max: 50
-      }
-    ]
-  }
+{
+  id: 2,
+  name: 'Uusivuosi',
+  date: 1483221600,
+  quota: [
+    {
+      quotaName: 'Default',
+      signUpStarts: 1482697816,
+      signUpEnds: 1482697816,
+      going: 50,
+      max: 50
+    }
+  ]
+}
 ]
 
 /*  This is a thunk, meaning it is a function that immediately
