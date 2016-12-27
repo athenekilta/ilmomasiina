@@ -2,6 +2,18 @@
 
 Ilmomasiina on tehty [tämän](https://github.com/davezuko/react-redux-starter-kit) starterkitin pohjalta. Tähän readmehen päivitetään ohjeet ilmomasiinan deployaamseen yms, kunhan saadaan homma sille asteelle, että pystytään tästä dokumentaatiosta luopumaan.
 
+## Requirements
+* node `^4.5.0`
+* yarn `^0.17.0` or npm `^3.0.0`
+* mysql
+
+## Getting started
+
+1. create database for ilmomasiina in mysql
+1. create `ilmomasiina.config.js` file based on `ilmomasiina.config.example.js`
+1. `npm install`
+1. `npm start`
+
 ## Table of Contents
 1. [Features](#features)
 1. [Requirements](#requirements)
@@ -32,9 +44,6 @@ Ilmomasiina on tehty [tämän](https://github.com/davezuko/react-redux-starter-k
 * [karma](https://github.com/karma-runner/karma)
 * [eslint](http://eslint.org)
 
-## Requirements
-* node `^4.5.0`
-* yarn `^0.17.0` or npm `^3.0.0`
 
 ## Getting Started
 
