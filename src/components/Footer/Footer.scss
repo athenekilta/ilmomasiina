@@ -1,0 +1,10 @@
+@import '../../styles/_base.scss';
+.navbar-fixed-bottom{
+  height: 10%;
+  color: #A0A0A0;
+  background-color: $secondary-background;
+  h3{
+    font-size: 16px;
+    margin-top: 15px;
+  }
+}

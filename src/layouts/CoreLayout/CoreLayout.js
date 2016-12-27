@@ -1,17 +1,21 @@
 import React from 'react'
 import Header from '../../components/Header'
+import Footer from '../../components/Footer'
 import './CoreLayout.scss'
 import '../../styles/core.scss'
 
 export const CoreLayout = ({ children }) => (
-  <div>
+  <span>
     <Header />
-    <div className='container text-center'>
+    <div className='container'>
       <div className='core-layout__viewport'>
         {children}
       </div>
     </div>
-  </div>
+    <div className='footer navbar-fixed-bottom'>
+      <Footer />
+    </div>
+  </span>
 )
 
 CoreLayout.propTypes = {
