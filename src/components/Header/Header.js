@@ -5,7 +5,7 @@ import './Header.scss'
 export const Header = () => (
   <div className='navbar navbar-default'>
     <div className='container'>
-      <Link href='/' className="navbar-brand" href="#">Ilmo.io</Link>
+      <Link href='/' className='navbar-brand'>Ilmo.io</Link>
     </div>
   </div>
 )

@@ -8,7 +8,7 @@ export const CoreLayout = ({ children }) => (
   <div>
     <Header />
     <div className='container'>
-        {children}
+      {children}
     </div>
     <Footer />
   </div>
