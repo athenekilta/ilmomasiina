@@ -5,12 +5,10 @@ import {Link} from 'react-router'
 */
 
 class SingleEvent extends React.Component {
-  constructor(props) {
-    super(props);
-  }
   componentWillMount() {
     // get the event with correct id
     console.log(this.props.params.id);
+    this.props.getEventInfo()
   }
   render(){
     // TODO: rendering multiple quotas
