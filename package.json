@@ -96,7 +96,6 @@
     "ip": "^1.1.2",
     "json-loader": "^0.5.4",
     "node-sass": "^4.0.0",
-    "normalize.css": "^5.0.0",
     "postcss-loader": "^1.1.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
@@ -114,6 +113,7 @@
   "devDependencies": {
     "babel-eslint": "^7.1.0",
     "babel-plugin-istanbul": "^3.0.0",
+    "bootstrap-sass": "^3.3.7",
     "chai": "^3.4.1",
     "chai-as-promised": "^6.0.0",
     "chai-enzyme": "^0.6.1",
