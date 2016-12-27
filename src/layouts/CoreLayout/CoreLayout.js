@@ -5,17 +5,13 @@ import './CoreLayout.scss'
 import '../../styles/core.scss'
 
 export const CoreLayout = ({ children }) => (
-  <span>
+  <div>
     <Header />
     <div className='container'>
-      <div className='core-layout__viewport'>
         {children}
-      </div>
     </div>
-    <div className='footer navbar-fixed-bottom'>
-      <Footer />
-    </div>
-  </span>
+    <Footer />
+  </div>
 )
 
 CoreLayout.propTypes = {

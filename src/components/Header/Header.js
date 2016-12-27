@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router'
 import './Header.scss'
 
 export const Header = () => (
   <div className='navbar navbar-default'>
     <div className='container'>
-      <h1>Ilmomasiina</h1>
+      <Link href='/' className="navbar-brand" href="#">Ilmo.io</Link>
     </div>
   </div>
 )

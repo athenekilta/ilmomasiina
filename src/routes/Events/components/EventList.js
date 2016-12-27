@@ -32,14 +32,16 @@ class EventList extends React.Component {
   render () {
     return (
       <div>
-        <h2>TAPAHTUMAT</h2>
-        <table className='table table-striped table-hover'>
-          <thead className='tableHeads'><tr>
-            <td>Nimi</td>
-            <td>Ajankohta</td>
-            <td>Ilmoittauminen</td>
-            <td>Kiintiö</td>
-          </tr></thead>
+        <h1>Tapahtumat</h1>
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>Nimi</th>
+              <th>Ajankohta</th>
+              <th>Ilmoittauminen</th>
+              <th>Kiintiö</th>
+            </tr>
+          </thead>
           <tbody>
             {
               this.props.eventList.map(
