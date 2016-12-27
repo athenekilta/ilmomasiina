@@ -7,3 +7,5 @@ dist
 coverage
 
 .idea/
+
+ilmomasiina.config.js
