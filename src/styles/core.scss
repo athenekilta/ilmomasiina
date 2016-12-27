@@ -1,22 +1,26 @@
 @import 'base';
-@import '~normalize.css/normalize';
+@import 'bootstrap';
 
-// Some best-practice CSS that's useful for most apps
-// Just remove them if they're not what you want
-html {
-  box-sizing: border-box;
-  font-family: 'Open Sans', sans-serif;
+h1 {
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+h2 {
+  font-weight: 600;
+  text-transform: uppercase;
+  color: $alt-text
 }
 
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
+table.table {
+  thead {
+    th {
+      border-bottom-width: 1px;
+      font-weight: 600;
+    }
+  }
+}
+
+.separator {
+  padding: 0 0.5em;
 }
