@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
+import './EventList.scss'
 
 /* Render a single item
 */
@@ -13,6 +14,7 @@ class EventListItem extends React.Component {
       <tr>
         <td><Link to={`/event/${this.props.data.id}`}>{this.props.data.name}</Link></td>
         <td>{this.props.data.date}</td>
+        <td>Avoinna</td>
         <td>{this.props.data.quota[0].going}/{this.props.data.quota[0].max}</td>
       </tr>
     )
@@ -30,12 +32,13 @@ class EventList extends React.Component {
   render () {
     return (
       <div>
-        <h2>List of Events</h2>
-        <table style={{ margin: 'auto', width: 400 + 'px' }}>
-          <thead><tr>
-            <td>Event</td>
-            <td>Date</td>
-            <td>Going/Max</td>
+        <h2>TAPAHTUMAT</h2>
+        <table className='table table-striped table-hover'>
+          <thead className='tableHeads'><tr>
+            <td>Nimi</td>
+            <td>Ajankohta</td>
+            <td>Ilmoittauminen</td>
+            <td>Kiintiö</td>
           </tr></thead>
           <tbody>
             {
