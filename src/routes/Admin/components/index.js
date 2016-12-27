@@ -1,3 +1,3 @@
-import EventList from './EventList'
+import AdminEventList from './AdminEventList'
 
-export default EventList
+export default AdminEventList

@@ -1,12 +1,12 @@
 import React from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router'
-import './EventList.scss'
+import './AdminEventList.scss'
 
 /* Render a single item
 */
 
-class EventListItem extends React.Component {
+class AdminEventListItem extends React.Component {
   render () {
     return (
       <tr>
@@ -24,16 +24,16 @@ class EventListItem extends React.Component {
 /* Render the list container
 */
 
-class EventList extends React.Component {
+class AdminEventList extends React.Component {
   componentWillMount () {
-    this.props.getEventList()
+    this.props.getAdminEventList()
   }
 
   render () {
     return (
       <div>
-        <h2>TAPAHTUMAT</h2>
-        <table className='table table-striped table-hover'>
+        <h1>Kaikki tapahtumat</h1>
+        <table className='table'>
           <thead className='tableHeads'><tr>
             <td>Nimi</td>
             <td>Ajankohta</td>
@@ -41,7 +41,7 @@ class EventList extends React.Component {
             <td>Ilmoittautuneita</td>
           </tr></thead>
           <tbody>
-            { this.props.eventList.map( (i, index) => <EventListItem key={index} data={i} />) }
+            { this.props.eventList.map( (i, index) => <AdminEventListItem key={index} data={i} />) }
           </tbody>
         </table>
         <nav className="text-center">
@@ -61,13 +61,13 @@ class EventList extends React.Component {
 
 }
 
-EventListItem.propTypes = {
+AdminEventListItem.propTypes = {
   data: React.PropTypes.object.isRequired
 }
 
-EventList.propTypes = {
+AdminEventList.propTypes = {
   eventList     : React.PropTypes.array.isRequired,
-  getEventList : React.PropTypes.func.isRequired
+  getAdminEventList : React.PropTypes.func.isRequired
 }
 
-export default EventList
+export default AdminEventList

@@ -50,7 +50,7 @@ const payload = [{
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
 
-export const getEventList = () => {
+export const getAdminEventList = () => {
   return (dispatch, getState) => {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -65,7 +65,7 @@ export const getEventList = () => {
 }
 
 export const actions = {
-  getEventList
+  getAdminEventList
 }
 
 // ------------------------------------

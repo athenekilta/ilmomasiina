@@ -9,7 +9,7 @@ export default (store) => ({
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const Events = require('./containers/EventListContainer').default
+      const Events = require('./containers/AdminEventListContainer').default
       const reducer = require('./modules/events').default
 
       /*  Add the reducer to the store on key 'events'  */
