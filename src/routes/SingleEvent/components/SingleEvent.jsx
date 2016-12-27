@@ -15,7 +15,10 @@ class SingleEvent extends React.Component {
     // http://stackoverflow.com/questions/25034994/how-to-correctly-wrap-few-td-tags-for-jsxtransformer
 
     return (
-      <h1>Single Event #{this.props.params.id}</h1>
+      <div>
+        <h1>Single Event #{this.props.params.id}</h1>
+        <h2>{this.props.singleEvent.name}</h2>
+      </div>
     )
   }
 }
