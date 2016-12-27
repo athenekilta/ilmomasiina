@@ -1,4 +1,8 @@
-.route--active {
-  font-weight: bold;
-  text-decoration: underline;
+@import '../../styles/_base.scss';
+
+.navbar-default{
+  background-color: $primary-accent;
+  h1{
+    color: white;
+  }
 }
