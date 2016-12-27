@@ -13,7 +13,7 @@ export default (store) => ({
       const reducer = require('./modules/singleEvent').default
 
       /*  Add the reducer to the store on key 'event'  */
-      injectReducer(store, { key: 'events', reducer })
+      injectReducer(store, { key: 'singleEvent', reducer })
 
       /*  Return getComponent   */
       cb(null, SingleEvent)
