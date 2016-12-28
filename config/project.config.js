@@ -79,11 +79,11 @@ config.globals = {
     NODE_ENV : JSON.stringify(config.env),
   },
   NODE_ENV     : config.env,
-  __DEV__      : config.env === 'development',
-  __PROD__     : config.env === 'production',
-  __TEST__     : config.env === 'test',
-  __COVERAGE__ : !argv.watch && config.env === 'test',
-  __BASENAME__ : JSON.stringify(process.env.BASENAME || ''),
+  DEV      : config.env === 'development',
+  PROD     : config.env === 'production',
+  TEST     : config.env === 'test',
+  COVERAGE : !argv.watch && config.env === 'test',
+  BASENAME : JSON.stringify(process.env.BASENAME || ''),
 };
 
 // ------------------------------------
@@ -92,21 +92,23 @@ config.globals = {
 const pkg = require('../package.json');
 
 config.compiler_vendors = config.compiler_vendors
-  .filter((dep) => {
+  .filter((dep) => { // eslint-disable-line
     if (pkg.dependencies[dep]) return true;
 
-    return debug(
+    /* eslint-disable */
+    debug(
       `Package "${dep}" was not found as an npm dependency in package.json; ` +
       `it won't be included in the webpack vendor bundle.
-       Consider removing it from \`compiler_vendors\` in ~/config/index.js`,
-    );
+       Consider removing it from \`compiler_vendors\` in ~/config/index.js`
+    )
+    /* eslint-enable */
   });
 
 // ------------------------------------
 // Utilities
 // ------------------------------------
-function base(arg) {
-  const args = [config.path_base].concat([].slice.call(arg));
+function base() {
+  const args = [config.path_base].concat([].slice.call(arguments)); // eslint-disable-line
   return path.resolve(...args);
 }
 

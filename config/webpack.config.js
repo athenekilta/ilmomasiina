@@ -69,25 +69,27 @@ webpackConfig.plugins = [
 
 // Ensure that the compiler exits on errors during testing so that
 // they do not get skipped and misreported.
+/* eslint-disable */
 if (TEST && !argv.watch) {
-  webpackConfig.plugins.push(() => {
-    this.plugin('done', (stats) => {
+  webpackConfig.plugins.push(function () {
+    this.plugin('done', function (stats) {
       if (stats.compilation.errors.length) {
         // Pretend no assets were generated. This prevents the tests
         // from running making it clear that there were warnings.
         throw new Error(
-          stats.compilation.errors.map(err => err.message || err),
-        );
+          stats.compilation.errors.map(err => err.message || err)
+        )
       }
-    });
-  });
+    })
+  })
 }
+/* eslint-enable */
 
 if (DEV) {
   debug('Enabling plugins for live development (HMR, NoErrors).');
   webpackConfig.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoErrorsPlugin() // eslint-disable-line
   );
 } else if (PROD) {
   debug('Enabling plugins for production (OccurenceOrder, Dedupe & UglifyJS).');
@@ -100,7 +102,7 @@ if (DEV) {
         dead_code: true,
         warnings: false,
       },
-    }),
+    }) // eslint-disable-line
   );
 }
 
@@ -109,7 +111,7 @@ if (!TEST) {
   webpackConfig.plugins.push(
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor'],
-    }),
+    }) // eslint-disable-line
   );
 }
 
@@ -198,7 +200,7 @@ webpackConfig.module.loaders.push(
 if (!DEV) {
   debug('Applying ExtractTextPlugin to CSS loaders.');
   webpackConfig.module.loaders.filter(loader =>
-    loader.loaders && loader.loaders.find(name => /css/.test(name.split('?')[0])),
+    loader.loaders && loader.loaders.find(name => /css/.test(name.split('?')[0])) // eslint-disable-line
   ).forEach((loader) => {
     const l = loader;
     const first = l.loaders[0];
@@ -210,7 +212,7 @@ if (!DEV) {
   webpackConfig.plugins.push(
     new ExtractTextPlugin('[name].[contenthash].css', {
       allChunks: true,
-    }),
+    }) // eslint-disable-line
   );
 }
 

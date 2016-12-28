@@ -11,15 +11,15 @@
     "promise"
   ],
   "env": {
-    "browser" : true
+    "browser": true
   },
   "globals": {
-    "DEV"      : false,
-    "TEST"     : false,
-    "PROD"     : false,
-    "COVERAGE" : false
+    "DEV": false,
+    "TEST": false,
+    "PROD": false,
+    "COVERAGE": false
   },
   "rules": {
-    "max-len"              : [2, 120, 2],
+    "max-len": [2, 120, 2],
   }
 }
