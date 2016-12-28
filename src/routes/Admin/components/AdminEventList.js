@@ -1,13 +1,13 @@
-import React from 'react'
-import _ from 'lodash'
-import { Link } from 'react-router'
-import './AdminEventList.scss'
+import React from 'react';
+import _ from 'lodash';
+import { Link } from 'react-router';
+import './AdminEventList.scss';
 
 /* Render a single item
 */
 
 class AdminEventListItem extends React.Component {
-  render () {
+  render() {
     return (
       <tr>
         <td><Link to={`/event/${this.props.data.id}`}>{ this.props.data.name }</Link></td>
@@ -17,7 +17,7 @@ class AdminEventListItem extends React.Component {
         <td><Link className="btn btn-default">Lataa osallistujatiedot</Link></td>
         <td><Link className="btn btn-warning">Muokkaa tapahtumaa</Link></td>
       </tr>
-    )
+    );
   }
 }
 
@@ -25,11 +25,11 @@ class AdminEventListItem extends React.Component {
 */
 
 class AdminEventList extends React.Component {
-  componentWillMount () {
-    this.props.getAdminEventList()
+  componentWillMount() {
+    this.props.getAdminEventList();
   }
 
-  render () {
+  render() {
     return (
       <div>
         <h1>Kaikki tapahtumat</h1>
@@ -41,7 +41,7 @@ class AdminEventList extends React.Component {
             <td>Ilmoittautuneita</td>
           </tr></thead>
           <tbody>
-            { this.props.eventList.map( (i, index) => <AdminEventListItem key={index} data={i} />) }
+            { this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />) }
           </tbody>
         </table>
         <nav className="text-center">
@@ -56,18 +56,18 @@ class AdminEventList extends React.Component {
           </ul>
         </nav>
       </div>
-    )
+    );
   }
 
 }
 
 AdminEventListItem.propTypes = {
-  data: React.PropTypes.object.isRequired
-}
+  data: React.PropTypes.object.isRequired,
+};
 
 AdminEventList.propTypes = {
-  eventList     : React.PropTypes.array.isRequired,
-  getAdminEventList : React.PropTypes.func.isRequired
-}
+  eventList: React.PropTypes.array.isRequired,
+  getAdminEventList: React.PropTypes.func.isRequired,
+};
 
-export default AdminEventList
+export default AdminEventList;

@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 // import { getAdminEventList } from '../modules/events'
 
 // import Editor from '../components/Editor'
