@@ -3,6 +3,7 @@ import CoreLayout from '../layouts/CoreLayout';
 import EventsRoute from './Events';
 import SingleEventRoute from './SingleEvent';
 import AdminRoute from './Admin';
+import EditorRoute from './Editor';
 
 export const createRoutes = store => ({
   path: '/',
@@ -11,6 +12,7 @@ export const createRoutes = store => ({
   childRoutes: [
     SingleEventRoute(store),
     AdminRoute(store),
+    EditorRoute(store),
   ],
 });
 
