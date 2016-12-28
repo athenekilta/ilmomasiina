@@ -1,1 +1,13 @@
 @import '../styles/_base.scss';
+
+table.eventlist {
+  tr.child {
+    td:first-child {
+      padding-left: 30px;
+    }
+    td {
+      border-top: 0;
+      padding-top: 0;
+    }
+  }
+}
