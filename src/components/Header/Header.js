@@ -1,11 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { IndexLink } from 'react-router'
 import './Header.scss'
 
 export const Header = () => (
   <div className='navbar navbar-default'>
     <div className='container'>
-      <Link href='/' className='navbar-brand'>Ilmo.io</Link>
+      <IndexLink to='/' className='navbar-brand'>Ilmo.io</IndexLink>
     </div>
   </div>
 )
