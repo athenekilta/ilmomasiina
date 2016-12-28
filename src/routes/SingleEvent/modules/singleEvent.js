@@ -19,28 +19,38 @@ const payload = {
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 15,
-      max: 20
+      max: 20,
+      attendees: [
+        'epic',
+        'long',
+        'list',
+        'of',
+        'people',
+        'who',
+        'are',
+        'coming'
+      ]
     },
     {
-      quotaName:'Athene',
+      quotaName:'Tietokilta',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 10,
-      max: 20
+      max: 20,
+      attendees: [
+        'epic',
+        'long',
+        'list',
+        'of',
+        'people',
+        'who',
+        'are',
+        'coming'
+      ]
     }
   ],
   description: 'Sitsit, Jee! Trololoo..',
-  price: '0€',
-  attendees: [
-    'epic',
-    'long',
-    'list',
-    'of',
-    'people',
-    'who',
-    'are',
-    'coming'
-  ]
+  price: '0€'
 }
 
 /*  This is a thunk, meaning it is a function that immediately
