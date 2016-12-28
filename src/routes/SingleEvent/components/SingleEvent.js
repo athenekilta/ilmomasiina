@@ -39,19 +39,24 @@ class AttendeeGroup extends React.Component {
 }
 
 class SingleEvent extends React.Component {
+  componentWillMount() {
+    // get the event with correct id
+    this.props.getEventInfo();
+  }
+
   render() {
     return (
       <div>
-        <h1>{this.props.data.title}</h1>
+        <h1>{this.props.singleEvent.title}</h1>
         <p>
-          {this.props.data.date}<br />
-          Hinta: {this.props.data.price}<br />
+          {this.props.singleEvent.date}<br />
+          Hinta: {this.props.singleEvent.price}<br />
           <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
         </p>
-        <p>{this.props.data.description}</p>
+        <p>{this.props.singleEvent.description}</p>
         <h2>Ilmoittautuneet</h2>
-        {typeof this.props.data.quota !== 'undefined' ?
-        (this.props.data.quota.map(
+        {typeof this.props.singleEvent.quota !== 'undefined' ?
+        (this.props.singleEvent.quota.map(
           (i, index) =>
             <AttendeeGroup key={index} data={i} />)
           ) : '' }
@@ -69,13 +74,17 @@ AttendeeGroup.propTypes = {
 
 
 SingleEvent.propTypes = {
-  data: React.PropTypes.shape({
+  getEventInfo: React.PropTypes.func.isRequired,
+  params: React.PropTypes.shape({
+    id: React.PropTypes.string,
+  }).isRequired,
+  singleEvent: React.PropTypes.shape({
     title: React.PropTypes.string,
     description: React.PropTypes.string,
     price: React.PropTypes.number,
     date: React.PropTypes.number,
     quota: React.PropTypes.object,
-  }).isRequired,
+  }),
 };
 
 export default SingleEvent;

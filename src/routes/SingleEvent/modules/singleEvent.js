@@ -11,7 +11,7 @@ export const GET_EVENT_ASYNC = 'GET_EVENT_ASYNC';
 
 const payload = {
   id: 1,
-  name: 'Joulusitsit',
+  title: 'Joulusitsit',
   date: 1482697816,
   quota: [
     {
