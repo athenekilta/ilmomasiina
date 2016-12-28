@@ -22,7 +22,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.configure(rest());
 app.configure(hooks());
-app.configure(services)
+app.configure(services);
 
 
 // This rewrites all routes requests to the root /index.html file

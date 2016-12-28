@@ -1,4 +1,4 @@
-const debug = require('debug')('service:index');
+const debug = require('debug')('app:server');
 const service = require('feathers-knex');
 const hooks = require('feathers-hooks');
 const knex = require('knex');
@@ -45,7 +45,7 @@ module.exports = function (){ // 'function' needed as we use 'this'
       table.string('email');
     })
   }).then(() => {
-    // create dummy event
+    // create dummy events
     app.service('/api/events').create({
       name: 'Tapahtuma1',
       date: '2017-1-1 23:59:59',
@@ -57,12 +57,54 @@ module.exports = function (){ // 'function' needed as we use 'this'
     }).then(() => {
       debug('created event');
     });
+
+    app.service('/api/events').create({
+      name: 'Tapahtuma2',
+      date: '2017-1-1 23:59:59',
+      description: 'Hassu tapahtuma',
+      price: 'sata euroo',
+      location: 'wat',
+      homepage: 'ei oo',
+      facebooklink: 'ei oo'
+    }).then(() => {
+      debug('created event');
+    });
+
+    app.service('/api/attendees').create({
+      name: 'Joel',
+      eventId: 1,
+      email: 'joel@ilmo.fi'
+    })
+
+    app.service('/api/attendees').create({
+      name: 'Pekka',
+      eventId: 1,
+      email: 'pekka@ilmo.fi'
+    })
+
+    app.service('/api/attendees').create({
+      name: 'Alan',
+      eventId: 2,
+      email: 'Alan@ilmo.fi'
+    })
+
+    app.service('/api/attendees').create({
+      name: 'Ville',
+      eventId: 2,
+      email: 'ville@ilmo.fi'
+    })
+
   });
 
   app.use('/api/events', service({
     Model: db,
     name: 'events'
   }));
+
+  app.use('/api/attendees', service({
+    Model: db,
+    name: 'attendees'
+  }))
 
   app.service('/api/events').after(
     hooks.remove(
