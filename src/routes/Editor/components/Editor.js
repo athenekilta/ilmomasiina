@@ -23,7 +23,7 @@ class Editor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 3,
+      activeTab: 1,
       useQuotas: true,
       useOpenQuota: false,
       eventData: {
@@ -242,7 +242,7 @@ class Editor extends React.Component {
             <Input name="webpage_url" value="" label="Kotisivujen osoite" type="text" />
             <Input name="facebook_url" value="" label="Facebook-tapahtuma" type="text" />
             <Input name="location" value="" label="Paikka" type="text" />
-            <Textarea rows={10} name="kuvaus" value="" label="Kuvaus" />
+            <Textarea rows={10} name="description" value="" label="Kuvaus" />
           </div>
           <div className={`tab-pane ${(this.state.activeTab === 2 ? 'active' : '')}`}>
             <Input name="registration_start_date" value="" label="Ilmo alkaa" type="datetime-local" required />
@@ -280,7 +280,7 @@ class Editor extends React.Component {
             </div>
           </div>
           <div className={`tab-pane ${(this.state.activeTab === 4 ? 'active' : '')}`}>
-            <p>Vahvistuviestit</p>
+            <Textarea rows={10} name="verification" value="" label="Vahvistusviesti sähköpostiin" />
           </div>
         </div>
       </Formsy.Form>
