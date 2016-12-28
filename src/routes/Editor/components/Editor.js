@@ -140,7 +140,11 @@ class Editor extends React.Component {
   }
 
   submitForm(model) {
-    console.log(model);
+    const data = model;
+    data.quotas = this.state.eventData.quotas;
+    data.questions = this.state.eventData.questions;
+
+    console.log(data);
   }
 
   render() {
