@@ -1,7 +1,7 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC'
+export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC';
 
 // ------------------------------------
 // Actions
@@ -15,20 +15,20 @@ const payload = [{
   date: 1482697816,
   quota: [
     {
-      quotaName:'Athene',
+      quotaName: 'Athene',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 15,
-      max: 20
+      max: 20,
     },
     {
-      quotaName:'Prodeko',
+      quotaName: 'Prodeko',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 10,
-      max: 20
-    }
-  ]
+      max: 20,
+    },
+  ],
 },
 {
   id: 2,
@@ -40,47 +40,43 @@ const payload = [{
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 50,
-      max: 50
-    }
-  ]
-}
-]
+      max: 50,
+    },
+  ],
+},
+];
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
 
-export const getEventList = () => {
-  return (dispatch, getState) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        dispatch({
-          type    : GET_EVENTLIST_ASYNC,
-          payload : payload
-        })
-        resolve()
-      }, 1000)
-    })
-  }
-}
+export const getEventList = () => dispatch => new Promise((resolve) => {
+  setTimeout(() => {
+    dispatch({
+      type: GET_EVENTLIST_ASYNC,
+      payload,
+    });
+    resolve();
+  }, 1000);
+});
 
 export const actions = {
-  getEventList
-}
+  getEventList,
+};
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_EVENTLIST_ASYNC] : (state, action) => action.payload
-}
+  [GET_EVENTLIST_ASYNC]: (state, action) => action.payload,
+};
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = []
-export default function counterReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+const initialState = [];
+export default function counterReducer(state = initialState, action) {
+  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state
+  return handler ? handler(state, action) : state;
 }

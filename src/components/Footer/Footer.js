@@ -1,6 +1,6 @@
-import React from 'react'
-import './Footer.scss'
-import { Link } from 'react-router'
+import React from 'react';
+import { Link } from 'react-router';
+import './Footer.scss';
 
 export const Footer = () => (
   <footer>
@@ -10,6 +10,6 @@ export const Footer = () => (
       <Link to='https://athene.fi' className='navbar-link'>Athene.fi</Link>
     </div>
   </footer>
-)
+);
 
-export default Footer
+export default Footer;
