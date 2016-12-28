@@ -61,8 +61,8 @@ EventListItem.propTypes = {
 };
 
 EventList.propTypes = {
-  eventList     : React.PropTypes.array.isRequired,
-  getEventList : React.PropTypes.func.isRequired,
+  eventList: React.PropTypes.array.isRequired,
+  getEventList: React.PropTypes.func.isRequired,
 };
 
 export default EventList;

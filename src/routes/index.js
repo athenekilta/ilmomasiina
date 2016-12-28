@@ -8,10 +8,10 @@ import SingleEventRoute from './SingleEvent';
     PlainRoute objects to build route definitions.   */
 
 export const createRoutes = store => ({
-  path        : '/',
-  component   : CoreLayout,
-  indexRoute  : Home,
-  childRoutes : [
+  path: '/',
+  component: CoreLayout,
+  indexRoute: Home,
+  childRoutes: [
     EventsRoute(store),
     SingleEventRoute(store),
   ],

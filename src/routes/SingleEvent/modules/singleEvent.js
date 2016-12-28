@@ -15,7 +15,7 @@ const payload = {
   date: 1482697816,
   quota: [
     {
-      quotaName:'Athene',
+      quotaName: 'Athene',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 15,
@@ -32,7 +32,7 @@ const payload = {
       ],
     },
     {
-      quotaName:'Tietokilta',
+      quotaName: 'Tietokilta',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 10,
@@ -60,7 +60,7 @@ const payload = {
 export const getEventInfo = () => dispatch => new Promise((resolve) => {
   setTimeout(() => {
     dispatch({
-      type    : GET_EVENT_ASYNC,
+      type: GET_EVENT_ASYNC,
       payload,
     });
     resolve();
@@ -75,7 +75,7 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_EVENT_ASYNC] : (state, action) => action.payload,
+  [GET_EVENT_ASYNC]: (state, action) => action.payload,
 };
 
 // ------------------------------------
