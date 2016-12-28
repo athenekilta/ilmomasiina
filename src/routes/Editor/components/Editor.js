@@ -24,7 +24,7 @@ class Editor extends React.Component {
     super(props);
     this.state = {
       activeTab: 1,
-      useQuotas: true,
+      useQuotas: false,
       useOpenQuota: false,
       eventData: {
         questions: [],
@@ -266,7 +266,6 @@ class Editor extends React.Component {
                   <Checkbox name="quotas"
                     value={false}
                     label="Käytä lisäksi yhteistä kiintiötä"
-                    rowLabel="asd"
                     onChange={this.toggleOpenQuota} />
                   {
                     (!this.state.useOpenQuota ||
