@@ -1,12 +1,13 @@
-import React from 'react'
-import './Header.scss'
+import React from 'react';
+import { IndexLink } from 'react-router';
+import './Header.scss';
 
 export const Header = () => (
   <div className='navbar navbar-default'>
     <div className='container'>
-      <h1>Ilmomasiina</h1>
+      <IndexLink to='/' className='navbar-brand'>Ilmo.io</IndexLink>
     </div>
   </div>
-)
+);
 
-export default Header
+export default Header;

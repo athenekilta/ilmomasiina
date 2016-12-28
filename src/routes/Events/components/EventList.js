@@ -1,12 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router'
-import './EventList.scss'
+import React from 'react';
+import { Link } from 'react-router';
+import './EventList.scss';
 
 /* Render a single item
 */
 
 class EventListItem extends React.Component {
-  render () {
+  render() {
     // TODO: rendering multiple quotas (kiintiöt)
     // TIP: http://stackoverflow.com/questions/25034994/how-to-correctly-wrap-few-td-tags-for-jsxtransformer
 
@@ -17,7 +17,7 @@ class EventListItem extends React.Component {
         <td>Avoinna</td>
         <td>{this.props.data.quota[0].going}/{this.props.data.quota[0].max}</td>
       </tr>
-    )
+    );
   }
 }
 
@@ -25,21 +25,23 @@ class EventListItem extends React.Component {
 */
 
 class EventList extends React.Component {
-  componentWillMount () {
-    this.props.getEventList()
+  componentWillMount() {
+    this.props.getEventList();
   }
 
-  render () {
+  render() {
     return (
       <div>
-        <h2>TAPAHTUMAT</h2>
-        <table className='table table-striped table-hover'>
-          <thead className='tableHeads'><tr>
-            <td>Nimi</td>
-            <td>Ajankohta</td>
-            <td>Ilmoittauminen</td>
-            <td>Kiintiö</td>
-          </tr></thead>
+        <h1>Tapahtumat</h1>
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>Nimi</th>
+              <th>Ajankohta</th>
+              <th>Ilmoittauminen</th>
+              <th>Kiintiö</th>
+            </tr>
+          </thead>
           <tbody>
             {
               this.props.eventList.map(
@@ -49,18 +51,18 @@ class EventList extends React.Component {
           </tbody>
         </table>
       </div>
-    )
+    );
   }
 
 }
 
 EventListItem.propTypes = {
-  data: React.PropTypes.object.isRequired
-}
+  data: React.PropTypes.object.isRequired,
+};
 
 EventList.propTypes = {
-  eventList     : React.PropTypes.array.isRequired,
-  getEventList : React.PropTypes.func.isRequired
-}
+  eventList: React.PropTypes.array.isRequired,
+  getEventList: React.PropTypes.func.isRequired,
+};
 
-export default EventList
+export default EventList;

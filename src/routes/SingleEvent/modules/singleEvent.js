@@ -1,7 +1,7 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const GET_EVENT_ASYNC = 'GET_EVENT_ASYNC'
+export const GET_EVENT_ASYNC = 'GET_EVENT_ASYNC';
 
 // ------------------------------------
 // Actions
@@ -11,73 +11,79 @@ export const GET_EVENT_ASYNC = 'GET_EVENT_ASYNC'
 
 const payload = {
   id: 1,
-  name: 'Joulusitsit',
+  title: 'Joulusitsit',
   date: 1482697816,
   quota: [
     {
-      quotaName:'Athene',
+      quotaName: 'Athene',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 15,
-      max: 20
+      max: 20,
+      attendees: [
+        'epic',
+        'long',
+        'list',
+        'of',
+        'people',
+        'who',
+        'are',
+        'coming',
+      ],
     },
     {
-      quotaName:'Athene',
+      quotaName: 'Tietokilta',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 10,
-      max: 20
-    }
+      max: 20,
+      attendees: [
+        'epic',
+        'long',
+        'list',
+        'of',
+        'people',
+        'who',
+        'are',
+        'coming',
+      ],
+    },
   ],
   description: 'Sitsit, Jee! Trololoo..',
   price: '0€',
-  attendees: [
-    'epic',
-    'long',
-    'list',
-    'of',
-    'people',
-    'who',
-    'are',
-    'coming'
-  ]
-}
+};
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
 
-export const getEventInfo = () => {
-  return (dispatch, getState) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        dispatch({
-          type    : GET_EVENT_ASYNC,
-          payload : payload
-        })
-        resolve()
-      }, 1000)
-    })
-  }
-}
+export const getEventInfo = () => dispatch => new Promise((resolve) => {
+  setTimeout(() => {
+    dispatch({
+      type: GET_EVENT_ASYNC,
+      payload,
+    });
+    resolve();
+  }, 1000);
+});
 
 export const actions = {
-  getEventInfo
-}
+  getEventInfo,
+};
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_EVENT_ASYNC] : (state, action) => action.payload
-}
+  [GET_EVENT_ASYNC]: (state, action) => action.payload,
+};
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = {}
-export default function counterReducer (state = initialState, action) {
-  const handler = ACTION_HANDLERS[action.type]
+const initialState = {};
+export default function counterReducer(state = initialState, action) {
+  const handler = ACTION_HANDLERS[action.type];
 
-  return handler ? handler(state, action) : state
+  return handler ? handler(state, action) : state;
 }

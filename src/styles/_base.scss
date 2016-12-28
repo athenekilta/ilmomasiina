@@ -1,16 +1,14 @@
-/*
-Application Settings Go Here
-------------------------------------
-This file acts as a bundler for all variables/mixins/themes, so they
-can easily be swapped out without `core.scss` ever having to know.
+// Colors
+$brand-primary: #4990de;
+$secondary-background: #f1f1f1;
+$alt-text: #7a7a7a;
 
-For example:
+$navbar-default-bg: $brand-primary;
+$navbar-default-brand-color: #fff;
 
-@import './variables/colors';
-@import './variables/components';
-@import './themes/default';
-*/
+//
+$border-radius-base: 0;
 
-//Variables
-$primary-accent: #4990DE;
-$secondary-background: #F1F1F1;
+// Typography
+$font-family-sans-serif: 'Open Sans', sans-serif;
+$font-size-base: 14px;

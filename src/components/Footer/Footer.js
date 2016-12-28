@@ -1,12 +1,15 @@
-import React from 'react'
-import './Footer.scss'
+import React from 'react';
+import { Link } from 'react-router';
+import './Footer.scss';
 
 export const Footer = () => (
-  <div className='footer'>
+  <footer>
     <div className='container'>
-      <h3>Hallinta &middot; Athene.fi</h3>
+      <Link to='/admin' className='navbar-link'>Hallinta</Link>
+      <span className='separator'>&middot;</span>
+      <Link to='https://athene.fi' className='navbar-link'>Athene.fi</Link>
     </div>
-  </div>
-)
+  </footer>
+);
 
-export default Footer
+export default Footer;

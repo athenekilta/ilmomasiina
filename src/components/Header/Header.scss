@@ -1,8 +1,12 @@
 @import '../../styles/_base.scss';
 
-.navbar-default{
-  background-color: $primary-accent;
-  h1{
-    color: white;
+.navbar-default {
+  border: none !important;
+  .navbar-brand {
+    color: #fff;
+    font-size: 18px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 1px;
   }
 }
