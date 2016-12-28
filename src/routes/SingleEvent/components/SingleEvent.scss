@@ -1,1 +1,10 @@
 @import '../styles/_base.scss';
+
+.asideComponent {
+  background-color: $secondary-background;
+  margin-bottom: 1em;
+}
+
+.progress {
+  padding: 0;
+}
