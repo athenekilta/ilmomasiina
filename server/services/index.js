@@ -6,9 +6,9 @@ const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disa
 
 // const user require('./user');
 
-module.exports = function () { // 'function' needed as we use 'this'
+module.exports = function () { // eslint-disable-line
   debug('Feathers');
-  const app = this;
+  const app = this; // function can't be nameless beacause of this
 
   // initialize db
 

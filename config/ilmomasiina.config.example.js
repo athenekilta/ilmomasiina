@@ -2,8 +2,8 @@ const config = {
   mysqlUser: 'mysqlUser',
   mysqlPassword: 'mysqlPass',
   mysqlDatabase: 'ilmomasiina',
-  mailKey: 'yourMailgunMailKey',
-  mailDomain: 'yourMailgunMailDomain',
+  mailgunKey: 'yourMailgunKey',
+  mailgunDomain: 'yourMailgunDomain',
   mailFrom: '<me@samples.mailgun.org>',
 };
 
