@@ -10,7 +10,7 @@ const webpackConfig = require('../config/webpack.config');
 const project = require('../config/project.config');
 const compress = require('compression');
 
-const services = require('./services/index.jsx');
+const services = require('./services/index.js');
 
 // create feathers app
 const app = feathers();
