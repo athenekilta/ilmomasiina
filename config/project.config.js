@@ -109,7 +109,7 @@ config.compiler_vendors = config.compiler_vendors
 // ------------------------------------
 function base() {
   const args = [config.path_base].concat([].slice.call(arguments)); // eslint-disable-line
-  return path.resolve(...args);
+  return path.resolve.apply(path, args); // eslint-disable-line
 }
 
 config.paths = {
