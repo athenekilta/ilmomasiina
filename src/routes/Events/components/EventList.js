@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
+import moment from 'moment';
 import './EventList.scss';
 
 /* Render a single item
@@ -13,7 +14,7 @@ class EventListItem extends React.Component {
     return (
       <tr>
         <td><Link to={`/event/${this.props.data.id}`}>{this.props.data.name}</Link></td>
-        <td>{this.props.data.date}</td>
+        <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
         <td>Avoinna</td>
         <td>{this.props.data.quota[0].going}/{this.props.data.quota[0].max}</td>
       </tr>
