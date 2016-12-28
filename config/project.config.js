@@ -95,7 +95,7 @@ config.compiler_vendors = config.compiler_vendors
   .filter((dep) => {
     if (pkg.dependencies[dep]) return true;
 
-    debug(
+    return debug(
       `Package "${dep}" was not found as an npm dependency in package.json; ` +
       `it won't be included in the webpack vendor bundle.
        Consider removing it from \`compiler_vendors\` in ~/config/index.js`,
@@ -105,8 +105,8 @@ config.compiler_vendors = config.compiler_vendors
 // ------------------------------------
 // Utilities
 // ------------------------------------
-function base() {
-  const args = [config.path_base].concat([].slice.call(arguments));
+function base(arg) {
+  const args = [config.path_base].concat([].slice.call(arg));
   return path.resolve(...args);
 }
 
@@ -121,7 +121,9 @@ config.paths = {
 // Environment Configuration
 // ========================================================
 debug(`Looking for environment overrides for NODE_ENV "${config.env}".`);
+
 const environments = require('./environments.config');
+
 const overrides = environments[config.env];
 if (overrides) {
   debug('Found overrides, applying to default configuration.');

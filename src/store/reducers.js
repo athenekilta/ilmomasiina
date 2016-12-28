@@ -7,10 +7,12 @@ export const makeRootReducer = asyncReducers => combineReducers({
 });
 
 export const injectReducer = (store, { key, reducer }) => {
-  if (Object.hasOwnProperty.call(store.asyncReducers, key)) return;
+  const s = store;
 
-  store.asyncReducers[key] = reducer;
-  store.replaceReducer(makeRootReducer(store.asyncReducers));
+  if (Object.hasOwnProperty.call(s.asyncReducers, key)) return;
+
+  s.asyncReducers[key] = reducer;
+  s.replaceReducer(makeRootReducer(s.asyncReducers));
 };
 
 export default makeRootReducer;

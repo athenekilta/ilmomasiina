@@ -1,16 +1,16 @@
 import React from 'react';
-import { Header } from 'components/Header/Header';
 import { shallow } from 'enzyme';
+import { Header } from '../../../src/components/Header/Header';
 
 describe('(Component) Header', () => {
-  let _wrapper;
+  let wrapper;
 
   beforeEach(() => {
-    _wrapper = shallow(<Header />);
+    wrapper = shallow(<Header />);
   });
 
   it('Renders a header link', () => {
-    const headerLink = _wrapper.find('IndexLink');
-    expect(headerLink).to.exist;
+    const headerLink = wrapper.find('IndexLink');
+    return expect(headerLink).to.exist;
   });
 });

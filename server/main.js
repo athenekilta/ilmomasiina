@@ -18,11 +18,13 @@ app.use(compress());
 // ------------------------------------
 // Apply Webpack HMR Middleware
 // ------------------------------------
+
 if (project.env === 'development') {
   const compiler = webpack(webpackConfig);
 
   debug('Enabling webpack dev and HMR middleware');
-  app.use(require('webpack-dev-middleware')(compiler, {
+
+  app.use(require('webpack-dev-middleware')(compiler, { // eslint-disable-line
     publicPath  : webpackConfig.output.publicPath,
     contentBase : project.paths.client(),
     hot         : true,
@@ -31,7 +33,8 @@ if (project.env === 'development') {
     lazy        : false,
     stats       : project.compiler_stats,
   }));
-  app.use(require('webpack-hot-middleware')(compiler));
+
+  app.use(require('webpack-hot-middleware')(compiler)); // eslint-disable-line
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside

@@ -1,6 +1,6 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import CoreLayout from 'layouts/CoreLayout/CoreLayout';
+import { CoreLayout } from '../../src/layouts/CoreLayout/CoreLayout';
 
 function shallowRender(component) {
   const renderer = TestUtils.createRenderer();
@@ -14,20 +14,20 @@ function shallowRenderWithProps(props = {}) {
 }
 
 describe('(Layout) Core', () => {
-  let _component;
-  let _props;
-  let _child;
+  let component;
+  let props;
+  let child;
 
   beforeEach(() => {
-    _child = <h1 className='child'>Child</h1>;
-    _props = {
-      children : _child,
+    child = <h1 className='child'>Child</h1>;
+    props = {
+      children : child,
     };
 
-    _component = shallowRenderWithProps(_props);
+    component = shallowRenderWithProps(props);
   });
 
   it('Should render as a <div>.', () => {
-    expect(_component.type).to.equal('div');
+    expect(component.type).to.equal('div');
   });
 });

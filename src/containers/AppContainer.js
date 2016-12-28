@@ -8,7 +8,7 @@ class AppContainer extends Component {
     store  : PropTypes.object.isRequired,
   }
 
-  shouldComponentUpdate() {
+  static shouldComponentUpdate() {
     return false;
   }
 

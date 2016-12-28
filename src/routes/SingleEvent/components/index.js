@@ -1,3 +1,3 @@
-import SingleEvent from './SingleEvent';
+import { SingleEvent } from './SingleEvent';
 
 export default SingleEvent;

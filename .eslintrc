@@ -14,10 +14,10 @@
     "browser" : true
   },
   "globals": {
-    "__DEV__"      : false,
-    "__TEST__"     : false,
-    "__PROD__"     : false,
-    "__COVERAGE__" : false
+    "DEV"      : false,
+    "TEST"     : false,
+    "PROD"     : false,
+    "COVERAGE" : false
   },
   "rules": {
     "key-spacing"          : 0,

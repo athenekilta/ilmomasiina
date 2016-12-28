@@ -5,9 +5,9 @@ const webpackConfig = require('../config/webpack.config');
 const project = require('../config/project.config');
 
 // Wrapper around webpack to promisify its compiler and supply friendly logging
-const webpackCompiler = webpackConfig =>
+const webpackCompiler = config =>
   new Promise((resolve, reject) => {
-    const compiler = webpack(webpackConfig);
+    const compiler = webpack(config);
 
     compiler.run((err, stats) => {
       if (err) {
@@ -29,7 +29,7 @@ const webpackCompiler = webpackConfig =>
       } else {
         debug('No errors or warnings encountered.');
       }
-      resolve(jsonStats);
+      return resolve(jsonStats);
     });
   });
 
