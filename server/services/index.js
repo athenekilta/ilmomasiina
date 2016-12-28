@@ -42,6 +42,7 @@ module.exports = function () { // 'function' needed as we use 'this'
   }))
   .then(() => {
     // create dummy events
+
     app.service('/api/events').create({
       name: 'Tapahtuma1',
       date: '2017-1-1 23:59:59',
@@ -66,6 +67,7 @@ module.exports = function () { // 'function' needed as we use 'this'
       debug('created event');
     });
 
+    // mockup users
     app.service('/api/attendees').create({
       name: 'Joel',
       eventId: 1,
@@ -91,6 +93,8 @@ module.exports = function () { // 'function' needed as we use 'this'
     });
   });
 
+
+  // initialize services
   app.use('/api/events', service({
     Model: db,
     name: 'events',
@@ -101,12 +105,17 @@ module.exports = function () { // 'function' needed as we use 'this'
     name: 'attendees',
   }));
 
-  app.service('/api/events').after(
-    hooks.remove(
-      // remove detailed info from things that get passed to /api/events
-      'location',
-      'homepage',
-      'facebooklink',
-      'price',
-  ));
+  const schema = {
+    include: [{
+      service: '/api/attendees',
+      nameAs: 'attendees',
+      parentField: 'id',
+      childField: 'eventId',
+    }]
+  }
+
+  // hook
+  app.service('/api/events').after({
+    get: hooks.populate({schema}),
+  });
 };
