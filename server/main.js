@@ -1,25 +1,21 @@
-const feathers = require('feathers')
+const feathers = require('feathers');
 const rest = require('feathers-rest');
-const memory = require('feathers-memory');
-const bodyParser = require('body-parser')
-const service = require('feathers-knex');
+const bodyParser = require('body-parser');
 const hooks = require('feathers-hooks');
-const knex = require('knex');
 
-const express = require('express')
-const debug = require('debug')('app:server')
-const webpack = require('webpack')
-const webpackConfig = require('../config/webpack.config')
-const project = require('../config/project.config')
-const ilmoconfig = require('../config/ilmomasiina.config.js')
-const compress = require('compression')
+const express = require('express');
+const debug = require('debug')('app:server');
+const webpack = require('webpack');
+const webpackConfig = require('../config/webpack.config');
+const project = require('../config/project.config');
+const compress = require('compression');
 
 const services = require('./services/index.jsx');
 
 // create feathers app
-const app = feathers()
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+const app = feathers();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.configure(rest());
 app.configure(hooks());
 app.configure(services);
