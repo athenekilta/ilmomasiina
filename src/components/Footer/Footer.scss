@@ -1,6 +1,8 @@
 @import '../../styles/_base.scss';
 
 footer {
+  position: absolute;
+  width: 100%;
   padding: 1em 0;
   background: $secondary-background;
   color: $alt-text;

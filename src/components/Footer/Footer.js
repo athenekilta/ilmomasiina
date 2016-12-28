@@ -3,7 +3,7 @@ import './Footer.scss'
 import { Link } from 'react-router'
 
 export const Footer = () => (
-  <footer className='navbar-fixed-bottom'>
+  <footer>
     <div className='container'>
       <Link to='/admin' className='navbar-link'>Hallinta</Link>
       <span className='separator'>&middot;</span>

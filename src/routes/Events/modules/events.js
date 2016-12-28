@@ -22,7 +22,7 @@ const payload = [{
       max: 20
     },
     {
-      quotaName:'Athene',
+      quotaName:'Prodeko',
       signUpStarts: 1482697816,
       signUpEnds: 1482697816,
       going: 10,
