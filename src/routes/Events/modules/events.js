@@ -16,15 +16,15 @@ const payload = [{
   quotas: [
     {
       title: 'Athene',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
+      signUpStarts: '2016-12-31T00:12:00+02:00',
+      signUpEnds: '2017-01-15T00:15:00+02:00',
       going: 15,
       max: 20,
     },
     {
       title: 'Prodeko',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
+      signUpStarts: '2016-12-28T00:12:00+02:00',
+      signUpEnds: '2017-01-15T00:15:00+02:00',
       going: 10,
       max: 20,
     },
@@ -37,8 +37,8 @@ const payload = [{
   quotas: [
     {
       title: 'Default',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
+      signUpStarts: '2016-12-24T00:20:00+02:00',
+      signUpEnds: '2016-12-25T00:15:00+02:00',
       going: 50,
       max: 50,
     },
