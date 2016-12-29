@@ -63,25 +63,25 @@ module.exports = function () { // eslint-disable-line
   .then(() => {
     // create dummy events
     app.service('/api/events').create({
-      title: 'Tapahtuma1',
-      date: '2017-1-1 23:59:59',
-      description: 'Hassu tapahtuma',
-      price: 'sata euroo',
-      location: 'wat',
-      homepage: 'ei oo',
-      facebooklink: 'ei oo',
+      name: 'Minuuttikalja 2016',
+      date: '2016-4-27 18:00:00',
+      description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
+      price: '',
+      location: 'Where: Smökki (Jämeräntaival 4, Espoo)',
+      homepage: '',
+      facebooklink: 'https://www.facebook.com/events/1715883881987829/',
     }).then(() => {
       debug('created event');
     });
 
     app.service('/api/events').create({
-      title: 'Tapahtuma2',
-      date: '2017-1-1 23:59:59',
-      description: 'Hassu tapahtuma',
-      price: 'sata euroo',
-      location: 'wat',
-      homepage: 'ei oo',
-      facebooklink: 'ei oo',
+      name: 'Columbia Road -excu',
+      date: '2017-1-11 17:00:00',
+      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset ',
+      price: '0',
+      location: 'Eerikinkatu 5, Helsinki',
+      homepage: 'http://crexcu2017.wordpress.com/',
+      facebooklink: '',
     }).then(() => {
       debug('created event');
     });
@@ -89,25 +89,25 @@ module.exports = function () { // eslint-disable-line
     // mockup users
     app.service('/api/signups').create({
       name: 'Joel',
-      eventId: 1,
+      quotaId: 1,
       email: 'ilmomasiina@gmail.com',
     });
 
     app.service('/api/signups').create({
       name: 'Pekka',
-      eventId: 1,
+      quotaId: 1,
       email: 'pekka@ilmo.fi',
     });
 
     app.service('/api/signups').create({
       name: 'Alan',
-      eventId: 2,
+      quotaId: 2,
       email: 'Alan@ilmo.fi',
     });
 
     app.service('/api/signups').create({
       name: 'Ville',
-      eventId: 2,
+      quotaId: 2,
       email: 'ville@ilmo.fi',
     });
   });
@@ -129,6 +129,12 @@ module.exports = function () { // eslint-disable-line
     name: 'quotas',
   }));
 
+  app.service('/api/quotas').before({
+    // disable external use (rest / websocket ) of /api/quotas
+    all: hooks.disable('external'),
+  });
+
+
   const populateEventsSchema = {
     include: [{
       service: '/api/quotas',
@@ -141,16 +147,16 @@ module.exports = function () { // eslint-disable-line
 
   const populateSingleEvent = {
     include: [{
-      service: '/api/signups',
-      nameAs: 'signups',
-      parentField: 'id',
-      childField: 'eventId',
-    },
-    {
       service: '/api/quotas',
       nameAs: 'quotas',
       parentField: 'id',
       childField: 'eventId',
+      include: [{
+        service: '/api/signups',
+        nameAs: 'signups',
+        parentField: 'eventId',
+        childField: 'quotaId',
+      }],
     }],
   };
 
