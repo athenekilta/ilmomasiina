@@ -24,7 +24,7 @@ module.exports = function () { // 'function' needed as we use 'this'
 
   // drop tables
   db.schema.dropTableIfExists('events')
-  .then(() => db.schema.dropTableIfExists('attendees'))
+  .then(() => db.schema.dropTableIfExists('signups'))
   .then(() => db.schema.dropTableIfExists('quotas'))
 
   // create tables
@@ -41,8 +41,8 @@ module.exports = function () { // 'function' needed as we use 'this'
       table.string('facebooklink');
     }))
   .then(() =>
-    db.schema.createTable('attendees', (table) => {
-      debug('Creating attendees table');
+    db.schema.createTable('signups', (table) => {
+      debug('Creating signups table');
       table.increments('id');
       table.integer('eventId');
       table.string('name');
@@ -85,25 +85,25 @@ module.exports = function () { // 'function' needed as we use 'this'
     });
 
     // mockup users
-    app.service('/api/attendees').create({
+    app.service('/api/signups').create({
       name: 'Joel',
       eventId: 1,
       email: 'joel@ilmo.fi',
     });
 
-    app.service('/api/attendees').create({
+    app.service('/api/signups').create({
       name: 'Pekka',
       eventId: 1,
       email: 'pekka@ilmo.fi',
     });
 
-    app.service('/api/attendees').create({
+    app.service('/api/signups').create({
       name: 'Alan',
       eventId: 2,
       email: 'Alan@ilmo.fi',
     });
 
-    app.service('/api/attendees').create({
+    app.service('/api/signups').create({
       name: 'Ville',
       eventId: 2,
       email: 'ville@ilmo.fi',
@@ -117,9 +117,9 @@ module.exports = function () { // 'function' needed as we use 'this'
     name: 'events',
   }));
 
-  app.use('/api/attendees', service({
+  app.use('/api/signups', service({
     Model: db,
-    name: 'attendees',
+    name: 'signups',
   }));
 
   app.use('/api/quotas', service({
@@ -129,8 +129,8 @@ module.exports = function () { // 'function' needed as we use 'this'
 
   const schema = {
     include: [{
-      service: '/api/attendees',
-      nameAs: 'attendees',
+      service: '/api/signups',
+      nameAs: 'signups',
       parentField: 'id',
       childField: 'eventId',
     },
