@@ -127,6 +127,12 @@ module.exports = function () { // 'function' needed as we use 'this'
     name: 'quotas',
   }));
 
+  app.service('/api/quotas').before({
+    // disable external use (rest / websocket ) of /api/quotas
+    all: hooks.disable('external'),
+  });
+
+
   const populateEventsSchema = {
     include: [{
       service: '/api/quotas',
@@ -168,4 +174,5 @@ module.exports = function () { // 'function' needed as we use 'this'
       });
     },
   });
+
 };
