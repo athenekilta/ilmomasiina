@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import moment from 'moment';
 import { Link } from 'react-router';
 import './AdminEventList.scss';
 
@@ -11,8 +12,8 @@ class AdminEventListItem extends React.Component {
     return (
       <tr>
         <td><Link to={`/event/${this.props.data.id}`}>{ this.props.data.name }</Link></td>
-        <td>{this.props.data.date}</td>
-        <td>Avoinna</td>
+        <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
+        <td>Luonnos</td>
         <td>{ _.sumBy(this.props.data.quota, n => n.going) }</td>
         <td><Link className="btn btn-default">Lataa osallistujatiedot</Link></td>
         <td><Link className="btn btn-warning">Muokkaa tapahtumaa</Link></td>
@@ -32,29 +33,21 @@ class AdminEventList extends React.Component {
   render() {
     return (
       <div>
-        <h1>Kaikki tapahtumat</h1>
-        <table className='table'>
-          <thead className='tableHeads'><tr>
-            <td>Nimi</td>
-            <td>Ajankohta</td>
-            <td>Tila</td>
-            <td>Ilmoittautuneita</td>
-          </tr></thead>
+        <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">+ Uusi tapahtuma</Link>
+        <h1>Hallinta</h1>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Nimi</th>
+              <th>Ajankohta</th>
+              <th>Tila</th>
+              <th>Ilmoittautuneita</th>
+            </tr>
+          </thead>
           <tbody>
             { this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />) }
           </tbody>
         </table>
-        <nav className="text-center">
-          <ul className="pagination">
-            <li><a href="#">&laquo;</a></li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">&raquo;</a></li>
-          </ul>
-        </nav>
       </div>
     );
   }
