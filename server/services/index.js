@@ -6,10 +6,10 @@ const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disa
 
 // const user require('./user');
 
-module.exports = function () { // 'function' needed as we use 'this'
-  debug('Feathers');
-  const app = this;
 
+module.exports = function () { // eslint-disable-line
+  debug('Feathers');
+  const app = this; // function can't be nameless beacause of this
   // initialize db
 
   // create database connection
@@ -88,7 +88,7 @@ module.exports = function () { // 'function' needed as we use 'this'
     app.service('/api/signups').create({
       name: 'Joel',
       eventId: 1,
-      email: 'joel@ilmo.fi',
+      email: 'ilmomasiina@gmail.com',
     });
 
     app.service('/api/signups').create({

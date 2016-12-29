@@ -109,6 +109,7 @@
     "moment": "^2.17.1",
     "mysql": "^2.12.0",
     "lodash": "^4.17.3",
+    "mailgun-js": "^0.7.15",
     "node-sass": "^4.0.0",
     "postcss-loader": "^1.1.0",
     "react": "^15.0.0",
