@@ -127,7 +127,7 @@ module.exports = function () { // 'function' needed as we use 'this'
     name: 'quotas',
   }));
 
-  const schema = {
+  const populateEventsSchema = {
     include: [{
       service: '/api/quotas',
       nameAs: 'quotas',
@@ -136,7 +136,7 @@ module.exports = function () { // 'function' needed as we use 'this'
     }],
   };
 
-  const schema2 = {
+  const populateSingleEvent = {
     include: [{
       service: '/api/signups',
       nameAs: 'signups',
@@ -154,9 +154,9 @@ module.exports = function () { // 'function' needed as we use 'this'
   // api/events hooks
   app.service('/api/events').after({
     // GET /api/events/<eventId>
-    get: hooks.populate({ schema: schema2 }),
+    get: hooks.populate({ schema: populateSingleEvent }),
     // GET /api/events
-    find: hooks.populate({ schema }),
+    find: hooks.populate({ schema: populateEventsSchema }),
     create: (hook) => {
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
