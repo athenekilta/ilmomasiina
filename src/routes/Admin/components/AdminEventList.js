@@ -35,6 +35,12 @@ class AdminEventList extends React.Component {
       <div>
         <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">+ Uusi tapahtuma</Link>
         <h1>Hallinta</h1>
+        <div className="alert alert-info" role="alert">
+          <p>
+            <strong>Ville Vuorenmaa</strong> on pyytänyt pääsyä hallintapaneeliin.&nbsp;
+            <a>Hyväksy</a><span className="separator">/</span><a>Hylkää</a>
+          </p>
+        </div>
         <table className="table">
           <thead>
             <tr>
