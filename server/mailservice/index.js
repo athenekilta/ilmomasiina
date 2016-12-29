@@ -1,4 +1,4 @@
-const ilmoconfig = require('../../config/ilmomasiina.config.js');
+const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 const debug = require('debug')('app:server');
 
 const mailgun = require('mailgun-js')({
