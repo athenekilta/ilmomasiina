@@ -5,6 +5,7 @@ h1 {
   font-weight: 800;
   font-size: 32px;
   text-transform: uppercase;
+  margin: 1em 0;
 }
 
 h2 {
@@ -20,6 +21,10 @@ h3 {
   font-size: 16px;
 }
 
+strong {
+  font-weight: 600;
+}
+
 table.table {
   thead {
     th {
@@ -29,6 +34,19 @@ table.table {
   }
 }
 
+.tab-pane {
+  padding: 2em 0;
+}
+
 .separator {
   padding: 0 0.5em;
+}
+
+.control-label {
+  font-weight: 400;
+
+  .required-symbol {
+    font-weight: 600;
+    color: $red;
+  }
 }

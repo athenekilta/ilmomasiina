@@ -1,0 +1,48 @@
+@import '../styles/_base.scss';
+
+.event-editor {
+
+  .panel-default {
+      position: relative;
+
+    .panel-body {
+      background: $secondary-background;
+      padding-left: 50px;
+    }
+
+    .handler {
+      display: block;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      background: #fff;
+      border-right: 1px solid #ddd;
+      cursor: move;
+
+      &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 50%;
+        height: 1px;
+        background: #ddd;
+      }
+
+      &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        top: 46.4%;
+        height: 8%;
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+      }
+    }
+  }
+}
