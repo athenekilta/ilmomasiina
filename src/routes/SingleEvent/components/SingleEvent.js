@@ -1,6 +1,6 @@
 import React from 'react';
 import Formsy from 'formsy-react';
-import { Input, Textarea } from 'formsy-react-components';
+import { Checkbox, Input, Textarea } from 'formsy-react-components';
 import './SingleEvent.scss';
 
 class EnrollForm extends React.Component {
@@ -40,6 +40,12 @@ class EnrollForm extends React.Component {
             name="avoinKysymys"
             label="Avoin kysymys"
             placeholder="Tämä on avoimen kysymyksen ennakkoteksti."
+          />
+          <Checkbox
+            name="checkbox1"
+            value
+            label="Valitse minut"
+            rowLabel="Klikattava vaihtoehto"
           />
         </Formsy.Form>
       </div>
