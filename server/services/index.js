@@ -174,5 +174,4 @@ module.exports = function () { // 'function' needed as we use 'this'
       });
     },
   });
-
 };
