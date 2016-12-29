@@ -1,53 +1,74 @@
 import React from 'react';
 import Formsy from 'formsy-react';
-import { Checkbox, Input, Textarea } from 'formsy-react-components';
+import { Checkbox, Select, Input, Textarea } from 'formsy-react-components';
 import './SingleEvent.scss';
 
 class EnrollForm extends React.Component {
   render() {
+    const selectOptions = [
+    { value: 'a', label: 'Option A' },
+    { value: 'a', label: 'Option A (again)' },
+    { value: 'b', label: 'Option B' },
+    { value: 'c', label: 'Option C' },
+    { value: 'd', label: 'Option D' },
+    ];
+
+    const singleSelectOptions = selectOptions.slice(0);
+    singleSelectOptions.unshift({ value: '', label: 'Please select…' });
+
     return (
       <div className='col-xs-12'>
-        <a onClick={() => this.props.closeForm()} >Sulje</a>
-        <h2>Ilmoittaudu</h2>
-        <p>Olet mukana</p>
-        <Formsy.Form
-          onSubmit={this.submitForm}>
-          <Input
-            name="nimi"
-            id="nimiId"
-            value=""
-            label="Nimi"
-            type="text"
-            placeholder="Nimesi"
-            help="*Tämä kenttä on pakollinen."
-            required />
-          <Input
-            name="email"
-            value=""
-            label="Sähköposti"
-            type="email"
-            placeholder="Sähköpostisi"
-            help="*Tämä kenttä on pakollinen"
-            validations="isEmail"
-            validationErrors={{
-              isEmail: 'Anna sähköpostisi muodossa pekka@cto.fi',
-            }}
-            required
-          />
-          <Textarea
-            rows={3}
-            cols={40}
-            name="avoinKysymys"
-            label="Avoin kysymys"
-            placeholder="Tämä on avoimen kysymyksen ennakkoteksti."
-          />
-          <Checkbox
-            name="checkbox1"
-            value
-            label="Valitse minut"
-            rowLabel="Klikattava vaihtoehto"
-          />
-        </Formsy.Form>
+        <a className='close hairline col-xs-1 pull-right' onClick={() => this.props.closeForm()} />
+        <div className='col-xs-11'>
+          <h2>Ilmoittaudu</h2>
+          <p>Ilmoittautumistilanteesi on: [insert tilanne]</p>
+          <Formsy.Form
+            onSubmit={this.submitForm}>
+            <Input
+              name="nimi"
+              id="nimiId"
+              value=""
+              label="Nimi"
+              type="text"
+              placeholder="Nimesi"
+              help="*Tämä kenttä on pakollinen."
+              required />
+            <Input
+              name="email"
+              value=""
+              label="Sähköposti"
+              type="email"
+              placeholder="Sähköpostisi"
+              help="*Tämä kenttä on pakollinen"
+              validations="isEmail"
+              validationErrors={{
+                isEmail: 'Anna sähköpostisi muodossa pekka@cto.fi',
+              }}
+              required
+            />
+            <Textarea className='open-question'
+              rows={3}
+              cols={40}
+              name="avoinKysymys"
+              label="Avoin kysymys"
+              placeholder="Tämä on avoimen kysymyksen ennakkoteksti."
+            />
+            <Checkbox
+              name="checkbox1"
+              value
+              label="Valitse minut"
+              rowLabel="Klikattava vaihtoehto"
+            />
+            <Select
+              name="select1"
+              label="Select"
+              help="This is a required select element."
+              options={singleSelectOptions}
+              required
+            />
+            <input className="btn btn-primary" formNoValidate type="submit" defaultValue="Submit" />
+          </Formsy.Form>
+        </div>
       </div>
     );
   }
