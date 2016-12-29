@@ -11,20 +11,22 @@ export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC';
 
 const payload = [{
   id: 1,
-  name: 'Joulusitsit',
+  title: 'Joulusitsit',
   date: 1482697816,
-  quota: [
+  quotas: [
     {
-      quotaName: 'Athene',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
+      title: 'Athene',
+      signUpStarts: '2016-12-31T00:12:00+02:00',
+      signUpEnds: '2017-01-15T00:15:00+02:00',
       going: 15,
       max: 20,
     },
     {
-      quotaName: 'Prodeko',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
+      title: 'Prodeko',
+      // signUpStarts: '2016-12-31T00:12:00+02:00',
+      // signUpEnds: '2017-01-15T00:15:00+02:00',
+      signUpStarts: '2016-12-28T00:12:00+02:00',
+      signUpEnds: '2017-01-15T00:15:00+02:00',
       going: 10,
       max: 20,
     },
@@ -32,13 +34,13 @@ const payload = [{
 },
 {
   id: 2,
-  name: 'Uusivuosi',
+  title: 'Uusivuosi',
   date: 1483221600,
-  quota: [
+  quotas: [
     {
-      quotaName: 'Default',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
+      title: 'Default',
+      signUpStarts: '2016-12-24T00:20:00+02:00',
+      signUpEnds: '2016-12-25T00:15:00+02:00',
       going: 50,
       max: 50,
     },
@@ -57,7 +59,7 @@ export const getEventList = () => dispatch => new Promise((resolve) => {
       payload,
     });
     resolve();
-  }, 1000);
+  }, 100);
 });
 
 export const actions = {

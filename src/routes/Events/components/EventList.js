@@ -1,21 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router';
+import moment from 'moment';
+import _ from 'lodash';
 import './EventList.scss';
 
-/* Render a single item
-*/
-
-class EventListItem extends React.Component {
+class TableRow extends React.Component {
   render() {
-    // TODO: rendering multiple quotas (kiintiöt)
-    // TIP: http://stackoverflow.com/questions/25034994/how-to-correctly-wrap-few-td-tags-for-jsxtransformer
+    const { title, link, date, signUpLabel, going, max, className } = this.props;
 
     return (
-      <tr>
-        <td><Link to={`/event/${this.props.data.id}`}>{this.props.data.name}</Link></td>
-        <td>{this.props.data.date}</td>
-        <td>Avoinna</td>
-        <td>{this.props.data.quota[0].going}/{this.props.data.quota[0].max}</td>
+      <tr className={className}>
+        <td className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
+        <td className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
+        <td className="signup" data-xs-prefix={signUpLabel ? 'Ilmoittautuminen ' : ''}>{signUpLabel}</td>
+        <td className="going" data-xs-prefix={going || max ? 'Ilmoittautuneita: ' : ''}>
+          { going || '' }{ max ? <span className="separator">/</span> : '' }{ max || ''}
+        </td>
       </tr>
     );
   }
@@ -30,25 +30,77 @@ class EventList extends React.Component {
   }
 
   render() {
+    const signUpLabel = (starts, closes) => {
+      const startTime = moment(starts);
+      const closeTime = moment(closes);
+      const now = moment();
+
+      const timeFormat = 'D.M. [klo] hh:mm';
+
+      if (startTime.isSameOrAfter(now)) {
+        return `Alkaa ${moment(startTime).format(timeFormat)}.`;
+      }
+
+      if (closeTime.isSameOrAfter(now)) {
+        return `Päättyy ${moment(closeTime).format(timeFormat)}.`;
+      }
+
+      return 'Päättynyt';
+    };
+
+    const tableRows = this.props.eventList.map((event) => {
+      // If every quota has same registration start/end time, show that time only once
+      const showOneLabel = () => {
+        const startMin = _.min(event.quotas.map(n => n.signUpStarts));
+        const endMin = _.min(event.quotas.map(n => n.signUpEnds));
+        const startMax = _.max(event.quotas.map(n => n.signUpStarts));
+        const endMax = _.max(event.quotas.map(n => n.signUpEnds));
+
+        return (startMin === startMax && endMin === endMax);
+      };
+
+      const rows = [
+        <TableRow
+          title={event.title}
+          link={`/event/${event.id}`}
+          date={event.date}
+          signUpLabel={showOneLabel() ? signUpLabel(event.quotas[0].signUpStarts, event.quotas[0].signUpEnds) : ''}
+          going={_.sumBy(event.quotas, 'going')}
+          max={_.sumBy(event.quotas, 'max')}
+          className={moment().isSameOrAfter(moment(event.quotas[0].signUpEnds)) ? 'text-muted' : ''}
+          key={`e${event.id}`} />,
+      ];
+
+      if (event.quotas.length > 1) {
+        event.quotas.map((quota, i) =>
+          rows.push(
+            <TableRow
+              title={quota.title}
+              signUpLabel={!showOneLabel() ? signUpLabel(quota.signUpStarts, quota.signUpEnds) : ''}
+              going={quota.going}
+              max={quota.max}
+              className={moment().isSameOrAfter(quota.signUpEnds) ? 'text-muted child' : 'child'}
+              key={`q${i}`} />,
+          ),
+        );
+      }
+
+      return rows;
+    });
+
     return (
       <div>
         <h1>Tapahtumat</h1>
-        <table className='table'>
+        <table className="table eventlist">
           <thead>
             <tr>
               <th>Nimi</th>
               <th>Ajankohta</th>
-              <th>Ilmoittauminen</th>
-              <th>Kiintiö</th>
+              <th>Ilmoittautuminen</th>
+              <th>Ilmoittautuneita</th>
             </tr>
           </thead>
-          <tbody>
-            {
-              this.props.eventList.map(
-                (i, index) =>
-                  <EventListItem key={index} data={i} />)
-            }
-          </tbody>
+          <tbody>{tableRows}</tbody>
         </table>
       </div>
     );
@@ -56,8 +108,14 @@ class EventList extends React.Component {
 
 }
 
-EventListItem.propTypes = {
-  data: React.PropTypes.object.isRequired,
+TableRow.propTypes = {
+  title: React.PropTypes.string.isRequired,
+  date: React.PropTypes.number,
+  link: React.PropTypes.string,
+  signUpLabel: React.PropTypes.string,
+  className: React.PropTypes.string,
+  going: React.PropTypes.number,
+  max: React.PropTypes.number,
 };
 
 EventList.propTypes = {
