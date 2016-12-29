@@ -84,7 +84,7 @@ module.exports = function () { // eslint-disable-line
       table.increments('id');
       table.integer('quotaId');
       table.dateTime('timestamp');
-      table.string('title');
+      table.string('attendee');
       table.string('email');
     }))
   .then(() =>
