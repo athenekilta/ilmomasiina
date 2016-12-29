@@ -21,7 +21,7 @@ app.configure(rest());
 app.configure(hooks());
 app.configure(services);
 
-sendmail('joel.lappalainen@gmail.com');
+sendmail('ilmomasiina@gmail.com');
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement universal
 // rendering, you'll want to remove this middleware.
