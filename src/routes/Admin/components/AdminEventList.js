@@ -71,7 +71,7 @@ class AdminEventList extends React.Component {
     }
 
     return (
-      <div>
+      <div className="container">
         <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">+ Uusi tapahtuma</Link>
         <h1>Hallinta</h1>
         <div className="alert alert-info" role="alert">

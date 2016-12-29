@@ -17,57 +17,57 @@ class EnrollForm extends React.Component {
     singleSelectOptions.unshift({ value: '', label: 'Please select…' });
 
     return (
-      <div className='col-xs-12'>
-        <a className='close hairline col-xs-1 pull-right' onClick={() => this.props.closeForm()} />
-        <div className='col-xs-11'>
-          <h2>Ilmoittaudu</h2>
-          <p>Ilmoittautumistilanteesi on: [insert tilanne]</p>
-          <Formsy.Form
-            onSubmit={this.submitForm}>
-            <Input
-              name="nimi"
-              id="nimiId"
-              value=""
-              label="Nimi"
-              type="text"
-              placeholder="Nimesi"
-              help="*Tämä kenttä on pakollinen."
-              required />
-            <Input
-              name="email"
-              value=""
-              label="Sähköposti"
-              type="email"
-              placeholder="Sähköpostisi"
-              help="*Tämä kenttä on pakollinen"
-              validations="isEmail"
-              validationErrors={{
-                isEmail: 'Anna sähköpostisi muodossa pekka@cto.fi',
-              }}
-              required
-            />
-            <Textarea className='open-question'
-              rows={3}
-              cols={40}
-              name="avoinKysymys"
-              label="Avoin kysymys"
-              placeholder="Tämä on avoimen kysymyksen ennakkoteksti."
-            />
-            <Checkbox
-              name="checkbox1"
-              value
-              label="Valitse minut"
-              rowLabel="Klikattava vaihtoehto"
-            />
-            <Select
-              name="select1"
-              label="Select"
-              help="This is a required select element."
-              options={singleSelectOptions}
-              required
-            />
-            <input className="btn btn-primary" formNoValidate type="submit" defaultValue="Submit" />
-          </Formsy.Form>
+      <div className="form-wrapper">
+        <div className="container">
+        <a className="close" onClick={() => this.props.closeForm()} />
+          <div className="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+            <h2>Ilmoittaudu</h2>
+            <p>Ilmoittautumistilanteesi on: [insert tilanne]</p>
+            <Formsy.Form
+              onSubmit={this.submitForm}>
+              <Input
+                name="nimi"
+                id="nimiId"
+                value=""
+                label="Nimi"
+                type="text"
+                placeholder="Nimesi"
+                required />
+              <Input
+                name="email"
+                value=""
+                label="Sähköposti"
+                type="email"
+                placeholder="Sähköpostisi"
+                validations="isEmail"
+                validationErrors={{
+                  isEmail: 'Anna sähköpostisi muodossa pekka@cto.fi',
+                }}
+                required
+              />
+              <Textarea className='open-question form-control'
+                rows={3}
+                cols={40}
+                name="avoinKysymys"
+                label="Avoin kysymys"
+                placeholder="Tämä on avoimen kysymyksen ennakkoteksti."
+              />
+              <Checkbox
+                name="checkbox1"
+                value
+                label="Valitse minut"
+                rowLabel="Klikattava vaihtoehto"
+              />
+              <Select
+                name="select1"
+                label="Select"
+                options={singleSelectOptions}
+                required
+              />
+              <input className="btn btn-primary pull-right" formNoValidate type="submit" defaultValue="Submit" />
+            </Formsy.Form>
+          </div>
+          <div className="cf" />
         </div>
       </div>
     );
@@ -168,29 +168,31 @@ class SingleEvent extends React.Component {
     return (
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
-        <div className='col-xs-12 col-md-8'>
-          <h1>{this.props.singleEvent.title}</h1>
-          <p>
-            {this.props.singleEvent.date}<br />
-            Hinta: {this.props.singleEvent.price}<br />
-            <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
-          </p>
-          <p>{this.props.singleEvent.description}</p>
-        </div>
-        <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
-          <h3 className='col-md-12'>Ilmoittaudu</h3>
-          {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-            <AttendButton openForm={this.openForm} key={index} data={i} />) : '')}
-        </div>
-        <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
-          <h3>Ilmoittautuneet</h3>
-          {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-            <ViewProgress key={index} data={i} />) : '')}
-        </div>
-        <div className='col-xs-12 col-md-8'>
-          <h2>Ilmoittautuneet</h2>
-          {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-            <AttendeeGroup key={index} data={i} />) : '')}
+        <div className="container">
+          <div className='col-xs-12 col-md-8'>
+            <h1>{this.props.singleEvent.title}</h1>
+            <p>
+              {this.props.singleEvent.date}<br />
+              Hinta: {this.props.singleEvent.price}<br />
+              <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
+            </p>
+            <p>{this.props.singleEvent.description}</p>
+          </div>
+          <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
+            <h3 className='col-md-12'>Ilmoittaudu</h3>
+            {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+              <AttendButton openForm={this.openForm} key={index} data={i} />) : '')}
+          </div>
+          <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
+            <h3>Ilmoittautuneet</h3>
+            {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+              <ViewProgress key={index} data={i} />) : '')}
+          </div>
+          <div className='col-xs-12 col-md-8'>
+            <h2>Ilmoittautuneet</h2>
+            {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+              <AttendeeGroup key={index} data={i} />) : '')}
+          </div>
         </div>
       </div>
     );

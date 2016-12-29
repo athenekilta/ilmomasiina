@@ -17,38 +17,47 @@
 }
 
 .close{
-  position: relative;
+  position: absolute;
+  right: 30px;
+  top: 30px;
   display: inline-block;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
-  color: red;
-  &:hover {
-    &::before, &::after {
-      opacity: 1.0;
-    }
-  }
+  cursor: pointer;
 
   &::before, &::after {
     content: '';
     position: absolute;
-    height: 2px;
+    height: 1px;
     width: 100%;
     top: 50%;
     left: 0;
     margin-top: -1px;
-    background: #000;
-    opacity: 0.3;
+    background: $alt-text;
   }
-  &::before {
+  &:before {
    transform:(rotate(45deg));
   }
-  &::after {
+  &:after {
     transform:(rotate(-45deg));
   }
-  &.hairline {
-    &::before, &::after {
-      height: 1px;
+
+  &:hover {
+    &:before, &:after {
+      background: lighten($alt-text, 20%);
     }
+  }
+}
+
+.form-wrapper {
+  width: 100%;
+  background: $secondary-background;
+  margin: -22px 0 3em;
+  padding: 4em 0;
+  position: relative;
+
+  p {
+    margin: 2em 0;
   }
 }
