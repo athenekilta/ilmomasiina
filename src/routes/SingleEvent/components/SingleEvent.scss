@@ -1,1 +1,54 @@
 @import '../styles/_base.scss';
+
+.sidebar-widget {
+  background-color: $secondary-background;
+  margin-bottom: 1em;
+}
+.btn{
+  margin-bottom: 1em;
+}
+
+.progress {
+  padding: 0;
+}
+
+.open-question{
+  max-width: 100%;
+}
+
+.close{
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  color: red;
+  &:hover {
+    &::before, &::after {
+      opacity: 1.0;
+    }
+  }
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -1px;
+    background: #000;
+    opacity: 0.3;
+  }
+  &::before {
+   transform:(rotate(45deg));
+  }
+  &::after {
+    transform:(rotate(-45deg));
+  }
+  &.hairline {
+    &::before, &::after {
+      height: 1px;
+    }
+  }
+}
