@@ -28,11 +28,9 @@ class TableRow extends React.Component {
 class EventList extends React.Component {
   componentWillMount() {
     this.props.getEventList();
-    console.log(this.props.eventList);
   }
 
   render() {
-    console.log(this.props.eventList);
     const state = (event, starts, closes) => {
       const signupOpens = moment(starts);
       const signupCloses = moment(closes);
@@ -104,8 +102,6 @@ class EventList extends React.Component {
 
       return rows;
     });
-
-    console.log(this.props.eventList);
 
     return (
       <div>

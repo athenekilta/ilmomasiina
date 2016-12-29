@@ -11,53 +11,6 @@ export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC';
 
 /*  Temporary payload. This is going to be loaded from the backend. */
 
-const payload = [
-  {
-    id:1,
-    title:"Tapahtuma1",
-    date:"2017-01-01T21:59:59.000Z",
-    description:"Hassu tapahtuma",
-    price:"sata euroo",
-    location:"wat",
-    homepage:"ei oo",
-    facebooklink:"ei oo",
-    _include:["quotas"],
-    quotas:[
-      {
-        id:1,
-        eventId:1,
-        title:"Kiintiö tapahtumalle ",
-        going:10,
-        size:20,
-        signupOpens:"2017-01-01T21:59:59.000Z",
-        signupCloses:"2017-01-01T21:59:59.000Z"
-      }
-    ]
-  },
-  {
-    id:2,
-    title:"Tapahtuma2",
-    date:"2017-01-01T21:59:59.000Z",
-    description:"Hassu tapahtuma",
-    price:"sata euroo",
-    location:"wat",
-    homepage:"ei oo",
-    facebooklink:"ei oo",
-    _include:["quotas"],
-    quotas:[
-      {
-        id:2,
-        eventId:2,
-        title:"Kiintiö tapahtumalle ",
-        going:10,
-        size:20,
-        signupOpens:"2017-01-01T21:59:59.000Z",
-        signupCloses:"2017-01-01T21:59:59.000Z"
-      }
-    ]
-  }
-];
-
 function getApi() {
   return request('GET', '/api/events');
 }
@@ -68,8 +21,7 @@ function getApi() {
 
 export const getEventList = () => (dispatch) => {
   getApi()
-    .then(res => JSON.parse(res.getBody()))
-    .then(r => console.log(r))
+    .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch({
         type: GET_EVENTLIST_ASYNC,
