@@ -2,7 +2,7 @@ const debug = require('debug')('app:server');
 const service = require('feathers-knex');
 const hooks = require('feathers-hooks');
 const knex = require('knex');
-const ilmoconfig = require('../../config/ilmomasiina.config.js');
+const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 
 // const user require('./user');
 
@@ -151,7 +151,7 @@ module.exports = function () { // 'function' needed as we use 'this'
     create(hook) {
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
-        eventId: hook.result.id,
+        eventId: hook.result.id, // id of the just created event
         quotaName: 'Kiintiö tapahtumalle ',
         quotaSize: 20,
         quotaOpens: '2017-1-1 23:59:59',
