@@ -3,13 +3,21 @@
 
 h1 {
   font-weight: 800;
+  font-size: 32px;
   text-transform: uppercase;
 }
 
 h2 {
   font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   color: $alt-text
+}
+
+h3 {
+  font-weight: 600;
+  font-size: 16px;
 }
 
 table.table {
