@@ -1,6 +1,7 @@
 import React from 'react';
 import Formsy from 'formsy-react';
 import { Checkbox, Select, Input, Textarea } from 'formsy-react-components';
+import Separator from '../../../components/Separator';
 import './SingleEvent.scss';
 
 class EnrollForm extends React.Component {
@@ -85,11 +86,13 @@ class ViewProgress extends React.Component {
   render() {
     return (
       <div>
-        <p>{this.props.data.quotaName}</p>
-        <div className='progress col-xs-12'>
-          <div className='progress-bar' role='progressbar'
+        {this.props.data.quotaName}
+        <div className="progress">
+          <div className="progress-bar" role="progressbar"
             style={{ minWidth: '4em', width: `${(this.props.data.going / this.props.data.max) * 100}%` }}>
-            {this.props.data.going}/{this.props.data.max}
+            {this.props.data.going}
+            <Separator />
+            {this.props.data.max}
           </div>
         </div>
       </div>
@@ -125,7 +128,6 @@ class AttendeeGroup extends React.Component {
           }
           </tbody>
         </table>
-        <hr />
       </div>
     );
   }
@@ -169,7 +171,7 @@ class SingleEvent extends React.Component {
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
         <div className="container">
-          <div className='col-xs-12 col-md-8'>
+          <div className='col-xs-12 col-sm-8'>
             <h1>{this.props.singleEvent.title}</h1>
             <p>
               {this.props.singleEvent.date}<br />
@@ -178,17 +180,21 @@ class SingleEvent extends React.Component {
             </p>
             <p>{this.props.singleEvent.description}</p>
           </div>
-          <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
-            <h3 className='col-md-12'>Ilmoittaudu</h3>
-            {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-              <AttendButton openForm={this.openForm} key={index} data={i} />) : '')}
+          <div className="col-xs-12 col-sm-4 pull-right">
+            <div className="sidebar-widget">
+              <h3>Ilmoittaudu</h3>
+              {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+                <AttendButton openForm={this.openForm} key={index} data={i} />) : '')}
+            </div>
           </div>
-          <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
-            <h3>Ilmoittautuneet</h3>
-            {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-              <ViewProgress key={index} data={i} />) : '')}
+          <div className="col-xs-12 col-sm-4 pull-right">
+            <div className="sidebar-widget">
+              <h3>Ilmoittautuneet</h3>
+              {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+                <ViewProgress key={index} data={i} />) : '')}
+              </div>
           </div>
-          <div className='col-xs-12 col-md-8'>
+          <div className="col-xs-12">
             <h2>Ilmoittautuneet</h2>
             {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
               <AttendeeGroup key={index} data={i} />) : '')}

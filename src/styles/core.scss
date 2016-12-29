@@ -22,6 +22,10 @@
     font-size: 16px;
   }
 
+  p {
+    margin-bottom: 1.5em;
+  }
+
   strong, label {
     font-weight: 600;
   }
@@ -38,5 +42,9 @@
   .required-symbol {
     color: $red;
     font-weight: 600;
+  }
+
+  .progress, .progress-bar {
+    box-shadow: none;
   }
 }
