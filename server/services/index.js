@@ -44,7 +44,7 @@ module.exports = function () { // eslint-disable-line
     db.schema.createTable('signups', (table) => {
       debug('Creating signups table');
       table.increments('id');
-      table.integer('eventId');
+      table.integer('quotaId');
       table.string('name');
       table.string('email');
     }))
@@ -63,7 +63,7 @@ module.exports = function () { // eslint-disable-line
     app.service('/api/events').create({
       name: 'Minuuttikalja 2016',
       date: '2016-4-27 18:00:00',
-      description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja, on jälleen täällä! Kyseessä on peli, jossa juodaan minuutin välein shotti kaljaa. Sarjoja on perinteiset kaksi: 60 minuutin Power Hour ja 100 minuutin Body Building. Lisäksi janoisammat ja vahvemmat pelaajat voivat jatkaa I Will Go On Forever -sarjaan. Pelata saa myös muilla kaljaan rinnastettavilla juomilla. Oheisviihteenä esitetään jääkiekkospektaakkeli joka, toisin kuin itse Minuuttikalja, tulee päättymään selvin lukemin: MM-finaali vuosimallia -95 tai -11. Viimevuotinen, historian suurin Minuuttikalja, järjestettiin Startup Saunalla, mutta tänä vuonna wapun suurin urheilujuhla tuodaan suoraan Otaniemen sydämeen, Servin Mökkiin! Tapahtuma on ilmainen, mutta vaatii ilmoittautumisen. Ilmo aukeaa keskiviikkona 13.4. klo 12:00 Athenen ilmomasiinassa. Pelit alkavat klo 18:00, olethan viimeistään 17:45 pelipaikoilla! <br /> ************ In English ************ <br /> The legendary Minute Beer is here again! Minute beer is a game in which a player drinks a shot of beer every minute for 60 or 100 minutes, or for as long as he or she can.The event takes place in Smökki, in Otaniemi on Wednesday the 27th of April at 6 PM. The event is free, but a registration is required.', // eslint-disable-line
+      description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
       price: '',
       location: 'Where: Smökki (Jämeräntaival 4, Espoo)',
       homepage: '',
@@ -75,7 +75,7 @@ module.exports = function () { // eslint-disable-line
     app.service('/api/events').create({
       name: 'Columbia Road -excu',
       date: '2017-1-11 17:00:00',
-      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset tervetulleeksi exculle 11.1. <br /> Tarkemmat tiedot löytyvät kutsusta linkin takaa. <br />Excupaikkoja on tarjolla 15:lle nopeimmalle athenelaiselle.', //eslint-disable-line
+      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset ',
       price: '0',
       location: 'Eerikinkatu 5, Helsinki',
       homepage: 'http://crexcu2017.wordpress.com/',
@@ -87,25 +87,25 @@ module.exports = function () { // eslint-disable-line
     // mockup users
     app.service('/api/signups').create({
       name: 'Joel',
-      eventId: 1,
+      quotaId: 1,
       email: 'ilmomasiina@gmail.com',
     });
 
     app.service('/api/signups').create({
       name: 'Pekka',
-      eventId: 1,
+      quotaId: 1,
       email: 'pekka@ilmo.fi',
     });
 
     app.service('/api/signups').create({
       name: 'Alan',
-      eventId: 2,
+      quotaId: 2,
       email: 'Alan@ilmo.fi',
     });
 
     app.service('/api/signups').create({
       name: 'Ville',
-      eventId: 2,
+      quotaId: 2,
       email: 'ville@ilmo.fi',
     });
   });
@@ -144,16 +144,16 @@ module.exports = function () { // eslint-disable-line
 
   const populateSingleEvent = {
     include: [{
-      service: '/api/signups',
-      nameAs: 'signups',
-      parentField: 'id',
-      childField: 'eventId',
-    },
-    {
       service: '/api/quotas',
       nameAs: 'quotas',
       parentField: 'id',
       childField: 'eventId',
+      include: [{
+        service: '/api/signups',
+        nameAs: 'signups',
+        parentField: 'eventId',
+        childField: 'quotaId',
+      }],
     }],
   };
 
