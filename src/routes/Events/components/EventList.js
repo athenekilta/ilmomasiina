@@ -114,8 +114,8 @@ TableRow.propTypes = {
   link: React.PropTypes.string,
   signUpLabel: React.PropTypes.string,
   className: React.PropTypes.string,
-  going: React.PropTypes.number.isRequired,
-  max: React.PropTypes.number.isRequired,
+  going: React.PropTypes.number,
+  max: React.PropTypes.number,
 };
 
 EventList.propTypes = {
