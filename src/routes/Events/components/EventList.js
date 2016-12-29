@@ -112,6 +112,8 @@ TableRow.propTypes = {
   title: React.PropTypes.string.isRequired,
   date: React.PropTypes.number,
   link: React.PropTypes.string,
+  signUpLabel: React.PropTypes.string,
+  className: React.PropTypes.string,
   going: React.PropTypes.number.isRequired,
   max: React.PropTypes.number.isRequired,
 };
