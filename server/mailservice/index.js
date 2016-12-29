@@ -1,21 +1,47 @@
 const ilmoconfig = require('../../config/ilmomasiina.config.js');
 const debug = require('debug')('app:server');
+
 const mailgun = require('mailgun-js')({
   apiKey: ilmoconfig.mailgunKey,
   domain: ilmoconfig.mailgunDomain,
 });
 
+/*
+
+  This file contains generic method for sending mail.
+
+  Example:
+
+  const mailservice = require('./');
+
+  // User input fields
+  const fields = [
+    { label: 'Nimi', answer: 'Eero Esimerkki' },
+    { label: 'Sähköposti', answer: 'eero@esimerkki.fi' },
+    { label: 'Kilta', answer: 'Athene' },
+  ];
+
+  mailservice.sendSignUpConfirmation(
+    'eero@esimerkki.fi',
+    'Höpöhöpösitsit 12.1.2017',
+    'Tervetuloa sitseille!\n\nMaksuohjeet: ...',
+    'http://ilmomasiina.io/magical-edit-link',
+    fields
+  );
+
+ */
+
+// Generic method for sending mail
 const sendMail = (msgTemplate, recipientEmail, eventTitle, customMsg, editLink = null, fields = null) => {
   debug('Sending mail');
-  const msg = [];
 
+  // We'll gather up message to one array and join it with line breaks at the end
+  const msg = [];
   msg.push(msgTemplate);
   msg.push('\nTapahtumajärjestäjän ohjeet:');
   msg.push(customMsg);
   msg.push('\n– – –\n');
-
   if (editLink) msg.push(`Voit muokata tietojasi tai perua osallistumisesti osoitteessa: ${editLink}\n`);
-
   fields.map(field => msg.push(`${field.label}: ${field.answer}`));
   msg.push('\n– – –\n');
   msg.push('Vahvistusviesti on lähetetty automaattisesti, joten ethän vastaa tähän viestiin. Peace and love <3');
@@ -28,10 +54,11 @@ const sendMail = (msgTemplate, recipientEmail, eventTitle, customMsg, editLink =
   };
 
   return mailgun.messages().send(data, (error, body) => {
-    console.log(body);
+    debug(body);
   });
 };
 
+// Fixed message templates depending on action
 const SIGNUP_MAIL = 'Pääsit messiin.';
 const FROM_QUEUE_MAIL = 'Pääsit jonosta messiin.';
 const SIGNUP_EDITED_MAIL = 'Ilmoittautumistasi on muokattu.';
