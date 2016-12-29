@@ -15,8 +15,11 @@ class AdminEventListItem extends React.Component {
         <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
         <td>Luonnos</td>
         <td>{ _.sumBy(this.props.data.quota, n => n.going) }</td>
-        <td><Link className="btn btn-default">Lataa osallistujatiedot</Link></td>
-        <td><Link className="btn btn-warning">Muokkaa tapahtumaa</Link></td>
+        <td>
+          <Link>Muokkaa tapahtumaa</Link>
+          <span className="separator text-muted">/</span>
+          <Link>Lataa osallistujalista</Link>
+        </td>
       </tr>
     );
   }
@@ -100,6 +103,7 @@ class AdminEventList extends React.Component {
               <th>Ajankohta</th>
               <th>Tila</th>
               <th>Ilmoittautuneita</th>
+              <th>Toiminnot</th>
             </tr>
           </thead>
           <tbody>
