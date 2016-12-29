@@ -11,7 +11,6 @@ const project = require('../config/project.config');
 const compress = require('compression');
 
 const services = require('./services/index.js');
-const sendmail = require('./mailservice/mail.js');
 
 // create feathers app
 const app = feathers();
@@ -20,11 +19,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.configure(rest());
 app.configure(hooks());
 app.configure(services);
-
-setTimeout(() => {
-  debug('tä');
-  sendmail(1);
-}, 10000);
 
 // This rewrites all routes requests to the root /index.html file
 // (ignoring file requests). If you want to implement universal
