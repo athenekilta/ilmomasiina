@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 import { Link } from 'react-router';
+import Separator from '../../../components/Separator';
 import './AdminEventList.scss';
 
 /* Render a single item
@@ -17,7 +18,7 @@ class AdminEventListItem extends React.Component {
         <td>{ _.sumBy(this.props.data.quota, n => n.going) }</td>
         <td>
           <Link>Muokkaa tapahtumaa</Link>
-          <span className="separator text-muted">/</span>
+          <Separator />
           <Link>Lataa osallistujalista</Link>
         </td>
       </tr>
@@ -76,7 +77,7 @@ class AdminEventList extends React.Component {
         <div className="alert alert-info" role="alert">
           <p>
             <strong>Ville Vuorenmaa</strong> on pyytänyt pääsyä hallintapaneeliin.<br />
-            <a>Hyväksy</a><span className="separator">/</span><a>Hylkää</a>
+            <a>Hyväksy</a><Separator /><a>Hylkää</a>
           </p>
         </div>
         <div className="search-form">
