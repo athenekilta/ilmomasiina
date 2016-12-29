@@ -10,10 +10,12 @@ class TableRow extends React.Component {
 
     return (
       <tr className={className}>
-        <td>{ link ? <Link to={link}>{title}</Link> : title }</td>
-        <td>{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
-        <td>{ signUpLabel }</td>
-        <td>{ going || '' }{ max ? <span className="separator">/</span> : '' }{ max || ''}</td>
+        <td className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
+        <td className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
+        <td className="signup" data-xs-prefix={signUpLabel ? 'Ilmoittautuminen ' : ''}>{signUpLabel}</td>
+        <td className="going" data-xs-prefix={going || max ? 'Ilmoittautuneita: ' : ''}>
+          { going || '' }{ max ? <span className="separator">/</span> : '' }{ max || ''}
+        </td>
       </tr>
     );
   }
@@ -36,11 +38,11 @@ class EventList extends React.Component {
       const timeFormat = 'D.M. [klo] hh:mm';
 
       if (startTime.isSameOrAfter(now)) {
-        return `Alkaa ${moment(startTime).format(timeFormat)}`;
+        return `Alkaa ${moment(startTime).format(timeFormat)}.`;
       }
 
       if (closeTime.isSameOrAfter(now)) {
-        return `Päättyy ${moment(closeTime).format(timeFormat)}`;
+        return `Päättyy ${moment(closeTime).format(timeFormat)}.`;
       }
 
       return 'Päättynyt';
