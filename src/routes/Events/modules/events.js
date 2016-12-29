@@ -1,3 +1,5 @@
+import request from 'then-request';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -48,19 +50,25 @@ const payload = [{
 },
 ];
 
+function getApi() {
+  return request('GET', '/api/events');
+}
+
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
 
-export const getEventList = () => dispatch => new Promise((resolve) => {
-  setTimeout(() => {
-    dispatch({
-      type: GET_EVENTLIST_ASYNC,
-      payload,
+export const getEventList = () => (dispatch) => {
+  getApi()
+    .then(res => JSON.parse(res.getBody()))
+    .then(r => console.log(r))
+    .then((res) => {
+      dispatch({
+        type: GET_EVENTLIST_ASYNC,
+        payload: res,
+      });
     });
-    resolve();
-  }, 100);
-});
+};
 
 export const actions = {
   getEventList,
