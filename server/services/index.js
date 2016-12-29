@@ -127,6 +127,12 @@ module.exports = function () { // eslint-disable-line
     name: 'quotas',
   }));
 
+  app.service('/api/quotas').before({
+    // disable external use (rest / websocket ) of /api/quotas
+    all: hooks.disable('external'),
+  });
+
+
   const populateEventsSchema = {
     include: [{
       service: '/api/quotas',
