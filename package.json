@@ -103,6 +103,8 @@
     "ip": "^1.1.2",
     "json-loader": "^0.5.4",
     "knex": "^0.12.6",
+    "lodash": "^4.17.3",
+    "moment": "^2.17.1",
     "node-sass": "^4.0.0",
     "postcss-loader": "^1.1.0",
     "react": "^15.0.0",

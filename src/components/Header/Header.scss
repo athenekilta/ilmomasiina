@@ -2,7 +2,10 @@
 
 .navbar-default {
   border: none !important;
-  .navbar-brand {
+
+  a.navbar-brand,
+  a.navbar-brand:focus,
+  a.navbar-brand:hover {
     color: #fff;
     font-size: 18px;
     text-transform: uppercase;
