@@ -20,7 +20,7 @@ class EnrollForm extends React.Component {
     return (
       <div className="form-wrapper">
         <div className="container">
-        <a className="close" onClick={() => this.props.closeForm()} />
+          <a className="close" onClick={() => this.props.closeForm()} />
           <div className="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
             <h2>Ilmoittaudu</h2>
             <p>Ilmoittautumistilanteesi on: [insert tilanne]</p>
@@ -192,7 +192,7 @@ class SingleEvent extends React.Component {
               <h3>Ilmoittautuneet</h3>
               {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
                 <ViewProgress key={index} data={i} />) : '')}
-              </div>
+            </div>
           </div>
           <div className="col-xs-12">
             <h2>Ilmoittautuneet</h2>
