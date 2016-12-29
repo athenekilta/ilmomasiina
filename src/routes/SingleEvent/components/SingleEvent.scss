@@ -1,17 +1,17 @@
 @import '../styles/_base.scss';
 
-.asideComponent {
+.sidebar-widget {
   background-color: $secondary-background;
   margin-bottom: 1em;
 }
 
 .enrollform{
   height: 100px;
-  background-color: #f9f9f9;
+  background-color: $secondary-background;
   text-align: center;
 }
 .btn{
-  margin: 1em
+  margin-bottom: 1em;
 }
 
 .progress {

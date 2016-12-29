@@ -3,11 +3,7 @@ import './SingleEvent.scss';
 
 class AttendButton extends React.Component {
   render() {
-    return (
-      <div>
-        <button className='col-md-12 btn btn-success'>{this.props.data.quotaName}</button>
-      </div>
-    );
+    return <button className='btn btn-success btn-block'>{this.props.data.quotaName}</button>;
   }
 }
 
@@ -15,14 +11,12 @@ class ViewProgress extends React.Component {
   render() {
     return (
       <div>
-        <p className='col-md-12'>{this.props.data.quotaName}</p>
-        <div className='col-md-2'>
-          <p>{this.props.data.going}/{this.props.data.max}</p>
-        </div>
-        <div className='progress col-md-10'>
-          <div className='progress-bar' role='progressbar' aria-valuenow={this.props.data.going}
-            aria-valuemin="0" aria-valuemax={this.props.data.max}
-            style={{ width: `${(this.props.data.going / this.props.data.max) * 100}%` }} />
+        <p>{this.props.data.quotaName}</p>
+        <div className='progress col-xs-12'>
+          <div className='progress-bar' role='progressbar'
+            style={{ minWidth: '4em', width: `${(this.props.data.going / this.props.data.max) * 100}%` }}>
+            {this.props.data.going}/{this.props.data.max}
+          </div>
         </div>
       </div>
     );
@@ -72,7 +66,7 @@ class SingleEvent extends React.Component {
   render() {
     return (
       <div>
-        <div className='col-md-8'>
+        <div className='col-xs-12 col-md-8'>
           <h1>{this.props.singleEvent.title}</h1>
           <p>
             {this.props.singleEvent.date}<br />
@@ -81,27 +75,18 @@ class SingleEvent extends React.Component {
           </p>
           <p>{this.props.singleEvent.description}</p>
           <h2>Ilmoittautuneet</h2>
-          {typeof this.props.singleEvent.quota !== 'undefined' ?
-          (this.props.singleEvent.quota.map(
-            (i, index) =>
-              <AttendeeGroup key={index} data={i} />)
-            ) : '' }
+          {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+            <AttendeeGroup key={index} data={i} />) : '')}
         </div>
-        <div className='asideComponent col-md-4 pull-right'>
+        <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
           <h3 className='col-md-12'>Ilmoittaudu</h3>
-          {typeof this.props.singleEvent.quota !== 'undefined' ?
-          (this.props.singleEvent.quota.map(
-            (i, index) =>
-              <AttendButton key={index} data={i} />)
-            ) : '' }
+          {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+            <AttendButton key={index} data={i} />) : '')}
         </div>
-        <div className='asideComponent col-md-4 pull-right'>
-          <h3 className='col-md-12'>Ilmoittautuneet</h3>
-          {typeof this.props.singleEvent.quota !== 'undefined' ?
-          (this.props.singleEvent.quota.map(
-            (i, index) =>
-              <ViewProgress key={index} data={i} />)
-            ) : '' }
+        <div className='sidebar-widget col-xs-12 col-md-4 pull-right'>
+          <h3>Ilmoittautuneet</h3>
+          {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+            <ViewProgress key={index} data={i} />) : '')}
         </div>
       </div>
     );
