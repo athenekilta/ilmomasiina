@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import moment from 'moment';
 import _ from 'lodash';
+import Separator from '../../../components/Separator';
 import './EventList.scss';
 
 class TableRow extends React.Component {
@@ -14,7 +15,7 @@ class TableRow extends React.Component {
         <td className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
         <td className="signup" data-xs-prefix={signUpLabel ? 'Ilmoittautuminen ' : ''}>{signUpLabel}</td>
         <td className="going" data-xs-prefix={going || max ? 'Ilmoittautuneita: ' : ''}>
-          { going || '' }{ max ? <span className="separator">/</span> : '' }{ max || ''}
+          { going || '' }{ max ? <Separator /> : '' }{ max || ''}
         </td>
       </tr>
     );
