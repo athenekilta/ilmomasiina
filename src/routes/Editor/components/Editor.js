@@ -15,7 +15,7 @@ const SortableItem = SortableElement(({ value }) =>
 
 const SortableItems = SortableContainer(({ collection, items }) =>
   <div>
-    { items.map((value, index) => <SortableItem collection={collection} key={index} index={index} value={value} />) }
+    {items.map((value, index) => <SortableItem collection={collection} key={index} index={index} value={value} />)}
   </div>,
 );
 
@@ -77,7 +77,7 @@ class Editor extends React.Component {
       id: (_.max(state.eventData.quotas.map(n => n.id)) || 0) + 1,
       existsInDb: false,
       title: '',
-      max_attendees: 10,
+      max_attendees: 0,
       registration_opens: new Date(),
       registration_closes: new Date(),
     });
@@ -165,6 +165,8 @@ class Editor extends React.Component {
             label="Kiintiön koko"
             type="number"
             required
+            validations="isInt"
+            min={0}
             onChange={(field, value) => this.updateState('quota', item.id, 'max_attendees', value)}
           />
         </div>
@@ -225,16 +227,16 @@ class Editor extends React.Component {
         <h1>Luo uusi tapahtuma</h1>
         <input className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Tallenna" />
         <ul className="nav nav-tabs">
-          <li className={`${(this.state.activeTab === 1 ? 'active' : '')}`}>
+          <li className={(this.state.activeTab === 1 ? 'active' : '')}>
             <a onClick={() => this.changeTab(1)}>Perustiedot</a>
           </li>
-          <li className={`${(this.state.activeTab === 2 ? 'active' : '')}`}>
+          <li className={(this.state.activeTab === 2 ? 'active' : '')}>
             <a onClick={() => this.changeTab(2)}>Ilmoittautumisasetukset</a>
           </li>
-          <li className={`${(this.state.activeTab === 3 ? 'active' : '')}`}>
+          <li className={(this.state.activeTab === 3 ? 'active' : '')}>
             <a onClick={() => this.changeTab(3)}>Kysymykset</a>
           </li>
-          <li className={`${(this.state.activeTab === 4 ? 'active' : '')}`}>
+          <li className={(this.state.activeTab === 4 ? 'active' : '')}>
             <a onClick={() => this.changeTab(4)}>Vahvistusviestit</a>
           </li>
         </ul>
