@@ -47,12 +47,22 @@ class EventList extends React.Component {
     };
 
     const tableRows = this.props.eventList.map((event) => {
+      // If every quota has same registration start/end time, show that time only once
+      const showOneLabel = () => {
+        const startMin = _.min(event.quotas.map(n => n.signUpStarts));
+        const endMin = _.min(event.quotas.map(n => n.signUpEnds));
+        const startMax = _.max(event.quotas.map(n => n.signUpStarts));
+        const endMax = _.max(event.quotas.map(n => n.signUpEnds));
+
+        return (startMin === startMax && endMin === endMax);
+      };
+
       const rows = [
         <TableRow
           title={event.title}
           link={`/event/${event.id}`}
           date={event.date}
-          signUpLabel={event.quotas.length === 1 ? signUpLabel(event.quotas[0].signUpStarts, event.quotas[0].signUpEnds) : ''}
+          signUpLabel={showOneLabel() ? signUpLabel(event.quotas[0].signUpStarts, event.quotas[0].signUpEnds) : ''}
           going={_.sumBy(event.quotas, 'going')}
           max={_.sumBy(event.quotas, 'max')}
           className={moment().isSameOrAfter(moment(event.quotas[0].signUpEnds)) ? 'text-muted' : ''}
@@ -64,7 +74,7 @@ class EventList extends React.Component {
           rows.push(
             <TableRow
               title={quota.title}
-              signUpLabel={signUpLabel(quota.signUpStarts, quota.signUpEnds)}
+              signUpLabel={!showOneLabel() ? signUpLabel(quota.signUpStarts, quota.signUpEnds) : ''}
               going={quota.going}
               max={quota.max}
               className={moment().isSameOrAfter(quota.signUpEnds) ? 'text-muted child' : 'child'}

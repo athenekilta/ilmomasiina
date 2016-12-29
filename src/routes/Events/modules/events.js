@@ -23,8 +23,10 @@ const payload = [{
     },
     {
       title: 'Prodeko',
-      signUpStarts: '2016-12-28T00:12:00+02:00',
+      signUpStarts: '2016-12-31T00:12:00+02:00',
       signUpEnds: '2017-01-15T00:15:00+02:00',
+      // signUpStarts: '2016-12-28T00:12:00+02:00',
+      // signUpEnds: '2017-01-15T00:15:00+02:00',
       going: 10,
       max: 20,
     },
