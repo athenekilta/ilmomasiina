@@ -127,7 +127,16 @@ module.exports = function () { // eslint-disable-line
     name: 'quotas',
   }));
 
-  const schema = {
+  const populateEventsSchema = {
+    include: [{
+      service: '/api/quotas',
+      nameAs: 'quotas',
+      parentField: 'id',
+      childField: 'eventId',
+    }],
+  };
+
+  const populateSingleEvent = {
     include: [{
       service: '/api/signups',
       nameAs: 'signups',
@@ -142,13 +151,13 @@ module.exports = function () { // eslint-disable-line
     }],
   };
 
-  // hook
+  // api/events hooks
   app.service('/api/events').after({
-    /* populate get-function result
-    with data from attendee and quota tables */
-    get: hooks.populate({ schema }),
-
-    create(hook) {
+    // GET /api/events/<eventId>
+    get: hooks.populate({ schema: populateSingleEvent }),
+    // GET /api/events
+    find: hooks.populate({ schema: populateEventsSchema }),
+    create: (hook) => {
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
         eventId: hook.result.id, // id of the just created event
