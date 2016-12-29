@@ -129,6 +129,15 @@ module.exports = function () { // 'function' needed as we use 'this'
 
   const schema = {
     include: [{
+      service: '/api/quotas',
+      nameAs: 'quotas',
+      parentField: 'id',
+      childField: 'eventId',
+    }],
+  };
+
+  const schema2 = {
+    include: [{
       service: '/api/signups',
       nameAs: 'signups',
       parentField: 'id',
@@ -142,13 +151,13 @@ module.exports = function () { // 'function' needed as we use 'this'
     }],
   };
 
-  // hook
+  // api/events hooks
   app.service('/api/events').after({
-    /* populate get-function result
-    with data from attendee and quota tables */
-    get: hooks.populate({ schema }),
-
-    create(hook) {
+    // GET /api/events/<eventId>
+    get: hooks.populate({ schema: schema2 }),
+    // Get /api/events
+    find: hooks.populate({ schema }),
+    create: (hook) => {
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
         eventId: hook.result.id, // id of the just created event
