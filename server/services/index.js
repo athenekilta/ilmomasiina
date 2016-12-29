@@ -61,25 +61,25 @@ module.exports = function () { // eslint-disable-line
   .then(() => {
     // create dummy events
     app.service('/api/events').create({
-      name: 'Tapahtuma1',
-      date: '2017-1-1 23:59:59',
-      description: 'Hassu tapahtuma',
-      price: 'sata euroo',
-      location: 'wat',
-      homepage: 'ei oo',
-      facebooklink: 'ei oo',
+      name: 'Minuuttikalja 2016',
+      date: '2016-4-27 18:00:00',
+      description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja, on jälleen täällä! Kyseessä on peli, jossa juodaan minuutin välein shotti kaljaa. Sarjoja on perinteiset kaksi: 60 minuutin Power Hour ja 100 minuutin Body Building. Lisäksi janoisammat ja vahvemmat pelaajat voivat jatkaa I Will Go On Forever -sarjaan. Pelata saa myös muilla kaljaan rinnastettavilla juomilla. Oheisviihteenä esitetään jääkiekkospektaakkeli joka, toisin kuin itse Minuuttikalja, tulee päättymään selvin lukemin: MM-finaali vuosimallia -95 tai -11. Viimevuotinen, historian suurin Minuuttikalja, järjestettiin Startup Saunalla, mutta tänä vuonna wapun suurin urheilujuhla tuodaan suoraan Otaniemen sydämeen, Servin Mökkiin! Tapahtuma on ilmainen, mutta vaatii ilmoittautumisen. Ilmo aukeaa keskiviikkona 13.4. klo 12:00 Athenen ilmomasiinassa. Pelit alkavat klo 18:00, olethan viimeistään 17:45 pelipaikoilla! <br /> ************ In English ************ <br /> The legendary Minute Beer is here again! Minute beer is a game in which a player drinks a shot of beer every minute for 60 or 100 minutes, or for as long as he or she can.The event takes place in Smökki, in Otaniemi on Wednesday the 27th of April at 6 PM. The event is free, but a registration is required.', // eslint-disable-line
+      price: '',
+      location: 'Where: Smökki (Jämeräntaival 4, Espoo)',
+      homepage: '',
+      facebooklink: 'https://www.facebook.com/events/1715883881987829/',
     }).then(() => {
       debug('created event');
     });
 
     app.service('/api/events').create({
-      name: 'Tapahtuma2',
-      date: '2017-1-1 23:59:59',
-      description: 'Hassu tapahtuma',
-      price: 'sata euroo',
-      location: 'wat',
-      homepage: 'ei oo',
-      facebooklink: 'ei oo',
+      name: 'Columbia Road -excu',
+      date: '2017-1-11 17:00:00',
+      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset tervetulleeksi exculle 11.1. <br /> Tarkemmat tiedot löytyvät kutsusta linkin takaa. <br />Excupaikkoja on tarjolla 15:lle nopeimmalle athenelaiselle.', //eslint-disable-line
+      price: '0',
+      location: 'Eerikinkatu 5, Helsinki',
+      homepage: 'http://crexcu2017.wordpress.com/',
+      facebooklink: '',
     }).then(() => {
       debug('created event');
     });
@@ -126,6 +126,12 @@ module.exports = function () { // eslint-disable-line
     Model: db,
     name: 'quotas',
   }));
+
+  app.service('/api/quotas').before({
+    // disable external use (rest / websocket ) of /api/quotas
+    all: hooks.disable('external'),
+  });
+
 
   const populateEventsSchema = {
     include: [{
