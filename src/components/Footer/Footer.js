@@ -9,6 +9,7 @@ export const Footer = () => (
       <Link to='/admin' className='navbar-link'>Hallinta</Link>
       <Separator />
       <Link to='https://athene.fi' className='navbar-link'>Athene.fi</Link>
+      <span className='pull-right'>On ilmoja pidelly</span>
     </div>
   </footer>
 );
