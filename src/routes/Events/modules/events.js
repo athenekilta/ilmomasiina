@@ -12,7 +12,7 @@ export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC';
 const payload = [{
   id: 1,
   title: 'Joulusitsit',
-  date: 1482697816,
+  date: '2016-12-31T00:12:00+02:00',
   quotas: [
     {
       title: 'Athene',
@@ -26,7 +26,7 @@ const payload = [{
       // signUpStarts: '2016-12-31T00:12:00+02:00',
       // signUpEnds: '2017-01-15T00:15:00+02:00',
       signUpStarts: '2016-12-28T00:12:00+02:00',
-      signUpEnds: '2017-01-15T00:15:00+02:00',
+      signUpEnds: '2016-12-31T00:15:00+02:00',
       going: 10,
       max: 20,
     },
@@ -35,7 +35,7 @@ const payload = [{
 {
   id: 2,
   title: 'Uusivuosi',
-  date: 1483221600,
+  date: '2015-12-31T00:12:00+02:00',
   quotas: [
     {
       title: 'Default',

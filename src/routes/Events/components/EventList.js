@@ -31,22 +31,33 @@ class EventList extends React.Component {
   }
 
   render() {
-    const signUpLabel = (starts, closes) => {
-      const startTime = moment(starts);
-      const closeTime = moment(closes);
+    const state = (event, starts, closes) => {
+      const signUpStarts = moment(starts);
+      const signUpCloses = moment(closes);
+      const eventStarts = moment(event);
       const now = moment();
 
       const timeFormat = 'D.M. [klo] hh:mm';
 
-      if (startTime.isSameOrAfter(now)) {
-        return `Alkaa ${moment(startTime).format(timeFormat)}.`;
+      if (signUpStarts.isSameOrAfter(now)) {
+        return {
+          label: `Alkaa ${moment(signUpStarts).format(timeFormat)}.`,
+          class: 'signup-not-opened',
+        };
       }
 
-      if (closeTime.isSameOrAfter(now)) {
-        return `Päättyy ${moment(closeTime).format(timeFormat)}.`;
+      if (signUpCloses.isSameOrAfter(now)) {
+        return {
+          label: `Auki ${moment(signUpCloses).format(timeFormat)} asti.`,
+          class: 'signup-opened',
+        };
       }
 
-      return 'Päättynyt';
+      if (eventStarts.isSameOrAfter(now)) {
+        return { label: 'Ilmoittautuminen päättynyt.', class: 'signup-closed' };
+      }
+
+      return { label: 'Päättynyt', class: 'event-ended' };
     };
 
     const tableRows = this.props.eventList.map((event) => {
@@ -60,30 +71,33 @@ class EventList extends React.Component {
         return (startMin === startMax && endMin === endMax);
       };
 
+      const eventState = state(event.date, event.quotas[0].signUpStarts, event.quotas[0].signUpEnds);
+
       const rows = [
         <TableRow
           title={event.title}
           link={`/event/${event.id}`}
           date={event.date}
-          signUpLabel={showOneLabel() ? signUpLabel(event.quotas[0].signUpStarts, event.quotas[0].signUpEnds) : ''}
+          signUpLabel={showOneLabel() ? eventState.label : ''}
           going={_.sumBy(event.quotas, 'going')}
           max={_.sumBy(event.quotas, 'max')}
-          className={moment().isSameOrAfter(moment(event.quotas[0].signUpEnds)) ? 'text-muted' : ''}
+          className={eventState.class}
           key={`e${event.id}`} />,
       ];
 
       if (event.quotas.length > 1) {
-        event.quotas.map((quota, i) =>
-          rows.push(
+        event.quotas.map((quota, i) => {
+          const quotaState = state(event.date, quota.signUpStarts, quota.signUpEnds);
+          return rows.push(
             <TableRow
               title={quota.title}
-              signUpLabel={!showOneLabel() ? signUpLabel(quota.signUpStarts, quota.signUpEnds) : ''}
+              signUpLabel={!showOneLabel() ? quotaState.label : ''}
               going={quota.going}
               max={quota.max}
-              className={moment().isSameOrAfter(quota.signUpEnds) ? 'text-muted child' : 'child'}
+              className={`${eventState.class} ${quotaState.class} child`}
               key={`q${i}`} />,
-          ),
-        );
+          );
+        });
       }
 
       return rows;

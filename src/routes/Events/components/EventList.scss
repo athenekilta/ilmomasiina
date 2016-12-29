@@ -11,6 +11,16 @@ table.eventlist {
       padding-top: 0;
     }
   }
+  tr.signup-opened {
+    td.signup { color: $green; }
+  }
+  tr.signup-closed {
+    td.signup { color: $red; }
+  }
+  tr.event-ended {
+    td.signup { color: $red; }
+    opacity: 0.4;
+  }
 }
 
 @media (max-width: $screen-xs-max) {
