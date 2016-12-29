@@ -155,7 +155,7 @@ module.exports = function () { // 'function' needed as we use 'this'
   app.service('/api/events').after({
     // GET /api/events/<eventId>
     get: hooks.populate({ schema: schema2 }),
-    // Get /api/events
+    // GET /api/events
     find: hooks.populate({ schema }),
     create: (hook) => {
       // creates a new quota and attaches it to just created event
