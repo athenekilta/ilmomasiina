@@ -7,15 +7,15 @@ import './EventList.scss';
 
 class TableRow extends React.Component {
   render() {
-    const { title, link, date, signUpLabel, going, max, className } = this.props;
+    const { title, link, date, signupLabel, going, size, className } = this.props;
 
     return (
       <tr className={className}>
         <td className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
         <td className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
-        <td className="signup" data-xs-prefix={signUpLabel ? 'Ilmoittautuminen ' : ''}>{signUpLabel}</td>
-        <td className="going" data-xs-prefix={going || max ? 'Ilmoittautuneita: ' : ''}>
-          { going || '' }{ max ? <Separator /> : '' }{ max || ''}
+        <td className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>{signupLabel}</td>
+        <td className="going" data-xs-prefix={going || size ? 'Ilmoittautuneita: ' : ''}>
+          { going || '' }{ size ? <Separator /> : '' }{ size || ''}
         </td>
       </tr>
     );
@@ -28,32 +28,34 @@ class TableRow extends React.Component {
 class EventList extends React.Component {
   componentWillMount() {
     this.props.getEventList();
+    console.log(this.props.eventList);
   }
 
   render() {
+    console.log(this.props.eventList);
     const state = (event, starts, closes) => {
-      const signUpStarts = moment(starts);
-      const signUpCloses = moment(closes);
-      const eventStarts = moment(event);
+      const signupOpens = moment(starts);
+      const signupCloses = moment(closes);
+      const eventOpens = moment(event);
       const now = moment();
 
       const timeFormat = 'D.M. [klo] hh:mm';
 
-      if (signUpStarts.isSameOrAfter(now)) {
+      if (signupOpens.isSameOrAfter(now)) {
         return {
-          label: `Alkaa ${moment(signUpStarts).format(timeFormat)}.`,
+          label: `Alkaa ${moment(signupOpens).format(timeFormat)}.`,
           class: 'signup-not-opened',
         };
       }
 
-      if (signUpCloses.isSameOrAfter(now)) {
+      if (signupCloses.isSameOrAfter(now)) {
         return {
-          label: `Auki ${moment(signUpCloses).format(timeFormat)} asti.`,
+          label: `Auki ${moment(signupCloses).format(timeFormat)} asti.`,
           class: 'signup-opened',
         };
       }
 
-      if (eventStarts.isSameOrAfter(now)) {
+      if (eventOpens.isSameOrAfter(now)) {
         return { label: 'Ilmoittautuminen päättynyt.', class: 'signup-closed' };
       }
 
@@ -63,37 +65,37 @@ class EventList extends React.Component {
     const tableRows = this.props.eventList.map((event) => {
       // If every quota has same registration start/end time, show that time only once
       const showOneLabel = () => {
-        const startMin = _.min(event.quotas.map(n => n.signUpStarts));
-        const endMin = _.min(event.quotas.map(n => n.signUpEnds));
-        const startMax = _.max(event.quotas.map(n => n.signUpStarts));
-        const endMax = _.max(event.quotas.map(n => n.signUpEnds));
+        const startMin = _.min(event.quotas.map(n => n.signupOpens));
+        const endMin = _.min(event.quotas.map(n => n.signupCloses));
+        const startMax = _.max(event.quotas.map(n => n.signupOpens));
+        const endMax = _.max(event.quotas.map(n => n.signupCloses));
 
         return (startMin === startMax && endMin === endMax);
       };
 
-      const eventState = state(event.date, event.quotas[0].signUpStarts, event.quotas[0].signUpEnds);
+      const eventState = state(event.date, event.quotas[0].signupOpens, event.quotas[0].signupCloses);
 
       const rows = [
         <TableRow
           title={event.title}
           link={`/event/${event.id}`}
           date={event.date}
-          signUpLabel={showOneLabel() ? eventState.label : ''}
+          signupLabel={showOneLabel() ? eventState.label : ''}
           going={_.sumBy(event.quotas, 'going')}
-          max={_.sumBy(event.quotas, 'max')}
+          size={_.sumBy(event.quotas, 'size')}
           className={eventState.class}
           key={`e${event.id}`} />,
       ];
 
       if (event.quotas.length > 1) {
         event.quotas.map((quota, i) => {
-          const quotaState = state(event.date, quota.signUpStarts, quota.signUpEnds);
+          const quotaState = state(event.date, quota.signupOpens, quota.signupCloses);
           return rows.push(
             <TableRow
               title={quota.title}
-              signUpLabel={!showOneLabel() ? quotaState.label : ''}
+              signupLabel={!showOneLabel() ? quotaState.label : ''}
               going={quota.going}
-              max={quota.max}
+              size={quota.size}
               className={`${eventState.class} ${quotaState.class} child`}
               key={`q${i}`} />,
           );
@@ -102,6 +104,8 @@ class EventList extends React.Component {
 
       return rows;
     });
+
+    console.log(this.props.eventList);
 
     return (
       <div>
@@ -127,14 +131,14 @@ TableRow.propTypes = {
   title: React.PropTypes.string.isRequired,
   date: React.PropTypes.number,
   link: React.PropTypes.string,
-  signUpLabel: React.PropTypes.string,
+  signupLabel: React.PropTypes.string,
   className: React.PropTypes.string,
   going: React.PropTypes.number,
-  max: React.PropTypes.number,
+  size: React.PropTypes.number,
 };
 
 EventList.propTypes = {
-  eventList: React.PropTypes.array.isRequired,
+  eventList: React.PropTypes.array,
   getEventList: React.PropTypes.func.isRequired,
 };
 
