@@ -42,7 +42,7 @@ class SingleEvent extends React.Component {
   }
   render() {
     const event = this.props.singleEvent;
-    console.log(event);
+
     return (
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
@@ -113,7 +113,7 @@ SingleEvent.propTypes = {
     title: React.PropTypes.string,
     description: React.PropTypes.string,
     price: React.PropTypes.string,
-    date: React.PropTypes.number,
+    date: React.PropTypes.string,
     quota: React.PropTypes.array,
   }),
 };

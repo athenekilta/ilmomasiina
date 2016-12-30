@@ -7,7 +7,7 @@ export class SignupList extends React.Component {
     const TableRow = ({ columns, index }) =>
       <tr>
         <td>{index}.</td>
-        {columns.map(column => <td>{column}</td>)}
+        {columns.map((column, i) => <td key={i}>{column}</td>)}
       </tr>;
 
     return (
@@ -17,12 +17,12 @@ export class SignupList extends React.Component {
         <table className='table table-condensed table-responsive'>
           <thead>
             <tr className='active'>
-              <th>Sija</th>
-              {this.props.headings.map(h => <th>{h}</th>)}
+              <th key="position">Sija</th>
+              {this.props.headings.map((h, i) => <th key={i}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
-            {this.props.rows.map((row, i) => <TableRow columns={_.values(row)} index={i + 1} />)}
+            {this.props.rows.map((row, i) => <TableRow columns={_.values(row)} index={i + 1} key={i} />)}
           </tbody>
         </table>
          }
@@ -33,7 +33,7 @@ export class SignupList extends React.Component {
 
 SignupList.propTypes = {
   title: React.PropTypes.string,
-  headings: React.PropTypes.string.isRequired,
+  headings: React.PropTypes.array.isRequired,
   rows: React.PropTypes.array.isRequired,
 };
 

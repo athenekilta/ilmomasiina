@@ -12,10 +12,10 @@ class TableRow extends React.Component {
 
     return (
       <tr className={className}>
-        <td className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
-        <td className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
-        <td className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>{signupLabel}</td>
-        <td className="going" data-xs-prefix={going || size ? 'Ilmoittautuneita: ' : ''}>
+        <td key="title" className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
+        <td key="date" className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
+        <td key="signup" className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>{signupLabel}</td>
+        <td key="going" className="going" data-xs-prefix={going || size ? 'Ilmoittautuneita: ' : ''}>
           { going || '' }{ size ? <Separator /> : '' }{ size || ''}
         </td>
       </tr>
