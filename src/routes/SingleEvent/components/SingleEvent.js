@@ -73,8 +73,6 @@ class SingleEvent extends React.Component {
                   />,
                   ) : '')}
               </div>
-            </div>
-            <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
                 <h3>Ilmoittautuneet</h3>
                 {(event.quotas ? event.quotas.map((quota, index) =>
