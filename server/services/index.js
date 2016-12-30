@@ -22,10 +22,48 @@ module.exports = function () { // eslint-disable-line
     },
   });
 
+  // initialize services
+  app.use('/api/events', service({
+    Model: db,
+    name: 'events',
+  }));
+
+  app.use('/api/signups', service({
+    Model: db,
+    name: 'signups',
+  }));
+
+  app.use('/api/quotas', service({
+    Model: db,
+    name: 'quotas',
+  }));
+
+  app.use('/api/questions', service({
+    Model: db,
+    name: 'questions',
+  }));
+
+  app.use('/api/answers', service({
+    Model: db,
+    name: 'answers',
+  }));
+
+  // Disable external use
+  app.service('/api/answers').before({
+    // disable external use (rest / websocket ) of /api/answers
+    all: hooks.disable('external'),
+  });
+  app.service('/api/quotas').before({
+    // disable external use (rest / websocket ) of /api/quotas
+    all: hooks.disable('external'),
+  });
+
   // drop tables
   db.schema.dropTableIfExists('events')
   .then(() => db.schema.dropTableIfExists('signups'))
   .then(() => db.schema.dropTableIfExists('quotas'))
+  .then(() => db.schema.dropTableIfExists('questions'))
+  .then(() => db.schema.dropTableIfExists('answers'))
 
   // create tables
   .then(() =>
@@ -59,6 +97,25 @@ module.exports = function () { // eslint-disable-line
       table.integer('size');
       table.dateTime('signupOpens');
       table.dateTime('signupCloses');
+    }))
+  .then(() =>
+    db.schema.createTable('answers', (table) => {
+      debug('Creating answers table');
+      table.increments('id');
+      table.integer('signupId');
+      table.integer('questionId');
+      table.string('answer');
+    }))
+  .then(() =>
+    db.schema.createTable('questions', (table) => {
+      debug('Creating questions table');
+      table.increments('id');
+      table.integer('eventId');
+      table.string('type');
+      table.string('question');
+      table.string('options');
+      table.boolean('required');
+      table.boolean('public');
     }))
   .then(() => {
     // create dummy events
@@ -110,30 +167,80 @@ module.exports = function () { // eslint-disable-line
       quotaId: 2,
       email: 'ville@ilmo.fi',
     });
+    debug('created 4 mockup users');
+
+    // mockup questions
+    app.service('/api/questions').create({
+      id: 1,
+      eventId: 1,
+      type: 'checkbox',
+      question: 'Name?',
+      required: true,
+      public: true,
+      options: '',
+    });
+
+    app.service('/api/questions').create({
+      id: 2,
+      eventId: 1,
+      type: 'text',
+      question: 'Name?',
+      required: true,
+      public: true,
+      options: '',
+    });
+
+    app.service('/api/questions').create({
+      id: 3,
+      eventId: 2,
+      type: 'longtext',
+      question: 'Name?',
+      required: true,
+      public: true,
+      options: '',
+    });
+
+    app.service('/api/questions').create({
+      id: 4,
+      eventId: 2,
+      type: 'select',
+      question: 'Name?',
+      required: true,
+      public: true,
+      options: '',
+    });
+    debug('created 4 mockup questions');
+
+    // mockup users
+    app.service('/api/answers').create({
+      id: 1,
+      signupId: 1,
+      questionId: 1,
+      answer: 'testi vastaus1',
+    });
+
+    app.service('/api/answers').create({
+      id: 2,
+      signupId: 2,
+      questionId: 1,
+      answer: 'testi vastaus2',
+    });
+
+    app.service('/api/answers').create({
+      id: 3,
+      signupId: 3,
+      questionId: 2,
+      answer: 'testi vastaus3',
+    });
+
+    app.service('/api/answers').create({
+      id: 4,
+      signupId: 4,
+      questionId: 2,
+      answer: 'testi vastaus4',
+    });
+    debug('created 4 mockup answers');
   });
-
-
-  // initialize services
-  app.use('/api/events', service({
-    Model: db,
-    name: 'events',
-  }));
-
-  app.use('/api/signups', service({
-    Model: db,
-    name: 'signups',
-  }));
-
-  app.use('/api/quotas', service({
-    Model: db,
-    name: 'quotas',
-  }));
-
-  app.service('/api/quotas').before({
-    // disable external use (rest / websocket ) of /api/quotas
-    all: hooks.disable('external'),
-  });
-
 
   const populateEventsSchema = {
     include: [{
@@ -154,9 +261,21 @@ module.exports = function () { // eslint-disable-line
       include: [{
         service: '/api/signups',
         nameAs: 'signups',
-        parentField: 'eventId',
+        parentField: 'id',
         childField: 'quotaId',
+        include: [{
+          service: '/api/answers',
+          nameAs: 'answers',
+          parentField: 'id',
+          childField: 'signupId',
+        }],
       }],
+    },
+    {
+      service: '/api/questions',
+      nameAs: 'questions',
+      parentField: 'id',
+      childField: 'eventId',
     }],
   };
 
