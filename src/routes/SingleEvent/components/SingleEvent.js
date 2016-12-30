@@ -1,5 +1,6 @@
 import React from 'react';
 import nl2br from 'react-nl2br';
+import _ from 'lodash';
 import moment from 'moment';
 import SignupButton from './SignupButton';
 import SignupList from './SignupList';
@@ -41,7 +42,7 @@ class SingleEvent extends React.Component {
   }
   render() {
     const event = this.props.singleEvent;
-
+    console.log(event);
     return (
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
@@ -53,8 +54,8 @@ class SingleEvent extends React.Component {
                 {event.date ? <span>{ moment(event.date).format('D.M.Y [klo] HH:mm') }<br /></span> : ''}
                 {event.location ? <span>{event.location}<br /></span> : ''}
                 {event.price ? <span>Hinta: {event.price}<br /></span> : ''}
-                {event.homepage ? <Link to={event.homepage}>{event.homepage}<br /></Link> : ''}
-                {event.facebook ? <Link to={event.facebook}>Facebook-tapahtuma<br /></Link> : ''}
+                {event.homepage ? <a href={event.homepage} title="Tapahtuman kotisivut">{event.homepage}<br /></a> : ''}
+                {event.facebook ? <a href={event.facebook} title="Facebook-tapahtuma">Facebook-tapahtuma<br /></a> : ''}
                 <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
               </p>
               <p>{nl2br(event.description)}</p>
@@ -63,20 +64,31 @@ class SingleEvent extends React.Component {
               <div className="sidebar-widget">
                 <h3>Ilmoittaudu</h3>
                 {(event.quotas ? event.quotas.map((data, index) =>
-                  <SignupButton openForm={this.openForm} key={index} data={data} />) : '')}
+                  <SignupButton title={data.title} openForm={this.openForm} key={index} />) : '')}
               </div>
             </div>
             <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
                 <h3>Ilmoittautuneet</h3>
-                {(event.quota ? event.quota.map((i, index) =>
-                  <ViewProgress key={index} data={i} />) : '')}
+                {(event.quotas ? event.quotas.map((quota, index) =>
+                  <ViewProgress title={quota.title} value={quota.going} max={quota.size} key={index} />) : '')}
               </div>
             </div>
             <div className="col-xs-12">
-              <h2>Ilmoittautuneet</h2>
-              {(event.quota ? event.quota.map((i, index) =>
-                <SignupList key={index} data={i} />) : '')}
+              {(event.quotas && !event.quotas.length ? <p>Tapahtuman vastaukset eivät ole julkisia.</p> :
+              <div>
+                <h2>Ilmoittautuneet</h2>
+                {(event.quotas ? event.quotas.map((quota, index) =>
+                  // TODO: replace _.keys() with proper headings
+                  <SignupList
+                    title={(event.quotas.length > 1 ? quota.title : '')}
+                    headings={_.keys(quota.signups[0])}
+                    rows={quota.signups}
+                    key={index}
+                  />,
+                ) : '')}
+              </div>
+              )}
             </div>
           </div>
         </div>
