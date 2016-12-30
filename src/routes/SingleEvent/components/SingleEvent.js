@@ -171,33 +171,35 @@ class SingleEvent extends React.Component {
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
         <div className="container">
-          <div className='col-xs-12 col-sm-8'>
-            <h1>{this.props.singleEvent.title}</h1>
-            <p>
-              {this.props.singleEvent.date}<br />
-              Hinta: {this.props.singleEvent.price}<br />
-              <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
-            </p>
-            <p>{this.props.singleEvent.description}</p>
-          </div>
-          <div className="col-xs-12 col-sm-4 pull-right">
-            <div className="sidebar-widget">
-              <h3>Ilmoittaudu</h3>
-              {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-                <AttendButton openForm={this.openForm} key={index} data={i} />) : '')}
+          <div className="row">
+            <div className="col-xs-12 col-sm-8">
+              <h1>{this.props.singleEvent.title}</h1>
+              <p>
+                {this.props.singleEvent.date}<br />
+                Hinta: {this.props.singleEvent.price}<br />
+                <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
+              </p>
+              <p>{this.props.singleEvent.description}</p>
             </div>
-          </div>
-          <div className="col-xs-12 col-sm-4 pull-right">
-            <div className="sidebar-widget">
-              <h3>Ilmoittautuneet</h3>
-              {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-                <ViewProgress key={index} data={i} />) : '')}
+            <div className="col-xs-12 col-sm-4 pull-right">
+              <div className="sidebar-widget">
+                <h3>Ilmoittaudu</h3>
+                {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+                  <AttendButton openForm={this.openForm} key={index} data={i} />) : '')}
+              </div>
             </div>
-          </div>
-          <div className="col-xs-12">
-            <h2>Ilmoittautuneet</h2>
-            {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-              <AttendeeGroup key={index} data={i} />) : '')}
+            <div className="col-xs-12 col-sm-4 pull-right">
+              <div className="sidebar-widget">
+                <h3>Ilmoittautuneet</h3>
+                {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+                  <ViewProgress key={index} data={i} />) : '')}
+              </div>
+            </div>
+            <div className="col-xs-12">
+              <h2>Ilmoittautuneet</h2>
+              {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+                <AttendeeGroup key={index} data={i} />) : '')}
+            </div>
           </div>
         </div>
       </div>
