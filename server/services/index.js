@@ -46,7 +46,7 @@ module.exports = function () { // eslint-disable-line
       table.increments('id');
       table.integer('quotaId');
       table.dateTime('timestamp');
-      table.string('name');
+      table.string('title');
       table.string('email');
     }))
   .then(() =>
@@ -63,7 +63,7 @@ module.exports = function () { // eslint-disable-line
   .then(() => {
     // create dummy events
     app.service('/api/events').create({
-      name: 'Minuuttikalja 2016',
+      title: 'Minuuttikalja 2016',
       date: '2016-4-27 18:00:00',
       description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
       price: '',
@@ -75,7 +75,7 @@ module.exports = function () { // eslint-disable-line
     });
 
     app.service('/api/events').create({
-      name: 'Columbia Road -excu',
+      title: 'Columbia Road -excu',
       date: '2017-1-11 17:00:00',
       description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset ',
       price: '0',
