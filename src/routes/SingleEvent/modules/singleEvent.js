@@ -1,3 +1,5 @@
+import request from 'then-request';
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -9,63 +11,24 @@ export const GET_EVENT_ASYNC = 'GET_EVENT_ASYNC';
 
 /*  Temporary payload. This is going to be loaded from the backend. */
 
-const payload = {
-  id: 1,
-  title: 'Joulusitsit',
-  date: 1482697816,
-  quota: [
-    {
-      quotaName: 'Athene',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
-      going: 15,
-      max: 20,
-      attendees: [
-        'epic',
-        'long',
-        'list',
-        'of',
-        'people',
-        'who',
-        'are',
-        'coming',
-      ],
-    },
-    {
-      quotaName: 'Tietokilta',
-      signUpStarts: 1482697816,
-      signUpEnds: 1482697816,
-      going: 10,
-      max: 20,
-      attendees: [
-        'epic',
-        'long',
-        'list',
-        'of',
-        'people',
-        'who',
-        'are',
-        'coming',
-      ],
-    },
-  ],
-  description: 'Sitsit, Jee! Trololoo..',
-  price: '0€',
-};
+function getApi(id) {
+  return request('GET', `/api/events/${id}`);
+}
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
 
-export const getEventInfo = () => dispatch => new Promise((resolve) => {
-  setTimeout(() => {
-    dispatch({
-      type: GET_EVENT_ASYNC,
-      payload,
+export const getEventInfo = eventId => (dispatch) => {
+  getApi(eventId)
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      dispatch({
+        type: GET_EVENT_ASYNC,
+        payload: res,
+      });
     });
-    resolve();
-  }, 1000);
-});
+};
 
 export const actions = {
   getEventInfo,

@@ -4,6 +4,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import Separator from '../../../components/Separator';
 import './EventList.scss';
+import signupState from '../../../utils/signupStateText';
 
 class TableRow extends React.Component {
   render() {
@@ -11,10 +12,10 @@ class TableRow extends React.Component {
 
     return (
       <tr className={className}>
-        <td className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
-        <td className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
-        <td className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>{signupLabel}</td>
-        <td className="going" data-xs-prefix={going || size ? 'Ilmoittautuneita: ' : ''}>
+        <td key="title" className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
+        <td key="date" className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
+        <td key="signup" className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>{signupLabel}</td>
+        <td key="going" className="going" data-xs-prefix={going || size ? 'Ilmoittautuneita: ' : ''}>
           { going || '' }{ size ? <Separator /> : '' }{ size || ''}
         </td>
       </tr>
@@ -31,35 +32,6 @@ class EventList extends React.Component {
   }
 
   render() {
-    const state = (event, starts, closes) => {
-      const signupOpens = moment(starts);
-      const signupCloses = moment(closes);
-      const eventOpens = moment(event);
-      const now = moment();
-
-      const timeFormat = 'D.M. [klo] hh:mm';
-
-      if (signupOpens.isSameOrAfter(now)) {
-        return {
-          label: `Alkaa ${moment(signupOpens).format(timeFormat)}.`,
-          class: 'signup-not-opened',
-        };
-      }
-
-      if (signupCloses.isSameOrAfter(now)) {
-        return {
-          label: `Auki ${moment(signupCloses).format(timeFormat)} asti.`,
-          class: 'signup-opened',
-        };
-      }
-
-      if (eventOpens.isSameOrAfter(now)) {
-        return { label: 'Ilmoittautuminen päättynyt.', class: 'signup-closed' };
-      }
-
-      return { label: 'Päättynyt', class: 'event-ended' };
-    };
-
     const tableRows = this.props.eventList.map((event) => {
       // If every quota has same registration start/end time, show that time only once
       const showOneLabel = () => {
@@ -71,7 +43,7 @@ class EventList extends React.Component {
         return (startMin === startMax && endMin === endMax);
       };
 
-      const eventState = state(event.date, event.quotas[0].signupOpens, event.quotas[0].signupCloses);
+      const eventState = signupState(event.date, event.quotas[0].signupOpens, event.quotas[0].signupCloses);
 
       const rows = [
         <TableRow
@@ -87,7 +59,7 @@ class EventList extends React.Component {
 
       if (event.quotas.length > 1) {
         event.quotas.map((quota, i) => {
-          const quotaState = state(event.date, quota.signupOpens, quota.signupCloses);
+          const quotaState = signupState(event.date, quota.signupOpens, quota.signupCloses);
           return rows.push(
             <TableRow
               title={quota.title}

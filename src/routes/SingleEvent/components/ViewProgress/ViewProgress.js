@@ -6,13 +6,13 @@ export class ViewProgress extends React.Component {
   render() {
     return (
       <div>
-        {this.props.data.quotaName}
+        {this.props.title}
         <div className="progress">
           <div className="progress-bar" role="progressbar"
-            style={{ minWidth: '4em', width: `${(this.props.data.going / this.props.data.max) * 100}%` }}>
-            {this.props.data.going}
+            style={{ minWidth: '5em', width: `${(this.props.value / this.props.max) * 100}%` }}>
+            {this.props.value}
             <Separator />
-            {this.props.data.max}
+            {this.props.max}
           </div>
         </div>
       </div>
@@ -21,11 +21,9 @@ export class ViewProgress extends React.Component {
 }
 
 ViewProgress.propTypes = {
-  data: React.PropTypes.shape({
-    quotaName: React.PropTypes.string,
-    going: React.PropTypes.number,
-    max: React.PropTypes.number,
-  }).isRequired,
+  title: React.PropTypes.string.isRequired,
+  value: React.PropTypes.number.isRequired,
+  max: React.PropTypes.number.isRequired,
 };
 
 export default ViewProgress;

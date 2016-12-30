@@ -84,7 +84,7 @@ module.exports = function () { // eslint-disable-line
       table.increments('id');
       table.integer('quotaId');
       table.dateTime('timestamp');
-      table.string('title');
+      table.string('attendee');
       table.string('email');
     }))
   .then(() =>
@@ -134,7 +134,7 @@ module.exports = function () { // eslint-disable-line
     app.service('/api/events').create({
       title: 'Columbia Road -excu',
       date: '2017-1-11 17:00:00',
-      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset ',
+      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem',
       price: '0',
       location: 'Eerikinkatu 5, Helsinki',
       homepage: 'http://crexcu2017.wordpress.com/',
@@ -145,25 +145,25 @@ module.exports = function () { // eslint-disable-line
 
     // mockup users
     app.service('/api/signups').create({
-      name: 'Joel',
+      attendee: 'Joel',
       quotaId: 1,
       email: 'ilmomasiina@gmail.com',
     });
 
     app.service('/api/signups').create({
-      name: 'Pekka',
+      attendee: 'Pekka',
       quotaId: 1,
       email: 'pekka@ilmo.fi',
     });
 
     app.service('/api/signups').create({
-      name: 'Alan',
+      attendee: 'Alan',
       quotaId: 2,
       email: 'Alan@ilmo.fi',
     });
 
     app.service('/api/signups').create({
-      name: 'Ville',
+      attendee: 'Ville',
       quotaId: 2,
       email: 'ville@ilmo.fi',
     });
@@ -258,6 +258,7 @@ module.exports = function () { // eslint-disable-line
       nameAs: 'quotas',
       parentField: 'id',
       childField: 'eventId',
+      asArray: true,
       include: [{
         service: '/api/signups',
         nameAs: 'signups',
@@ -268,7 +269,9 @@ module.exports = function () { // eslint-disable-line
           nameAs: 'answers',
           parentField: 'id',
           childField: 'signupId',
+          asArray: true,
         }],
+        asArray: true,
       }],
     },
     {

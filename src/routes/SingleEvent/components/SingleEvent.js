@@ -1,4 +1,6 @@
 import React from 'react';
+import nl2br from 'react-nl2br';
+import moment from 'moment';
 import SignupButton from './SignupButton';
 import SignupList from './SignupList';
 import ViewProgress from './ViewProgress';
@@ -7,8 +9,7 @@ import './SingleEvent.scss';
 
 class SingleEvent extends React.Component {
   componentWillMount() {
-    // get the event with correct id
-    this.props.getEventInfo();
+    this.props.getEventInfo(this.props.params.id);
   }
   constructor(props) {
     super(props);
@@ -39,38 +40,58 @@ class SingleEvent extends React.Component {
     this.setState(state);
   }
   render() {
+    const event = this.props.singleEvent;
+    console.log(event);
     return (
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
         <div className="container">
           <div className="row">
             <div className="col-xs-12 col-sm-8">
-              <h1>{this.props.singleEvent.title}</h1>
+              <h1>{event.title}</h1>
               <p>
-                {this.props.singleEvent.date}<br />
-                Hinta: {this.props.singleEvent.price}<br />
+                {event.date ? <span>{ moment(event.date).format('D.M.Y [klo] HH:mm') }<br /></span> : ''}
+                {event.location ? <span>{event.location}<br /></span> : ''}
+                {event.price ? <span>Hinta: {event.price}<br /></span> : ''}
+                {event.homepage ? <a href={event.homepage} title="Tapahtuman kotisivut">{event.homepage}<br /></a> : ''}
+                {event.facebook ? <a href={event.facebook} title="Facebook-tapahtuma">Facebook-tapahtuma<br /></a> : ''}
                 <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
               </p>
-              <p>{this.props.singleEvent.description}</p>
+              <p>{nl2br(event.description)}</p>
             </div>
             <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
                 <h3>Ilmoittaudu</h3>
-                {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-                  <SignupButton openForm={this.openForm} key={index} data={i} />) : '')}
+                {(event.quotas ? event.quotas.map((quota, index) =>
+                  <SignupButton
+                    title={quota.title}
+                    opens={quota.signupOpens}
+                    closes={quota.signupCloses}
+                    openForm={this.openForm}
+                    key={index}
+                  />,
+                  ) : '')}
               </div>
-            </div>
-            <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
                 <h3>Ilmoittautuneet</h3>
-                {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-                  <ViewProgress key={index} data={i} />) : '')}
+                {(event.quotas ? event.quotas.map((quota, index) =>
+                  <ViewProgress title={quota.title} value={quota.going} max={quota.size} key={index} />) : '')}
               </div>
             </div>
             <div className="col-xs-12">
-              <h2>Ilmoittautuneet</h2>
-              {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-                <SignupList key={index} data={i} />) : '')}
+              {(event.quotas && !event.quotas.length ? <p>Tapahtuman vastaukset eivät ole julkisia.</p> :
+              <div>
+                <h2>Ilmoittautuneet</h2>
+                {(event.quotas ? event.quotas.map((quota, index) =>
+                  <SignupList
+                    title={(event.quotas.length > 1 ? quota.title : '')}
+                    headings={event.questions.map(q => q.question)}
+                    rows={quota.signups}
+                    key={index}
+                  />,
+                ) : '')}
+              </div>
+              )}
             </div>
           </div>
         </div>
@@ -88,7 +109,7 @@ SingleEvent.propTypes = {
     title: React.PropTypes.string,
     description: React.PropTypes.string,
     price: React.PropTypes.string,
-    date: React.PropTypes.number,
+    date: React.PropTypes.string,
     quota: React.PropTypes.array,
   }),
 };
