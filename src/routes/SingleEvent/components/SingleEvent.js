@@ -42,7 +42,7 @@ class SingleEvent extends React.Component {
   }
   render() {
     const event = this.props.singleEvent;
-
+    console.log(event);
     return (
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
@@ -84,10 +84,9 @@ class SingleEvent extends React.Component {
               <div>
                 <h2>Ilmoittautuneet</h2>
                 {(event.quotas ? event.quotas.map((quota, index) =>
-                  // TODO: replace _.keys() with proper headings
                   <SignupList
                     title={(event.quotas.length > 1 ? quota.title : '')}
-                    headings={_.keys(quota.signups[0])}
+                    headings={event.questions.map(q => q.question)}
                     rows={quota.signups}
                     key={index}
                   />,

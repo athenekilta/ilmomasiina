@@ -269,7 +269,6 @@ module.exports = function () { // eslint-disable-line
           nameAs: 'answers',
           parentField: 'id',
           childField: 'signupId',
-          asArray: true,
         }],
         asArray: true,
       }],
