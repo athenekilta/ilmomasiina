@@ -47,4 +47,8 @@
   .progress, .progress-bar {
     box-shadow: none;
   }
+
+  textarea {
+    max-width: 100%;
+  }
 }
