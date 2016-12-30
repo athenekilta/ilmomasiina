@@ -145,25 +145,25 @@ module.exports = function () { // eslint-disable-line
 
     // mockup users
     app.service('/api/signups').create({
-      name: 'Joel',
+      attendee: 'Joel',
       quotaId: 1,
       email: 'ilmomasiina@gmail.com',
     });
 
     app.service('/api/signups').create({
-      name: 'Pekka',
+      attendee: 'Pekka',
       quotaId: 1,
       email: 'pekka@ilmo.fi',
     });
 
     app.service('/api/signups').create({
-      name: 'Alan',
+      attendee: 'Alan',
       quotaId: 2,
       email: 'Alan@ilmo.fi',
     });
 
     app.service('/api/signups').create({
-      name: 'Ville',
+      attendee: 'Ville',
       quotaId: 2,
       email: 'ville@ilmo.fi',
     });
@@ -269,6 +269,7 @@ module.exports = function () { // eslint-disable-line
           nameAs: 'answers',
           parentField: 'id',
           childField: 'signupId',
+          asArray: true,
         }],
         asArray: true,
       }],

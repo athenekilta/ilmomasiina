@@ -1,6 +1,5 @@
 import React from 'react';
 import nl2br from 'react-nl2br';
-import _ from 'lodash';
 import moment from 'moment';
 import SignupButton from './SignupButton';
 import SignupList from './SignupList';

@@ -4,10 +4,10 @@ import './SignupList.scss';
 
 export class SignupList extends React.Component {
   render() {
-    const TableRow = ({ columns, title, index }) =>
+    const TableRow = ({ columns, attendee, index }) =>
       <tr>
         <td>{index}.</td>
-        <td>{title}</td>
+        <td>{attendee}</td>
         {columns.map((column, i) => <td key={i}>{column}</td>)}
       </tr>;
     // console.log(this.props.rows);
@@ -19,12 +19,13 @@ export class SignupList extends React.Component {
           <thead>
             <tr className='active'>
               <th key="position">Sija</th>
-              <th key="name">Nimi</th>
+              <th key="attendee">Nimi</th>
               {this.props.headings.map((h, i) => <th key={i}>{h}</th>)}
             </tr>
           </thead>
           <tbody>
-            {this.props.rows.map((row, i) => <TableRow columns={row.answers.map(a => a.answer)} title={row.title} index={i + 1} key={i} />)}
+            {this.props.rows.map((row, i) =>
+              <TableRow columns={row.answers.map(a => a.answer)} attendee={row.attendee} index={i + 1} key={i} />)}
           </tbody>
         </table>
          }
