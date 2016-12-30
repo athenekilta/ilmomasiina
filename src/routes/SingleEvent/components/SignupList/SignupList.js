@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import './SignupList.scss';
 
 export class SignupList extends React.Component {
