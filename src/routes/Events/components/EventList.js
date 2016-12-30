@@ -104,7 +104,7 @@ class EventList extends React.Component {
     });
 
     return (
-      <div>
+      <div className="container">
         <h1>Tapahtumat</h1>
         <table className="table eventlist">
           <thead>
