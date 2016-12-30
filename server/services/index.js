@@ -32,7 +32,7 @@ module.exports = function () { // eslint-disable-line
     db.schema.createTable('events', (table) => {
       debug('Creating events table');
       table.increments('id');
-      table.string('name');
+      table.string('title');
       table.dateTime('date');
       table.string('description');
       table.string('price');
@@ -45,6 +45,7 @@ module.exports = function () { // eslint-disable-line
       debug('Creating signups table');
       table.increments('id');
       table.integer('quotaId');
+      table.dateTime('timestamp');
       table.string('name');
       table.string('email');
     }))
@@ -53,10 +54,11 @@ module.exports = function () { // eslint-disable-line
       debug('Creating quotas table');
       table.increments('id');
       table.integer('eventId');
-      table.string('quotaName');
-      table.integer('quotaSize');
-      table.dateTime('quotaOpens');
-      table.dateTime('quotaCloses');
+      table.string('title');
+      table.integer('going');
+      table.integer('size');
+      table.dateTime('signupOpens');
+      table.dateTime('signupCloses');
     }))
   .then(() => {
     // create dummy events
@@ -139,6 +141,7 @@ module.exports = function () { // eslint-disable-line
       nameAs: 'quotas',
       parentField: 'id',
       childField: 'eventId',
+      asArray: true,
     }],
   };
 
@@ -167,10 +170,11 @@ module.exports = function () { // eslint-disable-line
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
         eventId: hook.result.id, // id of the just created event
-        quotaName: 'Kiintiö tapahtumalle ',
-        quotaSize: 20,
-        quotaOpens: '2017-1-1 23:59:59',
-        quotaCloses: '2017-1-1 23:59:59',
+        title: 'Kiintiö tapahtumalle ',
+        size: 20,
+        going: 10,
+        signupOpens: '2017-1-1 23:59:59',
+        signupCloses: '2017-1-1 23:59:59',
       });
     },
   });
