@@ -58,6 +58,25 @@ module.exports = function () { // eslint-disable-line
       table.dateTime('quotaOpens');
       table.dateTime('quotaCloses');
     }))
+  .then(() =>
+    db.schema.createTable('answers', (table) => {
+      debug('Creating answers table');
+      table.increments('id');
+      table.integer('signupId');
+      table.integer('questionId');
+      table.string('answer');
+    }))
+  .then(() =>
+    db.schema.createTable('questions', (table) => {
+      debug('Creating questions table');
+      table.increments('id');
+      table.integer('eventId');
+      table.string('type');
+      table.string('question');
+      table.string('options');
+      table.boolean('required');
+      table.boolean('public');
+    }))
   .then(() => {
     // create dummy events
     app.service('/api/events').create({
