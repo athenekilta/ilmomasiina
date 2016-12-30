@@ -134,7 +134,7 @@ module.exports = function () { // eslint-disable-line
     app.service('/api/events').create({
       title: 'Columbia Road -excu',
       date: '2017-1-11 17:00:00',
-      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset ',
+      description: 'Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem',
       price: '0',
       location: 'Eerikinkatu 5, Helsinki',
       homepage: 'http://crexcu2017.wordpress.com/',
@@ -258,6 +258,7 @@ module.exports = function () { // eslint-disable-line
       nameAs: 'quotas',
       parentField: 'id',
       childField: 'eventId',
+      asArray: true,
       include: [{
         service: '/api/signups',
         nameAs: 'signups',
@@ -268,7 +269,9 @@ module.exports = function () { // eslint-disable-line
           nameAs: 'answers',
           parentField: 'id',
           childField: 'signupId',
+          asArray: true,
         }],
+        asArray: true,
       }],
     },
     {

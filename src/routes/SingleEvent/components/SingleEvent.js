@@ -1,4 +1,6 @@
 import React from 'react';
+import nl2br from 'react-nl2br';
+import moment from 'moment';
 import SignupButton from './SignupButton';
 import SignupList from './SignupList';
 import ViewProgress from './ViewProgress';
@@ -7,8 +9,7 @@ import './SingleEvent.scss';
 
 class SingleEvent extends React.Component {
   componentWillMount() {
-    // get the event with correct id
-    this.props.getEventInfo();
+    this.props.getEventInfo(this.props.params.id);
   }
   constructor(props) {
     super(props);
@@ -39,37 +40,42 @@ class SingleEvent extends React.Component {
     this.setState(state);
   }
   render() {
+    const event = this.props.singleEvent;
+
     return (
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
         <div className="container">
           <div className="row">
             <div className="col-xs-12 col-sm-8">
-              <h1>{this.props.singleEvent.title}</h1>
+              <h1>{event.title}</h1>
               <p>
-                {this.props.singleEvent.date}<br />
-                Hinta: {this.props.singleEvent.price}<br />
+                {event.date ? <span>{ moment(event.date).format('D.M.Y [klo] HH:mm') }<br /></span> : ''}
+                {event.location ? <span>{event.location}<br /></span> : ''}
+                {event.price ? <span>Hinta: {event.price}<br /></span> : ''}
+                {event.homepage ? <Link to={event.homepage}>{event.homepage}<br /></Link> : ''}
+                {event.facebook ? <Link to={event.facebook}>Facebook-tapahtuma<br /></Link> : ''}
                 <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
               </p>
-              <p>{this.props.singleEvent.description}</p>
+              <p>{nl2br(event.description)}</p>
             </div>
             <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
                 <h3>Ilmoittaudu</h3>
-                {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
-                  <SignupButton openForm={this.openForm} key={index} data={i} />) : '')}
+                {(event.quotas ? event.quotas.map((data, index) =>
+                  <SignupButton openForm={this.openForm} key={index} data={data} />) : '')}
               </div>
             </div>
             <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
                 <h3>Ilmoittautuneet</h3>
-                {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+                {(event.quota ? event.quota.map((i, index) =>
                   <ViewProgress key={index} data={i} />) : '')}
               </div>
             </div>
             <div className="col-xs-12">
               <h2>Ilmoittautuneet</h2>
-              {(this.props.singleEvent.quota ? this.props.singleEvent.quota.map((i, index) =>
+              {(event.quota ? event.quota.map((i, index) =>
                 <SignupList key={index} data={i} />) : '')}
             </div>
           </div>
