@@ -26,6 +26,8 @@ module.exports = function () { // eslint-disable-line
   db.schema.dropTableIfExists('events')
   .then(() => db.schema.dropTableIfExists('signups'))
   .then(() => db.schema.dropTableIfExists('quotas'))
+  .then(() => db.schema.dropTableIfExists('questions'))
+  .then(() => db.schema.dropTableIfExists('answers'))
 
   // create tables
   .then(() =>
@@ -146,6 +148,16 @@ module.exports = function () { // eslint-disable-line
     name: 'quotas',
   }));
 
+  app.use('/api/questions', service({
+    Model: db,
+    name: 'questions',
+  }));
+
+  app.use('/api/answers', service({
+    Model: db,
+    name: 'answers',
+  }));
+
   app.service('/api/quotas').before({
     // disable external use (rest / websocket ) of /api/quotas
     all: hooks.disable('external'),
@@ -172,7 +184,19 @@ module.exports = function () { // eslint-disable-line
         nameAs: 'signups',
         parentField: 'id',
         childField: 'quotaId',
+        include: [{
+          service: '/api/answers',
+          nameAs: 'answers',
+          parentField: 'id',
+          childField: 'signupId',
+        }],
       }],
+    },
+    {
+      service: '/api/questions',
+      nameAs: 'questions',
+      parentField: 'id',
+      childField: 'eventId',
     }],
   };
 
