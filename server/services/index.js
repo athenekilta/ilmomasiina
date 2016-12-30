@@ -151,7 +151,7 @@ module.exports = function () { // eslint-disable-line
       include: [{
         service: '/api/signups',
         nameAs: 'signups',
-        parentField: 'eventId',
+        parentField: 'id',
         childField: 'quotaId',
       }],
     }],
