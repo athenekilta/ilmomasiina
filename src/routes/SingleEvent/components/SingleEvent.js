@@ -61,13 +61,14 @@ class SingleEvent extends React.Component {
             </div>
             <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
-                <h3>Ilmoittaudu</h3>
+                <h3>Ilmoittautuminen</h3>
                 {(event.quotas ? event.quotas.map((quota, index) =>
                   <SignupButton
                     title={quota.title}
                     opens={quota.signupOpens}
                     closes={quota.signupCloses}
                     openForm={this.openForm}
+                    isOnly={(event.quotas.length === 1)}
                     key={index}
                   />,
                   ) : '')}

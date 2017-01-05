@@ -16,10 +16,10 @@ export class SignupButton extends React.Component {
       <p className="text-center">
         <button
           disabled={(isOpened && !isClosed)}
-          className='btn btn-success btn-block'
+          className="btn btn-success btn-block"
           onClick={() => this.props.openForm()}
         >
-          {this.props.title}
+          {(this.props.isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${this.props.title}`)}
         </button>
         {state.label}
       </p>
@@ -33,6 +33,7 @@ SignupButton.propTypes = {
   opens: React.PropTypes.string.isRequired,
   closes: React.PropTypes.string.isRequired,
   eventTime: React.PropTypes.string,
+  isOnly: React.PropTypes.bool.isRequired,
 };
 
 export default SignupButton;
