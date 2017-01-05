@@ -22,7 +22,7 @@ export class SignupButton extends React.Component {
         >
           {(this.props.isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${this.props.title}`)}
         </button>
-        {state.label}
+        {this.props.showLabel ? state.label : ''}
       </p>
     );
   }
@@ -35,6 +35,7 @@ SignupButton.propTypes = {
   closes: React.PropTypes.string.isRequired,
   eventTime: React.PropTypes.string,
   isOnly: React.PropTypes.bool.isRequired,
+  showLabel: React.PropTypes.bool.isRequired,
 };
 
 export default SignupButton;
