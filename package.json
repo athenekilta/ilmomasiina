@@ -19,7 +19,8 @@
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
-    "codecov": "cat coverage/*/lcov.info | codecov"
+    "codecov": "cat coverage/*/lcov.info | codecov",
+    "reset-db": "better-npm-run reset-db"
   },
   "betterScripts": {
     "compile": {
@@ -32,6 +33,12 @@
       "command": "nodemon bin/dev-server --ignore dist --ignore coverage --ignore tests --ignore src",
       "env": {
         "NODE_ENV": "development",
+        "DEBUG": "app:*"
+      }
+    },
+    "reset-db": {
+      "command": "node scripts/reset-database",
+      "env": {
         "DEBUG": "app:*"
       }
     },
