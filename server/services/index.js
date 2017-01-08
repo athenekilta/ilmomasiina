@@ -10,7 +10,6 @@ const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disa
 module.exports = function () { // eslint-disable-line
   debug('Feathers');
   const app = this; // function can't be nameless beacause of this
-  // initialize db
 
   // create database connection
   const db = knex({

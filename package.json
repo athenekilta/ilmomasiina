@@ -20,7 +20,8 @@
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
     "codecov": "cat coverage/*/lcov.info | codecov",
-    "reset-db": "better-npm-run reset-db"
+    "reset-db": "better-npm-run reset-db",
+    "create-fake-data": "better-npm-run create-fake-data"
   },
   "betterScripts": {
     "compile": {
@@ -38,6 +39,12 @@
     },
     "reset-db": {
       "command": "node scripts/reset-database",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    },
+    "create-fake-data": {
+      "command": "node scripts/create-fake-data",
       "env": {
         "DEBUG": "app:*"
       }
@@ -118,6 +125,7 @@
     "mysql": "^2.12.0",
     "node-sass": "^4.0.0",
     "postcss-loader": "^1.1.0",
+    "promise": "^7.1.1",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-nl2br": "^0.2.0",
