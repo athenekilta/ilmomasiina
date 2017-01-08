@@ -157,6 +157,7 @@ webpackConfig.module.loaders.push({
 });
 
 webpackConfig.sassLoader = {
+  data: "@import '_base.scss';",
   includePaths: project.paths.client('styles'),
 };
 
