@@ -1,6 +1,7 @@
 const debug = require('debug')('app:script');
 const knex = require('knex');
 const _ = require('lodash');
+const moment = require('moment');
 const config = require('../config/ilmomasiina.config.js');
 
 const db = knex({
@@ -12,10 +13,16 @@ const db = knex({
   },
 });
 
+// Let's create all the times relative to current date, so we can use the same
+// script after years
+const now = moment().startOf('hour');
+// Date format for knex
+const d = 'Y-M-D HH:mm:ss';
+
 const events = [
   {
     title: 'Minuuttikalja 2016',
-    date: '2016-04-28 18:00:00',
+    date: moment(now).subtract(10, 'days').format(d),
     description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
@@ -24,7 +31,7 @@ const events = [
   },
   {
     title: 'Columbia Road -excu',
-    date: '2017-1-11 17:00:00',
+    date: moment(now).add(5, 'days').format(d),
     description: 'Tapahtuma, jossa kiintiöt aukeavat eri aikoihin. Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem', // eslint-disable-line
     price: '0 €',
     location: 'Eerikinkatu 5, Helsinki',
@@ -33,7 +40,7 @@ const events = [
   },
   {
     title: 'Ystävänpäiväsitsit',
-    date: '2017-2-14 18:30:00',
+    date: moment(now).add(15, 'days').format(d),
     description: 'Sitsit kiintiöillä',
     price: '14 € (12 € alkoholiton)',
     location: 'Smökki',
@@ -53,48 +60,48 @@ const quotas = [
     title: 'Minuuttikalja 2016',
     going: 18,
     size: 20,
-    signupOpens: '2016-4-15 17:00:00',
-    signupCloses: '2017-4-29 17:00:00',
+    signupOpens: moment(now).subtract(50, 'days').format(d),
+    signupCloses: moment(now).subtract(35, 'days').format(d),
   },
   {
     eventId: 2,
     title: 'Athene',
     going: 0,
     size: 20,
-    signupOpens: '2017-1-10 17:00:00',
-    signupCloses: '2017-1-11 17:00:00',
+    signupOpens: moment(now).add(2, 'days').format(d),
+    signupCloses: moment(now).add(10, 'days').format(d),
   },
   {
     eventId: 2,
     title: 'Tietokilta',
     going: 19,
     size: 20,
-    signupOpens: '2017-1-1 17:00:00',
-    signupCloses: '2017-1-8 17:00:00',
+    signupOpens: moment(now).add(2, 'days').format(d),
+    signupCloses: moment(now).add(5, 'days').format(d),
   },
   {
     eventId: 3,
     title: 'Athene',
     going: 2,
     size: 20,
-    signupOpens: '2017-1-11 17:00:00',
-    signupCloses: '2017-1-11 17:00:00',
+    signupOpens: moment(now).subtract(2, 'days').format(d),
+    signupCloses: moment(now).add(5, 'days').format(d),
   },
   {
     eventId: 3,
     title: 'Prodeko',
     going: 15,
     size: 20,
-    signupOpens: '2017-1-11 17:00:00',
-    signupCloses: '2017-1-11 17:00:00',
+    signupOpens: moment(now).subtract(2, 'days').format(d),
+    signupCloses: moment(now).add(5, 'days').format(d),
   },
   {
     eventId: 3,
     title: 'Tietokilta',
     going: 20,
     size: 20,
-    signupOpens: '2017-1-11 17:00:00',
-    signupCloses: '2017-1-11 17:00:00',
+    signupOpens: moment(now).subtract(2, 'days').format(d),
+    signupCloses: moment(now).add(5, 'days').format(d),
   },
   {
     eventId: 4,
@@ -177,7 +184,7 @@ quotas.map((quota, quotaIndex) => {
 
     signups.push({
       quotaId: quotaIndex + 1,
-      timestamp: '2017-1-11 17:00:00',
+      timestamp: moment(now).format(d),
       attendee: attendee.name,
       email: attendee.email,
     });
