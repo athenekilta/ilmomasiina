@@ -91,7 +91,7 @@ class EventList extends React.Component {
 
 TableRow.propTypes = {
   title: React.PropTypes.string.isRequired,
-  date: React.PropTypes.number,
+  date: React.PropTypes.string,
   link: React.PropTypes.string,
   signupLabel: React.PropTypes.string,
   className: React.PropTypes.string,
