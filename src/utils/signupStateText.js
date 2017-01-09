@@ -23,7 +23,7 @@ const signupState = (eventTime, starts, closes) => {
   }
 
   if (eventOpens.isSameOrAfter(now)) {
-    return { label: 'Ilmoittautuminen päättynyt.', class: 'signup-closed' };
+    return { label: 'Ilmoittautuminen on päättynyt.', class: 'signup-closed' };
   }
 
   return { label: 'Tapahtuma on päättynyt.', class: 'event-ended' };

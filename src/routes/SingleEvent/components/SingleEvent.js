@@ -6,6 +6,7 @@ import SignupList from './SignupList';
 import ViewProgress from './ViewProgress';
 import EnrollForm from './EnrollForm';
 import './SingleEvent.scss';
+import allTimesMatch from '../../../utils/allTimesMatch';
 
 class SingleEvent extends React.Component {
   componentWillMount() {
@@ -41,7 +42,7 @@ class SingleEvent extends React.Component {
   }
   render() {
     const event = this.props.singleEvent;
-    console.log(event);
+
     return (
       <div>
         {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
@@ -61,13 +62,16 @@ class SingleEvent extends React.Component {
             </div>
             <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
-                <h3>Ilmoittaudu</h3>
+                <h3>Ilmoittautuminen</h3>
                 {(event.quotas ? event.quotas.map((quota, index) =>
                   <SignupButton
                     title={quota.title}
                     opens={quota.signupOpens}
                     closes={quota.signupCloses}
                     openForm={this.openForm}
+                    isOnly={(event.quotas.length === 1)}
+                    // Show label if sign ups times differ or this is the last button
+                    showLabel={(allTimesMatch(event.quotas) ? (event.quotas.length === index + 1) : true)}
                     key={index}
                   />,
                   ) : '')}

@@ -7,21 +7,22 @@ export class SignupButton extends React.Component {
   render() {
     const now = moment();
 
-    const isOpened = moment(this.props.opens).isSameOrAfter(now);
+    const isOpened = now.isSameOrAfter(moment(this.props.opens));
     const isClosed = now.isSameOrAfter(moment(this.props.closes));
+    const isOpen = (isOpened && !isClosed);
 
     const state = signupState(this.props.eventTime, this.props.opens, this.props.closes);
 
     return (
-      <p className="text-center">
+      <p>
         <button
-          disabled={(isOpened && !isClosed)}
-          className='btn btn-success btn-block'
-          onClick={() => this.props.openForm()}
+          disabled={!isOpen}
+          className="btn btn-success btn-block"
+          onClick={() => (isOpen ? this.props.openForm() : {})}
         >
-          {this.props.title}
+          {(this.props.isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${this.props.title}`)}
         </button>
-        {state.label}
+        {this.props.showLabel ? state.label : ''}
       </p>
     );
   }
@@ -33,6 +34,8 @@ SignupButton.propTypes = {
   opens: React.PropTypes.string.isRequired,
   closes: React.PropTypes.string.isRequired,
   eventTime: React.PropTypes.string,
+  isOnly: React.PropTypes.bool.isRequired,
+  showLabel: React.PropTypes.bool.isRequired,
 };
 
 export default SignupButton;
