@@ -44,7 +44,7 @@ class EventList extends React.Component {
           title={event.title}
           link={`/event/${event.id}`}
           date={event.date}
-          signupLabel={showOneLabel() ? eventState.label : ''}
+          signupLabel={showOneLabel ? eventState.label : ''}
           going={_.sumBy(event.quotas, 'going')}
           size={_.sumBy(event.quotas, 'size')}
           className={eventState.class}
@@ -57,7 +57,7 @@ class EventList extends React.Component {
           return rows.push(
             <TableRow
               title={quota.title}
-              signupLabel={!showOneLabel() ? quotaState.label : ''}
+              signupLabel={!showOneLabel ? quotaState.label : ''}
               going={quota.going}
               size={quota.size}
               className={`${eventState.class} ${quotaState.class} child`}
