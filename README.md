@@ -3,16 +3,19 @@
 Ilmomasiina on tehty [tämän](https://github.com/davezuko/react-redux-starter-kit) starterkitin pohjalta. Tähän readmehen päivitetään ohjeet ilmomasiinan deployaamseen yms, kunhan saadaan homma sille asteelle, että pystytään tästä dokumentaatiosta luopumaan.
 
 ## Requirements
-* node `^4.5.0`
-* yarn `^0.17.0` or npm `^3.0.0`
-* mysql
+* Node.js `^4.5.0`
+* Yarn `^0.17.0` or npm `^3.0.0`
+* MySQL
 
 ## Getting started
 
-1. create database for ilmomasiina in mysql
-1. create `ilmomasiina.config.js` file based on `ilmomasiina.config.example.js`
+1. Create database in MySQL.
+1. Create file `config/ilmomasiina.config.js` based on `config/ilmomasiina.config.example.js`.
 1. `npm install`
+1. `npm run reset-db`
 1. `npm start`
+
+**Optional**: You can create mockup data for development by running `npm run create-fake-data`.
 
 ## Table of Contents
 1. [Features](#features)
