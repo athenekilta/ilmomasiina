@@ -9,15 +9,15 @@ import allTimesMatch from '../../../utils/allTimesMatch';
 
 class TableRow extends React.Component {
   render() {
-    const { title, link, date, signupLabel, going, size, className } = this.props;
+    const { title, link, date, signupLabel, signups, size, className } = this.props;
 
     return (
       <tr className={className}>
         <td key="title" className="title">{ link ? <Link to={link}>{title}</Link> : title }</td>
         <td key="date" className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
         <td key="signup" className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>{signupLabel}</td>
-        <td key="going" className="going" data-xs-prefix={going || size ? 'Ilmoittautuneita: ' : ''}>
-          { going || '' }{ size ? <Separator /> : '' }{ size || ''}
+        <td key="signups" className="signups" data-xs-prefix={signups || size ? 'Ilmoittautuneita: ' : ''}>
+          { signups || 0 }{ size ? <Separator /> : '' }{ size || ''}
         </td>
       </tr>
     );
@@ -45,7 +45,7 @@ class EventList extends React.Component {
           link={`/event/${event.id}`}
           date={event.date}
           signupLabel={showOneLabel ? eventState.label : ''}
-          going={_.sumBy(event.quotas, 'going')}
+          signups={_.sumBy(event.quotas, 'signups')}
           size={_.sumBy(event.quotas, 'size')}
           className={eventState.class}
           key={`e${event.id}`} />,
@@ -58,7 +58,7 @@ class EventList extends React.Component {
             <TableRow
               title={quota.title}
               signupLabel={!showOneLabel ? quotaState.label : ''}
-              going={quota.going}
+              signups={quota.signups}
               size={quota.size}
               className={`${eventState.class} ${quotaState.class} child`}
               key={`q${i}`} />,
@@ -95,7 +95,7 @@ TableRow.propTypes = {
   link: React.PropTypes.string,
   signupLabel: React.PropTypes.string,
   className: React.PropTypes.string,
-  going: React.PropTypes.number,
+  signups: React.PropTypes.number,
   size: React.PropTypes.number,
 };
 
