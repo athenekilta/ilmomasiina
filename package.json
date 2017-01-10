@@ -4,7 +4,7 @@
   "description": "Get started with React, Redux, and React-Router!",
   "main": "index.js",
   "engines": {
-    "node": ">=4.5.0",
+    "node": ">=7.4.0",
     "npm": "^3.0.0"
   },
   "scripts": {
@@ -19,7 +19,9 @@
     "deploy": "better-npm-run deploy",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
-    "codecov": "cat coverage/*/lcov.info | codecov"
+    "codecov": "cat coverage/*/lcov.info | codecov",
+    "reset-db": "better-npm-run reset-db",
+    "create-fake-data": "better-npm-run create-fake-data"
   },
   "betterScripts": {
     "compile": {
@@ -32,6 +34,18 @@
       "command": "nodemon bin/dev-server --ignore dist --ignore coverage --ignore tests --ignore src",
       "env": {
         "NODE_ENV": "development",
+        "DEBUG": "app:*"
+      }
+    },
+    "reset-db": {
+      "command": "node scripts/reset-database",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    },
+    "create-fake-data": {
+      "command": "node scripts/create-fake-data",
+      "env": {
         "DEBUG": "app:*"
       }
     },
@@ -111,6 +125,7 @@
     "mysql": "^2.12.0",
     "node-sass": "^4.0.0",
     "postcss-loader": "^1.1.0",
+    "promise": "^7.1.1",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-nl2br": "^0.2.0",
