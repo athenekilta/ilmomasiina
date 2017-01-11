@@ -1,15 +1,16 @@
 import React from 'react';
+import _ from 'lodash';
 import './SignupList.scss';
 
 export class SignupList extends React.Component {
   render() {
-    const TableRow = ({ columns, attendee, index }) =>
+    const TableRow = ({ answers, attendee, index }) =>
       <tr>
         <td>{index}.</td>
         <td>{attendee}</td>
-        {columns.map((column, i) => <td key={i}>{column}</td>)}
+        {this.props.questions.map((q, i) => <td key={i}>{_.find(answers, { question: q.id }).answer}</td>)}
       </tr>;
-    // console.log(this.props.rows);
+
     return (
       <div>
         {this.props.title ? <h3>{this.props.title}</h3> : ''}
@@ -19,12 +20,12 @@ export class SignupList extends React.Component {
             <tr className='active'>
               <th key="position">Sija</th>
               <th key="attendee">Nimi</th>
-              {this.props.headings.map((h, i) => <th key={i}>{h}</th>)}
+              {this.props.questions.map((q, i) => <th key={i}>{q.question}</th>)}
             </tr>
           </thead>
           <tbody>
             {this.props.rows.map((row, i) =>
-              <TableRow columns={row.answers.map(a => a.answer)} attendee={row.attendee} index={i + 1} key={i} />)}
+              <TableRow answers={row.answers} attendee={row.attendee} index={i + 1} key={i} />)}
           </tbody>
         </table>
          }
@@ -35,7 +36,7 @@ export class SignupList extends React.Component {
 
 SignupList.propTypes = {
   title: React.PropTypes.string,
-  headings: React.PropTypes.array.isRequired,
+  questions: React.PropTypes.array.isRequired,
   rows: React.PropTypes.array.isRequired,
 };
 

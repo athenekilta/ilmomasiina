@@ -2,6 +2,7 @@ const debug = require('debug')('app:server');
 const service = require('feathers-knex');
 const hooks = require('feathers-hooks-common');
 const knex = require('knex');
+const _ = require('lodash');
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 
 // const user require('./user');
@@ -125,11 +126,36 @@ module.exports = function () { // eslint-disable-line
     }],
   };
 
+  const serializeSingleEvent = {
+    only: ['id', 'title', 'date', 'description', 'price', 'location', 'homepage', 'facebooklink'],
+    quotas: {
+      only: ['title', 'size', 'signupOpens', 'signupCloses'],
+      signups: {
+        only: ['attendee', 'timestamp'],
+        computed: {
+          answers: (signup, hook) =>
+            // Loop through all public questions, and return object with answer
+            // If answer doesn't exist, return still empty string
+            _.filter(hook.result.questions, 'public').map((question) => {
+              const answer = _.find(signup.answers, { questionId: question.id }).answer || '';
+              return { question: question.id, answer };
+            }),
+        },
+      },
+    },
+    questions: {
+      only: ['id', 'type', 'question', 'options', 'required', 'public'],
+      computed: {
+        options: question => (question.options ? question.options.split(',') : []),
+      },
+    },
+  };
+
   app.service('/api/events').after({
     // GET /api/events
     find: [hooks.populate({ schema: populateEvents }), hooks.serialize(serializeEvents)],
     // GET /api/events/<eventId>
-    get: hooks.populate({ schema: populateSingleEvent }),
+    get: [hooks.populate({ schema: populateSingleEvent }), hooks.serialize(serializeSingleEvent)],
     create: (hook) => {
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
