@@ -21,7 +21,7 @@ table.eventlist {
 }
 
 @media (min-width: $screen-md-min) {
-  tr td:first-child {
+  table.eventlist tr td:first-child {
     min-width: 300px;
   }
 }
