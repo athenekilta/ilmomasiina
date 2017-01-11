@@ -61,17 +61,8 @@ module.exports = function () { // eslint-disable-line
     all: hooks.disable('external'),
   });
 
-  // const populateEventsSchema = {
-  //   include: [{
-  //     service: '/api/quotas',
-  //     nameAs: 'quotas',
-  //     parentField: 'id',
-  //     childField: 'eventId',
-  //     asArray: true,
-  //   }],
-  // };
-
-  const schema = {
+  // Fields to fetch from db
+  const populateEvents = {
     include: [
       {
         service: '/api/quotas',
@@ -91,7 +82,8 @@ module.exports = function () { // eslint-disable-line
     ],
   };
 
-  const serializeSchema = {
+  // Clean output for REST endpoint
+  const serializeEvents = {
     only: ['id', 'title', 'date'],
     quotas: {
       only: ['title', 'size', 'signupOpens', 'signupCloses'],
@@ -102,6 +94,7 @@ module.exports = function () { // eslint-disable-line
     },
   };
 
+  // Fields to fetch from db
   const populateSingleEvent = {
     include: [{
       service: '/api/quotas',
@@ -132,21 +125,16 @@ module.exports = function () { // eslint-disable-line
     }],
   };
 
-  app.service('/api/events').before({
-    // GET /api/events
-    // find: [hooks.populate({ schema }), serialize(serializeSchema)],
-  });
-
-  // api/events hooks
   app.service('/api/events').after({
+    // GET /api/events
+    find: [hooks.populate({ schema: populateEvents }), hooks.serialize(serializeEvents)],
     // GET /api/events/<eventId>
     get: hooks.populate({ schema: populateSingleEvent }),
-    find: [hooks.populate({ schema }), hooks.serialize(serializeSchema)],
     create: (hook) => {
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
         eventId: hook.result.id, // id of the just created event
-        title: 'Kiintiö tapahtumalle ',
+        title: 'Kiintiö tapahtumalle',
         size: 20,
         going: 10,
         signupOpens: '2017-1-1 23:59:59',
