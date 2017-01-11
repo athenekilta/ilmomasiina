@@ -32,8 +32,8 @@ export class SignupButton extends React.Component {
 SignupButton.propTypes = {
   openForm: React.PropTypes.func.isRequired,
   title: React.PropTypes.string.isRequired,
-  opens: React.PropTypes.string.isRequired,
-  closes: React.PropTypes.string.isRequired,
+  opens: React.PropTypes.string,
+  closes: React.PropTypes.string,
   eventTime: React.PropTypes.string,
   isOnly: React.PropTypes.bool.isRequired,
   showLabel: React.PropTypes.bool.isRequired,
