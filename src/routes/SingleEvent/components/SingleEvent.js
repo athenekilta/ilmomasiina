@@ -2,6 +2,7 @@ import React from 'react';
 import nl2br from 'react-nl2br';
 import _ from 'lodash';
 import moment from 'moment';
+import _ from 'lodash';
 import SignupButton from './SignupButton';
 import SignupList from './SignupList';
 import ViewProgress from './ViewProgress';
@@ -77,11 +78,13 @@ class SingleEvent extends React.Component {
                   />,
                   ) : '')}
               </div>
+              {(!_.head(event.quotas) || _.isEmpty(_.head(event.quotas).max) ? '' :
               <div className="sidebar-widget">
                 <h3>Ilmoittautuneet</h3>
                 {(event.quotas ? event.quotas.map((quota, index) =>
                   <ViewProgress title={quota.title} value={quota.signups.length} max={quota.size} key={index} />) : '')}
               </div>
+              )}
             </div>
             <div className="col-xs-12">
               {(event.quotas && !event.quotas.length ? <p>Tapahtuman vastaukset eivät ole julkisia.</p> :

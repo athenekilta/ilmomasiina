@@ -4,15 +4,15 @@ import './SignupList.scss';
 
 export class SignupList extends React.Component {
   render() {
-    const TableRow = ({ answers, attendee, index }) =>
+    const TableRow = ({ answers, firstName, lastName, index }) =>
       <tr>
         <td>{index}.</td>
-        <td>{attendee}</td>
+        <td>{firstName} {lastName}</td>
         {this.props.questions.map((q, i) => <td key={i}>{_.find(answers, { question: q.id }).answer}</td>)}
       </tr>;
 
     return (
-      <div>
+      <div className="quota">
         {this.props.title ? <h3>{this.props.title}</h3> : ''}
         { !this.props.rows.length ? <p>Ei ilmoittautumisia.</p> :
         <table className='table table-condensed table-responsive'>
@@ -25,10 +25,15 @@ export class SignupList extends React.Component {
           </thead>
           <tbody>
             {this.props.rows.map((row, i) =>
-              <TableRow answers={row.answers} attendee={row.attendee} index={i + 1} key={i} />)}
+              <TableRow
+                columns={row.answers}
+                firstName={row.firstName}
+                lastName={row.lastName}
+                index={i + 1}
+                key={i} />)}
           </tbody>
         </table>
-         }
+        }
       </div>
     );
   }

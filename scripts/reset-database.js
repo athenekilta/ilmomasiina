@@ -40,7 +40,8 @@ db.schema.dropTableIfExists('events')
       table.increments('id');
       table.integer('quotaId');
       table.dateTime('timestamp');
-      table.string('attendee');
+      table.string('firstName');
+      table.string('lastName');
       table.string('email');
     }))
   .then(() =>

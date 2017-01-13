@@ -1,6 +1,14 @@
 import moment from 'moment';
+import _ from 'lodash';
 
 const signupState = (eventTime, starts, closes) => {
+  if (_.isEmpty(starts) || _.isEmpty(closes)) {
+    return {
+      label: 'Auki toistaiseksi.',
+      class: 'signup-opened',
+    };
+  }
+
   const signupOpens = moment(starts);
   const signupCloses = moment(closes);
   const eventOpens = moment(eventTime);

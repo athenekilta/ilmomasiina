@@ -26,12 +26,20 @@ export class EnrollForm extends React.Component {
             <Formsy.Form
               onSubmit={this.submitForm}>
               <Input
-                name="nimi"
-                id="nimiId"
+                name="firstname"
+                id="nimiId1"
                 value=""
-                label="Nimi"
+                label="Etunimi"
                 type="text"
-                placeholder="Nimesi"
+                placeholder="Etunimi"
+                required />
+              <Input
+                name="lastname"
+                id="nimiId2"
+                value=""
+                label="Sukunimi"
+                type="text"
+                placeholder="Sukunimi"
                 required />
               <Input
                 name="email"

@@ -33,7 +33,22 @@ class EventList extends React.Component {
   }
 
   render() {
-    const tableRows = this.props.eventList.map((event) => {
+    const sortFunction = (event) => {
+      const now = moment();
+
+      // First upcoming events
+      if (now.isAfter(moment(event.date))) return 2;
+
+      // Then events without date
+      if (_.isEmpty(event.date)) return 1;
+
+      // Default last events that are over
+      return 0;
+    };
+
+    const eventsSorted = _.sortBy(this.props.eventList, [sortFunction, 'date', 'title']);
+
+    const tableRows = eventsSorted.map((event) => {
       // If every quota has same registration start/end time, show that time only once
       const showOneLabel = allTimesMatch(event.quotas);
 
