@@ -1,7 +1,11 @@
-table {
-  tr {
-    td:first-child {
-      width: 4em;
+.quota {
+  margin: 1em 0 3em;
+  table {
+    font-size: 0.9em;
+    tr {
+      td:first-child {
+        width: 4em;
+      }
     }
   }
 }

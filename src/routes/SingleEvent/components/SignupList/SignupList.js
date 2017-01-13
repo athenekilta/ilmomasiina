@@ -11,7 +11,7 @@ export class SignupList extends React.Component {
       </tr>;
     // console.log(this.props.rows);
     return (
-      <div>
+      <div className="quota">
         {this.props.title ? <h3>{this.props.title}</h3> : ''}
         { !this.props.rows.length ? <p>Ei ilmoittautumisia.</p> :
         <table className='table table-condensed table-responsive'>

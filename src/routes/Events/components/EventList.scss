@@ -20,6 +20,12 @@ table.eventlist {
   }
 }
 
+@media (min-width: $screen-md-min) {
+  table.eventlist tr td:first-child {
+    min-width: 300px;
+  }
+}
+
 @media (max-width: $screen-xs-max) {
   table.eventlist {
     max-width: 100%;

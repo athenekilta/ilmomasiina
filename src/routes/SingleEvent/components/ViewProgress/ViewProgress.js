@@ -4,19 +4,22 @@ import Separator from '../../../../components/Separator';
 
 export class ViewProgress extends React.Component {
   render() {
-    return (
-      <div>
-        {this.props.title}
-        <div className="progress">
-          <div className="progress-bar" role="progressbar"
-            style={{ minWidth: '5em', width: `${(this.props.value / this.props.max) * 100}%` }}>
-            {this.props.value}
-            <Separator />
-            {this.props.max}
+    if (this.props.max) { // Don' return progress bar if no max limit
+      return (
+        <div>
+          {this.props.title}
+          <div className="progress">
+            <div className="progress-bar" role="progressbar"
+              style={{ minWidth: '5em', width: `${(this.props.value / this.props.max) * 100}%` }}>
+              {this.props.value}
+              <Separator />
+              {this.props.max}
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
+    return <div />;
   }
 }
 

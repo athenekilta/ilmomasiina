@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import _ from 'lodash';
 import signupState from '../../../../utils/signupStateText';
 import './SignupButton.scss';
 
@@ -9,7 +10,7 @@ export class SignupButton extends React.Component {
 
     const isOpened = now.isSameOrAfter(moment(this.props.opens));
     const isClosed = now.isSameOrAfter(moment(this.props.closes));
-    const isOpen = (isOpened && !isClosed);
+    const isOpen = ((isOpened && !isClosed) || _.isEmpty(this.props.opens) || _.isEmpty(this.props.closes));
 
     const state = signupState(this.props.eventTime, this.props.opens, this.props.closes);
 
@@ -31,8 +32,8 @@ export class SignupButton extends React.Component {
 SignupButton.propTypes = {
   openForm: React.PropTypes.func.isRequired,
   title: React.PropTypes.string.isRequired,
-  opens: React.PropTypes.string.isRequired,
-  closes: React.PropTypes.string.isRequired,
+  opens: React.PropTypes.string,
+  closes: React.PropTypes.string,
   eventTime: React.PropTypes.string,
   isOnly: React.PropTypes.bool.isRequired,
   showLabel: React.PropTypes.bool.isRequired,
