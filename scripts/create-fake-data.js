@@ -185,7 +185,8 @@ quotas.map((quota, quotaIndex) => {
     signups.push({
       quotaId: quotaIndex + 1,
       timestamp: moment(now).format(d),
-      attendee: attendee.name,
+      firstName: attendee.name.split(' ')[0],
+      lastName: attendee.name.split(' ')[1],
       email: attendee.email,
     });
 
