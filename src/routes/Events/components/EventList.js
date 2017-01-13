@@ -60,7 +60,7 @@ class EventList extends React.Component {
           link={`/event/${event.id}`}
           date={event.date}
           signupLabel={showOneLabel ? eventState.label : ''}
-          signups={_.sumBy(event.quotas, 'signups')}
+          signups={_.sumBy(event.quotas, 'signups') || 0}
           size={_.sumBy(event.quotas, 'size')}
           className={eventState.class}
           key={`e${event.id}`} />,
