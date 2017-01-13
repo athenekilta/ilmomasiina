@@ -1,7 +1,8 @@
 const debug = require('debug')('app:server');
 const service = require('feathers-knex');
-const hooks = require('feathers-hooks');
+const hooks = require('feathers-hooks-common');
 const knex = require('knex');
+const _ = require('lodash');
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 
 // const user require('./user');
@@ -49,24 +50,52 @@ module.exports = function () { // eslint-disable-line
 
   // Disable external use
   app.service('/api/answers').before({
-    // disable external use (rest / websocket ) of /api/answers
+    all: hooks.disable('external'),
+  });
+  app.service('/api/questions').before({
     all: hooks.disable('external'),
   });
   app.service('/api/quotas').before({
-    // disable external use (rest / websocket ) of /api/quotas
+    all: hooks.disable('external'),
+  });
+  app.service('/api/signups').before({
     all: hooks.disable('external'),
   });
 
-  const populateEventsSchema = {
-    include: [{
-      service: '/api/quotas',
-      nameAs: 'quotas',
-      parentField: 'id',
-      childField: 'eventId',
-      asArray: true,
-    }],
+  // Fields to fetch from db
+  const populateEvents = {
+    include: [
+      {
+        service: '/api/quotas',
+        nameAs: 'quotas',
+        parentField: 'id',
+        childField: 'eventId',
+        asArray: true,
+        include: [
+          {
+            service: '/api/signups',
+            nameAs: 'signups',
+            parentField: 'id',
+            childField: 'quotaId',
+          },
+        ],
+      },
+    ],
   };
 
+  // Clean output for REST endpoint
+  const serializeEvents = {
+    only: ['id', 'title', 'date'],
+    quotas: {
+      only: ['title', 'size', 'signupOpens', 'signupCloses'],
+      exclude: 'signups',
+      computed: {
+        signups: quota => quota.signups.length,
+      },
+    },
+  };
+
+  // Fields to fetch from db
   const populateSingleEvent = {
     include: [{
       service: '/api/quotas',
@@ -97,17 +126,41 @@ module.exports = function () { // eslint-disable-line
     }],
   };
 
-  // api/events hooks
+  const serializeSingleEvent = {
+    only: ['id', 'title', 'date', 'description', 'price', 'location', 'homepage', 'facebooklink'],
+    quotas: {
+      only: ['title', 'size', 'signupOpens', 'signupCloses'],
+      signups: {
+        only: ['attendee', 'timestamp'],
+        computed: {
+          answers: (signup, hook) =>
+            // Loop through all public questions, and return object with answer
+            // If answer doesn't exist, return still empty string
+            _.filter(hook.result.questions, 'public').map((question) => {
+              const answer = _.find(signup.answers, { questionId: question.id }).answer || '';
+              return { question: question.id, answer };
+            }),
+        },
+      },
+    },
+    questions: {
+      only: ['id', 'type', 'question', 'options', 'required', 'public'],
+      computed: {
+        options: question => (question.options ? question.options.split(',') : []),
+      },
+    },
+  };
+
   app.service('/api/events').after({
-    // GET /api/events/<eventId>
-    get: hooks.populate({ schema: populateSingleEvent }),
     // GET /api/events
-    find: hooks.populate({ schema: populateEventsSchema }),
+    find: [hooks.populate({ schema: populateEvents }), hooks.serialize(serializeEvents)],
+    // GET /api/events/<eventId>
+    get: [hooks.populate({ schema: populateSingleEvent }), hooks.serialize(serializeSingleEvent)],
     create: (hook) => {
       // creates a new quota and attaches it to just created event
       app.service('/api/quotas').create({
         eventId: hook.result.id, // id of the just created event
-        title: 'Kiintiö tapahtumalle ',
+        title: 'Kiintiö tapahtumalle',
         size: 20,
         going: 10,
         signupOpens: '2017-1-1 23:59:59',

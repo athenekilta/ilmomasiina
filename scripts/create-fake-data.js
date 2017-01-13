@@ -58,6 +58,7 @@ const quotas = [
   {
     eventId: 1,
     title: 'Minuuttikalja 2016',
+    // going fields doesn't exist in db, but it's used to create right amount of signups
     going: 18,
     size: 20,
     signupOpens: moment(now).subtract(50, 'days').format(d),
@@ -196,6 +197,10 @@ quotas.map((quota, quotaIndex) => {
   }
   return true;
 });
+
+for (let i = 0; i < quotas.length; i += 1) {
+  delete quotas[i].going;
+}
 
 db('events').insert(events)
   .then(() => db('quotas').insert(quotas))

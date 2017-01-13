@@ -108,6 +108,7 @@
     "extract-text-webpack-plugin": "^1.0.0",
     "feathers": "^2.0.3",
     "feathers-hooks": "^1.7.1",
+    "feathers-hooks-common": "^2.0.3",
     "feathers-knex": "^2.6.0",
     "feathers-rest": "^1.5.2",
     "file-loader": "^0.9.0",

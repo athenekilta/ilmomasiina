@@ -50,7 +50,6 @@ db.schema.dropTableIfExists('events')
       table.increments('id');
       table.integer('eventId');
       table.string('title');
-      table.integer('going');
       table.integer('size');
       table.dateTime('signupOpens');
       table.dateTime('signupCloses');
