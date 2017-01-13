@@ -25,6 +25,4 @@ module.exports = function () {
       sequelize.models[modelName].associate();
     }
   });
-
-  sequelize.sync({ force: true });
 };

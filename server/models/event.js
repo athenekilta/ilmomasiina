@@ -4,7 +4,7 @@ module.exports = function () {
   const app = this;
   const sequelize = app.get('sequelize');
 
-  const Event = sequelize.define('events', {
+  const Event = sequelize.define('event', {
     title: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -33,7 +33,7 @@ module.exports = function () {
       associate() {
         const models = app.get('models');
 
-        this.hasMany(models.quotas, {
+        this.hasMany(models.quota, {
           onDelete: 'CASCADE',
           foreignKey: {
             allowNull: false,

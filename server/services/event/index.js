@@ -5,7 +5,7 @@ module.exports = function () {
   const app = this;
 
   const options = {
-    Model: app.get('models').events,
+    Model: app.get('models').event,
   };
 
   // Initialize our service with any options it requires
