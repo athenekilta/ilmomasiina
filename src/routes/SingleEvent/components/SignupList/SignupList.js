@@ -26,7 +26,7 @@ export class SignupList extends React.Component {
           <tbody>
             {this.props.rows.map((row, i) =>
               <TableRow
-                columns={row.answers}
+                answers={row.answers}
                 firstName={row.firstName}
                 lastName={row.lastName}
                 index={i + 1}
