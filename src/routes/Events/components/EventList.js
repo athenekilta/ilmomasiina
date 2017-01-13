@@ -36,14 +36,14 @@ class EventList extends React.Component {
     const sortFunction = (event) => {
       const now = moment();
 
-      switch (true) {
-        case now.isAfter(moment(event.date)) : // First upcoming events
-          return 2;
-        case _.isEmpty(event.date) : // Then events without date
-          return 1;
-        default: // Last events that are over
-          return 0;
-      }
+      // First upcoming events
+      if (now.isAfter(moment(event.date))) return 2;
+
+      // Then events without date
+      if (_.isEmpty(event.date)) return 1;
+
+      // Default last events that are over
+      return 0;
     };
 
     const eventsSorted = _.sortBy(this.props.eventList, [sortFunction, 'date', 'title']);
