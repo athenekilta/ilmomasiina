@@ -1,6 +1,10 @@
 const Sequelize = require('sequelize');
+
 const event = require('./event');
 const quota = require('./quota');
+const signup = require('./signup');
+const question = require('./question');
+const answer = require('./answer');
 
 const config = require('../../config/ilmomasiina.config.js');
 
@@ -10,13 +14,16 @@ module.exports = function () {
   const sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
     host: 'localhost',
     dialect: 'mysql',
-    logging: false,
+    // logging: false,
   });
 
   app.set('sequelize', sequelize);
 
   app.configure(event);
   app.configure(quota);
+  app.configure(signup);
+  app.configure(question);
+  app.configure(answer);
 
   app.set('models', sequelize.models);
 

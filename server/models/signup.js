@@ -4,28 +4,18 @@ module.exports = function () {
   const app = this;
   const sequelize = app.get('sequelize');
 
-  const Event = sequelize.define('event', {
-    title: {
+  const Signup = sequelize.define('signup', {
+    firstName: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    date: {
-      type: Sequelize.DATE,
-    },
-    description: {
-      type: Sequelize.TEXT,
-    },
-    price: {
+    lastName: {
       type: Sequelize.STRING,
+      allowNull: false,
     },
-    location: {
+    email: {
       type: Sequelize.STRING,
-    },
-    homepage: {
-      type: Sequelize.STRING,
-    },
-    facebookLink: {
-      type: Sequelize.STRING,
+      allowNull: false,
     },
   }, {
     freezeTableName: true,
@@ -33,16 +23,14 @@ module.exports = function () {
       associate() {
         const models = app.get('models');
 
-        this.hasMany(models.quota, {
-          onDelete: 'CASCADE',
-        });
+        this.belongsTo(models.quota, { foreignKey: 'quotaId' });
 
-        this.hasMany(models.question, {
+        this.hasMany(models.answer, {
           onDelete: 'CASCADE',
         });
       },
     },
   });
 
-  return Event;
+  return Signup;
 };

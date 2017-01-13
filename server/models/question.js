@@ -4,28 +4,27 @@ module.exports = function () {
   const app = this;
   const sequelize = app.get('sequelize');
 
-  const Event = sequelize.define('event', {
-    title: {
+  const Question = sequelize.define('question', {
+    question: {
       type: Sequelize.STRING,
       allowNull: false,
     },
-    date: {
-      type: Sequelize.DATE,
+    type: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    description: {
-      type: Sequelize.TEXT,
-    },
-    price: {
+    options: {
       type: Sequelize.STRING,
     },
-    location: {
-      type: Sequelize.STRING,
+    required: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
-    homepage: {
-      type: Sequelize.STRING,
-    },
-    facebookLink: {
-      type: Sequelize.STRING,
+    public: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
     },
   }, {
     freezeTableName: true,
@@ -33,16 +32,14 @@ module.exports = function () {
       associate() {
         const models = app.get('models');
 
-        this.hasMany(models.quota, {
-          onDelete: 'CASCADE',
-        });
+        this.belongsTo(models.event, {});
 
-        this.hasMany(models.question, {
+        this.hasMany(models.answer, {
           onDelete: 'CASCADE',
         });
       },
     },
   });
 
-  return Event;
+  return Question;
 };

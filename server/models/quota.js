@@ -26,12 +26,10 @@ module.exports = function () {
 
         this.belongsTo(models.event, {});
 
-        // this.hasMany(models.books, {
-        //   onDelete: 'CASCADE',
-        //   foreignKey: {
-        //     allowNull: false,
-        //   },
-        // });
+        this.hasMany(models.signup, {
+          onDelete: 'CASCADE',
+          foreignKey: 'quotaId',
+        });
       },
     },
   });
