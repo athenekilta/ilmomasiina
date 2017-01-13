@@ -6,8 +6,7 @@ export class SignupList extends React.Component {
     const TableRow = ({ columns, firstName, lastName, index }) =>
       <tr>
         <td>{index}.</td>
-        <td>{firstName}</td>
-        <td>{lastName}</td>
+        <td>{firstName} {lastName}</td>
         {columns.map((column, i) => <td key={i}>{column}</td>)}
       </tr>;
     // console.log(this.props.rows);
@@ -19,8 +18,7 @@ export class SignupList extends React.Component {
           <thead>
             <tr className='active'>
               <th key="position">Sija</th>
-              <th key="firstName">Etunimi</th>
-              <th key="lastName">Sukunimi</th>
+              <th key="attendee">Nimi</th>
               {this.props.headings.map((h, i) => <th key={i}>{h}</th>)}
             </tr>
           </thead>
