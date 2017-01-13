@@ -77,13 +77,18 @@ class SingleEvent extends React.Component {
                   />,
                   ) : '')}
               </div>
-              {(!_.head(event.quotas) || _.isEmpty(_.head(event.quotas).max) ? '' :
-              <div className="sidebar-widget">
-                <h3>Ilmoittautuneet</h3>
-                {(event.quotas ? event.quotas.map((quota, index) =>
-                  <ViewProgress title={quota.title} value={quota.signups.length} max={quota.size} key={index} />) : '')}
-              </div>
-              )}
+              {((event.quotas && event.quotas.length) > 1 ?
+                <div className="sidebar-widget">
+                  <h3>Ilmoittautuneet</h3>
+                  {(event.quotas ? event.quotas.map((quota, index) =>
+                    <ViewProgress
+                      title={quota.title}
+                      value={quota.signups.length}
+                      max={quota.size}
+                      key={index} />,
+                    ) : '')}
+                </div>
+              : '')}
             </div>
             <div className="col-xs-12">
               {(event.quotas && !event.quotas.length ? <p>Tapahtuman vastaukset eivät ole julkisia.</p> :
