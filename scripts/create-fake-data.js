@@ -208,6 +208,7 @@ seq.sync({ force: true })
   // .then(() => seq.models.signups.bulkCreate(signups))
   // .then(() => seq.models.answers.bulkCreate(answers))
   .then(() => debug(`${signups.length} signups with ${answers.length} answers added.`))
+  .then(() => seq.close())
   .then(() => debug('Creating fake data finished.'));
 
 module.exports = app;

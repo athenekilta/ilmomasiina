@@ -11,6 +11,7 @@ app.configure(models);
 const seq = app.get('sequelize');
 
 seq.sync({ force: true })
+  .then(() => seq.close())
   .then(() => debug('Database reset finished.'));
 
 module.exports = app;
