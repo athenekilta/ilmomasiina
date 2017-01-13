@@ -203,10 +203,10 @@ const seq = app.get('sequelize');
 seq.sync({ force: true })
   .then(() => seq.models.event.bulkCreate(events))
   .then(() => seq.models.quota.bulkCreate(quotas))
-  // .then(() => seq.models.question.bulkCreate(questions))
+  .then(() => seq.models.question.bulkCreate(questions))
   .then(() => debug(`${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`))
-  // .then(() => seq.models.signups.bulkCreate(signups))
-  // .then(() => seq.models.answers.bulkCreate(answers))
+  .then(() => seq.models.signup.bulkCreate(signups))
+  .then(() => seq.models.answer.bulkCreate(answers))
   .then(() => debug(`${signups.length} signups with ${answers.length} answers added.`))
   .then(() => seq.close())
   .then(() => debug('Creating fake data finished.'));
