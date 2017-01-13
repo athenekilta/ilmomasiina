@@ -22,8 +22,10 @@ module.exports = function () {
     freezeTableName: true,
     classMethods: {
       associate() {
-        // const models = app.get('models');
-        //
+        const models = app.get('models');
+
+        this.belongsTo(models.event, {});
+
         // this.hasMany(models.books, {
         //   onDelete: 'CASCADE',
         //   foreignKey: {
