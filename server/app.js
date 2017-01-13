@@ -23,6 +23,9 @@ app.use(compress())
   .configure(models)
   .configure(services);
 
+// Create tables if not exist
+app.get('sequelize').sync();
+
 app.use(require('connect-history-api-fallback')());
 
 if (project.env === 'development') {

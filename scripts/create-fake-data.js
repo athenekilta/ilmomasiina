@@ -1,17 +1,9 @@
 const debug = require('debug')('app:script');
-const knex = require('knex');
+const feathers = require('feathers');
 const _ = require('lodash');
 const moment = require('moment');
-const config = require('../config/ilmomasiina.config.js');
 
-const db = knex({
-  client: 'mysql',
-  connection: {
-    user: config.mysqlUser,
-    password: config.mysqlPassword,
-    database: config.mysqlDatabase,
-  },
-});
+const models = require('../server/models');
 
 // Let's create all the times relative to current date, so we can use the same
 // script after years
@@ -202,12 +194,20 @@ for (let i = 0; i < quotas.length; i += 1) {
   delete quotas[i].going;
 }
 
-db('events').insert(events)
-  .then(() => db('quotas').insert(quotas))
-  .then(() => db('questions').insert(questions))
+const app = feathers();
+app.configure(models);
+
+const seq = app.get('sequelize');
+
+// Drop tables and create them
+seq.sync({ force: true })
+  .then(() => seq.models.event.bulkCreate(events))
+  .then(() => seq.models.quota.bulkCreate(quotas))
+  // .then(() => seq.models.question.bulkCreate(questions))
   .then(() => debug(`${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`))
-  .then(() => db('signups').insert(signups))
-  .then(() => db('answers').insert(answers))
+  // .then(() => seq.models.signups.bulkCreate(signups))
+  // .then(() => seq.models.answers.bulkCreate(answers))
   .then(() => debug(`${signups.length} signups with ${answers.length} answers added.`))
-  .then(() => db.destroy())
   .then(() => debug('Creating fake data finished.'));
+
+module.exports = app;
