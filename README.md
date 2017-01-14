@@ -12,10 +12,9 @@ Ilmomasiina on tehty [tämän](https://github.com/davezuko/react-redux-starter-k
 1. Create database in MySQL.
 1. Create file `config/ilmomasiina.config.js` based on `config/ilmomasiina.config.example.js`.
 1. `npm install`
-1. `npm run reset-db`
 1. `npm start`
 
-**Optional**: You can create mockup data for development by running `npm run create-fake-data`.
+**Optional**: You can create mockup data for development by running `npm run create-fake-data`. During development, database can be resetted with `npm run reset-db`.
 
 ## Table of Contents
 1. [Features](#features)
