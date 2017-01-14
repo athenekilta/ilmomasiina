@@ -8,8 +8,10 @@ export class SignupList extends React.Component {
       <tr>
         <td>{index}.</td>
         <td>{firstName} {lastName}</td>
-        {this.props.questions.map((q, i) => <td key={i}>{_.find(answers, { question: q.id }).answer}</td>)}
+        {this.props.questions.map((q, i) => <td key={i}>{_.find(answers, { questionId: q.id }).answer}</td>)}
       </tr>;
+
+    // console.log(this.props.rows);
 
     return (
       <div className="quota">
