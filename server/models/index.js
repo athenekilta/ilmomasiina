@@ -6,7 +6,7 @@ const signup = require('./signup');
 const question = require('./question');
 const answer = require('./answer');
 
-const config = require('../../config/ilmomasiina.config.js');
+const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 
 module.exports = function () {
   const app = this;
@@ -14,7 +14,7 @@ module.exports = function () {
   const sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
     host: 'localhost',
     dialect: 'mysql',
-    // logging: false,
+    logging: false,
   });
 
   app.set('sequelize', sequelize);
