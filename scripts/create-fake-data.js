@@ -20,6 +20,7 @@ const events = [
     location: 'Smökki (Jämeräntaival 4, Espoo)',
     homepage: '',
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
+    draft: 0,
   },
   {
     title: 'Columbia Road -excu',
@@ -29,6 +30,7 @@ const events = [
     location: 'Eerikinkatu 5, Helsinki',
     homepage: 'http://crexcu2017.wordpress.com/',
     facebooklink: '',
+    draft: 0,
   },
   {
     title: 'Ystävänpäiväsitsit',
@@ -38,11 +40,13 @@ const events = [
     location: 'Smökki',
     homepage: 'http://crexcu2017.wordpress.com/',
     facebooklink: '',
+    draft: 0,
   },
   {
     title: 'Athene Alumni',
     description: 'Lorem ipsum. Lomake kaikilla kentillä.',
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
+    draft: 0,
   },
 ];
 

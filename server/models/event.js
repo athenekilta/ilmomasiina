@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const moment = require('moment');
 
 module.exports = function () {
   const app = this;
@@ -27,8 +28,26 @@ module.exports = function () {
     facebookLink: {
       type: Sequelize.STRING,
     },
+    draft: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
   }, {
     freezeTableName: true,
+    defaultScope: {
+      where: {
+        $and: {
+          draft: false,
+          date: {
+            $or: {
+              $eq: null,
+              $gt: moment().subtract(7, 'days').format(),
+            },
+          },
+        },
+      },
+    },
     classMethods: {
       associate() {
         const models = app.get('models');
