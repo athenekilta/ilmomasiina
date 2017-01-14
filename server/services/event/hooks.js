@@ -52,6 +52,7 @@ const includeAllEventData = (hook) => {
               model: sequelize.models.question,
               attributes: [],
               where: { public: true },
+              required: false,
             }],
           }],
         }],
