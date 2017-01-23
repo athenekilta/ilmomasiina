@@ -154,6 +154,15 @@ const questions = [
     required: false,
     public: true,
   },
+  {
+    id: 6,
+    eventId: 4,
+    type: 'checkbox',
+    question: 'Osallistun',
+    options: 'Kokkareille,Pääjuhlaan,Sillikselle',
+    required: false,
+    public: false,
+  },
 ];
 
 const signups = [];

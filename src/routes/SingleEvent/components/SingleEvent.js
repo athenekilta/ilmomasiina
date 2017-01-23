@@ -46,7 +46,10 @@ class SingleEvent extends React.Component {
 
     return (
       <div>
-        {this.state.formOpened ? <EnrollForm closeForm={this.closeForm} /> : '' }
+        {
+          this.state.formOpened ?
+            <EnrollForm closeForm={this.closeForm} questions={event.questions} /> : ''
+        }
         <div className="container">
           <div className="row">
             <div className="col-xs-12 col-sm-8">
