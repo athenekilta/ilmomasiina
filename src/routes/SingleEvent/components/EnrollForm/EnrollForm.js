@@ -54,7 +54,7 @@ export class EnrollForm extends React.Component {
               name={option}
               label={option}
               rowLabel={index === 0 ? question.question : ''}
-              key={question.id + index / 100}
+              key={question.id + (index / 100)}
             />,
           ));
       }
