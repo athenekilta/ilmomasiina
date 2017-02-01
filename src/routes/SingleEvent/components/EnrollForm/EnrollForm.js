@@ -32,15 +32,17 @@ export class EnrollForm extends React.Component {
       }
 
       if (question.type === 'select') {
-        const options = question.options.map((option) => {
-          return { label: option };
-        });
+        const optionsArray = [];
+
+        question.options.map(option => (
+          optionsArray.push({ label: option })
+        ));
 
         return (
           <Select
             name={question.question}
             label={question.question}
-            options={options}
+            options={optionsArray}
             required={question.required === 1}
             key={question.id}
           />
