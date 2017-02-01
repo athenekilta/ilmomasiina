@@ -4,6 +4,7 @@ import EventsRoute from './Events';
 import SingleEventRoute from './SingleEvent';
 import AdminRoute from './Admin';
 import EditorRoute from './Editor';
+import FourZeroFour from './404';
 
 export const createRoutes = store => ({
   path: '/',
@@ -13,6 +14,7 @@ export const createRoutes = store => ({
     SingleEventRoute(store),
     AdminRoute(store),
     EditorRoute(store),
+    FourZeroFour(store),
   ],
 });
 
