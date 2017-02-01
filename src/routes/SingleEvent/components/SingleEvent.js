@@ -64,23 +64,23 @@ class SingleEvent extends React.Component {
             <div className="col-xs-12 col-sm-4 pull-right">
               <div className="sidebar-widget">
                 <h3>Ilmoittautuminen</h3>
-                {(event.quotas ? event.quotas.map((quota, index) =>
+                {(event.quota ? event.quota.map((quota, index) =>
                   <SignupButton
                     title={quota.title}
                     opens={quota.signupOpens}
                     closes={quota.signupCloses}
                     openForm={this.openForm}
-                    isOnly={(event.quotas.length === 1)}
+                    isOnly={(event.quota.length === 1)}
                     // Show label if sign ups times differ or this is the last button
-                    showLabel={(allTimesMatch(event.quotas) ? (event.quotas.length === index + 1) : true)}
+                    showLabel={(allTimesMatch(event.quota) ? (event.quota.length === index + 1) : true)}
                     key={index}
                   />,
                   ) : '')}
               </div>
-              {((event.quotas && event.quotas.length) > 1 ?
+              {((event.quota && event.quota.length) > 1 ?
                 <div className="sidebar-widget">
                   <h3>Ilmoittautuneet</h3>
-                  {(event.quotas ? event.quotas.map((quota, index) =>
+                  {(event.quota ? event.quota.map((quota, index) =>
                     <ViewProgress
                       title={quota.title}
                       value={quota.signups.length}
@@ -91,12 +91,12 @@ class SingleEvent extends React.Component {
               : '')}
             </div>
             <div className="col-xs-12">
-              {(event.quotas && !event.quotas.length ? <p>Tapahtuman vastaukset eivät ole julkisia.</p> :
+              {(event.quota && !event.quota.length ? <p>Tapahtuman vastaukset eivät ole julkisia.</p> :
               <div>
                 <h2>Ilmoittautuneet</h2>
-                {(event.quotas ? event.quotas.map((quota, index) =>
+                {(event.quota ? event.quota.map((quota, index) =>
                   <SignupList
-                    title={(event.quotas.length > 1 ? quota.title : '')}
+                    title={(event.quota.length > 1 ? quota.title : '')}
                     questions={_.filter(event.questions, 'public')}
                     rows={quota.signups}
                     key={index}

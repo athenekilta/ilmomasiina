@@ -50,9 +50,9 @@ class EventList extends React.Component {
 
     const tableRows = eventsSorted.map((event) => {
       // If every quota has same registration start/end time, show that time only once
-      const showOneLabel = allTimesMatch(event.quotas);
+      const showOneLabel = allTimesMatch(event.quota);
 
-      const eventState = signupState(event.date, event.quotas[0].signupOpens, event.quotas[0].signupCloses);
+      const eventState = signupState(event.date, event.quota[0].signupOpens, event.quota[0].signupCloses);
 
       const rows = [
         <TableRow
@@ -60,20 +60,20 @@ class EventList extends React.Component {
           link={`/event/${event.id}`}
           date={event.date}
           signupLabel={showOneLabel ? eventState.label : ''}
-          signups={_.sumBy(event.quotas, 'signups') || 0}
-          size={_.sumBy(event.quotas, 'size')}
+          signups={_.sumBy(event.quota, 'signups') || 0}
+          size={_.sumBy(event.quota, 'size')}
           className={eventState.class}
           key={`e${event.id}`} />,
       ];
 
-      if (event.quotas.length > 1) {
-        event.quotas.map((quota, i) => {
+      if (event.quota.length > 1) {
+        event.quota.map((quota, i) => {
           const quotaState = signupState(event.date, quota.signupOpens, quota.signupCloses);
           return rows.push(
             <TableRow
               title={quota.title}
               signupLabel={!showOneLabel ? quotaState.label : ''}
-              signups={quota.signups}
+              signups={quota.signupCount}
               size={quota.size}
               className={`${eventState.class} ${quotaState.class} child`}
               key={`q${i}`} />,

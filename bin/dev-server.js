@@ -1,6 +1,8 @@
-const project = require('../config/project.config');
-const server = require('../server/main');
 const debug = require('debug')('app:bin:dev-server');
+const project = require('../config/project.config');
 
-server.listen(project.server_port);
-debug(`Server is now running at http://localhost:${project.server_port}.`);
+const app = require('../server/app.js');
+
+const server = app.listen(project.server_port);
+
+server.on('listening', () => debug(`Server is now running at http://localhost:${project.server_port}.`));
