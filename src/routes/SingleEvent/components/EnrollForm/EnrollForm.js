@@ -5,16 +5,63 @@ import './EnrollForm.scss';
 
 export class EnrollForm extends React.Component {
   render() {
-    const selectOptions = [
-    { value: 'a', label: 'Option A' },
-    { value: 'a', label: 'Option A (again)' },
-    { value: 'b', label: 'Option B' },
-    { value: 'c', label: 'Option C' },
-    { value: 'd', label: 'Option D' },
-    ];
+    function questionsToField(question) {
+      if (question.type === 'text') {
+        return (
+          <Input
+            name={question.question}
+            label={question.question}
+            type="text"
+            required={question.required === 1}
+            key={question.id}
+          />
+        );
+      }
 
-    const singleSelectOptions = selectOptions.slice(0);
-    singleSelectOptions.unshift({ value: '', label: 'Please select…' });
+      if (question.type === 'textarea') {
+        return (
+          <Textarea className='open-question form-control'
+            rows={3}
+            cols={40}
+            name={question.question}
+            label={question.question}
+            required={question.required === 1}
+            key={question.id}
+          />
+        );
+      }
+
+      if (question.type === 'select') {
+        const optionsArray = [];
+
+        question.options.map(option => (
+          optionsArray.push({ label: option })
+        ));
+
+        return (
+          <Select
+            name={question.question}
+            label={question.question}
+            options={optionsArray}
+            required={question.required === 1}
+            key={question.id}
+          />
+        );
+      }
+
+      if (question.type === 'checkbox') {
+        return (
+          question.options.map((option, index) =>
+            <Checkbox
+              name={option}
+              label={option}
+              rowLabel={index === 0 ? question.question : ''}
+              key={question.id + (index / 100)}
+            />,
+          ));
+      }
+      return '';
+    }
 
     return (
       <div className="form-wrapper">
@@ -53,25 +100,9 @@ export class EnrollForm extends React.Component {
                 }}
                 required
               />
-              <Textarea className='open-question form-control'
-                rows={3}
-                cols={40}
-                name="avoinKysymys"
-                label="Avoin kysymys"
-                placeholder="Tämä on avoimen kysymyksen ennakkoteksti."
-              />
-              <Checkbox
-                name="checkbox1"
-                value
-                label="Valitse minut"
-                rowLabel="Klikattava vaihtoehto"
-              />
-              <Select
-                name="select1"
-                label="Select"
-                options={singleSelectOptions}
-                required
-              />
+
+              {this.props.questions.map(questionsToField)}
+
               <input className="btn btn-primary pull-right" formNoValidate type="submit" defaultValue="Submit" />
             </Formsy.Form>
           </div>
@@ -84,6 +115,9 @@ export class EnrollForm extends React.Component {
 
 EnrollForm.propTypes = {
   closeForm: React.PropTypes.func.isRequired,
+  questions: React.PropTypes.shape({
+    map: React.PropTypes.func,
+  }),
 };
 
 export default EnrollForm;
