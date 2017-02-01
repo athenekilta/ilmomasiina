@@ -14,7 +14,7 @@ export const createRoutes = store => ({
     SingleEventRoute(store),
     AdminRoute(store),
     EditorRoute(store),
-    FourZeroFour(store),
+    FourZeroFour,
   ],
 });
 
