@@ -47,7 +47,7 @@ const attachPosition = () => (hook) => {
   return signups.find({ query })
     .then((previousSignups) => {
       hook.result = {
-        quotaId: hook.result.quotaId,
+        id: hook.result.id,
         position: (previousSignups.length + 1),
         editHash: hook.result.editHash,
         time: hook.result.createdAt,
