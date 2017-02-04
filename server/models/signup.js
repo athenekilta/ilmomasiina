@@ -18,6 +18,11 @@ module.exports = function () {
       type: Sequelize.STRING,
       defaultValue: () => Math.random().toString(36).slice(-16),
     },
+    // Added manually createdAt field to support milliseconds
+    createdAt: {
+      type: Sequelize.DATE(3),
+      defaultValue: () => new Date(),
+    },
   }, {
     freezeTableName: true,
     classMethods: {
