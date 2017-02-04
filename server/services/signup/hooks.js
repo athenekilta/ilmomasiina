@@ -60,7 +60,7 @@ exports.before = {
   find: [hooks.disable('external')],
   get: [hooks.disable('external')],
   create: [validateNewSignup()],
-  update: [],
+  update: [hooks.disable('external')],
   patch: [],
   remove: [hooks.disable('external')],
 };
