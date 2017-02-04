@@ -34,6 +34,27 @@ const validateNewSignup = () => (hook) => {
   throw new Error('Missing valid quota id.');
 };
 
+const attachPosition = () => (hook) => {
+  const signups = hook.app.service('/api/signups');
+
+  const query = {
+    quotaId: hook.result.quotaId,
+    createdAt: {
+      $lte: hook.result.createdAt,
+    },
+  };
+
+  return signups.find({ query })
+    .then((previousSignups) => {
+      hook.result = {
+        quotaId: hook.result.quotaId,
+        position: (previousSignups.length + 1),
+        editHash: hook.result.editHash,
+        time: hook.result.createdAt,
+      };
+    });
+};
+
 exports.before = {
   all: [],
   find: [hooks.disable('external')],
@@ -48,7 +69,7 @@ exports.after = {
   all: [],
   find: [],
   get: [],
-  create: [],
+  create: [attachPosition()],
   update: [],
   patch: [],
   remove: [],
