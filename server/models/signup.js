@@ -7,15 +7,16 @@ module.exports = function () {
   const Signup = sequelize.define('signup', {
     firstName: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     lastName: {
       type: Sequelize.STRING,
-      allowNull: false,
     },
     email: {
       type: Sequelize.STRING,
-      allowNull: false,
+    },
+    editHash: {
+      type: Sequelize.STRING,
+      defaultValue: () => Math.random().toString(36).slice(-16),
     },
   }, {
     freezeTableName: true,
