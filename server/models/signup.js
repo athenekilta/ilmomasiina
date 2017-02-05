@@ -60,7 +60,7 @@ module.exports = function () {
           },
           // Under 30 minutes old
           createdAt: {
-            $gt: moment().subtract(30, 'minutes').format(),
+            $gt: moment().subtract(30, 'minutes').toDate(),
           },
         },
       },
