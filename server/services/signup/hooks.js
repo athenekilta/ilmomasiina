@@ -130,8 +130,8 @@ const sendConfirmationMail = () => (hook) => {
 
   const userAnswers = [];
 
-  return models.answer.find({ signupId: hook.result.id })
-    .then(answers => _.map(answers, answer => userAnswers.push(answer)))
+  return models.answer.findAll({ where: { signupId: hook.result.id } })
+    .then(answers => answers.map(answer => userAnswers.push(answer.dataValues)))
     .then(() => models.signup.findById(hook.result.id))
     .then(signup => models.quota.findById(signup.quotaId))
     .then((quota) => {
@@ -143,7 +143,7 @@ const sendConfirmationMail = () => (hook) => {
             .then((questions) => {
               questions.map(question => fields.push({
                 label: question.question,
-                answer: _.find(userAnswers, { questionId: question.id }),
+                answer: _.find(userAnswers, { questionId: question.id }).answer,
               }));
 
               return mail.sendSignUpConfirmation(
