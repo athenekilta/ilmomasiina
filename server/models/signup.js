@@ -7,19 +7,23 @@ module.exports = function () {
   const sequelize = app.get('sequelize');
 
   const Signup = sequelize.define('signup', {
-    id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     firstName: {
       type: Sequelize.STRING,
+      validate: {
+        notEmpty: true,
+      },
     },
     lastName: {
       type: Sequelize.STRING,
+      validate: {
+        notEmpty: true,
+      },
     },
     email: {
       type: Sequelize.STRING,
+      validate: {
+        isEmail: true,
+      },
     },
     editToken: {
       type: Sequelize.VIRTUAL,

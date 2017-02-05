@@ -19,4 +19,7 @@ module.exports = function () {
 
   // Set up our after hooks
   eventService.after(hooks.after);
+
+  // Set up custom method for querying event questions
+  eventService.getQuestions = eventId => Promise.resolve(app.get('models').question.findAll({ where: { eventId } }));
 };

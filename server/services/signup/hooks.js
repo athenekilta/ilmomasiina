@@ -62,13 +62,52 @@ const attachEditToken = () => (hook) => {
   hook.result.editToken = md5(`${hook.result.id}${config.editTokenSalt}`);
 };
 
-
 const validateSignUpFields = () => (hook) => {
+  const requiredFields = ['firstName', 'lastName', 'email'];
 
+  requiredFields.map((fieldName) => {
+    if (_.isNil(hook.data[fieldName])) {
+      throw new Error('Empty fields on submit');
+    }
+    return true;
+  });
+
+  return hook.app.service('/api/signups').get(hook.id)
+    .then(signup => hook.app.service('/api/quotas').get(signup.quotaId))
+    .then(quota => hook.app.service('/api/events').getQuestions(quota.eventId))
+    .then((questions) => {
+      // Remove answers to other events questions
+      const questionIds = questions.map(q => q.id);
+      _.remove(hook.data.answers, obj => questionIds.indexOf(obj.questionId) < 0);
+
+      questions.map((question) => {
+        const answer = _.find(hook.data.answers, { questionId: question.id });
+
+        // Check that required question have answers
+        if (question.required && _.isNil(answer)) {
+          throw new Error(`Missing answer for question ${question.question}`);
+        }
+
+        // Check that select and checkbox answers are one of the options
+        if ((question.type === 'select' || question.type === 'checkbox') && !_.isNil(answer)) {
+          const options = question.options.split(',');
+
+          if (options.indexOf(answer.answer) < 0) {
+            throw new Error(`Invalid answer to question ${question.question}`);
+          }
+        }
+
+        return true;
+      });
+      return hook;
+    });
 };
 
 const insertAnswers = () => (hook) => {
+  const signupId = hook.id;
+  const answers = hook.data.answers.map(a => _.merge(a, { signupId }));
 
+  return hook.app.get('models').answer.bulkCreate(answers, { updateOnDuplicate: true }).then(() => hook);
 };
 
 exports.before = {
