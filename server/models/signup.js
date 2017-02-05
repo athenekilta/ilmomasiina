@@ -49,11 +49,20 @@ module.exports = function () {
     },
   });
 
-  Signup.beforeBulkUpdate({ individualHooks: true }, (data) => {
-    if (data.attributes.editToken !== md5(`${data.where.id}${config.editTokenSalt}`)) {
+  const verifyEditToken = (data) => {
+    const token = (data.attributes ? data.attributes.editToken : data.where.editToken);
+
+    if (data.where.editToken) {
+      delete data.where.editToken;
+    }
+
+    if (token !== md5(`${data.where.id}${config.editTokenSalt}`)) {
       throw new Error('Invalid editToken');
     }
-  });
+  };
+
+  Signup.beforeBulkUpdate({ individualHooks: true }, verifyEditToken);
+  Signup.beforeBulkDestroy({ individualHooks: true }, verifyEditToken);
 
   return Signup;
 };

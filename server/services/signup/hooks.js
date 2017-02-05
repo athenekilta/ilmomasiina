@@ -120,7 +120,7 @@ exports.before = {
   create: [validateNewSignup()],
   update: [hooks.disable('external')],
   patch: [validateSignUpFields()],
-  remove: [hooks.disable('external')],
+  remove: [],
 };
 
 exports.after = {
