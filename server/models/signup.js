@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const md5 = require('md5');
 const moment = require('moment');
-const config = require('../../config/ilmomasiina.config');
+const config = require('../../config/ilmomasiina.config'); // eslint-disable-line
 
 module.exports = function () {
   const app = this;

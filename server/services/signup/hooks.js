@@ -4,7 +4,7 @@ const md5 = require('md5');
 const moment = require('moment');
 const mail = require('../../mail');
 
-const config = require('../../../config/ilmomasiina.config');
+const config = require('../../../config/ilmomasiina.config'); // eslint-disable-line
 
 const validateNewSignup = () => (hook) => {
   const quotaId = hook.data.quotaId;
