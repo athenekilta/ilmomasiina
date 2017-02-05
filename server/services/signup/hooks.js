@@ -1,6 +1,9 @@
 const hooks = require('feathers-hooks-common');
 const _ = require('lodash');
+const md5 = require('md5');
 const moment = require('moment');
+
+const config = require('../../../config/ilmomasiina.config');
 
 const validateNewSignup = () => (hook) => {
   const quotaId = hook.data.quotaId;
@@ -50,9 +53,22 @@ const attachPosition = () => (hook) => {
         id: hook.result.id,
         position: (previousSignups.length + 1),
         editHash: hook.result.editHash,
-        time: hook.result.createdAt,
+        createdAt: hook.result.createdAt,
       };
     });
+};
+
+const attachEditToken = () => (hook) => {
+  hook.result.editToken = md5(`${hook.result.id}${config.editTokenSalt}`);
+};
+
+
+const validateSignUpFields = () => (hook) => {
+
+};
+
+const insertAnswers = () => (hook) => {
+
 };
 
 exports.before = {
@@ -61,7 +77,7 @@ exports.before = {
   get: [hooks.disable('external')],
   create: [validateNewSignup()],
   update: [hooks.disable('external')],
-  patch: [],
+  patch: [validateSignUpFields()],
   remove: [hooks.disable('external')],
 };
 
@@ -69,8 +85,11 @@ exports.after = {
   all: [],
   find: [],
   get: [],
-  create: [attachPosition()],
+  create: [
+    attachPosition(),
+    attachEditToken(),
+  ],
   update: [],
-  patch: [],
+  patch: [insertAnswers()],
   remove: [],
 };
