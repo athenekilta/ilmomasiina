@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const md5 = require('md5');
+const moment = require('moment');
 const config = require('../../config/ilmomasiina.config');
 
 module.exports = function () {
@@ -28,6 +29,9 @@ module.exports = function () {
     editToken: {
       type: Sequelize.VIRTUAL,
     },
+    confirmedAt: {
+      type: Sequelize.DATE(3),
+    },
     // Added manually createdAt field to support milliseconds
     createdAt: {
       type: Sequelize.DATE(3),
@@ -47,6 +51,20 @@ module.exports = function () {
         });
       },
     },
+    defaultScope: {
+      where: {
+        $or: {
+          // Is confirmed
+          confirmedAt: {
+            $ne: null, // != null
+          },
+          // Under 30 minutes old
+          createdAt: {
+            $gt: moment().subtract(30, 'minutes').format(),
+          },
+        },
+      },
+    },
   });
 
   const verifyEditToken = (data) => {
@@ -61,7 +79,18 @@ module.exports = function () {
     }
   };
 
+  const verifyConfirmation = (data) => {
+    const shouldBeConfirmedBefore = moment(data.attributes.createdAt).add(30, 'minutes').toDate().getTime();
+    const confirmedAt = moment(data.attributes.confirmedAt).toDate().getTime();
+
+    if (confirmedAt > shouldBeConfirmedBefore) {
+      throw new Error('Signup has expired');
+    }
+  };
+
   Signup.beforeBulkUpdate({ individualHooks: true }, verifyEditToken);
+  Signup.beforeBulkUpdate({ individualHooks: true }, verifyConfirmation);
+
   Signup.beforeBulkDestroy({ individualHooks: true }, verifyEditToken);
 
   return Signup;

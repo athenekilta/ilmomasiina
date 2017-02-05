@@ -72,9 +72,15 @@ const validateSignUpFields = () => (hook) => {
     return true;
   });
 
+  hook.data.confirmedAt = new Date();
+
   const models = hook.app.get('models');
 
   return models.signup.findById(hook.id)
+    .then((signup) => {
+      hook.data.createdAt = signup.createdAt;
+      return signup;
+    })
     .then(signup => models.quota.findById(signup.quotaId))
     .then(quota => models.event.findById(quota.eventId))
     .then(event => event.getQuestions())
