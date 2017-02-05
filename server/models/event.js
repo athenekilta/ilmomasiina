@@ -58,6 +58,7 @@ module.exports = function () {
 
         this.hasMany(models.question, {
           onDelete: 'CASCADE',
+          as: 'Questions',
         });
       },
     },

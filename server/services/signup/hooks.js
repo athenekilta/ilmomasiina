@@ -11,10 +11,10 @@ const validateNewSignup = () => (hook) => {
   const isInt = n => n % 1 === 0;
 
   if (quotaId && isInt(quotaId)) {
-    const quotas = hook.app.service('/api/quotas');
+    const quotas = hook.app.get('models').quota;
 
     // Check is quota open for signups
-    return quotas.get(quotaId)
+    return quotas.findById(quotaId)
       .catch(() => {
         throw new Error('Quota doesn\'t exist.');
       })
@@ -72,9 +72,12 @@ const validateSignUpFields = () => (hook) => {
     return true;
   });
 
-  return hook.app.service('/api/signups').get(hook.id)
-    .then(signup => hook.app.service('/api/quotas').get(signup.quotaId))
-    .then(quota => hook.app.service('/api/events').getQuestions(quota.eventId))
+  const models = hook.app.get('models');
+
+  return models.signup.findById(hook.id)
+    .then(signup => models.quota.findById(signup.quotaId))
+    .then(quota => models.event.findById(quota.eventId))
+    .then(event => event.getQuestions())
     .then((questions) => {
       // Remove answers to other events questions
       const questionIds = questions.map(q => q.id);
