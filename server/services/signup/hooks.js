@@ -2,6 +2,7 @@ const hooks = require('feathers-hooks-common');
 const _ = require('lodash');
 const md5 = require('md5');
 const moment = require('moment');
+const mail = require('../../mail');
 
 const config = require('../../../config/ilmomasiina.config');
 
@@ -119,6 +120,43 @@ const insertAnswers = () => (hook) => {
   return hook.app.get('models').answer.bulkCreate(answers, { updateOnDuplicate: true }).then(() => hook);
 };
 
+const sendConfirmationMail = () => (hook) => {
+  const models = hook.app.get('models');
+
+  const fields = [
+    { label: 'Nimi', answer: `${hook.result.firstName} ${hook.result.lastName}` },
+    { label: 'Sähköposti', answer: `${hook.result.email}` },
+  ];
+
+  const userAnswers = [];
+
+  return models.answer.find({ signupId: hook.result.id })
+    .then(answers => _.map(answers, answer => userAnswers.push(answer)))
+    .then(() => models.signup.findById(hook.result.id))
+    .then(signup => models.quota.findById(signup.quotaId))
+    .then((quota) => {
+      fields.push({ label: 'Kiintiö', answer: quota.title });
+
+      return models.event.findById(quota.eventId)
+        .then((event) => {
+          event.getQuestions()
+            .then((questions) => {
+              questions.map(question => fields.push({
+                label: question.question,
+                answer: _.find(userAnswers, { questionId: question.id }),
+              }));
+
+              return mail.sendSignUpConfirmation(
+                hook.result.email,
+                event.title,
+                event.confirmationMessage,
+                'http://ilmomasiina.io/magical-edit-link', // TODO: remove or update
+                fields);
+            });
+        });
+    });
+};
+
 exports.before = {
   all: [],
   find: [hooks.disable('external')],
@@ -138,6 +176,9 @@ exports.after = {
     attachEditToken(),
   ],
   update: [],
-  patch: [insertAnswers()],
+  patch: [
+    insertAnswers(),
+    sendConfirmationMail(),
+  ],
   remove: [],
 };

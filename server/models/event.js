@@ -33,6 +33,9 @@ module.exports = function () {
       allowNull: false,
       defaultValue: true,
     },
+    confirmationMessage: {
+      type: Sequelize.TEXT,
+    },
   }, {
     freezeTableName: true,
     paranoid: true,
