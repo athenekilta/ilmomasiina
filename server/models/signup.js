@@ -35,6 +35,7 @@ module.exports = function () {
     },
   }, {
     freezeTableName: true,
+    paranoid: true,
     classMethods: {
       associate() {
         const models = app.get('models');

@@ -35,6 +35,7 @@ module.exports = function () {
     },
   }, {
     freezeTableName: true,
+    paranoid: true,
     defaultScope: {
       where: {
         $and: {
