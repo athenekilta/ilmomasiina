@@ -79,18 +79,7 @@ module.exports = function () {
     }
   };
 
-  const verifyConfirmation = (data) => {
-    const shouldBeConfirmedBefore = moment(data.attributes.createdAt).add(30, 'minutes').toDate().getTime();
-    const confirmedAt = moment(data.attributes.confirmedAt).toDate().getTime();
-
-    if (confirmedAt > shouldBeConfirmedBefore) {
-      throw new Error('Signup has expired');
-    }
-  };
-
   Signup.beforeBulkUpdate({ individualHooks: true }, verifyEditToken);
-  Signup.beforeBulkUpdate({ individualHooks: true }, verifyConfirmation);
-
   Signup.beforeBulkDestroy({ individualHooks: true }, verifyEditToken);
 
   return Signup;

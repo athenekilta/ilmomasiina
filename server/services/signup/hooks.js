@@ -78,7 +78,14 @@ const validateSignUpFields = () => (hook) => {
   const models = hook.app.get('models');
 
   return models.signup.findById(hook.id)
+    .catch(() => {
+      throw new Error('Signup expired');
+    })
     .then((signup) => {
+      if (_.isNil(signup)) {
+        throw new Error('Signup expired');
+      }
+
       hook.data.createdAt = signup.createdAt;
       return signup;
     })
