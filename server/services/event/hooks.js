@@ -29,6 +29,7 @@ const includeAllEventData = (hook) => {
 
   hook.params.sequelize = {
     distinct: true,
+    attributes: ['id', 'title', 'date', 'openQuota', 'description', 'price', 'location', 'homepage', 'facebookLink'],
     include: [
       // First include all questions (also non-public for the form)
       {
