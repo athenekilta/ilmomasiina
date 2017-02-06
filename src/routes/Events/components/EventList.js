@@ -81,6 +81,18 @@ class EventList extends React.Component {
         });
       }
 
+      if (event.openQuota > 0) {
+        rows.push(
+          <TableRow
+            title="Avoin"
+            signupLabel=""
+            signups={_.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size)))}
+            size={event.openQuota}
+            className={`${eventState.class} child text-muted`}
+            key={`open${event.id}`} />,
+        );
+      }
+
       return rows;
     });
 
