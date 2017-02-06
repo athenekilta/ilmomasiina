@@ -73,7 +73,7 @@ class EventList extends React.Component {
             <TableRow
               title={quota.title}
               signupLabel={!showOneLabel ? quotaState.label : ''}
-              signups={quota.signupCount}
+              signups={Math.min(quota.signupCount, quota.size)}
               size={quota.size}
               className={`${eventState.class} ${quotaState.class} child`}
               key={`q${i}`} />,
