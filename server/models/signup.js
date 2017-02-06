@@ -56,7 +56,7 @@ module.exports = function () {
         $or: {
           // Is confirmed
           confirmedAt: {
-            $ne: null, // != null
+            $ne: null, // $means !=
           },
           // Under 30 minutes old
           createdAt: {
