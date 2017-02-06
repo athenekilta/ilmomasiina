@@ -13,6 +13,13 @@ module.exports = function () {
     date: {
       type: Sequelize.DATE,
     },
+    openQuota: {
+      type: Sequelize.INTEGER,
+      validate: {
+        min: 0,
+      },
+      defaultValue: 0,
+    },
     description: {
       type: Sequelize.TEXT,
     },

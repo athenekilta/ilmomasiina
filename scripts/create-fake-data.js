@@ -15,7 +15,7 @@ const d = 'Y-M-D HH:mm:ss';
 const events = [
   {
     title: 'Minuuttikalja 2016',
-    date: moment(now).subtract(5, 'days').format(d),
+    date: moment(now).subtract(3, 'days').format(d),
     description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
@@ -38,7 +38,8 @@ const events = [
   {
     title: 'Ystävänpäiväsitsit',
     date: moment(now).add(15, 'days').format(d),
-    description: 'Sitsit kiintiöillä',
+    description: 'Sitsit kiintiöillä + avoimella',
+    openQuota: 20,
     price: '14 € (12 € alkoholiton)',
     location: 'Smökki',
     homepage: 'http://crexcu2017.wordpress.com/',
@@ -192,7 +193,8 @@ quotas.map((quota, quotaIndex) => {
   for (let i = 0; i < quota.going; i += 1) {
     signups.push({
       quotaId: quotaIndex + 1,
-      timestamp: moment(now).format(d),
+      createdAt: moment().subtract('5', 'minutes').format(d),
+      confirmedAt: moment().subtract('1', 'minutes').format(d),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
