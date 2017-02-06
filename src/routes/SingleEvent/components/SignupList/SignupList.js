@@ -4,14 +4,17 @@ import './SignupList.scss';
 
 export class SignupList extends React.Component {
   render() {
-    const TableRow = ({ answers, firstName, lastName, index }) =>
-      <tr>
-        <td>{index}.</td>
-        <td>{firstName} {lastName}</td>
-        {this.props.questions.map((q, i) => <td key={i}>{_.find(answers, { questionId: q.id }).answer}</td>)}
-      </tr>;
+    const getAnswer = (answers, questionId) => {
+      const answer = _.find(answers, { questionId });
+      return (answer == null ? '' : answer.answer);
+    };
 
-    // console.log(this.props.rows);
+    const TableRow = ({ answers, firstName, lastName, index }) =>
+      <tr className={(firstName == null ? 'text-muted' : '')}>
+        <td>{index}.</td>
+        <td>{ firstName || 'Vahvistamatta' } { lastName || '' }</td>
+        {this.props.questions.map((q, i) => <td key={i}>{getAnswer(answers, q.id) || ''}</td>)}
+      </tr>;
 
     return (
       <div className="quota">
