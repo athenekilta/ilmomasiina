@@ -62,6 +62,18 @@ const includeAllEventData = (hook) => {
   };
 };
 
+/* eslint-disable */
+const formatResponseAsJson = (hook) => {
+  if (hook.result.questions) {
+    hook.result.questions.map((question) => {
+      if (question.options) {
+        question.options = question.options.split(',');
+      }
+    });
+  }
+};
+/* eslint-enable */
+
 exports.before = {
   all: [],
   find: [includeQuotas],
@@ -75,7 +87,7 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  get: [],
+  get: [formatResponseAsJson],
   create: [],
   update: [],
   patch: [],
