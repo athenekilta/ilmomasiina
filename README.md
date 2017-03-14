@@ -18,7 +18,7 @@ Ilmomasiina is Athene's event registration system.
 
 ## Documentation
 
-See documentation folder for docs.
+See docs folder.
 
 ## Contributing
 
