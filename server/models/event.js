@@ -13,6 +13,13 @@ module.exports = function () {
     date: {
       type: Sequelize.DATE,
     },
+    openQuota: {
+      type: Sequelize.INTEGER,
+      validate: {
+        min: 0,
+      },
+      defaultValue: 0,
+    },
     description: {
       type: Sequelize.TEXT,
     },
@@ -33,8 +40,12 @@ module.exports = function () {
       allowNull: false,
       defaultValue: true,
     },
+    confirmationMessage: {
+      type: Sequelize.TEXT,
+    },
   }, {
     freezeTableName: true,
+    paranoid: true,
     defaultScope: {
       where: {
         $and: {
