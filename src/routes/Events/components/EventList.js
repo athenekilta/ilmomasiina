@@ -73,12 +73,24 @@ class EventList extends React.Component {
             <TableRow
               title={quota.title}
               signupLabel={!showOneLabel ? quotaState.label : ''}
-              signups={quota.signupCount}
+              signups={Math.min(quota.signupCount, quota.size)}
               size={quota.size}
               className={`${eventState.class} ${quotaState.class} child`}
               key={`q${i}`} />,
           );
         });
+      }
+
+      if (event.openQuota > 0) {
+        rows.push(
+          <TableRow
+            title="Avoin"
+            signupLabel=""
+            signups={_.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size)))}
+            size={event.openQuota}
+            className={`${eventState.class} child text-muted`}
+            key={`open${event.id}`} />,
+        );
       }
 
       return rows;

@@ -1,4 +1,7 @@
 const Sequelize = require('sequelize');
+const md5 = require('md5');
+const moment = require('moment');
+const config = require('../../config/ilmomasiina.config'); // eslint-disable-line
 
 module.exports = function () {
   const app = this;
@@ -7,18 +10,36 @@ module.exports = function () {
   const Signup = sequelize.define('signup', {
     firstName: {
       type: Sequelize.STRING,
-      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     lastName: {
       type: Sequelize.STRING,
-      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     email: {
       type: Sequelize.STRING,
-      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
+    },
+    editToken: {
+      type: Sequelize.VIRTUAL,
+    },
+    confirmedAt: {
+      type: Sequelize.DATE(3),
+    },
+    // Added manually createdAt field to support milliseconds
+    createdAt: {
+      type: Sequelize.DATE(3),
+      defaultValue: () => new Date(),
     },
   }, {
     freezeTableName: true,
+    paranoid: true,
     classMethods: {
       associate() {
         const models = app.get('models');
@@ -30,7 +51,36 @@ module.exports = function () {
         });
       },
     },
+    defaultScope: {
+      where: {
+        $or: {
+          // Is confirmed
+          confirmedAt: {
+            $ne: null, // $means !=
+          },
+          // Under 30 minutes old
+          createdAt: {
+            $gt: moment().subtract(30, 'minutes').toDate(),
+          },
+        },
+      },
+    },
   });
+
+  const verifyEditToken = (data) => {
+    const token = (data.attributes ? data.attributes.editToken : data.where.editToken);
+
+    if (data.where.editToken) {
+      delete data.where.editToken;
+    }
+
+    if (token !== md5(`${data.where.id}${config.editTokenSalt}`)) {
+      throw new Error('Invalid editToken');
+    }
+  };
+
+  Signup.beforeBulkUpdate({ individualHooks: true }, verifyEditToken);
+  Signup.beforeBulkDestroy({ individualHooks: true }, verifyEditToken);
 
   return Signup;
 };

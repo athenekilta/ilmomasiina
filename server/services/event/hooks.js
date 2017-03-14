@@ -2,7 +2,7 @@ const includeQuotas = (hook) => {
   const sequelize = hook.app.get('sequelize');
 
   hook.params.sequelize = {
-    attributes: ['id', 'title', 'date'],
+    attributes: ['id', 'title', 'date', 'openQuota'],
     distinct: true,
     // Include quotas of event and count of signups
     include: [{
@@ -29,6 +29,7 @@ const includeAllEventData = (hook) => {
 
   hook.params.sequelize = {
     distinct: true,
+    attributes: ['id', 'title', 'date', 'openQuota', 'description', 'price', 'location', 'homepage', 'facebookLink'],
     include: [
       // First include all questions (also non-public for the form)
       {

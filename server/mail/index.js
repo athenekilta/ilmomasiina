@@ -49,7 +49,7 @@ const sendMail = (msgTemplate, recipientEmail, eventTitle, customMsg, editLink =
   const data = {
     from: ilmoconfig.mailFrom,
     to: recipientEmail,
-    subject: `[Ilmoittautuminen] ${eventTitle}`,
+    subject: `Ilmoittautumisvahvistus: ${eventTitle}`,
     text: msg.join('\n'),
   };
 
@@ -63,14 +63,14 @@ const sendMail = (msgTemplate, recipientEmail, eventTitle, customMsg, editLink =
 const SIGNUP_MAIL = title =>
   `ILMOITTAUTUMISVAHVISTUS\n\nOlet ilmoittautunut tapahtumaan ${title}.`;
 
-const FROM_QUEUE_MAIL = title =>
+const FROM_QUEUE = title =>
   `ILMOITTAUTUMISVAHVISTUS\n\nOlet saanut peruutuspaikan tapahtumaan ${title}.`;
 
-const SIGNUP_EDITED_MAIL = title =>
+const SIGNUP_EDITED = title =>
   `VAHVISTUS ILMOITTAUTUMISEN MUOKKAUKSESTA\n\nOlet muokannut tietojasi tapahtuman ${title} ilmoittautumisessa.`;
 
 module.exports = {
-  sendSignUpConfirmation: (...args) => sendMail(SIGNUP_MAIL, args[0], args[1], args[2], args[3], args[4]),
-  sendSignUpFromQueueConfirmation: (...args) => sendMail(FROM_QUEUE_MAIL, args[0], args[1], args[2], args[3], args[4]),
-  sendEditConfirmation: (...args) => sendMail(SIGNUP_EDITED_MAIL, args[0], args[1], args[2], args[3], args[4]),
+  sendSignUpConfirmation: (...args) => sendMail(SIGNUP_MAIL(args[1]), args[0], args[1], args[2], args[3], args[4]),
+  sendFromQueueConfirmation: (...args) => sendMail(FROM_QUEUE(args[1]), args[0], args[1], args[2], args[3], args[4]),
+  sendEditConfirmation: (...args) => sendMail(SIGNUP_EDITED(args[1]), args[0], args[1], args[2], args[3], args[4]),
 };

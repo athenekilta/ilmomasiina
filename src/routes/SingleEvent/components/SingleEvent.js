@@ -86,10 +86,17 @@ class SingleEvent extends React.Component {
                   {(event.quota ? event.quota.map((quota, index) =>
                     <ViewProgress
                       title={quota.title}
-                      value={quota.signups.length}
+                      value={Math.min(quota.signups.length, quota.size)}
                       max={quota.size}
                       key={index} />,
                     ) : '')}
+                  {(event.openQuota > 0 ?
+                    <ViewProgress
+                      title="Avoin"
+                      value={(_.sum(event.quota.map(q => Math.max(0, q.signups.length - q.size))))}
+                      max={event.openQuota}
+                      key="open" /> : ''
+                  )}
                 </div>
               : '')}
             </div>
