@@ -63,7 +63,7 @@ const includeAllEventData = (hook) => {
 };
 
 /* eslint-disable */
-const formatResponseAsJson = (hook) => {
+const formatOptionsAsArray = (hook) => {
   if (hook.result.questions) {
     hook.result.questions.map((question) => {
       if (question.options) {
@@ -87,7 +87,7 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  get: [formatResponseAsJson],
+  get: [formatOptionsAsArray],
   create: [],
   update: [],
   patch: [],
