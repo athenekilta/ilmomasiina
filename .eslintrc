@@ -23,5 +23,6 @@
     "max-len": [2, 120, 2],
     "no-param-reassign": 0,
     "func-names": 0,
+    "array-callback-return": 0,
   }
 }

@@ -62,6 +62,16 @@ const includeAllEventData = (hook) => {
   };
 };
 
+const formatOptionsAsArray = (hook) => {
+  if (hook.result.questions) {
+    hook.result.questions.map((question) => {
+      if (question.options) {
+        question.options = question.options.split(',');
+      }
+    });
+  }
+};
+
 exports.before = {
   all: [],
   find: [includeQuotas],
@@ -75,7 +85,7 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  get: [],
+  get: [formatOptionsAsArray],
   create: [],
   update: [],
   patch: [],
