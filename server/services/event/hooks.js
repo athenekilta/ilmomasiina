@@ -62,7 +62,6 @@ const includeAllEventData = (hook) => {
   };
 };
 
-/* eslint-disable */
 const formatOptionsAsArray = (hook) => {
   if (hook.result.questions) {
     hook.result.questions.map((question) => {
@@ -72,7 +71,6 @@ const formatOptionsAsArray = (hook) => {
     });
   }
 };
-/* eslint-enable */
 
 exports.before = {
   all: [],
