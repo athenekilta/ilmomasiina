@@ -1,18 +1,16 @@
 import React from 'react';
 import Formsy from 'formsy-react';
 import { Input } from 'formsy-react-components';
-import './Login.scss';
 
 const Login = () => (
   <div className="container">
-    <h1>Login</h1>
-    <div className="Login col-xs-8 col-md-6 align-self-center">
-      <Formsy.Form className="credentials">
+    <div className="col-xs-12 col-sm-8 col-md-6">
+      <h1>Kirjaudu sisään</h1>
+      <Formsy.Form>
         <Input value="" label="Sähköposti" name="email" title="Email" required />
         <Input value="" label="Salasana" name="password" title="Password" type="password" required />
-        <div className="nuppi">
-          <button className="nappi btn-success col-xs-3" type="submit">Kirjaudu</button>
-        </div>
+        <p><button className="btn btn-primary btn-lg" type="submit">Kirjaudu</button></p>
+        <p><a>Unohditko salasanasi?</a></p>
       </Formsy.Form>
     </div>
   </div>
