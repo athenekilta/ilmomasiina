@@ -5,6 +5,7 @@ const quota = require('./quota');
 const signup = require('./signup');
 const question = require('./question');
 const answer = require('./answer');
+const user = require('./user');
 
 const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 
@@ -24,6 +25,7 @@ module.exports = function () {
   app.configure(signup);
   app.configure(question);
   app.configure(answer);
+  app.configure(user);
 
   app.set('models', sequelize.models);
 
