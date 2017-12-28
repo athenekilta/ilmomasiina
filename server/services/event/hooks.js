@@ -5,24 +5,27 @@ const includeQuotas = (hook) => {
     attributes: ['id', 'title', 'date', 'openQuota'],
     distinct: true,
     // Include quotas of event and count of signups
-    include: [{
-      model: sequelize.models.quota,
-      attributes: [
-        'title',
-        'size',
-        'signupOpens',
-        'signupCloses',
-        [sequelize.fn('COUNT', sequelize.col('quota.signups.id')), 'signupCount'],
-      ],
-      include: [{
-        model: sequelize.models.signup,
-        attributes: [],
-      }],
-    }],
+    include: [
+      {
+        model: sequelize.models.quota,
+        attributes: [
+          'title',
+          'size',
+          'signupOpens',
+          'signupCloses',
+          [sequelize.fn('COUNT', sequelize.col('quota.signups.id')), 'signupCount'],
+        ],
+        include: [
+          {
+            model: sequelize.models.signup,
+            attributes: [],
+          },
+        ],
+      },
+    ],
     group: [sequelize.col('event.id'), sequelize.col('quota.id')],
   };
 };
-
 
 const includeAllEventData = (hook) => {
   const sequelize = hook.app.get('sequelize');
@@ -41,22 +44,28 @@ const includeAllEventData = (hook) => {
         attributes: ['title', 'size', 'signupOpens', 'signupCloses'],
         model: sequelize.models.quota,
         // ... and signups of quotas
-        include: [{
-          attributes: ['firstName', 'lastName'],
-          model: sequelize.models.signup,
-          // ... and answers of signups
-          include: [{
-            attributes: ['questionId', 'answer'],
-            model: sequelize.models.answer,
-            // ... but only public ones
-            include: [{
-              model: sequelize.models.question,
-              attributes: [],
-              where: { public: true },
-              required: false,
-            }],
-          }],
-        }],
+        include: [
+          {
+            attributes: ['firstName', 'lastName'],
+            model: sequelize.models.signup,
+            // ... and answers of signups
+            include: [
+              {
+                attributes: ['questionId', 'answer'],
+                model: sequelize.models.answer,
+                // ... but only public ones
+                include: [
+                  {
+                    model: sequelize.models.question,
+                    attributes: [],
+                    where: { public: true },
+                    required: false,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
       },
     ],
   };
@@ -66,7 +75,7 @@ const formatOptionsAsArray = (hook) => {
   if (hook.result.questions) {
     hook.result.questions.map((question) => {
       if (question.options) {
-        question.options = question.options.split(',');
+        question.options = question.options.split(';');
       }
     });
   }

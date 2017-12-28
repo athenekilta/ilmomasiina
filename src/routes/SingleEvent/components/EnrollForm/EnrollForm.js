@@ -1,6 +1,6 @@
 import React from 'react';
 import Formsy from 'formsy-react';
-import { Checkbox, Select, Input, Textarea } from 'formsy-react-components';
+import { CheckboxGroup, Select, Input, Textarea } from 'formsy-react-components';
 import './EnrollForm.scss';
 
 export class EnrollForm extends React.Component {
@@ -49,15 +49,17 @@ export class EnrollForm extends React.Component {
       }
 
       if (question.type === 'checkbox') {
-        return question.options.map((option, index) => (
-          <Checkbox
-            name={option}
-            label={option}
-            rowLabel={index === 0 ? question.question : ''}
-            key={question.id + index / 100}
+        return (
+          <CheckboxGroup
+            value={[]}
+            name={question.question}
+            label={question.question}
+            options={question.options.map(option => ({ label: option, value: option }))}
+            key={question.id}
           />
-        ));
+        );
       }
+
       return '';
     }
 

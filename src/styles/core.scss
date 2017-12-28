@@ -14,7 +14,7 @@
     font-size: 20px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    color: $alt-text
+    color: $alt-text;
   }
 
   h3 {
@@ -26,8 +26,13 @@
     margin-bottom: 1.5em;
   }
 
-  strong, label {
+  strong,
+  label {
     font-weight: 600;
+  }
+
+  .checkbox label {
+    font-weight: 400;
   }
 
   table.table {
@@ -44,7 +49,8 @@
     font-weight: 600;
   }
 
-  .progress, .progress-bar {
+  .progress,
+  .progress-bar {
     box-shadow: none;
   }
 
