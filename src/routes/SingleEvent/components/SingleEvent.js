@@ -13,6 +13,7 @@ class SingleEvent extends React.Component {
   componentWillMount() {
     this.props.getEventInfo(this.props.params.id);
   }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -36,18 +37,20 @@ class SingleEvent extends React.Component {
     this.setState(state);
   }
 
-  submitForm() {
+  submitForm(asd) {
+    console.log(asd);
     const state = this.state;
     state.formOpened = false;
     this.setState(state);
   }
+
   render() {
     const event = this.props.singleEvent;
 
     return (
       <div>
         {this.state.formOpened ? (
-          <EnrollForm closeForm={this.closeForm} questions={event.questions} />
+          <EnrollForm closeForm={this.closeForm} submitForm={this.submitForm} questions={event.questions} />
         ) : (
           <div className="container">
             <div className="row">
