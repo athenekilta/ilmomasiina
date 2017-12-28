@@ -46,77 +46,125 @@ class SingleEvent extends React.Component {
 
     return (
       <div>
-        {
-          this.state.formOpened ?
-            <EnrollForm closeForm={this.closeForm} questions={event.questions} /> : ''
-        }
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-12 col-sm-8">
-              <h1>{event.title}</h1>
-              <p>
-                {event.date ? <span>{ moment(event.date).format('D.M.Y [klo] HH:mm') }<br /></span> : ''}
-                {event.location ? <span>{event.location}<br /></span> : ''}
-                {event.price ? <span>Hinta: {event.price}<br /></span> : ''}
-                {event.homepage ? <a href={event.homepage} title="Tapahtuman kotisivut">{event.homepage}<br /></a> : ''}
-                {event.facebook ? <a href={event.facebook} title="Facebook-tapahtuma">Facebook-tapahtuma<br /></a> : ''}
-                <a href='http://pekkalammi.com'>Facebook-tapahtuma</a>
-              </p>
-              <p>{nl2br(event.description)}</p>
-            </div>
-            <div className="col-xs-12 col-sm-4 pull-right">
-              <div className="sidebar-widget">
-                <h3>Ilmoittautuminen</h3>
-                {(event.quota ? event.quota.map((quota, index) =>
-                  <SignupButton
-                    title={quota.title}
-                    opens={quota.signupOpens}
-                    closes={quota.signupCloses}
-                    openForm={this.openForm}
-                    isOnly={(event.quota.length === 1)}
-                    // Show label if sign ups times differ or this is the last button
-                    showLabel={(allTimesMatch(event.quota) ? (event.quota.length === index + 1) : true)}
-                    key={index}
-                  />,
-                  ) : '')}
-              </div>
-              {((event.quota && event.quota.length) > 1 ?
-                <div className="sidebar-widget">
-                  <h3>Ilmoittautuneet</h3>
-                  {(event.quota ? event.quota.map((quota, index) =>
-                    <ViewProgress
-                      title={quota.title}
-                      value={Math.min(quota.signups.length, quota.size)}
-                      max={quota.size}
-                      key={index} />,
-                    ) : '')}
-                  {(event.openQuota > 0 ?
-                    <ViewProgress
-                      title="Avoin"
-                      value={(_.sum(event.quota.map(q => Math.max(0, q.signups.length - q.size))))}
-                      max={event.openQuota}
-                      key="open" /> : ''
+        {this.state.formOpened ? (
+          <EnrollForm closeForm={this.closeForm} questions={event.questions} />
+        ) : (
+          <div className="container">
+            <div className="row">
+              <div className="col-xs-12 col-sm-8">
+                <h1>{event.title}</h1>
+                <p>
+                  {event.date ? (
+                    <span>
+                      {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                      <br />
+                    </span>
+                  ) : (
+                    ''
                   )}
-                </div>
-              : '')}
-            </div>
-            <div className="col-xs-12">
-              {(event.quota && !event.quota.length ? <p>Tapahtuman vastaukset eivät ole julkisia.</p> :
-              <div>
-                <h2>Ilmoittautuneet</h2>
-                {(event.quota ? event.quota.map((quota, index) =>
-                  <SignupList
-                    title={(event.quota.length > 1 ? quota.title : '')}
-                    questions={_.filter(event.questions, 'public')}
-                    rows={quota.signups}
-                    key={index}
-                  />,
-                ) : '')}
+                  {event.location ? (
+                    <span>
+                      {event.location}
+                      <br />
+                    </span>
+                  ) : (
+                    ''
+                  )}
+                  {event.price ? (
+                    <span>
+                      Hinta: {event.price}
+                      <br />
+                    </span>
+                  ) : (
+                    ''
+                  )}
+                  {event.homepage ? (
+                    <a href={event.homepage} title="Tapahtuman kotisivut">
+                      {event.homepage}
+                      <br />
+                    </a>
+                  ) : (
+                    ''
+                  )}
+                  {event.facebook ? (
+                    <a href={event.facebook} title="Facebook-tapahtuma">
+                      Facebook-tapahtuma<br />
+                    </a>
+                  ) : (
+                    ''
+                  )}
+                  <a href="http://pekkalammi.com">Facebook-tapahtuma</a>
+                </p>
+                <p>{nl2br(event.description)}</p>
               </div>
-              )}
+              <div className="col-xs-12 col-sm-4 pull-right">
+                <div className="sidebar-widget">
+                  <h3>Ilmoittautuminen</h3>
+                  {event.quota
+                    ? event.quota.map((quota, index) => (
+                      <SignupButton
+                        title={quota.title}
+                        opens={quota.signupOpens}
+                        closes={quota.signupCloses}
+                        openForm={this.openForm}
+                        isOnly={event.quota.length === 1}
+                          // Show label if sign ups times differ or this is the last button
+                        showLabel={allTimesMatch(event.quota) ? event.quota.length === index + 1 : true}
+                        key={index}
+                        />
+                      ))
+                    : ''}
+                </div>
+                {(event.quota && event.quota.length) > 1 ? (
+                  <div className="sidebar-widget">
+                    <h3>Ilmoittautuneet</h3>
+                    {event.quota
+                      ? event.quota.map((quota, index) => (
+                        <ViewProgress
+                          title={quota.title}
+                          value={Math.min(quota.signups.length, quota.size)}
+                          max={quota.size}
+                          key={index}
+                          />
+                        ))
+                      : ''}
+                    {event.openQuota > 0 ? (
+                      <ViewProgress
+                        title="Avoin"
+                        value={_.sum(event.quota.map(q => Math.max(0, q.signups.length - q.size)))}
+                        max={event.openQuota}
+                        key="open"
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                ) : (
+                  ''
+                )}
+              </div>
+              <div className="col-xs-12">
+                {event.quota && !event.quota.length ? (
+                  <p>Tapahtuman vastaukset eivät ole julkisia.</p>
+                ) : (
+                  <div>
+                    <h2>Ilmoittautuneet</h2>
+                    {event.quota
+                      ? event.quota.map((quota, index) => (
+                        <SignupList
+                          title={event.quota.length > 1 ? quota.title : ''}
+                          questions={_.filter(event.questions, 'public')}
+                          rows={quota.signups}
+                          key={index}
+                          />
+                        ))
+                      : ''}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

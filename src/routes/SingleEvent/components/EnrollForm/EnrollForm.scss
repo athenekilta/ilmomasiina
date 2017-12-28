@@ -8,7 +8,8 @@
   overflow: hidden;
   cursor: pointer;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
     height: 1px;
@@ -19,14 +20,15 @@
     background: $alt-text;
   }
   &:before {
-   transform:(rotate(45deg));
+    transform: (rotate(45deg));
   }
   &:after {
-    transform:(rotate(-45deg));
+    transform: (rotate(-45deg));
   }
 
   &:hover {
-    &:before, &:after {
+    &:before,
+    &:after {
       background: lighten($alt-text, 20%);
     }
   }
@@ -34,7 +36,6 @@
 
 .form-wrapper {
   width: 100%;
-  background: $secondary-background;
   margin: -22px 0 3em;
   padding: 4em 0;
   position: relative;
