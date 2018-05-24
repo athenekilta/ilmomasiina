@@ -1,4 +1,7 @@
 import React from 'react';
+import request from 'then-request';
+import moment from 'moment';
+import AWN from 'awesome-notifications';
 import Formsy from 'formsy-react';
 import _ from 'lodash';
 import { Checkbox, Input, Select, Textarea } from 'formsy-react-components';
@@ -27,6 +30,7 @@ class Editor extends React.Component {
       useQuotas: false,
       useOpenQuota: false,
       eventData: {
+        eventId: null,
         questions: [],
         quotas: [],
       },
@@ -140,11 +144,20 @@ class Editor extends React.Component {
   }
 
   submitForm(model) {
-    const data = model;
-    data.quotas = this.state.eventData.quotas;
-    data.questions = this.state.eventData.questions;
+    const json = model;
+    json.quotas = this.state.eventData.quotas;
+    json.questions = this.state.eventData.questions;
 
-    console.log(data);
+    request('POST', '/api/events', { json }).done((res) => {
+      const notifier = new AWN({
+        animationDuration: 0,
+        icons: {
+          enabled: false,
+        },
+      });
+      notifier.success('Tapahtuman tiedot tallennettu');
+      console.log(res);
+    });
   }
 
   render() {
@@ -225,7 +238,7 @@ class Editor extends React.Component {
         onSubmit={this.submitForm}
         className="event-editor form-horizontal col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <h1>Luo uusi tapahtuma</h1>
-        <input className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Tallenna" />
+        <input className="btn btn-success pull-right" type="submit" defaultValue="Tallenna" />
         <ul className="nav nav-tabs">
           <li className={(this.state.activeTab === 1 ? 'active' : '')}>
             <a onClick={() => this.changeTab(1)}>Perustiedot</a>
@@ -251,8 +264,8 @@ class Editor extends React.Component {
             <Textarea rows={10} name="description" value="" label="Kuvaus" />
           </div>
           <div className={`tab-pane ${(this.state.activeTab === 2 ? 'active' : '')}`}>
-            <Input name="registration_start_date" value="" label="Ilmo alkaa" type="datetime-local" required />
-            <Input name="registration_end_date" value="" label="Ilmo päättyy" type="datetime-local" required />
+            <Input name="registration_start_date" value={ moment().format('YYYY-MM-DD\Thh:mm') } label="Ilmo alkaa" type="datetime-local" required />
+            <Input name="registration_end_date" value={ moment().format('YYYY-MM-DD\Thh:mm') } label="Ilmo päättyy" type="datetime-local" required />
             <hr />
             <Checkbox name="quotas"
               value={false}

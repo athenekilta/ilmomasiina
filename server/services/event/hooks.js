@@ -73,7 +73,7 @@ const includeAllEventData = (hook) => {
 
 const removeUnpublicAnswers = (hook) => {
   // console.log(hook.result.answersPublic)
-  // if (!hook.result.answersPublic) {
+  if (!hook.result.answersPublic) {
     if (hook.result.quota) {
       hook.result.quota.map((quota) => {
         quota.testi = 'asd';
@@ -82,7 +82,7 @@ const removeUnpublicAnswers = (hook) => {
         }
       });
     }
-  // }
+  }
 };
 
 const formatOptionsAsArray = (hook) => {

@@ -3,6 +3,6 @@
 import Editor from './components';
 
 export default () => ({
-  path: 'admin/edit',
+  path: 'admin/edit(/:id)',
   component: Editor,
 });
