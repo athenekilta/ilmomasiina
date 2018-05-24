@@ -32,7 +32,7 @@ const includeAllEventData = (hook) => {
 
   hook.params.sequelize = {
     distinct: true,
-    attributes: ['id', 'title', 'date', 'openQuota', 'description', 'price', 'location', 'homepage', 'facebookLink'],
+    attributes: ['id', 'title', 'date', 'openQuota', 'description', 'price', 'location', 'homepage', 'facebookLink', 'answersPublic'],
     include: [
       // First include all questions (also non-public for the form)
       {
@@ -71,6 +71,20 @@ const includeAllEventData = (hook) => {
   };
 };
 
+const removeUnpublicAnswers = (hook) => {
+  // console.log(hook.result.answersPublic)
+  // if (!hook.result.answersPublic) {
+    if (hook.result.quota) {
+      hook.result.quota.map((quota) => {
+        quota.testi = 'asd';
+        if (quota.signups) {
+          quota.signups = [];
+        }
+      });
+    }
+  // }
+};
+
 const formatOptionsAsArray = (hook) => {
   if (hook.result.questions) {
     hook.result.questions.map((question) => {
@@ -94,7 +108,7 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  get: [formatOptionsAsArray],
+  get: [removeUnpublicAnswers, formatOptionsAsArray],
   create: [],
   update: [],
   patch: [],
