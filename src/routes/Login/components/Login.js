@@ -3,7 +3,6 @@ import Formsy from 'formsy-react';
 import { Input } from 'formsy-react-components';
 import { connect } from 'react-redux';
 
-import './Login.scss';
 import { loginUser } from '../modules/login';
 
 class Login extends React.Component {
@@ -11,7 +10,7 @@ class Login extends React.Component {
     return (
       <div className="container">
         <h1>Login</h1>
-        { this.props.loginError
+        {this.props.loginError
           ? <div> {this.props.loginError.body} </div>
           : ''
         }
