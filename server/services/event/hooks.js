@@ -41,7 +41,7 @@ const includeAllEventData = (hook) => {
       },
       // Include quotas..
       {
-        attributes: ['title', 'size', 'signupOpens', 'signupCloses'],
+        attributes: ['title', 'size', 'signupOpens', 'signupCloses', 'id'],
         model: sequelize.models.quota,
         // ... and signups of quotas
         include: [
@@ -74,14 +74,14 @@ const includeAllEventData = (hook) => {
 const removeUnpublicAnswers = (hook) => {
   // console.log(hook.result.answersPublic)
   // if (!hook.result.answersPublic) {
-    if (hook.result.quota) {
-      hook.result.quota.map((quota) => {
-        quota.testi = 'asd';
-        if (quota.signups) {
-          quota.signups = [];
-        }
-      });
-    }
+  if (hook.result.quota) {
+    hook.result.quota.map((quota) => {
+      quota.testi = 'asd';
+      if (quota.signups) {
+        quota.signups = [];
+      }
+    });
+  }
   // }
 };
 

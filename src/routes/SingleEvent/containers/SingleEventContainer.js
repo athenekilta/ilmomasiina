@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getEventInfo } from '../modules/singleEvent';
+import * as Actions from '../modules/singleEvent';
 
 /*  This is a container component. Notice it does not contain any JSX,
     nor does it import React. This component is **only** responsible for
@@ -13,11 +13,13 @@ import SingleEvent from '../components/SingleEvent';
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-  getEventInfo,
+  updateEvent: Actions.updateEventAsync,
+  attachPosition: Actions.attachPositionAsync
 };
 
 const mapStateToProps = state => ({
-  singleEvent: state.singleEvent,
+  event: state.singleEvent.event,
+  signup: state.singleEvent.signup
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

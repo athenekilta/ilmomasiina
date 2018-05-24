@@ -18,7 +18,7 @@ export default store => ({
       /*  Return getComponent   */
       cb(null, SingleEvent);
 
-    /* Webpack named bundle   */
+      /* Webpack named bundle   */
     }, 'events');
   },
 });

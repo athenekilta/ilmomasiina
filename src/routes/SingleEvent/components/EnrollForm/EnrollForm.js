@@ -100,7 +100,7 @@ export class EnrollForm extends React.Component {
           <a className="close" onClick={() => this.props.closeForm()} />
           <div className="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
             <h2>Ilmoittaudu</h2>
-            <p>Ilmoittautumistilanteesi on: [insert tilanne]</p>
+            <p>{'Olet jonossa sijalla: ' + this.props.signup.positionInQuota}</p>
             <Formsy.Form onValidSubmit={this.parseSubmit}>
               <Input name="firstName" value="" label="Etunimi" type="text" placeholder="Etunimi" required />
               <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required />
@@ -129,9 +129,8 @@ export class EnrollForm extends React.Component {
 
 EnrollForm.propTypes = {
   closeForm: React.PropTypes.func.isRequired,
-  questions: React.PropTypes.shape({
-    map: React.PropTypes.func,
-  }),
+  questions: React.PropTypes.array,
+  signup: React.PropTypes.object
 };
 
 export default EnrollForm;

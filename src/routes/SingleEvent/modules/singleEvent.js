@@ -3,7 +3,8 @@ import request from 'then-request';
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const GET_EVENT_ASYNC = 'GET_EVENT_ASYNC';
+export const UPDATE_EVENT = 'UPDATE_EVENT';
+export const UPDATE_SIGNUP = 'UPDATE_SIGNUP';
 
 // ------------------------------------
 // Actions
@@ -11,40 +12,70 @@ export const GET_EVENT_ASYNC = 'GET_EVENT_ASYNC';
 
 /*  Temporary payload. This is going to be loaded from the backend. */
 
-function getApi(id) {
+function _getEvent(id) {
   return request('GET', `/api/events/${id}`);
+}
+
+function _attachPosition(quotaId) {
+  return request('POST', '/api/signups', { json: { quotaId } });
 }
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
 
-export const getEventInfo = eventId => (dispatch) => {
-  getApi(eventId)
+export const updateEventAsync = eventId => (dispatch) => {
+  _getEvent(eventId)
     .then(res => JSON.parse(res.body))
-    .then((res) => {
+    .then(res => {
       dispatch({
-        type: GET_EVENT_ASYNC,
+        type: UPDATE_EVENT,
         payload: res,
       });
     });
 };
 
+export const attachPositionAsync = quotaId => (dispatch) => {
+  _attachPosition(quotaId)
+    .then(res => JSON.parse(res.body))
+    .then(res => {
+      dispatch({
+        type: UPDATE_SIGNUP,
+        payload: res
+      });
+    });
+}
+
 export const actions = {
-  getEventInfo,
+  updateEventAsync,
+  attachPositionAsync
 };
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [GET_EVENT_ASYNC]: (state, action) => action.payload,
+  [UPDATE_EVENT]: (state, action) => {
+    return {
+      ...state,
+      event: action.payload
+    }
+  },
+  [UPDATE_SIGNUP]: (state, action) => {
+    return {
+      ...state,
+      signup: action.payload,
+    }
+  }
 };
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = {};
+const initialState = {
+  event: {},
+  signup: {}
+};
 export default function counterReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
 
