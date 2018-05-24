@@ -1,15 +1,33 @@
 // Colors
 $brand-primary: #278a2b;
-$brand-secondary: #607d8b;
+$brand-secondary: #3e846a;
 $secondary-background: #f1f1f1;
 $alt-text: #7a7a7a;
 $text-muted: #c5c5c5;
 $red: #d74949;
 $green: #4caf50;
 
+// Buttons
+
 $btn-default-bg: $brand-secondary;
 $btn-default-color: #fff;
 $btn-default-border: darken($btn-default-bg, 10%);
+
+$btn-primary-bg: $green;
+$btn-primary-color: #fff;
+$btn-primary-border: darken($green, 10%);
+
+$btn-success-bg: $green;
+$btn-success-color: #fff;
+$btn-success-border: darken($btn-success-bg, 10%);
+
+$btn-danger-bg: $red;
+$btn-danger-color: #fff;
+$btn-danger-border: darken($btn-danger-bg, 10%);
+
+
+
+
 
 $navbar-default-bg: $brand-primary;
 $navbar-default-brand-color: #fff;

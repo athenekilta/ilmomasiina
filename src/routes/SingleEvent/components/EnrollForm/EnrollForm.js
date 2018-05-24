@@ -117,6 +117,7 @@ export class EnrollForm extends React.Component {
               {this.props.questions.map(questionsToField)}
 
               <input className="btn btn-primary pull-right" formNoValidate type="submit" defaultValue="Submit" />
+              <a className="btn btn-link pull-right" onClick={() => this.props.closeForm()}>Peruuta</a>
             </Formsy.Form>
           </div>
           <div className="cf" />
