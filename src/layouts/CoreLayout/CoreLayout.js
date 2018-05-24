@@ -9,6 +9,7 @@ export const CoreLayout = ({ children }) => (
     <Header />
     {children}
     <Footer />
+    <div className="clearfix" />
   </div>
 );
 
