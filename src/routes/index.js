@@ -15,7 +15,7 @@ export const createRoutes = store => ({
     SingleEventRoute(store),
     AdminRoute(store),
     EditorRoute(store),
-    Login,
+    Login(store),
     PageNotFound,
   ],
 });
