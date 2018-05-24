@@ -1,16 +1,22 @@
 // Colors
 $brand-primary: #278a2b;
+$brand-secondary: #607d8b;
 $secondary-background: #f1f1f1;
 $alt-text: #7a7a7a;
 $text-muted: #c5c5c5;
 $red: #d74949;
 $green: #4caf50;
 
+$btn-default-bg: $brand-secondary;
+$btn-default-color: #fff;
+$btn-default-border: darken($btn-default-bg, 10%);
+
 $navbar-default-bg: $brand-primary;
 $navbar-default-brand-color: #fff;
 
 $border-radius-base: 0;
-$btn-border-radius-large: 0;
+$btn-border-radius-large: 2px;
+
 
 // Typography
 $font-family-sans-serif: 'Open Sans', sans-serif;

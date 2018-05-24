@@ -18,7 +18,7 @@ export class SignupButton extends React.Component {
       <p>
         <button
           disabled={!isOpen}
-          className="btn btn-dark btn-block"
+          className="btn btn-default btn-block"
           onClick={() => (isOpen ? this.props.openForm() : {})}
         >
           {this.props.isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${this.props.title}`}
