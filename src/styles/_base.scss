@@ -1,16 +1,40 @@
 // Colors
-$brand-primary: #4990de;
+$brand-primary: #278a2b;
+$brand-secondary: #3e846a;
 $secondary-background: #f1f1f1;
 $alt-text: #7a7a7a;
 $text-muted: #c5c5c5;
 $red: #d74949;
 $green: #4caf50;
 
+// Buttons
+
+$btn-default-bg: $brand-secondary;
+$btn-default-color: #fff;
+$btn-default-border: darken($btn-default-bg, 10%);
+
+$btn-primary-bg: $green;
+$btn-primary-color: #fff;
+$btn-primary-border: darken($green, 10%);
+
+$btn-success-bg: $green;
+$btn-success-color: #fff;
+$btn-success-border: darken($btn-success-bg, 10%);
+
+$btn-danger-bg: $red;
+$btn-danger-color: #fff;
+$btn-danger-border: darken($btn-danger-bg, 10%);
+
+
+
+
+
 $navbar-default-bg: $brand-primary;
 $navbar-default-brand-color: #fff;
 
 $border-radius-base: 0;
-$btn-border-radius-large: 0;
+$btn-border-radius-large: 2px;
+
 
 // Typography
 $font-family-sans-serif: 'Open Sans', sans-serif;
@@ -22,5 +46,5 @@ $font-size-large: 16px;
 $input-height-base: 33px;
 
 // Bootstrap core mixins
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
-@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins";
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';
+@import '~bootstrap-sass/assets/stylesheets/bootstrap/mixins';
