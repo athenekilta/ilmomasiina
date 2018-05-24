@@ -14,13 +14,23 @@ module.exports = function () {
       'local',
       'jwt',
     ],
-    userEndpoint: 'api/users',
   }));
+
   app.configure(jwt());
   app.configure(local(local({
     entity: 'user',
-    service: 'user',
     usernameField: 'email',
     passwordField: 'password',
   })));
+
+  app.service('api/authentication').hooks({
+    before: {
+      create: [
+        authentication.hooks.authenticate('local', 'jwt'),
+      ],
+      remove: [
+        authentication.hooks.authenticate('jwt'),
+      ],
+    },
+  });
 };

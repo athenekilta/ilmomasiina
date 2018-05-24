@@ -1,19 +1,53 @@
 import React from 'react';
 import Formsy from 'formsy-react';
 import { Input } from 'formsy-react-components';
+import { connect } from 'react-redux';
 
-const Login = () => (
-  <div className="container">
-    <div className="col-xs-12 col-sm-8 col-md-6">
-      <h1>Kirjaudu sisään</h1>
-      <Formsy.Form>
-        <Input label="Sähköposti" name="email" title="Sähköposti" required />
-        <Input label="Salasana" name="password" title="Salasana" type="password" required />
-        <p><button className="btn btn-primary btn-lg" type="submit">Kirjaudu</button></p>
-        <p><a>Unohditko salasanasi?</a></p>
-      </Formsy.Form>
-    </div>
-  </div>
-);
+import './Login.scss';
+import { loginUser } from '../modules/login';
 
-export default Login;
+class Login extends React.Component {
+  render() {
+    return (
+      <div className="container">
+        <h1>Login</h1>
+        { this.props.loginError
+          ? <div> {this.props.loginError.body} </div>
+          : ''
+        }
+        <div className="Login col-xs-8 col-md-6 align-self-center">
+          <Formsy.Form className="credentials">
+            <Input id="email" value="" label="Sähköposti" name="email" title="Email" required />
+            <Input id="password" value="" label="Salasana" name="password" title="Password" type="password" required />
+            <div className="nuppi">
+              <button
+                className="nappi btn-success col-xs-3"
+                onClick={() => this.props.loginUser({
+                  username: document.getElementById('email').value,
+                  password: document.getElementById('password').value,
+                })}
+              >
+                Kirjaudu
+              </button>
+            </div>
+          </Formsy.Form>
+        </div>
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  loginError: state.login.errorMessage,
+});
+
+const mapDispatchToProps = {
+  loginUser,
+};
+
+Login.propTypes = {
+  loginError: React.PropTypes.string,
+  loginUser: React.PropTypes.func,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
