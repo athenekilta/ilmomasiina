@@ -35,9 +35,14 @@ class SingleEvent extends React.Component {
     this.setState({ formOpened: false });
   }
 
-  submitForm(asd) {
-    window.alert('Please implement this');
-    this.setState({ formOpened: false });
+  submitForm(answers) {
+    this.props.completeSignup(
+      this.props.signup.id,
+      {
+        editToken: this.props.signup.editToken,
+        ...answers,
+      },
+    );
   }
 
   render() {
@@ -51,6 +56,8 @@ class SingleEvent extends React.Component {
             submitForm={this.submitForm}
             questions={event.questions}
             signup={signup}
+            loading={this.props.loading}
+            error={this.props.error}
           />
         ) : (
             <div className="container">
@@ -177,6 +184,9 @@ class SingleEvent extends React.Component {
 SingleEvent.propTypes = {
   updateEvent: React.PropTypes.func.isRequired,
   attachPosition: React.PropTypes.func.isRequired,
+  completeSignup: React.PropTypes.func.isRequired,
+  setError: React.PropTypes.func.isRequired,
+  setLoading: React.PropTypes.func.isRequired,
   params: React.PropTypes.shape({
     id: React.PropTypes.string,
   }).isRequired,
@@ -187,6 +197,8 @@ SingleEvent.propTypes = {
     date: React.PropTypes.string,
     quota: React.PropTypes.array,
   }),
+  error: React.PropTypes.string,
+  loading: React.PropTypes.bool,
 };
 
 export default SingleEvent;

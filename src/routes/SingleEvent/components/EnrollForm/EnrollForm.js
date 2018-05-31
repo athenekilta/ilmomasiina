@@ -1,5 +1,7 @@
 import React from 'react';
 import Formsy from 'formsy-react';
+import _ from 'lodash';
+import Spinner from 'react-spinkit';
 import { CheckboxGroup, Select, Input, Textarea } from 'formsy-react-components';
 import './EnrollForm.scss';
 
@@ -35,8 +37,9 @@ export class EnrollForm extends React.Component {
     return this.props.submitForm(answers);
   }
 
-  render() {
-    function questionsToField(question) {
+  renderQuestionFields() {
+
+    return _.map(this.props.questions, (question) => {
       if (question.type === 'text') {
         return (
           <Input
@@ -91,9 +94,17 @@ export class EnrollForm extends React.Component {
         );
       }
 
-      return '';
-    }
+      return null;
+    });
+  }
 
+  renderLoadingOverlay() {
+    return (
+      <Spinner name='double-bounce' />
+    );
+  }
+
+  render() {
     return (
       <div className="form-wrapper">
         <div className="container">
@@ -114,9 +125,22 @@ export class EnrollForm extends React.Component {
                 required
               />
 
-              {this.props.questions.map(questionsToField)}
+              {this.renderQuestionFields()}
 
-              <input className="btn btn-primary pull-right" formNoValidate type="submit" defaultValue="Submit" />
+              <div className="input-wrapper pull-right">
+                <input
+                  className="btn btn-primary pull-right"
+                  formNoValidate
+                  type="submit"
+                  defaultValue="Submit"
+                />
+                {this.props.loading ?
+                  <div className="loading-wrapper">
+                    <Spinner name='circle' fadeIn={0} color="#ffffff" />
+                  </div>
+                  : null
+                }
+              </div>
               <a className="btn btn-link pull-right" onClick={() => this.props.closeForm()}>Peruuta</a>
             </Formsy.Form>
           </div>
@@ -130,7 +154,9 @@ export class EnrollForm extends React.Component {
 EnrollForm.propTypes = {
   closeForm: React.PropTypes.func.isRequired,
   questions: React.PropTypes.array,
-  signup: React.PropTypes.object
+  signup: React.PropTypes.object,
+  loading: React.PropTypes.bool,
+  error: React.PropTypes.string,
 };
 
 export default EnrollForm;

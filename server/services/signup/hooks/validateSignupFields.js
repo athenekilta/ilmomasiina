@@ -15,7 +15,7 @@ module.exports = () => (hook) => {
   const models = hook.app.get('models');
 
   return models.signup.findById(hook.id)
-    .catch(() => {
+    .catch((error) => {
       throw new Error('Signup expired');
     })
     .then((signup) => {
@@ -37,17 +37,28 @@ module.exports = () => (hook) => {
       questions.map((question) => {
         const answer = _.find(hook.data.answers, { questionId: question.id });
 
-        // Check that required question have answers
-        if (question.required && _.isNil(answer)) {
-          throw new Error(`Missing answer for question ${question.question}`);
-        }
+        if (_.isNil(answer)) {
+          if (question.required) {
+            throw new Error(`Missing answer for question ${question.question}`);
+          }
+        } else {
+          // Check that the select answer is valid
+          if (question.type === 'select') {
+            const options = question.options.split(';');
 
-        // Check that select and checkbox answers are one of the options
-        if ((question.type === 'select' || question.type === 'checkbox') && !_.isNil(answer)) {
-          const options = question.options.split(',');
+            if (options.indexOf(answer.answer) === -1) {
+              throw new Error(`Invalid answer to question ${question.question}`);
+            }
+          }
+          // Check that all checkbox answers are valid
+          if (question.type === 'checkbox') {
+            const options = question.options.split(';');
 
-          if (options.indexOf(answer.answer) < 0) {
-            throw new Error(`Invalid answer to question ${question.question}`);
+            _.each(answer.answer, (ans) => {
+              if (options.indexOf(ans) === -1) {
+                throw new Error(`Invalid answer to question ${question.question}`);
+              }
+            });
           }
         }
 

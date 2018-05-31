@@ -14,12 +14,17 @@ import SingleEvent from '../components/SingleEvent';
 
 const mapDispatchToProps = {
   updateEvent: Actions.updateEventAsync,
-  attachPosition: Actions.attachPositionAsync
+  attachPosition: Actions.attachPositionAsync,
+  completeSignup: Actions.completeSignupAsync,
+  setError: Actions.setError,
+  setLoading: Actions.setLoading,
 };
 
 const mapStateToProps = state => ({
   event: state.singleEvent.event,
-  signup: state.singleEvent.signup
+  signup: state.singleEvent.signup,
+  error: state.singleEvent.error,
+  loading: state.singleEvent.loading,
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

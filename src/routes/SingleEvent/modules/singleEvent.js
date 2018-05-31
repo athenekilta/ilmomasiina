@@ -5,13 +5,15 @@ import request from 'then-request';
 // ------------------------------------
 export const UPDATE_EVENT = 'UPDATE_EVENT';
 export const UPDATE_SIGNUP = 'UPDATE_SIGNUP';
+export const SET_LOADING = 'SET_LOADING';
+export const SET_ERROR = 'SET_ERROR';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
-/*  Temporary payload. This is going to be loaded from the backend. */
 
+// Helpers 
 function _getEvent(id) {
   return request('GET', `/api/events/${id}`);
 }
@@ -20,9 +22,36 @@ function _attachPosition(quotaId) {
   return request('POST', '/api/signups', { json: { quotaId } });
 }
 
+function _insertAnswers(signupId, data) {
+  return request('PATCH', `/api/signups/${signupId}`, {
+    json: {
+      editToken: data.editToken,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      answers: data.answers,
+    },
+  });
+}
+
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
+
+export const setLoading = isLoading => (dispatch) => {
+  dispatch({
+    type: SET_LOADING,
+    payload: isLoading,
+  });
+};
+
+// If non-empty string, counts as error
+export const setError = errorText => (dispatch) => {
+  dispatch({
+    type: SET_ERROR,
+    payload: errorText,
+  });
+};
 
 export const updateEventAsync = eventId => (dispatch) => {
   _getEvent(eventId)
@@ -38,44 +67,80 @@ export const updateEventAsync = eventId => (dispatch) => {
 export const attachPositionAsync = quotaId => (dispatch) => {
   _attachPosition(quotaId)
     .then(res => JSON.parse(res.body))
-    .then(res => {
+    .then((res) => {
       dispatch({
         type: UPDATE_SIGNUP,
-        payload: res
+        payload: res,
       });
     });
-}
+};
+
+export const completeSignupAsync = (signupId, data) => (dispatch) => {
+  dispatch(setLoading(true));
+
+  _insertAnswers(signupId, data)
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      dispatch({
+        type: UPDATE_SIGNUP,
+        payload: res,
+      });
+      dispatch(setError(''));
+      dispatch(setLoading(false));
+    })
+    .catch((error) => {
+      dispatch(setError('Jotain meni pieleen. Yritäpä uudestaan.'));
+    });
+};
 
 export const actions = {
   updateEventAsync,
-  attachPositionAsync
+  attachPositionAsync,
+  completeSignupAsync,
+  setLoading,
+  setError,
 };
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
+const initialState = {
+  event: {},
+  signup: {},
+  loading: false,
+  error: '',
+};
+
 const ACTION_HANDLERS = {
   [UPDATE_EVENT]: (state, action) => {
     return {
       ...state,
-      event: action.payload
-    }
+      event: action.payload,
+    };
   },
   [UPDATE_SIGNUP]: (state, action) => {
     return {
       ...state,
       signup: action.payload,
-    }
-  }
+    };
+  },
+  [SET_LOADING]: (state, action) => {
+    return {
+      ...state,
+      loading: action.payload,
+    };
+  },
+  [SET_ERROR]: (state, action) => {
+    return {
+      ...state,
+      error: action.payload,
+    };
+  },
 };
 
 // ------------------------------------
 // Reducer
 // ------------------------------------
-const initialState = {
-  event: {},
-  signup: {}
-};
 export default function counterReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type];
 

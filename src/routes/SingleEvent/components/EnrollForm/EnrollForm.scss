@@ -44,3 +44,20 @@
     margin: 2em 0;
   }
 }
+
+.input-wrapper {
+  position: relative;
+}
+
+.loading-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 1em;
+  background: $green;
+
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}

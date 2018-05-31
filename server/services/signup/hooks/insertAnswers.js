@@ -1,6 +1,8 @@
 const _ = require('lodash');
 
 module.exports = () => (hook) => {
+
+  console.log('Inserting answers');
   const signupId = hook.id;
   const answers = hook.data.answers.map(a => _.merge(a, { signupId }));
 

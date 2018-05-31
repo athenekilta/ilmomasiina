@@ -27,12 +27,15 @@ module.exports = () => (hook) => {
                 answer: _.find(userAnswers, { questionId: question.id }).answer,
               }));
 
-              return mail.sendSignUpConfirmation(
-                hook.result.email,
-                event.title,
-                event.confirmationMessage,
-                'http://ilmomasiina.io/magical-edit-link', // TODO: remove or update
-                fields);
+              console.log('-- CONFIRMATION MAIL DISABLED --');
+              return true;
+
+              // return mail.sendSignUpConfirmation(
+              //   hook.result.email,
+              //   event.title,
+              //   event.confirmationMessage,
+              //   'http://ilmomasiina.io/magical-edit-link', // TODO: remove or update
+              //   fields);
             });
         });
     });
