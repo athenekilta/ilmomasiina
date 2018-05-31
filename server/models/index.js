@@ -12,11 +12,17 @@ const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-
 module.exports = function () {
   const app = this;
 
-  const sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
-    host: 'localhost',
-    dialect: 'mysql',
-    logging: false,
-  });
+  const sequelize = new Sequelize(
+    process.env.DB_DATABASE || 'ilmomasiina',
+    process.env.DB_USERNAME || 'ilmomasiina',
+    process.env.DB_PASSWORD || '',
+    {
+      dialect: 'postgres',
+      host: process.env.DB_HOSTNAME || 'db',
+      port: process.env.DB_PORT || '5432',
+      logging: false,
+    }
+  );
 
   app.set('sequelize', sequelize);
 

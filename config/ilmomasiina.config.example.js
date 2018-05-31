@@ -1,7 +1,7 @@
 const config = {
-  mysqlUser: 'mysqlUser',
-  mysqlPassword: 'mysqlPass',
-  mysqlDatabase: 'ilmomasiina',
+  dbUser: 'admin',
+  dbPassword: '',
+  dbDatabase: 'ilmomasiina',
   editTokenSalt: 'some super secret string here',
   mailgunKey: 'yourMailgunKey',
   mailgunDomain: 'yourMailgunDomain',
