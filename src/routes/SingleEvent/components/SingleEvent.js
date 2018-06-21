@@ -40,6 +40,7 @@ class SingleEvent extends React.Component {
       this.props.cancelSignup(this.props.signup.id, this.props.signup.editToken);
       this.setState({ formOpened: false });
     }
+    this.props.updateEvent(this.props.event.id);
   }
 
   async submitForm(answers) {
@@ -59,6 +60,7 @@ class SingleEvent extends React.Component {
         type: toast.TYPE.SUCCESS,
         autoClose: 5000,
       });
+      this.props.updateEvent(this.props.event.id);
       this.setState({
         formOpened: false,
       });
