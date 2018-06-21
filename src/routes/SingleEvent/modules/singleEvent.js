@@ -34,6 +34,10 @@ function _insertAnswers(signupId, data) {
   });
 }
 
+function _deleteSignup(signupId, editToken) {
+  return request('DELETE', `/api/signups/${signupId}?editToken=${editToken}`);
+}
+
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
@@ -78,7 +82,7 @@ export const attachPositionAsync = quotaId => (dispatch) => {
 export const completeSignupAsync = (signupId, data) => (dispatch) => {
   dispatch(setLoading(true));
 
-  _insertAnswers(signupId, data)
+  return _insertAnswers(signupId, data)
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch({
@@ -87,16 +91,32 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
       });
       dispatch(setError(''));
       dispatch(setLoading(false));
+      return true;
     })
-    .catch((error) => {
+    .catch(() => {
       dispatch(setError('Jotain meni pieleen. Yritäpä uudestaan.'));
+      return false;
     });
 };
+
+export const cancelSignupAsync = (signupId, editToken) => (dispatch) => {
+  return _deleteSignup(signupId, editToken)
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      dispatch({
+        type: UPDATE_SIGNUP,
+        payload: {},
+      });
+      dispatch(setError(''));
+      dispatch(setLoading(false));
+    });
+}
 
 export const actions = {
   updateEventAsync,
   attachPositionAsync,
   completeSignupAsync,
+  cancelSignupAsync,
   setLoading,
   setError,
 };

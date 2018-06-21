@@ -2,12 +2,14 @@ import React from 'react';
 import nl2br from 'react-nl2br';
 import _ from 'lodash';
 import moment from 'moment';
+import { toast } from 'react-toastify';
 import SignupButton from './SignupButton';
 import SignupList from './SignupList';
 import ViewProgress from './ViewProgress';
 import EnrollForm from './EnrollForm';
 import './SingleEvent.scss';
 import allTimesMatch from '../../../utils/allTimesMatch';
+
 
 class SingleEvent extends React.Component {
 
@@ -32,17 +34,42 @@ class SingleEvent extends React.Component {
   }
 
   closeForm() {
-    this.setState({ formOpened: false });
+    const close = window.confirm('Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.');
+
+    if (close) {
+      this.props.cancelSignup(this.props.signup.id, this.props.signup.editToken);
+      this.setState({ formOpened: false });
+    }
   }
 
-  submitForm(answers) {
-    this.props.completeSignup(
+  async submitForm(answers) {
+    this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
+
+    let success = await this.props.completeSignup(
       this.props.signup.id,
       {
         editToken: this.props.signup.editToken,
         ...answers,
       },
     );
+
+    if (success) {
+      toast.update(this.toastId, {
+        render: 'Ilmoittautuminen onnistui!',
+        type: toast.TYPE.SUCCESS,
+        autoClose: 5000,
+      });
+      this.setState({
+        formOpened: false,
+      });
+    }
+    else {
+      toast.update(this.toastId, {
+        render: 'Ilmoittautuminen ei onnistunut. Tarkista että kaikki pakolliset kentät on täytetty ja yritä uudestaan.',
+        type: toast.TYPE.ERROR,
+        autoClose: 5000,
+      });
+    }
   }
 
   render() {
@@ -185,6 +212,7 @@ SingleEvent.propTypes = {
   updateEvent: React.PropTypes.func.isRequired,
   attachPosition: React.PropTypes.func.isRequired,
   completeSignup: React.PropTypes.func.isRequired,
+  cancelSignup: React.PropTypes.func.isRequired,
   setError: React.PropTypes.func.isRequired,
   setLoading: React.PropTypes.func.isRequired,
   params: React.PropTypes.shape({
@@ -197,6 +225,7 @@ SingleEvent.propTypes = {
     date: React.PropTypes.string,
     quota: React.PropTypes.array,
   }),
+  signup: React.PropTypes.object,
   error: React.PropTypes.string,
   loading: React.PropTypes.bool,
 };

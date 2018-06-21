@@ -1,7 +1,7 @@
 import React from 'react';
 import Formsy from 'formsy-react';
 import _ from 'lodash';
-import Spinner from 'react-spinkit';
+
 import { CheckboxGroup, Select, Input, Textarea } from 'formsy-react-components';
 import './EnrollForm.scss';
 
@@ -12,6 +12,7 @@ export class EnrollForm extends React.Component {
   }
 
   parseSubmit(data) {
+
     const answers = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -98,12 +99,6 @@ export class EnrollForm extends React.Component {
     });
   }
 
-  renderLoadingOverlay() {
-    return (
-      <Spinner name='double-bounce' />
-    );
-  }
-
   render() {
     return (
       <div className="form-wrapper">
@@ -133,13 +128,8 @@ export class EnrollForm extends React.Component {
                   formNoValidate
                   type="submit"
                   defaultValue="Submit"
+                  disabled={this.props.loading}
                 />
-                {this.props.loading ?
-                  <div className="loading-wrapper">
-                    <Spinner name='circle' fadeIn={0} color="#ffffff" />
-                  </div>
-                  : null
-                }
               </div>
               <a className="btn btn-link pull-right" onClick={() => this.props.closeForm()}>Peruuta</a>
             </Formsy.Form>

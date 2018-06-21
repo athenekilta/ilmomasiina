@@ -16,6 +16,7 @@ const mapDispatchToProps = {
   updateEvent: Actions.updateEventAsync,
   attachPosition: Actions.attachPositionAsync,
   completeSignup: Actions.completeSignupAsync,
+  cancelSignup: Actions.cancelSignupAsync,
   setError: Actions.setError,
   setLoading: Actions.setLoading,
 };
