@@ -4,8 +4,8 @@
   "description": "Get started with React, Redux, and React-Router!",
   "main": "index.js",
   "engines": {
-    "node": ">=7.4.0",
-    "npm": "^3.0.0"
+    "node": "^8.9.4",
+    "npm": "^5.6.0"
   },
   "scripts": {
     "clean": "rimraf dist",
