@@ -27,6 +27,9 @@ export class EnrollForm extends React.Component {
           const answer = data[question.id];
 
           if (answer && answer.length > 0) {
+            if (question.type === 'checkbox') {
+              return { questionId, answer: answer.join(';') };
+            }
             return { questionId, answer };
           }
 

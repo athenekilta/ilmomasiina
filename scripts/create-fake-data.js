@@ -124,7 +124,7 @@ const questions = [
   },
   {
     id: 2,
-    eventId: 4,
+    eventId: 3,
     type: 'text',
     question: 'Valmistumisvuosi',
     required: true,
@@ -132,7 +132,7 @@ const questions = [
   },
   {
     id: 3,
-    eventId: 4,
+    eventId: 3,
     type: 'textarea',
     question: 'Terveiset',
     required: true,
@@ -140,8 +140,8 @@ const questions = [
   },
   {
     id: 4,
-    eventId: 4,
-    type: 'select',
+    eventId: 3,
+    type: 'checkbox',
     question: 'Monivalinta',
     options: 'Vaihtoehto 1;Vaihtoehto 2;Vaihtoehto 3',
     required: true,
@@ -150,7 +150,7 @@ const questions = [
   {
     id: 5,
     eventId: 3,
-    type: 'checkbox',
+    type: 'select',
     question: 'Valintaruudut',
     options: 'Vaihtoehto 1;Vaihtoehto 2;Vaihtoehto 3',
     required: false,
@@ -158,7 +158,7 @@ const questions = [
   },
   {
     id: 6,
-    eventId: 4,
+    eventId: 3,
     type: 'checkbox',
     question: 'Osallistun',
     options: 'Kokkareille;Pääjuhlaan;Sillikselle',

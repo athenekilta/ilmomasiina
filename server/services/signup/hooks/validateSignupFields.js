@@ -53,8 +53,8 @@ module.exports = () => (hook) => {
           // Check that all checkbox answers are valid
           if (question.type === 'checkbox') {
             const options = question.options.split(';');
-
-            _.each(answer.answer, (ans) => {
+            const answers = answer.answer.split(';');
+            _.each(answers, (ans) => {
               if (options.indexOf(ans) === -1) {
                 throw new Error(`Invalid answer to question ${question.question}`);
               }
