@@ -60,7 +60,7 @@ export const setError = errorText => (dispatch) => {
 export const updateEventAsync = eventId => (dispatch) => {
   _getEvent(eventId)
     .then(res => JSON.parse(res.body))
-    .then(res => {
+    .then((res) => {
       dispatch({
         type: UPDATE_EVENT,
         payload: res,
@@ -89,7 +89,6 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
         type: UPDATE_SIGNUP,
         payload: res,
       });
-      dispatch(setError(''));
       dispatch(setLoading(false));
       return true;
     })
@@ -102,15 +101,14 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
 export const cancelSignupAsync = (signupId, editToken) => (dispatch) => {
   return _deleteSignup(signupId, editToken)
     .then(res => JSON.parse(res.body))
-    .then((res) => {
+    .then(() => {
       dispatch({
         type: UPDATE_SIGNUP,
         payload: {},
       });
-      dispatch(setError(''));
       dispatch(setLoading(false));
     });
-}
+};
 
 export const actions = {
   updateEventAsync,
@@ -148,12 +146,14 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       loading: action.payload,
+      error: '',
     };
   },
   [SET_ERROR]: (state, action) => {
     return {
       ...state,
       error: action.payload,
+      loading: false,
     };
   },
 };
