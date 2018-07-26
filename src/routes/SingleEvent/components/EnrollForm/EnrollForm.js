@@ -47,7 +47,7 @@ export class EnrollForm extends React.Component {
             name={String(question.id)}
             label={question.question}
             type="text"
-            required={question.required === 1}
+            required={question.required}
             key={question.id}
           />
         );
@@ -61,7 +61,7 @@ export class EnrollForm extends React.Component {
             cols={40}
             name={String(question.id)}
             label={question.question}
-            required={question.required === 1}
+            required={question.required}
             key={question.id}
           />
         );
@@ -77,7 +77,7 @@ export class EnrollForm extends React.Component {
             name={String(question.id)}
             label={question.question}
             options={optionsArray}
-            required={question.required === 1}
+            required={question.required}
             key={question.id}
           />
         );

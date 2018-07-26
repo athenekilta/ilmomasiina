@@ -77,6 +77,8 @@ class SingleEvent extends React.Component {
   render() {
     const { event, signup } = this.props;
 
+    console.log(this.props.event);
+
     return (
       <div>
         {this.state.formOpened ? (
