@@ -3,8 +3,8 @@
 Ilmomasiina is Athene's event registration system.
 
 ## Requirements
-* Node.js `^7.4.0`
-* npm `^3.0.0`
+* Node.js `^8.9.4`
+* npm `^5.6.0`
 * MySQL
 
 ## Getting started
