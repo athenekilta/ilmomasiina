@@ -32,8 +32,6 @@ function loginError(message) {
 }
 
 export const loginUser = (creds) => (dispatch) => {
-  console.log(creds);
-
   request('POST', 'http://localhost:3000/api/authentication', {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `strategy=local&email=${creds.username}&password=${creds.password}`,
