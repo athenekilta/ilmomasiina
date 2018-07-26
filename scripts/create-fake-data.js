@@ -77,7 +77,7 @@ const quotas = [
   {
     eventId: 2,
     title: 'Tietokilta',
-    going: 19,
+    going: 29,
     size: 20,
     signupOpens: moment(now).add(2, 'days').format(d),
     signupCloses: moment(now).add(5, 'days').format(d),
@@ -85,7 +85,7 @@ const quotas = [
   {
     eventId: 3,
     title: 'Athene',
-    going: 2,
+    going: 29,
     size: 20,
     signupOpens: moment(now).subtract(2, 'days').format(d),
     signupCloses: moment(now).add(5, 'days').format(d),
@@ -93,7 +93,7 @@ const quotas = [
   {
     eventId: 3,
     title: 'Prodeko',
-    going: 15,
+    going: 27,
     size: 20,
     signupOpens: moment(now).subtract(2, 'days').format(d),
     signupCloses: moment(now).add(5, 'days').format(d),
@@ -101,7 +101,7 @@ const quotas = [
   {
     eventId: 3,
     title: 'Tietokilta',
-    going: 20,
+    going: 29,
     size: 20,
     signupOpens: moment(now).subtract(2, 'days').format(d),
     signupCloses: moment(now).add(5, 'days').format(d),

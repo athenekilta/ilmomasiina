@@ -126,6 +126,7 @@
     "mailgun-js": "^0.7.15",
     "md5": "^2.2.1",
     "moment": "^2.17.1",
+    "moment-timezone": "^0.5.21",
     "mysql": "^2.12.0",
     "node-sass-chokidar": "0.0.3",
     "postcss-loader": "^1.1.0",

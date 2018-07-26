@@ -74,10 +74,76 @@ class SingleEvent extends React.Component {
     }
   }
 
+  renderSignupLists(event) {
+
+    if (!event.quota) {
+      return null;
+    }
+
+    return event.quota.map((quota, index) => {
+
+      const signups = quota.signups.slice(0, quota.size);
+
+      return (
+        <SignupList
+          title={event.quota.length > 1 ? quota.title : ''}
+          questions={_.filter(event.questions, 'public')}
+          rows={signups}
+          key={index}
+        />
+      );
+    });
+  }
+
+  getOpenQuotas(event) {
+    if (!event.quota) {
+      return {
+        openQuota: [],
+        waitList: [],
+        formattedQuestions: null
+      };
+    }
+
+    const extraSignups = [];
+
+    _.each(event.quota, (quota) => {
+      _.each(quota.signups.slice(quota.size), (signup) => {
+        signup.answers.push({
+          questionId: 0,
+          answer: quota.title,
+        });
+        extraSignups.push(signup);
+      });
+    });
+
+    const openQuota = extraSignups.slice(0, event.openQuota);
+    const waitList = extraSignups.slice(event.openQuota);
+
+    const formattedQuestions = event.questions;
+
+    formattedQuestions.push({
+      id: 0,
+      options: null,
+      public: true,
+      question: 'Kiintiö',
+      type: 'text',
+    });
+
+    return {
+      openQuota,
+      waitList,
+      formattedQuestions,
+    };
+  }
+
   render() {
     const { event, signup } = this.props;
 
-    console.log(this.props.event);
+    const {
+      openQuota,
+      waitList,
+      formattedQuestions,
+    } = this.getOpenQuotas(event);
 
     return (
       <div>
@@ -173,13 +239,17 @@ class SingleEvent extends React.Component {
                       {event.openQuota > 0 ? (
                         <ViewProgress
                           title="Avoin"
-                          value={_.sum(event.quota.map(q => Math.max(0, q.signups.length - q.size)))}
+                          value={openQuota.length}
                           max={event.openQuota}
                           key="open"
                         />
                       ) : (
                           ''
                         )}
+                      {waitList ? (
+                        <p>{'Jonossa: ' + waitList.length}</p>
+                      ) : null
+                      }
                     </div>
                   ) : (
                       ''
@@ -191,18 +261,31 @@ class SingleEvent extends React.Component {
                   ) : (
                       <div>
                         <h2>Ilmoittautuneet</h2>
-                        {event.quota
-                          ? event.quota.map((quota, index) => (
-                            <SignupList
-                              title={event.quota.length > 1 ? quota.title : ''}
-                              questions={_.filter(event.questions, 'public')}
-                              rows={quota.signups}
-                              key={index}
-                            />
-                          ))
-                          : ''}
+                        {this.renderSignupLists(event)}
                       </div>
                     )}
+                </div>
+                <div className="col-xs-12">
+                  <div>
+                    {openQuota ? (
+                      <SignupList
+                        title={'Avoin kiintiö'}
+                        questions={formattedQuestions}
+                        rows={openQuota}
+                        key={'openQuota'}
+                      />
+                    ) : null
+                    }
+                    {waitList ? (
+                      <SignupList
+                        title={'Jonossa'}
+                        questions={formattedQuestions}
+                        rows={waitList}
+                        key={'waitList'}
+                      />
+                    ) : null
+                    }
+                  </div>
                 </div>
               </div>
             </div>

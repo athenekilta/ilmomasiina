@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import './SignupList.scss';
+import moment from 'moment-timezone';
 
 export class SignupList extends React.Component {
   render() {
@@ -9,35 +10,38 @@ export class SignupList extends React.Component {
       return (answer == null ? '' : answer.answer);
     };
 
-    const TableRow = ({ answers, firstName, lastName, index }) =>
+    const TableRow = ({ answers, firstName, lastName, createdAt, index }) =>
       <tr className={(firstName == null ? 'text-muted' : '')}>
         <td>{index}.</td>
-        <td>{ firstName || 'Vahvistamatta' } { lastName || '' }</td>
+        <td>{firstName || 'Vahvistamatta'} {lastName || ''}</td>
         {this.props.questions.map((q, i) => <td key={i}>{getAnswer(answers, q.id) || ''}</td>)}
+        <td>{moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM. hh:mm:ss')}</td>
       </tr>;
 
     return (
       <div className="quota">
         {this.props.title ? <h3>{this.props.title}</h3> : ''}
-        { !this.props.rows.length ? <p>Ei ilmoittautumisia.</p> :
-        <table className='table table-condensed table-responsive'>
-          <thead>
-            <tr className='active'>
-              <th key="position">Sija</th>
-              <th key="attendee">Nimi</th>
-              {this.props.questions.map((q, i) => <th key={i}>{q.question}</th>)}
-            </tr>
-          </thead>
-          <tbody>
-            {this.props.rows.map((row, i) =>
-              <TableRow
-                answers={row.answers}
-                firstName={row.firstName}
-                lastName={row.lastName}
-                index={i + 1}
-                key={i} />)}
-          </tbody>
-        </table>
+        {!this.props.rows.length ? <p>Ei ilmoittautumisia.</p> :
+          <table className='table table-condensed table-responsive'>
+            <thead>
+              <tr className='active'>
+                <th key="position">Sija</th>
+                <th key="attendee">Nimi</th>
+                {this.props.questions.map((q, i) => <th key={i}>{q.question}</th>)}
+                <th key="datetime">Ilmoittautumisaika</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.props.rows.map((row, i) =>
+                <TableRow
+                  answers={row.answers}
+                  firstName={row.firstName}
+                  lastName={row.lastName}
+                  createdAt={row.createdAt}
+                  index={i + 1}
+                  key={i} />)}
+            </tbody>
+          </table>
         }
       </div>
     );

@@ -46,7 +46,7 @@ const includeAllEventData = (hook) => {
         // ... and signups of quotas
         include: [
           {
-            attributes: ['firstName', 'lastName'],
+            attributes: ['firstName', 'lastName', 'createdAt'],
             model: sequelize.models.signup,
             // ... and answers of signups
             include: [
