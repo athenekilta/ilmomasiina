@@ -12,9 +12,13 @@ class AdminEventListItem extends React.Component {
   render() {
     return (
       <tr>
+<<<<<<< HEAD
         <td>
           <Link to={`/event/${this.props.data.id}`}>{this.props.data.title}</Link>
         </td>
+=======
+        <td><Link to={`/event/${this.props.data.id}`}>{this.props.data.name}</Link></td>
+>>>>>>> Editor redux setup
         <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
         <td>Luonnos</td>
         <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
@@ -76,6 +80,8 @@ class AdminEventList extends React.Component {
       );
     }
 
+    console.log(this.props.eventList);
+
     return (
       <div className="container">
         <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">
@@ -119,7 +125,13 @@ class AdminEventList extends React.Component {
               <th>Toiminnot</th>
             </tr>
           </thead>
+<<<<<<< HEAD
           <tbody>{this.props.eventList.map(i => <AdminEventListItem key={i.id} data={i} />)}</tbody>
+=======
+          <tbody>
+            {this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />)}
+          </tbody>
+>>>>>>> Editor redux setup
         </table>
       </div>
     );
