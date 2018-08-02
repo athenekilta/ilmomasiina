@@ -30,14 +30,9 @@ class QuotasTab extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleChange = this.handleChange.bind(this);
     this.addQuota = this.addQuota.bind(this);
     this.updateQuota = this.updateQuota.bind(this);
     this.updateOrder = this.updateOrder.bind(this);
-  }
-
-  handleChange(field, value) {
-    this.props.onDataChange(field, value);
   }
 
   addQuota() {
@@ -144,10 +139,16 @@ class QuotasTab extends React.Component {
             name="useOpenQuota"
             value={this.props.event.useOpenQuota}
             label="Käytä lisäksi yhteistä kiintiötä"
-            onChange={this.handleChange} />
+            onChange={this.props.onDataChange} />
           {
             (!this.props.event.useOpenQuota ||
-              <Input name="open-quota-size" label="Avoimen kiintiön koko" type="number" required />
+              <Input
+                name="openQuotaSize"
+                label="Avoimen kiintiön koko"
+                type="number"
+                required
+                onChange={this.props.onDataChange}
+              />
             )
           }
         </div>
@@ -161,20 +162,20 @@ class QuotasTab extends React.Component {
     return (
       <div>
         <Input
-          name="registration_start_date"
+          name="registrationStartDate"
           value=""
           label="Ilmo alkaa"
           type="datetime-local"
           required
-          onChange={this.handleChange}
+          onChange={this.props.onDataChange}
         />
         <Input
-          name="registration_end_date"
+          name="registrationEndDate"
           value=""
           label="Ilmo päättyy"
           type="datetime-local"
           required
-          onChange={this.handleChange}
+          onChange={this.props.onDataChange}
         />
         <hr />
         <Checkbox
@@ -182,7 +183,7 @@ class QuotasTab extends React.Component {
           value={this.props.event.useQuotas}
           label="Ilmoittautumisessa käytetään kiintiöitä"
           rowLabel="Kiintiöt"
-          onChange={this.handleChange}
+          onChange={this.props.onDataChange}
         />
         {this.renderQuotaSection()}
       </div>
