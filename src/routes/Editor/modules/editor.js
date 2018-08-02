@@ -27,8 +27,8 @@ export const updateEventField = (field, value) => (dispatch) => {
   });
 };
 
-export const getEventAsync = eventId => (dispatch) => {
-  request('GET', `/api/events/${eventId}`)
+export const getEventAsync = eventId => async (dispatch) => {
+  await request('GET', `/api/events/${eventId}`)
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch({
