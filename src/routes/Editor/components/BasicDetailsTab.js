@@ -8,6 +8,7 @@ class BasicDetailsTab extends React.Component {
 
   static propTypes = {
     onDataChange: PropTypes.func.isRequired,
+    event: PropTypes.object,
   }
 
   constructor(props) {
@@ -20,18 +21,8 @@ class BasicDetailsTab extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  updateState(updates) {
-    this.setState(updates, () => {
-      if (typeof this.props.onDataChange === 'function') {
-        this.props.onDataChange(this.state.data);
-      }
-    });
-  }
-
   handleChange(field, value) {
-    this.updateState({
-      data: { ...this.state.data, [field]: value },
-    });
+    this.props.onDataChange(field, value);
   }
 
   render() {
@@ -39,7 +30,7 @@ class BasicDetailsTab extends React.Component {
       <div>
         <Input
           name="title"
-          value=""
+          value={this.props.event.title}
           label="Tapahtuman nimi"
           type="text"
           required
@@ -47,35 +38,35 @@ class BasicDetailsTab extends React.Component {
         />
         <Input
           name="start_date"
-          value=""
+          value={this.props.event.start_date}
           label="Alkamisajankohta"
           type="datetime-local"
           onChange={this.handleChange}
         />
         <Input
           name="end_date"
-          value=""
+          value={this.props.event.end_date}
           label="Päättymisajankohta"
           type="datetime-local"
           onChange={this.handleChange}
         />
         <Input
           name="webpage_url"
-          value=""
+          value={this.props.event.webpage_url}
           label="Kotisivujen osoite"
           type="text"
           onChange={this.handleChange}
         />
         <Input
           name="facebook_url"
-          value=""
+          value={this.props.event.facebook_url}
           label="Facebook-tapahtuma"
           type="text"
           onChange={this.handleChange}
         />
         <Input
           name="location"
-          value=""
+          value={this.props.event.location}
           label="Paikka"
           type="text"
           onChange={this.handleChange}
@@ -83,7 +74,7 @@ class BasicDetailsTab extends React.Component {
         <Textarea
           rows={10}
           name="description"
-          value=""
+          value={this.props.event.description}
           label="Kuvaus"
           onChange={this.handleChange}
         />

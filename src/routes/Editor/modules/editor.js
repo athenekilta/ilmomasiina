@@ -4,9 +4,7 @@ import request from 'then-request';
 // // Constants
 // // ------------------------------------
 export const UPDATE_EVENT = 'UPDATE_EVENT';
-// export const UPDATE_SIGNUP = 'UPDATE_SIGNUP';
-// export const SET_LOADING = 'SET_LOADING';
-// export const SET_ERROR = 'SET_ERROR';
+export const UPDATE_EVENT_FIELD = 'UPDATE_EVENT_FIELD';
 
 // ------------------------------------
 // Actions
@@ -16,6 +14,16 @@ export const updateEvent = event => (dispatch) => {
   dispatch({
     type: UPDATE_EVENT,
     payload: event,
+  });
+};
+
+export const updateEventField = (field, value) => (dispatch) => {
+  dispatch({
+    type: UPDATE_EVENT_FIELD,
+    payload: {
+      field,
+      value,
+    },
   });
 };
 
@@ -36,6 +44,7 @@ export const getEventAsync = eventId => (dispatch) => {
 
 export const actions = {
   updateEvent,
+  updateEventField,
   getEventAsync,
 };
 
@@ -51,6 +60,15 @@ const ACTION_HANDLERS = {
     return {
       ...state,
       event: action.payload,
+    };
+  },
+  [UPDATE_EVENT_FIELD]: (state, action) => {
+    return {
+      ...state,
+      event: {
+        ...state.event,
+        [action.payload.field]: action.payload.value,
+      },
     };
   },
 };

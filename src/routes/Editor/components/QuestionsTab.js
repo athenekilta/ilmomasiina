@@ -32,54 +32,33 @@ class QuestionsTab extends React.Component {
 
   static propTypes = {
     onDataChange: PropTypes.func.isRequired,
-  }
+    event: PropTypes.object,
+  };
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      data: {},
-    };
-
-    this.handleChange = this.handleChange.bind(this);
     this.addQuestion = this.addQuestion.bind(this);
     this.updateQuestion = this.updateQuestion.bind(this);
     this.updateOrder = this.updateOrder.bind(this);
     this.removeQuestion = this.removeQuestion.bind(this);
   }
 
-  updateState(updates) {
-    this.setState(updates, () => {
-      if (typeof this.props.onDataChange === 'function') {
-        this.props.onDataChange(this.state.data);
-      }
-    });
-  }
-
-  handleChange(field, value) {
-    this.updateState({
-      data: { ...this.state.data, [field]: value },
-    });
-  }
-
   addQuestion() {
-    const questions = this.state.data.questions ? this.state.data.questions : [];
+    const questions = this.props.event.questions ? this.props.event.questions : [];
 
-    this.updateState({
-      data: {
-        ...this.state.data,
-        questions: _.concat(questions, {
-          id: (_.max(questions.map(n => n.id)) || 0) + 1,
-          existsInDb: false,
-          title: '',
-          type: 'text',
-        }),
-      },
+    const newQuestions = _.concat(questions, {
+      id: (_.max(questions.map(n => n.id)) || 0) + 1,
+      existsInDb: false,
+      title: '',
+      type: 'text',
     });
+
+    this.props.onDataChange('questions', newQuestions);
   }
 
   updateOrder(args) {
-    let newQuestions = this.state.data.questions;
+    let newQuestions = this.props.event.questions;
 
     const elementToMove = newQuestions[args.oldIndex];
     newQuestions.splice(args.oldIndex, 1);
@@ -91,49 +70,40 @@ class QuestionsTab extends React.Component {
       return question;
     });
 
-    this.updateState({
-      data: {
-        ...this.state.data,
-        questions: newQuestions,
-      },
-    });
+    this.props.onDataChange('questions', newQuestions);
   }
 
   updateQuestion(itemId, field, value) {
-    this.updateState({
-      data: {
-        ...this.state.data,
-        questions: _.map(this.state.data.questions, (question) => {
-          if (question.id === itemId) {
-            return {
-              ...question,
-              [field]: value,
-            };
-          }
+    const questions = this.props.event.questions;
+    const newQuestions = _.map(questions, (question) => {
+      if (question.id === itemId) {
+        return {
+          ...question,
+          [field]: value,
+        };
+      }
 
-          return question;
-        }),
-      },
+      return question;
     });
+
+    this.props.onDataChange('questions', newQuestions);
   }
 
   removeQuestion(itemId) {
-    this.updateState({
-      data: {
-        ...this.state.data,
-        questions: _.filter(this.state.data.questions, (question) => {
-          if (question.id === itemId) {
-            return false;
-          }
+    const questions = this.props.event.questions;
+    const newQuestions = _.filter(questions, (question) => {
+      if (question.id === itemId) {
+        return false;
+      }
 
-          return true;
-        }),
-      },
+      return true;
     });
+
+    this.props.onDataChange('questions', newQuestions);
   }
 
   renderQuestions() {
-    const q = _.map(this.state.data.questions, (item) => {
+    const q = _.map(this.props.event.questions, (item) => {
       return (
         <div className="panel-body">
           <div className="col-xs-12 col-sm-10">

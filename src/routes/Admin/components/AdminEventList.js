@@ -13,17 +13,21 @@ class AdminEventListItem extends React.Component {
     return (
       <tr>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <td>
           <Link to={`/event/${this.props.data.id}`}>{this.props.data.title}</Link>
         </td>
 =======
         <td><Link to={`/event/${this.props.data.id}`}>{this.props.data.name}</Link></td>
 >>>>>>> Editor redux setup
+=======
+        <td><Link to={`/event/${this.props.data.id}`}>{this.props.data.title}</Link></td>
+>>>>>>> Enable event editing in Editor, finish redux integration
         <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
         <td>Luonnos</td>
         <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
         <td>
-          <Link>Muokkaa tapahtumaa</Link>
+          <Link to={`/admin/edit/${this.props.data.id}`}>Muokkaa tapahtumaa</Link>
           <Separator />
           <Link>Lataa osallistujalista</Link>
         </td>
@@ -84,9 +88,13 @@ class AdminEventList extends React.Component {
 
     return (
       <div className="container">
+<<<<<<< HEAD
         <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">
           + Uusi tapahtuma
         </Link>
+=======
+        <Link to="/admin/edit/new" className="btn btn-success btn-lg pull-right">+ Uusi tapahtuma</Link>
+>>>>>>> Enable event editing in Editor, finish redux integration
         <h1>Hallinta</h1>
         <div className="alert alert-info" role="alert">
           <p>
