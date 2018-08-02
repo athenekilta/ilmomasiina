@@ -64,6 +64,9 @@ class Editor extends React.Component {
         onSubmit={this.submitForm}
         className="event-editor form-horizontal col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <h1>{isNewEvent ? 'Luo uusi tapahtuma' : 'Muokkaa tapahtumaa'}</h1>
+        <p>TODO: hook up event fields: 'draft', 'answersPublic' and 'openQuota'</p>
+        <p>TODO: Hook up save-button. (If editing: update event, otherwise: create event)</p>
+        <p>NOTE: Currently 'create-fake-data' script has wrong fields for events, update that</p>
         <input className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Tallenna" />
         <ul className="nav nav-tabs">
           <li className={(this.state.activeTab === 1 ? 'active' : '')}>

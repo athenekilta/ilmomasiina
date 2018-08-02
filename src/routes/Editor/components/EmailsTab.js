@@ -15,7 +15,7 @@ class EmailsTab extends React.Component {
       <div>
         <Textarea
           rows={10}
-          name="verification"
+          name="verificationEmail"
           value={this.props.event.verification}
           label="Vahvistusviesti sähköpostiin"
           onChange={this.props.onDataChange}
