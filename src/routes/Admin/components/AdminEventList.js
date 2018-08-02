@@ -12,10 +12,10 @@ class AdminEventListItem extends React.Component {
   render() {
     return (
       <tr>
-        <td><Link to={`/event/${this.props.data.id}`}>{ this.props.data.name }</Link></td>
+        <td><Link to={`/event/${this.props.data.id}`}>{this.props.data.name}</Link></td>
         <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
         <td>Luonnos</td>
-        <td>{ _.sumBy(this.props.data.quota, n => n.going) }</td>
+        <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
         <td>
           <Link>Muokkaa tapahtumaa</Link>
           <Separator />
@@ -70,6 +70,8 @@ class AdminEventList extends React.Component {
       yearOptions.push(<option value={year}>{year}</option>);
     }
 
+    console.log(this.props.eventList);
+
     return (
       <div className="container">
         <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">+ Uusi tapahtuma</Link>
@@ -108,7 +110,7 @@ class AdminEventList extends React.Component {
             </tr>
           </thead>
           <tbody>
-            { this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />) }
+            {this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />)}
           </tbody>
         </table>
       </div>

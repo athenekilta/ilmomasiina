@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import './Editor.scss';
 
@@ -8,6 +9,13 @@ import QuestionsTab from './QuestionsTab';
 import EmailsTab from './EmailsTab';
 
 class Editor extends React.Component {
+
+  static propTypes = {
+    getEventAsync: PropTypes.func.isRequired,
+    updateEvent: PropTypes.func.isRequired,
+    params: PropTypes.any,
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +24,17 @@ class Editor extends React.Component {
 
     this.changeTab = this.changeTab.bind(this);
     this.submitForm = this.submitForm.bind(this);
+  }
+
+  componentWillMount() {
+    const eventId = this.props.params.id;
+
+    if (eventId === 'new') {
+      // New event;
+    }
+    else {
+      this.props.getEventAsync(eventId);
+    }
   }
 
   changeTab(id) {
@@ -29,11 +48,14 @@ class Editor extends React.Component {
   }
 
   render() {
+
+    const isNewEvent = this.props.params.id === 'new';
+
     return (
       <Formsy.Form
         onSubmit={this.submitForm}
         className="event-editor form-horizontal col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-        <h1>Luo uusi tapahtuma</h1>
+        <h1>{isNewEvent ? 'Luo uusi tapahtuma' : 'Muokkaa tapahtumaa'}</h1>
         <input className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Tallenna" />
         <ul className="nav nav-tabs">
           <li className={(this.state.activeTab === 1 ? 'active' : '')}>
