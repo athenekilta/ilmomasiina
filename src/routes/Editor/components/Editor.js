@@ -13,6 +13,8 @@ class Editor extends React.Component {
   static propTypes = {
     getEventAsync: PropTypes.func.isRequired,
     updateEvent: PropTypes.func.isRequired,
+    updateEventField: PropTypes.func.isRequired,
+    event: PropTypes.object,
     params: PropTypes.any,
   }
 
@@ -23,6 +25,7 @@ class Editor extends React.Component {
     };
 
     this.changeTab = this.changeTab.bind(this);
+    this.onDataChange = this.onDataChange.bind(this);
     this.submitForm = this.submitForm.bind(this);
   }
 
@@ -33,6 +36,7 @@ class Editor extends React.Component {
       // New event;
     }
     else {
+      console.log(eventId);
       this.props.getEventAsync(eventId);
     }
   }
@@ -43,12 +47,16 @@ class Editor extends React.Component {
     this.setState(state);
   }
 
+  onDataChange(field, value) {
+    this.props.updateEventField(field, value);
+  }
+
   submitForm(model) {
     // TODO: this
   }
 
   render() {
-
+    console.log('EVENT', this.props.event);
     const isNewEvent = this.props.params.id === 'new';
 
     return (
@@ -73,16 +81,16 @@ class Editor extends React.Component {
         </ul>
         <div className="tab-content">
           <div className={`tab-pane ${(this.state.activeTab === 1 ? 'active' : '')}`}>
-            <BasicDetailsTab onDataChange={data => console.log(data)} />
+            <BasicDetailsTab event={this.props.event} onDataChange={this.onDataChange} />
           </div>
           <div className={`tab-pane ${(this.state.activeTab === 2 ? 'active' : '')}`}>
-            <QuotasTab onDataChange={data => console.log(data)} />
+            <QuotasTab event={this.props.event} onDataChange={this.onDataChange} />
           </div>
           <div className={`tab-pane ${(this.state.activeTab === 3 ? 'active' : '')}`}>
-            <QuestionsTab onDataChange={data => console.log(data)} />
+            <QuestionsTab event={this.props.event} onDataChange={this.onDataChange} />
           </div>
           <div className={`tab-pane ${(this.state.activeTab === 4 ? 'active' : '')}`}>
-            <EmailsTab onDataChange={data => console.log(data)} />
+            <EmailsTab event={this.props.event} onDataChange={this.onDataChange} />
           </div>
         </div>
       </Formsy.Form>

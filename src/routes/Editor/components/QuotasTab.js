@@ -24,14 +24,11 @@ class QuotasTab extends React.Component {
 
   static propTypes = {
     onDataChange: PropTypes.func.isRequired,
+    event: PropTypes.object,
   }
 
   constructor(props) {
     super(props);
-
-    this.state = {
-      data: {},
-    };
 
     this.handleChange = this.handleChange.bind(this);
     this.addQuota = this.addQuota.bind(this);
@@ -39,41 +36,26 @@ class QuotasTab extends React.Component {
     this.updateOrder = this.updateOrder.bind(this);
   }
 
-  updateState(updates) {
-    this.setState(updates, () => {
-      if (typeof this.props.onDataChange === 'function') {
-        this.props.onDataChange(this.state.data);
-      }
-    });
-  }
-
   handleChange(field, value) {
-
-    this.updateState({
-      data: { ...this.state.data, [field]: value },
-    });
+    this.props.onDataChange(field, value);
   }
 
   addQuota() {
-    const quotas = this.state.data.quotas ? this.state.data.quotas : [];
-
-    this.updateState({
-      data: {
-        ...this.state.data,
-        quotas: _.concat(quotas, {
-          id: (_.max(quotas.map(n => n.id)) || 0) + 1,
-          existsInDb: false,
-          title: '',
-          max_attendees: 0,
-          registration_opens: new Date(),
-          registration_closes: new Date(),
-        }),
-      },
+    const quotas = this.props.event.quota ? this.props.event.quota : [];
+    const newQuotas = _.concat(quotas, {
+      id: (_.max(quotas.map(n => n.id)) || 0) + 1,
+      existsInDb: false,
+      title: '',
+      max_attendees: 0,
+      registration_opens: new Date(),
+      registration_closes: new Date(),
     });
+
+    this.props.onDataChange('quota', newQuotas);
   }
 
   updateOrder(args) {
-    let newQuotas = this.state.data.quotas;
+    let newQuotas = this.props.event.quota;
 
     const elementToMove = newQuotas[args.oldIndex];
     newQuotas.splice(args.oldIndex, 1);
@@ -85,49 +67,40 @@ class QuotasTab extends React.Component {
       return quota;
     });
 
-    this.updateState({
-      data: {
-        ...this.state.data,
-        quotas: newQuotas,
-      },
-    });
+    this.props.onDataChange('quota', newQuotas);
   }
 
   updateQuota(itemId, field, value) {
-    this.updateState({
-      data: {
-        ...this.state.data,
-        quotas: _.map(this.state.data.quotas, (quota) => {
-          if (quota.id === itemId) {
-            return {
-              ...quota,
-              [field]: value,
-            };
-          }
+    const quotas = this.props.event.quota ? this.props.event.quota : [];
+    const newQuotas = _.map(quotas, (quota) => {
+      if (quota.id === itemId) {
+        return {
+          ...quota,
+          [field]: value,
+        };
+      }
 
-          return quota;
-        }),
-      },
+      return quota;
     });
+
+    this.props.onDataChange('quota', newQuotas);
   }
 
   removeQuota(itemId) {
-    this.updateState({
-      data: {
-        ...this.state.data,
-        quotas: _.filter(this.state.data.quotas, (quota) => {
-          if (quota.id === itemId) {
-            return false;
-          }
+    const quotas = this.props.event.quota ? this.props.event.quota : [];
+    const newQuotas = _.filter(quotas, (quota) => {
+      if (quota.id === itemId) {
+        return false;
+      }
 
-          return true;
-        }),
-      },
+      return true;
     });
+
+    this.props.onDataChange('quota', newQuotas);
   }
 
   renderQuotas() {
-    const q = _.map(this.state.data.quotas, (item) => {
+    const q = _.map(this.props.event.quota, (item) => {
       return (
         <div className="panel-body">
           <div className="col-xs-12 col-sm-10">
@@ -161,7 +134,7 @@ class QuotasTab extends React.Component {
   }
 
   renderQuotaSection() {
-    if (this.state.data.useQuotas) {
+    if (this.props.event.useQuotas) {
       return (
         <div>
           {this.renderQuotas()}
@@ -169,11 +142,11 @@ class QuotasTab extends React.Component {
           <div className="clearfix" />
           <Checkbox
             name="useOpenQuota"
-            value={this.state.data.useOpenQuota}
+            value={this.props.event.useOpenQuota}
             label="Käytä lisäksi yhteistä kiintiötä"
             onChange={this.handleChange} />
           {
-            (!this.state.data.useOpenQuota ||
+            (!this.props.event.useOpenQuota ||
               <Input name="open-quota-size" label="Avoimen kiintiön koko" type="number" required />
             )
           }
@@ -206,7 +179,7 @@ class QuotasTab extends React.Component {
         <hr />
         <Checkbox
           name="useQuotas"
-          value={this.state.data.useQuotas}
+          value={this.props.event.useQuotas}
           label="Ilmoittautumisessa käytetään kiintiöitä"
           rowLabel="Kiintiöt"
           onChange={this.handleChange}

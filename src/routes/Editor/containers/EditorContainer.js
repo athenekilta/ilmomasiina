@@ -5,11 +5,12 @@ import Editor from '../components/Editor';
 
 const mapDispatchToProps = {
   updateEvent: Actions.updateEvent,
+  updateEventField: Actions.updateEventField,
   getEventAsync: Actions.getEventAsync,
 };
 
 const mapStateToProps = state => ({
-  event: state.event,
+  event: state.editor.event,
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);
