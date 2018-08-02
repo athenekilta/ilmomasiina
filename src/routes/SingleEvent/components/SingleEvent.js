@@ -100,7 +100,7 @@ class SingleEvent extends React.Component {
       return {
         openQuota: [],
         waitList: [],
-        formattedQuestions: null
+        formattedQuestions: null,
       };
     }
 

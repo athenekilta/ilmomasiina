@@ -12,9 +12,12 @@ module.exports = function () {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      date: {
+      start_date: {
         type: Sequelize.DATE,
       },
+      end_date: {
+        type: Sequelize.DATE,
+      }
       openQuota: {
         type: Sequelize.INTEGER,
         validate: {
@@ -34,7 +37,10 @@ module.exports = function () {
       homepage: {
         type: Sequelize.STRING,
       },
-      facebookLink: {
+      facebook_url: {
+        type: Sequelize.STRING,
+      },
+      webpage_url: {
         type: Sequelize.STRING,
       },
       draft: {
@@ -47,7 +53,7 @@ module.exports = function () {
         allowNull: false,
         defaultValue: true,
       },
-      confirmationMessage: {
+      verificationEmail: {
         type: Sequelize.TEXT,
       },
     },
