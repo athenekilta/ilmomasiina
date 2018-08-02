@@ -37,28 +37,28 @@ class BasicDetailsTab extends React.Component {
           onChange={this.handleChange}
         />
         <Input
-          name="start_date"
+          name="startDate"
           value={this.props.event.start_date}
           label="Alkamisajankohta"
           type="datetime-local"
           onChange={this.handleChange}
         />
         <Input
-          name="end_date"
+          name="endDate"
           value={this.props.event.end_date}
           label="Päättymisajankohta"
           type="datetime-local"
           onChange={this.handleChange}
         />
         <Input
-          name="webpage_url"
+          name="webpageUrl"
           value={this.props.event.webpage_url}
           label="Kotisivujen osoite"
           type="text"
           onChange={this.handleChange}
         />
         <Input
-          name="facebook_url"
+          name="facebookUrl"
           value={this.props.event.facebook_url}
           label="Facebook-tapahtuma"
           type="text"

@@ -12,13 +12,22 @@ module.exports = function () {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      start_date: {
+      startDate: {
         type: Sequelize.DATE,
       },
-      end_date: {
+      endDate: {
         type: Sequelize.DATE,
-      }
-      openQuota: {
+      },
+      registrationStartDate: {
+        type: Sequelize.DATE,
+      },
+      registrationEndDate: {
+        type: Sequelize.DATE,
+      },
+      useOpenQuota: {
+        type: Sequelize.BOOLEAN,
+      },
+      openQuotaSize: {
         type: Sequelize.INTEGER,
         validate: {
           min: 0,
@@ -37,10 +46,10 @@ module.exports = function () {
       homepage: {
         type: Sequelize.STRING,
       },
-      facebook_url: {
+      facebookUrl: {
         type: Sequelize.STRING,
       },
-      webpage_url: {
+      webpageUrl: {
         type: Sequelize.STRING,
       },
       draft: {
