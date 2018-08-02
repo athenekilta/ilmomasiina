@@ -1,6 +1,10 @@
 @import 'base';
 @import 'bootstrap';
 
+body, html {
+  height: 100%;
+}
+
 #root {
   h1 {
     font-weight: 800;
@@ -56,5 +60,18 @@
 
   textarea {
     max-width: 100%;
+  }
+
+  .layout-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    .page-wrapper {
+       flex: 1 0 auto;
+    }
+
+    .page-footer {
+      flex-shrink: 0;
+    }
   }
 }

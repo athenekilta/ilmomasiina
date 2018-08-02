@@ -4,7 +4,7 @@ import Separator from '../Separator';
 import './Footer.scss';
 
 export const Footer = () => (
-  <footer>
+  <footer className="page-footer">
     <div className='container'>
       <Link to='/admin' className='navbar-link'>Hallinta</Link>
       <Separator />
