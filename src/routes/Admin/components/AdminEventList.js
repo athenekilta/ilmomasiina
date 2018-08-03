@@ -12,10 +12,12 @@ class AdminEventListItem extends React.Component {
   render() {
     return (
       <tr>
-        <td><Link to={`/event/${this.props.data.id}`}>{ this.props.data.name }</Link></td>
+        <td>
+          <Link to={`/event/${this.props.data.id}`}>{this.props.data.title}</Link>
+        </td>
         <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
         <td>Luonnos</td>
-        <td>{ _.sumBy(this.props.data.quota, n => n.going) }</td>
+        <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
         <td>
           <Link>Muokkaa tapahtumaa</Link>
           <Separator />
@@ -72,12 +74,16 @@ class AdminEventList extends React.Component {
 
     return (
       <div className="container">
-        <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">+ Uusi tapahtuma</Link>
+        <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">
+          + Uusi tapahtuma
+        </Link>
         <h1>Hallinta</h1>
         <div className="alert alert-info" role="alert">
           <p>
             <strong>Ville Vuorenmaa</strong> on pyytänyt pääsyä hallintapaneeliin.<br />
-            <a>Hyväksy</a><Separator /><a>Hylkää</a>
+            <a>Hyväksy</a>
+            <Separator />
+            <a>Hylkää</a>
           </p>
         </div>
         <div className="search-form">
@@ -93,7 +99,9 @@ class AdminEventList extends React.Component {
               onKeyPress={event => (event.key === 'Enter' ? this.changeSearchString(event.target.value) : '')}
             />
             <span className="input-group-btn">
-              <button className="btn btn-default" type="button" onClick={this.doSearch}>Hae</button>
+              <button className="btn btn-default" type="button" onClick={this.doSearch}>
+                Hae
+              </button>
             </span>
           </div>
         </div>
@@ -107,14 +115,11 @@ class AdminEventList extends React.Component {
               <th>Toiminnot</th>
             </tr>
           </thead>
-          <tbody>
-            { this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />) }
-          </tbody>
+          <tbody>{this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />)}</tbody>
         </table>
       </div>
     );
   }
-
 }
 
 AdminEventListItem.propTypes = {
