@@ -1,5 +1,5 @@
 const service = require('feathers-sequelize');
-const hooks = require('./hooks.js');
+const hooks = require('./hooks');
 
 module.exports = function () {
   const app = this;
