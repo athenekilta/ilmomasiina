@@ -7,6 +7,7 @@ const mapDispatchToProps = {
   updateEvent: Actions.updateEvent,
   updateEventField: Actions.updateEventField,
   getEventAsync: Actions.getEventAsync,
+  publishEventAsync: Actions.publishEventAsync,
 };
 
 const mapStateToProps = state => ({

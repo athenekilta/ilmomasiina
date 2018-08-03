@@ -12,6 +12,7 @@ class Editor extends React.Component {
 
   static propTypes = {
     getEventAsync: PropTypes.func.isRequired,
+    publishEventAsync: PropTypes.func.isRequired,
     updateEvent: PropTypes.func.isRequired,
     updateEventField: PropTypes.func.isRequired,
     event: PropTypes.object,
@@ -27,7 +28,7 @@ class Editor extends React.Component {
 
     this.changeTab = this.changeTab.bind(this);
     this.onDataChange = this.onDataChange.bind(this);
-    this.submitForm = this.submitForm.bind(this);
+    this.publishEvent = this.publishEvent.bind(this);
   }
 
   componentWillMount() {
@@ -64,8 +65,8 @@ class Editor extends React.Component {
     this.props.updateEventField(field, value);
   }
 
-  submitForm(model) {
-    // TODO: this
+  publishEvent() {
+    this.props.publishEventAsync(this.props.event);
   }
 
   render() {
@@ -75,11 +76,10 @@ class Editor extends React.Component {
     return (
       <div className="event-editor">
         <Formsy.Form
-          onSubmit={this.submitForm}
           className="form-horizontal col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
           <h1>{isNewEvent ? 'Luo uusi tapahtuma' : 'Muokkaa tapahtumaa'}</h1>
-          <input className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Julkaise" />
-          <input className="btn btn-info pull-right" formNoValidate type="submit" defaultValue="Tallenna Luonnoksena" />
+          <input className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Julkaise" onClick={this.publishEvent} />
+          <input className="btn btn-info pull-right" formNoValidate type="submit" defaultValue="Tallenna Luonnoksena" onClick={this.saveAsDraft} />
           <ul className="nav nav-tabs">
             <li className={(this.state.activeTab === 1 ? 'active' : '')}>
               <a onClick={() => this.changeTab(1)}>Perustiedot</a>

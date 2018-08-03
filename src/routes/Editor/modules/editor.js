@@ -5,6 +5,7 @@ import request from 'then-request';
 // // ------------------------------------
 export const UPDATE_EVENT = 'UPDATE_EVENT';
 export const UPDATE_EVENT_FIELD = 'UPDATE_EVENT_FIELD';
+export const PUBLISH_EVENT = 'PUBLISH_EVENT';
 
 // ------------------------------------
 // Actions
@@ -27,6 +28,14 @@ export const updateEventField = (field, value) => (dispatch) => {
   });
 };
 
+export const publishEventAsync = data => async (dispatch) => {
+  await request('POST', '/api/events')
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      console.log(res);
+    });
+};
+
 export const getEventAsync = eventId => async (dispatch) => {
   await request('GET', `/api/events/${eventId}`)
     .then(res => JSON.parse(res.body))
@@ -46,6 +55,7 @@ export const actions = {
   updateEvent,
   updateEventField,
   getEventAsync,
+  publishEventAsync,
 };
 
 // ------------------------------------
