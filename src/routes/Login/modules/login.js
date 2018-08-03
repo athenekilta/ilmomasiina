@@ -1,4 +1,5 @@
 import request from 'then-request';
+import { push } from 'react-router-redux';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -31,23 +32,25 @@ function loginError(message) {
   };
 }
 
-export const loginUser = (creds) => (dispatch) => {
+export const loginUser = creds => (dispatch) => {
   request('POST', 'http://localhost:3000/api/authentication', {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `strategy=local&email=${creds.username}&password=${creds.password}`,
   })
-  .then((res) => {
-    if (res.statusCode >= 300) {
-      console.log('We have an error');
-      dispatch(loginError(res));
-      return Promise.reject(res);
-    }
-    return JSON.parse(res.body);
-  })
-  .then((res) => {
-    localStorage.setItem('id_token', res.accessToken);
-    dispatch(receiveLogin());
-  }).catch(err => console.log('Error: ', err));
+    .then((res) => {
+      if (res.statusCode >= 300) {
+        console.log('We have an error');
+        dispatch(loginError(res));
+        return Promise.reject(res);
+      }
+      return JSON.parse(res.body);
+    })
+    .then((res) => {
+      localStorage.setItem('id_token', res.accessToken);
+      dispatch(receiveLogin());
+      dispatch(push('/admin'));
+    })
+    .catch(err => console.log('Error: ', err));
 };
 
 export const actions = {
