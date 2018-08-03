@@ -70,7 +70,7 @@ module.exports = function () {
       freezeTableName: true,
       paranoid: true,
       defaultScope: {
-        where: {
+        startDate: {
           $and: {
             draft: false,
             date: {
