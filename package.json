@@ -132,6 +132,7 @@
     "nvm": "0.0.4",
     "postcss-loader": "^1.1.0",
     "promise": "^7.1.1",
+    "prop-types": "^15.6.2",
     "react": "^15.6.2",
     "react-dom": "^15.0.0",
     "react-nl2br": "^0.2.0",

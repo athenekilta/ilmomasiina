@@ -9,6 +9,7 @@ export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC';
 // Actions
 // ------------------------------------
 
+<<<<<<< HEAD
 /*  Temporary payload. This is going to be loaded from the backend. */
 
 const payload = [
@@ -49,6 +50,8 @@ const payload = [
   },
 ];
 
+=======
+>>>>>>> 45a802aa6b5d5b85263f1cc083756f5c1d63966e
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */

@@ -19,7 +19,7 @@ class AdminEventListItem extends React.Component {
         <td>Luonnos</td>
         <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
         <td>
-          <Link>Muokkaa tapahtumaa</Link>
+          <Link to={`/admin/edit/${this.props.data.id}`}>Muokkaa tapahtumaa</Link>
           <Separator />
           <Link>Lataa osallistujalista</Link>
         </td>
@@ -76,9 +76,11 @@ class AdminEventList extends React.Component {
       );
     }
 
+    console.log(this.props.eventList);
+
     return (
       <div className="container">
-        <Link to="/admin/edit" className="btn btn-success btn-lg pull-right">
+        <Link to="/admin/edit/new" className="btn btn-success btn-lg pull-right">
           + Uusi tapahtuma
         </Link>
         <h1>Hallinta</h1>

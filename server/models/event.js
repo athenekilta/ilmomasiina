@@ -12,10 +12,22 @@ module.exports = function () {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      date: {
+      startDate: {
         type: Sequelize.DATE,
       },
-      openQuota: {
+      endDate: {
+        type: Sequelize.DATE,
+      },
+      registrationStartDate: {
+        type: Sequelize.DATE,
+      },
+      registrationEndDate: {
+        type: Sequelize.DATE,
+      },
+      useOpenQuota: {
+        type: Sequelize.BOOLEAN,
+      },
+      openQuotaSize: {
         type: Sequelize.INTEGER,
         validate: {
           min: 0,
@@ -34,7 +46,10 @@ module.exports = function () {
       homepage: {
         type: Sequelize.STRING,
       },
-      facebookLink: {
+      facebookUrl: {
+        type: Sequelize.STRING,
+      },
+      webpageUrl: {
         type: Sequelize.STRING,
       },
       draft: {
@@ -47,7 +62,7 @@ module.exports = function () {
         allowNull: false,
         defaultValue: true,
       },
-      confirmationMessage: {
+      verificationEmail: {
         type: Sequelize.TEXT,
       },
     },
@@ -55,7 +70,7 @@ module.exports = function () {
       freezeTableName: true,
       paranoid: true,
       defaultScope: {
-        where: {
+        startDate: {
           $and: {
             draft: false,
             date: {
