@@ -76,8 +76,6 @@ class AdminEventList extends React.Component {
       );
     }
 
-    console.log(this.props.eventList);
-
     return (
       <div className="container">
         <Link to="/admin/edit/new" className="btn btn-success btn-lg pull-right">
