@@ -69,7 +69,11 @@ class AdminEventList extends React.Component {
   render() {
     const yearOptions = [];
     for (let year = 2016; year <= new Date().getFullYear(); year += 1) {
-      yearOptions.push(<option value={year}>{year}</option>);
+      yearOptions.push(
+        <option key={year} value={year}>
+          {year}
+        </option>,
+      );
     }
 
     return (
@@ -115,7 +119,7 @@ class AdminEventList extends React.Component {
               <th>Toiminnot</th>
             </tr>
           </thead>
-          <tbody>{this.props.eventList.map((i, index) => <AdminEventListItem key={index} data={i} />)}</tbody>
+          <tbody>{this.props.eventList.map(i => <AdminEventListItem key={i.id} data={i} />)}</tbody>
         </table>
       </div>
     );
