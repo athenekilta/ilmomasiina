@@ -29,11 +29,19 @@ export const updateEventField = (field, value) => (dispatch) => {
 };
 
 export const publishEventAsync = data => async (dispatch) => {
-  await request('POST', '/api/events')
+  await request('POST', '/api/events', { json: data })
     .then(res => JSON.parse(res.body))
     .then((res) => {
-      console.log(res);
+      console.log('CREATED', res);
     });
+};
+
+export const updateEventAsync = data => async (dispatch) => {
+  await request('PATCH', '/api/events', { json: data })
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      console.log('PATCHED', res);
+    })
 };
 
 export const getEventAsync = eventId => async (dispatch) => {

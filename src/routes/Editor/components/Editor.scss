@@ -48,3 +48,23 @@
     margin-top: 20px;
   }
 }
+
+.event-editor--valid-notice {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 40px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+
+  &.collapsed {
+    height: 0;
+    opacity: 0;
+  }
+
+  span b {
+    color: #d74949;
+    margin-right: 5px;
+    font-weight: normal;
+  }
+}

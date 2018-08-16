@@ -24,6 +24,7 @@ class Editor extends React.Component {
     this.state = {
       activeTab: 1,
       eventLoading: true,
+      isValid: false
     };
 
     this.changeTab = this.changeTab.bind(this);
@@ -65,21 +66,59 @@ class Editor extends React.Component {
     this.props.updateEventField(field, value);
   }
 
-  publishEvent() {
-    this.props.publishEventAsync(this.props.event);
+  setValidState(isValid) {
+    if (isValid !== this.state.isValid) {
+      this.setState({
+        isValid
+      });
+    }
+  }
+
+  publishEvent(isDraft = false) {
+    const event = {
+      ...this.props.event, 
+      draft: isDraft,
+    };
+
+    if (this.props.params.id === 'new') {
+      this.props.publishEventAsync(event);
+    } else {
+      this.props.updateEventAsync(event);
+    }
+  }
+
+  renderButtons() {
+
+    return(
+      <div className="pull-right">
+        <input disabled={!this.state.isValid} className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Julkaise" onClick={() => this.publishEvent(false)} />
+        <input disabled={!this.state.isValid} className="btn btn-info pull-right" formNoValidate type="submit" defaultValue="Tallenna Luonnoksena" onClick={() => this.publishEvent(true)} />
+      </div>
+    );
+  }
+
+  renderValidNotice() {
+
+    const className = this.state.isValid ? 'event-editor--valid-notice collapsed' : 'event-editor--valid-notice';
+
+    return(
+      <div className={className}>
+        <span><b>*</b>Tähdellä merkityt kentät ovat pakollisia</span>
+      </div>
+    )
   }
 
   render() {
-    console.log('EVENT', this.props.event);
     const isNewEvent = this.props.params.id === 'new';
 
     return (
       <div className="event-editor">
         <Formsy.Form
+          onValid={() => this.setValidState(true)}
+          onInvalid={() => this.setValidState(false)}
           className="form-horizontal col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
           <h1>{isNewEvent ? 'Luo uusi tapahtuma' : 'Muokkaa tapahtumaa'}</h1>
-          <input className="btn btn-success pull-right" formNoValidate type="submit" defaultValue="Julkaise" onClick={this.publishEvent} />
-          <input className="btn btn-info pull-right" formNoValidate type="submit" defaultValue="Tallenna Luonnoksena" onClick={this.saveAsDraft} />
+          {this.renderButtons()}
           <ul className="nav nav-tabs">
             <li className={(this.state.activeTab === 1 ? 'active' : '')}>
               <a onClick={() => this.changeTab(1)}>Perustiedot</a>
@@ -94,6 +133,7 @@ class Editor extends React.Component {
               <a onClick={() => this.changeTab(4)}>Vahvistusviestit</a>
             </li>
           </ul>
+          {this.renderValidNotice()}
           {
             this.state.eventLoading ?
               (
