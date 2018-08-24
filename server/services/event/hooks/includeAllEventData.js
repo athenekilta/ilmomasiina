@@ -1,6 +1,8 @@
 module.exports = () => (hook) => {
   const sequelize = hook.app.get('sequelize');
 
+  console.log('HOOK', hook);
+
   hook.params.sequelize = {
     distinct: true,
     attributes: [

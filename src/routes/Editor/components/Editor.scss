@@ -1,7 +1,6 @@
 .event-editor {
-
   .panel-default {
-      position: relative;
+    position: relative;
 
     .panel-body {
       background: $secondary-background;
@@ -67,4 +66,51 @@
     margin-right: 5px;
     font-weight: normal;
   }
+}
+
+.event-editor--saving-event {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 44px;
+}
+
+.event-editor--buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .event-editor--public-status {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 20px;
+
+    .event-editor--bubble {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin-right: 10px;
+
+      &.draft {
+        background-color: orange;
+      }
+
+      &.public {
+        background-color: green;
+      }
+    }
+  }
+}
+
+.event-editor--animated {
+  transition: all 0.3s ease;
+}
+
+.event-editor--loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
 }

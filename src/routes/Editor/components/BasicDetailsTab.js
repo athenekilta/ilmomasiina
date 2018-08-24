@@ -3,20 +3,19 @@ import PropTypes from 'prop-types';
 import { Input, Textarea, Checkbox } from 'formsy-react-components';
 import './Editor.scss';
 
-
 class BasicDetailsTab extends React.Component {
-
   static propTypes = {
     onDataChange: PropTypes.func.isRequired,
     event: PropTypes.object,
-  }
+  };
 
   render() {
+    const { event } = this.props;
     return (
       <div>
         <Input
           name="title"
-          value={this.props.event.title}
+          value={event.title ? event.title : ''}
           label="Tapahtuman nimi"
           type="text"
           required
@@ -24,35 +23,35 @@ class BasicDetailsTab extends React.Component {
         />
         <Input
           name="startDate"
-          value={this.props.event.startDate}
+          value={event.startDate ? event.startDate : ''}
           label="Alkamisajankohta"
           type="datetime-local"
           onChange={this.props.onDataChange}
         />
         <Input
           name="endDate"
-          value={this.props.event.endDate}
+          value={event.endDate ? event.endDate : ''}
           label="Päättymisajankohta"
           type="datetime-local"
           onChange={this.props.onDataChange}
         />
         <Input
           name="webpageUrl"
-          value={this.props.event.webpageUrl}
+          value={event.webpageUrl ? event.webpageUrl : ''}
           label="Kotisivujen osoite"
           type="text"
           onChange={this.props.onDataChange}
         />
         <Input
           name="facebookUrl"
-          value={this.props.event.facebookUrl}
+          value={event.facebookUrl ? event.facebookUrl : ''}
           label="Facebook-tapahtuma"
           type="text"
           onChange={this.props.onDataChange}
         />
         <Input
           name="location"
-          value={this.props.event.location}
+          value={event.location ? event.location : ''}
           label="Paikka"
           type="text"
           onChange={this.props.onDataChange}
@@ -60,13 +59,13 @@ class BasicDetailsTab extends React.Component {
         <Textarea
           rows={10}
           name="description"
-          value={this.props.event.description}
+          value={event.description ? event.description : ''}
           label="Kuvaus"
           onChange={this.props.onDataChange}
         />
         <Checkbox
           name="answersPublic"
-          value={this.props.event.answersPublic}
+          value={event.answersPublic ? event.answersPublic : false}
           label="Vastaukset ovat julkisia"
           onChange={this.props.onDataChange}
         />

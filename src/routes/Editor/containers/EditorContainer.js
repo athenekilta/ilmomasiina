@@ -8,10 +8,14 @@ const mapDispatchToProps = {
   updateEventField: Actions.updateEventField,
   getEventAsync: Actions.getEventAsync,
   publishEventAsync: Actions.publishEventAsync,
+  updateEventAsync: Actions.updateEventAsync,
 };
 
 const mapStateToProps = state => ({
   event: state.editor.event,
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Editor);

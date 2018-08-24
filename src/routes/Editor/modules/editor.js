@@ -29,23 +29,37 @@ export const updateEventField = (field, value) => (dispatch) => {
 };
 
 export const publishEventAsync = data => async (dispatch) => {
-  await request('POST', '/api/events', { json: data })
+  const event = await request('POST', '/api/events', { json: data })
     .then(res => JSON.parse(res.body))
     .then((res) => {
-      console.log('CREATED', res);
+      dispatch({
+        type: UPDATE_EVENT,
+        payload: res,
+      });
+
+      return res;
     });
+
+  return event;
 };
 
 export const updateEventAsync = data => async (dispatch) => {
-  await request('PATCH', '/api/events', { json: data })
+  const event = await request('PATCH', `/api/events/${data.id}`, { json: data })
     .then(res => JSON.parse(res.body))
     .then((res) => {
-      console.log('PATCHED', res);
-    })
+      dispatch({
+        type: UPDATE_EVENT,
+        payload: res,
+      });
+
+      return res;
+    });
+
+  return event;
 };
 
 export const getEventAsync = eventId => async (dispatch) => {
-  await request('GET', `/api/events/${eventId}`)
+  const res = await request('GET', `/api/events/${eventId}`)
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch({
@@ -53,6 +67,8 @@ export const getEventAsync = eventId => async (dispatch) => {
         payload: res,
       });
     });
+
+  return res;
 };
 
 /*  This is a thunk, meaning it is a function that immediately
@@ -74,21 +90,17 @@ const initialState = {
 };
 
 const ACTION_HANDLERS = {
-  [UPDATE_EVENT]: (state, action) => {
-    return {
-      ...state,
-      event: action.payload,
-    };
-  },
-  [UPDATE_EVENT_FIELD]: (state, action) => {
-    return {
-      ...state,
-      event: {
-        ...state.event,
-        [action.payload.field]: action.payload.value,
-      },
-    };
-  },
+  [UPDATE_EVENT]: (state, action) => ({
+    ...state,
+    event: action.payload,
+  }),
+  [UPDATE_EVENT_FIELD]: (state, action) => ({
+    ...state,
+    event: {
+      ...state.event,
+      [action.payload.field]: action.payload.value,
+    },
+  }),
 };
 
 // ------------------------------------
