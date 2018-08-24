@@ -1,7 +1,9 @@
 @import 'base';
 @import 'bootstrap';
+@import '~antd/dist/antd.css';
 
-body, html {
+body,
+html {
   height: 100%;
 }
 
@@ -67,7 +69,7 @@ body, html {
     flex-direction: column;
 
     .page-wrapper {
-       flex: 1 0 auto;
+      flex: 1 0 auto;
     }
 
     .page-footer {

@@ -77,6 +77,7 @@ module.exports = function () {
               $or: {
                 $eq: null,
                 $gt: moment()
+                  .tz('Europe/Helsinki')
                   .subtract(7, 'days')
                   .format(),
               },

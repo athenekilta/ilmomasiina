@@ -5,11 +5,17 @@ import Spinner from 'react-spinkit';
 import './Editor.scss';
 import { browserHistory, Link } from 'react-router';
 import { toast } from 'react-toastify';
+import Promise from 'bluebird';
 
 import BasicDetailsTab from './BasicDetailsTab';
 import QuotasTab from './QuotasTab';
 import QuestionsTab from './QuestionsTab';
 import EmailsTab from './EmailsTab';
+
+async function minDelay(func, ms = 1000) {
+  const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
+  return res[0];
+}
 
 class Editor extends React.Component {
   static propTypes = {
@@ -101,40 +107,20 @@ class Editor extends React.Component {
     });
 
     if (this.props.params.id === 'new') {
-      this.toastId = toast.info('Luodaan tapahtumaa...', { autoClose: false });
-
       try {
-        const res = await this.props.publishEventAsync(event);
+        const res = await minDelay(this.props.publishEventAsync(event), 1000);
         browserHistory.push(`/admin/edit/${res.id}`);
-        window.location.reload();
       } catch (error) {
-        console.log(error);
-        toast.update(this.toastId, {
-          render: 'Jotain meni pieleen - tapahtuman luonti epäonnistui.',
-          type: toast.TYPE.ERROR,
-          autoClose: 2000,
-        });
+        toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', { autoClose: 2000 });
       }
       this.setState({
         eventPublishing: false,
       });
     } else {
-      this.toastId = toast.info('Tallenetaan muutoksia...', { autoClose: false });
-
       try {
-        await this.props.updateEventAsync(event);
-        toast.update(this.toastId, {
-          render: 'Tapahtuma päivitetty!',
-          type: toast.TYPE.SUCCESS,
-          autoClose: 2000,
-        });
+        await minDelay(this.props.updateEventAsync(event), 1000);
       } catch (error) {
-        console.log(error);
-        toast.update(this.toastId, {
-          render: 'Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.',
-          type: toast.TYPE.ERROR,
-          autoClose: 2000,
-        });
+        toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
       }
 
       this.setState({
@@ -147,6 +133,7 @@ class Editor extends React.Component {
     if (this.props.params.id === 'new') {
       return (
         <div className="pull-right event-editor--buttons-wrapper">
+          {this.state.eventPublishing ? <Spinner name="circle" fadeIn="quarter" /> : null}
           <input
             disabled={!this.state.isValid || this.state.eventPublishing}
             className="btn btn-info pull-right event-editor--animated"
@@ -162,6 +149,7 @@ class Editor extends React.Component {
     if (this.props.event.draft) {
       return (
         <div className="pull-right event-editor--buttons-wrapper">
+          {this.state.eventPublishing ? <Spinner name="circle" fadeIn="quarter" /> : null}
           <div className="event-editor--public-status">
             <div className="event-editor--bubble draft event-editor--animated" />
             <span>Luonnos</span>
@@ -188,6 +176,7 @@ class Editor extends React.Component {
 
     return (
       <div className="pull-right event-editor--buttons-wrapper">
+        {this.state.eventPublishing ? <Spinner name="circle" fadeIn="quarter" /> : null}
         <div className="event-editor--public-status">
           <div className="event-editor--bubble public event-editor--animated" />
           <span>Julkaistu</span>

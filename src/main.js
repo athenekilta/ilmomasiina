@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import createStore from './store/createStore';
 import AppContainer from './containers/AppContainer';
-
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 // ========================================================
 // Store Instantiation
 // ========================================================
@@ -17,10 +18,7 @@ const MOUNT_NODE = document.getElementById('root');
 let render = () => {
   const routes = require('./routes/index').default(store); // eslint-disable-line global-require
 
-  ReactDOM.render(
-    <AppContainer store={store} routes={routes} />,
-    MOUNT_NODE,
-  );
+  ReactDOM.render(<AppContainer store={store} routes={routes} />, MOUNT_NODE);
 };
 
 // This code is excluded from production bundle

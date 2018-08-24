@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Input, Textarea, Checkbox } from 'formsy-react-components';
+import DateTimePicker from './DateTimePicker';
+
 import './Editor.scss';
 
 class BasicDetailsTab extends React.Component {
@@ -9,8 +11,29 @@ class BasicDetailsTab extends React.Component {
     event: PropTypes.object,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: null,
+      startDateFocused: false,
+      endDateFocused: false,
+    };
+
+    this.onStartDateChange = this.onStartDateChange.bind(this);
+    this.onEndDateChange = this.onEndDateChange.bind(this);
+  }
+
+  onStartDateChange(date) {
+    this.setState({
+      date,
+    });
+  }
+
+  onEndDateChange() {}
+
   render() {
     const { event } = this.props;
+
     return (
       <div>
         <Input
@@ -21,18 +44,18 @@ class BasicDetailsTab extends React.Component {
           required
           onChange={this.props.onDataChange}
         />
-        <Input
+        <DateTimePicker
           name="startDate"
-          value={event.startDate ? event.startDate : ''}
+          value={event.startDate}
           label="Alkamisajankohta"
-          type="datetime-local"
+          required
           onChange={this.props.onDataChange}
         />
-        <Input
+        <DateTimePicker
           name="endDate"
-          value={event.endDate ? event.endDate : ''}
+          value={event.endDate}
           label="Päättymisajankohta"
-          type="datetime-local"
+          required
           onChange={this.props.onDataChange}
         />
         <Input

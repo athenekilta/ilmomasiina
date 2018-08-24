@@ -11,7 +11,9 @@ exports.before = {
   all: [],
   find: [includeQuotas()],
   get: [includeAllEventData()],
-  create: [/*validateEvent()*/],
+  create: [
+    /* validateEvent() */
+  ],
   update: [],
   patch: [],
   remove: [],
@@ -21,7 +23,9 @@ exports.after = {
   all: [],
   find: [],
   get: [removeUnpublicAnswers(), formatOptionsAsArray()],
-  create: [/* createEvent()*/],
+  create: [
+    /* createEvent() */
+  ],
   update: [],
   patch: [],
   remove: [],
