@@ -1,76 +1,49 @@
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
-const debug = require('debug')('app:server');
+const sgMail = require('@sendgrid/mail');
+const Email = require('email-templates');
+const path = require('path');
 
-const mailgun = require('mailgun-js')({
-  apiKey: ilmoconfig.mailgunKey,
-  domain: ilmoconfig.mailgunDomain,
-});
+sgMail.setApiKey(ilmoconfig.sendgridApiKey);
 
-/*
+const EmailService = {
+  send: () => {
+    const email = new Email({
+      juice: true,
+      juiceResources: {
+        preserveImportant: true,
+        webResources: {
+          relativeTo: path.join(__dirname, 'css'),
+        },
+      },
+    });
 
-  This file contains generic method for sending mail.
+    email
+      .render('../../server/mail/emails/confirmation/html', {
+        topText: 'Ilmoittautuminen onnistui!',
+        eventName: 'Minuuttikalja',
+        name: 'Juuso Lappalainen',
+        email: 'juuso.lappalainen@juuso.com',
+      })
+      .then((html) => {
+        const msg = {
+          to: 'juuso.u.lappalainen@gmail.com',
+          from: 'test@example.com',
+          subject: 'Sending with SendGrid is Fun',
+          text: 'and easy to do anywhere, even with Node.js',
+          html,
+        };
 
-  Example:
-
-  const mailservice = require('./');
-
-  // User input fields
-  const fields = [
-    { label: 'Nimi', answer: 'Eero Esimerkki' },
-    { label: 'Sähköposti', answer: 'eero@esimerkki.fi' },
-    { label: 'Kilta', answer: 'Athene' },
-  ];
-
-  mailservice.sendSignUpConfirmation(
-    'eero@esimerkki.fi',
-    'Höpöhöpösitsit 12.1.2017',
-    'Tervetuloa sitseille!\n\nMaksuohjeet: ...',
-    'http://ilmomasiina.io/magical-edit-link',
-    fields
-  );
-
- */
-
-// Generic method for sending mail
-const sendMail = (msgTemplate, recipientEmail, eventTitle, customMsg, editLink = null, fields = null) => {
-  debug('Sending mail');
-
-  // We'll gather up message to one array and join it with line breaks at the end
-  const msg = [];
-  msg.push(msgTemplate);
-  msg.push('\nTapahtuman järjestäjän ohjeet:');
-  msg.push(customMsg);
-  msg.push('\n– – –\n');
-  if (editLink) msg.push(`Voit muokata tietojasi tai perua osallistumisesti osoitteessa: ${editLink}\n`);
-  fields.map(field => msg.push(`${field.label}: ${field.answer}`));
-  msg.push('\n– – –\n');
-  msg.push('Vahvistusviesti on lähetetty automaattisesti, joten ethän vastaa tähän viestiin. Peace and love <3');
-
-  const data = {
-    from: ilmoconfig.mailFrom,
-    to: recipientEmail,
-    subject: `Ilmoittautumisvahvistus: ${eventTitle}`,
-    text: msg.join('\n'),
-  };
-
-  return mailgun.messages().send(data, (error, body) => {
-    debug(body);
-  });
+        sgMail
+          .send(msg)
+          .then((res) => {
+            console.log('SUCCESS');
+          })
+          .catch((error) => {
+            console.log('ERROR', error);
+          });
+      })
+      .catch(console.error);
+  },
 };
 
-// Fixed message templates depending on action
-
-const SIGNUP_MAIL = title =>
-  `ILMOITTAUTUMISVAHVISTUS\n\nOlet ilmoittautunut tapahtumaan ${title}.`;
-
-const FROM_QUEUE = title =>
-  `ILMOITTAUTUMISVAHVISTUS\n\nOlet saanut peruutuspaikan tapahtumaan ${title}.`;
-
-const SIGNUP_EDITED = title =>
-  `VAHVISTUS ILMOITTAUTUMISEN MUOKKAUKSESTA\n\nOlet muokannut tietojasi tapahtuman ${title} ilmoittautumisessa.`;
-
-module.exports = {
-  sendSignUpConfirmation: (...args) => sendMail(SIGNUP_MAIL(args[1]), args[0], args[1], args[2], args[3], args[4]),
-  sendFromQueueConfirmation: (...args) => sendMail(FROM_QUEUE(args[1]), args[0], args[1], args[2], args[3], args[4]),
-  sendEditConfirmation: (...args) => sendMail(SIGNUP_EDITED(args[1]), args[0], args[1], args[2], args[3], args[4]),
-};
+module.exports = EmailService;

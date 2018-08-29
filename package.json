@@ -21,7 +21,8 @@
     "deploy:prod": "better-npm-run deploy:prod",
     "codecov": "cat coverage/*/lcov.info | codecov",
     "reset-db": "better-npm-run reset-db",
-    "create-fake-data": "better-npm-run create-fake-data"
+    "create-fake-data": "better-npm-run create-fake-data",
+    "test-email": "better-npm-run test-email"
   },
   "betterScripts": {
     "compile": {
@@ -45,6 +46,12 @@
     },
     "create-fake-data": {
       "command": "node scripts/create-fake-data",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    },
+    "test-email": {
+      "command": "node scripts/test-email",
       "env": {
         "DEBUG": "app:*"
       }
@@ -90,6 +97,7 @@
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "antd": "^3.8.2",
     "babel-core": "^6.17.0",
     "babel-loader": "^6.2.5",
@@ -106,6 +114,7 @@
     "css-loader": "^0.26.0",
     "cssnano": "^3.7.4",
     "debug": "^2.2.0",
+    "email-templates": "^4.0.4",
     "express": "^4.14.0",
     "extract-text-webpack-plugin": "^1.0.0",
     "feathers": "^2.1.7",
@@ -131,10 +140,12 @@
     "moment-timezone": "^0.5.21",
     "mysql": "^2.12.0",
     "node-sass-chokidar": "0.0.3",
+    "nodemailer": "^4.6.8",
     "nvm": "0.0.4",
     "postcss-loader": "^1.1.0",
     "promise": "^7.1.1",
     "prop-types": "^15.6.2",
+    "pug": "^2.0.3",
     "react": "^15.6.2",
     "react-dates": "^17.2.0",
     "react-dom": "^15.0.0",

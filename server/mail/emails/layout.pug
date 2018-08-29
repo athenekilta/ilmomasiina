@@ -1,0 +1,43 @@
+doctype transitional 
+html(lang='fi', xmlns='http://www.w3.org/1999/xhtml')  
+	head
+		meta(name='viewport', content='width-device-width')
+		meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+		title Ilmomasiina
+		link(href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet')
+		link(href='base.css', rel='stylesheet', data-inline='data-inline')
+		link(href='header.css', rel='stylesheet', data-inline='data-inline')
+		link(href='footer.css' rel='stylesheet' data-inline='data-inline')
+		link(href='content.css' rel='stylesheet' data-inline='data-inline')
+		block headContent
+	body(itemscope, itemtype='http://schema.org/EmailMessage')
+		table.body-wrap
+			tr
+				td
+				td(class='container', width='600')
+					div.content
+						table(class='header', width='100%', cellpadding='0', cellspacing='0')
+							tr
+								td(class='align-center content-block')
+									block headerContent
+										h1.headerTitle Ilmomasiina
+					div.content
+						table(class='main', width='100%', cellpadding='0', cellspacing='0')
+							tr
+								td(class='alert alert-good')
+									p.alertText #{topText}
+							tr
+								td.content-wrap
+									table(width='100%', cellpadding='0', cellspacing='0')
+										block mainContent
+						div.footer
+							table(width='100%')
+								tr
+									td(class='align-center content-block')
+										block footerContent
+											p.footerText Rakkaudella, Tietskarijengi & Athene
+											a.footerLink
+												p.footerText Linkki johonkin
+						
+
+				

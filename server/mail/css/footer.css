@@ -1,0 +1,9 @@
+.footerText {
+  color: grey;
+  text-align: center;
+}
+
+.footerLink .footerText {
+  text-decoration: underline;
+  color: blue;
+}

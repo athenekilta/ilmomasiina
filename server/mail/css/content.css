@@ -1,0 +1,31 @@
+.alert {
+  padding: 20px;
+  text-align: center;
+  border-radius: 3px 3px 0 0;
+}
+.alert a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.alertText {
+  font-size: 24px;
+  color: #fff;
+  font-weight: 500;
+}
+
+.alert.alert-warning {
+  background-color: #ff9f00;
+}
+.alert.alert-bad {
+  background-color: #d0021b;
+}
+.alert.alert-good {
+  background-color: #79b654;
+}
+
+.bodyText {
+  color: black;
+}
