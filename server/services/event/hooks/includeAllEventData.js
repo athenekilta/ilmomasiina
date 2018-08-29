@@ -22,41 +22,41 @@ module.exports = () => (hook) => {
       'answersPublic',
       'verificationEmail',
     ],
-    // TODO: THIS FUCKS UP THE QUERY SOMEHOW, results in "no record found for id 'x'" for all events
-    // include: [
-    //   // First include all questions (also non-public for the form)
-    //   {
-    //     attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
-    //     model: sequelize.models.question,
-    //   },
-    //   // Include quotas..
-    //   {
-    //     attributes: ['title', 'size', 'signupOpens', 'signupCloses', 'id'],
-    //     model: sequelize.models.quota,
-    //     // ... and signups of quotas
-    //     include: [
-    //       {
-    //         attributes: ['firstName', 'lastName', 'createdAt'],
-    //         model: sequelize.models.signup,
-    //         // ... and answers of signups
-    //         include: [
-    //           {
-    //             attributes: ['questionId', 'answer'],
-    //             model: sequelize.models.answer,
-    //             // ... but only public ones
-    //             include: [
-    //               {
-    //                 model: sequelize.models.question,
-    //                 attributes: [],
-    //                 where: { public: true },
-    //                 required: false,
-    //               },
-    //             ],
-    //           },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // ],
+
+    include: [
+      // First include all questions (also non-public for the form)
+      {
+        attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
+        model: sequelize.models.question,
+      },
+      // Include quotas..
+      {
+        attributes: ['title', 'size', 'signupOpens', 'signupCloses', 'id'],
+        model: sequelize.models.quota,
+        // ... and signups of quotas
+        include: [
+          {
+            attributes: ['firstName', 'lastName', 'createdAt'],
+            model: sequelize.models.signup,
+            // ... and answers of signups
+            include: [
+              {
+                attributes: ['questionId', 'answer'],
+                model: sequelize.models.answer,
+                // ... but only public ones
+                include: [
+                  {
+                    model: sequelize.models.question,
+                    attributes: [],
+                    where: { public: true },
+                    required: false,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
   };
 };
