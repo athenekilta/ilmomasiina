@@ -57,7 +57,7 @@ module.exports = function () {
         allowNull: false,
         defaultValue: true,
       },
-      answersPublic: {
+      signupsPublic: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
         defaultValue: true,

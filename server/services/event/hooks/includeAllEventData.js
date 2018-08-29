@@ -19,7 +19,7 @@ module.exports = () => (hook) => {
       'webpageUrl',
       'facebookUrl',
       'draft',
-      'answersPublic',
+      'signupsPublic',
       'verificationEmail',
     ],
 
@@ -43,15 +43,6 @@ module.exports = () => (hook) => {
               {
                 attributes: ['questionId', 'answer'],
                 model: sequelize.models.answer,
-                // ... but only public ones
-                include: [
-                  {
-                    model: sequelize.models.question,
-                    attributes: [],
-                    where: { public: true },
-                    required: false,
-                  },
-                ],
               },
             ],
           },
