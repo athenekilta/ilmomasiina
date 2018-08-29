@@ -2,7 +2,7 @@
 
 const includeQuotas = require('./includeQuotas');
 const includeAllEventData = require('./includeAllEventData');
-const removeUnpublicAnswers = require('./removeUnpublicAnswers');
+const removeNonpublicAnswers = require('./removeNonpublicAnswers');
 const formatOptionsAsArray = require('./formatOptionsAsArray');
 // const createEvent = require('./createEvent');
 // const validateEvent = require('./validateEvent');
@@ -22,7 +22,7 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  get: [removeUnpublicAnswers(), formatOptionsAsArray()],
+  get: [removeNonpublicAnswers(), formatOptionsAsArray()],
   create: [
     /* createEvent() */
   ],
