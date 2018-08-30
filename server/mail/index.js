@@ -36,7 +36,7 @@ const EmailService = {
     });
 
     return email.render('../server/mail/emails/confirmation/html', params).then((html) => {
-      const subject = `Ilmoittautuminen onnistui | ${params.eventName}`;
+      const subject = `Ilmoittautuminen onnistui | ${params.event.title}`;
       return EmailService.send(to, subject, html);
     });
   },

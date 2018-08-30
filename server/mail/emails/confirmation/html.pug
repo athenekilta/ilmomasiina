@@ -14,12 +14,12 @@ block mainContent
 				strong Tapahtuma: 
 				| #{event.title}
 			li 
-				strong Sijainti
+				strong Sijainti: 
 				| #{event.location}
 	div.content-block
 		p.bodyText Ilmoittautumisesi tiedot:
 		ul
 			each val in answers
 				li
-					strong #{val.label}
+					strong #{val.label}: 
 					| #{val.answer}
