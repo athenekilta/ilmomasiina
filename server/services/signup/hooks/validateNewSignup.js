@@ -1,6 +1,17 @@
 const moment = require('moment');
 const _ = require('lodash');
 
+const signupsAllowed = (signupOpens, signupCloses) => {
+  const now = moment();
+
+  const isOpened = now.isSameOrAfter(moment(signupOpens));
+  const isClosed = now.isAfter(moment(signupCloses));
+  const bothNull = (_.isNull(signupOpens) && _.isNull(signupCloses));
+
+  return (isOpened && !isClosed) || bothNull;
+};
+
+
 module.exports = () => (hook) => {
   const quotaId = hook.data.quotaId;
 
@@ -15,19 +26,16 @@ module.exports = () => (hook) => {
         throw new Error('Quota doesn\'t exist.');
       })
       .then((quota) => {
-        const signupsAllowed = (signupOpens, signupCloses) => {
-          const now = moment();
-
-          const isOpened = now.isSameOrAfter(moment(signupOpens));
-          const isClosed = now.isAfter(moment(signupCloses));
-          const bothNull = (_.isNull(signupOpens) && _.isNull(signupCloses));
-
-          return (isOpened && !isClosed) || bothNull;
-        };
-
-        if (!signupsAllowed(quota.signupOpens, quota.signupCloses)) {
-          throw new Error('Signups closed for this quota.');
-        }
+        const events = hook.app.get('models').event;
+        return events.findById(quota.eventId)
+          .catch(() => {
+            throw new Error('Event doesn\'t exist.');
+          })
+          .then((event) => {
+            if (!signupsAllowed(event.registrationStartDate, event.registrationEndDate)) {
+              throw new Error('Signups closed for this event.');
+            }
+          });
       });
   }
   throw new Error('Missing valid quota id.');
