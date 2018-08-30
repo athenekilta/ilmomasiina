@@ -14,7 +14,8 @@ module.exports = () => (hook) => {
 
   const models = hook.app.get('models');
 
-  return models.signup.findById(hook.id)
+  return models.signup
+    .findById(hook.id)
     .catch((error) => {
       throw new Error('Signup expired');
     })
@@ -35,6 +36,7 @@ module.exports = () => (hook) => {
       _.remove(hook.data.answers, obj => questionIds.indexOf(obj.questionId) < 0);
 
       questions.map((question) => {
+        console.log(question);
         const answer = _.find(hook.data.answers, { questionId: question.id });
 
         if (_.isNil(answer)) {

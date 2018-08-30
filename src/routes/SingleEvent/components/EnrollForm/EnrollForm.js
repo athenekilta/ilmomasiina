@@ -12,7 +12,6 @@ export class EnrollForm extends React.Component {
   }
 
   parseSubmit(data) {
-
     const answers = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -42,7 +41,6 @@ export class EnrollForm extends React.Component {
   }
 
   renderQuestionFields() {
-
     return _.map(this.props.questions, (question) => {
       if (question.type === 'text') {
         return (
@@ -92,6 +90,7 @@ export class EnrollForm extends React.Component {
             value={[]}
             name={String(question.id)}
             label={question.question}
+            required={question.required}
             options={question.options.map(option => ({ label: option, value: option }))}
             key={question.id}
           />
@@ -109,7 +108,7 @@ export class EnrollForm extends React.Component {
           <a className="close" onClick={() => this.props.closeForm()} />
           <div className="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
             <h2>Ilmoittaudu</h2>
-            <p>{'Olet jonossa sijalla: ' + this.props.signup.positionInQuota}</p>
+            <p>{`Olet jonossa sijalla: ${this.props.signup.positionInQuota}`}</p>
             <Formsy.Form onValidSubmit={this.parseSubmit}>
               <Input name="firstName" value="" label="Etunimi" type="text" placeholder="Etunimi" required />
               <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required />
@@ -134,7 +133,9 @@ export class EnrollForm extends React.Component {
                   disabled={this.props.loading}
                 />
               </div>
-              <a className="btn btn-link pull-right" onClick={() => this.props.closeForm()}>Peruuta</a>
+              <a className="btn btn-link pull-right" onClick={() => this.props.closeForm()}>
+                Peruuta
+              </a>
             </Formsy.Form>
           </div>
           <div className="cf" />
