@@ -116,10 +116,12 @@ class SingleEvent extends React.Component {
       });
     });
 
-    const openQuota = extraSignups.slice(0, event.openQuota);
-    const waitList = extraSignups.slice(event.openQuota);
+    const byTimestamp = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
 
-    let formattedQuestions = event.questions.slice();
+    const openQuota = extraSignups.slice(0, event.openQuotaSize).sort(byTimestamp);
+    const waitList = extraSignups.slice(event.openQuotaSize).sort(byTimestamp);
+
+    const formattedQuestions = event.questions.slice();
 
     formattedQuestions.push({
       id: 0,
@@ -213,11 +215,11 @@ class SingleEvent extends React.Component {
                           />
                         ))
                         : ''}
-                      {event.openQuota > 0 ? (
+                      {event.openQuotaSize > 0 ? (
                         <ViewProgress
                           title="Avoin"
                           value={openQuota.length}
-                          max={event.openQuota}
+                          max={event.openQuotaSize}
                           key="open"
                         />
                       ) : (
