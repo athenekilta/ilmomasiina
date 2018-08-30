@@ -161,47 +161,25 @@ class SingleEvent extends React.Component {
               <div className="row">
                 <div className="col-xs-12 col-sm-8">
                   <h1>{event.title}</h1>
-                  <p>
+                  <div className="event-heading">
                     {event.date ? (
-                      <span>
-                        {moment(event.date).format('D.M.Y [klo] HH:mm')}
-                        <br />
-                      </span>
-                    ) : (
-                        ''
-                      )}
+                      <p>
+                        <strong>Ajankohta:</strong> {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                      </p>
+                    ) : null}
                     {event.location ? (
-                      <span>
-                        {event.location}
-                        <br />
-                      </span>
-                    ) : (
-                        ''
-                      )}
+                      <p><strong>Sijainti:</strong> {event.location}</p>
+                    ) : null}
                     {event.price ? (
-                      <span>
-                        Hinta: {event.price}
-                        <br />
-                      </span>
-                    ) : (
-                        ''
-                      )}
+                      <p><strong>Hinta:</strong> {event.price}</p>
+                    ) : null}
                     {event.homepage ? (
-                      <a href={event.homepage} title="Tapahtuman kotisivut">
-                        {event.homepage}
-                        <br />
-                      </a>
-                    ) : (
-                        ''
-                      )}
+                      <p><strong>Tapahtuman kotisivut:</strong> <a href={event.homepage} title="Tapahtuman kotisivut">{event.homepage}</a></p>
+                    ) : null}
                     {event.facebook ? (
-                      <a href={event.facebook} title="Facebook-tapahtuma">
-                        Facebook-tapahtuma<br />
-                      </a>
-                    ) : (
-                        ''
-                      )}
-                  </p>
+                      <p><strong>Facebook-tapahtuma:</strong> <a href={event.facebook} title="Facebook-tapahtuma">{event.facebook}</a></p>
+                    ) : null}
+                  </div>
                   <p>{nl2br(event.description)}</p>
                 </div>
                 <div className="col-xs-12 col-sm-4 pull-right">
