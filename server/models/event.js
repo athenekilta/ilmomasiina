@@ -24,9 +24,6 @@ module.exports = function () {
       registrationEndDate: {
         type: Sequelize.DATE,
       },
-      useOpenQuota: {
-        type: Sequelize.BOOLEAN,
-      },
       openQuotaSize: {
         type: Sequelize.INTEGER,
         validate: {
