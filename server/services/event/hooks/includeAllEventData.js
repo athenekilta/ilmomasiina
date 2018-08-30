@@ -10,7 +10,6 @@ module.exports = () => (hook) => {
       'endDate',
       'registrationStartDate',
       'registrationEndDate',
-      'useOpenQuota',
       'openQuotaSize',
       'description',
       'price',
