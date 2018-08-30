@@ -9,3 +9,15 @@
     }
   }
 }
+
+td {
+  span.hover {
+    display: none;
+  }
+
+  &:hover {
+    span.hover {
+      display: inline;
+    }
+  }
+}
