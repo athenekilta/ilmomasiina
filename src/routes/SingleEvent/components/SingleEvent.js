@@ -156,6 +156,7 @@ class SingleEvent extends React.Component {
             signup={signup}
             loading={this.props.loading}
             error={this.props.error}
+            event={event}
           />
         ) : (
             <div className="container">
