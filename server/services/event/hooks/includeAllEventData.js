@@ -1,5 +1,6 @@
 module.exports = () => (hook) => {
   const sequelize = hook.app.get('sequelize');
+  const { quota } = sequelize.models;
 
   hook.params.sequelize = {
     distinct: true,
@@ -20,7 +21,7 @@ module.exports = () => (hook) => {
       'signupsPublic',
       'verificationEmail',
     ],
-
+    raw: false,
     include: [
       // First include all questions (also non-public for the form)
       {

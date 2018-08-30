@@ -22,7 +22,9 @@ module.exports = () => (hook) => {
       quota.dataValues.signups = quota.dataValues.signups.map((signup) => {
         if (signup.dataValues.answers) {
           // Filter out answers that are not public
-          signup.dataValues.answers = signup.dataValues.answers.filter(answer => publicQuestions.includes(answer.questionId));
+          signup.dataValues.answers = signup.dataValues.answers.filter(answer =>
+            publicQuestions.includes(answer.questionId),
+          );
         }
 
         return signup;
