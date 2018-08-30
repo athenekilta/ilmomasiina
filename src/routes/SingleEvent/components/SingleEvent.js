@@ -241,7 +241,7 @@ class SingleEvent extends React.Component {
                     <div>
                       <h2>Ilmoittautuneet</h2>
                       {this.renderSignupLists(event)}
-                      {openQuota ? (
+                      {event.openQuotaSize ? (
                         <SignupList
                           title={'Avoin kiintiö'}
                           questions={_.filter(formattedQuestions, 'public')}
