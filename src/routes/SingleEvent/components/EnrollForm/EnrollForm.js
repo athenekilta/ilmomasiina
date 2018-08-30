@@ -103,13 +103,34 @@ export class EnrollForm extends React.Component {
   }
 
   render() {
+
+    const signupStatus = () => {
+      const { status, position, quotaId } = this.props.signup;
+      const { openQuotaSize } = this.props.event;
+      const quotas = this.props.event.quota;
+
+      console.log(this.props.signup);
+      console.log(status);
+
+      if (status == 'in-quota') {
+        const quota = _.find(quotas, { id: quotaId });
+        return `Olet kiintiössä ${quota.title} sijalla ${position} / ${quota.size}.`;
+      }
+
+      if (status == 'in-open') {
+        return `Olet avoimessa kiintiössä sijalla ${position} / ${openQuotaSize}.`;
+      }
+
+      return `Olet jonossa sijalla ${position}.`;
+    }
+
     return (
       <div className="form-wrapper">
         <div className="container">
           <a className="close" onClick={() => this.props.closeForm()} />
-          <div className="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+          <div className="col-xs-12 col-md-8 col-md-offset-2">
             <h2>Ilmoittaudu</h2>
-            <p>{'Olet jonossa sijalla: ' + this.props.signup.positionInQuota}</p>
+            <p>{signupStatus()}</p>
             <Formsy.Form onValidSubmit={this.parseSubmit}>
               <Input name="firstName" value="" label="Etunimi" type="text" placeholder="Etunimi" required />
               <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required />

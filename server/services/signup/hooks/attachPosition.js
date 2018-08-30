@@ -38,18 +38,34 @@ module.exports = () => (hook) => {
       return models.event.findOne(query)
         .then((event) => {
           const currentQuota = _.find(event.quota, { dataValues: { id: quotaId } }).dataValues;
-          const positionInQuota = currentQuota.signupsBefore;
+          const positionInQuota = currentQuota.signupsBefore + 1;
 
-          const quotaOverflows = event.quota.map(q => Math.min(0, q.dataValues.size - q.dataValues.signupsBefore));
-          const positionInOpen = Math.max(0, Number(event.openQuota) - _.sum(quotaOverflows) - currentQuota.size);
+          let position = 0;
+          let status = null;
 
-          const positionInQueue = Math.max(0, positionInOpen - Number(event.openQuota));
+          if (positionInQuota <= currentQuota.size) {
+            position = positionInQuota;
+            status = 'in-quota';
+          } else {
+            const quotaOverflows = event.quota.map(q => Math.min(0, q.dataValues.size - q.dataValues.signupsBefore));
+            const positionInOpen = Math.max(0, Number(event.openQuotaSize) - _.sum(quotaOverflows) - currentQuota.size);
+
+            if (positionInOpen <= event.openQuotaSize) {
+              position = positionInOpen;
+              status = 'in-open';
+            } else {
+              const positionInQueue = Math.max(0, positionInOpen - Number(event.openQuotaSize));
+              position = positionInQueue;
+              status = 'in-queue';
+            }
+
+          }
 
           hook.result = {
             id: hook.result.id, // signup id
-            positionInQuota,
-            positionInOpen,
-            positionInQueue,
+            position,
+            status,
+            quotaId,
             editHash: hook.result.editHash,
             createdAt: hook.result.createdAt,
           };
