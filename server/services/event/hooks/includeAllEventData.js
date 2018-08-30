@@ -6,8 +6,7 @@ module.exports = () => (hook) => {
     attributes: [
       'id',
       'title',
-      'startDate',
-      'endDate',
+      'date',
       'registrationStartDate',
       'registrationEndDate',
       'openQuotaSize',

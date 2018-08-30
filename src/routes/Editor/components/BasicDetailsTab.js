@@ -15,21 +15,15 @@ class BasicDetailsTab extends React.Component {
     super(props);
     this.state = {
       date: null,
-      startDateFocused: false,
-      endDateFocused: false,
+      dateFocused: false,
     };
 
-    this.onStartDateChange = this.onStartDateChange.bind(this);
-    this.onEndDateChange = this.onEndDateChange.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
   }
 
-  onStartDateChange(date) {
-    this.setState({
-      date,
-    });
+  onDateChange(date) {
+    this.setState({ date });
   }
-
-  onEndDateChange() {}
 
   render() {
     const { event } = this.props;
@@ -45,16 +39,9 @@ class BasicDetailsTab extends React.Component {
           onChange={this.props.onDataChange}
         />
         <DateTimePicker
-          name="startDate"
-          value={event.startDate}
-          label="Alkamisajankohta"
-          required
-          onChange={this.props.onDataChange}
-        />
-        <DateTimePicker
-          name="endDate"
-          value={event.endDate}
-          label="Päättymisajankohta"
+          name="date"
+          value={event.date}
+          label="Ajankohta"
           required
           onChange={this.props.onDataChange}
         />

@@ -12,10 +12,7 @@ module.exports = function () {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      startDate: {
-        type: Sequelize.DATE,
-      },
-      endDate: {
+      date: {
         type: Sequelize.DATE,
       },
       registrationStartDate: {
@@ -67,7 +64,7 @@ module.exports = function () {
       freezeTableName: true,
       paranoid: true,
       defaultScope: {
-        startDate: {
+        date: {
           $and: {
             draft: false,
             date: {

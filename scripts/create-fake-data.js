@@ -15,9 +15,7 @@ const d = 'Y-M-D HH:mm:ss';
 const events = [
   {
     title: 'Minuuttikalja 2016',
-    date: moment(now)
-      .subtract(3, 'days')
-      .format(d),
+    date: moment(now).subtract(3, 'days'),
     description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
@@ -28,9 +26,7 @@ const events = [
   },
   {
     title: 'Columbia Road -excu',
-    date: moment(now)
-      .add(5, 'days')
-      .format(d),
+    date: moment(now).add(5, 'days'),
     description:
       'Tapahtuma, jossa kiintiöt aukeavat eri aikoihin. Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem', // eslint-disable-line
     price: '0 €',
@@ -42,9 +38,7 @@ const events = [
   },
   {
     title: 'Ystävänpäiväsitsit',
-    date: moment(now)
-      .add(15, 'days')
-      .format(d),
+    date: moment(now).add(15, 'days'),
     description: 'Sitsit kiintiöillä + avoimella',
     openQuotaSize: 20,
     price: '14 € (12 € alkoholiton)',
@@ -70,36 +64,24 @@ const quotas = [
     // going fields doesn't exist in db, but it's used to create right amount of signups
     going: 18,
     size: 20,
-    signupOpens: moment(now)
-      .subtract(50, 'days')
-      .format(d),
-    signupCloses: moment(now)
-      .subtract(35, 'days')
-      .format(d),
+    signupOpens: moment(now).subtract(50, 'days'),
+    signupCloses: moment(now).subtract(35, 'days'),
   },
   {
     eventId: 2,
     title: 'Athene',
     going: 0,
     size: 20,
-    signupOpens: moment(now)
-      .add(2, 'days')
-      .format(d),
-    signupCloses: moment(now)
-      .add(10, 'days')
-      .format(d),
+    signupOpens: moment(now).add(2, 'days'),
+    signupCloses: moment(now).add(10, 'days'),
   },
   {
     eventId: 2,
     title: 'Tietokilta',
     going: 29,
     size: 20,
-    signupOpens: moment(now)
-      .add(2, 'days')
-      .format(d),
-    signupCloses: moment(now)
-      .add(5, 'days')
-      .format(d),
+    signupOpens: moment(now).add(2, 'days'),
+    signupCloses: moment(now).add(5, 'days'),
   },
   {
     eventId: 3,
@@ -107,11 +89,8 @@ const quotas = [
     going: 29,
     size: 20,
     signupOpens: moment(now)
-      .subtract(2, 'days')
-      .format(d),
-    signupCloses: moment(now)
-      .add(5, 'days')
-      .format(d),
+      .subtract(2, 'days'),
+    signupCloses: moment(now).add(5, 'days'),
   },
   {
     eventId: 3,
@@ -119,11 +98,8 @@ const quotas = [
     going: 27,
     size: 20,
     signupOpens: moment(now)
-      .subtract(2, 'days')
-      .format(d),
-    signupCloses: moment(now)
-      .add(5, 'days')
-      .format(d),
+      .subtract(2, 'days'),
+    signupCloses: moment(now).add(5, 'days'),
   },
   {
     eventId: 3,
@@ -131,11 +107,8 @@ const quotas = [
     going: 29,
     size: 20,
     signupOpens: moment(now)
-      .subtract(2, 'days')
-      .format(d),
-    signupCloses: moment(now)
-      .add(5, 'days')
-      .format(d),
+      .subtract(2, 'days'),
+    signupCloses: moment(now).add(5, 'days'),
   },
   {
     eventId: 4,
@@ -226,11 +199,9 @@ quotas.map((quota, quotaIndex) => {
     signups.push({
       quotaId: quotaIndex + 1,
       createdAt: moment()
-        .subtract('5', 'minutes')
-        .format(d),
+        .subtract('5', 'minutes'),
       confirmedAt: moment()
-        .subtract('1', 'minutes')
-        .format(d),
+        .subtract('1', 'minutes'),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
