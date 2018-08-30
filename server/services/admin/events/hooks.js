@@ -36,7 +36,7 @@ const includeAllEventData = (hook) => {
       'id',
       'title',
       'date',
-      'openQuota',
+      'openQuotaSize',
       'description',
       'price',
       'location',
