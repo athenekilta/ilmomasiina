@@ -29,7 +29,7 @@ module.exports = () => (hook) => {
       },
       // Include quotas..
       {
-        attributes: ['title', 'size', 'signupOpens', 'signupCloses', 'id'],
+        attributes: ['title', 'size', 'id'],
         model: sequelize.models.quota,
         // ... and signups of quotas
         include: [

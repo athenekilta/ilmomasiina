@@ -13,8 +13,6 @@ const includeQuotas = (hook) => {
         attributes: [
           'title',
           'size',
-          'signupOpens',
-          'signupCloses',
           [sequelize.fn('COUNT', sequelize.col('quota.signups.id')), 'signupCount'],
         ],
         include: [
@@ -54,7 +52,7 @@ const includeAllEventData = (hook) => {
       },
       // Include quotas..
       {
-        attributes: ['title', 'size', 'signupOpens', 'signupCloses'],
+        attributes: ['title', 'size'],
         model: sequelize.models.quota,
         // ... and signups of quotas
         include: [

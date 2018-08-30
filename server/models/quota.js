@@ -12,12 +12,6 @@ module.exports = function () {
     size: {
       type: Sequelize.INTEGER,
     },
-    signupOpens: {
-      type: Sequelize.DATE,
-    },
-    signupCloses: {
-      type: Sequelize.DATE,
-    },
   }, {
     freezeTableName: true,
     paranoid: true,

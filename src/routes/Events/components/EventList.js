@@ -5,7 +5,6 @@ import _ from 'lodash';
 import Separator from '../../../components/Separator';
 import './EventList.scss';
 import signupState from '../../../utils/signupStateText';
-import allTimesMatch from '../../../utils/allTimesMatch';
 
 class TableRow extends React.Component {
   render() {
@@ -17,7 +16,7 @@ class TableRow extends React.Component {
         <td key="date" className="date">{ date ? moment(date).format('DD.MM.YYYY') : '' }</td>
         <td key="signup" className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>{signupLabel}</td>
         <td key="signups" className="signups" data-xs-prefix={signups || size ? 'Ilmoittautuneita: ' : ''}>
-          { signups || 0 }{ size ? <Separator /> : '' }{ size || ''}
+          { signups }{ size ? <Separator /> : '' }{ size || ''}
         </td>
       </tr>
     );
@@ -49,46 +48,41 @@ class EventList extends React.Component {
     const eventsSorted = _.sortBy(this.props.eventList, [sortFunction, 'date', 'title']);
 
     const tableRows = eventsSorted.map((event) => {
-      // If every quota has same registration start/end time, show that time only once
-      const showOneLabel = allTimesMatch(event.quota);
-
-      const eventState = signupState(event.date, event.quota[0].signupOpens, event.quota[0].signupCloses);
+      const eventState = signupState(event.date, event.registrationStartDate, event.registrationEndDate);
 
       const rows = [
         <TableRow
           title={event.title}
           link={`/event/${event.id}`}
           date={event.date}
-          signupLabel={showOneLabel ? eventState.label : ''}
-          signups={_.sumBy(event.quota, 'signups') || 0}
-          size={_.sumBy(event.quota, 'size')}
+          signupLabel={eventState.label}
+          signups={event.quota.length < 2 && event.signupsPublic ? (_.sumBy(event.quota, 'signups') || 0) : null}
+          size={event.quota.length < 2 ?_.sumBy(event.quota, 'size') : null}
           className={eventState.class}
           key={`e${event.id}`} />,
       ];
 
       if (event.quota.length > 1) {
         event.quota.map((quota, i) => {
-          const quotaState = signupState(event.date, quota.signupOpens, quota.signupCloses);
           return rows.push(
             <TableRow
               title={quota.title}
-              signupLabel={!showOneLabel ? quotaState.label : ''}
-              signups={Math.min(quota.signupCount, quota.size)}
+              signups={event.signupsPublic ? Math.min(quota.signupCount, quota.size) : null}
               size={quota.size}
-              className={`${eventState.class} ${quotaState.class} child`}
+              className="child"
               key={`q${i}`} />,
           );
         });
       }
 
-      if (event.openQuota > 0) {
+      if (event.openQuotaSize > 0) {
         rows.push(
           <TableRow
             title="Avoin"
             signupLabel=""
-            signups={_.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size)))}
-            size={event.openQuota}
-            className={`${eventState.class} child text-muted`}
+            signups={Math.min(_.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size))), event.openQuotaSize)}
+            size={event.openQuotaSize}
+            className="child"
             key={`open${event.id}`} />,
         );
       }

@@ -2,7 +2,7 @@ module.exports = () => (hook) => {
   const sequelize = hook.app.get('sequelize');
 
   hook.params.sequelize = {
-    attributes: ['id', 'title', 'date', 'openQuotaSize'],
+    attributes: ['id', 'title', 'date', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize', 'signupsPublic'],
     distinct: true,
     // Include quotas of event and count of signups
     include: [
@@ -11,8 +11,6 @@ module.exports = () => (hook) => {
         attributes: [
           'title',
           'size',
-          'signupOpens',
-          'signupCloses',
           [sequelize.fn('COUNT', sequelize.col('quota.signups.id')), 'signupCount'],
         ],
         include: [

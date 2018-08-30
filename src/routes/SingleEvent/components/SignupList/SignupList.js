@@ -15,7 +15,7 @@ export class SignupList extends React.Component {
         <td>{index}.</td>
         <td>{firstName || 'Vahvistamatta'} {lastName || ''}</td>
         {this.props.questions.map((q, i) => <td key={i}>{getAnswer(answers, q.id) || ''}</td>)}
-        <td>{moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM. hh:mm:ss')}<span className="hover">{moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}</span></td>
+        <td>{moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY hh:mm:ss')}<span className="hover">{moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}</span></td>
       </tr>;
 
     return (

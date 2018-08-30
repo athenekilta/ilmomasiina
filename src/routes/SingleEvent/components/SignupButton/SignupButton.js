@@ -12,8 +12,6 @@ export class SignupButton extends React.Component {
     const isClosed = now.isSameOrAfter(moment(this.props.closes));
     const isOpen = (isOpened && !isClosed) || _.isEmpty(this.props.opens) || _.isEmpty(this.props.closes);
 
-    const state = signupState(this.props.eventTime, this.props.opens, this.props.closes);
-
     return (
       <p>
         <button
@@ -23,7 +21,6 @@ export class SignupButton extends React.Component {
         >
           {this.props.isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${this.props.title}`}
         </button>
-        {this.props.showLabel ? state.label : ''}
       </p>
     );
   }
@@ -36,7 +33,6 @@ SignupButton.propTypes = {
   closes: React.PropTypes.string,
   eventTime: React.PropTypes.string,
   isOnly: React.PropTypes.bool.isRequired,
-  showLabel: React.PropTypes.bool.isRequired,
 };
 
 export default SignupButton;
