@@ -4,14 +4,22 @@ block mainContent
 	div.content-block
 		p.bodyText 
 			| Ilmoittautumisesi tapahtumaan 
-			strong #{eventName} 
+			strong #{event.title} 
 			| onnistui! Mikäli haluat perua ilmoittautumisesi, voit tehdä niin painamalla tätä 
 			a linkkiä. 
 	div.content-block
+		p.bodyText Tapahtuman tiedot:
+		ul
+			li
+				strong Tapahtuma: 
+				| #{event.title}
+			li 
+				strong Sijainti
+				| #{event.location}
+	div.content-block
 		p.bodyText Ilmoittautumisesi tiedot:
-		p.bodyText 
-			strong Nimi: 
-			| #{name}
-			br
-			strong Sähköposti: 
-			| #{email}
+		ul
+			each val in answers
+				li
+					strong #{val.label}
+					| #{val.answer}
