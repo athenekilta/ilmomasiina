@@ -67,7 +67,7 @@ class SingleEvent extends React.Component {
     }
     else {
       toast.update(this.toastId, {
-        render: 'Ilmoittautuminen ei onnistunut. Tarkista että kaikki pakolliset kentät on täytetty ja yritä uudestaan.',
+        render: 'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.',
         type: toast.TYPE.ERROR,
         autoClose: 5000,
       });
@@ -119,7 +119,7 @@ class SingleEvent extends React.Component {
     const openQuota = extraSignups.slice(0, event.openQuota);
     const waitList = extraSignups.slice(event.openQuota);
 
-    const formattedQuestions = event.questions;
+    let formattedQuestions = event.questions.slice();
 
     formattedQuestions.push({
       id: 0,
@@ -201,7 +201,6 @@ class SingleEvent extends React.Component {
                     ) : (
                         ''
                       )}
-                    <a href="http://pekkalammi.com">Facebook-tapahtuma</a>
                   </p>
                   <p>{nl2br(event.description)}</p>
                 </div>
@@ -256,36 +255,32 @@ class SingleEvent extends React.Component {
                     )}
                 </div>
                 <div className="col-xs-12">
-                  {event.quota && !event.quota.length ? (
+                  {!event.signupsPublic ? (
                     <p>Tapahtuman vastaukset eivät ole julkisia.</p>
                   ) : (
-                      <div>
-                        <h2>Ilmoittautuneet</h2>
-                        {this.renderSignupLists(event)}
-                      </div>
-                    )}
-                </div>
-                <div className="col-xs-12">
-                  <div>
-                    {openQuota ? (
-                      <SignupList
-                        title={'Avoin kiintiö'}
-                        questions={formattedQuestions}
-                        rows={openQuota}
-                        key={'openQuota'}
-                      />
-                    ) : null
-                    }
-                    {waitList ? (
-                      <SignupList
-                        title={'Jonossa'}
-                        questions={formattedQuestions}
-                        rows={waitList}
-                        key={'waitList'}
-                      />
-                    ) : null
-                    }
-                  </div>
+                    <div>
+                      <h2>Ilmoittautuneet</h2>
+                      {this.renderSignupLists(event)}
+                      {openQuota ? (
+                        <SignupList
+                          title={'Avoin kiintiö'}
+                          questions={_.filter(formattedQuestions, 'public')}
+                          rows={openQuota}
+                          key={'openQuota'}
+                        />
+                      ) : null
+                      }
+                      {waitList ? (
+                        <SignupList
+                          title={'Jonossa'}
+                          questions={_.filter(formattedQuestions, 'public')}
+                          rows={waitList}
+                          key={'waitList'}
+                        />
+                      ) : null
+                      }
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
