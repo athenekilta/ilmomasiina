@@ -5,15 +5,13 @@ const includeAllEventData = require('./includeAllEventData');
 const removeNonpublicAnswers = require('./removeNonpublicAnswers');
 const formatOptionsAsArray = require('./formatOptionsAsArray');
 // const createEvent = require('./createEvent');
-// const validateEvent = require('./validateEvent');
+const validateEvent = require('./validateEvent');
 
 exports.before = {
   all: [],
   find: [includeQuotas()],
   get: [includeAllEventData()],
-  create: [
-    /* validateEvent() */
-  ],
+  create: [validateEvent()],
   update: [],
   patch: [],
   remove: [],

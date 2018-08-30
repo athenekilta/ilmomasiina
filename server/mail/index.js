@@ -6,7 +6,25 @@ const path = require('path');
 sgMail.setApiKey(ilmoconfig.sendgridApiKey);
 
 const EmailService = {
-  send: () => {
+  send: (to, subject, html) => {
+    const msg = {
+      to,
+      from: ilmoconfig.mailFrom,
+      subject,
+      html,
+    };
+
+    sgMail
+      .send(msg)
+      .then((res) => {
+        console.log('SUCCESS');
+      })
+      .catch((error) => {
+        console.log('ERROR', error);
+      });
+  },
+
+  sendConfirmationMail(to, params) {
     const email = new Email({
       juice: true,
       juiceResources: {
@@ -17,32 +35,17 @@ const EmailService = {
       },
     });
 
-    email
+    return email
       .render('../../server/mail/emails/confirmation/html', {
-        topText: 'Ilmoittautuminen onnistui!',
-        eventName: 'Minuuttikalja',
-        name: 'Juuso Lappalainen',
-        email: 'juuso.lappalainen@juuso.com',
+        topText: params.topText,
+        eventName: params.eventName,
+        name: params.name,
+        email: params.email,
       })
       .then((html) => {
-        const msg = {
-          to: 'juuso.u.lappalainen@gmail.com',
-          from: 'test@example.com',
-          subject: 'Sending with SendGrid is Fun',
-          text: 'and easy to do anywhere, even with Node.js',
-          html,
-        };
-
-        sgMail
-          .send(msg)
-          .then((res) => {
-            console.log('SUCCESS');
-          })
-          .catch((error) => {
-            console.log('ERROR', error);
-          });
-      })
-      .catch(console.error);
+        const subject = `Ilmoittautuminen onnistui | ${params.eventName}`;
+        return EmailService.send(to, subject, html);
+      });
   },
 };
 

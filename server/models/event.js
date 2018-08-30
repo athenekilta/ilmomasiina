@@ -60,7 +60,7 @@ module.exports = function () {
       signupsPublic: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
+        defaultValue: false,
       },
       verificationEmail: {
         type: Sequelize.TEXT,

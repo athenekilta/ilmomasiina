@@ -217,6 +217,8 @@ class Editor extends React.Component {
   render() {
     const isNewEvent = this.props.params.id === 'new';
 
+    console.log(this.props.event);
+
     if (this.state.eventLoading) {
       return (
         <div className="event-editor">

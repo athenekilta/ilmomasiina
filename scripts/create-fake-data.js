@@ -15,7 +15,9 @@ const d = 'Y-M-D HH:mm:ss';
 const events = [
   {
     title: 'Minuuttikalja 2016',
-    date: moment(now).subtract(3, 'days').format(d),
+    date: moment(now)
+      .subtract(3, 'days')
+      .format(d),
     description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
@@ -26,8 +28,11 @@ const events = [
   },
   {
     title: 'Columbia Road -excu',
-    date: moment(now).add(5, 'days').format(d),
-    description: 'Tapahtuma, jossa kiintiöt aukeavat eri aikoihin. Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem', // eslint-disable-line
+    date: moment(now)
+      .add(5, 'days')
+      .format(d),
+    description:
+      'Tapahtuma, jossa kiintiöt aukeavat eri aikoihin. Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem', // eslint-disable-line
     price: '0 €',
     location: 'Eerikinkatu 5, Helsinki',
     homepage: 'http://crexcu2017.wordpress.com/',
@@ -37,9 +42,11 @@ const events = [
   },
   {
     title: 'Ystävänpäiväsitsit',
-    date: moment(now).add(15, 'days').format(d),
+    date: moment(now)
+      .add(15, 'days')
+      .format(d),
     description: 'Sitsit kiintiöillä + avoimella',
-    openQuota: 20,
+    openQuotaSize: 20,
     price: '14 € (12 € alkoholiton)',
     location: 'Smökki',
     homepage: 'http://crexcu2017.wordpress.com/',
@@ -63,48 +70,72 @@ const quotas = [
     // going fields doesn't exist in db, but it's used to create right amount of signups
     going: 18,
     size: 20,
-    signupOpens: moment(now).subtract(50, 'days').format(d),
-    signupCloses: moment(now).subtract(35, 'days').format(d),
+    signupOpens: moment(now)
+      .subtract(50, 'days')
+      .format(d),
+    signupCloses: moment(now)
+      .subtract(35, 'days')
+      .format(d),
   },
   {
     eventId: 2,
     title: 'Athene',
     going: 0,
     size: 20,
-    signupOpens: moment(now).add(2, 'days').format(d),
-    signupCloses: moment(now).add(10, 'days').format(d),
+    signupOpens: moment(now)
+      .add(2, 'days')
+      .format(d),
+    signupCloses: moment(now)
+      .add(10, 'days')
+      .format(d),
   },
   {
     eventId: 2,
     title: 'Tietokilta',
     going: 29,
     size: 20,
-    signupOpens: moment(now).add(2, 'days').format(d),
-    signupCloses: moment(now).add(5, 'days').format(d),
+    signupOpens: moment(now)
+      .add(2, 'days')
+      .format(d),
+    signupCloses: moment(now)
+      .add(5, 'days')
+      .format(d),
   },
   {
     eventId: 3,
     title: 'Athene',
     going: 29,
     size: 20,
-    signupOpens: moment(now).subtract(2, 'days').format(d),
-    signupCloses: moment(now).add(5, 'days').format(d),
+    signupOpens: moment(now)
+      .subtract(2, 'days')
+      .format(d),
+    signupCloses: moment(now)
+      .add(5, 'days')
+      .format(d),
   },
   {
     eventId: 3,
     title: 'Prodeko',
     going: 27,
     size: 20,
-    signupOpens: moment(now).subtract(2, 'days').format(d),
-    signupCloses: moment(now).add(5, 'days').format(d),
+    signupOpens: moment(now)
+      .subtract(2, 'days')
+      .format(d),
+    signupCloses: moment(now)
+      .add(5, 'days')
+      .format(d),
   },
   {
     eventId: 3,
     title: 'Tietokilta',
     going: 29,
     size: 20,
-    signupOpens: moment(now).subtract(2, 'days').format(d),
-    signupCloses: moment(now).add(5, 'days').format(d),
+    signupOpens: moment(now)
+      .subtract(2, 'days')
+      .format(d),
+    signupCloses: moment(now)
+      .add(5, 'days')
+      .format(d),
   },
   {
     eventId: 4,
@@ -178,12 +209,13 @@ faker.locale = 'pl';
 const createAnswers = (eventId, signupId) => {
   const questionsToAnswer = _.filter(questions, ['eventId', eventId]) || [];
   if (questionsToAnswer.length > 0) {
-    questionsToAnswer.map(question =>
-      answers.push({
-        signupId,
-        questionId: question.id,
-        answer: faker.lorem.sentence(),
-      }) // eslint-disable-line
+    questionsToAnswer.map(
+      question =>
+        answers.push({
+          signupId,
+          questionId: question.id,
+          answer: faker.lorem.sentence(),
+        }), // eslint-disable-line
     );
   }
   return true;
@@ -193,8 +225,12 @@ quotas.map((quota, quotaIndex) => {
   for (let i = 0; i < quota.going; i += 1) {
     signups.push({
       quotaId: quotaIndex + 1,
-      createdAt: moment().subtract('5', 'minutes').format(d),
-      confirmedAt: moment().subtract('1', 'minutes').format(d),
+      createdAt: moment()
+        .subtract('5', 'minutes')
+        .format(d),
+      confirmedAt: moment()
+        .subtract('1', 'minutes')
+        .format(d),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       email: faker.internet.email(),
@@ -217,7 +253,8 @@ app.configure(models);
 const seq = app.get('sequelize');
 
 // Drop tables and create them
-seq.sync({ force: true })
+seq
+  .sync({ force: true })
   .then(() => seq.models.event.bulkCreate(events))
   .then(() => seq.models.quota.bulkCreate(quotas))
   .then(() => seq.models.question.bulkCreate(questions))
