@@ -19,16 +19,18 @@ module.exports = () => (hook) => {
 
     // Loop through all quotas and all signups of them
     hook.result.dataValues.quota = hook.result.dataValues.quota.map((quota) => {
-      quota.dataValues.signups = quota.dataValues.signups.map((signup) => {
-        if (signup.dataValues.answers) {
-          // Filter out answers that are not public
-          signup.dataValues.answers = signup.dataValues.answers.filter(answer =>
-            publicQuestions.includes(answer.questionId),
-          );
-        }
+      if (quota.dataValues.signups) {
+        quota.dataValues.signups = quota.dataValues.signups.map((signup) => {
+          if (signup.dataValues.answers) {
+            // Filter out answers that are not public
+            signup.dataValues.answers = signup.dataValues.answers.filter(answer =>
+              publicQuestions.includes(answer.questionId),
+            );
+          }
 
-        return signup;
-      });
+          return signup;
+        });
+      }
 
       return quota;
     });

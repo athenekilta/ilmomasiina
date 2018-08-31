@@ -125,7 +125,7 @@ export class EnrollForm extends React.Component {
           <a className="close" onClick={() => this.props.closeForm()} />
           <div className="col-xs-12 col-md-8 col-md-offset-2">
             <h2>Ilmoittaudu</h2>
-            <p>{signupStatus()}</p>
+            {this.props.signup.status != null ? <p>{signupStatus()}</p> : null}
             <Formsy.Form onValidSubmit={this.parseSubmit}>
               <Input name="firstName" value="" label="Etunimi" type="text" placeholder="Etunimi" required />
               <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required />

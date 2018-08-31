@@ -74,7 +74,6 @@ class SingleEvent extends React.Component {
   }
 
   renderSignupLists(event) {
-
     if (!event.quota) {
       return null;
     }
@@ -95,7 +94,7 @@ class SingleEvent extends React.Component {
   }
 
   getOpenQuotas(event) {
-    if (!event.quota) {
+    if (!event.quota || !event.signupsPublic) {
       return {
         openQuota: [],
         waitList: [],
@@ -176,7 +175,7 @@ class SingleEvent extends React.Component {
                       <p><strong>Hinta:</strong> {event.price}</p>
                     ) : null}
                     {event.homepage ? (
-                      <p><strong>Tapahtuman kotisivut:</strong> <a href={event.homepage} title="Tapahtuman kotisivut">{event.homepage}</a></p>
+                      <p><strong>Kotisivut:</strong> <a href={event.homepage} title="Kotisivut">{event.homepage}</a></p>
                     ) : null}
                     {event.facebook ? (
                       <p><strong>Facebook-tapahtuma:</strong> <a href={event.facebook} title="Facebook-tapahtuma">{event.facebook}</a></p>
@@ -247,8 +246,7 @@ class SingleEvent extends React.Component {
                           rows={openQuota}
                           key={'openQuota'}
                         />
-                      ) : null
-                      }
+                      ) : null}
                       {waitList ? (
                         <SignupList
                           title={'Jonossa'}
@@ -256,8 +254,7 @@ class SingleEvent extends React.Component {
                           rows={waitList}
                           key={'waitList'}
                         />
-                      ) : null
-                      }
+                      ) : null}
                     </div>
                   )}
                 </div>
