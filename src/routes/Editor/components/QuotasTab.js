@@ -105,7 +105,7 @@ class QuotasTab extends React.Component {
             type="text"
             required
             onChange={(field, value) => this.updateQuota(item.id, 'title', value)}
-            help="Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen."
+            help={index === 0 ? 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.' : null}
           />
           <Input
             name={`quota-${item.id}-max-attendees`}
@@ -120,7 +120,7 @@ class QuotasTab extends React.Component {
         </div>
         {index > 0 ? <div className="col-xs-12 col-sm-2">
           <a onClick={() => this.removeQuota(item.id)}>Poista</a>
-        </div> : <span title="Tapahtumalla on oltava ainakin yksi kiintiö." class="text-muted">Poista</span>}
+        </div> : null}
       </div>
     ));
 
