@@ -58,7 +58,6 @@ module.exports = () => (hook) => {
               position = positionInQueue;
               status = 'in-queue';
             }
-
           }
 
           hook.result = {

@@ -41,11 +41,8 @@ class QuotasTab extends React.Component {
     const quotas = this.props.event.quota ? this.props.event.quota : [];
     const newQuotas = _.concat(quotas, {
       id: (_.max(quotas.map(n => n.id)) || 0) + 1,
-      existsInDb: false,
       title: '',
-      max_attendees: 0,
-      registration_opens: new Date(),
-      registration_closes: new Date(),
+      size: 0,
     });
 
     this.props.onDataChange('quota', newQuotas);
@@ -69,6 +66,7 @@ class QuotasTab extends React.Component {
 
   updateQuota(itemId, field, value) {
     const quotas = this.props.event.quota ? this.props.event.quota : [];
+
     const newQuotas = _.map(quotas, (quota) => {
       if (quota.id === itemId) {
         return {
@@ -97,7 +95,7 @@ class QuotasTab extends React.Component {
   }
 
   renderQuotas() {
-    const q = _.map(this.props.event.quota, item => (
+    const q = _.map(this.props.event.quota, (item, index) => (
       <div className="panel-body">
         <div className="col-xs-12 col-sm-10">
           <Input
@@ -107,21 +105,22 @@ class QuotasTab extends React.Component {
             type="text"
             required
             onChange={(field, value) => this.updateQuota(item.id, 'title', value)}
+            help="Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen."
           />
           <Input
             name={`quota-${item.id}-max-attendees`}
-            value={item.max_attendees}
+            value={item.size}
             label="Kiintiön koko"
             type="number"
-            required
             validations="isInt"
             min={0}
-            onChange={(field, value) => this.updateQuota(item.id, 'max_attendees', value)}
+            onChange={(field, value) => this.updateQuota(item.id, 'size', value)}
+            help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi."
           />
         </div>
-        <div className="col-xs-12 col-sm-2">
+        {index > 0 ? <div className="col-xs-12 col-sm-2">
           <a onClick={() => this.removeQuota(item.id)}>Poista</a>
-        </div>
+        </div> : <span title="Tapahtumalla on oltava ainakin yksi kiintiö." class="text-muted">Poista</span>}
       </div>
     ));
 
@@ -129,34 +128,30 @@ class QuotasTab extends React.Component {
   }
 
   renderQuotaSection() {
-    if (this.props.event.useQuotas) {
-      return (
-        <div>
-          {this.renderQuotas()}
-          <a className="btn btn-primary pull-right" onClick={this.addQuota}>
-            Lisää kiintiö
-          </a>
-          <div className="clearfix" />
-          <Checkbox
-            name="useOpenQuota"
-            value={this.props.event.useOpenQuota}
-            label="Käytä lisäksi yhteistä kiintiötä"
+    return (
+      <div>
+        {this.renderQuotas()}
+        <div className="text-center">
+          <a className="btn btn-primary" onClick={this.addQuota}>Lisää kiintiö</a>
+          </div>
+        <div className="clearfix" />
+        <Checkbox
+          name="useOpenQuota"
+          value={this.props.event.useOpenQuota}
+          label="Käytä lisäksi yhteistä kiintiötä"
+          onChange={this.props.onDataChange}
+        />
+        {!this.props.event.useOpenQuota || (
+          <Input
+            name="openQuotaSize"
+            label="Avoimen kiintiön koko"
+            type="number"
+            required
             onChange={this.props.onDataChange}
           />
-          {!this.props.event.useOpenQuota || (
-            <Input
-              name="openQuotaSize"
-              label="Avoimen kiintiön koko"
-              type="number"
-              required
-              onChange={this.props.onDataChange}
-            />
-          )}
-        </div>
-      );
-    }
-
-    return null;
+        )}
+      </div>
+    );
   }
 
   render() {
@@ -177,13 +172,6 @@ class QuotasTab extends React.Component {
           onChange={this.props.onDataChange}
         />
         <hr />
-        <Checkbox
-          name="useQuotas"
-          value={this.props.event.useQuotas}
-          label="Ilmoittautumisessa käytetään kiintiöitä"
-          rowLabel="Kiintiöt"
-          onChange={this.props.onDataChange}
-        />
         {this.renderQuotaSection()}
       </div>
     );
