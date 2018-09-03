@@ -3,16 +3,51 @@ import request from 'then-request';
 // ------------------------------------
 // Constants
 // ------------------------------------
+const UPDATE_SIGNUP = 'UPDATE_SIGNUP';
+const SET_ERROR = 'ERROR';
+const SET_LOADING = 'LOADING';
 
 // ------------------------------------
 // Actions
 // ------------------------------------
 
 // Helpers
+function _getSignup(id, editToken) {
+  return request('GET', `/api/signups/${id}?editToken=${editToken}`);
+}
+
+function _setLoading(dispatch, isLoading) {
+  return dispatch({ type: SET_LOADING, isLoading });
+}
+
+function _setError(dispatch, isError) {
+  return dispatch({ type: SET_ERROR, isError });
+}
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk! */
+export const getSignupAsync = (id, editToken) => (dispatch) => {
+  _setLoading(dispatch, true);
+  _setError(dispatch, false);
+  return _getSignup(id, editToken)
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      dispatch({
+        type: UPDATE_SIGNUP,
+        payload: res,
+      });
+    })
+    .then(() => {
+      _setLoading(dispatch, false);
+      return true;
+    })
+    .catch((error) => {
+      _setError(dispatch, true);
+      console.log(error);
+      return false;
+    });
+};
 
 // export const setLoading = isLoading => (dispatch) => {
 //   dispatch({
@@ -82,6 +117,7 @@ import request from 'then-request';
 //     });
 
 export const actions = {
+  getSignupAsync,
   //   updateEventAsync,
   //   attachPositionAsync,
   //   completeSignupAsync,
@@ -101,6 +137,18 @@ const initialState = {
 };
 
 const ACTION_HANDLERS = {
+  [UPDATE_SIGNUP]: (state, action) => ({
+    ...state,
+    signup: action.payload,
+  }),
+  [SET_LOADING]: (state, action) => ({
+    ...state,
+    loading: action.payload,
+  }),
+  [SET_ERROR]: (state, action) => ({
+    ...state,
+    error: action.payload,
+  }),
   //   [UPDATE_EVENT]: (state, action) => ({
   //     ...state,
   //     event: action.payload,

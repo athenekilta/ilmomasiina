@@ -11,7 +11,7 @@ const getSignup = require('./getSignup.js');
 exports.before = {
   all: [],
   find: [hooks.disable('external')],
-  get: [],
+  get: [getSignup()],
   create: [validateNewSignup()],
   update: [hooks.disable('external')],
   patch: [validateSignupFields()],
@@ -21,7 +21,7 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  get: [getSignup()],
+  get: [],
   create: [attachPosition(), attachEditToken()],
   update: [],
   patch: [insertAnswers(), sendConfirmationMail()],

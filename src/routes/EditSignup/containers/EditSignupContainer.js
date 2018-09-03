@@ -13,19 +13,14 @@ import EditSignup from '../components/EditSignup';
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-  //   updateEvent: Actions.updateEventAsync,
-  //   attachPosition: Actions.attachPositionAsync,
-  //   completeSignup: Actions.completeSignupAsync,
-  //   cancelSignup: Actions.cancelSignupAsync,
-  //   setError: Actions.setError,
-  //   setLoading: Actions.setLoading,
+  getSignupAsync: Actions.getSignupAsync,
 };
 
 const mapStateToProps = state => ({
-  //   event: state.singleEvent.event,
-  //   signup: state.singleEvent.signup,
-  //   error: state.singleEvent.error,
-  //   loading: state.singleEvent.loading,
+  event: state.editSignup.event,
+  signup: state.editSignup.signup,
+  error: state.editSignup.error,
+  loading: state.editSignup.loading,
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

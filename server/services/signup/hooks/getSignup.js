@@ -1,6 +1,18 @@
 module.exports = () => (hook) => {
-  const signupId = hook.id;
-  const editToken = hook.data.editToken;
+  const models = hook.app.get('models');
+  const id = hook.id;
+  const editToken = hook.params.query.editToken;
 
-  console.log(hook.result);
+  // TODO: Verify edit token here!
+
+  return models.signup
+    .findOne({
+      where: {
+        id,
+      },
+    })
+    .then((signup) => {
+      hook.result = signup;
+      return hook;
+    });
 };

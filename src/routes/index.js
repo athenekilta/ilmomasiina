@@ -4,6 +4,7 @@ import EventsRoute from './Events';
 import SingleEventRoute from './SingleEvent';
 import AdminRoute from './Admin';
 import EditorRoute from './Editor';
+import EditSignupRoute from './EditSignup';
 import Login from './Login';
 import PageNotFound from './404';
 
@@ -15,6 +16,7 @@ export const createRoutes = store => ({
     SingleEventRoute(store),
     AdminRoute(store),
     EditorRoute(store),
+    EditSignupRoute(store),
     Login(store),
     PageNotFound,
   ],
