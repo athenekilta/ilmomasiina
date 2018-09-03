@@ -6,6 +6,7 @@ const removeNonpublicAnswers = require('./removeNonpublicAnswers');
 const formatOptionsAsArray = require('./formatOptionsAsArray');
 // const createEvent = require('./createEvent');
 const validateEvent = require('./validateEvent');
+const updateQuotas = require('./updateQuotas');
 
 exports.before = {
   all: [],
@@ -23,8 +24,9 @@ exports.after = {
   get: [removeNonpublicAnswers(), formatOptionsAsArray()],
   create: [
     /* createEvent() */
+    updateQuotas(),
   ],
-  update: [],
-  patch: [],
+  update: [updateQuotas()],
+  patch: [updateQuotas()],
   remove: [],
 };

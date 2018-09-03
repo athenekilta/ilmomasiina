@@ -54,6 +54,9 @@ class Editor extends React.Component {
         if (eventId === 'new') {
           // New event, clear any existing one from redux;
           this.props.updateEvent({});
+
+          // Set base quota field
+          this.props.updateEventField('quota', [{ title: 'Kiintiö' }]);
         } else {
           // Editing existing event, fetch the event
           try {
@@ -139,7 +142,7 @@ class Editor extends React.Component {
             className="btn btn-info pull-right event-editor--animated"
             formNoValidate
             type="submit"
-            defaultValue="Tallenna Luonnoksena"
+            defaultValue="Tallenna luonnoksena"
             onClick={() => this.publishEvent(true)}
           />
         </div>

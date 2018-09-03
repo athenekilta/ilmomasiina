@@ -92,7 +92,7 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
       return true;
     })
     .catch(() => {
-      dispatch(setError('Jotain meni pieleen. Yritäpä uudestaan.'));
+      dispatch(setError('Jotain meni pieleen. Yritä uudelleen.'));
       return false;
     });
 };
