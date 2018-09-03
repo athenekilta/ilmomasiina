@@ -2,11 +2,7 @@ extends ../layout.pug
 
 block mainContent
 	div.content-block
-		p.bodyText 
-			| Ilmoittautumisesi tapahtumaan 
-			strong #{event.title} 
-			| onnistui! Mikäli haluat perua ilmoittautumisesi, voit tehdä niin painamalla tätä 
-			a linkkiä. 
+		p.bodyText #{event.verificationEmail}
 	div.content-block
 		p.bodyText Tapahtuman tiedot:
 		ul
@@ -23,3 +19,6 @@ block mainContent
 				li
 					strong #{val.label}: 
 					| #{val.answer}
+	div.content-block
+		p.bodyText Mikäli haluat perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].
+	

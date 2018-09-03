@@ -36,7 +36,6 @@ module.exports = () => (hook) => {
       _.remove(hook.data.answers, obj => questionIds.indexOf(obj.questionId) < 0);
 
       questions.map((question) => {
-        console.log(question);
         const answer = _.find(hook.data.answers, { questionId: question.id });
 
         if (_.isNil(answer)) {

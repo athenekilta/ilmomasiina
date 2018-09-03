@@ -10,12 +10,16 @@ module.exports = () => (hook) => {
   ];
 
   const userAnswers = [];
+  let sp = null;
 
   return models.answer
     .findAll({ where: { signupId: hook.result.id } })
     .then(answers => answers.map(answer => userAnswers.push(answer.dataValues)))
     .then(() => models.signup.findById(hook.result.id))
-    .then(signup => models.quota.findById(signup.quotaId))
+    .then((signup) => {
+      sp = signup;
+      return models.quota.findById(signup.quotaId);
+    })
     .then((quota) => {
       fields.push({ label: 'Kiintiö', answer: quota.title });
 
@@ -40,8 +44,11 @@ module.exports = () => (hook) => {
           const params = {
             answers: fields,
             event: event.dataValues,
+            cancelLink: 'http://www.google.com',
           };
-          EmailService.sendConfirmationMail(hook.result.email, params);
+          console.log(hook.data);
+          console.log('=====CONFIRMATION MAIL DISABLED!=====');
+          //          EmailService.sendConfirmationMail(hook.result.email, params);
         });
     });
 };

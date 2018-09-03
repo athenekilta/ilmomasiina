@@ -12,8 +12,7 @@ export const SET_ERROR = 'SET_ERROR';
 // Actions
 // ------------------------------------
 
-
-// Helpers 
+// Helpers
 function _getEvent(id) {
   return request('GET', `/api/events/${id}`);
 }
@@ -98,8 +97,8 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
     });
 };
 
-export const cancelSignupAsync = (signupId, editToken) => (dispatch) => {
-  return _deleteSignup(signupId, editToken)
+export const cancelSignupAsync = (signupId, editToken) => dispatch =>
+  _deleteSignup(signupId, editToken)
     .then(res => JSON.parse(res.body))
     .then(() => {
       dispatch({
@@ -108,7 +107,6 @@ export const cancelSignupAsync = (signupId, editToken) => (dispatch) => {
       });
       dispatch(setLoading(false));
     });
-};
 
 export const actions = {
   updateEventAsync,
@@ -130,32 +128,24 @@ const initialState = {
 };
 
 const ACTION_HANDLERS = {
-  [UPDATE_EVENT]: (state, action) => {
-    return {
-      ...state,
-      event: action.payload,
-    };
-  },
-  [UPDATE_SIGNUP]: (state, action) => {
-    return {
-      ...state,
-      signup: action.payload,
-    };
-  },
-  [SET_LOADING]: (state, action) => {
-    return {
-      ...state,
-      loading: action.payload,
-      error: '',
-    };
-  },
-  [SET_ERROR]: (state, action) => {
-    return {
-      ...state,
-      error: action.payload,
-      loading: false,
-    };
-  },
+  [UPDATE_EVENT]: (state, action) => ({
+    ...state,
+    event: action.payload,
+  }),
+  [UPDATE_SIGNUP]: (state, action) => ({
+    ...state,
+    signup: action.payload,
+  }),
+  [SET_LOADING]: (state, action) => ({
+    ...state,
+    loading: action.payload,
+    error: '',
+  }),
+  [SET_ERROR]: (state, action) => ({
+    ...state,
+    error: action.payload,
+    loading: false,
+  }),
 };
 
 // ------------------------------------
