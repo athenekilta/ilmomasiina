@@ -162,7 +162,7 @@
     "redux-thunk": "^2.2.0",
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.0",
-    "sequelize": "^3.29.0",
+    "sequelize": "^4.22.12",
     "sequelize-heroku": "^2.0.0",
     "style-loader": "^0.13.1",
     "then-request": "^2.2.0",
