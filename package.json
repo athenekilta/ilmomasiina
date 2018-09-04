@@ -24,6 +24,7 @@
     "codecov": "cat coverage/*/lcov.info | codecov",
     "reset-db": "better-npm-run reset-db",
     "create-fake-data": "better-npm-run create-fake-data",
+    "create-user": "better-npm-run create-user",
     "test-email": "better-npm-run test-email"
   },
   "betterScripts": {
@@ -48,6 +49,12 @@
     },
     "create-fake-data": {
       "command": "node scripts/create-fake-data",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    },
+    "create-user": {
+      "command": "node scripts/create-user",
       "env": {
         "DEBUG": "app:*"
       }

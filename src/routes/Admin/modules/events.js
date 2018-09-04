@@ -4,6 +4,7 @@ import request from 'then-request';
 // Constants
 // ------------------------------------
 export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC';
+export const CREATE_USER = 'CREATE_USER';
 
 // ------------------------------------
 // Actions
@@ -14,7 +15,7 @@ export const GET_EVENTLIST_ASYNC = 'GET_EVENTLIST_ASYNC';
     creating async actions, especially when combined with redux-thunk! */
 
 export const getAdminEventList = () => dispatch =>
-  request('GET', 'http://localhost:3000/api/admin/events', {
+  request('GET', '/api/admin/events', {
     headers: { Authorization: localStorage.getItem('id_token') },
   }).then((res) => {
     dispatch({
@@ -23,8 +24,27 @@ export const getAdminEventList = () => dispatch =>
     });
   });
 
+
+export const createUserAsync = data => async (dispatch) => {
+  const event = await request('POST', '/api/users', {
+    json: data,
+    headers: { Authorization: localStorage.getItem('id_token') },
+  }).then(res => JSON.parse(res.body))
+    .then((res) => {
+      dispatch({
+        type: CREATE_USER,
+        payload: JSON.parse(res.body),
+      });
+
+      return res;
+    });
+
+  return event;
+};
+
 export const actions = {
   getAdminEventList,
+  createUserAsync,
 };
 
 // ------------------------------------
@@ -32,6 +52,7 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   [GET_EVENTLIST_ASYNC]: (state, action) => action.payload,
+  [CREATE_USER]: (state, action) => action.payload,
 };
 
 // ------------------------------------

@@ -17,6 +17,7 @@ module.exports = function () {
   }));
 
   app.configure(jwt());
+
   app.configure(local(local({
     entity: 'user',
     usernameField: 'email',

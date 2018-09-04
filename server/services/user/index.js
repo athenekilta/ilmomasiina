@@ -12,11 +12,11 @@ module.exports = function () {
   app.use('/api/users', service(options));
 
   // Get our initialize service to that we can bind hooks
-  const eventService = app.service('/api/users');
+  const userService = app.service('/api/users');
 
   // Set up our before hooks
-  eventService.before(hooks.before);
+  userService.before(hooks.before);
 
   // Set up our after hooks
-  eventService.after(hooks.after);
+  userService.after(hooks.after);
 };

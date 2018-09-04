@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 import { Link } from 'react-router';
+import UserForm from './UserForm';
 import Separator from '../../../components/Separator';
 import './AdminEventList.scss';
 
@@ -15,7 +16,7 @@ class AdminEventListItem extends React.Component {
         <td>
           <Link to={`/event/${this.props.data.id}`}>{this.props.data.title}</Link>
         </td>
-        <td>{moment(this.props.data.date).format('DD.MM.YYYY')}</td>
+        <td>{this.props.data.date ? moment(this.props.data.date).format('DD.MM.YYYY') : ''}</td>
         <td>Luonnos</td>
         <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
         <td>
@@ -32,83 +33,14 @@ class AdminEventListItem extends React.Component {
 */
 
 class AdminEventList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      year: 0,
-      searchString: '',
-    };
-
-    this.changeYear = this.changeYear.bind(this);
-    this.changeSearchString = this.changeSearchString.bind(this);
-    this.doSearch = this.doSearch.bind(this);
-  }
-
   componentWillMount() {
     this.props.getAdminEventList();
   }
 
-  changeYear(year) {
-    const state = this.state;
-    state.year = year;
-    this.setState(state);
-    this.doSearch();
-  }
-
-  changeSearchString(str) {
-    const state = this.state;
-    state.searchString = str;
-    this.setState(state);
-    this.doSearch();
-  }
-
-  doSearch() {
-    console.log(this.state);
-  }
-
   render() {
-    const yearOptions = [];
-    for (let year = 2016; year <= new Date().getFullYear(); year += 1) {
-      yearOptions.push(
-        <option key={year} value={year}>
-          {year}
-        </option>,
-      );
-    }
-
     return (
       <div className="container">
-        <Link to="/admin/edit/new" className="btn btn-success btn-lg pull-right">
-          + Uusi tapahtuma
-        </Link>
         <h1>Hallinta</h1>
-        <div className="alert alert-info" role="alert">
-          <p>
-            <strong>Ville Vuorenmaa</strong> on pyytänyt pääsyä hallintapaneeliin.<br />
-            <a>Hyväksy</a>
-            <Separator />
-            <a>Hylkää</a>
-          </p>
-        </div>
-        <div className="search-form">
-          <select className="form-control pull-left" onChange={event => this.changeYear(event.target.value)}>
-            <option value={0}>Hae vuoden mukaan</option>
-            {yearOptions}
-          </select>
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Hae tapahtumaa…"
-              onKeyPress={event => (event.key === 'Enter' ? this.changeSearchString(event.target.value) : '')}
-            />
-            <span className="input-group-btn">
-              <button className="btn btn-default" type="button" onClick={this.doSearch}>
-                Hae
-              </button>
-            </span>
-          </div>
-        </div>
         <table className="table">
           <thead>
             <tr>
@@ -121,6 +53,11 @@ class AdminEventList extends React.Component {
           </thead>
           <tbody>{this.props.eventList.map(i => <AdminEventListItem key={i.id} data={i} />)}</tbody>
         </table>
+        <Link to="/admin/edit/new" className="btn btn-default">
+          + Uusi tapahtuma
+        </Link>
+        <h1>Luo uusi käyttäjä</h1>
+        <UserForm createUserAsync={this.props.createUserAsync} />
       </div>
     );
   }
@@ -131,6 +68,7 @@ AdminEventListItem.propTypes = {
 };
 
 AdminEventList.propTypes = {
+  createUserAsync: React.PropTypes.func.isRequired,
   eventList: React.PropTypes.array.isRequired,
   getAdminEventList: React.PropTypes.func.isRequired,
 };

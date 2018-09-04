@@ -36,7 +36,24 @@ const EmailService = {
     });
 
     return email.render('../server/mail/emails/confirmation/html', params).then((html) => {
-      const subject = `Ilmoittautuminen onnistui | ${params.event.title}`;
+      const subject = `Ilmoittautumisvahvistus: ${params.event.title}`;
+      return EmailService.send(to, subject, html);
+    });
+  },
+
+  sendNewUserMail(to, params) {
+    const email = new Email({
+      juice: true,
+      juiceResources: {
+        preserveImportant: true,
+        webResources: {
+          relativeTo: path.join(__dirname, 'css'),
+        },
+      },
+    });
+
+    return email.render('../server/mail/emails/newUser/html', params).then((html) => {
+      const subject = 'Käyttäjätunnukset Ilmomasiinaan';
       return EmailService.send(to, subject, html);
     });
   },
