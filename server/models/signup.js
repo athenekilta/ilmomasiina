@@ -7,68 +7,74 @@ module.exports = function () {
   const app = this;
   const sequelize = app.get('sequelize');
 
-  const Signup = sequelize.define('signup', {
-    firstName: {
-      type: Sequelize.STRING,
-      validate: {
-        notEmpty: true,
+  const Signup = sequelize.define(
+    'signup',
+    {
+      firstName: {
+        type: Sequelize.STRING,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      lastName: {
+        type: Sequelize.STRING,
+        validate: {
+          notEmpty: true,
+        },
+      },
+      email: {
+        type: Sequelize.STRING,
+        validate: {
+          isEmail: true,
+        },
+      },
+      editToken: {
+        type: Sequelize.VIRTUAL,
+      },
+      confirmedAt: {
+        type: Sequelize.DATE(3),
+      },
+      // Added manually createdAt field to support milliseconds
+      createdAt: {
+        type: Sequelize.DATE(3),
+        defaultValue: () => new Date(),
       },
     },
-    lastName: {
-      type: Sequelize.STRING,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    email: {
-      type: Sequelize.STRING,
-      validate: {
-        isEmail: true,
-      },
-    },
-    editToken: {
-      type: Sequelize.VIRTUAL,
-    },
-    confirmedAt: {
-      type: Sequelize.DATE(3),
-    },
-    // Added manually createdAt field to support milliseconds
-    createdAt: {
-      type: Sequelize.DATE(3),
-      defaultValue: () => new Date(),
-    },
-  }, {
-    freezeTableName: true,
-    paranoid: true,
-    classMethods: {
-      associate() {
-        const models = app.get('models');
+    {
+      freezeTableName: true,
+      paranoid: true,
+      classMethods: {
+        associate() {
+          const models = app.get('models');
 
-        this.belongsTo(models.quota, { foreignKey: 'quotaId' });
+          this.belongsTo(models.quota, { foreignKey: 'quotaId' });
 
-        this.hasMany(models.answer, {
-          onDelete: 'CASCADE',
-        });
+          this.hasMany(models.answer, {
+            onDelete: 'CASCADE',
+          });
+        },
       },
-    },
-    defaultScope: {
-      where: {
-        $or: {
-          // Is confirmed
-          confirmedAt: {
-            $ne: null, // $means !=
-          },
-          // Under 30 minutes old
-          createdAt: {
-            $gt: moment().subtract(30, 'minutes').toDate(),
+      defaultScope: {
+        where: {
+          $or: {
+            // Is confirmed
+            confirmedAt: {
+              $ne: null, // $means !=
+            },
+            // Under 30 minutes old
+            createdAt: {
+              $gt: moment()
+                .subtract(30, 'minutes')
+                .toDate(),
+            },
           },
         },
       },
     },
-  });
+  );
 
   const verifyEditToken = (data) => {
-    const token = (data.attributes ? data.attributes.editToken : data.where.editToken);
+    const token = data.attributes ? data.attributes.editToken : data.where.editToken;
 
     if (data.where.editToken) {
       delete data.where.editToken;

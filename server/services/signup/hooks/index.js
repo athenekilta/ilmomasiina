@@ -6,16 +6,17 @@ const attachPosition = require('./attachPosition.js');
 const attachEditToken = require('./attachEditToken.js');
 const insertAnswers = require('./insertAnswers.js');
 const sendConfirmationMail = require('./sendConfirmationMail.js');
-const getSignup = require('./getSignup.js');
+const getSignupAndEvent = require('./getSignupAndEvent.js');
+const deleteSignup = require('./deleteSignup.js');
 
 exports.before = {
   all: [],
   find: [hooks.disable('external')],
-  get: [getSignup()],
+  get: [getSignupAndEvent()],
   create: [validateNewSignup()],
   update: [hooks.disable('external')],
   patch: [validateSignupFields()],
-  remove: [],
+  remove: [deleteSignup()],
 };
 
 exports.after = {

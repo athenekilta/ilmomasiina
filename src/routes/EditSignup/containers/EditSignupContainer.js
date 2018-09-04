@@ -13,7 +13,8 @@ import EditSignup from '../components/EditSignup';
     implementing our wrapper around increment; the component doesn't care   */
 
 const mapDispatchToProps = {
-  getSignupAsync: Actions.getSignupAsync,
+  getSignupAndEventAsync: Actions.getSignupAndEventAsync,
+  deleteSignupAsync: Actions.deleteSignupAsync,
 };
 
 const mapStateToProps = state => ({
@@ -21,6 +22,7 @@ const mapStateToProps = state => ({
   signup: state.editSignup.signup,
   error: state.editSignup.error,
   loading: state.editSignup.loading,
+  deleted: state.editSignup.deleted,
 });
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:

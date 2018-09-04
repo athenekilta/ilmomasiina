@@ -1,22 +1,78 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
+import './EditSignup.scss';
 
 class EditSignup extends React.Component {
   static propTypes = {
-    getSignupAsync: PropTypes.func.isRequired,
+    getSignupAndEventAsync: PropTypes.func.isRequired,
+    deleteSignupAsync: PropTypes.func.isRequired,
+    signup: PropTypes.object,
+    event: PropTypes.object,
     error: PropTypes.bool,
     loading: PropTypes.bool,
-    params: PropTypes.object.isRequired,
+    params: PropTypes.object,
   };
+
+  constructor(props) {
+    super(props);
+
+    this.deleteSignup = this.deleteSignup.bind(this);
+  }
 
   componentWillMount() {
     const { id, editToken } = this.props.params;
-    this.props.getSignupAsync(id, editToken);
+    this.props.getSignupAndEventAsync(id, editToken);
+  }
+
+  deleteSignup() {
+    const { id, editToken } = this.props.params;
+    this.props.deleteSignupAsync(id, editToken);
   }
 
   render() {
-    console.log(this.props.signup);
-    return <h1>TODO: Edit Signup</h1>;
+    if (this.props.error) {
+      return (
+        <div className="container align-items-center">
+          <div className="EditSignup--wrapper">
+            <h1>Hups, jotain meni pieleen</h1>
+            <p>
+              Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai sitten jotain muuta kummallista
+              tapahtui. Jos ilmoittautumisesi ei ole vielä poistunut, yritä kohta uudestaan.
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    if (this.props.loading) {
+      return (
+        <div className="container align-items-center">
+          <div className="EditSignup--wrapper">
+            <Spinner name="circle" fadeIn="quarter" />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="container align-items-center">
+        <div className="EditSignup--wrapper">
+          <h1>Poista ilmoittautuminen</h1>
+          <p>
+            Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan <strong>{this.props.event.title}?</strong>
+          </p>
+          <p>
+            Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos kuitenkin muutat mielesi, voit aina
+            ilmoittautua tapahtumaan uudelleen myöhemmin, mutta siirryt silloin jonon hännille.{' '}
+            <strong>Tätä toimintoa ei voi perua.</strong>
+          </p>
+          <button onClick={this.deleteSignup} className="btn btn-danger">
+            Poista ilmoittautuminen
+          </button>
+        </div>
+      </div>
+    );
   }
 }
 
