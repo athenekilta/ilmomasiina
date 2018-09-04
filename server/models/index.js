@@ -8,15 +8,34 @@ const answer = require('./answer');
 const user = require('./user');
 
 const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
+const sequelizeHeroku = require('sequelize-heroku');
 
 module.exports = function () {
   const app = this;
 
-  const sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
-    host: 'localhost',
-    dialect: 'mysql',
-    logging: false,
-  });
+  let sequelize;
+  if (process.env.NODE_ENV === 'production') {
+    sequelize = sequelizeHeroku.connect(Sequelize);
+  } else {
+    sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
+      host: 'localhost',
+      dialect: 'mysql',
+      logging: false,
+    });
+  }
+
+  if (sequelize) {
+    sequelize
+      .authenticate()
+      .then(() => {
+        const cfg = sequelize.connectionManager.config;
+        console.log(`sequelize-heroku: Connected to ${cfg.host} as ${cfg.username}.`);
+      })
+      .catch((err) => {
+        const cfg = sequelize.connectionManager.config;
+        console.log(`Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`);
+      });
+  }
 
   app.set('sequelize', sequelize);
 

@@ -162,6 +162,7 @@
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.0",
     "sequelize": "^3.29.0",
+    "sequelize-heroku": "^2.0.0",
     "style-loader": "^0.13.1",
     "then-request": "^2.2.0",
     "url-loader": "^0.5.6",
