@@ -18,7 +18,7 @@
     "test": "npm run lint && better-npm-run test",
     "test:dev": "npm run test -- --watch",
     "deploy": "better-npm-run deploy",
-    "heroku-postbuild": "better-npm-run deploy:prod",
+    "heroku-postbuild": "npm run clean && npm run compile",
     "deploy:dev": "better-npm-run deploy:dev",
     "deploy:prod": "better-npm-run deploy:prod",
     "codecov": "cat coverage/*/lcov.info | codecov",
