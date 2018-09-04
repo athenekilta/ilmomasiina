@@ -142,6 +142,7 @@
     "node-sass-chokidar": "0.0.3",
     "nodemailer": "^4.6.8",
     "nvm": "0.0.4",
+    "pg": "^7.4.3",
     "postcss-loader": "^1.1.0",
     "promise": "^7.1.1",
     "prop-types": "^15.6.2",
