@@ -82,6 +82,12 @@
         "DEBUG": "app:*"
       }
     },
+    "start:prod": {
+      "command": "node bin/prod-server",
+      "env": {
+        "DEBUG": "app:*"
+      }
+    },
     "test": {
       "command": "node ./node_modules/karma/bin/karma start config/karma.config",
       "env": {
