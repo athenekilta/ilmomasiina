@@ -46,7 +46,38 @@ module.exports = function () {
   app.configure(answer);
   app.configure(user);
 
-  app.set('models', sequelize.models);
+  const { models } = sequelize;
+
+  models.event.hasMany(models.quota, {
+    foreignKey: 'eventId',
+    onDelete: 'CASCADE',
+  });
+
+  models.event.hasMany(models.question, {
+    foreignKey: 'eventId',
+    onDelete: 'CASCADE',
+  });
+
+  models.quota.hasMany(models.signup, {
+    onDelete: 'CASCADE',
+    foreignKey: 'quotaId',
+  });
+
+  models.signup.belongsTo(models.quota, {
+    foreignKey: 'quotaId',
+  });
+
+  models.signup.hasMany(models.answer, {
+    foreignKey: 'signupId',
+    onDelete: 'CASCADE',
+  });
+
+  models.question.hasMany(models.answer, {
+    foreignKey: 'questionId',
+    onDelete: 'CASCADE',
+  });
+
+  app.set('models', models);
 
   Object.keys(sequelize.models).forEach((modelName) => {
     if ('associate' in sequelize.models[modelName]) {

@@ -79,19 +79,6 @@ module.exports = function () {
           },
         },
       },
-      classMethods: {
-        associate() {
-          const models = app.get('models');
-
-          this.hasMany(models.quota, {
-            onDelete: 'CASCADE',
-          });
-
-          this.hasMany(models.question, {
-            onDelete: 'CASCADE',
-          });
-        },
-      },
     },
   );
 

@@ -13,7 +13,7 @@ const includeQuotas = (hook) => {
         attributes: [
           'title',
           'size',
-          [sequelize.fn('COUNT', sequelize.col('quota.signups.id')), 'signupCount'],
+          [sequelize.fn('COUNT', sequelize.col('quota->signups.id')), 'signupCount'],
         ],
         include: [
           {

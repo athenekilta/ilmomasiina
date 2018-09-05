@@ -17,7 +17,7 @@ module.exports = () => (hook) => {
     include: [
       {
         model: sequelize.models.quota,
-        attributes: ['title', 'size', [sequelize.fn('COUNT', sequelize.col('quota.signups.id')), 'signupCount']],
+        attributes: ['title', 'size', [sequelize.fn('COUNT', sequelize.col('quota->signups.id')), 'signupCount']],
         include: [
           {
             model: sequelize.models.signup,

@@ -43,17 +43,6 @@ module.exports = function () {
     {
       freezeTableName: true,
       paranoid: true,
-      classMethods: {
-        associate() {
-          const models = app.get('models');
-
-          this.belongsTo(models.quota, { foreignKey: 'quotaId' });
-
-          this.hasMany(models.answer, {
-            onDelete: 'CASCADE',
-          });
-        },
-      },
       defaultScope: {
         where: {
           $or: {
@@ -73,20 +62,21 @@ module.exports = function () {
     },
   );
 
-  const verifyEditToken = (data) => {
-    const token = data.attributes ? data.attributes.editToken : data.where.editToken;
+  // TODO: edit token validation
+  // const verifyEditToken = (data) => {
+  //   const token = data.attributes ? data.attributes.editToken : data.where.editToken;
 
-    if (data.where.editToken) {
-      delete data.where.editToken;
-    }
+  //   if (data.where.editToken) {
+  //     delete data.where.editToken;
+  //   }
 
-    if (token !== md5(`${data.where.id}${config.editTokenSalt}`)) {
-      throw new Error('Invalid editToken');
-    }
-  };
+  //   if (token !== md5(`${data.where[Symbol('and')].id}${config.editTokenSalt}`)) {
+  //     throw new Error('Invalid editToken');
+  //   }
+  // };
 
-  Signup.beforeBulkUpdate({ individualHooks: true }, verifyEditToken);
-  Signup.beforeBulkDestroy({ individualHooks: true }, verifyEditToken);
+  // Signup.beforeBulkUpdate({ individualHooks: true }, verifyEditToken);
+  // Signup.beforeBulkDestroy({ individualHooks: true }, verifyEditToken);
 
   return Signup;
 };
