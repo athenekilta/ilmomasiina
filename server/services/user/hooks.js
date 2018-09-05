@@ -1,14 +1,15 @@
 const authentication = require('feathers-authentication');
 const hooks = require('feathers-hooks-common');
 const createPassword = require('./hooks/createPassword');
+const validateRegistration = require('./hooks/validateRegistration');
 const sendEmail = require('./hooks/sendEmail');
 const { hashPassword } = require('feathers-authentication-local').hooks;
 
 exports.before = {
-  all: [authentication.hooks.authenticate('jwt')],
+  all: [],
   find: [hooks.disable('external')],
   get: [hooks.disable('external')],
-  create: [createPassword(), hashPassword()],
+  create: [validateRegistration(), createPassword(), hashPassword()],
   update: [hooks.disable('external'), hashPassword()],
   patch: [hooks.disable('external'), hashPassword()],
   remove: [hooks.disable('external')],

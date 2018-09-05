@@ -1,5 +1,4 @@
-const _ = require('lodash');
-const EmailService = require('../../../mail/');
+const EmailService = require('../../../mail');
 
 module.exports = () => (hook) => {
   const fields = [

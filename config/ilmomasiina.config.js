@@ -9,6 +9,7 @@ const config = {
   feathersAuthSecret: process.env.FEATHERS_AUTH_SECRET,
   sendgridApiKey: process.env.SENDGRID_API_KEY,
   baseUrl: process.env.BASE_URL,
+  adminRegistrationAllowed: process.env.ADMIN_REGISTRATION_ALLOWED || false,
 };
 
 _.forOwn(config, (value, key) => {
