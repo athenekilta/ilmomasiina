@@ -8,29 +8,22 @@ import { loginUser } from '../modules/login';
 class Login extends React.Component {
   render() {
     return (
-      <div className="container">
-        <h1>Login</h1>
-        {this.props.loginError
-          ? <div> {this.props.loginError.body} </div>
-          : ''
-        }
-        <div className="Login col-xs-8 col-md-6 align-self-center">
-          <Formsy.Form className="credentials">
-            <Input id="email" value="" label="Sähköposti" name="email" title="Email" required />
-            <Input id="password" value="" label="Salasana" name="password" title="Password" type="password" required />
-            <div className="nuppi">
-              <button
-                className="nappi btn-success col-xs-3"
-                onClick={() => this.props.loginUser({
-                  username: document.getElementById('email').value,
-                  password: document.getElementById('password').value,
-                })}
-              >
-                Kirjaudu
-              </button>
-            </div>
-          </Formsy.Form>
-        </div>
+      <div className="container" style={{ maxWidth: '400px' }}>
+        <h1>Kirjaudu</h1>
+        {this.props.loginError ? <p>Kirjautuminen epäonnistui</p> : ''}
+        <Formsy.Form className="credentials"layout="vertical">
+          <Input id="email" value="" label="Sähköposti" name="email" title="Sähköposti" placeholder="ville@athene.fi" layout="vertical" required />
+          <Input id="password" value="" label="Salasana" name="password" title="Salasana" type="password" placeholder="••••••••" layout="vertical" required />
+          <button
+            className="btn btn-default"
+            onClick={() => this.props.loginUser({
+              email: document.getElementById('email').value,
+              password: document.getElementById('password').value,
+            })}
+          >
+            Kirjaudu
+          </button>
+        </Formsy.Form>
       </div>
     );
   }

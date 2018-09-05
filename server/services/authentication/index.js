@@ -27,7 +27,7 @@ module.exports = function () {
   app.service('api/authentication').hooks({
     before: {
       create: [
-        authentication.hooks.authenticate('local', 'jwt'),
+        authentication.hooks.authenticate(['local', 'jwt']),
       ],
       remove: [
         authentication.hooks.authenticate('jwt'),

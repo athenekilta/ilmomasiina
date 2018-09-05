@@ -33,9 +33,9 @@ function loginError(message) {
 }
 
 export const loginUser = creds => (dispatch) => {
-  request('POST', 'http://localhost:3000/api/authentication', {
+  request('POST', '/api/authentication', {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `strategy=local&email=${creds.username}&password=${creds.password}`,
+    body: `strategy=local&email=${creds.email}&password=${creds.password}`,
   })
     .then((res) => {
       if (res.statusCode >= 300) {

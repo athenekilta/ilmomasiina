@@ -1,4 +1,3 @@
-const authentication = require('feathers-authentication');
 const hooks = require('feathers-hooks-common');
 const createPassword = require('./hooks/createPassword');
 const validateRegistration = require('./hooks/validateRegistration');
