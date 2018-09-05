@@ -1,4 +1,5 @@
 import request from 'then-request';
+import { push } from 'react-router-redux';
 
 // ------------------------------------
 // Constants
@@ -18,10 +19,14 @@ export const getAdminEventList = () => dispatch =>
   request('GET', '/api/admin/events', {
     headers: { Authorization: localStorage.getItem('id_token') },
   }).then((res) => {
-    dispatch({
-      type: GET_EVENTLIST_ASYNC,
-      payload: JSON.parse(res.body),
-    });
+    if (res.statusCode == 500) {
+      dispatch(push('/login'));
+    } else {
+      dispatch({
+        type: GET_EVENTLIST_ASYNC,
+        payload: JSON.parse(res.body),
+      });
+    }
   });
 
 

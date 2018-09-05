@@ -11,10 +11,10 @@ class Login extends React.Component {
       <div className="container" style={{ maxWidth: '400px' }}>
         <h1>Kirjaudu</h1>
         {this.props.loginError ? <p>Kirjautuminen epäonnistui</p> : ''}
-        <Formsy.Form className="credentials"layout="vertical">
+        <Formsy.Form>
           <Input id="email" value="" label="Sähköposti" name="email" title="Sähköposti" placeholder="ville@athene.fi" layout="vertical" required />
           <Input id="password" value="" label="Salasana" name="password" title="Salasana" type="password" placeholder="••••••••" layout="vertical" required />
-          <button
+              <button
             className="btn btn-default"
             onClick={() => this.props.loginUser({
               email: document.getElementById('email').value,
