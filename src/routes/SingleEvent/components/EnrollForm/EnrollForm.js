@@ -146,7 +146,7 @@ export class EnrollForm extends React.Component {
                   className="btn btn-primary pull-right"
                   formNoValidate
                   type="submit"
-                  defaultValue="Submit"
+                  defaultValue="Lähetä"
                   disabled={this.props.loading}
                 />
               </div>
