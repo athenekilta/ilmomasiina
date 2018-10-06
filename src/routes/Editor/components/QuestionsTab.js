@@ -108,7 +108,7 @@ class QuestionsTab extends React.Component {
         <div className="col-xs-12 col-sm-10">
           <Input
             name={`question-${item.id}-title`}
-            value={item.title}
+            value={item.question}
             label="Kysymys"
             type="text"
             required
