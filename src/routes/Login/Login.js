@@ -1,11 +1,27 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import { Input } from 'formsy-react-components';
 import { connect } from 'react-redux';
 
-import { loginUser } from '../modules/login';
+import * as AdminActions from '../../modules/admin/actions';
 
 class Login extends React.Component {
+  static propTypes = {
+    loginError: PropTypes.bool,
+    loginLoading: PropTypes.bool,
+    login: PropTypes.func,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      email: '',
+      password: '',
+    };
+  }
+
   render() {
     return (
       <div className="container" style={{ maxWidth: '400px' }}>
@@ -13,20 +29,18 @@ class Login extends React.Component {
         {this.props.loginError ? <p>Kirjautuminen epäonnistui</p> : ''}
         <Formsy.Form>
           <Input
-            id="email"
-            value=""
+            value={this.state.email}
+            onChange={e => this.setState({ email: e.target.value })}
             label="Sähköposti"
-            name="email"
             title="Sähköposti"
             placeholder="ville@athene.fi"
             layout="vertical"
             required
           />
           <Input
-            id="password"
-            value=""
+            value={this.state.password}
+            onChange={e => this.setState({ password: e.target.value })}
             label="Salasana"
-            name="password"
             title="Salasana"
             type="password"
             placeholder="••••••••"
@@ -35,12 +49,13 @@ class Login extends React.Component {
           />
           <button
             className="btn btn-default"
-            onClick={() =>
-              this.props.loginUser({
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-              })
-            }
+            onClick={(e) => {
+              e.preventDefault();
+              this.props.login({
+                email: this.state.email,
+                password: this.state.password,
+              });
+            }}
           >
             Kirjaudu
           </button>
@@ -51,16 +66,12 @@ class Login extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  loginError: state.login.errorMessage,
+  loginError: state.admin.loginError,
+  loginLoading: state.admin.loginLoading,
 });
 
 const mapDispatchToProps = {
-  loginUser,
-};
-
-Login.propTypes = {
-  loginError: React.PropTypes.string,
-  loginUser: React.PropTypes.func,
+  login: AdminActions.login,
 };
 
 export default connect(
