@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import './Editor.scss';
-
+import '../Editor.scss';
 
 class SignupsTab extends React.Component {
   static propTypes = {
@@ -18,6 +17,8 @@ class SignupsTab extends React.Component {
 
   render() {
     const { questions, quota } = this.props.event;
+
+    if (!questions || !quota) return null;
 
     const data = quota.flatMap(q => q.signups.map((signup) => {
       const base = {
@@ -33,8 +34,6 @@ class SignupsTab extends React.Component {
 
       return { ...base, ...answers };
     }));
-
-    console.log(data);
 
     const baseColumns = [{
       Header: 'Kiintiö',
@@ -55,15 +54,11 @@ class SignupsTab extends React.Component {
 
     const columns = baseColumns.concat(questions.map(q => ({ Header: q.question, accessor: `answer${q.id}` })));
 
-    console.log(columns);
-
     return <ReactTable
       data={data}
       columns={columns}
       defaultPageSize={100}
     />;
-
-    return <b>asd</b>;
   }
 }
 
