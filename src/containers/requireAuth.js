@@ -16,7 +16,7 @@ function requireAuth(WrappedComponent) {
         this.props.redirectToLogin();
         return null;
       }
-      return <WrappedComponent />;
+      return <WrappedComponent {...this.props} />;
     }
   }
 
