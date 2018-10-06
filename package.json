@@ -164,6 +164,7 @@
     "react-router-redux": "^4.0.8",
     "react-sortable-hoc": "^0.4.5",
     "react-spinkit": "^3.0.0",
+    "react-table": "^6.8.6",
     "react-toastify": "^4.1.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
