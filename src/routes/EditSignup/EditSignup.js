@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from 'react-spinkit';
+import { connect } from 'react-redux';
+import * as EditSignupActions from '../../modules/editSignup/actions';
 import './EditSignup.scss';
 
 class EditSignup extends React.Component {
@@ -76,4 +78,20 @@ class EditSignup extends React.Component {
   }
 }
 
-export default EditSignup;
+const mapDispatchToProps = {
+  getSignupAndEventAsync: EditSignupActions.getSignupAndEventAsync,
+  deleteSignupAsync: EditSignupActions.deleteSignupAsync,
+};
+
+const mapStateToProps = state => ({
+  event: state.editSignup.event,
+  signup: state.editSignup.signup,
+  error: state.editSignup.error,
+  loading: state.editSignup.loading,
+  deleted: state.editSignup.deleted,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EditSignup);

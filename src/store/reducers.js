@@ -6,6 +6,7 @@ import admin from '../modules/admin/reducer';
 import editor from '../modules/editor/reducer';
 import events from '../modules/events/reducer';
 import singleEvent from '../modules/singleEvent/reducer';
+import editSignup from '../modules/editSignup/reducer';
 
 export const makeRootReducer = asyncReducers =>
   combineReducers({
@@ -15,6 +16,7 @@ export const makeRootReducer = asyncReducers =>
     editor,
     events,
     singleEvent,
+    editSignup,
     ...asyncReducers,
   });
 

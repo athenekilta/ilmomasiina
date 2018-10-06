@@ -6,7 +6,7 @@ const initialState = {
   eventsError: false,
 };
 
-export default function admin(state = initialState, action = {}) {
+export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     case ActionTypes.SET_EVENTS:
       return {

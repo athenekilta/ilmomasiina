@@ -7,7 +7,6 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/CoreLayout';
-import EditSignup from '../routes/EditSignup/containers/EditSignupContainer';
 import Login from '../routes/Login/components/Login';
 
 /** REFACTORED */
@@ -16,6 +15,7 @@ import Editor from '../routes/Editor/Editor';
 import Events from '../routes/Events/EventList';
 import SingleEvent from '../routes/SingleEvent/SingleEvent';
 import PageNotFound from '../routes/404/PageNotFound';
+import EditSignup from '../routes/EditSignup/EditSignup';
 
 class AppContainer extends Component {
   static propTypes = {
