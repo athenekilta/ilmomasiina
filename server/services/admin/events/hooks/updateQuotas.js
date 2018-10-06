@@ -21,7 +21,8 @@ module.exports = () => (hook) => {
             model: sequelize.models.answer,
           },
         ],
-    }], })
+      }],
+    })
     .then((quota) => {
       hook.result.dataValues.quota = quota;
       return hook;
