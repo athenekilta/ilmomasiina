@@ -5,7 +5,6 @@ import { Input } from 'formsy-react-components';
 import locale from 'antd/lib/date-picker/locale/fi_FI';
 import DatePicker from 'antd/lib/date-picker';
 import TimePicker from 'antd/lib/time-picker';
-import './Editor.scss';
 
 class DateTimePicker extends React.PureComponent {
   static propTypes = {

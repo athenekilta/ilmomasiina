@@ -4,7 +4,6 @@ import _ from 'lodash';
 import { Input, Checkbox } from 'formsy-react-components';
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
 import DateTimePicker from './DateTimePicker';
-import './Editor.scss';
 
 const DragHandle = SortableHandle(() => <span className="handler" />); // This can be any component you want
 
@@ -105,7 +104,11 @@ class QuotasTab extends React.Component {
             type="text"
             required
             onChange={(field, value) => this.updateQuota(item.id, 'title', value)}
-            help={index === 0 ? 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.' : null}
+            help={
+              index === 0
+                ? 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.'
+                : null
+            }
           />
           <Input
             name={`quota-${item.id}-max-attendees`}
@@ -118,9 +121,11 @@ class QuotasTab extends React.Component {
             help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi."
           />
         </div>
-        {index > 0 ? <div className="col-xs-12 col-sm-2">
-          <a onClick={() => this.removeQuota(item.id)}>Poista</a>
-        </div> : null}
+        {index > 0 ? (
+          <div className="col-xs-12 col-sm-2">
+            <a onClick={() => this.removeQuota(item.id)}>Poista</a>
+          </div>
+        ) : null}
       </div>
     ));
 
@@ -132,8 +137,10 @@ class QuotasTab extends React.Component {
       <div>
         {this.renderQuotas()}
         <div className="text-center">
-          <a className="btn btn-primary" onClick={this.addQuota}>Lisää kiintiö</a>
-          </div>
+          <a className="btn btn-primary" onClick={this.addQuota}>
+            Lisää kiintiö
+          </a>
+        </div>
         <div className="clearfix" />
         <Checkbox
           name="useOpenQuota"

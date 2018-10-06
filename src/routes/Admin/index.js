@@ -1,4 +1,5 @@
 import { injectReducer } from '../../store/reducers';
+import adminWrapper from '../authWrapper';
 
 export default store => ({
   path: 'admin',
@@ -6,19 +7,23 @@ export default store => ({
   getComponent(nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point
         and embed an async module loader (jsonp) when bundling   */
-    require.ensure([], (require) => {
-      /*  Webpack - use require callback to define
+    require.ensure(
+      [],
+      (require) => {
+        /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const Events = require('./containers/AdminEventListContainer').default;
-      const reducer = require('./modules/events').default;
+        const Events = require('./containers/AdminEventListContainer').default;
+        const reducer = require('./modules/events').default;
 
-      /*  Add the reducer to the store on key 'events'  */
-      injectReducer(store, { key: 'events', reducer });
+        /*  Add the reducer to the store on key 'events'  */
+        injectReducer(store, { key: 'events', reducer });
 
-      /*  Return getComponent   */
-      cb(null, Events);
+        /*  Return getComponent   */
+        cb(null, adminWrapper(Events, store));
 
-    /* Webpack named bundle   */
-    }, 'events');
+        /* Webpack named bundle   */
+      },
+      'events',
+    );
   },
 });

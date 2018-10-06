@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Textarea } from 'formsy-react-components';
-import './Editor.scss';
 
 class EmailsTab extends React.Component {
-
   static propTypes = {
     onDataChange: PropTypes.func.isRequired,
     event: PropTypes.object,
-  }
+  };
 
   render() {
     return (

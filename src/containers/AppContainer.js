@@ -1,13 +1,24 @@
 import React, { Component, PropTypes } from 'react';
-import { browserHistory, Router } from 'react-router';
+import { browserHistory, Router, IndexRoute, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { ToastContainer, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { syncHistoryWithStore } from 'react-router-redux';
 
+// We only need to import the modules necessary for initial render
+import CoreLayout from '../layouts/CoreLayout';
+import EditSignup from '../routes/EditSignup/containers/EditSignupContainer';
+import Login from '../routes/Login/components/Login';
+
+/** REFACTORED */
+import Admin from '../routes/Admin/AdminEventsList';
+import Editor from '../routes/Editor/Editor';
+import Events from '../routes/Events/EventList';
+import SingleEvent from '../routes/SingleEvent/SingleEvent';
+import PageNotFound from '../routes/404/PageNotFound';
+
 class AppContainer extends Component {
   static propTypes = {
-    routes: PropTypes.object.isRequired,
     store: PropTypes.object.isRequired,
   };
 
@@ -16,13 +27,25 @@ class AppContainer extends Component {
   }
 
   render() {
-    const { routes, store } = this.props;
+    const { store } = this.props;
     const history = syncHistoryWithStore(browserHistory, store);
 
     return (
       <Provider store={store}>
         <div style={{ height: '100%' }}>
-          <Router history={history} children={routes} />
+          <CoreLayout>
+            <Router history={history}>
+              <Route path="/" component={Events} />
+              <Route path="event/:id" component={SingleEvent} />
+              <Route path="admin" component={Admin} />
+              <Route path="admin/edit/:id" component={Editor} />
+              <Route path="signup/:id/:editToken" component={EditSignup} />
+              <Route path="login" component={Login} />
+              <Route path="*" component={PageNotFound} />
+              <Route />
+            </Router>
+          </CoreLayout>
+          {/* <Router history={history} children={routes} /> */}
           {/* Global toast wrapper, use toast() function to display a message
             * https://github.com/fkhadra/react-toastify
             */}

@@ -2,15 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import Spinner from 'react-spinkit';
-import './Editor.scss';
 import { browserHistory, Link } from 'react-router';
 import { toast } from 'react-toastify';
 import Promise from 'bluebird';
+import { connect } from 'react-redux';
 
-import BasicDetailsTab from './BasicDetailsTab';
-import QuotasTab from './QuotasTab';
-import QuestionsTab from './QuestionsTab';
-import EmailsTab from './EmailsTab';
+import './Editor.scss';
+import * as EditorActions from '../../modules/editor/actions';
+
+import BasicDetailsTab from './components/BasicDetailsTab';
+import QuotasTab from './components/QuotasTab';
+import QuestionsTab from './components/QuestionsTab';
+import EmailsTab from './components/EmailsTab';
 
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
@@ -19,12 +22,16 @@ async function minDelay(func, ms = 1000) {
 
 class Editor extends React.Component {
   static propTypes = {
-    getEventAsync: PropTypes.func.isRequired,
-    publishEventAsync: PropTypes.func.isRequired,
-    updateEvent: PropTypes.func.isRequired,
-    updateEventAsync: PropTypes.func.isRequired,
-    updateEventField: PropTypes.func.isRequired,
+    publishEventAsync: PropTypes.func,
+    updateEventAsync: PropTypes.func,
+    updateEventField: PropTypes.func,
+    getEventAsync: PropTypes.func,
+    setEvent: PropTypes.func,
     event: PropTypes.object,
+    eventLoading: PropTypes.bool,
+    eventError: PropTypes.bool,
+    eventPublishLoading: PropTypes.bool,
+    eventPublishError: PropTypes.bool,
     params: PropTypes.any,
   };
 
@@ -32,10 +39,7 @@ class Editor extends React.Component {
     super(props);
     this.state = {
       activeTab: 1,
-      eventLoading: true,
-      eventLoadingError: false,
       isValid: false,
-      eventPublishing: false,
     };
 
     this.changeTab = this.changeTab.bind(this);
@@ -53,32 +57,15 @@ class Editor extends React.Component {
 
         if (eventId === 'new') {
           // New event, clear any existing one from redux;
-          this.props.updateEvent({});
+          this.props.setEvent({});
 
           // Set base quota field
           this.props.updateEventField('quota', [{ title: 'Kiintiö' }]);
         } else {
-          // Editing existing event, fetch the event
-          try {
-            await this.props.getEventAsync(eventId);
-          } catch (error) {
-            console.log(error);
-            this.setState({
-              eventLoadingError: true,
-              eventLoading: false,
-            });
-          }
+          this.props.getEventAsync(eventId);
         }
       },
     );
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.state.eventLoading && nextProps.event !== this.props.event) {
-      this.setState({
-        eventLoading: false,
-      });
-    }
   }
 
   changeTab(id) {
@@ -105,10 +92,6 @@ class Editor extends React.Component {
       draft: isDraft,
     };
 
-    this.setState({
-      eventPublishing: true,
-    });
-
     if (this.props.params.id === 'new') {
       try {
         const res = await minDelay(this.props.publishEventAsync(event), 1000);
@@ -125,10 +108,6 @@ class Editor extends React.Component {
       } catch (error) {
         toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
       }
-
-      this.setState({
-        eventPublishing: false,
-      });
     }
   }
 
@@ -136,9 +115,9 @@ class Editor extends React.Component {
     if (this.props.params.id === 'new') {
       return (
         <div className="pull-right event-editor--buttons-wrapper">
-          {this.state.eventPublishing ? <Spinner name="circle" fadeIn="quarter" /> : null}
+          {this.props.eventPublishLoading ? <Spinner name="circle" fadeIn="quarter" /> : null}
           <input
-            disabled={!this.state.isValid || this.state.eventPublishing}
+            disabled={!this.state.isValid || this.props.eventPublishLoading}
             className="btn btn-info pull-right event-editor--animated"
             formNoValidate
             type="submit"
@@ -152,13 +131,13 @@ class Editor extends React.Component {
     if (this.props.event.draft) {
       return (
         <div className="pull-right event-editor--buttons-wrapper">
-          {this.state.eventPublishing ? <Spinner name="circle" fadeIn="quarter" /> : null}
+          {this.props.eventPublishLoading ? <Spinner name="circle" fadeIn="quarter" /> : null}
           <div className="event-editor--public-status">
             <div className="event-editor--bubble draft event-editor--animated" />
             <span>Luonnos</span>
           </div>
           <input
-            disabled={!this.state.isValid || this.state.eventPublishing}
+            disabled={!this.state.isValid || this.props.eventPublishLoading}
             className="btn btn-success event-editor--animated"
             formNoValidate
             type="submit"
@@ -166,7 +145,7 @@ class Editor extends React.Component {
             onClick={() => this.publishEvent(false)}
           />
           <input
-            disabled={!this.state.isValid || this.state.eventPublishing}
+            disabled={!this.state.isValid || this.props.eventPublishLoading}
             className="btn btn-info event-editor--animated"
             formNoValidate
             type="submit"
@@ -179,13 +158,13 @@ class Editor extends React.Component {
 
     return (
       <div className="pull-right event-editor--buttons-wrapper">
-        {this.state.eventPublishing ? <Spinner name="circle" fadeIn="quarter" /> : null}
+        {this.props.eventPublishLoading ? <Spinner name="circle" fadeIn="quarter" /> : null}
         <div className="event-editor--public-status">
           <div className="event-editor--bubble public event-editor--animated" />
           <span>Julkaistu</span>
         </div>
         <input
-          disabled={!this.state.isValid || this.state.eventPublishing}
+          disabled={!this.state.isValid || this.props.eventPublishLoading}
           className="btn btn-warning event-editor--animated"
           formNoValidate
           type="submit"
@@ -193,7 +172,7 @@ class Editor extends React.Component {
           onClick={() => this.publishEvent(true)}
         />
         <input
-          disabled={!this.state.isValid || this.state.eventPublishing}
+          disabled={!this.state.isValid || this.props.eventPublishLoading}
           className="btn btn-info event-editor--animated"
           formNoValidate
           type="submit"
@@ -220,7 +199,7 @@ class Editor extends React.Component {
   render() {
     const isNewEvent = this.props.params.id === 'new';
 
-    if (this.state.eventLoading) {
+    if (this.props.eventLoading) {
       return (
         <div className="event-editor">
           <div className="event-editor--loading-container">
@@ -230,7 +209,7 @@ class Editor extends React.Component {
       );
     }
 
-    if (this.state.eventLoadingError) {
+    if (this.props.eventError) {
       return (
         <div className="event-editor">
           <div className="event-editor--loading-container">
@@ -286,4 +265,23 @@ class Editor extends React.Component {
   }
 }
 
-export default Editor;
+const mapDispatchToProps = {
+  publishEventAsync: EditorActions.publishEventAsync,
+  updateEventAsync: EditorActions.updateEventAsync,
+  getEventAsync: EditorActions.getEventAsync,
+  setEvent: EditorActions.setEvent,
+  updateEventField: EditorActions.updateEventField,
+};
+
+const mapStateToProps = state => ({
+  event: state.editor.event,
+  eventLoading: state.editor.eventLoading,
+  eventError: state.editor.eventError,
+  eventPublishLoading: state.editor.eventPublishLoading,
+  eventPublishError: state.editor.eventPublishError,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Editor);
