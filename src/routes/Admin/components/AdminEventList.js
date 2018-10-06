@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import moment from 'moment';
 import { Link } from 'react-router';
 import UserForm from './UserForm';
@@ -17,12 +16,11 @@ class AdminEventListItem extends React.Component {
           <Link to={`/event/${this.props.data.id}`}>{this.props.data.title}</Link>
         </td>
         <td>{this.props.data.date ? moment(this.props.data.date).format('DD.MM.YYYY') : ''}</td>
-        <td>Luonnos</td>
-        <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
+        <td>{this.props.data.draft ? 'Luonnos' : 'Julkinen'}</td>
         <td>
           <Link to={`/admin/edit/${this.props.data.id}`}>Muokkaa tapahtumaa</Link>
-          <Separator />
-          <Link>Lataa osallistujalista</Link>
+          <br />
+          <Link>Näytä osallistujat</Link>
         </td>
       </tr>
     );
@@ -47,7 +45,6 @@ class AdminEventList extends React.Component {
               <th>Nimi</th>
               <th>Ajankohta</th>
               <th>Tila</th>
-              <th>Ilmoittautuneita</th>
               <th>Toiminnot</th>
             </tr>
           </thead>
