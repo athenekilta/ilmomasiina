@@ -30,7 +30,8 @@ class Login extends React.Component {
         <Formsy.Form>
           <Input
             value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value })}
+            onChange={(key, value) => this.setState({ email: value })}
+            name="email"
             label="Sähköposti"
             title="Sähköposti"
             placeholder="ville@athene.fi"
@@ -39,7 +40,8 @@ class Login extends React.Component {
           />
           <Input
             value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value })}
+            onChange={(key, value) => this.setState({ password: value })}
+            name="password"
             label="Salasana"
             title="Salasana"
             type="password"
@@ -51,10 +53,7 @@ class Login extends React.Component {
             className="btn btn-default"
             onClick={(e) => {
               e.preventDefault();
-              this.props.login({
-                email: this.state.email,
-                password: this.state.password,
-              });
+              this.props.login(this.state.email, this.state.password);
             }}
           >
             Kirjaudu

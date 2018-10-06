@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { browserHistory, Router, IndexRoute, Route } from 'react-router';
+import { browserHistory, Router, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { ToastContainer, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,8 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/CoreLayout';
+
+import requireAuth from './requireAuth';
 
 import Admin from '../routes/Admin/AdminEventsList';
 import Editor from '../routes/Editor/Editor';
@@ -36,10 +38,10 @@ class AppContainer extends Component {
             <Router history={history}>
               <Route path="/" component={Events} />
               <Route path="event/:id" component={SingleEvent} />
-              <Route path="admin" component={Admin} />
-              <Route path="admin/edit/:id" component={Editor} />
               <Route path="signup/:id/:editToken" component={EditSignup} />
               <Route path="login" component={Login} />
+              <Route path="admin" component={requireAuth(Admin)} />
+              <Route path="admin/edit/:id" component={requireAuth(Editor)} />
               <Route path="*" component={PageNotFound} />
               <Route />
             </Router>

@@ -88,6 +88,11 @@ export const login = (email, password) => (dispatch) => {
     });
 };
 
+export const redirectToLogin = () => (dispatch) => {
+  dispatch(clearState());
+  dispatch(push('/login'));
+};
+
 export const logout = () => (dispatch) => {
   dispatch(clearState());
   dispatch(push('/'));
