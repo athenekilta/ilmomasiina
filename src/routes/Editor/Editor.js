@@ -98,6 +98,7 @@ class Editor extends React.Component {
         const res = await minDelay(this.props.publishEventAsync(event), 1000);
         browserHistory.push(`/admin/edit/${res.id}`);
       } catch (error) {
+        console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', { autoClose: 2000 });
       }
       this.setState({
@@ -107,6 +108,7 @@ class Editor extends React.Component {
       try {
         await minDelay(this.props.updateEventAsync(event), 1000);
       } catch (error) {
+        console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
       }
     }

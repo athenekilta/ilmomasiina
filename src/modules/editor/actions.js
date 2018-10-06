@@ -48,7 +48,8 @@ export const updateEventField = (field, value) => (dispatch) => {
 
 export const publishEventAsync = data => async (dispatch) => {
   dispatch(setEventPublishLoading());
-  const event = await request('POST', '/api/admin/events', { json: data }, {
+  const event = await request('POST', '/api/admin/events', {
+    json: data,
     headers: { Authorization: localStorage.getItem('id_token') },
   }).then(res => JSON.parse(res.body))
     .then((res) => {
@@ -65,7 +66,8 @@ export const publishEventAsync = data => async (dispatch) => {
 
 export const updateEventAsync = data => async (dispatch) => {
   dispatch(setEventPublishLoading());
-  const event = await request('PATCH', `/api/admin/events/${data.id}`, { json: data }, {
+  const event = await request('PATCH', `/api/admin/events/${data.id}`, {
+    json: data,
     headers: { Authorization: localStorage.getItem('id_token') },
   }).then(res => JSON.parse(res.body))
     .then((res) => {

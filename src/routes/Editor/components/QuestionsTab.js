@@ -50,7 +50,7 @@ class QuestionsTab extends React.Component {
     const newQuestions = _.concat(questions, {
       id: (_.max(questions.map(n => n.id)) || 0) + 1,
       existsInDb: false,
-      title: '',
+      question: '',
       type: 'text',
     });
 
@@ -107,12 +107,12 @@ class QuestionsTab extends React.Component {
       <div className="panel-body">
         <div className="col-xs-12 col-sm-10">
           <Input
-            name={`question-${item.id}-title`}
+            name={`question-${item.id}-question`}
             value={item.question}
             label="Kysymys"
             type="text"
             required
-            onChange={(field, value) => this.updateQuestion(item.id, 'title', value)}
+            onChange={(field, value) => this.updateQuestion(item.id, 'question', value)}
             />
           <Select
             name={`question-${item.id}-type`}
@@ -126,13 +126,13 @@ class QuestionsTab extends React.Component {
         <div className="col-xs-12 col-sm-2">
           <Checkbox
             name={`question-${item.id}-required`}
-            value={false}
+            value={item.required}
             label="Pakollinen"
             onChange={(field, value) => this.updateQuestion(item.id, 'required', value)}
             />
           <Checkbox
             name={`question-${item.id}-public`}
-            value={false}
+            value={item.public}
             label="Julkinen"
             onChange={(field, value) => this.updateQuestion(item.id, 'public', value)}
             />
