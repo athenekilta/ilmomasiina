@@ -48,8 +48,10 @@ export const updateEventField = (field, value) => (dispatch) => {
 
 export const publishEventAsync = data => async (dispatch) => {
   dispatch(setEventPublishLoading());
-  const event = await request('POST', '/api/events', { json: data })
-    .then(res => JSON.parse(res.body))
+  const event = await request('POST', '/api/admin/events', {
+    json: data,
+    headers: { Authorization: localStorage.getItem('id_token') },
+  }).then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setEvent(res));
       return res;
@@ -64,8 +66,10 @@ export const publishEventAsync = data => async (dispatch) => {
 
 export const updateEventAsync = data => async (dispatch) => {
   dispatch(setEventPublishLoading());
-  const event = await request('PATCH', `/api/events/${data.id}`, { json: data })
-    .then(res => JSON.parse(res.body))
+  const event = await request('PATCH', `/api/admin/events/${data.id}`, {
+    json: data,
+    headers: { Authorization: localStorage.getItem('id_token') },
+  }).then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setEvent(res));
       return res;
@@ -80,8 +84,9 @@ export const updateEventAsync = data => async (dispatch) => {
 
 export const getEventAsync = eventId => async (dispatch) => {
   dispatch(setEventLoading());
-  const res = await request('GET', `/api/events/${eventId}`)
-    .then(res => JSON.parse(res.body))
+  const res = await request('GET', `/api/admin/events/${eventId}`, {
+    headers: { Authorization: localStorage.getItem('id_token') },
+  }).then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setEvent(res));
       return res;
@@ -93,3 +98,4 @@ export const getEventAsync = eventId => async (dispatch) => {
 
   return res;
 };
+

@@ -3,6 +3,7 @@ module.exports = () => (hook) => {
 
   hook.params.sequelize = {
     distinct: true,
+    raw: false,
     attributes: [
       'id',
       'title',
@@ -20,9 +21,8 @@ module.exports = () => (hook) => {
       'signupsPublic',
       'verificationEmail',
     ],
-    raw: false,
     include: [
-      // First include all questions (also non-public for the form)
+      // First include all questions
       {
         attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
         model: sequelize.models.question,

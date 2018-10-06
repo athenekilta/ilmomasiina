@@ -14,6 +14,7 @@ import BasicDetailsTab from './components/BasicDetailsTab';
 import QuotasTab from './components/QuotasTab';
 import QuestionsTab from './components/QuestionsTab';
 import EmailsTab from './components/EmailsTab';
+import SignupsTab from './components/SignupsTab';
 
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
@@ -97,6 +98,7 @@ class Editor extends React.Component {
         const res = await minDelay(this.props.publishEventAsync(event), 1000);
         browserHistory.push(`/admin/edit/${res.id}`);
       } catch (error) {
+        console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', { autoClose: 2000 });
       }
       this.setState({
@@ -106,6 +108,7 @@ class Editor extends React.Component {
       try {
         await minDelay(this.props.updateEventAsync(event), 1000);
       } catch (error) {
+        console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
       }
     }
@@ -226,11 +229,11 @@ class Editor extends React.Component {
         <Formsy.Form
           onValid={() => this.setValidState(true)}
           onInvalid={() => this.setValidState(false)}
-          className="form-horizontal col-xs-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2"
+          className="form-horizontal col-xs-12 col-md-10 col-md-offset-1"
         >
           <h1>{isNewEvent ? 'Luo uusi tapahtuma' : 'Muokkaa tapahtumaa'}</h1>
           {this.renderButtons()}
-          <ul className="nav nav-tabs">
+          <ul className="event-editor--nav nav nav-tabs">
             <li className={this.state.activeTab === 1 ? 'active' : ''}>
               <a onClick={() => this.changeTab(1)}>Perustiedot</a>
             </li>
@@ -242,6 +245,9 @@ class Editor extends React.Component {
             </li>
             <li className={this.state.activeTab === 4 ? 'active' : ''}>
               <a onClick={() => this.changeTab(4)}>Vahvistusviestit</a>
+            </li>
+            <li className={this.state.activeTab === 5 ? 'active' : ''}>
+              <a onClick={() => this.changeTab(5)}>Ilmoittautuneet</a>
             </li>
           </ul>
           {this.renderValidNotice()}
@@ -257,6 +263,9 @@ class Editor extends React.Component {
             </div>
             <div className={`tab-pane ${this.state.activeTab === 4 ? 'active' : ''}`}>
               <EmailsTab event={this.props.event} onDataChange={this.onDataChange} />
+            </div>
+            <div className={`tab-pane ${this.state.activeTab === 5 ? 'active' : ''}`}>
+              <SignupsTab event={this.props.event} onDataChange={this.onDataChange} />
             </div>
           </div>
         </Formsy.Form>
