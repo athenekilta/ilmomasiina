@@ -13,6 +13,10 @@ module.exports = () => (hook) => {
     ],
     distinct: true,
     raw: false,
+    // Filter out events that are saved as draft
+    where: {
+      draft: 0,
+    },
     // Include quotas of event and count of signups
     include: [
       {
