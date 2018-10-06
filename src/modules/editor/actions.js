@@ -97,18 +97,3 @@ export const getEventAsync = eventId => async (dispatch) => {
   return res;
 };
 
-export const getPublicEventAsync = eventId => async (dispatch) => {
-  dispatch(setEventLoading());
-  const res = await request('GET', `/api/events/${eventId}`)
-    .then(res => JSON.parse(res.body))
-    .then((res) => {
-      dispatch(setEvent(res));
-      return res;
-    })
-    .catch((error) => {
-      console.error('Error in getPublicEventAsync', error);
-      dispatch(setEventError());
-    });
-
-  return res;
-};
