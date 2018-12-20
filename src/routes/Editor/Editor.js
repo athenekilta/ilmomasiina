@@ -34,6 +34,7 @@ class Editor extends React.Component {
     eventPublishLoading: PropTypes.bool,
     eventPublishError: PropTypes.bool,
     params: PropTypes.any,
+    adminToken: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -55,6 +56,7 @@ class Editor extends React.Component {
       },
       async () => {
         const eventId = this.props.params.id;
+        const { adminToken } = this.props;
 
         if (eventId === 'new') {
           // New event, clear any existing one from redux;
@@ -62,8 +64,9 @@ class Editor extends React.Component {
 
           // Set base quota field
           this.props.updateEventField('quota', [{ title: 'Kiintiö' }]);
+          this.props.updateEventField('questions', []);
         } else {
-          this.props.getEventAsync(eventId);
+          this.props.getEventAsync(eventId, adminToken);
         }
       },
     );
@@ -93,9 +96,11 @@ class Editor extends React.Component {
       draft: isDraft,
     };
 
+    const { adminToken } = this.props;
+
     if (this.props.params.id === 'new') {
       try {
-        const res = await minDelay(this.props.publishEventAsync(event), 1000);
+        const res = await minDelay(this.props.publishEventAsync(event, adminToken), 1000);
         browserHistory.push(`/admin/edit/${res.id}`);
       } catch (error) {
         console.log(error);
@@ -106,7 +111,8 @@ class Editor extends React.Component {
       });
     } else {
       try {
-        await minDelay(this.props.updateEventAsync(event), 1000);
+        await minDelay(this.props.updateEventAsync(event, adminToken), 1000);
+        toast.success('Muutoksesi tallennettiin ontunisneesti!', { autoClose: 2000 });
       } catch (error) {
         console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
@@ -224,6 +230,8 @@ class Editor extends React.Component {
       );
     }
 
+    console.log('EVENT', this.props.event);
+
     return (
       <div className="event-editor">
         <Formsy.Form
@@ -288,6 +296,7 @@ const mapStateToProps = state => ({
   eventError: state.editor.eventError,
   eventPublishLoading: state.editor.eventPublishLoading,
   eventPublishError: state.editor.eventPublishError,
+  adminToken: state.admin.accessToken
 });
 
 export default connect(

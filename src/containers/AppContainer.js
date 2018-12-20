@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import { ToastContainer, Flip } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { syncHistoryWithStore } from 'react-router-redux';
+import { PersistGate } from 'redux-persist/integration/react'
+
 
 // We only need to import the modules necessary for initial render
 import CoreLayout from '../layouts/CoreLayout';
@@ -21,6 +23,7 @@ import Login from '../routes/Login/Login';
 class AppContainer extends Component {
   static propTypes = {
     store: PropTypes.object.isRequired,
+    persistor: PropTypes.object.isRequired,
   };
 
   static shouldComponentUpdate() {
@@ -28,41 +31,43 @@ class AppContainer extends Component {
   }
 
   render() {
-    const { store } = this.props;
+    const { store, persistor } = this.props;
     const history = syncHistoryWithStore(browserHistory, store);
 
     return (
       <Provider store={store}>
-        <div style={{ height: '100%' }}>
-          <CoreLayout>
-            <Router history={history}>
-              <Route path="/" component={Events} />
-              <Route path="event/:id" component={SingleEvent} />
-              <Route path="signup/:id/:editToken" component={EditSignup} />
-              <Route path="login" component={Login} />
-              <Route path="admin" component={requireAuth(Admin)} />
-              <Route path="admin/edit/:id" component={requireAuth(Editor)} />
-              <Route path="*" component={PageNotFound} />
-              <Route />
-            </Router>
-          </CoreLayout>
-          {/* <Router history={history} children={routes} /> */}
-          {/* Global toast wrapper, use toast() function to display a message
+        <PersistGate persistor={persistor}>
+          <div style={{ height: '100%' }}>
+            <CoreLayout>
+              <Router history={history}>
+                <Route path="/" component={Events} />
+                <Route path="event/:id" component={SingleEvent} />
+                <Route path="signup/:id/:editToken" component={EditSignup} />
+                <Route path="login" component={Login} />
+                <Route path="admin" component={requireAuth(Admin)} />
+                <Route path="admin/edit/:id" component={requireAuth(Editor)} />
+                <Route path="*" component={PageNotFound} />
+                <Route />
+              </Router>
+            </CoreLayout>
+            {/* <Router history={history} children={routes} /> */}
+            {/* Global toast wrapper, use toast() function to display a message
             * https://github.com/fkhadra/react-toastify
             */}
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnVisibilityChange
-            draggable
-            pauseOnHover
-            transition={Flip}
-          />
-        </div>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnVisibilityChange
+              draggable
+              pauseOnHover
+              transition={Flip}
+            />
+          </div>
+        </PersistGate>
       </Provider>
     );
   }

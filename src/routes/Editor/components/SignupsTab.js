@@ -16,49 +16,9 @@ class SignupsTab extends React.Component {
   // }
 
   render() {
-    const { questions, quota } = this.props.event;
+    //TODO: This tab
 
-    if (!questions || !quota) return null;
-
-    const data = quota.flatMap(q => q.signups.map((signup) => {
-      const base = {
-        firstName: signup.firstName,
-        lastName: signup.lastName,
-        timestamp: signup.createdAt,
-        quota: q.title,
-      };
-
-      const answers = Object.assign(...signup.answers.map(answer => ({
-        [`answer${answer.questionId}`]: answer.answer,
-      })));
-
-      return { ...base, ...answers };
-    }));
-
-    const baseColumns = [{
-      Header: 'Kiintiö',
-      accessor: 'quota',
-    },
-    {
-      Header: 'Etunimi',
-      accessor: 'firstName',
-    },
-    {
-      Header: 'Sukunimi',
-      accessor: 'lastName',
-    },
-    {
-      Header: 'Ilmoittautumisaika',
-      accessor: 'timestamp',
-    }];
-
-    const columns = baseColumns.concat(questions.map(q => ({ Header: q.question, accessor: `answer${q.id}` })));
-
-    return <ReactTable
-      data={data}
-      columns={columns}
-      defaultPageSize={100}
-    />;
+    return null;
   }
 }
 

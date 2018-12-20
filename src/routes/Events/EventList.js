@@ -150,6 +150,7 @@ const mapStateToProps = state => ({
   events: state.events.events,
   eventsLoading: state.events.eventsLoading,
   eventsError: state.events.eventsError,
+  admin: state.admin,
 });
 
 export default connect(

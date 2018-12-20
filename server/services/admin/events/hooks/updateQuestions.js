@@ -13,9 +13,9 @@ module.exports = () => (hook) => {
 
   return questionModel.bulkCreate(questionsToAdd, { updateOnDuplicate: true })
     .then(() => questionModel.findAll({ where: { eventId } })
-    .then((questions) => {
-      hook.result.dataValues.questions = questions;
-      return hook;
-    }),
+      .then((questions) => {
+        hook.result.dataValues.questions = questions;
+        return hook;
+      }),
   );
 };

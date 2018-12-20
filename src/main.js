@@ -8,7 +8,7 @@ import 'react-dates/lib/css/_datepicker.css';
 // Store Instantiation
 // ========================================================
 const initialState = window.___INITIAL_STATE__; // eslint-disable-line no-underscore-dangle
-const store = createStore(initialState);
+const { store, persistor } = createStore(initialState);
 
 // ========================================================
 // Render Setup
@@ -16,7 +16,7 @@ const store = createStore(initialState);
 const MOUNT_NODE = document.getElementById('root');
 
 let render = () => {
-  ReactDOM.render(<AppContainer store={store} />, MOUNT_NODE);
+  ReactDOM.render(<AppContainer store={store} persistor={persistor} />, MOUNT_NODE);
 };
 
 // This code is excluded from production bundle
