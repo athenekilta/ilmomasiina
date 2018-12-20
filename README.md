@@ -5,14 +5,23 @@ Ilmomasiina is Athene's event registration system.
 ## Requirements
 * Node.js `^8.9.4`
 * npm `^5.6.0`
-* MySQL
+* MySQL `^8.0`
+
+## MYSQL Setup (Mac)
+
+1. Install `mysql` (8.x) with Homebrew (https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e)
+2. Start the mysql service with `brew services start mysql`
+3. Open the mysql terminal with `mysql -u root`
+4. In the mysql terminal, create a new user e.g. `CREATE USER 'juuso'@'localhost' IDENTIFIED WITH sha256_password BY 'password';`
+5. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
+6. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
+
 
 ## Getting started
 
-1. Create database in MySQL.
-1. Create file `config/ilmomasiina.config.js` based on `config/ilmomasiina.config.example.js`.
-1. `npm install`
-1. `npm start`
+1. Create an `.env` file at the root of the project. For the contents of the .env file, check `ENV.MD`
+2. `npm install`
+3. `npm start`
 
 **Optional**: You can create mockup data for development by running `npm run create-fake-data`. During development, database can be resetted with `npm run reset-db`.
 
