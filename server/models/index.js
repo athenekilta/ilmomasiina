@@ -17,11 +17,18 @@ module.exports = function () {
   if (process.env.NODE_ENV === 'production') {
     sequelize = sequelizeHeroku.connect(Sequelize);
   } else {
-    sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
-      host: 'localhost',
-      dialect: 'mysql',
-      logging: false,
-    });
+
+    if (process.env.CLEARDB_DATABASE_URL) {
+      sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, {
+        logging: false,
+      });
+    } else {
+      sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
+        host: 'localhost',
+        dialect: 'mysql',
+        logging: false,
+      });
+    }
   }
 
   if (sequelize) {
