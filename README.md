@@ -12,7 +12,7 @@ Ilmomasiina is Athene's event registration system.
 1. Install `mysql` (8.x) with Homebrew (https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e)
 2. Start the mysql service with `brew services start mysql`
 3. Open the mysql terminal with `mysql -u root`
-4. In the mysql terminal, create a new user e.g. `CREATE USER 'juuso'@'localhost' IDENTIFIED WITH sha256_password BY 'password';`
+4. In the mysql terminal, create a new user e.g. `CREATE USER 'juuso'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';`
 5. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
 6. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
 
