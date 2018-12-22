@@ -97,3 +97,18 @@ export const logout = () => (dispatch) => {
   dispatch(clearState());
   dispatch(push('/'));
 };
+
+export const deleteEventAsync = (id) => (dispatch, getState) => {
+  const accessToken = getState().admin.accessToken;
+
+  return request('DELETE', `/api/admin/events/${id}`, {
+    headers: { Authorization: accessToken }
+  })
+    .then((res) => {
+      return true;
+    })
+    .catch((error) => {
+      console.error('Error in deleteEventAsync', error);
+      return false;
+    });
+};

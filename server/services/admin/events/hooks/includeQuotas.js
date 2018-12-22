@@ -6,6 +6,7 @@ module.exports = () => (hook) => {
       'id',
       'title',
       'date',
+      'draft',
       'registrationStartDate',
       'registrationEndDate',
       'openQuotaSize',

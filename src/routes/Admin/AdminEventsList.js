@@ -37,7 +37,11 @@ class AdminEventList extends React.Component {
           </thead>
           <tbody>
             {this.props.events.map(i => (
-              <AdminEventListItem key={i.id} data={i} />
+              <AdminEventListItem
+                key={i.id}
+                data={i}
+                deleteEvent={this.props.deleteEvent}
+                getEvents={this.props.getEvents} />
             ))}
           </tbody>
         </table>
@@ -53,6 +57,7 @@ class AdminEventList extends React.Component {
 
 const mapDispatchToProps = {
   getEvents: AdminActions.getEventsAsync,
+  deleteEvent: AdminActions.deleteEventAsync
 };
 
 const mapStateToProps = state => ({
