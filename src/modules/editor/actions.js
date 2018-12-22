@@ -71,6 +71,7 @@ export const updateEventAsync = (data, token) => async (dispatch) => {
     headers: { Authorization: token },
   }).then(res => JSON.parse(res.body))
     .then((res) => {
+      res.useOpenQuota = res.openQuotaSize > 0
       dispatch(setEvent(res));
       return res;
     })
@@ -88,6 +89,7 @@ export const getEventAsync = (eventId, token) => async (dispatch) => {
     headers: { Authorization: token },
   }).then(res => JSON.parse(res.body))
     .then((res) => {
+      res.useOpenQuota = res.openQuotaSize > 0
       dispatch(setEvent(res));
       return res;
     })

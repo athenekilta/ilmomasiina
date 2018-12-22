@@ -153,6 +153,7 @@ class QuotasTab extends React.Component {
             name="openQuotaSize"
             label="Avoimen kiintiön koko"
             type="number"
+            value={this.props.event.openQuotaSize}
             required
             onChange={this.props.onDataChange}
           />
