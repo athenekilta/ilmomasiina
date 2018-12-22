@@ -22,7 +22,7 @@ class AdminEventListItem extends React.Component {
         </td>
         <td>{this.props.data.date ? moment(this.props.data.date).format('DD.MM.YYYY') : ''}</td>
         <td>{this.props.data.draft === 1 ? "Luonnos" : "Julkaistu"}</td>
-        <td>{_.sumBy(this.props.data.quota, n => n.going)}</td>
+        <td>{_.sumBy(this.props.data.quota, n => n.signupCount)}</td>
         <td>
           <Link to={`/admin/edit/${this.props.data.id}`}>Muokkaa tapahtumaa</Link>
           <Separator />
