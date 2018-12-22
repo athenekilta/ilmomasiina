@@ -31,6 +31,10 @@ export const setDeleted = () => (dispatch) => {
   dispatch({ type: ActionTypes.SET_DELETED });
 };
 
+export const resetEventState = () => (dispatch) => {
+  dispatch({ type: ActionTypes.RESET });
+};
+
 export const getSignupAndEventAsync = (id, editToken) => (dispatch) => {
   dispatch(setLoading());
 

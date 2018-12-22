@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from 'react-spinkit';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import * as EditSignupActions from '../../modules/editSignup/actions';
 import './EditSignup.scss';
@@ -23,16 +24,29 @@ class EditSignup extends React.Component {
   }
 
   componentWillMount() {
+    this.props.resetEventState();
     const { id, editToken } = this.props.params;
     this.props.getSignupAndEventAsync(id, editToken);
   }
 
   deleteSignup() {
     const { id, editToken } = this.props.params;
-    this.props.deleteSignupAsync(id, editToken);
+    this.props.deleteSignupAsync(id, editToken)
   }
 
   render() {
+    if (this.props.deleted) {
+      return (
+        <div className="container align-items-center">
+          <div className="EditSignup--wrapper">
+            <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
+            <Link to="/" className="btn btn-default">
+              Takaisin etusivulle
+            </Link>
+          </div>
+        </div>
+      );
+    }
     if (this.props.error) {
       return (
         <div className="container align-items-center">
@@ -81,6 +95,7 @@ class EditSignup extends React.Component {
 const mapDispatchToProps = {
   getSignupAndEventAsync: EditSignupActions.getSignupAndEventAsync,
   deleteSignupAsync: EditSignupActions.deleteSignupAsync,
+  resetEventState: EditSignupActions.resetEventState,
 };
 
 const mapStateToProps = state => ({

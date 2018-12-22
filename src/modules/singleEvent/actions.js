@@ -66,10 +66,12 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setSignup(res));
+      return true
     })
     .catch((error) => {
       console.error('Error in completeSignupAsync', error);
       dispatch(setSignupError());
+      return false
     });
 };
 
