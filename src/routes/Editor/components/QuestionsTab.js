@@ -50,6 +50,8 @@ class QuestionsTab extends React.Component {
     const newQuestions = _.concat(questions, {
       id: (_.max(questions.map(n => n.id)) || 0) + 1,
       existsInDb: false,
+      required: false,
+      public: false,
       question: '',
       type: 'text',
     });
@@ -103,6 +105,7 @@ class QuestionsTab extends React.Component {
   }
 
   renderQuestions() {
+    console.log(this.props.event.questions)
     const q = _.map(this.props.event.questions, item => (
       <div className="panel-body">
         <div className="col-xs-12 col-sm-10">
@@ -113,7 +116,7 @@ class QuestionsTab extends React.Component {
             type="text"
             required
             onChange={(field, value) => this.updateQuestion(item.id, 'question', value)}
-            />
+          />
           <Select
             name={`question-${item.id}-type`}
             value={item.type}
@@ -121,7 +124,7 @@ class QuestionsTab extends React.Component {
             options={QUESTION_TYPES}
             onChange={(field, value) => this.updateQuestion(item.id, 'type', value)}
             required
-            />
+          />
         </div>
         <div className="col-xs-12 col-sm-2">
           <Checkbox
@@ -129,17 +132,17 @@ class QuestionsTab extends React.Component {
             value={item.required}
             label="Pakollinen"
             onChange={(field, value) => this.updateQuestion(item.id, 'required', value)}
-            />
+          />
           <Checkbox
             name={`question-${item.id}-public`}
             value={item.public}
             label="Julkinen"
             onChange={(field, value) => this.updateQuestion(item.id, 'public', value)}
-            />
+          />
           <a onClick={() => this.removeQuestion(item.id)}>Poista</a>
         </div>
       </div>
-      ));
+    ));
 
     return <SortableItems collection="questions" items={q} onSortEnd={this.updateOrder} useDragHandle />;
   }
