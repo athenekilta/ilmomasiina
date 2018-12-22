@@ -234,6 +234,7 @@ class Editor extends React.Component {
 
     return (
       <div className="event-editor">
+        <a onClick={() => window.history.back()} style={{ margin: 0 }}>&#8592; Takaisin</a>
         <Formsy.Form
           onValid={() => this.setValidState(true)}
           onInvalid={() => this.setValidState(false)}

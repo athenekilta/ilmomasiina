@@ -166,115 +166,116 @@ class SingleEvent extends React.Component {
             event={event}
           />
         ) : (
-          <div className="container">
-            <div className="row">
-              <div className="col-xs-12 col-sm-8">
-                <h1>{event.title}</h1>
-                <div className="event-heading">
-                  {event.date ? (
-                    <p>
-                      <strong>Ajankohta:</strong> {moment(event.date).format('D.M.Y [klo] HH:mm')}
-                    </p>
-                  ) : null}
-                  {event.location ? (
-                    <p>
-                      <strong>Sijainti:</strong> {event.location}
-                    </p>
-                  ) : null}
-                  {event.price ? (
-                    <p>
-                      <strong>Hinta:</strong> {event.price}
-                    </p>
-                  ) : null}
-                  {event.homepage ? (
-                    <p>
-                      <strong>Kotisivut:</strong>{' '}
-                      <a href={event.homepage} title="Kotisivut">
-                        {event.homepage}
-                      </a>
-                    </p>
-                  ) : null}
-                  {event.facebook ? (
-                    <p>
-                      <strong>Facebook-tapahtuma:</strong>{' '}
-                      <a href={event.facebook} title="Facebook-tapahtuma">
-                        {event.facebook}
-                      </a>
-                    </p>
-                  ) : null}
+            <div className="container">
+              <a onClick={() => window.history.back()} style={{ margin: 0 }}>&#8592; Takaisin</a>
+              <div className="row">
+                <div className="col-xs-12 col-sm-8">
+                  <h1>{event.title}</h1>
+                  <div className="event-heading">
+                    {event.date ? (
+                      <p>
+                        <strong>Ajankohta:</strong> {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                      </p>
+                    ) : null}
+                    {event.location ? (
+                      <p>
+                        <strong>Sijainti:</strong> {event.location}
+                      </p>
+                    ) : null}
+                    {event.price ? (
+                      <p>
+                        <strong>Hinta:</strong> {event.price}
+                      </p>
+                    ) : null}
+                    {event.homepage ? (
+                      <p>
+                        <strong>Kotisivut:</strong>{' '}
+                        <a href={event.homepage} title="Kotisivut">
+                          {event.homepage}
+                        </a>
+                      </p>
+                    ) : null}
+                    {event.facebook ? (
+                      <p>
+                        <strong>Facebook-tapahtuma:</strong>{' '}
+                        <a href={event.facebook} title="Facebook-tapahtuma">
+                          {event.facebook}
+                        </a>
+                      </p>
+                    ) : null}
+                  </div>
+                  <p>{nl2br(event.description)}</p>
                 </div>
-                <p>{nl2br(event.description)}</p>
-              </div>
-              <div className="col-xs-12 col-sm-4 pull-right">
-                <div className="sidebar-widget">
-                  <h3>Ilmoittautuminen</h3>
-                  <p>{signupState(event.date, event.registrationStartDate, event.registrationEndDate).label}</p>
-                  {event.quota
-                    ? event.quota.map((quota, index) => (
-                      <SignupButton
-                        title={quota.title}
-                        opens={event.registrationStartDate}
-                        closes={event.registrationEndDate}
-                        openForm={() => this.openForm(quota)}
-                        isOnly={event.quota.length === 1}
-                        key={index}
-                        />
-                      ))
-                    : ''}
-                </div>
-                {(event.quota && event.quota.length) > 1 ? (
+                <div className="col-xs-12 col-sm-4 pull-right">
                   <div className="sidebar-widget">
-                    <h3>Ilmoittautuneet</h3>
+                    <h3>Ilmoittautuminen</h3>
+                    <p>{signupState(event.date, event.registrationStartDate, event.registrationEndDate).label}</p>
                     {event.quota
                       ? event.quota.map((quota, index) => (
-                        <ViewProgress
+                        <SignupButton
                           title={quota.title}
-                          value={Math.min(quota.signups.length, quota.size)}
-                          max={quota.size}
+                          opens={event.registrationStartDate}
+                          closes={event.registrationEndDate}
+                          openForm={() => this.openForm(quota)}
+                          isOnly={event.quota.length === 1}
                           key={index}
+                        />
+                      ))
+                      : ''}
+                  </div>
+                  {(event.quota && event.quota.length) > 1 ? (
+                    <div className="sidebar-widget">
+                      <h3>Ilmoittautuneet</h3>
+                      {event.quota
+                        ? event.quota.map((quota, index) => (
+                          <ViewProgress
+                            title={quota.title}
+                            value={Math.min(quota.signups.length, quota.size)}
+                            max={quota.size}
+                            key={index}
                           />
                         ))
-                      : ''}
-                    {event.openQuotaSize > 0 ? (
-                      <ViewProgress title="Avoin" value={openQuota.length} max={event.openQuotaSize} key="open" />
-                    ) : (
+                        : ''}
+                      {event.openQuotaSize > 0 ? (
+                        <ViewProgress title="Avoin" value={openQuota.length} max={event.openQuotaSize} key="open" />
+                      ) : (
+                          ''
+                        )}
+                      {waitList ? <p>{`Jonossa: ${waitList.length}`}</p> : null}
+                    </div>
+                  ) : (
                       ''
                     )}
-                    {waitList ? <p>{`Jonossa: ${waitList.length}`}</p> : null}
-                  </div>
-                ) : (
-                  ''
-                )}
-              </div>
-              <div className="col-xs-12">
-                {!event.signupsPublic ? (
-                  <p>Tapahtuman vastaukset eivät ole julkisia.</p>
-                ) : (
-                  <div>
-                    <h2>Ilmoittautuneet</h2>
-                    {this.renderSignupLists(event)}
-                    {event.openQuotaSize ? (
-                      <SignupList
-                        title={'Avoin kiintiö'}
-                        questions={_.filter(formattedQuestions, 'public')}
-                        rows={openQuota}
-                        key={'openQuota'}
-                      />
-                    ) : null}
-                    {waitList ? (
-                      <SignupList
-                        title={'Jonossa'}
-                        questions={_.filter(formattedQuestions, 'public')}
-                        rows={waitList}
-                        key={'waitList'}
-                      />
-                    ) : null}
-                  </div>
-                )}
+                </div>
+                <div className="col-xs-12">
+                  {!event.signupsPublic ? (
+                    <p>Tapahtuman vastaukset eivät ole julkisia.</p>
+                  ) : (
+                      <div>
+                        <h2>Ilmoittautuneet</h2>
+                        {this.renderSignupLists(event)}
+                        {event.openQuotaSize ? (
+                          <SignupList
+                            title={'Avoin kiintiö'}
+                            questions={_.filter(formattedQuestions, 'public')}
+                            rows={openQuota}
+                            key={'openQuota'}
+                          />
+                        ) : null}
+                        {waitList ? (
+                          <SignupList
+                            title={'Jonossa'}
+                            questions={_.filter(formattedQuestions, 'public')}
+                            rows={waitList}
+                            key={'waitList'}
+                          />
+                        ) : null}
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     );
   }

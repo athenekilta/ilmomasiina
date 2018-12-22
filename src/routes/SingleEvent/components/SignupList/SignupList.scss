@@ -12,12 +12,12 @@
 
 td {
   span.hover {
-    display: none;
+    visiblity: visible;
   }
 
   &:hover {
     span.hover {
-      display: inline;
+      visibility: hidden;
     }
   }
 }
