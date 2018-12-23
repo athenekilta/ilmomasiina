@@ -156,6 +156,7 @@
     "postcss-loader": "^1.1.0",
     "prop-types": "^15.6.2",
     "react": "^15.6.2",
+    "react-csv": "^1.0.19",
     "react-dates": "^17.2.0",
     "react-dom": "^15.0.0",
     "react-nl2br": "^0.2.0",
