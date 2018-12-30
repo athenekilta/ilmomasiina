@@ -1,4 +1,4 @@
-import * as ActionTypes from './actionTypes';
+import * as ActionTypes from "./actionTypes";
 
 const initialState = {
   events: [],
@@ -7,6 +7,7 @@ const initialState = {
   accessToken: null,
   loginLoading: false,
   loginError: false,
+  loggedIn: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -46,6 +47,11 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loginLoading: false,
         loginError: true,
+      };
+    case ActionTypes.SET_LOGIN_STATUS:
+      return {
+        ...state,
+        loggedIn: action.payload,
       };
     case ActionTypes.CLEAR_STATE:
       return initialState;
