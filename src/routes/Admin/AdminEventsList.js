@@ -7,6 +7,7 @@ import UserForm from './UserForm';
 import './AdminEventsList.scss';
 
 import AdminEventListItem from './AdminEventListItem';
+import { getSignups } from '../../modules/admin/selectors';
 
 /* Render the list container
 */
@@ -36,9 +37,10 @@ class AdminEventList extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.events.map(i => (
+            {this.props.events.map((i, index) => (
               <AdminEventListItem
                 key={i.id}
+                signups={this.props.signups[index]}
                 data={i}
                 deleteEvent={this.props.deleteEvent}
                 getEvents={this.props.getEvents} />
@@ -64,6 +66,7 @@ const mapStateToProps = state => ({
   events: state.admin.events,
   eventsLoading: state.admin.eventsLoading,
   eventsError: state.admin.eventsError,
+  signups: getSignups(state.admin.events)
 });
 
 export default connect(

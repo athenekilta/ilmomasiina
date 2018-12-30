@@ -12,6 +12,7 @@ import ViewProgress from './components/ViewProgress';
 import EnrollForm from './components/EnrollForm';
 import signupState from '../../utils/signupStateText';
 import './SingleEvent.scss';
+import { getOpenQuotas } from '../../modules/singleEvent/selectors';
 
 class SingleEvent extends React.Component {
   static propTypes = {
@@ -105,54 +106,9 @@ class SingleEvent extends React.Component {
     });
   }
 
-  getOpenQuotas(event) {
-    if (!event.quota || !event.signupsPublic) {
-      return {
-        openQuota: [],
-        waitList: [],
-        formattedQuestions: null,
-      };
-    }
-
-    const extraSignups = [];
-
-    _.each(event.quota, (quota) => {
-      _.each(quota.signups.slice(quota.size), (signup) => {
-        signup.answers.push({
-          questionId: 0,
-          answer: quota.title,
-        });
-        extraSignups.push(signup);
-      });
-    });
-
-    const byTimestamp = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
-
-    const openQuota = extraSignups.slice(0, event.openQuotaSize).sort(byTimestamp);
-    const waitList = extraSignups.slice(event.openQuotaSize).sort(byTimestamp);
-
-    const formattedQuestions = event.questions.slice();
-
-    formattedQuestions.push({
-      id: 0,
-      options: null,
-      public: true,
-      question: 'Kiintiö',
-      type: 'text',
-    });
-
-    return {
-      openQuota,
-      waitList,
-      formattedQuestions,
-    };
-  }
-
   render() {
-    const { event, signup } = this.props;
-
-    const { openQuota, waitList, formattedQuestions } = this.getOpenQuotas(event);
-
+    const { event, signup, openQuotaData } = this.props;
+    const { openQuota, waitList, formattedQuestions } = openQuotaData
     return (
       <div>
         {this.state.formOpened ? (
@@ -295,6 +251,7 @@ const mapStateToProps = state => ({
   signup: state.singleEvent.signup,
   signupLoading: state.singleEvent.signupLoading,
   signupError: state.singleEvent.signupError,
+  openQuotaData: getOpenQuotas(state.singleEvent.event)
 });
 
 export default connect(

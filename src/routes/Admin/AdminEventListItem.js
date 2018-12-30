@@ -13,27 +13,10 @@ class AdminEventListItem extends React.Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
     deleteEvent: PropTypes.func.isRequired,
-    getEvents: PropTypes.func.isRequired
+    getEvents: PropTypes.func.isRequired,
+    signups: PropTypes.array.isRequired
   };
-  constructor(props) {
-    super(props);
-    this.state = {
-      signups: []
-    };
-  }
-  componentDidMount() {
-    let signups = []
-    this.props.data.quota.forEach(quota => {
-      quota.signups.forEach(y =>
-        signups.push({
-          "Etunimi": y.firstName,
-          "Sukunimi": y.lastName,
-          "Ilmoittautumisaika": new Date(y.createdAt).toLocaleString(),
-          "Kiintiö": quota.title
-        }))
-    })
-    this.setState({ signups })
-  }
+
   deleteEvent = () => {
     if (window.confirm("Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.")) {
       this.props.deleteEvent(this.props.data.id)
@@ -54,12 +37,12 @@ class AdminEventListItem extends React.Component {
         </td>
         <td>{this.props.data.date ? moment(this.props.data.date).format('DD.MM.YYYY') : ''}</td>
         <td>{this.props.data.draft ? "Luonnos" : "Julkaistu"}</td>
-        <td>{this.state.signups.length}</td>
+        <td>{_.sumBy(this.props.data.quota, n => n.signups.length)}</td>
         <td>
           <Link to={`/admin/edit/${this.props.data.id}`}>Muokkaa tapahtumaa</Link>
           <Separator />
           <CSVLink
-            data={this.state.signups}
+            data={this.props.signups}
             filename={this.props.data.title + " osallistujalista"}>Lataa osallistujalista</CSVLink>
           <Separator />
           <a onClick={this.deleteEvent}>Poista tapahtuma</a>

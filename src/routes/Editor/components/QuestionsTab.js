@@ -105,7 +105,6 @@ class QuestionsTab extends React.Component {
   }
 
   renderQuestions() {
-    console.log(this.props.event.questions)
     const q = _.map(this.props.event.questions, item => (
       <div className="panel-body">
         <div className="col-xs-12 col-sm-10">
