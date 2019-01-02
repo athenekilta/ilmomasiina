@@ -1,36 +1,23 @@
 import { createSelector } from 'reselect'
 
-const getEvents = state => state.admin.events;
+const _getEvents = state => state.admin.events;
+export const eventsLoading = state => state.admin.eventsLoading;
+export const eventsError = state => state.admin.eventsError;
 
-export const getSignups = createSelector(
-    [getEvents],
-    (events) => {
-        let signups = []
+export const getEvents = createSelector(
+    [
+        _getEvents,
+        eventsLoading,
+        eventsError
+    ],
+    (events, loading, error) => {
+        if (!events || loading || error) {
+            return [];
+        }
 
-        events.forEach(event => {
-            if (Object.keys(event).length > 0) {
-                let event_signups = []
-                event.quota.forEach(quota => {
-                    quota.signups.slice(0, quota.size).forEach(y =>
-                        event_signups.push({
-                            "Etunimi": y.firstName,
-                            "Sukunimi": y.lastName,
-                            "Ilmoittautumisaika": new Date(y.createdAt).toLocaleString(),
-                            "Kiintiö": quota.title
-                        }));
-                });
-                getOpenQuotas(event).forEach(y =>
-                    event_signups.push({
-                        "Etunimi": y.firstName,
-                        "Sukunimi": y.lastName,
-                        "Ilmoittautumisaika": new Date(y.createdAt).toLocaleString(),
-                        "Kiintiö": y.quotaTitle
-                    }));
-                signups.push(event_signups);
-            }
-        });
-        return signups
-    });
+        return events;
+    }
+)
 
 const getOpenQuotas = (event) => {
     if (!event.quota || !event.signupsPublic) {

@@ -7,7 +7,8 @@ import UserForm from './UserForm';
 import './AdminEventsList.scss';
 
 import AdminEventListItem from './AdminEventListItem';
-import { getSignups } from '../../modules/admin/selectors';
+import { getEvents, eventsLoading, eventsError } from '../../modules/admin/selectors';
+import { getSignupsArray, getSignupsArrayFormatted } from '../../utils/signupUtils';
 
 /* Render the list container
 */
@@ -15,11 +16,44 @@ import { getSignups } from '../../modules/admin/selectors';
 class AdminEventList extends React.Component {
   static propTypes = {
     events: PropTypes.array.isRequired,
-    getEvents: PropTypes.func.isRequired,
+    updateEvents: PropTypes.func.isRequired,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.onDeleteEvent = this.onDeleteEvent.bind(this);
+  }
+
   componentWillMount() {
-    this.props.getEvents();
+    this.props.updateEvents();
+  }
+
+  onDeleteEvent(eventId) {
+    if (window.confirm("Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.")) {
+      this.props.deleteEvent(eventId)
+        .then((success) => {
+          if (!success) {
+            console.alert("Poisto epäonnistui :(")
+          }
+          this.props.updateEvents();
+        });
+    }
+  }
+
+  renderEventRows() {
+    const { events } = this.props;
+    return _.map(events, (e) => {
+
+      return (
+        <AdminEventListItem
+          key={e.id}
+          signups={getSignupsArrayFormatted(e)}
+          data={e}
+          onDelete={this.onDeleteEvent}
+        />
+      );
+    });
   }
 
   render() {
@@ -37,14 +71,7 @@ class AdminEventList extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.props.events.map((i, index) => (
-              <AdminEventListItem
-                key={i.id}
-                signups={this.props.signups[index]}
-                data={i}
-                deleteEvent={this.props.deleteEvent}
-                getEvents={this.props.getEvents} />
-            ))}
+            {this.renderEventRows()}
           </tbody>
         </table>
         <Link to="/admin/edit/new" className="btn btn-default">
@@ -58,15 +85,14 @@ class AdminEventList extends React.Component {
 }
 
 const mapDispatchToProps = {
-  getEvents: AdminActions.getEventsAsync,
+  updateEvents: AdminActions.getEventsAsync,
   deleteEvent: AdminActions.deleteEventAsync
 };
 
 const mapStateToProps = state => ({
-  events: state.admin.events,
-  eventsLoading: state.admin.eventsLoading,
-  eventsError: state.admin.eventsError,
-  signups: getSignups(state.admin.events)
+  events: getEvents(state),
+  eventsLoading: eventsLoading(state),
+  eventsError: eventsError(state),
 });
 
 export default connect(
