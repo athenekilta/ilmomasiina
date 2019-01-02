@@ -18,6 +18,9 @@ import SignupsTab from './components/SignupsTab';
 import { getOpenQuotas } from '../../modules/singleEvent/selectors';
 import { getSignups } from '../../modules/admin/selectors';
 
+import { getSignupsByQuota } from '../../utils/signupUtils';
+
+
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
   return res[0];
@@ -276,7 +279,7 @@ class Editor extends React.Component {
               <EmailsTab event={this.props.event} onDataChange={this.onDataChange} />
             </div>
             <div className={`tab-pane ${this.state.activeTab === 5 ? 'active' : ''}`}>
-              <SignupsTab event={this.props.event} onDataChange={this.onDataChange} openQuotaData={this.props.openQuotaData} signups={this.props.signups[0]} />
+              <SignupsTab event={this.props.event} />
             </div>
           </div>
         </Formsy.Form>
@@ -300,8 +303,6 @@ const mapStateToProps = state => ({
   eventPublishLoading: state.editor.eventPublishLoading,
   eventPublishError: state.editor.eventPublishError,
   adminToken: state.admin.accessToken,
-  openQuotaData: getOpenQuotas(state.editor.event),
-  signups: getSignups([state.editor.event])
 });
 
 export default connect(

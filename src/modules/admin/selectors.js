@@ -19,7 +19,10 @@ export const getEvents = createSelector(
     }
 )
 
-const getOpenQuotas = (event) => {
+// export const isAuthenticated = (state) => state.admin.accessToken !== null;
+// export const getToken = (state) => state.admin.accessToken;
+
+export const getOpenQuotas = (event) => {
     if (!event.quota || !event.signupsPublic) {
         return []
     }
