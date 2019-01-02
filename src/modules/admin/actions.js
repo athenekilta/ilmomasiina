@@ -39,6 +39,25 @@ export const getEventsAsync = () => (dispatch, getState) => {
     });
 };
 
+export const createUserAsync = (data) => (dispatch, getState) => {
+  const accessToken = getState().admin.accessToken;
+  console.log(email)
+  return request('POST', '/api/users', {
+    headers: { Authorization: accessToken },
+    json: { email: data.email }
+  })
+    .then(res => JSON.parse(res.body))
+    .then(res => {
+      return true
+    })
+    .catch(error => {
+      console.error('Error in createUserAsync', error);
+      return false
+
+    });
+};
+
+
 export const setAccessToken = token => dispatch => {
   dispatch({
     type: ActionTypes.SET_ACCESS_TOKEN,

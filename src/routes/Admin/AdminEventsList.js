@@ -5,13 +5,17 @@ import { connect } from 'react-redux';
 import * as AdminActions from '../../modules/admin/actions';
 import UserForm from './UserForm';
 import './AdminEventsList.scss';
-
+import { toast } from 'react-toastify';
 import AdminEventListItem from './AdminEventListItem';
 import { getEvents, eventsLoading, eventsError } from '../../modules/admin/selectors';
 import { getSignupsArray, getSignupsArrayFormatted } from '../../utils/signupUtils';
 
 /* Render the list container
 */
+async function minDelay(func, ms = 1000) {
+  const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
+  return res[0];
+}
 
 class AdminEventList extends React.Component {
   static propTypes = {
@@ -47,13 +51,21 @@ class AdminEventList extends React.Component {
   }
 
   createUser(email) {
-
+    console.log(email)
     this.setState({
       userFormLoading: true,
     }, async () => {
       try {
-        const res = await minDelay(this.props.createUserAsync({ email }), 1000);
+        // TODO: better error handling
+        let success = await minDelay(this.props.createUserAsync({ email }), 1000);
+        if (success) {
+          toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 })
+        }
+        else {
+          toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+        }
       } catch (error) {
+        console.log(error)
         toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
       }
 
@@ -110,7 +122,8 @@ class AdminEventList extends React.Component {
 
 const mapDispatchToProps = {
   updateEvents: AdminActions.getEventsAsync,
-  deleteEvent: AdminActions.deleteEventAsync
+  deleteEvent: AdminActions.deleteEventAsync,
+  createUserAsync: AdminActions.createUserAsync
 };
 
 const mapStateToProps = state => ({
