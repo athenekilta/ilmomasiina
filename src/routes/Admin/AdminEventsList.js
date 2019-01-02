@@ -22,7 +22,12 @@ class AdminEventList extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      userFormLoading: false,
+    };
+
     this.onDeleteEvent = this.onDeleteEvent.bind(this);
+    this.createUser = this.createUser.bind(this);
   }
 
   componentWillMount() {
@@ -39,6 +44,25 @@ class AdminEventList extends React.Component {
           this.props.updateEvents();
         });
     }
+  }
+
+  createUser(email) {
+
+    this.setState({
+      userFormLoading: true,
+    }, async () => {
+      try {
+        const res = await minDelay(this.props.createUserAsync({ email }), 1000);
+      } catch (error) {
+        toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+      }
+
+      this.setState({ userFormLoading: false });
+    });
+  }
+
+  onDeleteUser(userId) {
+
   }
 
   renderEventRows() {
@@ -78,7 +102,7 @@ class AdminEventList extends React.Component {
           + Uusi tapahtuma
         </Link>
         <h1>Luo uusi käyttäjä</h1>
-        {/* <UserForm createUserAsync={this.props.createUserAsync} /> */}
+        <UserForm onSubmit={this.createUser} loading={this.state.userFormLoading} />
       </div>
     );
   }

@@ -106,6 +106,7 @@ class Editor extends React.Component {
     if (this.props.params.id === 'new') {
       try {
         const res = await minDelay(this.props.publishEventAsync(event, adminToken), 1000);
+        console.log('RES EDITOR', res);
         browserHistory.push(`/admin/edit/${res.id}`);
       } catch (error) {
         console.log(error);
@@ -117,7 +118,7 @@ class Editor extends React.Component {
     } else {
       try {
         await minDelay(this.props.updateEventAsync(event, adminToken), 1000);
-        toast.success('Muutoksesi tallennettiin ontunisneesti!', { autoClose: 2000 });
+        toast.success('Muutoksesi tallennettiin onnistuneesti!', { autoClose: 2000 });
       } catch (error) {
         console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
@@ -235,7 +236,7 @@ class Editor extends React.Component {
       );
     }
 
-    console.log('EVENT', this.props.event);
+    console.log(this.props.event);
 
     return (
       <div className="event-editor">

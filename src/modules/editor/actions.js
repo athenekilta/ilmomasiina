@@ -53,10 +53,12 @@ export const publishEventAsync = (data, token) => async (dispatch) => {
     headers: { Authorization: token },
   }).then(res => JSON.parse(res.body))
     .then((res) => {
+      console.log('RES', res);
       dispatch(setEvent(res));
       return res;
     })
     .catch((error) => {
+      console.log('ERR', error);
       console.error('Error in publishEventAsync', error);
       dispatch(setEventPublishError());
     });
