@@ -8,8 +8,8 @@ module.exports = () => (hook) => {
     for (let i = 0; i < 24; i += 1) {
       password += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-
     hook.data.password = password;
     hook.data.passwordPlain = password;
+    return hook
   }
 };
