@@ -1,4 +1,5 @@
 import request from 'then-request';
+import _ from 'lodash';
 import * as ActionTypes from './actionTypes';
 
 // ------------------------------------
@@ -46,14 +47,34 @@ export const updateEventField = (field, value) => (dispatch) => {
   });
 };
 
+const cleanEventData = (event) => {
+  return {
+    ...event,
+    questions: _.map(event.questions, (q) => {
+      if (q.existsInDb === false) {
+        delete q.id;
+      }
+      return q;
+    }),
+    quota: _.map(event.quota, (q) => {
+      if (q.existsInDb === false) {
+        delete q.id;
+      }
+      return q;
+    })
+  }
+}
+
 export const publishEventAsync = (data, token) => async (dispatch) => {
   dispatch(setEventPublishLoading());
+  const cleaned = cleanEventData(data);
+  console.log('CLEANED', cleaned);
   const event = await request('POST', '/api/admin/events', {
-    json: data,
+    json: cleaned,
     headers: { Authorization: token },
   }).then(res => JSON.parse(res.body))
     .then((res) => {
-      console.log('RES', res);
+      console.log('RES PUBLISH', res);
       dispatch(setEvent(res));
       return res;
     })
@@ -68,11 +89,14 @@ export const publishEventAsync = (data, token) => async (dispatch) => {
 
 export const updateEventAsync = (data, token) => async (dispatch) => {
   dispatch(setEventPublishLoading());
+  const cleaned = cleanEventData(data);
+  console.log('CLEANED', cleaned);
   const event = await request('PATCH', `/api/admin/events/${data.id}`, {
-    json: data,
+    json: cleaned,
     headers: { Authorization: token },
   }).then(res => JSON.parse(res.body))
     .then((res) => {
+      console.log('RES UPDATE', res);
       res.useOpenQuota = res.openQuotaSize > 0
       dispatch(setEvent(res));
       return res;

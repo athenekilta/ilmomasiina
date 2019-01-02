@@ -22,7 +22,7 @@ exports.after = {
   all: [],
   find: [],
   get: [formatOptionsAsArray()],
-  create: [ /* createEvent() */ updateQuotas(), updateQuestions()],
+  create: [ /* createEvent() */],
   update: [updateQuotas(), updateQuestions()],
   patch: [updateQuotas(), updateQuestions()],
   remove: [],

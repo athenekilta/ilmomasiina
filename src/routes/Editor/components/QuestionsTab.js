@@ -66,12 +66,6 @@ class QuestionsTab extends React.Component {
     newQuestions.splice(args.oldIndex, 1);
     newQuestions.splice(args.newIndex, 0, elementToMove);
 
-    // Update quota id's
-    newQuestions = _.map(newQuestions, (question, index) => {
-      question.id = index + 1;
-      return question;
-    });
-
     this.props.onDataChange('questions', newQuestions);
   }
 

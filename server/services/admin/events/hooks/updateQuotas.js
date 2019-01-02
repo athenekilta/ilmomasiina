@@ -8,23 +8,22 @@ module.exports = () => (hook) => {
 
   const quotaModel = hook.app.get('models').quota;
 
+  console.log('TO ADD', quotasToAdd);
+
   return quotaModel.bulkCreate(quotasToAdd, { updateOnDuplicate: true })
-    .then(() => quotaModel.findAll({
-      where: { eventId },
-      include: [{
-        attributes: ['firstName', 'lastName', 'createdAt'],
-        model: sequelize.models.signup,
-        // ... and answers of signups
-        include: [
-          {
-            attributes: ['questionId', 'answer'],
-            model: sequelize.models.answer,
-          },
-        ],
-      }],
+    .then((res) => {
+      console.log('RES', res);
+      return quotaModel.findAll({
+        where: { eventId },
+        include: [{
+          attributes: ['firstName', 'lastName', 'email', 'createdAt'],
+          model: sequelize.models.signup,
+        }],
+      })
     })
     .then((quota) => {
+      console.log('QUOTAS', quota);
       hook.result.dataValues.quota = quota;
       return hook;
-    }));
+    });
 };

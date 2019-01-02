@@ -31,20 +31,20 @@ module.exports = () => (hook) => {
       {
         attributes: ['title', 'size', 'id'],
         model: sequelize.models.quota,
-        // ... and signups of quotas
-        include: [
-          {
-            attributes: ['firstName', 'lastName', 'createdAt'],
-            model: sequelize.models.signup,
-            // ... and answers of signups
-            include: [
-              {
-                attributes: ['questionId', 'answer'],
-                model: sequelize.models.answer,
-              },
-            ],
-          },
-        ],
+        // // ... and signups of quotas
+        // include: [
+        //   {
+        //     attributes: ['firstName', 'lastName', 'createdAt'],
+        //     model: sequelize.models.signup,
+        //     // ... and answers of signups
+        //     include: [
+        //       {
+        //         attributes: ['questionId', 'answer'],
+        //         model: sequelize.models.answer,
+        //       },
+        //     ],
+        //   },
+        // ],
       },
     ],
   };
