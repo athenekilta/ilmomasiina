@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 
-const getEvents = state => state
+const getEvents = state => state.admin.events;
 
 export const getSignups = createSelector(
     [getEvents],

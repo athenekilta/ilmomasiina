@@ -1,48 +1,40 @@
 import { createSelector } from 'reselect'
+import { getSignupsByQuota } from '../../utils/signupUtils';
 
-const getEvent = state => state
+const getEvent = state => state.singleEvent.event;
+const eventLoading = state => state.singleEvent.eventLoading;
+const eventError = state => state.singleEvent.eventError;
 
-export const getOpenQuotas = createSelector(
-    [getEvent],
-    (event) => {
-        if (!event.quota || !event.signupsPublic) {
-            return {
-                openQuota: [],
-                waitList: [],
-                formattedQuestions: null,
-            };
+export const getQuotaData = createSelector(
+    [
+        getEvent,
+        eventLoading,
+        eventError
+    ],
+    (event, loading, error) => {
+        if (!event || loading || error) {
+            return null;
         }
+        return getSignupsByQuota(event);
+    }
+);
 
-        const extraSignups = [];
-
-        _.each(event.quota, (quota) => {
-            _.each(quota.signups.slice(quota.size), (signup) => {
-                signup.answers.push({
-                    questionId: 0,
-                    answer: quota.title,
-                });
-                extraSignups.push(signup);
-            });
-        });
-
-        const byTimestamp = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
-
-        const openQuota = extraSignups.slice(0, event.openQuotaSize).sort(byTimestamp);
-        const waitList = extraSignups.slice(event.openQuotaSize).sort(byTimestamp);
-
-        const formattedQuestions = event.questions.slice();
-
-        formattedQuestions.push({
+export const getFormattedQuestions = createSelector(
+    [
+        getEvent,
+        eventLoading,
+        eventError,
+    ],
+    (event, loading, error) => {
+        if (!event || loading || error) {
+            return [];
+        }
+        return _.concat(event.questions, {
             id: 0,
             options: null,
             public: true,
             question: 'Kiintiö',
-            type: 'text',
+            type: 'text'
         });
-
-        return {
-            openQuota,
-            waitList,
-            formattedQuestions,
-        };
-    });
+    }
+)
