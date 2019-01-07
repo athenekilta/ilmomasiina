@@ -19,6 +19,7 @@ module.exports = () => (hook) => {
       'facebookUrl',
       'draft',
       'signupsPublic',
+      'answersPublic',
       'verificationEmail',
     ],
     include: [

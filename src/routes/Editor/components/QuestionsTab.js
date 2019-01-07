@@ -73,6 +73,12 @@ class QuestionsTab extends React.Component {
     const questions = this.props.event.questions;
     const newQuestions = _.map(questions, (question) => {
       if (question.id === itemId) {
+        if (value === "select" || value === "checkbox") {
+          question.options = ["Vaihtoehto"]
+        }
+        else {
+          question.options = null
+        }
         return {
           ...question,
           [field]: value,
@@ -85,6 +91,32 @@ class QuestionsTab extends React.Component {
     this.props.onDataChange('questions', newQuestions);
   }
 
+  updateQuestionOption(itemId, index, value) {
+    const questions = this.props.event.questions;
+    const newQuestions = _.map(questions, (question) => {
+
+      if (question.id === itemId) {
+        question.options[index] = value
+      }
+
+      return question;
+    });
+
+    this.props.onDataChange('questions', newQuestions);
+  }
+
+  addOption(questionId) {
+    const questions = this.props.event.questions;
+    const newQuestions = _.map(questions, (question) => {
+
+      if (question.id === questionId) {
+        question.options.push("Vaihtoehto");
+      }
+      return question
+    });
+
+    this.props.onDataChange('questions', newQuestions);
+  }
   removeQuestion(itemId) {
     const questions = this.props.event.questions;
     const newQuestions = _.filter(questions, (question) => {
@@ -97,7 +129,24 @@ class QuestionsTab extends React.Component {
 
     this.props.onDataChange('questions', newQuestions);
   }
+  renderQuestionOptions(question) {
+    if (!question.options) { return null }
+    return (
+      <div>
+        {_.map(question.options, (option, index) => (
+          <Input
+            name={`question-${question.id}-question-option-${index}`}
+            value={option}
+            label={"Vastausvaihtoehto "}
+            type="text"
+            required
+            onChange={(field, value) => this.updateQuestionOption(question.id, index, value)}
+          />
+        ))}
+        <a onClick={() => this.addOption(question.id)}>Lisää vastausvaihtoehto</a>
+      </div>)
 
+  }
   renderQuestions() {
     const q = _.map(this.props.event.questions, item => (
       <div className="panel-body">
@@ -118,6 +167,8 @@ class QuestionsTab extends React.Component {
             onChange={(field, value) => this.updateQuestion(item.id, 'type', value)}
             required
           />
+          {console.log(item.options)}
+          {this.renderQuestionOptions(item)}
         </div>
         <div className="col-xs-12 col-sm-2">
           <Checkbox

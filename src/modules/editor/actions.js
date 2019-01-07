@@ -1,6 +1,7 @@
 import request from 'then-request';
 import _ from 'lodash';
 import * as ActionTypes from './actionTypes';
+import { isArray } from 'util';
 
 // ------------------------------------
 // Actions
@@ -96,7 +97,14 @@ export const updateEventAsync = (data, token) => async (dispatch) => {
     headers: { Authorization: token },
   }).then(res => JSON.parse(res.body))
     .then((res) => {
-      console.log('RES UPDATE', res);
+      if (res.questions) {
+        res.questions = _.map(res.questions, (q) => {
+          if (q.options && !isArray(q.options)) {
+            q.options = q.options.split(";")
+          };
+          return q
+        });
+      };
       res.useOpenQuota = res.openQuotaSize > 0
       dispatch(setEvent(res));
       return res;

@@ -56,6 +56,11 @@ module.exports = function () {
         allowNull: false,
         defaultValue: false,
       },
+      answersPublic: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       verificationEmail: {
         type: Sequelize.TEXT,
       },
