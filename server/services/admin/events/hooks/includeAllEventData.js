@@ -1,4 +1,4 @@
-module.exports = () => (hook) => {
+module.exports = () => hook => {
   const sequelize = hook.app.get('sequelize');
 
   hook.params.sequelize = {
@@ -32,6 +32,13 @@ module.exports = () => (hook) => {
       {
         attributes: ['title', 'size', 'id'],
         model: sequelize.models.quota,
+        include: [
+          {
+            all: true,
+            nested: true,
+          },
+        ],
+
         // // ... and signups of quotas
         // include: [
         //   {
