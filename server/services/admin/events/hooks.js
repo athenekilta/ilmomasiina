@@ -10,7 +10,7 @@ const updateQuestions = require('./hooks/updateQuestions');
 
 exports.before = {
   all: [authentication.hooks.authenticate('jwt')],
-  find: [includeAllEventData()],
+  find: [includeQuotas()],
   get: [includeAllEventData()],
   create: [includeAllEventData()],
   update: [includeAllEventData()],
@@ -22,7 +22,9 @@ exports.after = {
   all: [],
   find: [],
   get: [formatOptionsAsArray()],
-  create: [ /* createEvent() */],
+  create: [
+    /* createEvent() */
+  ],
   update: [updateQuotas(), updateQuestions()],
   patch: [updateQuotas(), updateQuestions()],
   remove: [],
