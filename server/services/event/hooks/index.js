@@ -10,7 +10,7 @@ exports.before = {
   all: [],
   find: [includeQuotas()],
   get: [includeAllEventData()],
-  create: [validateEvent()],
+  create: [hooks.disable('external')],
   update: [hooks.disable('external')],
   patch: [hooks.disable('external')],
   remove: [hooks.disable('external')],
