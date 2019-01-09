@@ -4,7 +4,6 @@ const includeQuotas = require('./includeQuotas');
 const includeAllEventData = require('./includeAllEventData');
 const removeNonpublicAnswers = require('./removeNonpublicAnswers');
 const formatOptionsAsArray = require('./formatOptionsAsArray');
-const validateEvent = require('./validateEvent');
 
 exports.before = {
   all: [],
