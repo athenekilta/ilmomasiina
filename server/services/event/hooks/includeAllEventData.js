@@ -1,4 +1,4 @@
-module.exports = () => (hook) => {
+module.exports = () => hook => {
   const sequelize = hook.app.get('sequelize');
 
   hook.params.sequelize = {
@@ -36,11 +36,13 @@ module.exports = () => (hook) => {
           {
             attributes: ['firstName', 'lastName', 'createdAt'],
             model: sequelize.models.signup,
+            required: false,
             // ... and answers of signups
             include: [
               {
                 attributes: ['questionId', 'answer'],
                 model: sequelize.models.answer,
+                required: false,
               },
             ],
           },
