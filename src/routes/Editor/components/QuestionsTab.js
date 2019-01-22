@@ -74,7 +74,9 @@ class QuestionsTab extends React.Component {
     const newQuestions = _.map(questions, (question) => {
       if (question.id === itemId) {
         if (value === "select" || value === "checkbox") {
-          question.options = ["Vaihtoehto"]
+          if (!question.options) {
+            question.options = [""]
+          }
         }
         else {
           question.options = null
@@ -110,7 +112,7 @@ class QuestionsTab extends React.Component {
     const newQuestions = _.map(questions, (question) => {
 
       if (question.id === questionId) {
-        question.options.push("Vaihtoehto");
+        question.options.push("");
       }
       return question
     });
