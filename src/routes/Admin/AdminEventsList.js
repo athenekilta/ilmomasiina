@@ -80,11 +80,10 @@ class AdminEventList extends React.Component {
   renderEventRows() {
     const { events } = this.props;
     return _.map(events, (e) => {
-
       return (
         <AdminEventListItem
           key={e.id}
-          signups={getSignupsArrayFormatted(e)}
+          signups={_.sum(_.map(e.quota, q => q.signupCount))}
           data={e}
           onDelete={this.onDeleteEvent}
         />
