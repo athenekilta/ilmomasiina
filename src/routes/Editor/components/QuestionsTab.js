@@ -77,10 +77,11 @@ class QuestionsTab extends React.Component {
           if (!question.options) {
             question.options = [""]
           }
+          else {
+            question.options = null
+          }
         }
-        else {
-          question.options = null
-        }
+
         return {
           ...question,
           [field]: value,
@@ -169,7 +170,6 @@ class QuestionsTab extends React.Component {
             onChange={(field, value) => this.updateQuestion(item.id, 'type', value)}
             required
           />
-          {console.log(item.options)}
           {this.renderQuestionOptions(item)}
         </div>
         <div className="col-xs-12 col-sm-2">
