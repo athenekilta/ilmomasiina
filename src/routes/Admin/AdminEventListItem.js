@@ -12,7 +12,7 @@ import Separator from '../../components/Separator';
 class AdminEventListItem extends React.Component {
   static propTypes = {
     data: PropTypes.object.isRequired,
-    signups: PropTypes.array.isRequired,
+    signups: PropTypes.number.isRequired,
     onDelete: PropTypes.func.isRequired,
   };
 
@@ -27,14 +27,15 @@ class AdminEventListItem extends React.Component {
         </td>
         <td>{data.date ? moment(data.date).format('DD.MM.YYYY') : ''}</td>
         <td>{data.draft ? "Luonnos" : "Julkaistu"}</td>
-        <td>{signups.length}</td>
+        <td>{signups}</td>
         <td>
           <Link to={`/admin/edit/${data.id}`}>Muokkaa tapahtumaa</Link>
+          {/* {<Separator />
+            <CSVLink
+              data={signups}
+              filename={data.title + " osallistujalista"}>Lataa osallistujalista</CSVLink> */}
           <Separator />
-          <CSVLink
-            data={signups}
-            filename={data.title + " osallistujalista"}>Lataa osallistujalista</CSVLink>
-          <Separator />
+
           <a onClick={() => this.props.onDelete(data.id)}>Poista tapahtuma</a>
         </td>
       </tr>

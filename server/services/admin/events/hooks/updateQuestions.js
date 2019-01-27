@@ -10,12 +10,14 @@ module.exports = () => (hook) => {
   });
 
   const questionModel = hook.app.get('models').question;
-
+  questionModel.destroy({
+    where: { eventId }
+  });
   return questionModel.bulkCreate(questionsToAdd, { updateOnDuplicate: true })
     .then(() => questionModel.findAll({ where: { eventId } })
       .then((questions) => {
         hook.result.dataValues.questions = questions;
         return hook;
       }),
-  );
+    );
 };

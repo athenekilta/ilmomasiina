@@ -74,11 +74,14 @@ class QuestionsTab extends React.Component {
     const newQuestions = _.map(questions, (question) => {
       if (question.id === itemId) {
         if (value === "select" || value === "checkbox") {
-          question.options = ["Vaihtoehto"]
+          if (!question.options) {
+            question.options = [""]
+          }
+          else {
+            question.options = null
+          }
         }
-        else {
-          question.options = null
-        }
+
         return {
           ...question,
           [field]: value,
@@ -110,7 +113,7 @@ class QuestionsTab extends React.Component {
     const newQuestions = _.map(questions, (question) => {
 
       if (question.id === questionId) {
-        question.options.push("Vaihtoehto");
+        question.options.push("");
       }
       return question
     });
@@ -167,7 +170,6 @@ class QuestionsTab extends React.Component {
             onChange={(field, value) => this.updateQuestion(item.id, 'type', value)}
             required
           />
-          {console.log(item.options)}
           {this.renderQuestionOptions(item)}
         </div>
         <div className="col-xs-12 col-sm-2">

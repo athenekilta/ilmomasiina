@@ -127,9 +127,7 @@ class EventList extends React.Component {
             <TableRow
               title={quota.title}
               signups={
-                event.signupsPublic
-                  ? Math.min(quota.signupCount, quota.size)
-                  : null
+                Math.min(quota.signupCount, quota.size)
               }
               size={quota.size}
               className="child"
