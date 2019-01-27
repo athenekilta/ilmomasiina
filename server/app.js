@@ -6,11 +6,13 @@ const hooks = require('feathers-hooks');
 const rest = require('feathers-rest');
 const bodyParser = require('body-parser');
 const webpack = require('webpack');
+const cron = require('node-cron');
 const webpackConfig = require('../config/webpack.config');
 const project = require('../config/project.config');
 
 const models = require('./models');
 const services = require('./services');
+const deleteUnconfirmedEntries = require('./cron-delete-unconfirmed-entries');
 
 const app = feathers();
 
@@ -25,6 +27,15 @@ app
 
 // Create tables if not exist
 app.get('sequelize').sync();
+
+/*
+ * cron script that removes signups that have not been confirmed within 30 minutes
+ * runs every minute
+ */
+cron.schedule('* * * * *', () => {
+  console.log('running a task every minute');
+  deleteUnconfirmedEntries(app);
+});
 
 if (project.env === 'development') {
   app.use(express.errorHandler());
