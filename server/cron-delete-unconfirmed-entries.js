@@ -1,8 +1,10 @@
+const moment = require('moment');
+
 module.exports = app => {
   const models = app.get('models');
-  const moment = require('moment');
 
   models.signup
+    .unscoped()
     .findAll({
       where: {
         $and: {
@@ -20,7 +22,22 @@ module.exports = app => {
       },
     })
     .then(r => {
-      console.log('modelsThatShouldBeDeleted');
+      console.log('Unconfirmed signups: ');
       console.log(r);
+      console.log(r.map(s => s.dataValues.id));
+      return r.map(s => s.dataValues.id);
+    })
+    .then(r => {
+      r.map(id => {
+        models.signup
+          .unscoped()
+          .destroy({
+            where: {
+              id,
+            },
+          })
+          .then(res => console.log(res))
+          .catch(error => console.log(error));
+      });
     });
 };

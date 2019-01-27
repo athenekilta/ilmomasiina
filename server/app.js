@@ -32,6 +32,7 @@ app.get('sequelize').sync();
  * cron script that removes signups that have not been confirmed within 30 minutes
  * runs every minute
  */
+
 cron.schedule('* * * * *', () => {
   console.log('running a task every minute');
   deleteUnconfirmedEntries(app);
