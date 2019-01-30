@@ -24,7 +24,7 @@ class DateTimePicker extends React.PureComponent {
 
   toMoment(date) {
     return date
-      ? moment(date, 'YYYY-MM-DDTHH:mm').tz('Europe/Helsinki')
+      ? moment.tz(date, 'Europe/Helsinki')
       : moment()
           .tz('Europe/Helsinki')
           .hour(0)
