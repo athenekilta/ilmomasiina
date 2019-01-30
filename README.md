@@ -1,3 +1,15 @@
+# Current status
+
+```diff
+- Hello you random bypasser! 
+
+- Ilmomasiina is currently at alpha testing phase. In case you're interested in development,
+- we heavily recommend you to contact a fellow committer from this repo. 
+```
+
+Current defelopment is being held on `heroku/staging` branch.
+
+
 # Ilmomasiina
 
 Ilmomasiina is Athene's event registration system.
