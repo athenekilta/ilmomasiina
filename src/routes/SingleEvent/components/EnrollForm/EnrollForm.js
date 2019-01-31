@@ -53,6 +53,17 @@ export class EnrollForm extends React.Component {
           />
         );
       }
+      if (question.type === 'number') {
+        return (
+          <Input
+            name={String(question.id)}
+            label={question.question}
+            type="number"
+            required={question.required}
+            key={question.id}
+          />
+        );
+      }
 
       if (question.type === 'textarea') {
         return (
