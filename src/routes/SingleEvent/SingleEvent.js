@@ -63,11 +63,11 @@ class SingleEvent extends React.Component {
   async submitForm(answers) {
     this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
 
-    const success = await this.props.completeSignupAsync(this.props.signup.id, {
+    const response = await this.props.completeSignupAsync(this.props.signup.id, {
       editToken: this.props.signup.editToken,
       ...answers,
     });
-
+    let success = response === true
     if (success) {
       toast.update(this.toastId, {
         render: 'Ilmoittautuminen onnistui!',
@@ -79,9 +79,9 @@ class SingleEvent extends React.Component {
         formOpened: false,
       });
     } else {
+      let toast_text = 'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.' + typeof (response) === "string" ? "Virheviesti: " + response : ""
       toast.update(this.toastId, {
-        render:
-        'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.',
+        render: toast_text,
         type: toast.TYPE.ERROR,
         autoClose: 5000,
       });
