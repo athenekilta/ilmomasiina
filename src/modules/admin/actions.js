@@ -93,11 +93,14 @@ export const login = (email, password) => dispatch => {
     .then(res => {
       if (res.statusCode >= 300) {
         dispatch(setLoginError());
-        return res;
+        return false;
       }
       return JSON.parse(res.body);
     })
     .then(res => {
+      if (!res) {
+        return false
+      }
       dispatch(setAccessToken(res.accessToken));
       dispatch({ type: ActionTypes.SET_LOGIN_STATUS, payload: true });
       dispatch(push('/admin'));
