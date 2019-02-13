@@ -36,7 +36,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         accessToken: action.payload,
-        accessTokenExpires: moment(new Date()).add(30, 'm').toDate().toISOString(),
+        accessTokenExpires: moment(new Date()).add(60, 'm').toDate().toISOString(),
         loginLoading: false,
       };
     case ActionTypes.SET_LOGIN_LOADING:
