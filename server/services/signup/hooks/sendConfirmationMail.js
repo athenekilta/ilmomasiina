@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const EmailService = require('../../../mail/');
-
+const config = require('../../../../config/ilmomasiina.config.js');
 module.exports = () => (hook) => {
   const models = hook.app.get('models');
 
@@ -41,7 +41,7 @@ module.exports = () => (hook) => {
           const params = {
             answers: fields,
             event: event.dataValues,
-            cancelLink: `http://localhost:3000/signup/${hook.result.id}/${hook.data.editToken}`,
+            cancelLink: `${config.baseUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
           };
           // console.log(hook.data);
           // console.log('=====CONFIRMATION MAIL DISABLED!=====');
