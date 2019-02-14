@@ -12,6 +12,9 @@ block mainContent
 			li 
 				strong Sijainti: 
 				| #{event.location}
+			li 
+				strong Aika: 
+				| #{event.date.toLocaleString("fi-FI")}
 	div.content-block
 		p.bodyText Ilmoittautumisesi tiedot:
 		ul
