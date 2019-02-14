@@ -51,9 +51,13 @@ export const updateEventField = (field, value) => (dispatch) => {
 const cleanEventData = (event) => {
   return {
     ...event,
+    openQuotaSize: event.useOpenQuota ? event.openQuotaSize : 0,
     questions: _.map(event.questions, (q) => {
       if (q.existsInDb === false) {
         delete q.id;
+      }
+      if (q.options && Array.isArray(q.options)) {
+        q.options = q.options.join(";")
       }
       return q;
     }),
@@ -64,6 +68,20 @@ const cleanEventData = (event) => {
       return q;
     })
   }
+
+}
+
+const cleanServerEventdata = (res) => {
+  if (res.questions) {
+    res.questions = _.map(res.questions, (q) => {
+      if (q.options && !isArray(q.options)) {
+        q.options = q.options.split(";")
+      };
+      return q
+    });
+  };
+  res.useOpenQuota = res.openQuotaSize > 0
+  return res
 }
 
 export const publishEventAsync = (data, token) => async (dispatch) => {
@@ -73,16 +91,22 @@ export const publishEventAsync = (data, token) => async (dispatch) => {
   const event = await request('POST', '/api/admin/events', {
     json: cleaned,
     headers: { Authorization: token },
-  }).then(res => JSON.parse(res.body))
+  }).then(res => {
+    if (res.statusCode > 201) {
+      throw new Error(res.body)
+    }
+    return JSON.parse(res.body)
+  }
+  )
     .then((res) => {
-      console.log('RES PUBLISH', res);
-      dispatch(setEvent(res));
-      return res;
+      const cleaned = cleanServerEventdata(res)
+      dispatch(setEvent(cleaned));
+      return cleaned;
     })
     .catch((error) => {
-      console.log('ERR', error);
       console.error('Error in publishEventAsync', error);
       dispatch(setEventPublishError());
+      throw new Error(error)
     });
 
   return event;
@@ -95,23 +119,22 @@ export const updateEventAsync = (data, token) => async (dispatch) => {
   const event = await request('PATCH', `/api/admin/events/${data.id}`, {
     json: cleaned,
     headers: { Authorization: token },
-  }).then(res => JSON.parse(res.body))
+  }).then(res => {
+    if (res.statusCode > 201) {
+      throw new Error(res.body)
+    }
+    return JSON.parse(res.body)
+  }
+  )
     .then((res) => {
-      if (res.questions) {
-        res.questions = _.map(res.questions, (q) => {
-          if (q.options && !isArray(q.options)) {
-            q.options = q.options.split(";")
-          };
-          return q
-        });
-      };
-      res.useOpenQuota = res.openQuotaSize > 0
-      dispatch(setEvent(res));
-      return res;
+      const cleaned = cleanServerEventdata(res)
+      dispatch(setEvent(cleaned));
+      return cleaned;
     })
     .catch((error) => {
       console.error('Error in updateEventAsync', error);
       dispatch(setEventPublishError());
+      throw new Error(error)
     });
 
   return event;
