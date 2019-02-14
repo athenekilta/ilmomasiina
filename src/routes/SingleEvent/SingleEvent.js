@@ -80,7 +80,7 @@ class SingleEvent extends React.Component {
         formOpened: false,
       });
     } else {
-      let toast_text = 'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.' + typeof (response) === "string" ? "Virheviesti: " + response : ""
+      let toast_text = 'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.'
       toast.update(this.toastId, {
         render: toast_text,
         type: toast.TYPE.ERROR,
