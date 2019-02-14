@@ -9,7 +9,7 @@ const webpack = require('webpack');
 const cron = require('node-cron');
 const webpackConfig = require('../config/webpack.config');
 const project = require('../config/project.config');
-
+const enforce = require('express-sslify');
 const models = require('./models');
 const services = require('./services');
 const deleteUnconfirmedEntries = require('./cron-delete-unconfirmed-entries');
@@ -72,16 +72,18 @@ if (project.env === 'development') {
 } else {
   debug(
     'Server is being run outside of live development mode, meaning it will ' +
-      'only serve the compiled application bundle in ~/dist. Generally you ' +
-      'do not need an application server for this and can instead use a web ' +
-      'server such as nginx to serve your static files. See the "deployment" ' +
-      'section in the README for more information on deployment strategies.', // eslint-disable-line
+    'only serve the compiled application bundle in ~/dist. Generally you ' +
+    'do not need an application server for this and can instead use a web ' +
+    'server such as nginx to serve your static files. See the "deployment" ' +
+    'section in the README for more information on deployment strategies.', // eslint-disable-line
   );
 
   // Serving ~/dist by default. Ideally these files should be served by
   // the web server and not the app server, but this helps to demo the
   // server in production.
-  app.use(express.static(project.paths.dist()));
+
+  app.use(express.static(project.paths.dist()))
+    .use(enforce.HTTPS());
 }
 
 module.exports = app;
