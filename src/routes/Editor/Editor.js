@@ -240,7 +240,7 @@ class Editor extends React.Component {
 
     return (
       <div className="event-editor">
-        <a onClick={() => window.location.replace("/admin")} style={{ margin: 0 }}>&#8592; Takaisin</a>
+        <Link to="/admin">&#8592; Takaisin</Link>
         <Formsy.Form
           onValid={() => this.setValidState(true)}
           onInvalid={() => this.setValidState(false)}

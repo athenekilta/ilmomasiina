@@ -14,6 +14,7 @@ import signupState from '../../utils/signupStateText';
 import './SingleEvent.scss';
 import { getQuotaData, getFormattedQuestions } from '../../modules/singleEvent/selectors';
 import { WAITLIST, OPENQUOTA } from '../../utils/signupUtils';
+import { Link } from 'react-router';
 
 class SingleEvent extends React.Component {
   static propTypes = {
@@ -230,7 +231,7 @@ class SingleEvent extends React.Component {
           />
         ) : (
             <div className="container">
-              <a onClick={() => window.history.back()} style={{ margin: 0 }}>&#8592; Takaisin</a>
+              <Link to="/" style={{ margin: 0 }}>&#8592; Takaisin</Link>
               <div className="row">
                 <div className="col-xs-12 col-sm-8">
                   <h1>{event.title}</h1>
