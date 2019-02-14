@@ -35,6 +35,19 @@ class EditSignup extends React.Component {
   }
 
   render() {
+    if (new Date(this.props.event.registrationEndDate) < new Date()) {
+      return (
+        <div className="container align-items-center">
+          <div className="EditSignup--wrapper">
+            <h1>Hups, jotain meni pieleen</h1>
+            <p>Ilmoittautumistasi ei voi enää perua, koska tapahtuman ilmoittautuminen on sulkeutunut.</p>
+            <Link to="/" className="btn btn-default">
+              Takaisin etusivulle
+            </Link>
+          </div>
+        </div>
+      );
+    }
     if (this.props.deleted) {
       return (
         <div className="container align-items-center">
