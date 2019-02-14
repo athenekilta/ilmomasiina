@@ -9,8 +9,12 @@ export class EnrollForm extends React.Component {
   constructor(props) {
     super(props);
     this.parseSubmit = this.parseSubmit.bind(this);
+    this.setError = this.setError.bind(this)
+    this.state = { inputError: false }
   }
-
+  setError() {
+    this.setState({ inputError: true })
+  }
   parseSubmit(data) {
     const answers = {
       firstName: data.firstName,
@@ -80,12 +84,14 @@ export class EnrollForm extends React.Component {
       }
 
       if (question.type === 'select') {
-        const optionsArray = [{ label: "Valitse...", value: null }];
+
+        let optionsArray = [{ label: "Valitse...", value: null }];
 
         question.options.map(option => optionsArray.push({ label: option }));
 
         return (
           <Select
+            validations="isExisty"
             name={String(question.id)}
             label={question.question}
             options={optionsArray}
@@ -129,15 +135,17 @@ export class EnrollForm extends React.Component {
 
       return `Olet jonossa sijalla ${position}.`;
     };
-
     return (
+
       <div className="form-wrapper">
         <div className="container">
           <a className="close" onClick={() => this.props.closeForm()} />
           <div className="col-xs-12 col-md-8 col-md-offset-2">
+            {this.state.inputError ? <p style={{ color: "#a94442" }}>Ilmoittautumisessasi on virheitä.</p> : null}
             <h2>Ilmoittaudu</h2>
             {this.props.signup.status != null ? <p>{signupStatus()}</p> : null}
-            <Formsy.Form onValidSubmit={this.parseSubmit}>
+
+            <Formsy.Form onValidSubmit={this.parseSubmit} onInvalidSubmit={this.setError}>
               <Input name="firstName" value="" label="Etunimi" type="text" placeholder="Etunimi" required />
               <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required />
               <Input
@@ -168,7 +176,7 @@ export class EnrollForm extends React.Component {
           </div>
           <div className="cf" />
         </div>
-      </div>
+      </div >
     );
   }
 }
