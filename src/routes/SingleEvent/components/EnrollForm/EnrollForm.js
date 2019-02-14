@@ -80,13 +80,12 @@ export class EnrollForm extends React.Component {
       }
 
       if (question.type === 'select') {
-        const optionsArray = [{ label: "Valitse...", disabled: true }];
+        const optionsArray = [{ label: "Valitse...", value: null }];
 
         question.options.map(option => optionsArray.push({ label: option }));
 
         return (
           <Select
-            value={"Valitse..."}
             name={String(question.id)}
             label={question.question}
             options={optionsArray}
