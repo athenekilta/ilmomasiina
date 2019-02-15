@@ -30,7 +30,7 @@ export const getFormattedQuestions = createSelector(
             return [];
         }
         return _.concat(event.questions, {
-            id: 0,
+            id: "quota",
             options: null,
             public: true,
             question: 'Kiintiö',
