@@ -128,8 +128,8 @@ setTimeout(function delay() {
                     let postData = {
                         answers: [],
                         editToken: response.data.editToken,
-                        email: faker.internet.email(),
-                        firstName: faker.name.firstName(),
+                        email: "fake@example.com",
+                        firstName: "Rasitusgubbe " + i,
                         lastName: faker.name.lastName(),
 
                     }
