@@ -20,7 +20,7 @@ const EmailService = {
         console.log('SUCCESS');
       })
       .catch((error) => {
-        console.log('ERROR', error);
+        console.error('ERROR', error);
       });
   },
 

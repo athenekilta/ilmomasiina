@@ -13,6 +13,7 @@ class Header extends React.Component {
 
   render() {
     return (
+
       <div className="navbar navbar-default">
         <div className="container">
           <a onClick={() => browserHistory.push('/')} className="navbar-brand">
@@ -28,10 +29,10 @@ class Header extends React.Component {
               Logout
             </a>
           ) : (
-            ''
-          )}
+              ''
+            )}
         </div>
-      </div>
+      </div >
     );
   }
 }

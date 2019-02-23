@@ -23,7 +23,6 @@ module.exports = app => {
     })
     .then(r => {
       console.log('Unconfirmed signups: ');
-      console.log(r);
       console.log(r.map(s => s.dataValues.id));
       return r.map(s => s.dataValues.id);
     })

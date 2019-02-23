@@ -3,7 +3,10 @@ const EmailService = require('../../../mail/');
 
 module.exports = () => (hook) => {
   const models = hook.app.get('models');
-
+  if (process.env.SKIP_CONFIRMATION_EMAIL) {
+    console.log("Would send email to " + hook.result.email)
+    return
+  }
   const fields = [
     { label: 'Nimi', answer: `${hook.result.firstName} ${hook.result.lastName}` },
     { label: 'Sähköposti', answer: `${hook.result.email}` },
@@ -43,9 +46,14 @@ module.exports = () => (hook) => {
             event: event.dataValues,
             cancelLink: `http://localhost:3000/signup/${hook.result.id}/${hook.data.editToken}`,
           };
-          // console.log(hook.data);
-          // console.log('=====CONFIRMATION MAIL DISABLED!=====');
-          EmailService.sendConfirmationMail(hook.result.email, params);
+          console.log('=====CONFIRMATION MAIL DISABLED!=====');
+          // try {
+          //   EmailService.sendConfirmationMail(hook.result.email, params);
+          // }
+          // catch (error) {
+          //   console.log("Confirmation email send failed")
+          // }
+
         });
     });
 };
