@@ -44,7 +44,7 @@ class SignupsTab extends React.Component {
                   const answer = s[q.question];
                   return <td key={q.id}>{answer}</td>;
                 })}
-                <td key="timestamp">{moment(s['Ilmoittautumisaika']).tz('Europe/Helsinki').format('DD.MM.YY HH:mm:ss')}</td>
+                <td key="timestamp">{s['Ilmoittautumisaika']}</td>
               </tr>
             );
           })}

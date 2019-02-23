@@ -83,7 +83,7 @@ if (project.env === 'development') {
   // server in production.
 
   app.use(express.static(project.paths.dist()))
-    .use(enforce.HTTPS());
+    .use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 module.exports = app;

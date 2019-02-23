@@ -1,33 +1,47 @@
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 
-const event = require('./event');
-const quota = require('./quota');
-const signup = require('./signup');
-const question = require('./question');
-const answer = require('./answer');
-const user = require('./user');
+const event = require("./event");
+const quota = require("./quota");
+const signup = require("./signup");
+const question = require("./question");
+const answer = require("./answer");
+const user = require("./user");
 
-const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
-const sequelizeHeroku = require('sequelize-heroku');
+const config = require("../../config/ilmomasiina.config.js"); // eslint-disable-line
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
 
   let sequelize;
-  if (process.env.NODE_ENV === 'production') {
-    sequelize = sequelizeHeroku.connect(Sequelize);
+  if (process.env.NODE_ENV === "production") {
+    sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, {
+      dialect: "mysql",
+      protocol: "mysql",
+      dialectOptions: {
+        ssl: true
+      },
+      pool: {
+        max: 10,
+        min: 0,
+        idle: 10000
+      }
+    });
   } else {
-
     if (process.env.CLEARDB_DATABASE_URL) {
       sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, {
-        logging: false,
+        logging: false
       });
     } else {
-      sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
-        host: 'localhost',
-        dialect: 'mysql',
-        logging: false,
-      });
+      sequelize = new Sequelize(
+        config.mysqlDatabase,
+        config.mysqlUser,
+        config.mysqlPassword,
+        {
+          host: "localhost",
+          dialect: "mysql",
+          logging: false
+        }
+      );
     }
   }
 
@@ -36,15 +50,19 @@ module.exports = function () {
       .authenticate()
       .then(() => {
         const cfg = sequelize.connectionManager.config;
-        console.log(`sequelize-heroku: Connected to ${cfg.host} as ${cfg.username}.`);
+        console.log(
+          `sequelize-heroku: Connected to ${cfg.host} as ${cfg.username}.`
+        );
       })
-      .catch((err) => {
+      .catch(err => {
         const cfg = sequelize.connectionManager.config;
-        console.log(`Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`);
+        console.log(
+          `Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`
+        );
       });
   }
 
-  app.set('sequelize', sequelize);
+  app.set("sequelize", sequelize);
 
   app.configure(event);
   app.configure(quota);
@@ -56,38 +74,38 @@ module.exports = function () {
   const { models } = sequelize;
 
   models.event.hasMany(models.quota, {
-    foreignKey: 'eventId',
-    onDelete: 'CASCADE',
+    foreignKey: "eventId",
+    onDelete: "CASCADE"
   });
 
   models.event.hasMany(models.question, {
-    foreignKey: 'eventId',
-    onDelete: 'CASCADE',
+    foreignKey: "eventId",
+    onDelete: "CASCADE"
   });
 
   models.quota.hasMany(models.signup, {
-    onDelete: 'CASCADE',
-    foreignKey: 'quotaId',
+    onDelete: "CASCADE",
+    foreignKey: "quotaId"
   });
 
   models.signup.belongsTo(models.quota, {
-    foreignKey: 'quotaId',
+    foreignKey: "quotaId"
   });
 
   models.signup.hasMany(models.answer, {
-    foreignKey: 'signupId',
-    onDelete: 'CASCADE',
+    foreignKey: "signupId",
+    onDelete: "CASCADE"
   });
 
   models.question.hasMany(models.answer, {
-    foreignKey: 'questionId',
-    onDelete: 'CASCADE',
+    foreignKey: "questionId",
+    onDelete: "CASCADE"
   });
 
-  app.set('models', models);
+  app.set("models", models);
 
-  Object.keys(sequelize.models).forEach((modelName) => {
-    if ('associate' in sequelize.models[modelName]) {
+  Object.keys(sequelize.models).forEach(modelName => {
+    if ("associate" in sequelize.models[modelName]) {
       sequelize.models[modelName].associate();
     }
   });

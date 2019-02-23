@@ -111,7 +111,7 @@ class EventList extends React.Component {
           date={event.date}
           signupLabel={eventState.label}
           signups={
-            event.quota.length < 2 && event.signupsPublic
+            event.quota.length < 2
               ? _.sumBy(event.quota, 'signupCount') || 0
               : null
           }
