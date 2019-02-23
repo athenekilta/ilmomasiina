@@ -26,6 +26,9 @@ module.exports = () => (hook) => {
         throw new Error('Quota doesn\'t exist.');
       })
       .then((quota) => {
+        if (!quota) {
+          throw new Error('Quota ' + quotaId + 'doesn\'t exist.');
+        }
         const events = hook.app.get('models').event;
         return events.findById(quota.eventId)
           .catch(() => {
