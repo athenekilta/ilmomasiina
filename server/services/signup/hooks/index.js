@@ -8,6 +8,7 @@ const insertAnswers = require('./insertAnswers.js');
 const sendConfirmationMail = require('./sendConfirmationMail.js');
 const getSignupAndEvent = require('./getSignupAndEvent.js');
 const deleteSignup = require('./deleteSignup.js');
+const validateEditToken = require('./validateEditToken.js');
 
 exports.before = {
   all: [],
@@ -15,7 +16,7 @@ exports.before = {
   get: [getSignupAndEvent()],
   create: [validateNewSignup()],
   update: [hooks.disable('external')],
-  patch: [validateSignupFields()],
+  patch: [validateEditToken(), validateSignupFields()],
   remove: [deleteSignup()],
 };
 
