@@ -46,6 +46,8 @@ export class EnrollForm extends React.Component {
 
   renderQuestionFields() {
     return _.map(this.props.questions, (question) => {
+      const help = question.public ? 'Tämän kentän vastaukset ovat julkisia.' : null;
+
       if (question.type === 'text') {
         return (
           <Input
@@ -54,6 +56,7 @@ export class EnrollForm extends React.Component {
             type="text"
             required={question.required}
             key={question.id}
+            help={help}
           />
         );
       }
@@ -65,6 +68,7 @@ export class EnrollForm extends React.Component {
             type="number"
             required={question.required}
             key={question.id}
+            help={help}
           />
         );
       }
@@ -79,6 +83,7 @@ export class EnrollForm extends React.Component {
             label={question.question}
             required={question.required}
             key={question.id}
+            help={help}
           />
         );
       }
@@ -97,6 +102,7 @@ export class EnrollForm extends React.Component {
             options={optionsArray}
             required={question.required}
             key={question.id}
+            help={help}
           />
         );
       }
@@ -110,6 +116,7 @@ export class EnrollForm extends React.Component {
             required={question.required}
             options={question.options.map(option => ({ label: option, value: option }))}
             key={question.id}
+            help={help}
           />
         );
       }
