@@ -147,7 +147,8 @@ export class EnrollForm extends React.Component {
 
             <Formsy.Form onValidSubmit={this.parseSubmit} onInvalidSubmit={this.setError}>
               <Input name="firstName" value="" label="Etunimi" type="text" placeholder="Etunimi" required />
-              <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required />
+              <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required help="Nimi on julkinen tieto. Voit halutessasi ilmoittautua tapahtumaan salanimellä." />
+
               <Input
                 name="email"
                 value=""
