@@ -84,6 +84,7 @@ config.globals = {
   TEST     : config.env === 'test',
   COVERAGE : !argv.watch && config.env === 'test',
   BASENAME : JSON.stringify(process.env.BASENAME || ''),
+  PREFIX_URL : JSON.stringify(process.env.PREFIX_URL || ''),
   BRANDING_HEADER_TITLE: JSON.stringify(process.env.BRANDING_HEADER_TITLE_TEXT),
   BRANDING_FOOTER_GDPR_TEXT: JSON.stringify(process.env.BRANDING_FOOTER_GDPR_TEXT),
   BRANDING_FOOTER_GDPR_LINK: JSON.stringify(process.env.BRANDING_FOOTER_GDPR_LINK),
