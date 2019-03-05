@@ -6,7 +6,7 @@ const PageNotFound = () => (
     <h1>Virhe 404</h1>
     <p>Sivua ei löydy. Tapahtuma on varmaan vanhentunut ja poistettu näkyvistä.</p>
     <p>
-      <IndexLink to="/">Palaa etusivulle</IndexLink>
+      <IndexLink to={`${PREFIX_URL}/`}>Palaa etusivulle</IndexLink>
     </p>
   </div>
 );

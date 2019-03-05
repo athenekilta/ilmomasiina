@@ -40,12 +40,12 @@ class AppContainer extends Component {
           <div style={{ height: '100%' }}>
             <CoreLayout>
               <Router history={history}>
-                <Route path="/" component={Events} />
-                <Route path="event/:id" component={SingleEvent} />
-                <Route path="signup/:id/:editToken" component={EditSignup} />
-                <Route path="login" component={Login} />
-                <Route path="admin" component={requireAuth(Admin)} />
-                <Route path="admin/edit/:id" component={requireAuth(Editor)} />
+                <Route path={`${PREFIX_URL}/`} component={Events} />
+                <Route path={`${PREFIX_URL}/event/:id`} component={SingleEvent} />
+                <Route path={`${PREFIX_URL}/signup/:id/:editToken`} component={EditSignup} />
+                <Route path={`${PREFIX_URL}/login`} component={Login} />
+                <Route path={`${PREFIX_URL}/admin`} component={requireAuth(Admin)} />
+                <Route path={`${PREFIX_URL}/admin/edit/:id`} component={requireAuth(Editor)} />
                 <Route path="*" component={PageNotFound} />
                 <Route />
               </Router>
