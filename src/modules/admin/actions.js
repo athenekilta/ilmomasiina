@@ -26,7 +26,7 @@ export const getEventsAsync = () => (dispatch, getState) => {
 
   const accessToken = getState().admin.accessToken;
 
-  request('GET', '/api/admin/events', {
+  request('GET', `${PREFIX_URL}/api/admin/events`, {
     headers: { Authorization: accessToken },
   })
     .then(res => JSON.parse(res.body))
@@ -42,7 +42,7 @@ export const getEventsAsync = () => (dispatch, getState) => {
 export const createUserAsync = (data) => (dispatch, getState) => {
   const accessToken = getState().admin.accessToken;
   console.log(email)
-  return request('POST', '/api/users', {
+  return request('POST', `${PREFIX_URL}/api/users`, {
     headers: { Authorization: accessToken },
     json: { email: data.email }
   })
@@ -86,7 +86,7 @@ export const setLoginError = () => dispatch => {
 export const login = (email, password) => dispatch => {
   dispatch(setLoginLoading());
 
-  request('POST', '/api/authentication', {
+  request('POST', `${PREFIX_URL}/api/authentication`, {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `strategy=local&email=${email}&password=${password}`,
   })
@@ -103,7 +103,7 @@ export const login = (email, password) => dispatch => {
       }
       dispatch(setAccessToken(res.accessToken));
       dispatch({ type: ActionTypes.SET_LOGIN_STATUS, payload: true });
-      dispatch(push('/admin'));
+      dispatch(push(`${PREFIX_URL}/admin`));
     })
     .catch(error => {
       console.error('Error in login', error);
@@ -113,13 +113,13 @@ export const login = (email, password) => dispatch => {
 
 export const redirectToLogin = () => dispatch => {
   dispatch(clearState());
-  dispatch(push('/login'));
+  dispatch(push(`${PREFIX_URL}/login`));
 };
 
 export const deleteEventAsync = id => (dispatch, getState) => {
   const accessToken = getState().admin.accessToken;
 
-  return request('DELETE', `/api/admin/events/${id}`, {
+  return request('DELETE', `${PREFIX_URL}/api/admin/events/${id}`, {
     headers: { Authorization: accessToken },
   })
     .then(res => {
