@@ -10,3 +10,12 @@ MAIL_FROM=<ilmo@athene.fi>
 FEATHERS_AUTH_SECRET=randomly-generated-token
 SENDGRID_API_KEY=ask-someone-for-this
 BASE_URL=http://localhost:3000
+
+# These can be configured if so desired
+BRANDING_HEADER_TITLE_TEXT=Athenen ilmomasiina
+BRANDING_FOOTER_GDPR_TEXT=Tietosuoja
+BRANDING_FOOTER_GDPR_LINK=https://athene.fi/hallinto/materiaalit/
+BRANDING_FOOTER_HOME_TEXT=Athene.fi
+BRANDING_FOOTER_HOME_LINK=https://athene.fi
+BRANDING_MAIL_FOOTER_TEXT=Rakkaudella, Tietskarijengi & Athene
+BRANDING_MAIL_FOOTER_LINK=ilmo.athene.fi
