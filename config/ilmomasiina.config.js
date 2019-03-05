@@ -9,7 +9,7 @@ const config = {
   feathersAuthSecret: process.env.FEATHERS_AUTH_SECRET,
   sendgridApiKey: process.env.SENDGRID_API_KEY,
   baseUrl: process.env.BASE_URL,
-  prefixUrl: process.env.PREFIX_URL,
+  prefixUrl: process.env.PREFIX_URL || '',
   adminRegistrationAllowed: process.env.ADMIN_REGISTRATION_ALLOWED == "true" || false,
   brandingMailFooterText: process.env.BRANDING_MAIL_FOOTER_TEXT,
   brandingMailFooterLink: `${process.env.BASE_URL}${process.env.PREFIX_URL || ''}`,
