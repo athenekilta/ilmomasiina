@@ -34,8 +34,15 @@ const EmailService = {
         },
       },
     });
+    const brandedParams = {
+      ...params,
+      branding: {
+        footerText: ilmoconfig.brandingMailFooterText,
+        footerLink: ilmoconfig.brandingMailFooterLink,
+      },
+    };
 
-    return email.render('../server/mail/emails/confirmation/html', params).then((html) => {
+    return email.render('../server/mail/emails/confirmation/html', brandedParams).then((html) => {
       const subject = `Ilmoittautumisvahvistus: ${params.event.title}`;
       return EmailService.send(to, subject, html);
     });
@@ -51,8 +58,16 @@ const EmailService = {
         },
       },
     });
+    const brandedParams = {
+      ...params,
+      branding: {
+        footerText: ilmoconfig.brandingMailFooterText,
+        footerLink: ilmoconfig.brandingMailFooterLink,
+        siteUrl: ilmoconfig.baseUrl,
+      },
+    };
 
-    return email.render('../server/mail/emails/newUser/html', params).then((html) => {
+    return email.render('../server/mail/emails/newUser/html', brandedParams).then((html) => {
       const subject = 'Käyttäjätunnukset Ilmomasiinaan';
       return EmailService.send(to, subject, html);
     });

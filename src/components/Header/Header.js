@@ -17,7 +17,7 @@ class Header extends React.Component {
         <div className="container">
           <a onClick={() => browserHistory.push('/')} className="navbar-brand">
             {' '}
-            Athenen ilmomasiina
+            {BRANDING_HEADER_TITLE}
           </a>
           {this.props.loggedIn ? (
             <a

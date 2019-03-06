@@ -10,6 +10,8 @@ const config = {
   sendgridApiKey: process.env.SENDGRID_API_KEY,
   baseUrl: process.env.BASE_URL,
   adminRegistrationAllowed: process.env.ADMIN_REGISTRATION_ALLOWED == "true" || false,
+  brandingMailFooterText: process.env.BRANDING_MAIL_FOOTER_TEXT,
+  brandingMailFooterLink: process.env.BASE_URL,
 };
 
 _.forOwn(config, (value, key) => {
