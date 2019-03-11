@@ -9,4 +9,4 @@ app.use(enforce.HTTPS({ trustProtoHeader: true }));
 
 const server = app.listen(process.env.PORT);
 
-server.on('listening', () => debug(`Server is now running at ${process.env.BASE_URL}.`));
+server.on('listening', () => debug(`Server is now running at ${process.env.BASE_URL}${process.env.PREFIX_URL}.`));

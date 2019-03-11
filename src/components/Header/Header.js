@@ -15,7 +15,7 @@ class Header extends React.Component {
     return (
       <div className="navbar navbar-default">
         <div className="container">
-          <a onClick={() => browserHistory.push('/')} className="navbar-brand">
+          <a onClick={() => browserHistory.push(`${PREFIX_URL}/`)} className="navbar-brand">
             {' '}
             {BRANDING_HEADER_TITLE}
           </a>

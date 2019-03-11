@@ -109,7 +109,7 @@ class AdminEventList extends React.Component {
             {this.renderEventRows()}
           </tbody>
         </table>
-        <Link to="/admin/edit/new" className="btn btn-default">
+        <Link to={`${PREFIX_URL}/admin/edit/new`} className="btn btn-default">
           + Uusi tapahtuma
         </Link>
         <h1>Luo uusi käyttäjä</h1>

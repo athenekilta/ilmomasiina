@@ -27,7 +27,7 @@ export const setSignupError = () => (dispatch) => {
 
 export const updateEventAsync = eventId => (dispatch) => {
   dispatch(setEventLoading());
-  return request('GET', `/api/events/${eventId}`)
+  return request('GET', `${PREFIX_URL}/api/events/${eventId}`)
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setEvent(res));
@@ -40,7 +40,7 @@ export const updateEventAsync = eventId => (dispatch) => {
 
 export const attachPositionAsync = quotaId => (dispatch) => {
   dispatch(setSignupLoading());
-  return request('POST', '/api/signups', { json: { quotaId } })
+  return request('POST', `${PREFIX_URL}/api/signups`, { json: { quotaId } })
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setSignup(res));
@@ -54,7 +54,7 @@ export const attachPositionAsync = quotaId => (dispatch) => {
 export const completeSignupAsync = (signupId, data) => (dispatch) => {
   dispatch(setSignupLoading());
 
-  return request('PATCH', `/api/signups/${signupId}`, {
+  return request('PATCH', `${PREFIX_URL}/api/signups/${signupId}`, {
     json: {
       editToken: data.editToken,
       firstName: data.firstName,
@@ -83,7 +83,7 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
 
 export const cancelSignupAsync = (signupId, editToken) => (dispatch) => {
   dispatch(setSignupLoading());
-  return request('DELETE', `/api/signups/${signupId}?editToken=${editToken}`)
+  return request('DELETE', `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`)
     .then(res => JSON.parse(res.body))
     .then(() => {
       dispatch(setSignup({}));

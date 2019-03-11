@@ -107,7 +107,7 @@ class Editor extends React.Component {
       try {
         const res = await minDelay(this.props.publishEventAsync(event, adminToken), 1000);
         console.log('RES EDITOR', res);
-        browserHistory.push(`/admin/edit/${res.id}`);
+        browserHistory.push(`${PREFIX_URL}/admin/edit/${res.id}`);
       } catch (error) {
         console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', { autoClose: 2000 });
@@ -230,7 +230,7 @@ class Editor extends React.Component {
           <div className="event-editor--loading-container">
             <h1>Hups, jotain meni pieleen</h1>
             <p>{`Tapahtumaa id:llä "${this.props.params.id}" ei löytynyt`}</p>
-            <Link to="/admin/">Palaa tapahtumalistaukseen</Link>
+            <Link to={`${PREFIX_URL}/admin/`}>Palaa tapahtumalistaukseen</Link>
           </div>
         </div>
       );
@@ -240,7 +240,7 @@ class Editor extends React.Component {
 
     return (
       <div className="event-editor">
-        <Link to="/admin">&#8592; Takaisin</Link>
+        <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
         <Formsy.Form
           onValid={() => this.setValidState(true)}
           onInvalid={() => this.setValidState(false)}

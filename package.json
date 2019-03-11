@@ -31,6 +31,7 @@
     "compile": {
       "command": "node bin/compile",
       "env": {
+        "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
     },
@@ -94,6 +95,7 @@
     "start:prod": {
       "command": "node bin/prod-server",
       "env": {
+        "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
     },

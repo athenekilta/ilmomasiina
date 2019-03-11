@@ -43,7 +43,7 @@ module.exports = () => (hook) => {
             answers: fields,
             date: moment(event.dataValues.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss'),
             event: event.dataValues,
-            cancelLink: `${config.baseUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
+            cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
           };
           // console.log(hook.data);
           // console.log('=====CONFIRMATION MAIL DISABLED!=====');

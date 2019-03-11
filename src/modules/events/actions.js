@@ -22,7 +22,7 @@ export const setEventsError = () => (dispatch) => {
 
 export const getEventsAsync = () => (dispatch) => {
   dispatch(setEventsLoading());
-  request('GET', '/api/events')
+  request('GET', `${PREFIX_URL}/api/events`)
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setEvents(res));

@@ -231,7 +231,7 @@ class SingleEvent extends React.Component {
           />
         ) : (
             <div className="container">
-              <Link to="/" style={{ margin: 0 }}>&#8592; Takaisin</Link>
+              <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>&#8592; Takaisin</Link>
               <div className="row">
                 <div className="col-xs-12 col-sm-8">
                   <h1>{event.title}</h1>
