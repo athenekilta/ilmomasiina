@@ -1,9 +1,11 @@
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
-const sgMail = require('@sendgrid/mail');
 const Email = require('email-templates');
 const path = require('path');
 
-sgMail.setApiKey(ilmoconfig.sendgridApiKey);
+const mailgun = require('mailgun-js')({
+  apiKey: ilmoconfig.mailgunApiKey,
+  domain: ilmoconfig.mailgunDomain,
+});
 
 const EmailService = {
   send: (to, subject, html) => {
@@ -14,14 +16,9 @@ const EmailService = {
       html,
     };
 
-    sgMail
-      .send(msg)
-      .then((res) => {
-        console.log('SUCCESS');
-      })
-      .catch((error) => {
-        console.log('ERROR', error);
-      });
+    mailgun.messages().send(msg, (error, body) => {
+      console.log(body);
+    });
   },
 
   sendConfirmationMail(to, params) {
@@ -42,10 +39,12 @@ const EmailService = {
       },
     };
 
-    return email.render('../server/mail/emails/confirmation/html', brandedParams).then((html) => {
-      const subject = `Ilmoittautumisvahvistus: ${params.event.title}`;
-      return EmailService.send(to, subject, html);
-    });
+    return email
+      .render('../server/mail/emails/confirmation/html', brandedParams)
+      .then(html => {
+        const subject = `Ilmoittautumisvahvistus: ${params.event.title}`;
+        return EmailService.send(to, subject, html);
+      });
   },
 
   sendNewUserMail(to, params) {
@@ -67,10 +66,12 @@ const EmailService = {
       },
     };
 
-    return email.render('../server/mail/emails/newUser/html', brandedParams).then((html) => {
-      const subject = 'Käyttäjätunnukset Ilmomasiinaan';
-      return EmailService.send(to, subject, html);
-    });
+    return email
+      .render('../server/mail/emails/newUser/html', brandedParams)
+      .then(html => {
+        const subject = 'Käyttäjätunnukset Ilmomasiinaan';
+        return EmailService.send(to, subject, html);
+      });
   },
 };
 

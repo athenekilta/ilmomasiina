@@ -8,10 +8,12 @@ ADMIN_REGISTRATION_ALLOWED=true
 EDIT_TOKEN_SALT=randomly-generated-token
 MAIL_FROM=<ilmo@athene.fi>
 FEATHERS_AUTH_SECRET=randomly-generated-token
-SENDGRID_API_KEY=ask-someone-for-this
+MAILGUN_API_KEY=ask-someone-for-this
+MAILGUN_DOMAIN=ask-someone-for-this
 BASE_URL=http://localhost:3000
 
 # These can be configured if so desired
+
 BRANDING_HEADER_TITLE_TEXT=Athenen ilmomasiina
 BRANDING_FOOTER_GDPR_TEXT=Tietosuoja
 BRANDING_FOOTER_GDPR_LINK=https://athene.fi/hallinto/materiaalit/
