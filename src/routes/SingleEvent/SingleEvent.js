@@ -270,14 +270,9 @@ class SingleEvent extends React.Component {
                       </a>
                     </p>
                   ) : null}
-                  {event.facebook ? (
-                    <p>
-                      <strong>Facebook-tapahtuma:</strong>{' '}
-                      <a href={event.facebook} title="Facebook-tapahtuma">
-                        {event.facebook}
-                      </a>
-                    </p>
-                  ) : null}
+                  {event.facebookUrl ? (
+                      <p><a href={event.facebookUrl} title="Facebook-tapahtuma" target="_blank">Facebook-tapahtuma</a></p>
+                    ) : null}
                 </div>
                 <p>{nl2br(event.description)}</p>
               </div>
