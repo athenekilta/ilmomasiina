@@ -12,7 +12,10 @@ import ViewProgress from './components/ViewProgress';
 import EnrollForm from './components/EnrollForm';
 import signupState from '../../utils/signupStateText';
 import './SingleEvent.scss';
-import { getQuotaData, getFormattedQuestions } from '../../modules/singleEvent/selectors';
+import {
+  getQuotaData,
+  getFormattedQuestions,
+} from '../../modules/singleEvent/selectors';
 import { WAITLIST, OPENQUOTA } from '../../utils/signupUtils';
 import { Link } from 'react-router';
 
@@ -52,10 +55,15 @@ class SingleEvent extends React.Component {
   }
 
   closeForm() {
-    const close = window.confirm('Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.');
+    const close = window.confirm(
+      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.',
+    );
 
     if (close) {
-      this.props.cancelSignupAsync(this.props.signup.id, this.props.signup.editToken);
+      this.props.cancelSignupAsync(
+        this.props.signup.id,
+        this.props.signup.editToken,
+      );
       this.setState({ formOpened: false });
     }
     this.props.updateEventAsync(this.props.event.id);
@@ -64,11 +72,14 @@ class SingleEvent extends React.Component {
   async submitForm(answers) {
     this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
 
-    const response = await this.props.completeSignupAsync(this.props.signup.id, {
-      editToken: this.props.signup.editToken,
-      ...answers,
-    });
-    let success = response === true
+    const response = await this.props.completeSignupAsync(
+      this.props.signup.id,
+      {
+        editToken: this.props.signup.editToken,
+        ...answers,
+      },
+    );
+    let success = response === true;
     if (success) {
       toast.update(this.toastId, {
         render: 'Ilmoittautuminen onnistui!',
@@ -80,7 +91,8 @@ class SingleEvent extends React.Component {
         formOpened: false,
       });
     } else {
-      let toast_text = 'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.'
+      let toast_text =
+        'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
       toast.update(this.toastId, {
         render: toast_text,
         type: toast.TYPE.ERROR,
@@ -90,13 +102,10 @@ class SingleEvent extends React.Component {
   }
 
   renderSignupLists() {
-
     const { event, quotaData, formattedQuestions } = this.props;
 
     if (!event.signupsPublic) {
-      return (
-        <p>Tapahtuman vastaukset eivät ole julkisia</p>
-      );
+      return <p>Tapahtuman vastaukset eivät ole julkisia</p>;
     }
 
     if (!event.quota) {
@@ -118,8 +127,7 @@ class SingleEvent extends React.Component {
                 key={quotaName}
               />
             );
-          }
-          else if (quotaName === OPENQUOTA) {
+          } else if (quotaName === OPENQUOTA) {
             return (
               <SignupList
                 title={'Avoin kiintiö'}
@@ -128,8 +136,7 @@ class SingleEvent extends React.Component {
                 key={quotaName}
               />
             );
-          }
-          else {
+          } else {
             return (
               <SignupList
                 title={quotaName}
@@ -142,52 +149,45 @@ class SingleEvent extends React.Component {
         })}
       </div>
     );
-
   }
 
   renderQuotaStatus() {
-
     const { event, quotaData } = this.props;
 
     if (!event.quota || event.quota.length === 0) {
       return null;
     }
 
-
     return (
       <div className="sidebar-widget">
         <h3>Ilmoittautuneet</h3>
-        {
-          _.map(Object.keys(quotaData), quotaName => {
-            const quota = quotaData[quotaName];
-            if (quotaName === OPENQUOTA) {
-              return (
-                <ViewProgress
-                  title="Avoin"
-                  value={quota.signups.length}
-                  max={event.openQuotaSize}
-                  key={quotaName}
-                />
-              );
+        {_.map(Object.keys(quotaData), quotaName => {
+          const quota = quotaData[quotaName];
+          if (quotaName === OPENQUOTA) {
+            return (
+              <ViewProgress
+                title="Avoin"
+                value={quota.signups.length}
+                max={event.openQuotaSize}
+                key={quotaName}
+              />
+            );
+          } else if (quotaName === WAITLIST) {
+            if (quota.signups && quota.signups.length > 0) {
+              return <p>{`Jonossa: ${quota.signups.length}`}</p>;
             }
-            else if (quotaName === WAITLIST) {
-              if (quota.signups && quota.signups.length > 0) {
-                return <p>{`Jonossa: ${quota.signups.length}`}</p>;
-              }
-              return null;
-            }
-            else {
-              return (
-                <ViewProgress
-                  title={quotaName}
-                  value={Math.min(quota.signups.length, quota.size)}
-                  max={quota.size}
-                  key={quotaName}
-                />
-              );
-            }
-          })
-        }
+            return null;
+          } else {
+            return (
+              <ViewProgress
+                title={quotaName}
+                value={Math.min(quota.signups.length, quota.size)}
+                max={quota.size}
+                key={quotaName}
+              />
+            );
+          }
+        })}
       </div>
     );
   }
@@ -197,18 +197,26 @@ class SingleEvent extends React.Component {
     return (
       <div className="sidebar-widget">
         <h3>Ilmoittautuminen</h3>
-        <p>{signupState(event.date, event.registrationStartDate, event.registrationEndDate).label}</p>
+        <p>
+          {
+            signupState(
+              event.date,
+              event.registrationStartDate,
+              event.registrationEndDate,
+            ).label
+          }
+        </p>
         {event.quota
           ? event.quota.map((quota, index) => (
-            <SignupButton
-              title={quota.title}
-              opens={event.registrationStartDate}
-              closes={event.registrationEndDate}
-              openForm={() => this.openForm(quota)}
-              isOnly={event.quota.length === 1}
-              key={index}
-            />
-          ))
+              <SignupButton
+                title={quota.title}
+                opens={event.registrationStartDate}
+                closes={event.registrationEndDate}
+                openForm={() => this.openForm(quota)}
+                isOnly={event.quota.length === 1}
+                key={index}
+              />
+            ))
           : ''}
       </div>
     );
@@ -230,56 +238,57 @@ class SingleEvent extends React.Component {
             event={event}
           />
         ) : (
-            <div className="container">
-              <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>&#8592; Takaisin</Link>
-              <div className="row">
-                <div className="col-xs-12 col-sm-8">
-                  <h1>{event.title}</h1>
-                  <div className="event-heading">
-                    {event.date ? (
-                      <p>
-                        <strong>Ajankohta:</strong> {moment(event.date).format('D.M.Y [klo] HH:mm')}
-                      </p>
-                    ) : null}
-                    {event.location ? (
-                      <p>
-                        <strong>Sijainti:</strong> {event.location}
-                      </p>
-                    ) : null}
-                    {event.price ? (
-                      <p>
-                        <strong>Hinta:</strong> {event.price}
-                      </p>
-                    ) : null}
-                    {event.homepage ? (
-                      <p>
-                        <strong>Kotisivut:</strong>{' '}
-                        <a href={event.homepage} title="Kotisivut">
-                          {event.homepage}
-                        </a>
-                      </p>
-                    ) : null}
-                    {event.facebook ? (
-                      <p>
-                        <strong>Facebook-tapahtuma:</strong>{' '}
-                        <a href={event.facebook} title="Facebook-tapahtuma">
-                          {event.facebook}
-                        </a>
-                      </p>
-                    ) : null}
-                  </div>
-                  <p>{nl2br(event.description)}</p>
+          <div className="container singleEventContainer">
+            <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
+              &#8592; Takaisin
+            </Link>
+            <div className="row">
+              <div className="col-xs-12 col-sm-8">
+                <h1>{event.title}</h1>
+                <div className="event-heading">
+                  {event.date ? (
+                    <p>
+                      <strong>Ajankohta:</strong>{' '}
+                      {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                    </p>
+                  ) : null}
+                  {event.location ? (
+                    <p>
+                      <strong>Sijainti:</strong> {event.location}
+                    </p>
+                  ) : null}
+                  {event.price ? (
+                    <p>
+                      <strong>Hinta:</strong> {event.price}
+                    </p>
+                  ) : null}
+                  {event.homepage ? (
+                    <p>
+                      <strong>Kotisivut:</strong>{' '}
+                      <a href={event.homepage} title="Kotisivut">
+                        {event.homepage}
+                      </a>
+                    </p>
+                  ) : null}
+                  {event.facebook ? (
+                    <p>
+                      <strong>Facebook-tapahtuma:</strong>{' '}
+                      <a href={event.facebook} title="Facebook-tapahtuma">
+                        {event.facebook}
+                      </a>
+                    </p>
+                  ) : null}
                 </div>
-                <div className="col-xs-12 col-sm-4 pull-right">
-                  {this.renderSignupButtons()}
-                  {this.renderQuotaStatus()}
-                </div>
-                <div className="col-xs-12">
-                  {this.renderSignupLists()}
-                </div>
+                <p>{nl2br(event.description)}</p>
               </div>
+              <div className="col-xs-12 col-sm-4 pull-right">
+                {this.renderSignupButtons()}
+                {this.renderQuotaStatus()}
+              </div>
+              <div className="col-xs-12">{this.renderSignupLists()}</div>
             </div>
-          )}
+          </div>
+        )}
       </div>
     );
   }
