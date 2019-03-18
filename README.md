@@ -59,6 +59,7 @@ Example of `.htaccess` config:
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteBase /
+    RewriteRule ^ilmo$ ilmo/ [NC,R=301,L]
     RewriteRule ^ilmo/$ http://0.0.0.0:2011/ [P,L]
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
