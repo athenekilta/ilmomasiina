@@ -92,7 +92,7 @@
       }
     },
     "start:prod": {
-      "command": "node bin/prod-server",
+      "command": "pm2 start ./bin/prod-server.js",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
@@ -207,6 +207,8 @@
     "eslint-plugin-react": "^6.0.0",
     "eslint-plugin-standard": "^2.0.0",
     "faker": "^3.1.0",
+    "nodemon": "^1.18.10",
+    "pm2": "^3.3.1",
     "react-addons-test-utils": "^15.0.0",
     "redbox-react": "^1.2.10",
     "sinon": "^1.17.5",
