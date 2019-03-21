@@ -76,9 +76,8 @@ app.configure(models);
 const seq = app.get('sequelize');
 
 // Drop tables and create them
-seq
-  .sync({ force: true })
-  .then(() => seq.models.event.bulkCreate(events))
+seq.models.event
+  .bulkCreate(events)
   .then(() => seq.models.quota.bulkCreate(quotas))
   .then(() => seq.models.question.bulkCreate(questions))
   .then(() =>
