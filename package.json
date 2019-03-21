@@ -14,6 +14,8 @@
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
     "start:prod": "better-npm-run start:prod",
+    "monit:prod": "better-npm-run monit:prod",
+    "stop:prod": "better-npm-run stop:prod",
     "dev": "better-npm-run dev",
     "test": "npm run lint && better-npm-run test",
     "test:dev": "npm run test -- --watch",
@@ -97,6 +99,12 @@
         "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
+    },
+    "stop:prod": {
+      "command": "pm2 stop 0"
+    },
+    "monit:prod": {
+      "command": "pm2 monit"
     },
     "test": {
       "command": "node ./node_modules/karma/bin/karma start config/karma.config",
