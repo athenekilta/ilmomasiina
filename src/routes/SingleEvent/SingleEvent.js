@@ -210,8 +210,7 @@ class SingleEvent extends React.Component {
           ? event.quota.map((quota, index) => (
               <SignupButton
                 title={quota.title}
-                opens={event.registrationStartDate}
-                closes={event.registrationEndDate}
+                isOpen={event.isOpen}
                 openForm={() => this.openForm(quota)}
                 isOnly={event.quota.length === 1}
                 key={index}
