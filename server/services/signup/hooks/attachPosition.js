@@ -38,7 +38,7 @@ module.exports = () => (hook) => {
       return models.event.findOne(query)
         .then((event) => {
           const currentQuota = _.find(event.quota, { dataValues: { id: quotaId } }).dataValues;
-          const positionInQuota = currentQuota.signupsBefore + 1;
+          const positionInQuota = currentQuota.signupsBefore;
 
           let position = null;
           let status = null;
