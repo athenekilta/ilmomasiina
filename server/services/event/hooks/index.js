@@ -4,6 +4,7 @@ const includeQuotas = require('./includeQuotas');
 const includeAllEventData = require('./includeAllEventData');
 const removeNonpublicAnswers = require('./removeNonpublicAnswers');
 const formatOptionsAsArray = require('./formatOptionsAsArray');
+const addOpenStatus = require('./addOpenStatus');
 
 exports.before = {
   all: [],
@@ -18,7 +19,7 @@ exports.before = {
 exports.after = {
   all: [],
   find: [],
-  get: [removeNonpublicAnswers(), formatOptionsAsArray()],
+  get: [removeNonpublicAnswers(), formatOptionsAsArray(), addOpenStatus()],
   create: [],
   update: [],
   patch: [],
