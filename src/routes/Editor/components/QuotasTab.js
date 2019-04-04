@@ -41,7 +41,6 @@ class QuotasTab extends React.Component {
     const newQuotas = _.concat(quotas, {
       id: (_.max(quotas.map(n => n.id)) || 0) + 1,
       title: '',
-      size: 0,
       existsInDb: false,
     });
 
@@ -63,10 +62,19 @@ class QuotasTab extends React.Component {
 
     const newQuotas = _.map(quotas, (quota) => {
       if (quota.id === itemId) {
-        return {
-          ...quota,
-          [field]: value,
-        };
+        if (field === "size" && value === '') {
+          return {
+            ...quota,
+            [field]: null,
+          };
+        }
+        else {
+          return {
+            ...quota,
+            [field]: value,
+          };
+        }
+
       }
 
       return quota;

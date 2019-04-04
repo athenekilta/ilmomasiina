@@ -14,7 +14,7 @@ export const getSignupsByQuota = (event) => {
 			const sorted = _.sortBy(quota.signups, (s) => new Date(s.createdAt));
 			const quotaSignups = [];
 			_.each(sorted, (s, index) => {
-				if (index < quota.size) {
+				if (index < quota.size || !quota.size) { // size may be null
 					quotaSignups.push({
 						...s,
 						quota: quota.title,
