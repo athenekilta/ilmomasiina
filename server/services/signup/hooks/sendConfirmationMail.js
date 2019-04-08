@@ -41,6 +41,7 @@ module.exports = () => (hook) => {
         .then((event) => {
           const params = {
             answers: fields,
+            edited: userAnswers.some(a => a.createdAt.getTime() !== a.updatedAt.getTime()),
             date: moment(event.dataValues.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss'),
             event: event.dataValues,
             cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
