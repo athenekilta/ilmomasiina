@@ -133,7 +133,7 @@ export class EnrollForm extends React.Component {
 
       if (status == 'in-quota') {
         const quota = _.find(quotas, { id: quotaId });
-        return `Olet kiintiössä ${quota.title} sijalla ${position} / ${quota.size}.`;
+        return `Olet kiintiössä ${quota.title} sijalla ${position + (quota.size ? " / " + quota.size : "")}.`;
       }
 
       if (status == 'in-open') {

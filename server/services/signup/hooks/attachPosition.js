@@ -44,7 +44,7 @@ module.exports = () => (hook) => {
           let status = null;
 
           if (event.signupsPublic) {
-            if (positionInQuota <= currentQuota.size) {
+            if (positionInQuota <= currentQuota.size || currentQuota.size === null) {
               position = positionInQuota;
               status = 'in-quota';
             } else {
