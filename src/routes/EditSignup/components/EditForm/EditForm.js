@@ -131,24 +131,7 @@ export class EditForm extends React.Component {
   }
 
   render() {
-    const signupStatus = () => {
-      const { status, position, quotaId } = this.props.signup;
-      const { openQuotaSize } = this.props.event;
-      const quotas = this.props.event.quota;
-
-      if (status == 'in-quota') {
-        const quota = _.find(quotas, { id: quotaId });
-        return `Olet kiintiössä ${quota.title} sijalla ${position} / ${quota.size}.`;
-      }
-
-      if (status == 'in-open') {
-        return `Olet avoimessa kiintiössä sijalla ${position} / ${openQuotaSize}.`;
-      }
-
-      return `Olet jonossa sijalla ${position}.`;
-    };
     return (
-
       <div className="form-wrapper">
         <div className="container">
           <div className="col-xs-12 col-md-8 col-md-offset-2">
