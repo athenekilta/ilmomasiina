@@ -3,8 +3,8 @@ module.exports = () => (hook) => {
   const now = new Date();
   const endDate = new Date(hook.result.registrationEndDate);
   if (now > startDate && now < endDate) {
-    hook.result.dataValues.isOpen = true;
+    hook.result.dataValues.millisTillOpening = 0;
   } else {
-    hook.result.dataValues.isOpen = false;
+    hook.result.dataValues.millisTillOpening = startDate - now;
   }
 };

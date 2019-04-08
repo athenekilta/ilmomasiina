@@ -18,6 +18,7 @@ import {
 } from '../../modules/singleEvent/selectors';
 import { WAITLIST, OPENQUOTA } from '../../utils/signupUtils';
 import { Link } from 'react-router';
+import Countdown from 'react-countdown-now';
 
 class SingleEvent extends React.Component {
   static propTypes = {
@@ -48,7 +49,6 @@ class SingleEvent extends React.Component {
   componentDidMount() {
     this.props.updateEventAsync(this.props.params.id);
   }
-
   openForm(quota) {
     this.props.attachPositionAsync(quota.id);
     this.setState({ formOpened: true });
@@ -191,9 +191,8 @@ class SingleEvent extends React.Component {
       </div>
     );
   }
+  signupButtonRenderer(event, isOpen, total, seconds, ) {
 
-  renderSignupButtons() {
-    const { event } = this.props;
     return (
       <div className="sidebar-widget">
         <h3>Ilmoittautuminen</h3>
@@ -205,19 +204,32 @@ class SingleEvent extends React.Component {
               event.registrationEndDate,
             ).label
           }
+          {total < 60000 && !isOpen ? <span style={{ color: "green" }} > {` (${seconds}  s)`}</span> : null}
         </p>
         {event.quota
           ? event.quota.map((quota, index) => (
-              <SignupButton
-                title={quota.title}
-                isOpen={event.isOpen}
-                openForm={() => this.openForm(quota)}
-                isOnly={event.quota.length === 1}
-                key={index}
-              />
-            ))
+            <SignupButton
+              title={quota.title}
+              isOpen={isOpen}
+              openForm={() => this.openForm(quota)}
+              isOnly={event.quota.length === 1}
+              key={index} />
+
+          ))
           : ''}
       </div>
+    )
+
+  }
+  renderSignupButtons() {
+    const { event } = this.props;
+    return (
+      <Countdown
+        daysInHours={true}
+        date={new Date(new Date().getTime() + event.millisTillOpening)}
+        renderer={props => this.signupButtonRenderer(event, props.completed, props.total, props.seconds)}>
+      </Countdown>
+
     );
   }
 
@@ -237,57 +249,58 @@ class SingleEvent extends React.Component {
             event={event}
           />
         ) : (
-          <div className="container singleEventContainer">
-            <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
-              &#8592; Takaisin
+            <div className="container singleEventContainer">
+              <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
+                &#8592; Takaisin
             </Link>
-            <div className="row">
-              <div className="col-xs-12 col-sm-8">
-                <h1>{event.title}</h1>
-                <div className="event-heading">
-                  {event.date ? (
-                    <p>
-                      <strong>Ajankohta:</strong>{' '}
-                      {moment(event.date).format('D.M.Y [klo] HH:mm')}
-                    </p>
-                  ) : null}
-                  {event.location ? (
-                    <p>
-                      <strong>Sijainti:</strong> {event.location}
-                    </p>
-                  ) : null}
-                  {event.price ? (
-                    <p>
-                      <strong>Hinta:</strong> {event.price}
-                    </p>
-                  ) : null}
-                  {event.homepage ? (
-                    <p>
-                      <strong>Kotisivut:</strong>{' '}
-                      <a href={event.homepage} title="Kotisivut">
-                        {event.homepage}
-                      </a>
-                    </p>
-                  ) : null}
-                  {event.facebook ? (
-                    <p>
-                      <strong>Facebook-tapahtuma:</strong>{' '}
-                      <a href={event.facebook} title="Facebook-tapahtuma">
-                        {event.facebook}
-                      </a>
-                    </p>
-                  ) : null}
+              <div className="row">
+                <div className="col-xs-12 col-sm-8">
+                  <h1>{event.title}</h1>
+                  <div className="event-heading">
+                    {event.date ? (
+                      <p>
+                        <strong>Ajankohta:</strong>{' '}
+                        {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                      </p>
+                    ) : null}
+                    {event.location ? (
+                      <p>
+                        <strong>Sijainti:</strong> {event.location}
+                      </p>
+                    ) : null}
+                    {event.price ? (
+                      <p>
+                        <strong>Hinta:</strong> {event.price}
+                      </p>
+                    ) : null}
+                    {event.homepage ? (
+                      <p>
+                        <strong>Kotisivut:</strong>{' '}
+                        <a href={event.homepage} title="Kotisivut">
+                          {event.homepage}
+                        </a>
+                      </p>
+                    ) : null}
+                    {event.facebook ? (
+                      <p>
+                        <strong>Facebook-tapahtuma:</strong>{' '}
+                        <a href={event.facebook} title="Facebook-tapahtuma">
+                          {event.facebook}
+                        </a>
+                      </p>
+                    ) : null}
+                  </div>
+                  <p>{nl2br(event.description)}</p>
                 </div>
-                <p>{nl2br(event.description)}</p>
+                <div className="col-xs-12 col-sm-4 pull-right">
+                  {this.renderSignupButtons()}
+                  {this.renderQuotaStatus()}
+                </div>
+                <div className="col-xs-12">{this.renderSignupLists()}</div>
               </div>
-              <div className="col-xs-12 col-sm-4 pull-right">
-                {this.renderSignupButtons()}
-                {this.renderQuotaStatus()}
-              </div>
-              <div className="col-xs-12">{this.renderSignupLists()}</div>
             </div>
-          </div>
-        )}
+          )
+        }
       </div>
     );
   }
