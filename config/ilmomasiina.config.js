@@ -9,7 +9,6 @@ const config = {
   feathersAuthSecret: process.env.FEATHERS_AUTH_SECRET,
   mailgunApiKey: process.env.MAILGUN_API_KEY,
   mailgunDomain: process.env.MAILGUN_DOMAIN,
-  sengridApiKey: process.env.SENDGRID_API_KEY, // temp sendgrid
   baseUrl: process.env.BASE_URL,
   prefixUrl: process.env.PREFIX_URL || '',
   adminRegistrationAllowed:

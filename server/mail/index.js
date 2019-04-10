@@ -1,20 +1,10 @@
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 const Email = require('email-templates');
 const path = require('path');
-
-// Temp sendgrid
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(ilmoconfig.sendgridApiKey);
-// /temp sendgrid
-
-/*
-Hide mailgun for a while
-
 const mailgun = require('mailgun-js')({
   apiKey: ilmoconfig.mailgunApiKey,
   domain: ilmoconfig.mailgunDomain,
 });
-*/
 
 const EmailService = {
   send: (to, subject, html) => {
@@ -25,23 +15,10 @@ const EmailService = {
       html,
     };
 
-    // temp sendgrid
-    sgMail
-      .send(msg)
-      .then(res => {
-        console.log('SUCCESS', res);
-      })
-      .catch(error => {
-        console.log('ERROR', error);
-      });
-    // /temp sendgrid
-
-    /* hide mailgun for a while
-
     mailgun.messages().send(msg, (error, body) => {
+      console.log(error);
       console.log(body);
     });
-*/
   },
 
   sendConfirmationMail(to, params) {
