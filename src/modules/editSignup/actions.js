@@ -41,6 +41,7 @@ export const getSignupAndEventAsync = (id, editToken) => (dispatch) => {
   return request('GET', `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`)
     .then(res => JSON.parse(res.body))
     .then((res) => {
+      if (res.signup === null) throw new Error('signup not found');
       dispatch(setSignupAndEvent(res.signup, res.event));
       return true;
     })

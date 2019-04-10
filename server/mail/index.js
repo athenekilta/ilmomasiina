@@ -42,7 +42,7 @@ const EmailService = {
     return email
       .render('../server/mail/emails/confirmation/html', brandedParams)
       .then(html => {
-        const subject = `Ilmoittautumisvahvistus: ${params.event.title}`;
+        const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
         return EmailService.send(to, subject, html);
       });
   },
