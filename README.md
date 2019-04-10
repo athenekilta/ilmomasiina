@@ -3,11 +3,13 @@
 ```diff
 - Hello you random bypasser! 
 
-- Ilmomasiina is currently at alpha testing phase. In case you're interested in development,
-- we heavily recommend you to contact a fellow committer from this repo. 
+- Ilmomasiina is currently at alpha testing phase. You use it. Something breaks? You fix it.
+
+- In case you're interested in development. We heavily recommend you to contact @peksi
+
 ```
 
-Current defelopment is being held on `heroku/staging` branch.
+Current defelopment is being held on `otax/production` branch.
 
 
 # Ilmomasiina
