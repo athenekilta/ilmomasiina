@@ -2,7 +2,7 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import _ from 'lodash';
 
-import { CheckboxGroup, Select, Input, Textarea } from 'formsy-react-components';
+import { CheckboxGroup, Select, Input, Textarea, RadioGroup } from 'formsy-react-components';
 import './EnrollForm.scss';
 
 export class EnrollForm extends React.Component {
@@ -89,17 +89,29 @@ export class EnrollForm extends React.Component {
       }
 
       if (question.type === 'select') {
+        if (question.options.length > 3) { // render select if more than 3 options
+          let optionsArray = [{ label: "Valitse...", value: null }];
 
-        let optionsArray = [{ label: "Valitse...", value: null }];
+          question.options.map(option => optionsArray.push({ label: option }));
 
-        question.options.map(option => optionsArray.push({ label: option }));
-
+          return (
+            <Select
+              validations="isExisty"
+              name={String(question.id)}
+              label={question.question}
+              options={optionsArray}
+              required={question.required}
+              key={question.id}
+              help={help}
+            />
+          );
+        }
         return (
-          <Select
-            validations="isExisty"
+          <RadioGroup
             name={String(question.id)}
+            type="inline"
             label={question.question}
-            options={optionsArray}
+            options={question.options.map(option => ({ label: option, value: option }))}
             required={question.required}
             key={question.id}
             help={help}
@@ -111,6 +123,7 @@ export class EnrollForm extends React.Component {
         return (
           <CheckboxGroup
             value={[]}
+            type="inline"
             name={String(question.id)}
             label={question.question}
             required={question.required}
