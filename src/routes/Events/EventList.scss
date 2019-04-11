@@ -51,13 +51,6 @@ table.eventlist {
           font-weight: 600;
         }
 
-        td.signup, td.going {
-          text-transform: lowercase;
-          &:before {
-            content: attr(data-xs-prefix);
-            text-transform: none;
-          }
-        }
       }
 
       tr:not(:first-child) {

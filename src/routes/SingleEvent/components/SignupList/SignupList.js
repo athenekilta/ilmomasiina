@@ -29,9 +29,9 @@ export class SignupList extends React.Component {
             <thead>
               <tr className='active'>
                 <th key="position">Sija</th>
-                <th key="attendee">Nimi</th>
+                <th key="attendee" style={{ minWidth: 90 }} >Nimi</th>
                 {this.props.questions.map((q, i) => <th key={i}>{q.question}</th>)}
-                <th key="datetime">Ilmoittautumisaika</th>
+                <th key="datetime" style={{ minWidth: 130 }}>Ilmoittautumisaika</th>
               </tr>
             </thead>
             <tbody>

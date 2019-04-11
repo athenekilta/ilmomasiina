@@ -44,7 +44,6 @@ class TableRow extends React.Component {
         <td
           key="signup"
           className="signup"
-          data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}
         >
           {signupLabel}
         </td>
