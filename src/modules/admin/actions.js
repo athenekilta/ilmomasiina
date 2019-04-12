@@ -1,7 +1,7 @@
 import request from 'then-request';
 import { push } from 'react-router-redux';
 import * as ActionTypes from './actionTypes';
-
+import * as EditorActions from './../editor/actions.js'
 export const setEvents = events => dispatch => {
   dispatch({
     type: ActionTypes.SET_EVENTS,
@@ -127,6 +127,23 @@ export const deleteEventAsync = id => (dispatch, getState) => {
     })
     .catch(error => {
       console.error('Error in deleteEventAsync', error);
+      return false;
+    });
+};
+
+export const deleteSignupAsync = (id, eventId) => (dispatch, getState) => {
+  const accessToken = getState().admin.accessToken;
+  return request('DELETE', `${PREFIX_URL}/api/admin/signups/${id}`, {
+    headers: { Authorization: accessToken },
+  })
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      dispatch(EditorActions.getEventAsync(eventId, accessToken)) // TODO UPDATE THE ROWS, THIS DOESNT WORK
+      return true;
+    })
+    .catch((error) => {
+      console.error('Error in deleteSignupAsync', error);
+      dispatch(setError());
       return false;
     });
 };

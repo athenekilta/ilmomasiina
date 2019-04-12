@@ -41,7 +41,7 @@ module.exports = () => hook => {
         // ... and signups of quotas
         include: [
           {
-            attributes: ['firstName', 'lastName', 'email', 'createdAt'],
+            attributes: ['firstName', 'lastName', 'email', 'createdAt', 'id'],
             model: sequelize.models.signup,
             required: false,
             // ... and answers of signups

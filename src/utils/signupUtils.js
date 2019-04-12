@@ -96,6 +96,7 @@ export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
 	return _.map(sorted, (signup) => {
 
 		const result = {
+			"id": signup.id,
 			"Etunimi": signup.firstName,
 			"Sukunimi": signup.lastName,
 			"Sähköposti": signup.email,

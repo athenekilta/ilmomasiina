@@ -29,6 +29,7 @@ class SignupsTab extends React.Component {
               return <th key={q.id}>{q.question}</th>;
             })}
             <th key="timestamp">Ilmoittautumisaika</th>
+            <th key="delete"></th>
           </tr>
         </thead>
         <tbody>
@@ -45,6 +46,13 @@ class SignupsTab extends React.Component {
                   return <td key={q.id}>{answer}</td>;
                 })}
                 <td key="timestamp">{s['Ilmoittautumisaika']}</td>
+                <td key="delete"><button className="btn btn-danger" onClick={() => {
+                  var confirmation = window.confirm("Oletko varma? Poistamista ei voi perua.")
+                  if (confirmation) {
+                    this.props.deleteSignup(s.id, event.id)
+                  }
+
+                }}>Poista</button></td>
               </tr>
             );
           })}

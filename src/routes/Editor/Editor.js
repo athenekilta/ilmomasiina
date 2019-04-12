@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 
 import './Editor.scss';
 import * as EditorActions from '../../modules/editor/actions';
+import * as AdminSignupActions from '../../modules/admin/actions';
 
 import BasicDetailsTab from './components/BasicDetailsTab';
 import QuotasTab from './components/QuotasTab';
@@ -236,8 +237,6 @@ class Editor extends React.Component {
       );
     }
 
-    console.log(this.props.event);
-
     return (
       <div className="event-editor">
         <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
@@ -280,7 +279,7 @@ class Editor extends React.Component {
               <EmailsTab event={this.props.event} onDataChange={this.onDataChange} />
             </div>
             <div className={`tab-pane ${this.state.activeTab === 5 ? 'active' : ''}`}>
-              <SignupsTab event={this.props.event} />
+              <SignupsTab event={this.props.event} deleteSignup={this.props.deleteSignup} />
             </div>
           </div>
         </Formsy.Form>
@@ -295,6 +294,7 @@ const mapDispatchToProps = {
   getEventAsync: EditorActions.getEventAsync,
   setEvent: EditorActions.setEvent,
   updateEventField: EditorActions.updateEventField,
+  deleteSignup: AdminSignupActions.deleteSignupAsync,
 };
 
 const mapStateToProps = state => ({
