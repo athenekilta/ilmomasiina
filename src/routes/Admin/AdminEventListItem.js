@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router';
 import _ from 'lodash';
-import { CSVLink } from "react-csv";
 import Separator from '../../components/Separator';
 
 /* Render a single item
@@ -30,10 +29,7 @@ class AdminEventListItem extends React.Component {
         <td>{signups}</td>
         <td>
           <Link to={`${PREFIX_URL}/admin/edit/${data.id}`}>Muokkaa tapahtumaa</Link>
-          {/* {<Separator />
-            <CSVLink
-              data={signups}
-              filename={data.title + " osallistujalista"}>Lataa osallistujalista</CSVLink> */}
+
           <Separator />
 
           <a onClick={() => this.props.onDelete(data.id)}>Poista tapahtuma</a>
