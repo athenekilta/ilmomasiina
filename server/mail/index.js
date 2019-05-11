@@ -1,9 +1,9 @@
-const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
-const Email = require('email-templates');
-const path = require('path');
-const mailgun = require('mailgun-js')({
+const ilmoconfig = require("../../config/ilmomasiina.config.js"); // eslint-disable-line
+const Email = require("email-templates");
+const path = require("path");
+const mailgun = require("mailgun-js")({
   apiKey: ilmoconfig.mailgunApiKey,
-  domain: ilmoconfig.mailgunDomain,
+  domain: ilmoconfig.mailgunDomain
 });
 
 const EmailService = {
@@ -12,7 +12,7 @@ const EmailService = {
       to,
       from: ilmoconfig.mailFrom,
       subject,
-      html,
+      html
     };
 
     mailgun.messages().send(msg, (error, body) => {
@@ -27,22 +27,24 @@ const EmailService = {
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: path.join(__dirname, 'css'),
-        },
-      },
+          relativeTo: path.join(__dirname, "css")
+        }
+      }
     });
     const brandedParams = {
       ...params,
       branding: {
         footerText: ilmoconfig.brandingMailFooterText,
-        footerLink: ilmoconfig.brandingMailFooterLink,
-      },
+        footerLink: ilmoconfig.brandingMailFooterLink
+      }
     };
 
     return email
-      .render('../server/mail/emails/confirmation/html', brandedParams)
+      .render("../server/mail/emails/confirmation/html", brandedParams)
       .then(html => {
-        const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
+        const subject = `${
+          params.edited ? "Muokkaus" : "Ilmoittautumis"
+        }vahvistus: ${params.event.title}`;
         return EmailService.send(to, subject, html);
       });
   },
@@ -53,26 +55,26 @@ const EmailService = {
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: path.join(__dirname, 'css'),
-        },
-      },
+          relativeTo: path.join(__dirname, "css")
+        }
+      }
     });
     const brandedParams = {
       ...params,
       branding: {
         footerText: ilmoconfig.brandingMailFooterText,
         footerLink: ilmoconfig.brandingMailFooterLink,
-        siteUrl: ilmoconfig.baseUrl,
-      },
+        siteUrl: ilmoconfig.baseUrl
+      }
     };
 
     return email
-      .render('../server/mail/emails/newUser/html', brandedParams)
+      .render("../server/mail/emails/newUser/html", brandedParams)
       .then(html => {
-        const subject = 'Käyttäjätunnukset Ilmomasiinaan';
+        const subject = "Käyttäjätunnukset Ilmomasiinaan";
         return EmailService.send(to, subject, html);
       });
-  },
+  }
 };
 
 module.exports = EmailService;
