@@ -1,9 +1,11 @@
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 const Email = require('email-templates');
 const path = require('path');
-const mailgun = require('mailgun-js')({
-  apiKey: ilmoconfig.mailgunApiKey,
-  domain: ilmoconfig.mailgunDomain,
+const nodemailer = require('nodemailer')
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.ayy.fi',
+  port: 25,
 });
 
 const EmailService = {
@@ -15,10 +17,7 @@ const EmailService = {
       html,
     };
 
-    mailgun.messages().send(msg, (error, body) => {
-      console.log(error);
-      console.log(body);
-    });
+    return transporter.sendMail(msg);
   },
 
   sendConfirmationMail(to, params) {
