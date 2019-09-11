@@ -23,10 +23,13 @@ module.exports = app => {
       },
     })
     .then(r => {
-      logger.info('Unconfirmed signups: ');
-      console.log('Unconfirmed signups: ');
-      console.log(r);
-      console.log(r.map(s => s.dataValues.id));
+      if (r.length > 0) {
+        logger.info('Unconfirmed signups: ');
+        logger.info(r);
+      } else {
+        logger.info('No unconfirmed signups');
+      }
+
       return r.map(s => s.dataValues.id);
     })
     .then(r => {
@@ -38,8 +41,10 @@ module.exports = app => {
               id,
             },
           })
-          .then(res => console.log(res))
-          .catch(error => console.log(error));
+          .then(res => logger.info('Deleted unconfirmed signups'))
+          .catch(error =>
+            logger.error('Error with unconfirmed signups (cron)'),
+          );
       });
     });
 };
