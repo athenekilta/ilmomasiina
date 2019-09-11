@@ -1,6 +1,7 @@
+const moment = require('moment')
 module.exports = () => hook => {
   const sequelize = hook.app.get('sequelize');
-
+  const Op = sequelize.Op
   hook.params.sequelize = {
     attributes: [
       'id',
@@ -14,6 +15,12 @@ module.exports = () => hook => {
     ],
     distinct: true,
     raw: false,
+    // filter out events older than 1 month
+    where: {
+      date: {
+        [Op.gt]: moment().subtract(30, 'days').toDate()
+      }
+    },
     // Include quotas of event and count of signups
     include: [
       {
