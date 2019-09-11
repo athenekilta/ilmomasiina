@@ -1,4 +1,5 @@
 const moment = require('moment');
+const logger = require('./logger');
 
 module.exports = app => {
   const models = app.get('models');
@@ -22,6 +23,7 @@ module.exports = app => {
       },
     })
     .then(r => {
+      logger.info('Unconfirmed signups: ');
       console.log('Unconfirmed signups: ');
       console.log(r);
       console.log(r.map(s => s.dataValues.id));
