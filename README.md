@@ -51,7 +51,7 @@ By default, only logged in admin users can create new admin users (via `/admin`)
 
 ## Production
 
-**Important**: Ilmomasiina is currently on alpha stage. It's not completely stable. Things might break.
+**Important**: Ilmomasiina is currently on alpha stage. Use it with your own risk.
 
 Example of `.htaccess` config:
 
@@ -75,7 +75,16 @@ PREFIX_URL=/ilmo
 PORT=2011
 ```
 
-With some hosting providers you might need to request the access to the port.
+With some hosting providers (such as Otax) you might need to request the access to the port.
+Running production version within pm2 is recommended
+
+## Updating production
+
+```
+git pull otax/master
+npm run compile
+pm2 restart prod-server
+```
 
 ## Documentation
 
