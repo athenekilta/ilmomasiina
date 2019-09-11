@@ -13,6 +13,41 @@ const enforce = require('express-sslify');
 const models = require('./models');
 const services = require('./services');
 const deleteUnconfirmedEntries = require('./cron-delete-unconfirmed-entries');
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.prettyPrint(),
+    winston.format.ms(),
+  ),
+  transports: [
+    // - Write to all logs with level `info` and below to `combined.log`
+    // - Write all logs error (and below) to `error.log`.
+    new winston.transports.File({
+      filename: './log/error.log',
+      level: 'error',
+    }),
+    new winston.transports.File({ filename: './log/combined.log' }),
+  ],
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.timestamp({
+          format: 'YYYY-MM-DD HH:mm:ss',
+        }),
+        winston.format.printf(
+          info => `${info.timestamp} ${info.level}: ${info.message} ${info.ms}`,
+        ),
+      ),
+    }),
+  );
+}
 
 const app = feathers();
 
@@ -34,7 +69,7 @@ app.get('sequelize').sync();
  */
 
 cron.schedule('* * * * *', () => {
-  console.log('running a task every minute');
+  logger.info('Running cron task to destroy unconfirmed signups');
   deleteUnconfirmedEntries(app);
 });
 
@@ -72,17 +107,18 @@ if (project.env === 'development') {
 } else {
   debug(
     'Server is being run outside of live development mode, meaning it will ' +
-    'only serve the compiled application bundle in ~/dist. Generally you ' +
-    'do not need an application server for this and can instead use a web ' +
-    'server such as nginx to serve your static files. See the "deployment" ' +
-    'section in the README for more information on deployment strategies.', // eslint-disable-line
+      'only serve the compiled application bundle in ~/dist. Generally you ' +
+      'do not need an application server for this and can instead use a web ' +
+      'server such as nginx to serve your static files. See the "deployment" ' +
+      'section in the README for more information on deployment strategies.', // eslint-disable-line
   );
 
   // Serving ~/dist by default. Ideally these files should be served by
   // the web server and not the app server, but this helps to demo the
   // server in production.
 
-  app.use(express.static(project.paths.dist()))
+  app
+    .use(express.static(project.paths.dist()))
     .use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 

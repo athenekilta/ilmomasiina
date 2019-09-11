@@ -194,6 +194,7 @@
     "then-request": "^2.2.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
+    "winston": "^3.2.1",
     "yargs": "^6.3.0"
   },
   "devDependencies": {
