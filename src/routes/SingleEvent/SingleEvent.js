@@ -154,7 +154,7 @@ class SingleEvent extends React.Component {
   renderQuotaStatus() {
     const { event, quotaData } = this.props;
 
-    if (!event.quota || event.quota.length === 0) {
+    if (!event.quota || event.quota.length === 0 || !event.signupsPublic) {
       return null;
     }
 
