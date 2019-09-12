@@ -1,3 +1,17 @@
+# Current status
+
+```diff
+- Hello you random bypasser! 
+
+- Ilmomasiina is currently at alpha testing phase. You use it. Something breaks? You fix it.
+
+- In case you're interested in development. We heavily recommend you to contact @peksi
+
+```
+
+Current defelopment is being held on `otax/production` branch.
+
+
 # Ilmomasiina
 
 Ilmomasiina is Athene's event registration system.
