@@ -28,4 +28,5 @@
 
 .bodyText {
   color: black;
+  white-space: pre-line;
 }
