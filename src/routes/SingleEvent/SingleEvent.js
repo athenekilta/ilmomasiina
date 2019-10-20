@@ -186,11 +186,11 @@ class SingleEvent extends React.Component {
                       <strong>Hinta:</strong> {event.price}
                     </p>
                   ) : null}
-                  {event.homepage ? (
+                  {event.webpageUrl ? (
                     <p>
                       <strong>Kotisivut:</strong>{' '}
-                      <a href={event.homepage} title="Kotisivut">
-                        {event.homepage}
+                      <a href={event.webpageUrl} title="Kotisivut">
+                        {event.webpageUrl}
                       </a>
                     </p>
                   ) : null}
