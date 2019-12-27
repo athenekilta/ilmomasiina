@@ -1,17 +1,15 @@
+import { connectRouter } from 'connected-react-router';
 import { combineReducers } from 'redux';
-import locationReducer from './location';
-import { routerReducer } from 'react-router-redux';
 
 import admin from '../modules/admin/reducer';
 import editor from '../modules/editor/reducer';
+import editSignup from '../modules/editSignup/reducer';
 import events from '../modules/events/reducer';
 import singleEvent from '../modules/singleEvent/reducer';
-import editSignup from '../modules/editSignup/reducer';
 
-export const makeRootReducer = asyncReducers =>
+export const makeRootReducer = (asyncReducers, history) =>
   combineReducers({
-    location: locationReducer,
-    routing: routerReducer,
+    router: connectRouter(history),
     admin,
     editor,
     events,

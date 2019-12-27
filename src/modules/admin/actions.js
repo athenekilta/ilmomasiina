@@ -1,7 +1,9 @@
+import { push } from 'connected-react-router';
 import request from 'then-request';
-import { push } from 'react-router-redux';
+
+import * as EditorActions from '../editor/actions.js';
 import * as ActionTypes from './actionTypes';
-import * as EditorActions from './../editor/actions.js'
+
 export const setEvents = events => dispatch => {
   dispatch({
     type: ActionTypes.SET_EVENTS,
@@ -24,7 +26,7 @@ export const setEventsError = () => dispatch => {
 export const getEventsAsync = () => (dispatch, getState) => {
   dispatch(setEventsLoading());
 
-  const accessToken = getState().admin.accessToken;
+  const { accessToken } = getState().admin;
 
   request('GET', `${PREFIX_URL}/api/admin/events`, {
     headers: { Authorization: accessToken },
@@ -39,24 +41,20 @@ export const getEventsAsync = () => (dispatch, getState) => {
     });
 };
 
-export const createUserAsync = (data) => (dispatch, getState) => {
-  const accessToken = getState().admin.accessToken;
-  console.log(email)
+export const createUserAsync = data => (dispatch, getState) => {
+  const { accessToken } = getState().admin;
+  console.log(email);
   return request('POST', `${PREFIX_URL}/api/users`, {
     headers: { Authorization: accessToken },
-    json: { email: data.email }
+    json: { email: data.email },
   })
     .then(res => JSON.parse(res.body))
-    .then(res => {
-      return true
-    })
+    .then(res => true)
     .catch(error => {
       console.error('Error in createUserAsync', error);
-      return false
-
+      return false;
     });
 };
-
 
 export const setAccessToken = token => dispatch => {
   dispatch({
@@ -99,7 +97,7 @@ export const login = (email, password) => dispatch => {
     })
     .then(res => {
       if (!res) {
-        return false
+        return false;
       }
       dispatch(setAccessToken(res.accessToken));
       dispatch({ type: ActionTypes.SET_LOGIN_STATUS, payload: true });
@@ -117,14 +115,12 @@ export const redirectToLogin = () => dispatch => {
 };
 
 export const deleteEventAsync = id => (dispatch, getState) => {
-  const accessToken = getState().admin.accessToken;
+  const { accessToken } = getState().admin;
 
   return request('DELETE', `${PREFIX_URL}/api/admin/events/${id}`, {
     headers: { Authorization: accessToken },
   })
-    .then(res => {
-      return true;
-    })
+    .then(res => true)
     .catch(error => {
       console.error('Error in deleteEventAsync', error);
       return false;
@@ -132,16 +128,16 @@ export const deleteEventAsync = id => (dispatch, getState) => {
 };
 
 export const deleteSignupAsync = (id, eventId) => (dispatch, getState) => {
-  const accessToken = getState().admin.accessToken;
+  const { accessToken } = getState().admin;
   return request('DELETE', `${PREFIX_URL}/api/admin/signups/${id}`, {
     headers: { Authorization: accessToken },
   })
     .then(res => JSON.parse(res.body))
-    .then((res) => {
-      dispatch(EditorActions.getEventAsync(eventId, accessToken)) // TODO UPDATE THE ROWS, THIS DOESNT WORK
+    .then(res => {
+      dispatch(EditorActions.getEventAsync(eventId, accessToken)); // TODO UPDATE THE ROWS, THIS DOESNT WORK
       return true;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error in deleteSignupAsync', error);
       dispatch(setError());
       return false;
