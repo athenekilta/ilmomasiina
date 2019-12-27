@@ -1,5 +1,6 @@
-import * as ActionTypes from "./actionTypes";
 import moment from 'moment';
+
+import * as ActionTypes from './actionTypes';
 
 const initialState = {
   events: [],
@@ -36,7 +37,10 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         accessToken: action.payload,
-        accessTokenExpires: moment(new Date()).add(60, 'm').toDate().toISOString(),
+        accessTokenExpires: moment(new Date())
+          .add(60, 'm')
+          .toDate()
+          .toISOString(),
         loginLoading: false,
       };
     case ActionTypes.SET_LOGIN_LOADING:

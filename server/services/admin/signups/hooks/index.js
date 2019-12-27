@@ -1,16 +1,15 @@
-const authentication = require('feathers-authentication');
-const deleteSignup = require('./deleteSignup.js');
+const { authenticate } = require('@feathersjs/authentication').hooks;
 const hooks = require('feathers-hooks-common');
+const deleteSignup = require('./deleteSignup.js');
 
 exports.before = {
-    all: [authentication.hooks.authenticate('jwt')],
-    find: [hooks.disable('external')],
-    get: [hooks.disable('external')],
-    create: [hooks.disable('external')],
-    update: [hooks.disable('external')],
-    patch: [hooks.disable('external')],
-    remove: [deleteSignup()],
-
+  all: [authenticate('jwt')],
+  find: [hooks.disallow('external')],
+  get: [hooks.disallow('external')],
+  create: [hooks.disallow('external')],
+  update: [hooks.disallow('external')],
+  patch: [hooks.disallow('external')],
+  remove: [deleteSignup()],
 };
 
 exports.after = {};

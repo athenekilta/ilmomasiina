@@ -1,8 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
+import { Checkbox, Input } from 'formsy-react-components';
 import _ from 'lodash';
-import { Input, Checkbox } from 'formsy-react-components';
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc';
+import PropTypes from 'prop-types';
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle,
+} from 'react-sortable-hoc';
+
 import DateTimePicker from './DateTimePicker';
 
 const DragHandle = SortableHandle(() => <span className="handler" />); // This can be any component you want
@@ -17,7 +23,12 @@ const SortableItem = SortableElement(({ value }) => (
 const SortableItems = SortableContainer(({ collection, items }) => (
   <div>
     {items.map((value, index) => (
-      <SortableItem collection={collection} key={index} index={index} value={value} />
+      <SortableItem
+        collection={collection}
+        key={index}
+        index={index}
+        value={value}
+      />
     ))}
   </div>
 ));
@@ -48,7 +59,7 @@ class QuotasTab extends React.Component {
   }
 
   updateOrder(args) {
-    let newQuotas = this.props.event.quota;
+    const newQuotas = this.props.event.quota;
 
     const elementToMove = newQuotas[args.oldIndex];
     newQuotas.splice(args.oldIndex, 1);
@@ -60,21 +71,19 @@ class QuotasTab extends React.Component {
   updateQuota(itemId, field, value) {
     const quotas = this.props.event.quota ? this.props.event.quota : [];
 
-    const newQuotas = _.map(quotas, (quota) => {
+    const newQuotas = _.map(quotas, quota => {
       if (quota.id === itemId) {
-        if (field === "size" && value === '') {
+        if (field === 'size' && value === '') {
           return {
             ...quota,
             [field]: null,
           };
         }
-        else {
-          return {
-            ...quota,
-            [field]: value,
-          };
-        }
 
+        return {
+          ...quota,
+          [field]: value,
+        };
       }
 
       return quota;
@@ -85,7 +94,7 @@ class QuotasTab extends React.Component {
 
   removeQuota(itemId) {
     const quotas = this.props.event.quota ? this.props.event.quota : [];
-    const newQuotas = _.filter(quotas, (quota) => {
+    const newQuotas = _.filter(quotas, quota => {
       if (quota.id === itemId) {
         return false;
       }
@@ -106,7 +115,9 @@ class QuotasTab extends React.Component {
             label="Kiintiön nimi"
             type="text"
             required
-            onChange={(field, value) => this.updateQuota(item.id, 'title', value)}
+            onChange={(field, value) =>
+              this.updateQuota(item.id, 'title', value)
+            }
             help={
               index === 0
                 ? 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.'
@@ -118,9 +129,10 @@ class QuotasTab extends React.Component {
             value={item.size}
             label="Kiintiön koko"
             type="number"
-            validations="isInt"
-            min={0}
-            onChange={(field, value) => this.updateQuota(item.id, 'size', value)}
+            validations="minLength:0"
+            onChange={(field, value) =>
+              this.updateQuota(item.id, 'size', value)
+            }
             help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi."
           />
         </div>
@@ -132,7 +144,14 @@ class QuotasTab extends React.Component {
       </div>
     ));
 
-    return <SortableItems collection="quotas" items={q} onSortEnd={this.updateOrder} useDragHandle />;
+    return (
+      <SortableItems
+        collection="quotas"
+        items={q}
+        onSortEnd={this.updateOrder}
+        useDragHandle
+      />
+    );
   }
 
   renderQuotaSection() {
@@ -155,8 +174,9 @@ class QuotasTab extends React.Component {
           <Input
             name="openQuotaSize"
             label="Avoimen kiintiön koko"
-            type="number"
             value={this.props.event.openQuotaSize}
+            type="number"
+            validations="minLength:0"
             required
             onChange={this.props.onDataChange}
           />

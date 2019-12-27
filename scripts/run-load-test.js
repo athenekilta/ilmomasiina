@@ -1,5 +1,5 @@
 const debug = require('debug')('app:script');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 const _ = require('lodash');
 const moment = require('moment');
 const faker = require('faker');
@@ -21,23 +21,23 @@ const events = [
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
     homepage: '',
-    draft: 0,
+    draft: false,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1,
-  },
+    signupsPublic: 1
+  }
 ];
 
 const quotas = [
   {
     eventId: 1,
     title: 'Rasittajat 1',
-    size: 100,
+    size: 100
   },
   {
     eventId: 1,
     title: 'Rasittajat 2',
-    size: 50,
-  },
+    size: 50
+  }
 ];
 
 const questions = [];
@@ -58,7 +58,7 @@ quotas.map((quota, quotaIndex) => {
       confirmedAt: moment().subtract('1', 'minutes'),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: faker.internet.email(),
+      email: faker.internet.email()
     });
 
     signupIndex += 1;
@@ -82,67 +82,65 @@ seq.models.event
   .then(() => seq.models.question.bulkCreate(questions))
   .then(() =>
     console.log(
-      `${events.length} events with ${quotas.length} quotas and ${
-        questions.length
-      } questions created.`,
-    ),
+    `${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`
+  )
   )
   .then(() => seq.close())
   .then(() => console.log('Creating fake data finished.'))
   .catch(err => console.log(err));
 
-setTimeout(function delay() {
+setTimeout(() => {
   const apiUrl = 'https://athene.fi/ilmo/api/signups/';
   for (let i = 1; i <= 100; i++) {
-    setTimeout(function timer() {
+    setTimeout(() => {
       axios
         .post(apiUrl, { quotaId: 1 })
-        .then(function(response) {
-          console.log('Got edit token ' + response.data.editToken);
-          let postData = {
+        .then(response => {
+          console.log(`Got edit token ${response.data.editToken}`);
+          const postData = {
             answers: [],
             editToken: response.data.editToken,
             email: 'fake@example.com',
-            firstName: 'Rasitusgubbe ' + i,
+            firstName: `Rasitusgubbe ${i}`,
             lastName: faker.name.lastName(),
           };
           axios
             .patch(apiUrl + response.data.id, postData)
-            .then(function(response) {
+            .then((response) => {
               console.log('Success');
             })
-            .catch(function(error) {
+            .catch((error) => {
               console.log(error);
             });
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log(error);
         });
     }, i * 100);
   }
   for (let i = 1; i <= 45; i++) {
-    setTimeout(function timer() {
+    setTimeout(() => {
       axios
         .post(apiUrl, { quotaId: 2 })
-        .then(function(response) {
-          console.log('Got edit token ' + response.data.editToken);
-          let postData = {
+        .then(response => {
+          console.log(`Got edit token ${response.data.editToken}`);
+          const postData = {
             answers: [],
             editToken: response.data.editToken,
             email: 'fake@example.com',
-            firstName: 'Rasitusgubbe ' + i,
+            firstName: `Rasitusgubbe ${i}`,
             lastName: faker.name.lastName(),
           };
           axios
             .patch(apiUrl + response.data.id, postData)
-            .then(function(response) {
+            .then((response) => {
               console.log('Success');
             })
-            .catch(function(error) {
+            .catch((error) => {
               console.log(error);
             });
         })
-        .catch(function(error) {
+        .catch(error => {
           console.log(error);
         });
     }, i * 100);

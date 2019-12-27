@@ -26,34 +26,25 @@ module.exports = () => hook => {
       {
         attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
         model: sequelize.models.question,
+        required: true,
       },
       // Include quotas..
       {
         attributes: ['title', 'size', 'id'],
         model: sequelize.models.quota,
-        // include: [
-        //   {
-        //     all: true,
-        //     nested: true,
-        //   },
-        // ],
-
+        required: true,
         // ... and signups of quotas
-        include: [
-          {
-            attributes: ['firstName', 'lastName', 'email', 'createdAt', 'id'],
-            model: sequelize.models.signup,
+        include: {
+          attributes: ['firstName', 'lastName', 'email', 'createdAt', 'id'],
+          model: sequelize.models.signup,
+          required: false,
+          // ... and answers of signups
+          include: {
             required: false,
-            // ... and answers of signups
-            include: [
-              {
-                required: false,
-                attributes: ['questionId', 'answer'],
-                model: sequelize.models.answer,
-              },
-            ],
+            attributes: ['questionId', 'answer'],
+            model: sequelize.models.answer,
           },
-        ],
+        },
       },
     ],
   };

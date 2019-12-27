@@ -1,5 +1,5 @@
 const debug = require('debug')('app:script');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 
 const models = require('../server/models');
 
@@ -10,7 +10,8 @@ app.configure(models);
 
 const seq = app.get('sequelize');
 
-seq.sync({ force: true })
+seq
+  .sync({ force: true })
   .then(() => seq.close())
   .then(() => debug('Database reset finished.'));
 

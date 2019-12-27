@@ -1,7 +1,7 @@
 import React from 'react';
+
+import { Form, Input } from 'formsy-react-components';
 import PropTypes from 'prop-types';
-import Formsy from 'formsy-react';
-import { Input } from 'formsy-react-components';
 import { connect } from 'react-redux';
 
 import * as AdminActions from '../../modules/admin/actions';
@@ -26,8 +26,8 @@ class Login extends React.Component {
     return (
       <div className="container" style={{ maxWidth: '400px' }}>
         <h1>Kirjaudu</h1>
-        {this.props.loginError ? <p>Kirjautuminen epäonnistui</p> : ''}
-        <Formsy.Form>
+        {this.props.loginError && <p>Kirjautuminen epäonnistui</p>}
+        <Form>
           <Input
             value={this.state.email}
             onChange={(key, value) => this.setState({ email: value })}
@@ -51,14 +51,14 @@ class Login extends React.Component {
           />
           <button
             className="btn btn-default"
-            onClick={(e) => {
+            onClick={e => {
               e.preventDefault();
               this.props.login(this.state.email, this.state.password);
             }}
           >
             Kirjaudu
           </button>
-        </Formsy.Form>
+        </Form>
       </div>
     );
   }
@@ -73,7 +73,4 @@ const mapDispatchToProps = {
   login: AdminActions.login,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

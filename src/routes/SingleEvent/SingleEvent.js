@@ -1,24 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import nl2br from 'react-nl2br';
+
 import _ from 'lodash';
 import moment from 'moment';
-import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+import Countdown from 'react-countdown-now';
+import nl2br from 'react-nl2br';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import * as SingleEventActions from '../../modules/singleEvent/actions';
+import {
+  getFormattedQuestions,
+  getQuotaData,
+} from '../../modules/singleEvent/selectors';
+import signupState from '../../utils/signupStateText';
+import { OPENQUOTA, WAITLIST } from '../../utils/signupUtils';
+import EnrollForm from './components/EnrollForm';
 import SignupButton from './components/SignupButton';
 import SignupList from './components/SignupList';
 import ViewProgress from './components/ViewProgress';
-import EnrollForm from './components/EnrollForm';
-import signupState from '../../utils/signupStateText';
+
 import './SingleEvent.scss';
-import {
-  getQuotaData,
-  getFormattedQuestions,
-} from '../../modules/singleEvent/selectors';
-import { WAITLIST, OPENQUOTA } from '../../utils/signupUtils';
-import { Link } from 'react-router';
-import Countdown from 'react-countdown-now';
 
 class SingleEvent extends React.Component {
   static propTypes = {
@@ -47,8 +50,9 @@ class SingleEvent extends React.Component {
   }
 
   componentDidMount() {
-    this.props.updateEventAsync(this.props.params.id);
+    this.props.updateEventAsync(this.props.match.params.id);
   }
+
   openForm(quota) {
     this.props.attachPositionAsync(quota.id);
     this.setState({ formOpened: true });
@@ -56,13 +60,13 @@ class SingleEvent extends React.Component {
 
   closeForm() {
     const close = window.confirm(
-      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.',
+      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.'
     );
 
     if (close) {
       this.props.cancelSignupAsync(
         this.props.signup.id,
-        this.props.signup.editToken,
+        this.props.signup.editToken
       );
       this.setState({ formOpened: false });
     }
@@ -77,9 +81,9 @@ class SingleEvent extends React.Component {
       {
         editToken: this.props.signup.editToken,
         ...answers,
-      },
+      }
     );
-    let success = response === true;
+    const success = response === true;
     if (success) {
       toast.update(this.toastId, {
         render: 'Ilmoittautuminen onnistui!',
@@ -91,7 +95,7 @@ class SingleEvent extends React.Component {
         formOpened: false,
       });
     } else {
-      let toast_text =
+      const toast_text =
         'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
       toast.update(this.toastId, {
         render: toast_text,
@@ -115,37 +119,37 @@ class SingleEvent extends React.Component {
     return (
       <div>
         <h2>Ilmoittautuneet</h2>
-        {_.map(Object.keys(quotaData), quotaName => {
+        {_.map(_.keys(quotaData), quotaName => {
           const quota = quotaData[quotaName];
 
           if (quotaName === WAITLIST) {
             return (
               <SignupList
-                title={'Jonossa'}
+                title="Jonossa"
                 questions={_.filter(formattedQuestions, 'public')}
-                rows={quota.signups}
-                key={quotaName}
-              />
-            );
-          } else if (quotaName === OPENQUOTA) {
-            return (
-              <SignupList
-                title={'Avoin kiintiö'}
-                questions={_.filter(formattedQuestions, 'public')}
-                rows={quota.signups}
-                key={quotaName}
-              />
-            );
-          } else {
-            return (
-              <SignupList
-                title={quotaName}
-                questions={_.filter(event.questions, 'public')}
                 rows={quota.signups}
                 key={quotaName}
               />
             );
           }
+          if (quotaName === OPENQUOTA) {
+            return (
+              <SignupList
+                title="Avoin kiintiö"
+                questions={_.filter(formattedQuestions, 'public')}
+                rows={quota.signups}
+                key={quotaName}
+              />
+            );
+          }
+          return (
+            <SignupList
+              title={quotaName}
+              questions={_.filter(event.questions, 'public')}
+              rows={quota.signups}
+              key={quotaName}
+            />
+          );
         })}
       </div>
     );
@@ -161,7 +165,7 @@ class SingleEvent extends React.Component {
     return (
       <div className="sidebar-widget">
         <h3>Ilmoittautuneet</h3>
-        {_.map(Object.keys(quotaData), quotaName => {
+        {_.map(_.keys(quotaData), quotaName => {
           const quota = quotaData[quotaName];
           if (quotaName === OPENQUOTA) {
             return (
@@ -172,27 +176,29 @@ class SingleEvent extends React.Component {
                 key={quotaName}
               />
             );
-          } else if (quotaName === WAITLIST) {
+          }
+          if (quotaName === WAITLIST) {
             if (quota.signups && quota.signups.length > 0) {
-              return <p>{`Jonossa: ${quota.signups.length}`}</p>;
+              return (
+                <p key={quotaName}>{`Jonossa: ${quota.signups.length}`}</p>
+              );
             }
             return null;
-          } else {
-            return (
-              <ViewProgress
-                title={quotaName}
-                value={Math.min(quota.signups.length, quota.size)}
-                max={quota.size}
-                key={quotaName}
-              />
-            );
           }
+          return (
+            <ViewProgress
+              title={quotaName}
+              value={Math.min(quota.signups.length, quota.size)}
+              max={quota.size}
+              key={quotaName}
+            />
+          );
         })}
       </div>
     );
   }
-  signupButtonRenderer(event, isOpen, total, seconds, ) {
 
+  signupButtonRenderer(event, isOpen, total, seconds) {
     return (
       <div className="sidebar-widget">
         <h3>Ilmoittautuminen</h3>
@@ -201,35 +207,43 @@ class SingleEvent extends React.Component {
             signupState(
               event.date,
               event.registrationStartDate,
-              event.registrationEndDate,
+              event.registrationEndDate
             ).label
           }
-          {total < 60000 && !isOpen ? <span style={{ color: "green" }} > {` (${seconds}  s)`}</span> : null}
+          {total < 60000 && !isOpen ? (
+            <span style={{ color: 'green' }}> {` (${seconds}  s)`}</span>
+          ) : null}
         </p>
         {event.quota
           ? event.quota.map((quota, index) => (
-            <SignupButton
-              title={quota.title}
-              isOpen={isOpen && !event.registrationClosed}
-              openForm={() => this.openForm(quota)}
-              isOnly={event.quota.length === 1}
-              key={index} />
-
-          ))
+              <SignupButton
+                title={quota.title}
+                isOpen={isOpen && !event.registrationClosed}
+                openForm={() => this.openForm(quota)}
+                isOnly={event.quota.length === 1}
+                key={index}
+              />
+            ))
           : ''}
       </div>
-    )
-
+    );
   }
+
   renderSignupButtons() {
     const { event } = this.props;
     return (
       <Countdown
-        daysInHours={true}
+        daysInHours
         date={new Date(new Date().getTime() + event.millisTillOpening)}
-        renderer={props => this.signupButtonRenderer(event, props.completed, props.total, props.seconds)}>
-      </Countdown>
-
+        renderer={props =>
+          this.signupButtonRenderer(
+            event,
+            props.completed,
+            props.total,
+            props.seconds
+          )
+        }
+      />
     );
   }
 
@@ -250,58 +264,57 @@ class SingleEvent extends React.Component {
             key={event.id}
           />
         ) : (
-            <div className="container singleEventContainer">
-              <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
-                &#8592; Takaisin
+          <div className="container singleEventContainer">
+            <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
+              &#8592; Takaisin
             </Link>
-              <div className="row">
-                <div className="col-xs-12 col-sm-8">
-                  <h1>{event.title}</h1>
-                  <div className="event-heading">
-                    {event.date ? (
-                      <p>
-                        <strong>Ajankohta:</strong>{' '}
-                        {moment(event.date).format('D.M.Y [klo] HH:mm')}
-                      </p>
-                    ) : null}
-                    {event.location ? (
-                      <p>
-                        <strong>Sijainti:</strong> {event.location}
-                      </p>
-                    ) : null}
-                    {event.price ? (
-                      <p>
-                        <strong>Hinta:</strong> {event.price}
-                      </p>
-                    ) : null}
-                    {event.homepage ? (
-                      <p>
-                        <strong>Kotisivut:</strong>{' '}
-                        <a href={event.homepage} title="Kotisivut">
-                          {event.homepage}
-                        </a>
-                      </p>
-                    ) : null}
-                    {event.facebook ? (
-                      <p>
-                        <strong>Facebook-tapahtuma:</strong>{' '}
-                        <a href={event.facebook} title="Facebook-tapahtuma">
-                          {event.facebook}
-                        </a>
-                      </p>
-                    ) : null}
-                  </div>
-                  <p>{nl2br(event.description)}</p>
+            <div className="row">
+              <div className="col-xs-12 col-sm-8">
+                <h1>{event.title}</h1>
+                <div className="event-heading">
+                  {event.date ? (
+                    <p>
+                      <strong>Ajankohta:</strong>{' '}
+                      {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                    </p>
+                  ) : null}
+                  {event.location ? (
+                    <p>
+                      <strong>Sijainti:</strong> {event.location}
+                    </p>
+                  ) : null}
+                  {event.price ? (
+                    <p>
+                      <strong>Hinta:</strong> {event.price}
+                    </p>
+                  ) : null}
+                  {event.homepage ? (
+                    <p>
+                      <strong>Kotisivut:</strong>{' '}
+                      <a href={event.homepage} title="Kotisivut">
+                        {event.homepage}
+                      </a>
+                    </p>
+                  ) : null}
+                  {event.facebook ? (
+                    <p>
+                      <strong>Facebook-tapahtuma:</strong>{' '}
+                      <a href={event.facebook} title="Facebook-tapahtuma">
+                        {event.facebook}
+                      </a>
+                    </p>
+                  ) : null}
                 </div>
-                <div className="col-xs-12 col-sm-4 pull-right">
-                  {this.renderSignupButtons()}
-                  {this.renderQuotaStatus()}
-                </div>
-                <div className="col-xs-12">{this.renderSignupLists()}</div>
+                <p>{nl2br(event.description)}</p>
               </div>
+              <div className="col-xs-12 col-sm-4 pull-right">
+                {this.renderSignupButtons()}
+                {this.renderQuotaStatus()}
+              </div>
+              <div className="col-xs-12">{this.renderSignupLists()}</div>
             </div>
-          )
-        }
+          </div>
+        )}
       </div>
     );
   }
@@ -325,7 +338,4 @@ const mapStateToProps = state => ({
   formattedQuestions: getFormattedQuestions(state),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SingleEvent);
+export default connect(mapStateToProps, mapDispatchToProps)(SingleEvent);

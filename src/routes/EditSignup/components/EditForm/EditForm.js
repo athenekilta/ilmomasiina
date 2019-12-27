@@ -1,21 +1,30 @@
 import React from 'react';
-import Formsy from 'formsy-react';
-import { Link } from 'react-router';
-import _ from 'lodash';
 
-import { CheckboxGroup, Select, Input, Textarea } from 'formsy-react-components';
+import {
+  CheckboxGroup,
+  Form,
+  Input,
+  Select,
+  Textarea,
+} from 'formsy-react-components';
+import _ from 'lodash';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+
 import './EditForm.scss';
 
 export class EditForm extends React.Component {
   constructor(props) {
     super(props);
     this.parseSubmit = this.parseSubmit.bind(this);
-    this.setError = this.setError.bind(this)
-    this.state = { inputError: false }
+    this.setError = this.setError.bind(this);
+    this.state = { inputError: false };
   }
+
   setError() {
-    this.setState({ inputError: true })
+    this.setState({ inputError: true });
   }
+
   parseSubmit(data) {
     const answers = {
       firstName: this.props.signup.firstName,
@@ -26,13 +35,17 @@ export class EditForm extends React.Component {
 
     if (this.props.questions) {
       answers.answers = this.props.questions
-        .map((question) => {
+        .map(question => {
           const questionId = question.id;
           const answer = data[question.id];
 
           if (answer && answer.length > 0) {
             if (question.type === 'checkbox') {
-              return { id: question.answerId, questionId, answer: answer.join(';') };
+              return {
+                id: question.answerId,
+                questionId,
+                answer: answer.join(';'),
+              };
             }
             return { id: question.answerId, questionId, answer };
           }
@@ -46,8 +59,10 @@ export class EditForm extends React.Component {
   }
 
   renderQuestionFields() {
-    return _.map(this.props.questions, (question) => {
-      const help = question.public ? 'Tämän kentän vastaukset ovat julkisia.' : null;
+    return _.map(this.props.questions, question => {
+      const help = question.public
+        ? 'Tämän kentän vastaukset ovat julkisia.'
+        : null;
 
       if (question.type === 'text') {
         return (
@@ -93,10 +108,11 @@ export class EditForm extends React.Component {
       }
 
       if (question.type === 'select') {
+        const optionsArray = [{ label: 'Valitse...', value: null }];
 
-        let optionsArray = [{ label: "Valitse...", value: null }];
-
-        question.options.split(';').map(option => optionsArray.push({ label: option }));
+        question.options
+          .split(';')
+          .map(option => optionsArray.push({ label: option }));
 
         return (
           <Select
@@ -118,7 +134,9 @@ export class EditForm extends React.Component {
             name={String(question.id)}
             label={question.question}
             required={question.required}
-            options={question.options.split(';').map(option => ({ label: option, value: option }))}
+            options={question.options
+              .split(';')
+              .map(option => ({ label: option, value: option }))}
             key={question.id}
             help={help}
             value={question.answer.split(';')}
@@ -135,11 +153,18 @@ export class EditForm extends React.Component {
       <div className="form-wrapper">
         <div className="container">
           <div className="col-xs-12 col-md-8 col-md-offset-2">
-            {this.state.inputError ? <p style={{ color: "#a94442" }}>Ilmoittautumisessasi on virheitä.</p> : null}
+            {this.state.inputError ? (
+              <p style={{ color: '#a94442' }}>
+                Ilmoittautumisessasi on virheitä.
+              </p>
+            ) : null}
             <h2>Muokkaa ilmoittautumista</h2>
             {this.props.signup.status != null ? <p>{signupStatus()}</p> : null}
 
-            <Formsy.Form onValidSubmit={this.parseSubmit} onInvalidSubmit={this.setError}>
+            <Form
+              onValidSubmit={this.parseSubmit}
+              onInvalidSubmit={this.setError}
+            >
               <Input
                 name="firstName"
                 value={this.props.signup.firstName}
@@ -174,26 +199,26 @@ export class EditForm extends React.Component {
                   className="btn btn-primary pull-right"
                   formNoValidate
                   type="submit"
-                  defaultValue="Päivitä"
+                  value="Päivitä"
                   disabled={this.props.loading}
                 />
               </div>
-              <Link className="btn btn-link pull-right" to={`${PREFIX_URL}/`} >
+              <Link className="btn btn-link pull-right" to={`${PREFIX_URL}/`}>
                 Peruuta
               </Link>
-            </Formsy.Form>
+            </Form>
           </div>
           <div className="cf" />
         </div>
-      </div >
+      </div>
     );
   }
 }
 
 EditForm.propTypes = {
-  questions: React.PropTypes.array,
-  signup: React.PropTypes.object,
-  loading: React.PropTypes.bool,
+  questions: PropTypes.array,
+  signup: PropTypes.object,
+  loading: PropTypes.bool,
 };
 
 export default EditForm;

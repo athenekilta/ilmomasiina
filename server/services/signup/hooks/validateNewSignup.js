@@ -6,14 +6,13 @@ const signupsAllowed = (signupOpens, signupCloses) => {
 
   const isOpened = now.isSameOrAfter(moment(signupOpens));
   const isClosed = now.isAfter(moment(signupCloses));
-  const bothNull = (_.isNull(signupOpens) && _.isNull(signupCloses));
+  const bothNull = _.isNull(signupOpens) && _.isNull(signupCloses);
 
   return (isOpened && !isClosed) || bothNull;
 };
 
-
-module.exports = () => (hook) => {
-  const quotaId = hook.data.quotaId;
+module.exports = () => hook => {
+  const { quotaId } = hook.data;
 
   const isInt = n => n % 1 === 0;
 
@@ -21,18 +20,25 @@ module.exports = () => (hook) => {
     const quotas = hook.app.get('models').quota;
 
     // Check is quota open for signups
-    return quotas.findById(quotaId)
+    return quotas
+      .findByPk(quotaId)
       .catch(() => {
-        throw new Error('Quota doesn\'t exist.');
+        throw new Error("Quota doesn't exist.");
       })
-      .then((quota) => {
+      .then(quota => {
         const events = hook.app.get('models').event;
-        return events.findById(quota.eventId)
+        return events
+          .findByPk(quota.eventId)
           .catch(() => {
-            throw new Error('Event doesn\'t exist.');
+            throw new Error("Event doesn't exist.");
           })
-          .then((event) => {
-            if (!signupsAllowed(event.registrationStartDate, event.registrationEndDate)) {
+          .then(event => {
+            if (
+              !signupsAllowed(
+                event.registrationStartDate,
+                event.registrationEndDate
+              )
+            ) {
               throw new Error('Signups closed for this event.');
             }
           });

@@ -1,57 +1,58 @@
 import request from 'then-request';
+
 import * as ActionTypes from './actionTypes';
 
-export const setEvent = event => (dispatch) => {
+export const setEvent = event => dispatch => {
   dispatch({ type: ActionTypes.SET_EVENT, payload: event });
 };
 
-export const setEventLoading = () => (dispatch) => {
+export const setEventLoading = () => dispatch => {
   dispatch({ type: ActionTypes.SET_EVENT_LOADING });
 };
 
-export const setEventError = () => (dispatch) => {
+export const setEventError = () => dispatch => {
   dispatch({ type: ActionTypes.SET_EVENT_ERROR });
 };
 
-export const setSignup = signup => (dispatch) => {
+export const setSignup = signup => dispatch => {
   dispatch({ type: ActionTypes.SET_SIGNUP, payload: signup });
 };
 
-export const setSignupLoading = () => (dispatch) => {
+export const setSignupLoading = () => dispatch => {
   dispatch({ type: ActionTypes.SET_SIGNUP_LOADING });
 };
 
-export const setSignupError = () => (dispatch) => {
+export const setSignupError = () => dispatch => {
   dispatch({ type: ActionTypes.SET_SIGNUP_ERROR });
 };
 
-export const updateEventAsync = eventId => (dispatch) => {
+export const updateEventAsync = eventId => dispatch => {
   dispatch(setEventLoading());
   return request('GET', `${PREFIX_URL}/api/events/${eventId}`)
     .then(res => JSON.parse(res.body))
-    .then((res) => {
+    .then(res => {
       dispatch(setEvent(res));
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error in updateEventAsync', error);
       dispatch(setEventError());
     });
 };
 
-export const attachPositionAsync = quotaId => (dispatch) => {
+export const attachPositionAsync = quotaId => dispatch => {
   dispatch(setSignupLoading());
   return request('POST', `${PREFIX_URL}/api/signups`, { json: { quotaId } })
     .then(res => JSON.parse(res.body))
-    .then((res) => {
+    .then(res => {
       dispatch(setSignup(res));
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error in attachPositionAsync', error);
       dispatch(setSignupError());
     });
 };
 
-export const completeSignupAsync = (signupId, data) => (dispatch) => {
+export const completeSignupAsync = (signupId, data) => dispatch => {
   dispatch(setSignupLoading());
 
   return request('PATCH', `${PREFIX_URL}/api/signups/${signupId}`, {
@@ -63,32 +64,33 @@ export const completeSignupAsync = (signupId, data) => (dispatch) => {
       answers: data.answers,
     },
   })
-    .then(res =>
-      JSON.parse(res.body)
-    )
-    .then((res) => {
-      console.log(res)
+    .then(res => JSON.parse(res.body))
+    .then(res => {
+      console.log(res);
       if (res.code && res.code !== 200) {
-        throw new Error(res.message)
+        throw new Error(res.message);
       }
       dispatch(setSignup(res));
-      return true
+      return true;
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error in completeSignupAsync', error);
       dispatch(setSignupError());
-      return false
+      return false;
     });
 };
 
-export const cancelSignupAsync = (signupId, editToken) => (dispatch) => {
+export const cancelSignupAsync = (signupId, editToken) => dispatch => {
   dispatch(setSignupLoading());
-  return request('DELETE', `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`)
+  return request(
+    'DELETE',
+    `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`
+  )
     .then(res => JSON.parse(res.body))
     .then(() => {
       dispatch(setSignup({}));
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('Error in cancelSignupAsync', error);
       dispatch(setSignupError());
     });

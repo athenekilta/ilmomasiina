@@ -1,5 +1,5 @@
-import moment from 'moment';
 import _ from 'lodash';
+import moment from 'moment';
 
 const signupState = (eventTime, starts, closes) => {
   if (_.isEmpty(starts) || _.isEmpty(closes)) {

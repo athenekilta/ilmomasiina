@@ -1,21 +1,24 @@
 import React from 'react';
-import Header from '../../components/Header';
+
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+
 import Footer from '../../components/Footer';
+import Header from '../../components/Header';
+
 import './CoreLayout.scss';
 import '../../styles/core.scss';
 
 export const CoreLayout = ({ children }) => (
   <div className="layout-wrapper">
     <Header />
-    <div className="page-wrapper">
-      {children}
-    </div>
+    <div className="page-wrapper">{children}</div>
     <Footer />
   </div>
 );
 
 CoreLayout.propTypes = {
-  children: React.PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
-export default CoreLayout;
+export default withRouter(CoreLayout);

@@ -1,27 +1,23 @@
+const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const debug = require('debug')('app:server');
-const compress = require('compression');
-const feathers = require('feathers');
-const hooks = require('feathers-hooks');
-const rest = require('feathers-rest');
-const bodyParser = require('body-parser');
+const compression = require('compression');
 const webpack = require('webpack');
 const cron = require('node-cron');
+const enforce = require('express-sslify');
 const webpackConfig = require('../config/webpack.config');
 const project = require('../config/project.config');
-const enforce = require('express-sslify');
 const models = require('./models');
 const services = require('./services');
 const deleteUnconfirmedEntries = require('./cron-delete-unconfirmed-entries');
 
-const app = feathers();
+const app = express(feathers());
 
 app
-  .use(compress())
-  .use(bodyParser.json())
-  .use(bodyParser.urlencoded({ extended: true }))
-  .configure(hooks())
-  .configure(rest())
+  .use(compression())
+  .use(express.json())
+  .use(express.urlencoded({ extended: true }))
+  .configure(express.rest())
   .configure(models)
   .configure(services);
 
@@ -59,10 +55,10 @@ if (project.env === 'development') {
       noInfo: project.compiler_quiet,
       lazy: false,
       stats: project.compiler_stats,
-    }),
+    })
   );
 
-  app.use(require('webpack-hot-middleware')(compiler)); // eslint-disable-line
+  app.use(require("webpack-hot-middleware")(compiler)); // eslint-disable-line
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside
@@ -70,19 +66,18 @@ if (project.env === 'development') {
   // when the application is compiled.
   app.use(express.static(project.paths.public()));
 } else {
-  debug(
-    'Server is being run outside of live development mode, meaning it will ' +
-    'only serve the compiled application bundle in ~/dist. Generally you ' +
-    'do not need an application server for this and can instead use a web ' +
-    'server such as nginx to serve your static files. See the "deployment" ' +
-    'section in the README for more information on deployment strategies.', // eslint-disable-line
-  );
+  debug(`Server is being run outside of live development mode, meaning it will 
+only serve the compiled application bundle in ~/dist. Generally you
+do not need an application server for this and can instead use a web
+server such as nginx to serve your static files. See the "deployment"
+section in the README for more information on deployment strategies.`);
 
   // Serving ~/dist by default. Ideally these files should be served by
   // the web server and not the app server, but this helps to demo the
   // server in production.
 
-  app.use(express.static(project.paths.dist()))
+  app
+    .use(express.static(project.paths.dist()))
     .use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 

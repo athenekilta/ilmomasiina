@@ -5,7 +5,7 @@ const signup = require('./signup');
 const user = require('./user');
 const authentication = require('./authentication');
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
 
   app.configure(authentication);

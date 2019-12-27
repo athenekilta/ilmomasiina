@@ -17,13 +17,13 @@ export default function reducer(state = initialState, action = {}) {
         event: action.payload,
         eventLoading: false,
       };
-    case ActionTypes.SET_EVENTS_LOADING:
+    case ActionTypes.SET_EVENT_LOADING:
       return {
         ...state,
         eventLoading: true,
         eventError: false,
       };
-    case ActionTypes.SET_EVENTS_ERROR:
+    case ActionTypes.SET_EVENT_ERROR:
       return {
         ...state,
         eventError: true,

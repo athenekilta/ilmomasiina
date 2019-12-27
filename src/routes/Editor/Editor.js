@@ -1,29 +1,31 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Formsy from 'formsy-react';
-import Spinner from 'react-spinkit';
-import { browserHistory, Link } from 'react-router';
-import { toast } from 'react-toastify';
+
 import Promise from 'bluebird';
+import { Form } from 'formsy-react-components';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import Spinner from 'react-spinkit';
+import { toast } from 'react-toastify';
+
+import * as AdminSignupActions from '../../modules/admin/actions';
+import { getSignups } from '../../modules/admin/selectors';
+import * as EditorActions from '../../modules/editor/actions';
+import { getOpenQuotas } from '../../modules/singleEvent/selectors';
+import { getSignupsByQuota } from '../../utils/signupUtils';
+import BasicDetailsTab from './components/BasicDetailsTab';
+import EmailsTab from './components/EmailsTab';
+import QuestionsTab from './components/QuestionsTab';
+import QuotasTab from './components/QuotasTab';
+import SignupsTab from './components/SignupsTab';
 
 import './Editor.scss';
-import * as EditorActions from '../../modules/editor/actions';
-import * as AdminSignupActions from '../../modules/admin/actions';
-
-import BasicDetailsTab from './components/BasicDetailsTab';
-import QuotasTab from './components/QuotasTab';
-import QuestionsTab from './components/QuestionsTab';
-import EmailsTab from './components/EmailsTab';
-import SignupsTab from './components/SignupsTab';
-import { getOpenQuotas } from '../../modules/singleEvent/selectors';
-import { getSignups } from '../../modules/admin/selectors';
-
-import { getSignupsByQuota } from '../../utils/signupUtils';
-
 
 async function minDelay(func, ms = 1000) {
-  const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
+  const res = await Promise.all([
+    func,
+    new Promise(resolve => setTimeout(resolve, ms)),
+  ]);
   return res[0];
 }
 
@@ -61,7 +63,7 @@ class Editor extends React.Component {
         eventLoading: true,
       },
       async () => {
-        const eventId = this.props.params.id;
+        const eventId = this.props.match.params.id;
         const { adminToken } = this.props;
 
         if (eventId === 'new') {
@@ -69,17 +71,24 @@ class Editor extends React.Component {
           this.props.setEvent({});
 
           // Set base quota field
-          this.props.updateEventField('quota', [{ id: 0, title: 'Kiintiö', size: 20, existsInDb: false }]);
+          this.props.updateEventField('quota', [
+            {
+              id: 0,
+              title: 'Kiintiö',
+              size: 20,
+              existsInDb: false,
+            },
+          ]);
           this.props.updateEventField('questions', []);
         } else {
           this.props.getEventAsync(eventId, adminToken);
         }
-      },
+      }
     );
   }
 
   changeTab(id) {
-    const state = this.state;
+    const { state } = this;
     state.activeTab = id;
     this.setState(state);
   }
@@ -104,14 +113,19 @@ class Editor extends React.Component {
 
     const { adminToken } = this.props;
 
-    if (this.props.params.id === 'new') {
+    if (this.props.match.params.id === 'new') {
       try {
-        const res = await minDelay(this.props.publishEventAsync(event, adminToken), 1000);
+        const res = await minDelay(
+          this.props.publishEventAsync(event, adminToken),
+          1000
+        );
         console.log('RES EDITOR', res);
-        browserHistory.push(`${PREFIX_URL}/admin/edit/${res.id}`);
+        this.props.history.push(`${PREFIX_URL}/admin/edit/${res.id}`);
       } catch (error) {
         console.log(error);
-        toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', { autoClose: 2000 });
+        toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', {
+          autoClose: 2000,
+        });
       }
       this.setState({
         eventPublishing: false,
@@ -119,25 +133,32 @@ class Editor extends React.Component {
     } else {
       try {
         await minDelay(this.props.updateEventAsync(event, adminToken), 1000);
-        toast.success('Muutoksesi tallennettiin onnistuneesti!', { autoClose: 2000 });
+        toast.success('Muutoksesi tallennettiin onnistuneesti!', {
+          autoClose: 2000,
+        });
       } catch (error) {
         console.log(error);
-        toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
+        toast.error(
+          'Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.',
+          { autoClose: 2000 }
+        );
       }
     }
   }
 
   renderButtons() {
-    if (this.props.params.id === 'new') {
+    if (this.props.match.params.id === 'new') {
       return (
         <div className="pull-right event-editor--buttons-wrapper">
-          {this.props.eventPublishLoading ? <Spinner name="circle" fadeIn="quarter" /> : null}
+          {this.props.eventPublishLoading ? (
+            <Spinner name="circle" fadeIn="quarter" />
+          ) : null}
           <input
             disabled={!this.state.isValid || this.props.eventPublishLoading}
             className="btn btn-info pull-right event-editor--animated"
             formNoValidate
             type="submit"
-            defaultValue="Tallenna luonnoksena"
+            value="Tallenna luonnoksena"
             onClick={() => this.publishEvent(true)}
           />
         </div>
@@ -147,7 +168,9 @@ class Editor extends React.Component {
     if (this.props.event.draft) {
       return (
         <div className="pull-right event-editor--buttons-wrapper">
-          {this.props.eventPublishLoading ? <Spinner name="circle" fadeIn="quarter" /> : null}
+          {this.props.eventPublishLoading ? (
+            <Spinner name="circle" fadeIn="quarter" />
+          ) : null}
           <div className="event-editor--public-status">
             <div className="event-editor--bubble draft event-editor--animated" />
             <span>Luonnos</span>
@@ -157,7 +180,7 @@ class Editor extends React.Component {
             className="btn btn-success event-editor--animated"
             formNoValidate
             type="submit"
-            defaultValue="Julkaise"
+            value="Julkaise"
             onClick={() => this.publishEvent(false)}
           />
           <input
@@ -165,7 +188,7 @@ class Editor extends React.Component {
             className="btn btn-info event-editor--animated"
             formNoValidate
             type="submit"
-            defaultValue="Tallenna muutokset"
+            value="Tallenna muutokset"
             onClick={() => this.publishEvent(this.props.event.draft)}
           />
         </div>
@@ -174,7 +197,9 @@ class Editor extends React.Component {
 
     return (
       <div className="pull-right event-editor--buttons-wrapper">
-        {this.props.eventPublishLoading ? <Spinner name="circle" fadeIn="quarter" /> : null}
+        {this.props.eventPublishLoading ? (
+          <Spinner name="circle" fadeIn="quarter" />
+        ) : null}
         <div className="event-editor--public-status">
           <div className="event-editor--bubble public event-editor--animated" />
           <span>Julkaistu</span>
@@ -184,7 +209,7 @@ class Editor extends React.Component {
           className="btn btn-warning event-editor--animated"
           formNoValidate
           type="submit"
-          defaultValue="Muuta luonnokseksi"
+          value="Muuta luonnokseksi"
           onClick={() => this.publishEvent(true)}
         />
         <input
@@ -192,7 +217,7 @@ class Editor extends React.Component {
           className="btn btn-info event-editor--animated"
           formNoValidate
           type="submit"
-          defaultValue="Tallenna muutokset"
+          value="Tallenna muutokset"
           onClick={() => this.publishEvent(this.props.event.draft)}
         />
       </div>
@@ -200,7 +225,9 @@ class Editor extends React.Component {
   }
 
   renderValidNotice() {
-    const className = this.state.isValid ? 'event-editor--valid-notice collapsed' : 'event-editor--valid-notice';
+    const className = this.state.isValid
+      ? 'event-editor--valid-notice collapsed'
+      : 'event-editor--valid-notice';
 
     return (
       <div className={className}>
@@ -213,7 +240,7 @@ class Editor extends React.Component {
   }
 
   render() {
-    const isNewEvent = this.props.params.id === 'new';
+    const isNewEvent = this.props.match.params.id === 'new';
 
     if (this.props.eventLoading) {
       return (
@@ -230,7 +257,7 @@ class Editor extends React.Component {
         <div className="event-editor">
           <div className="event-editor--loading-container">
             <h1>Hups, jotain meni pieleen</h1>
-            <p>{`Tapahtumaa id:llä "${this.props.params.id}" ei löytynyt`}</p>
+            <p>{`Tapahtumaa id:llä "${this.props.match.params.id}" ei löytynyt`}</p>
             <Link to={`${PREFIX_URL}/admin/`}>Palaa tapahtumalistaukseen</Link>
           </div>
         </div>
@@ -240,7 +267,7 @@ class Editor extends React.Component {
     return (
       <div className="event-editor">
         <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
-        <Formsy.Form
+        <Form
           onValid={() => this.setValidState(true)}
           onInvalid={() => this.setValidState(false)}
           className="form-horizontal col-xs-12 col-md-10 col-md-offset-1"
@@ -266,23 +293,58 @@ class Editor extends React.Component {
           </ul>
           {this.renderValidNotice()}
           <div className="tab-content">
-            <div className={`tab-pane ${this.state.activeTab === 1 ? 'active' : ''}`}>
-              <BasicDetailsTab event={this.props.event} onDataChange={this.onDataChange} />
+            <div
+              className={`tab-pane ${
+                this.state.activeTab === 1 ? 'active' : ''
+              }`}
+            >
+              <BasicDetailsTab
+                event={this.props.event}
+                onDataChange={this.onDataChange}
+              />
             </div>
-            <div className={`tab-pane ${this.state.activeTab === 2 ? 'active' : ''}`}>
-              <QuotasTab event={this.props.event} onDataChange={this.onDataChange} />
+            <div
+              className={`tab-pane ${
+                this.state.activeTab === 2 ? 'active' : ''
+              }`}
+            >
+              <QuotasTab
+                event={this.props.event}
+                onDataChange={this.onDataChange}
+              />
             </div>
-            <div className={`tab-pane ${this.state.activeTab === 3 ? 'active' : ''}`}>
-              <QuestionsTab event={this.props.event} onDataChange={this.onDataChange} />
+            <div
+              className={`tab-pane ${
+                this.state.activeTab === 3 ? 'active' : ''
+              }`}
+            >
+              <QuestionsTab
+                event={this.props.event}
+                onDataChange={this.onDataChange}
+              />
             </div>
-            <div className={`tab-pane ${this.state.activeTab === 4 ? 'active' : ''}`}>
-              <EmailsTab event={this.props.event} onDataChange={this.onDataChange} />
+            <div
+              className={`tab-pane ${
+                this.state.activeTab === 4 ? 'active' : ''
+              }`}
+            >
+              <EmailsTab
+                event={this.props.event}
+                onDataChange={this.onDataChange}
+              />
             </div>
-            <div className={`tab-pane ${this.state.activeTab === 5 ? 'active' : ''}`}>
-              <SignupsTab event={this.props.event} deleteSignup={this.props.deleteSignup} />
+            <div
+              className={`tab-pane ${
+                this.state.activeTab === 5 ? 'active' : ''
+              }`}
+            >
+              <SignupsTab
+                event={this.props.event}
+                deleteSignup={this.props.deleteSignup}
+              />
             </div>
           </div>
-        </Formsy.Form>
+        </Form>
       </div>
     );
   }
@@ -306,7 +368,4 @@ const mapStateToProps = state => ({
   adminToken: state.admin.accessToken,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Editor);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Editor));

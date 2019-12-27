@@ -1,20 +1,22 @@
+const Sequelize = require('sequelize');
 const moment = require('moment');
 
 module.exports = app => {
   const models = app.get('models');
+  const { Op } = Sequelize;
 
   models.signup
     .unscoped()
     .findAll({
       where: {
-        $and: {
+        [Op.and]: {
           // Is confirmed
           confirmedAt: {
-            $eq: null, // $means ==
+            [Op.eq]: null, // $means ==
           },
           // Over 30 minutes old
           createdAt: {
-            $lt: moment()
+            [Op.lt]: moment()
               .subtract(30, 'minutes')
               .toDate(),
           },

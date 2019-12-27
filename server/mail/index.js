@@ -1,7 +1,7 @@
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 const Email = require('email-templates');
 const path = require('path');
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.ayy.fi',
@@ -41,7 +41,9 @@ const EmailService = {
     return email
       .render('../server/mail/emails/confirmation/html', brandedParams)
       .then(html => {
-        const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
+        const subject = `${
+          params.edited ? 'Muokkaus' : 'Ilmoittautumis'
+        }vahvistus: ${params.event.title}`;
         return EmailService.send(to, subject, html);
       });
   },

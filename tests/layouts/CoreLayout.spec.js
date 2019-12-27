@@ -1,5 +1,7 @@
 import React from 'react';
+
 import TestUtils from 'react-addons-test-utils';
+
 import { CoreLayout } from '../../src/layouts/CoreLayout/CoreLayout';
 
 function shallowRender(component) {
@@ -19,7 +21,7 @@ describe('(Layout) Core', () => {
   let child;
 
   beforeEach(() => {
-    child = <h1 className='child'>Child</h1>;
+    child = <h1 className="child">Child</h1>;
     props = {
       children: child,
     };

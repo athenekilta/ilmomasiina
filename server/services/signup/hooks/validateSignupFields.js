@@ -1,9 +1,9 @@
 const _ = require('lodash');
 
-module.exports = () => (hook) => {
+module.exports = () => hook => {
   const requiredFields = ['firstName', 'lastName', 'email'];
 
-  requiredFields.map((fieldName) => {
+  requiredFields.map(fieldName => {
     if (_.isNil(hook.data[fieldName])) {
       throw new Error('Empty fields on submit');
     }
@@ -15,11 +15,11 @@ module.exports = () => (hook) => {
   const models = hook.app.get('models');
 
   return models.signup
-    .findById(hook.id)
-    .catch((error) => {
+    .findByPk(hook.id)
+    .catch(error => {
       throw new Error('Signup expired');
     })
-    .then((signup) => {
+    .then(signup => {
       if (_.isNil(signup)) {
         throw new Error('Signup expired');
       }
@@ -27,15 +27,18 @@ module.exports = () => (hook) => {
       hook.data.createdAt = signup.createdAt;
       return signup;
     })
-    .then(signup => models.quota.findById(signup.quotaId))
-    .then(quota => models.event.findById(quota.eventId))
+    .then(signup => models.quota.findByPk(signup.quotaId))
+    .then(quota => models.event.findByPk(quota.eventId))
     .then(event => event.getQuestions())
-    .then((questions) => {
+    .then(questions => {
       // Remove answers to other events questions
       const questionIds = questions.map(q => q.id);
-      _.remove(hook.data.answers, obj => questionIds.indexOf(obj.questionId) < 0);
+      _.remove(
+        hook.data.answers,
+        obj => questionIds.indexOf(obj.questionId) < 0
+      );
 
-      questions.map((question) => {
+      questions.map(question => {
         const answer = _.find(hook.data.answers, { questionId: question.id });
 
         if (_.isNil(answer)) {
@@ -48,16 +51,20 @@ module.exports = () => (hook) => {
             const options = question.options.split(';');
 
             if (options.indexOf(answer.answer) === -1) {
-              throw new Error(`Invalid answer to question ${question.question}`);
+              throw new Error(
+                `Invalid answer to question ${question.question}`
+              );
             }
           }
           // Check that all checkbox answers are valid
           if (question.type === 'checkbox') {
             const options = question.options.split(';');
             const answers = answer.answer.split(';');
-            _.each(answers, (ans) => {
+            _.each(answers, ans => {
               if (options.indexOf(ans) === -1) {
-                throw new Error(`Invalid answer to question ${question.question}`);
+                throw new Error(
+                  `Invalid answer to question ${question.question}`
+                );
               }
             });
           }

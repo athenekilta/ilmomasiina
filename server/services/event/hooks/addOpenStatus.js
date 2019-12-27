@@ -1,4 +1,4 @@
-module.exports = () => (hook) => {
+module.exports = () => hook => {
   const startDate = new Date(hook.result.registrationStartDate);
   const now = new Date();
   const endDate = new Date(hook.result.registrationEndDate);

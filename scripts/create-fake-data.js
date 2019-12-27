@@ -1,5 +1,5 @@
 const debug = require('debug')('app:script');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 const _ = require('lodash');
 const moment = require('moment');
 const faker = require('faker');
@@ -23,7 +23,7 @@ const events = [
     location: 'Smökki (Jämeräntaival 4, Espoo)',
     homepage: '',
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
-    draft: 0,
+    draft: false,
     confirmationMessage: faker.lorem.paragraphs(),
     signupsPublic: 1
   },
@@ -33,12 +33,12 @@ const events = [
     registrationStartDate: moment(now).add(2, 'days'),
     registrationEndDate: moment(now).add(3, 'days'),
     description:
-      'Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem', // eslint-disable-line
+      "Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem", // eslint-disable-line
     price: '0 €',
     location: 'Eerikinkatu 5, Helsinki',
     homepage: 'http://crexcu2017.wordpress.com/',
     facebooklink: '',
-    draft: 0,
+    draft: false,
     confirmationMessage: faker.lorem.paragraphs(),
     signupsPublic: 1
   },
@@ -53,7 +53,7 @@ const events = [
     location: 'Smökki',
     homepage: 'http://crexcu2017.wordpress.com/',
     facebooklink: '',
-    draft: 0,
+    draft: false,
     confirmationMessage: faker.lorem.paragraphs(),
     signupsPublic: 1
   },
@@ -61,9 +61,9 @@ const events = [
     title: 'Athene Alumni',
     description: 'Lorem ipsum. Lomake kaikilla kentillä.',
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
-    draft: 0,
-    confirmationMessage: faker.lorem.paragraphs(),
-  },
+    draft: false,
+    confirmationMessage: faker.lorem.paragraphs()
+  }
 ];
 
 const quotas = [
@@ -72,43 +72,43 @@ const quotas = [
     title: 'Minuuttikalja 2016',
     // going fields doesn't exist in db, but it's used to create right amount of signups
     going: 18,
-    size: 20,
+    size: 20
   },
   {
     eventId: 2,
     title: 'Athene',
     going: 0,
-    size: 20,
+    size: 20
   },
   {
     eventId: 2,
     title: 'Tietokilta',
     going: 29,
-    size: 20,
+    size: 20
   },
   {
     eventId: 3,
     title: 'Athene',
     going: 29,
-    size: 20,
+    size: 20
   },
   {
     eventId: 3,
     title: 'Prodeko',
     going: 27,
-    size: 20,
+    size: 20
   },
   {
     eventId: 3,
     title: 'Tietokilta',
     going: 29,
-    size: 20,
+    size: 20
   },
   {
     eventId: 4,
     title: 'Athene Alumni',
-    going: 5,
-  },
+    going: 5
+  }
 ];
 
 const questions = [
@@ -118,7 +118,7 @@ const questions = [
     type: 'text',
     question: 'Pöytätoive',
     required: true,
-    public: false,
+    public: false
   },
   {
     id: 2,
@@ -126,7 +126,7 @@ const questions = [
     type: 'text',
     question: 'Valmistumisvuosi',
     required: true,
-    public: false,
+    public: false
   },
   {
     id: 3,
@@ -134,7 +134,7 @@ const questions = [
     type: 'textarea',
     question: 'Terveiset',
     required: true,
-    public: true,
+    public: true
   },
   {
     id: 4,
@@ -143,7 +143,7 @@ const questions = [
     question: 'Monivalinta',
     options: 'Vaihtoehto 1;Vaihtoehto 2;Vaihtoehto 3',
     required: true,
-    public: true,
+    public: true
   },
   {
     id: 5,
@@ -152,7 +152,7 @@ const questions = [
     question: 'Valintaruudut',
     options: 'Vaihtoehto 1;Vaihtoehto 2;Vaihtoehto 3',
     required: false,
-    public: true,
+    public: true
   },
   {
     id: 6,
@@ -161,8 +161,8 @@ const questions = [
     question: 'Osallistun',
     options: 'Kokkareille;Pääjuhlaan;Sillikselle',
     required: false,
-    public: false,
-  },
+    public: false
+  }
 ];
 
 const signups = [];
@@ -179,10 +179,10 @@ const createAnswers = (eventId, signupId) => {
     questionsToAnswer.map(
       question =>
         answers.push({
-          signupId,
-          questionId: question.id,
-          answer: faker.lorem.sentence(),
-        }), // eslint-disable-line
+        signupId,
+        questionId: question.id,
+        answer: faker.lorem.sentence()
+        }) // eslint-disable-line
     );
   }
   return true;
@@ -192,13 +192,11 @@ quotas.map((quota, quotaIndex) => {
   for (let i = 0; i < quota.going; i += 1) {
     signups.push({
       quotaId: quotaIndex + 1,
-      createdAt: moment()
-        .subtract('5', 'minutes'),
-      confirmedAt: moment()
-        .subtract('1', 'minutes'),
+      createdAt: moment().subtract('5', 'minutes'),
+      confirmedAt: moment().subtract('1', 'minutes'),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
-      email: faker.internet.email(),
+      email: faker.internet.email()
     });
 
     signupIndex += 1;
@@ -223,10 +221,16 @@ seq
   .then(() => seq.models.event.bulkCreate(events))
   .then(() => seq.models.quota.bulkCreate(quotas))
   .then(() => seq.models.question.bulkCreate(questions))
-  .then(() => debug(`${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`))
+  .then(() =>
+    debug(
+    `${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`
+  )
+  )
   .then(() => seq.models.signup.bulkCreate(signups))
   .then(() => seq.models.answer.bulkCreate(answers))
-  .then(() => debug(`${signups.length} signups with ${answers.length} answers added.`))
+  .then(() =>
+    debug(`${signups.length} signups with ${answers.length} answers added.`)
+  )
   .then(() => seq.close())
   .then(() => debug('Creating fake data finished.'));
 

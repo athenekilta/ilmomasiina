@@ -1,9 +1,10 @@
 const Sequelize = require('sequelize');
 const moment = require('moment');
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
   const sequelize = app.get('sequelize');
+  const { Op } = Sequelize;
 
   const Event = sequelize.define(
     'event',
@@ -65,12 +66,12 @@ module.exports = function () {
       paranoid: true,
       defaultScope: {
         date: {
-          $and: {
+          [Op.and]: {
             draft: false,
             date: {
-              $or: {
-                $eq: null,
-                $gt: moment()
+              [Op.or]: {
+                [Op.eq]: null,
+                [Op.gt]: moment()
                   .tz('Europe/Helsinki')
                   .subtract(7, 'days')
                   .format(),
@@ -79,7 +80,7 @@ module.exports = function () {
           },
         },
       },
-    },
+    }
   );
 
   return Event;

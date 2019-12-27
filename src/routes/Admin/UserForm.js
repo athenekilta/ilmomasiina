@@ -1,19 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Formsy from 'formsy-react';
-import { Input } from 'formsy-react-components';
-import Spinner from 'react-spinkit';
+
 import Promise from 'bluebird';
+import { Form, Input } from 'formsy-react-components';
+import PropTypes from 'prop-types';
+import Spinner from 'react-spinkit';
 
 async function minDelay(func, ms = 1000) {
-  const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
+  const res = await Promise.all([
+    func,
+    new Promise(resolve => setTimeout(resolve, ms)),
+  ]);
   return res[0];
 }
 
 class UserForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired
+    loading: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -25,7 +28,6 @@ class UserForm extends React.Component {
     this.updateInputValue = this.updateInputValue.bind(this);
   }
 
-
   updateInputValue(field, value) {
     this.setState({
       email: value,
@@ -34,7 +36,7 @@ class UserForm extends React.Component {
 
   render() {
     return (
-      <Formsy.Form style={{ maxWidth: '300px' }}>
+      <Form style={{ maxWidth: '300px' }}>
         <Input
           id="email"
           placeholder="Sähköposti"
@@ -52,7 +54,7 @@ class UserForm extends React.Component {
         >
           {this.props.loading ? <Spinner /> : 'Luo uusi käyttäjä'}
         </button>
-      </Formsy.Form>
+      </Form>
     );
   }
 }

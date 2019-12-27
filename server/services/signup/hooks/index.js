@@ -11,10 +11,10 @@ const deleteSignup = require('./deleteSignup.js');
 
 exports.before = {
   all: [],
-  find: [hooks.disable('external')],
+  find: [hooks.disallow('external')],
   get: [getSignupAndEvent()],
   create: [validateNewSignup()],
-  update: [hooks.disable('external')],
+  update: [hooks.disallow('external')],
   patch: [validateSignupFields()],
   remove: [deleteSignup()],
 };

@@ -3,9 +3,10 @@ const md5 = require('md5');
 const moment = require('moment');
 const config = require('../../config/ilmomasiina.config'); // eslint-disable-line
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
   const sequelize = app.get('sequelize');
+  const { Op } = Sequelize;
 
   const Signup = sequelize.define(
     'signup',
@@ -45,21 +46,21 @@ module.exports = function () {
       paranoid: true,
       defaultScope: {
         where: {
-          $or: {
+          [Op.or]: {
             // Is confirmed
             confirmedAt: {
-              $ne: null, // $means !=
+              [Op.ne]: null, // $means !=
             },
             // Under 30 minutes old
             createdAt: {
-              $gt: moment()
+              [Op.gt]: moment()
                 .subtract(30, 'minutes')
                 .toDate(),
             },
           },
         },
       },
-    },
+    }
   );
 
   // TODO: edit token validation

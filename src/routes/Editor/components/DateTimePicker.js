@@ -1,10 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import moment from 'moment-timezone';
-import { Input } from 'formsy-react-components';
-import locale from 'antd/lib/date-picker/locale/fi_FI';
+
 import DatePicker from 'antd/lib/date-picker';
+import locale from 'antd/lib/date-picker/locale/fi_FI';
 import TimePicker from 'antd/lib/time-picker';
+import { Input } from 'formsy-react-components';
+import moment from 'moment-timezone';
+import PropTypes from 'prop-types';
 
 class DateTimePicker extends React.PureComponent {
   static propTypes = {
@@ -56,7 +57,9 @@ class DateTimePicker extends React.PureComponent {
       <div className="form-group row">
         <label className="control-label col-sm-3" data-required="false">
           {this.props.label}
-          {this.props.required ? <span className="required-symbol"> *</span> : null}
+          {this.props.required ? (
+            <span className="required-symbol"> *</span>
+          ) : null}
         </label>
         <div className="col-sm-9">
           <Input
@@ -65,9 +68,14 @@ class DateTimePicker extends React.PureComponent {
             value={this.props.value ? this.props.value : ''}
             required={this.props.required}
           />
-          <DatePicker locale={locale} format="DD.MM.YYYY" onChange={this.changeDate} value={value} />
+          <DatePicker
+            locale={locale}
+            format="DD.MM.YYYY"
+            onChange={this.changeDate}
+            value={value}
+          />
           <TimePicker
-            placeholder={'Valitse aika'}
+            placeholder="Valitse aika"
             onChange={this.changeTime}
             minuteStep={5}
             format="HH.mm"
@@ -79,4 +87,4 @@ class DateTimePicker extends React.PureComponent {
   }
 }
 
-module.exports = DateTimePicker;
+export default DateTimePicker;

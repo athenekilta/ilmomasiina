@@ -1,11 +1,15 @@
 import React from 'react';
+
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+
 import signupState from '../../../../utils/signupStateText';
+
 import './SignupButton.scss';
 
 export class SignupButton extends React.Component {
   render() {
-    const isOpen = this.props.isOpen;
+    const { isOpen } = this.props;
 
     return (
       <p>
@@ -14,7 +18,9 @@ export class SignupButton extends React.Component {
           className="btn btn-default btn-block btn-whitespace-normal"
           onClick={() => (isOpen ? this.props.openForm() : {})}
         >
-          {this.props.isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${this.props.title}`}
+          {this.props.isOnly
+            ? 'Ilmoittaudu nyt'
+            : `Ilmoittaudu: ${this.props.title}`}
         </button>
       </p>
     );
@@ -22,11 +28,11 @@ export class SignupButton extends React.Component {
 }
 
 SignupButton.propTypes = {
-  openForm: React.PropTypes.func.isRequired,
-  title: React.PropTypes.string.isRequired,
-  isOpen: React.PropTypes.bool.isRequired,
-  eventTime: React.PropTypes.string,
-  isOnly: React.PropTypes.bool.isRequired,
+  openForm: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  eventTime: PropTypes.string,
+  isOnly: PropTypes.bool.isRequired,
 };
 
 export default SignupButton;

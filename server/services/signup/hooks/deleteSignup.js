@@ -1,10 +1,10 @@
-const config = require('../../../../config/ilmomasiina.config'); // eslint-disable-line
 const md5 = require('md5');
+const config = require('../../../../config/ilmomasiina.config'); // eslint-disable-line
 
-module.exports = () => (hook) => {
+module.exports = () => hook => {
   const models = hook.app.get('models');
-  const id = hook.id;
-  const editToken = hook.params.query.editToken;
+  const { id } = hook;
+  const { editToken } = hook.params.query;
 
   if (editToken !== md5(`${`${hook.id}`}${config.editTokenSalt}`)) {
     throw new Error('Invalid editToken');
@@ -13,10 +13,10 @@ module.exports = () => (hook) => {
   return models.signup
     .destroy({
       where: {
-        id
+        id,
       },
     })
-    .then((res) => {
+    .then(res => {
       hook.result = res;
       return hook;
     })

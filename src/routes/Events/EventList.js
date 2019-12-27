@@ -1,15 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router';
-import moment from 'moment';
-import _ from 'lodash';
-import { connect } from 'react-redux';
-import './EventList.scss';
 
-import * as EventsActions from '../../modules/events/actions';
+import _ from 'lodash';
+import moment from 'moment';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import Separator from '../../components/Separator';
+import * as EventsActions from '../../modules/events/actions';
 import signupState from '../../utils/signupStateText';
+
+import './EventList.scss';
 
 class TableRow extends React.Component {
   static propTypes = {
@@ -41,10 +42,7 @@ class TableRow extends React.Component {
         <td key="date" className="date">
           {date ? moment(date).format('DD.MM.YYYY') : ''}
         </td>
-        <td
-          key="signup"
-          className="signup"
-        >
+        <td key="signup" className="signup">
           {signupLabel}
         </td>
         <td
@@ -100,7 +98,7 @@ class EventList extends React.Component {
       const eventState = signupState(
         event.date,
         event.registrationStartDate,
-        event.registrationEndDate,
+        event.registrationEndDate
       );
 
       const rows = [
@@ -125,14 +123,12 @@ class EventList extends React.Component {
           rows.push(
             <TableRow
               title={quota.title}
-              signups={
-                Math.min(quota.signupCount, quota.size)
-              }
+              signups={Math.min(quota.signupCount, quota.size)}
               size={quota.size}
               className="child"
               key={`q${i}`}
-            />,
-          ),
+            />
+          )
         );
       }
 
@@ -143,12 +139,12 @@ class EventList extends React.Component {
             signupLabel=""
             signups={Math.min(
               _.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size))),
-              event.openQuotaSize,
+              event.openQuotaSize
             )}
             size={event.openQuotaSize}
             className="child"
             key={`open${event.id}`}
-          />,
+          />
         );
       }
 
@@ -185,7 +181,4 @@ const mapStateToProps = state => ({
   admin: state.admin,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EventList);
+export default connect(mapStateToProps, mapDispatchToProps)(EventList);

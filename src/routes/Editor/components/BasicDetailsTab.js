@@ -1,6 +1,8 @@
 import React from 'react';
+
+import { Checkbox, Input, Textarea } from 'formsy-react-components';
 import PropTypes from 'prop-types';
-import { Input, Textarea, Checkbox } from 'formsy-react-components';
+
 import DateTimePicker from './DateTimePicker';
 
 class BasicDetailsTab extends React.Component {
@@ -36,7 +38,13 @@ class BasicDetailsTab extends React.Component {
           required
           onChange={this.props.onDataChange}
         />
-        <DateTimePicker name="date" value={event.date} label="Ajankohta" required onChange={this.props.onDataChange} />
+        <DateTimePicker
+          name="date"
+          value={event.date}
+          label="Ajankohta"
+          required
+          onChange={this.props.onDataChange}
+        />
         <Input
           name="webpageUrl"
           value={event.webpageUrl ? event.webpageUrl : ''}

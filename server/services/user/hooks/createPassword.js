@@ -1,6 +1,6 @@
 const config = require('../../../../config/ilmomasiina.config.js');
 
-module.exports = () => (hook) => {
+module.exports = () => hook => {
   if (!config.adminRegistrationAllowed) {
     let password = '';
     const possible = 'abcdefghijklmnopqrstuvwxyzåäö0123456789';
@@ -10,6 +10,6 @@ module.exports = () => (hook) => {
     }
     hook.data.password = password;
     hook.data.passwordPlain = password;
-    return hook
+    return hook;
   }
 };

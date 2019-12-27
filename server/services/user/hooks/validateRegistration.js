@@ -1,6 +1,6 @@
 const config = require('../../../../config/ilmomasiina.config.js');
 
-module.exports = () => (hook) => {
+module.exports = () => hook => {
   if (config.adminRegistrationAllowed) {
     return hook;
   }

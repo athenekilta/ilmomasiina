@@ -1,12 +1,15 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
 import Spinner from 'react-spinkit';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router';
-import { connect } from 'react-redux';
-import EditForm from './components/EditForm';
+
 import * as EditSignupActions from '../../modules/editSignup/actions';
 import * as SingleEventActions from '../../modules/singleEvent/actions';
+import EditForm from './components/EditForm';
+
 import './EditSignup.scss';
 
 class EditSignup extends React.Component {
@@ -29,25 +32,22 @@ class EditSignup extends React.Component {
 
   componentWillMount() {
     this.props.resetEventState();
-    const { id, editToken } = this.props.params;
+    const { id, editToken } = this.props.match.params;
     this.props.getSignupAndEventAsync(id, editToken);
   }
 
   deleteSignup() {
-    const { id, editToken } = this.props.params;
+    const { id, editToken } = this.props.match.params;
     this.props.deleteSignupAsync(id, editToken);
   }
 
   async updateSignup(answers) {
     this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
 
-    const response = await this.props.updateSignupAsync(
-      this.props.signup.id,
-      {
-        editToken: this.props.params.editToken,
-        ...answers,
-      },
-    );
+    const response = await this.props.updateSignupAsync(this.props.signup.id, {
+      editToken: this.props.match.params.editToken,
+      ...answers,
+    });
     const success = response === true;
     if (success) {
       toast.update(this.toastId, {
@@ -68,7 +68,6 @@ class EditSignup extends React.Component {
         autoClose: 5000,
       });
     }
-
   }
 
   render() {
@@ -77,7 +76,10 @@ class EditSignup extends React.Component {
         <div className="container align-items-center">
           <div className="EditSignup--wrapper">
             <h1>Hups, jotain meni pieleen</h1>
-            <p>Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman ilmoittautuminen on sulkeutunut.</p>
+            <p>
+              Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
+              ilmoittautuminen on sulkeutunut.
+            </p>
             <Link to={`${PREFIX_URL}/`} className="btn btn-default">
               Takaisin etusivulle
             </Link>
@@ -103,8 +105,9 @@ class EditSignup extends React.Component {
           <div className="EditSignup--wrapper">
             <h1>Hups, jotain meni pieleen</h1>
             <p>
-              Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai sitten jotain muuta kummallista
-              tapahtui. Jos ilmoittautumisesi ei ole vielä poistunut, yritä kohta uudestaan.
+              Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
+              sitten jotain muuta kummallista tapahtui. Jos ilmoittautumisesi ei
+              ole vielä poistunut, yritä kohta uudestaan.
             </p>
           </div>
         </div>
@@ -133,11 +136,13 @@ class EditSignup extends React.Component {
         <div className="EditSignup--wrapper">
           <h2>Poista ilmoittautuminen</h2>
           <p>
-            Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan <strong>{this.props.event.title}?</strong>
+            Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan{' '}
+            <strong>{this.props.event.title}?</strong>
           </p>
           <p>
-            Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos kuitenkin muutat mielesi, voit aina
-            ilmoittautua tapahtumaan uudelleen myöhemmin, mutta siirryt silloin jonon hännille.{' '}
+            Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos
+            kuitenkin muutat mielesi, voit aina ilmoittautua tapahtumaan
+            uudelleen myöhemmin, mutta siirryt silloin jonon hännille.{' '}
             <strong>Tätä toimintoa ei voi perua.</strong>
           </p>
           <button onClick={this.deleteSignup} className="btn btn-danger">
@@ -165,7 +170,4 @@ const mapStateToProps = state => ({
   deleted: state.editSignup.deleted,
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EditSignup);
+export default connect(mapStateToProps, mapDispatchToProps)(EditSignup);

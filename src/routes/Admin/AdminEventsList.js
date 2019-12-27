@@ -1,19 +1,32 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import * as AdminActions from '../../modules/admin/actions';
-import UserForm from './UserForm';
-import './AdminEventsList.scss';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
+import * as AdminActions from '../../modules/admin/actions';
+import {
+  eventsError,
+  eventsLoading,
+  getEvents,
+} from '../../modules/admin/selectors';
+import {
+  getSignupsArray,
+  getSignupsArrayFormatted,
+} from '../../utils/signupUtils';
 import AdminEventListItem from './AdminEventListItem';
-import { getEvents, eventsLoading, eventsError } from '../../modules/admin/selectors';
-import { getSignupsArray, getSignupsArrayFormatted } from '../../utils/signupUtils';
+import UserForm from './UserForm';
+
+import './AdminEventsList.scss';
 
 /* Render the list container
-*/
+ */
 async function minDelay(func, ms = 1000) {
-  const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
+  const res = await Promise.all([
+    func,
+    new Promise(resolve => setTimeout(resolve, ms)),
+  ]);
   return res[0];
 }
 
@@ -39,56 +52,60 @@ class AdminEventList extends React.Component {
   }
 
   onDeleteEvent(eventId) {
-    if (window.confirm("Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.")) {
-      this.props.deleteEvent(eventId)
-        .then((success) => {
-          if (!success) {
-            console.alert("Poisto epäonnistui :(")
-          }
-          this.props.updateEvents();
-        });
+    if (
+      window.confirm(
+        'Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.'
+      )
+    ) {
+      this.props.deleteEvent(eventId).then(success => {
+        if (!success) {
+          console.alert('Poisto epäonnistui :(');
+        }
+        this.props.updateEvents();
+      });
     }
   }
 
   createUser(email) {
-    console.log(email)
-    this.setState({
-      userFormLoading: true,
-    }, async () => {
-      try {
-        // TODO: better error handling
-        let success = await minDelay(this.props.createUserAsync({ email }), 1000);
-        if (success) {
-          toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 })
-        }
-        else {
+    console.log(email);
+    this.setState(
+      {
+        userFormLoading: true,
+      },
+      async () => {
+        try {
+          // TODO: better error handling
+          const success = await minDelay(
+            this.props.createUserAsync({ email }),
+            1000
+          );
+          if (success) {
+            toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 });
+          } else {
+            toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+          }
+        } catch (error) {
+          console.log(error);
           toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
         }
-      } catch (error) {
-        console.log(error)
-        toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+
+        this.setState({ userFormLoading: false });
       }
-
-      this.setState({ userFormLoading: false });
-    });
+    );
   }
 
-  onDeleteUser(userId) {
-
-  }
+  onDeleteUser(userId) {}
 
   renderEventRows() {
     const { events } = this.props;
-    return _.map(events, (e) => {
-      return (
-        <AdminEventListItem
-          key={e.id}
-          signups={_.sum(_.map(e.quota, q => q.signupCount))}
-          data={e}
-          onDelete={this.onDeleteEvent}
-        />
-      );
-    });
+    return _.map(events, e => (
+      <AdminEventListItem
+        key={e.id}
+        signups={_.sum(_.map(e.quota, q => q.signupCount))}
+        data={e}
+        onDelete={this.onDeleteEvent}
+      />
+    ));
   }
 
   render() {
@@ -105,15 +122,16 @@ class AdminEventList extends React.Component {
               <th>Toiminnot</th>
             </tr>
           </thead>
-          <tbody>
-            {this.renderEventRows()}
-          </tbody>
+          <tbody>{this.renderEventRows()}</tbody>
         </table>
         <Link to={`${PREFIX_URL}/admin/edit/new`} className="btn btn-default">
           + Uusi tapahtuma
         </Link>
         <h1>Luo uusi käyttäjä</h1>
-        <UserForm onSubmit={this.createUser} loading={this.state.userFormLoading} />
+        <UserForm
+          onSubmit={this.createUser}
+          loading={this.state.userFormLoading}
+        />
       </div>
     );
   }
@@ -122,7 +140,7 @@ class AdminEventList extends React.Component {
 const mapDispatchToProps = {
   updateEvents: AdminActions.getEventsAsync,
   deleteEvent: AdminActions.deleteEventAsync,
-  createUserAsync: AdminActions.createUserAsync
+  createUserAsync: AdminActions.createUserAsync,
 };
 
 const mapStateToProps = state => ({
@@ -131,7 +149,4 @@ const mapStateToProps = state => ({
   eventsError: eventsError(state),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AdminEventList);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminEventList);

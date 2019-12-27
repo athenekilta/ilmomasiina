@@ -1,6 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+
 import { Textarea } from 'formsy-react-components';
+import PropTypes from 'prop-types';
 
 class EmailsTab extends React.Component {
   static propTypes = {
@@ -14,7 +15,7 @@ class EmailsTab extends React.Component {
         <Textarea
           rows={10}
           name="verificationEmail"
-          value={this.props.event.verificationEmail}
+          value={this.props.event.verificationEmail || ''}
           label="Vahvistusviesti sähköpostiin"
           onChange={this.props.onDataChange}
         />

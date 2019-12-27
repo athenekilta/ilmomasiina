@@ -1,41 +1,32 @@
-const authentication = require('feathers-authentication');
-const jwt = require('feathers-authentication-jwt');
-const local = require('feathers-authentication-local');
+const {
+  AuthenticationService,
+  JWTStrategy,
+} = require('@feathersjs/authentication');
+const { LocalStrategy } = require('@feathersjs/authentication-local');
 const config = require('./../../../config/ilmomasiina.config.js');
 
-module.exports = function () {
-  const app = this;
+module.exports = app => {
   // Set up authentication with the secret
-  app.configure(authentication({
-    secret: config.feathersAuthSecret,
-    path: 'api/authentication',
-    service: 'api/users',
-    strategies: [
-      'local',
-      'jwt',
-    ],
-  }));
-
-  app.configure(jwt());
-
-  app.configure(local(local({
+  app.set('authentication', {
     entity: 'user',
-    usernameField: 'email',
-    passwordField: 'password',
-  })));
-
-  app.service('api/authentication').hooks({
-    before: {
-      create: [
-        authentication.hooks.authenticate(['local', 'jwt']),
-        context => {
-          context.params.jwt = { expiresIn: 3600 }; // 1 hour
-        }
-
-      ],
-      remove: [
-        authentication.hooks.authenticate('jwt'),
-      ],
+    service: 'api/users',
+    secret: config.feathersAuthSecret,
+    authStrategies: ['local', 'jwt'],
+    jwtOptions: {
+      header: { typ: 'access' },
+      algorithm: 'HS256',
+      expiresIn: '1h',
+    },
+    local: {
+      usernameField: 'email',
+      passwordField: 'password',
     },
   });
+
+  const authService = new AuthenticationService(app);
+
+  authService.register('jwt', new JWTStrategy());
+  authService.register('local', new LocalStrategy());
+
+  app.use('/api/authentication', authService);
 };
