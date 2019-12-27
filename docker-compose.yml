@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  db:
+    # image: postgres:12
+    image: mysql:8
+    env_file: .env
+  ilmo:
+    tty: true
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file: .env

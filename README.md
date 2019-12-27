@@ -1,7 +1,7 @@
 # Current status
 
 ```diff
-- Hello you random bypasser! 
+- Hello you random bypasser!
 
 - Ilmomasiina is currently at alpha testing phase. You use it. Something breaks? You fix it.
 
@@ -10,7 +10,6 @@
 ```
 
 Current defelopment is being held on `otax/production` branch.
-
 
 # Ilmomasiina
 
@@ -21,6 +20,12 @@ Ilmomasiina is Athene's event registration system.
 - Node.js `^8.9.4`
 - npm `^5.6.0`
 - MySQL `^8.0`
+
+## Docker setup
+
+Change docker-compose.yml to usee the desired database (mysql or postgres). Create an `.env` file at project root, for contents check `ENV.MD`.
+
+Run `docker-compose up`.
 
 ## MYSQL Setup (Mac)
 

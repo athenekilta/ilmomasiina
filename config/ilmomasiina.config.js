@@ -1,9 +1,9 @@
 const _ = require('lodash');
 
 const config = {
-  mysqlUser: process.env.MYSQL_USER,
-  mysqlPassword: process.env.MYSQL_PASSWORD,
-  mysqlDatabase: process.env.MYSQL_DATABASE,
+  dbUser: process.env.DB_USER,
+  dbPassword: process.env.DB_PASSWORD,
+  dbDatabase: process.env.DB_DATABASE,
   editTokenSalt: process.env.EDIT_TOKEN_SALT,
   mailFrom: process.env.MAIL_FROM,
   feathersAuthSecret: process.env.FEATHERS_AUTH_SECRET,
@@ -21,7 +21,7 @@ const config = {
 _.forOwn(config, (value, key) => {
   if (!value) {
     console.error(
-      `Missing .env variable: ${key}, please check /config/ilmomasiina.config.js`,
+      `Missing .env variable: ${key}, please check /config/ilmomasiina.config.js`
     );
   }
 });

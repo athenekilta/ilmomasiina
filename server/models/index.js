@@ -7,7 +7,7 @@ const question = require('./question');
 const answer = require('./answer');
 const user = require('./user');
 
-const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
+const config = require("../../config/ilmomasiina.config.js"); // eslint-disable-line
 
 module.exports = function() {
   const app = this;
@@ -19,14 +19,14 @@ module.exports = function() {
     });
   } else {
     sequelize = new Sequelize(
-      config.mysqlDatabase,
-      config.mysqlUser,
-      config.mysqlPassword,
+      config.dbDatabase,
+      config.dbUser,
+      config.dbPassword,
       {
-        host: 'localhost',
-        dialect: 'mysql',
+        host: process.env.DOCKER ? 'db' : 'localhost',
+        dialect: process.env.DATABASE_DIALECT,
         logging: false,
-      },
+      }
     );
   }
 
@@ -40,7 +40,7 @@ module.exports = function() {
       .catch(err => {
         const cfg = sequelize.connectionManager.config;
         console.log(
-          `Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`,
+          `Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`
         );
       });
   }
