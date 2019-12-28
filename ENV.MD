@@ -2,7 +2,7 @@
 
 # Docker variables
 DOCKER=true # Set this if running with docker
-DATABASE_DIALECT=<mysql|postgres> # Set the desired databasee type
+DB_DIALECT=<mysql|postgres> # Set the desired databasee type
 
 DB_USER=ilmomasiina
 DB_PASSWORD=secret

@@ -1,6 +1,8 @@
 const _ = require('lodash');
 
 const config = {
+  useDocker: process.env.DOCKER,
+  dbDialect: process.env.DB_DIALECT,
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
   dbDatabase: process.env.DB_DATABASE,

@@ -23,8 +23,8 @@ module.exports = function() {
       config.dbUser,
       config.dbPassword,
       {
-        host: process.env.DOCKER ? 'db' : 'localhost',
-        dialect: process.env.DATABASE_DIALECT,
+        host: config.useDocker === 'true' ? 'db' : 'localhost',
+        dialect: config.dbDialect,
         logging: false,
       }
     );
