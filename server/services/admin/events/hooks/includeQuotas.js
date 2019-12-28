@@ -15,26 +15,22 @@ module.exports = () => hook => {
     distinct: true,
     raw: false,
     // Include quotas of event and count of signups
-    include: [
-      {
-        model: sequelize.models.quota,
-        attributes: [
-          'title',
-          'size',
-          [
-            sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
-            'signupCount',
-          ],
+    include: {
+      model: sequelize.models.quota,
+      attributes: [
+        'title',
+        'size',
+        [
+          sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
+          'signupCount',
         ],
-        include: [
-          {
-            model: sequelize.models.signup,
-            required: false,
-            attributes: [],
-          },
-        ],
+      ],
+      include: {
+        model: sequelize.models.signup,
+        required: false,
+        attributes: [],
       },
-    ],
+    },
     group: [sequelize.col('event.id'), sequelize.col('quota.id')],
   };
 };
