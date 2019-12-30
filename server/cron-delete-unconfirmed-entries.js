@@ -1,9 +1,8 @@
-const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const moment = require('moment');
 
 module.exports = app => {
   const models = app.get('models');
-  const { Op } = Sequelize;
 
   models.signup
     .unscoped()
