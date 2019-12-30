@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const _ = require('lodash');
 
 module.exports = () => hook => {
@@ -31,7 +32,7 @@ module.exports = () => hook => {
               attributes: [],
               where: {
                 createdAt: {
-                  $lte: hook.result.createdAt,
+                  [Op.lte]: hook.result.createdAt,
                 },
               },
             },
