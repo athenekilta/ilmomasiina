@@ -6,6 +6,14 @@ module.exports = () => hook => {
 
   return hook.app
     .get('models')
-    .answer.bulkCreate(answers, { updateOnDuplicate: ['answer'] })
+    .answer.bulkCreate(answers, {
+      updateOnDuplicate: [
+        'answer',
+        'createdAt',
+        'updatedAt',
+        'deletedAt',
+        'eventId',
+      ],
+    })
     .then(() => hook);
 };

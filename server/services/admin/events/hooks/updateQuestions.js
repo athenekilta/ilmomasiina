@@ -31,6 +31,10 @@ module.exports = () => hook => {
                   'options',
                   'required',
                   'public',
+                  'createdAt',
+                  'updatedAt',
+                  'deletedAt',
+                  'eventId',
                 ],
               },
               { transaction: t }

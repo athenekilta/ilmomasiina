@@ -5,6 +5,7 @@ const compression = require('compression');
 const webpack = require('webpack');
 const cron = require('node-cron');
 const enforce = require('express-sslify');
+const history = require('connect-history-api-fallback');
 const webpackConfig = require('../config/webpack.config');
 const project = require('../config/project.config');
 const models = require('./models');
@@ -38,7 +39,7 @@ if (project.env === 'development') {
   app.use(express.errorHandler());
 }
 
-app.use(require('connect-history-api-fallback')());
+app.use(history());
 
 if (project.env === 'development') {
   const compiler = webpack(webpackConfig);
