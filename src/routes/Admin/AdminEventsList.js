@@ -67,7 +67,6 @@ class AdminEventList extends React.Component {
   }
 
   createUser(email) {
-    console.log(email);
     this.setState(
       {
         userFormLoading: true,
@@ -85,7 +84,6 @@ class AdminEventList extends React.Component {
             toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
           }
         } catch (error) {
-          console.log(error);
           toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
         }
 

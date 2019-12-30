@@ -1,7 +1,7 @@
 module.exports = () => hook => {
   const models = hook.app.get('models');
   const { id } = hook;
-  console.log(id);
+
   return models.signup
     .destroy({
       where: {

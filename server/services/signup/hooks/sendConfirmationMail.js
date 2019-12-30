@@ -53,8 +53,6 @@ module.exports = () => hook => {
             event: event.dataValues,
             cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
           };
-          // console.log(hook.data);
-          // console.log('=====CONFIRMATION MAIL DISABLED!=====');
           EmailService.sendConfirmationMail(hook.result.email, params);
         });
     });

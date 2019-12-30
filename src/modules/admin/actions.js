@@ -43,7 +43,7 @@ export const getEventsAsync = () => (dispatch, getState) => {
 
 export const createUserAsync = data => (dispatch, getState) => {
   const { accessToken } = getState().admin;
-  console.log(email);
+
   return request('POST', `${PREFIX_URL}/api/users`, {
     headers: { Authorization: accessToken },
     json: { email: data.email },

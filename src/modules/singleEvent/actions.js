@@ -66,7 +66,6 @@ export const completeSignupAsync = (signupId, data) => dispatch => {
   })
     .then(res => JSON.parse(res.body))
     .then(res => {
-      console.log(res);
       if (res.code && res.code !== 200) {
         throw new Error(res.message);
       }
