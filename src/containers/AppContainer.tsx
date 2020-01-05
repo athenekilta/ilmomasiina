@@ -6,7 +6,6 @@ import { Route, Switch } from "react-router-dom";
 import { Flip, ToastContainer } from "react-toastify";
 import { PersistGate } from "redux-persist/integration/react";
 
-// We only need to import the modules necessary for initial render
 import CoreLayout from "../layouts/CoreLayout/CoreLayout";
 import PageNotFound from "../routes/404/PageNotFound";
 import Admin from "../routes/Admin/AdminEventsList";
@@ -56,11 +55,6 @@ const AppContainer = () => (
             </Switch>
           </CoreLayout>
         </ConnectedRouter>
-
-        {/* <Router history={history} children={routes} /> */}
-        {/* Global toast wrapper, use toast() function to display a message
-         * https://github.com/fkhadra/react-toastify
-         */}
         <ToastContainer
           position="top-right"
           autoClose={5000}

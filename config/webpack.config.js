@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const project = require('./project.config');
 
 module.exports = {
@@ -101,5 +102,6 @@ module.exports = {
       },
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new ForkTsCheckerWebpackPlugin()
   ],
 };

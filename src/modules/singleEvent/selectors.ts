@@ -1,10 +1,10 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect";
+import { AppState } from "../../store/types";
+import { getSignupsByQuota } from "../../utils/signupUtils";
 
-import { getSignupsByQuota } from '../../utils/signupUtils';
-
-const getEvent = state => state.singleEvent.event;
-const eventLoading = state => state.singleEvent.eventLoading;
-const eventError = state => state.singleEvent.eventError;
+const getEvent = (state: AppState) => state.singleEvent.event;
+const eventLoading = (state: AppState) => state.singleEvent.eventLoading;
+const eventError = (state: AppState) => state.singleEvent.eventError;
 
 export const getQuotaData = createSelector(
   [getEvent, eventLoading, eventError],
@@ -23,11 +23,11 @@ export const getFormattedQuestions = createSelector(
       return [];
     }
     return _.concat(event.questions, {
-      id: 'quota',
+      id: "quota",
       options: null,
       public: true,
-      question: 'Kiintiö',
-      type: 'text',
+      question: "Kiintiö",
+      type: "text"
     });
   }
 );

@@ -13,5 +13,5 @@
     "noEmit": true, // Don't emit; allow Babel to transform files.
     "jsx": "react"
   },
-  "include": ["src"]
+  "include": ["../src"]
 }

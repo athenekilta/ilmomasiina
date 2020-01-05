@@ -1,0 +1,40 @@
+import request from "then-request";
+import { Event } from "../types";
+import { DispatchAction } from "../../store/types";
+import {
+  SET_EVENTS,
+  SET_EVENTS_ERROR,
+  SET_EVENTS_LOADING
+} from "./actionTypes";
+
+export const setEvents = (events: Event[]) => {
+  return <const>{
+    type: SET_EVENTS,
+    payload: events
+  };
+};
+
+export const setEventsLoading = () => {
+  return <const>{
+    type: SET_EVENTS_LOADING
+  };
+};
+
+export const setEventsError = () => {
+  return <const>{
+    type: SET_EVENTS_ERROR
+  };
+};
+
+export const getEventsAsync = () => (dispatch: DispatchAction) => {
+  dispatch(setEventsLoading());
+  request("GET", `${PREFIX_URL}/api/events`)
+    .then(res => JSON.parse(res.body.toString()))
+    .then(res => {
+      dispatch(setEvents(res));
+    })
+    .catch(error => {
+      console.error("Error in getEventsAsync", error);
+      dispatch(setEventsError());
+    });
+};
