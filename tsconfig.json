@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "esnext", // Target latest version of ECMAScript.
+    "allowJs": true, // Process & infer types from .js files.
+    "skipLibCheck": true, // Skip type checking of all declaration files (*.d.ts).
+    "esModuleInterop": true, // Import non-ES modules as default imports.
+    "allowSyntheticDefaultImports": true, // Allow default imports from modules with no default export. This does not affect code emit, just typechecking.
+    "strict": true, // Enable all strict type checking options.
+    "forceConsistentCasingInFileNames": true, // Disallow inconsistently-cased references to the same file.
+    "module": "esnext",
+    "moduleResolution": "node", // Search under node_modules for non-relative imports.
+    "isolatedModules": true, // Disallow features that require cross-file information for emit.
+    "noEmit": true, // Don't emit; allow Babel to transform files.
+    "jsx": "react"
+  },
+  "include": ["src"]
+}

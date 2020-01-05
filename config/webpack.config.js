@@ -4,13 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const project = require('./project.config');
 
-const hotMidConf =
-  'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000';
-
 module.exports = {
   mode: 'development',
   context: __dirname,
-  entry: [hotMidConf, project.paths.client('main.js')],
+  entry: { app: project.paths.client('main.tsx') },
   output: {
     path: project.paths.dist(),
     publicPath: project.compiler_public_path,
@@ -20,11 +17,12 @@ module.exports = {
     alias: {
       '@': path.resolve(__dirname, '../src/styles'),
     },
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js|jsx|tsx|ts)$/,
         exclude: /node_modules/,
         use: [
           {

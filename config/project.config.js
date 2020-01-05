@@ -2,7 +2,6 @@
 const path = require('path');
 const debug = require('debug')('app:config:project');
 const { argv } = require('yargs');
-const ip = require('ip');
 
 debug('Creating default configuration.');
 // ========================================================
@@ -44,6 +43,7 @@ const config = {
         },
       ],
       '@babel/preset-react',
+      '@babel/preset-typescript'
     ],
   },
   compiler_devtool: 'source-map',
