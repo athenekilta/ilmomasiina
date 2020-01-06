@@ -10,7 +10,7 @@ import CoreLayout from "../layouts/CoreLayout";
 import PageNotFound from "../routes/404/PageNotFound";
 import Admin from "../routes/Admin/AdminEventsList";
 import Editor from "../routes/Editor/Editor";
-import EditSignup from "../routes/EditSignup/EditSignup";
+import EditSignup from "../routes/EditSignup";
 import Events from "../routes/Events/EventList";
 import Login from "../routes/Login/Login";
 import SingleEvent from "../routes/SingleEvent/SingleEvent";

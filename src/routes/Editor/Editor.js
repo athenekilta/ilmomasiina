@@ -1,30 +1,29 @@
-import React from 'react';
+import React from "react";
 
-import Promise from 'bluebird';
-import { Form } from 'formsy-react-components';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
-import Spinner from 'react-spinkit';
-import { toast } from 'react-toastify';
+import { Form } from "formsy-react-components";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { Link, withRouter } from "react-router-dom";
+import Spinner from "react-spinkit";
+import { toast } from "react-toastify";
 
-import * as AdminSignupActions from '../../modules/admin/actions';
-import { getSignups } from '../../modules/admin/selectors';
-import * as EditorActions from '../../modules/editor/actions';
-import { getOpenQuotas } from '../../modules/singleEvent/selectors';
-import { getSignupsByQuota } from '../../utils/signupUtils';
-import BasicDetailsTab from './components/BasicDetailsTab';
-import EmailsTab from './components/EmailsTab';
-import QuestionsTab from './components/QuestionsTab';
-import QuotasTab from './components/QuotasTab';
-import SignupsTab from './components/SignupsTab';
+import * as AdminSignupActions from "../../modules/admin/actions";
+import { getSignups } from "../../modules/admin/selectors";
+import * as EditorActions from "../../modules/editor/actions";
+import { getOpenQuotas } from "../../modules/singleEvent/selectors";
+import { getSignupsByQuota } from "../../utils/signupUtils";
+import BasicDetailsTab from "./components/BasicDetailsTab";
+import EmailsTab from "./components/EmailsTab";
+import QuestionsTab from "./components/QuestionsTab";
+import QuotasTab from "./components/QuotasTab";
+import SignupsTab from "./components/SignupsTab";
 
-import './Editor.scss';
+import "./Editor.scss";
 
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([
     func,
-    new Promise(resolve => setTimeout(resolve, ms)),
+    new Promise(resolve => setTimeout(resolve, ms))
   ]);
   return res[0];
 }
@@ -42,14 +41,14 @@ class Editor extends React.Component {
     eventPublishLoading: PropTypes.bool,
     eventPublishError: PropTypes.bool,
     params: PropTypes.any,
-    adminToken: PropTypes.string.isRequired,
+    adminToken: PropTypes.string.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = {
       activeTab: 1,
-      isValid: false,
+      isValid: false
     };
 
     this.changeTab = this.changeTab.bind(this);
@@ -60,26 +59,26 @@ class Editor extends React.Component {
   componentWillMount() {
     this.setState(
       {
-        eventLoading: true,
+        eventLoading: true
       },
       async () => {
         const eventId = this.props.match.params.id;
         const { adminToken } = this.props;
 
-        if (eventId === 'new') {
+        if (eventId === "new") {
           // New event, clear any existing one from redux;
           this.props.setEvent({});
 
           // Set base quota field
-          this.props.updateEventField('quota', [
+          this.props.updateEventField("quota", [
             {
               id: 0,
-              title: 'Kiintiö',
+              title: "Kiintiö",
               size: 20,
-              existsInDb: false,
-            },
+              existsInDb: false
+            }
           ]);
-          this.props.updateEventField('questions', []);
+          this.props.updateEventField("questions", []);
         } else {
           this.props.getEventAsync(eventId, adminToken);
         }
@@ -100,7 +99,7 @@ class Editor extends React.Component {
   setValidState(isValid) {
     if (isValid !== this.state.isValid) {
       this.setState({
-        isValid,
+        isValid
       });
     }
   }
@@ -108,38 +107,38 @@ class Editor extends React.Component {
   async publishEvent(isDraft = false) {
     const event = {
       ...this.props.event,
-      draft: isDraft,
+      draft: isDraft
     };
 
     const { adminToken } = this.props;
 
-    if (this.props.match.params.id === 'new') {
+    if (this.props.match.params.id === "new") {
       try {
         const res = await minDelay(
           this.props.publishEventAsync(event, adminToken),
           1000
         );
-        console.log('RES EDITOR', res);
+        console.log("RES EDITOR", res);
         this.props.history.push(`${PREFIX_URL}/admin/edit/${res.id}`);
       } catch (error) {
         console.log(error);
-        toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', {
-          autoClose: 2000,
+        toast.error("Jotain meni pieleen - tapahtuman luonti epäonnistui.", {
+          autoClose: 2000
         });
       }
       this.setState({
-        eventPublishing: false,
+        eventPublishing: false
       });
     } else {
       try {
         await minDelay(this.props.updateEventAsync(event, adminToken), 1000);
-        toast.success('Muutoksesi tallennettiin onnistuneesti!', {
-          autoClose: 2000,
+        toast.success("Muutoksesi tallennettiin onnistuneesti!", {
+          autoClose: 2000
         });
       } catch (error) {
         console.log(error);
         toast.error(
-          'Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.',
+          "Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.",
           { autoClose: 2000 }
         );
       }
@@ -147,7 +146,7 @@ class Editor extends React.Component {
   }
 
   renderButtons() {
-    if (this.props.match.params.id === 'new') {
+    if (this.props.match.params.id === "new") {
       return (
         <div className="pull-right event-editor--buttons-wrapper">
           {this.props.eventPublishLoading ? (
@@ -226,8 +225,8 @@ class Editor extends React.Component {
 
   renderValidNotice() {
     const className = this.state.isValid
-      ? 'event-editor--valid-notice collapsed'
-      : 'event-editor--valid-notice';
+      ? "event-editor--valid-notice collapsed"
+      : "event-editor--valid-notice";
 
     return (
       <div className={className}>
@@ -240,7 +239,7 @@ class Editor extends React.Component {
   }
 
   render() {
-    const isNewEvent = this.props.match.params.id === 'new';
+    const isNewEvent = this.props.match.params.id === "new";
 
     if (this.props.eventLoading) {
       return (
@@ -272,22 +271,22 @@ class Editor extends React.Component {
           onInvalid={() => this.setValidState(false)}
           className="form-horizontal col-xs-12 col-md-10 col-md-offset-1"
         >
-          <h1>{isNewEvent ? 'Luo uusi tapahtuma' : 'Muokkaa tapahtumaa'}</h1>
+          <h1>{isNewEvent ? "Luo uusi tapahtuma" : "Muokkaa tapahtumaa"}</h1>
           {this.renderButtons()}
           <ul className="event-editor--nav nav nav-tabs">
-            <li className={this.state.activeTab === 1 ? 'active' : ''}>
+            <li className={this.state.activeTab === 1 ? "active" : ""}>
               <a onClick={() => this.changeTab(1)}>Perustiedot</a>
             </li>
-            <li className={this.state.activeTab === 2 ? 'active' : ''}>
+            <li className={this.state.activeTab === 2 ? "active" : ""}>
               <a onClick={() => this.changeTab(2)}>Ilmoittautumisasetukset</a>
             </li>
-            <li className={this.state.activeTab === 3 ? 'active' : ''}>
+            <li className={this.state.activeTab === 3 ? "active" : ""}>
               <a onClick={() => this.changeTab(3)}>Kysymykset</a>
             </li>
-            <li className={this.state.activeTab === 4 ? 'active' : ''}>
+            <li className={this.state.activeTab === 4 ? "active" : ""}>
               <a onClick={() => this.changeTab(4)}>Vahvistusviestit</a>
             </li>
-            <li className={this.state.activeTab === 5 ? 'active' : ''}>
+            <li className={this.state.activeTab === 5 ? "active" : ""}>
               <a onClick={() => this.changeTab(5)}>Ilmoittautuneet</a>
             </li>
           </ul>
@@ -295,7 +294,7 @@ class Editor extends React.Component {
           <div className="tab-content">
             <div
               className={`tab-pane ${
-                this.state.activeTab === 1 ? 'active' : ''
+                this.state.activeTab === 1 ? "active" : ""
               }`}
             >
               <BasicDetailsTab
@@ -305,7 +304,7 @@ class Editor extends React.Component {
             </div>
             <div
               className={`tab-pane ${
-                this.state.activeTab === 2 ? 'active' : ''
+                this.state.activeTab === 2 ? "active" : ""
               }`}
             >
               <QuotasTab
@@ -315,7 +314,7 @@ class Editor extends React.Component {
             </div>
             <div
               className={`tab-pane ${
-                this.state.activeTab === 3 ? 'active' : ''
+                this.state.activeTab === 3 ? "active" : ""
               }`}
             >
               <QuestionsTab
@@ -325,7 +324,7 @@ class Editor extends React.Component {
             </div>
             <div
               className={`tab-pane ${
-                this.state.activeTab === 4 ? 'active' : ''
+                this.state.activeTab === 4 ? "active" : ""
               }`}
             >
               <EmailsTab
@@ -335,7 +334,7 @@ class Editor extends React.Component {
             </div>
             <div
               className={`tab-pane ${
-                this.state.activeTab === 5 ? 'active' : ''
+                this.state.activeTab === 5 ? "active" : ""
               }`}
             >
               <SignupsTab
@@ -356,7 +355,7 @@ const mapDispatchToProps = {
   getEventAsync: EditorActions.getEventAsync,
   setEvent: EditorActions.setEvent,
   updateEventField: EditorActions.updateEventField,
-  deleteSignup: AdminSignupActions.deleteSignupAsync,
+  deleteSignup: AdminSignupActions.deleteSignupAsync
 };
 
 const mapStateToProps = state => ({
@@ -365,7 +364,7 @@ const mapStateToProps = state => ({
   eventError: state.editor.eventError,
   eventPublishLoading: state.editor.eventPublishLoading,
   eventPublishError: state.editor.eventPublishError,
-  adminToken: state.admin.accessToken,
+  adminToken: state.admin.accessToken
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Editor));

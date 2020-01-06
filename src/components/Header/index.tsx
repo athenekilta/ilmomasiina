@@ -1,7 +1,7 @@
 import React from "react";
 
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 import { redirectToLogin } from "../../modules/admin/actions";
 
@@ -10,7 +10,10 @@ import { AppState } from "../../store/types";
 
 interface HeaderProps {}
 
-type Props = HeaderProps & LinkStateProps & LinkDispatchProps;
+type Props = HeaderProps &
+  LinkStateProps &
+  LinkDispatchProps &
+  RouteComponentProps;
 
 const Header = (props: Props) => {
   const { loggedIn } = props;
@@ -19,7 +22,7 @@ const Header = (props: Props) => {
     <div className="navbar navbar-default">
       <div className="container">
         <a
-          onClick={() => this.props.history.push(`${PREFIX_URL}/`)}
+          onClick={() => props.history.push(`${PREFIX_URL}/`)}
           className="navbar-brand"
         >
           {" "}
@@ -27,7 +30,7 @@ const Header = (props: Props) => {
         </a>
         {loggedIn && (
           <a
-            onClick={() => this.props.redirectToLogin()}
+            onClick={() => props.redirectToLogin()}
             className="navbar-brand"
             style={{ float: "right" }}
           >

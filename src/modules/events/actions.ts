@@ -34,7 +34,6 @@ export const getEventsAsync = () => (dispatch: DispatchAction) => {
       dispatch(setEvents(res));
     })
     .catch(error => {
-      console.error("Error in getEventsAsync", error);
       dispatch(setEventsError());
     });
 };

@@ -1,6 +1,6 @@
 import request from "then-request";
 import { DispatchAction } from "../../store/types";
-import { Event, Signup } from "../types";
+import { Event, Signup, Answer } from "../types";
 import {
   SET_EVENT,
   SET_EVENT_LOADING,
@@ -62,9 +62,18 @@ export const attachPositionAsync = (quotaId: string) => (
     });
 };
 
-export const completeSignupAsync = (signupId: string, data: any) => (
-  dispatch: DispatchAction
-) => {
+export interface CompleteSignupData {
+  editToken: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  answers: Answer[];
+}
+
+export const completeSignupAsync = (
+  signupId: string,
+  data: CompleteSignupData
+) => (dispatch: DispatchAction) => {
   dispatch(setSignupLoading());
 
   return request("PATCH", `${PREFIX_URL}/api/signups/${signupId}`, {

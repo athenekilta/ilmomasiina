@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 
 import { redirectToLogin } from "../modules/admin/actions";
+import { AppState } from "../store/types";
 
 interface Props {
   accessToken: string;
@@ -36,7 +36,7 @@ const requireAuth = WrappedComponent => {
     return <WrappedComponent {...props} />;
   };
 
-  const mapStateToProps = state => ({
+  const mapStateToProps = (state: AppState) => ({
     accessToken: state.admin.accessToken,
     accessTokenExpires: state.admin.accessTokenExpires
   });

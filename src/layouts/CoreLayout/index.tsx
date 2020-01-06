@@ -1,6 +1,5 @@
 import React from "react";
 
-import PropTypes from "prop-types";
 import { withRouter } from "react-router-dom";
 
 import Footer from "../../components/Footer";
@@ -16,9 +15,5 @@ const CoreLayout: React.FC = ({ children }) => (
     <Footer />
   </div>
 );
-
-CoreLayout.propTypes = {
-  children: PropTypes.node.isRequired
-};
 
 export default withRouter(CoreLayout);

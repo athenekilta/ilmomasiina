@@ -82,16 +82,11 @@ export const getEventsAsync = () => (
       dispatch(setEvents(res));
     })
     .catch(error => {
-      console.error("Error in getEventsAsync", error);
       dispatch(setEventsError());
     });
 };
 
-interface UserData {
-  email: string;
-}
-
-export const createUserAsync = (data: UserData) => (
+export const createUserAsync = (data: { email: string }) => (
   _dispatch: DispatchAction,
   getState: GetState
 ) => {
@@ -104,7 +99,6 @@ export const createUserAsync = (data: UserData) => (
     .then(res => JSON.parse(res.body.toString()))
     .then(() => true)
     .catch(error => {
-      console.error("Error in createUserAsync", error);
       return false;
     });
 };
@@ -132,7 +126,6 @@ export const login = (email: string, password: string) => dispatch => {
       dispatch(push(`${PREFIX_URL}/admin`));
     })
     .catch(error => {
-      console.error("Error in login", error);
       dispatch(setLoginError());
     });
 };
@@ -142,7 +135,7 @@ export const redirectToLogin = () => dispatch => {
   dispatch(push(`${PREFIX_URL}/login`));
 };
 
-export const deleteEventAsync = id => (_dispatch, getState) => {
+export const deleteEventAsync = (id: string) => (_dispatch, getState) => {
   const { accessToken } = getState().admin;
 
   return request("DELETE", `${PREFIX_URL}/api/admin/events/${id}`, {
