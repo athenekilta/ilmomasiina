@@ -1,10 +1,11 @@
-import _ from 'lodash';
-import moment from 'moment-timezone';
+import _ from "lodash";
+import moment from "moment-timezone";
+import { Event } from "../modules/types";
 
-export const WAITLIST = '__waitlist';
-export const OPENQUOTA = '__open';
+export const WAITLIST = "__waitlist";
+export const OPENQUOTA = "__open";
 
-export const getSignupsByQuota = event => {
+export const getSignupsByQuota = (event: Event) => {
   let extraSignups = [];
   const quotas = {};
 
@@ -17,19 +18,19 @@ export const getSignupsByQuota = event => {
           // size may be null
           quotaSignups.push({
             ...s,
-            quota: quota.title,
+            quota: quota.title
           });
         } else {
           extraSignups.push({
             ...s,
-            quota: quota.title,
+            quota: quota.title
           });
         }
       });
 
       quotas[quota.title] = {
         size: quota.size,
-        signups: quotaSignups,
+        signups: quotaSignups
       };
     });
   }
@@ -39,24 +40,24 @@ export const getSignupsByQuota = event => {
   if (event.openQuotaSize > 0) {
     quotas[OPENQUOTA] = {
       size: event.openQuotaSize,
-      signups: extraSignups.slice(0, event.openQuotaSize),
+      signups: extraSignups.slice(0, event.openQuotaSize)
     };
 
     quotas[WAITLIST] = {
       size: Infinity,
-      signups: extraSignups.slice(event.openQuotaSize),
+      signups: extraSignups.slice(event.openQuotaSize)
     };
   } else {
     quotas[WAITLIST] = {
       size: Infinity,
-      signups: extraSignups,
+      signups: extraSignups
     };
   }
 
   return quotas;
 };
 
-export const getSignupsArray = (event, includeWaitlist = true) => {
+export const getSignupsArray = (event: Event, includeWaitlist = true) => {
   const byQuota = getSignupsByQuota(event);
 
   const signups = [];
@@ -67,7 +68,7 @@ export const getSignupsArray = (event, includeWaitlist = true) => {
         signups.push({
           ...s,
           isWaitlist: quotaName === WAITLIST,
-          isOpenQuota: quotaName === OPENQUOTA,
+          isOpenQuota: quotaName === OPENQUOTA
         });
       });
     }
@@ -98,18 +99,18 @@ export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
       Sukunimi: signup.lastName,
       Sähköposti: signup.email,
       Ilmoittautumisaika: moment(signup.createdAt)
-        .tz('Europe/Helsinki')
-        .format('DD.MM.YYYY HH:mm:ss'),
-      Kiintiö: `${signup.quota} ${signup.isOpenQuota ? '(Avoin)' : ''}${
-        signup.isWaitlist ? '(Jonossa)' : ''
-      }`,
+        .tz("Europe/Helsinki")
+        .format("DD.MM.YYYY HH:mm:ss"),
+      Kiintiö: `${signup.quota} ${signup.isOpenQuota ? "(Avoin)" : ""}${
+        signup.isWaitlist ? "(Jonossa)" : ""
+      }`
     };
 
     _.each(event.questions, q => {
       const answer = _.find(signup.answers, a => a.questionId === q.id);
 
       if (!answer) {
-        result[q.question] = '';
+        result[q.question] = "";
       } else {
         result[q.question] = answer.answer.toString();
       }
