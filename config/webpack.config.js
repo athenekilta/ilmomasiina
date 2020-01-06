@@ -102,6 +102,6 @@ module.exports = {
       },
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin()
+    new ForkTsCheckerWebpackPlugin(),
   ],
 };

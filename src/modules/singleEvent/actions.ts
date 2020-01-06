@@ -62,7 +62,7 @@ export const attachPositionAsync = (quotaId: string) => (
     });
 };
 
-export const completeSignupAsync = (signupId: string, data) => (
+export const completeSignupAsync = (signupId: string, data: any) => (
   dispatch: DispatchAction
 ) => {
   dispatch(setSignupLoading());

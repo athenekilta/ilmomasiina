@@ -9,7 +9,7 @@ import {
 import { Event } from "../types";
 
 interface EditorState {
-  event: { [key: string]: event };
+  event: { [key: string]: Event };
   eventLoading: boolean;
   eventError: boolean;
   eventPublishLoading: boolean;

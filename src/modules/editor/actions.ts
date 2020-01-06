@@ -139,7 +139,6 @@ export const updateEventAsync = (data, token) => async (
       return cleaned;
     })
     .catch(error => {
-      console.error("Error in updateEventAsync", error);
       dispatch(setEventPublishError());
       throw new Error(error);
     });
@@ -158,14 +157,13 @@ export const getEventAsync = (eventId: string, token: string) => async (
       headers: { Authorization: token }
     }
   )
-    .then(res => JSON.parse(res.body))
-    .then(res => {
+    .then(res => JSON.parse(res.body.toString()))
+    .then((res: Event) => {
       res.useOpenQuota = res.openQuotaSize > 0;
       dispatch(setEvent(res));
       return res;
     })
     .catch(error => {
-      console.error("Error in getEventAsync", error);
       dispatch(setEventError());
     });
 

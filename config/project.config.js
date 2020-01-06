@@ -34,6 +34,7 @@ const config = {
     plugins: [
       '@babel/plugin-transform-runtime',
       '@babel/plugin-proposal-class-properties',
+      '@babel/plugin-proposal-optional-chaining',
     ],
     presets: [
       [
@@ -43,7 +44,7 @@ const config = {
         },
       ],
       '@babel/preset-react',
-      '@babel/preset-typescript'
+      '@babel/preset-typescript',
     ],
   },
   compiler_devtool: 'source-map',

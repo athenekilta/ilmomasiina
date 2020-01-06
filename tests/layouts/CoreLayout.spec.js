@@ -2,7 +2,7 @@ import React from 'react';
 
 import TestUtils from 'react-addons-test-utils';
 
-import { CoreLayout } from '../../src/layouts/CoreLayout/CoreLayout';
+import { CoreLayout } from '../../src/layouts/CoreLayout';
 
 function shallowRender(component) {
   const renderer = TestUtils.createRenderer();

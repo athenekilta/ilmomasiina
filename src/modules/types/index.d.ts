@@ -1,8 +1,8 @@
 interface SequelizeType {
   id: string;
   createdAt: string;
-  updatedAt: string;
   deletedAt: string;
+  updatedAt: string;
 }
 
 export interface Answer extends SequelizeType {
@@ -10,20 +10,26 @@ export interface Answer extends SequelizeType {
 }
 
 export interface Event extends SequelizeType {
-  title: string;
   date: string;
+  description: string;
+  draft: boolean;
+  facebook: string;
+  facebookUrl: string;
+  homepage: string;
+  location: string;
+  millisTillOpening: number;
+  openQuotaSize: number;
+  price: string;
+  questions: Question[];
+  quota: Quota[];
+  registrationClosed: boolean;
   registrationStartDate: string;
   registrationEndDate: string;
-  openQuotaSize: number;
-  description: string;
-  price: string;
-  location: string;
-  homepage: string;
-  facebookUrl: string;
-  webpageUrl: string;
-  draft: boolean;
   signupsPublic: boolean;
+  title: string;
+  useOpenQuota: boolean;
   verificationEmail: string;
+  webpageUrl: string;
 }
 
 export interface Quota extends SequelizeType {
@@ -32,20 +38,26 @@ export interface Quota extends SequelizeType {
 }
 
 export interface Question extends SequelizeType {
-  question: string;
-  type: string;
-  options: string;
-  required: boolean;
-  public: boolean;
   eventId: string;
+  existsInDb: boolean;
+  options: string[];
+  public: boolean;
+  required: boolean;
+  type: string;
+  question: string;
 }
 
 export interface Signup extends SequelizeType {
+  answers: Answer[];
+  confirmedAt: string;
+  editToken: string;
+  email: string;
   firstName: string;
   lastName: string;
-  email: string;
-  editToken: string;
-  confirmedAt: string;
+  position: number;
+  quota: Quota;
+  quotaId: string;
+  status: string;
 }
 
 export interface Signup extends SequelizeType {

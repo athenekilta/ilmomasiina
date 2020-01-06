@@ -1,16 +1,9 @@
 import React from "react";
-
 import ReactDOM from "react-dom";
-
 import "react-dates/initialize";
-
 import AppContainer from "./containers/AppContainer";
-
 import "react-dates/lib/css/_datepicker.css";
 
-// ========================================================
-// Render Setup
-// ========================================================
 const MOUNT_NODE = document.getElementById("root");
 
 let render = () => {

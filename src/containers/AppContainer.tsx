@@ -6,7 +6,7 @@ import { Route, Switch } from "react-router-dom";
 import { Flip, ToastContainer } from "react-toastify";
 import { PersistGate } from "redux-persist/integration/react";
 
-import CoreLayout from "../layouts/CoreLayout/CoreLayout";
+import CoreLayout from "../layouts/CoreLayout";
 import PageNotFound from "../routes/404/PageNotFound";
 import Admin from "../routes/Admin/AdminEventsList";
 import Editor from "../routes/Editor/Editor";
