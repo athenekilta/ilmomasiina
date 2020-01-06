@@ -1,16 +1,20 @@
 {
-  "parser": "babel-eslint",
-  "plugins": ["babel", "prettier", "react", "promise", "simple-import-sort"],
-  "extends": [
-    "standard",
-    "standard-react",
-    "airbnb-base",
-    "prettier",
-    "prettier/react"
-  ],
+  "parser": "@typescript-eslint/parser",
+  "settings": {
+    "pragma": "React",
+    "version": "detect"
+  },
   "env": {
     "browser": true
   },
+  "plugins": ["react", "@typescript-eslint", "prettier", "simple-import-sort"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
   "globals": {
     "DEV": false,
     "TEST": false,
@@ -28,9 +32,8 @@
     "prettier/prettier": [
       "error",
       {
-        "trailingComma": "es5",
-        "singleQuote": true,
-        "printWidth": 80
+        "trailingComma": "none",
+        "singleQuote": true
       }
     ],
     "simple-import-sort/sort": [
@@ -47,10 +50,6 @@
           ["css$"]
         ]
       }
-    ],
-    "max-len": [2, 120, 2],
-    "no-param-reassign": 0,
-    "func-names": 0,
-    "array-callback-return": 0
+    ]
   }
 }
