@@ -35,6 +35,7 @@ export interface Event extends SequelizeType {
 export interface Quota extends SequelizeType {
   title: string;
   size: number;
+  signups: Signup[];
 }
 
 export interface Question extends SequelizeType {
