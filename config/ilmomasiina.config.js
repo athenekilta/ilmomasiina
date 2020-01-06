@@ -1,23 +1,38 @@
 const _ = require('lodash');
 
+const {
+  DOCKER,
+  DB_DIALECT,
+  DB_USER,
+  DB_PASSWORD,
+  DB_DATABASE,
+  EDIT_TOKEN_SALT,
+  MAIL_FROM,
+  FEATHERS_AUTH_SECRET,
+  MAILGUN_API_KEY,
+  MAILGUN_DOMAIN,
+  BASE_URL,
+  PREFIX_URL,
+  ADMIN_REGISTRATION_ALLOWED,
+  BRANDING_MAIL_FOOTER_TEXT
+} = process.env;
+
 const config = {
-  useDocker: process.env.DOCKER,
-  dbDialect: process.env.DB_DIALECT,
-  dbUser: process.env.DB_USER,
-  dbPassword: process.env.DB_PASSWORD,
-  dbDatabase: process.env.DB_DATABASE,
-  editTokenSalt: process.env.EDIT_TOKEN_SALT,
-  mailFrom: process.env.MAIL_FROM,
-  feathersAuthSecret: process.env.FEATHERS_AUTH_SECRET,
-  mailgunApiKey: process.env.MAILGUN_API_KEY,
-  mailgunDomain: process.env.MAILGUN_DOMAIN,
-  baseUrl: process.env.BASE_URL,
-  prefixUrl: process.env.PREFIX_URL || '',
-  adminRegistrationAllowed:
-    process.env.ADMIN_REGISTRATION_ALLOWED == 'true' || false,
-  brandingMailFooterText: process.env.BRANDING_MAIL_FOOTER_TEXT,
-  brandingMailFooterLink: `${process.env.BASE_URL}${process.env.PREFIX_URL ||
-    ''}`,
+  useDocker: DOCKER,
+  dbDialect: DB_DIALECT,
+  dbUser: DB_USER,
+  dbPassword: DB_PASSWORD,
+  dbDatabase: DB_DATABASE,
+  editTokenSalt: EDIT_TOKEN_SALT,
+  mailFrom: MAIL_FROM,
+  feathersAuthSecret: FEATHERS_AUTH_SECRET,
+  mailgunApiKey: MAILGUN_API_KEY,
+  mailgunDomain: MAILGUN_DOMAIN,
+  baseUrl: BASE_URL,
+  prefixUrl: PREFIX_URL || '',
+  adminRegistrationAllowed: ADMIN_REGISTRATION_ALLOWED == 'true' || false,
+  brandingMailFooterText: BRANDING_MAIL_FOOTER_TEXT,
+  brandingMailFooterLink: `${BASE_URL}${PREFIX_URL || ''}`
 };
 
 _.forOwn(config, (value, key) => {
