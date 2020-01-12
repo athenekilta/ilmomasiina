@@ -9,7 +9,7 @@ exports.before = {
   create: [hooks.disallow('external')],
   update: [hooks.disallow('external')],
   patch: [hooks.disallow('external')],
-  remove: [deleteSignup()],
+  remove: [deleteSignup()]
 };
 
 exports.after = {};

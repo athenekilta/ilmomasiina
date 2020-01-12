@@ -1,9 +1,10 @@
-import _ from "lodash";
-import moment from "moment-timezone";
-import { Event } from "../modules/types";
+import _ from 'lodash';
+import moment from 'moment-timezone';
 
-export const WAITLIST = "__waitlist";
-export const OPENQUOTA = "__open";
+import { Event } from '../modules/types';
+
+export const WAITLIST = '__waitlist';
+export const OPENQUOTA = '__open';
 
 export const getSignupsByQuota = (event: Event) => {
   let extraSignups = [];
@@ -99,10 +100,10 @@ export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
       Sukunimi: signup.lastName,
       Sähköposti: signup.email,
       Ilmoittautumisaika: moment(signup.createdAt)
-        .tz("Europe/Helsinki")
-        .format("DD.MM.YYYY HH:mm:ss"),
-      Kiintiö: `${signup.quota} ${signup.isOpenQuota ? "(Avoin)" : ""}${
-        signup.isWaitlist ? "(Jonossa)" : ""
+        .tz('Europe/Helsinki')
+        .format('DD.MM.YYYY HH:mm:ss'),
+      Kiintiö: `${signup.quota} ${signup.isOpenQuota ? '(Avoin)' : ''}${
+        signup.isWaitlist ? '(Jonossa)' : ''
       }`
     };
 
@@ -110,7 +111,7 @@ export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
       const answer = _.find(signup.answers, a => a.questionId === q.id);
 
       if (!answer) {
-        result[q.question] = "";
+        result[q.question] = '';
       } else {
         result[q.question] = answer.answer.toString();
       }

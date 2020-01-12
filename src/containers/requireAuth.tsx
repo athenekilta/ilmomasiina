@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { redirectToLogin } from "../modules/admin/actions";
-import { AppState } from "../store/types";
+import { redirectToLogin } from '../modules/admin/actions';
+import { AppState } from '../store/types';
 
 interface Props {
   accessToken: string;
@@ -21,7 +21,7 @@ const requireAuth = WrappedComponent => {
       if (!accessTokenExpires) {
         redirectToLogin();
       }
-      if (typeof accessTokenExpires === "string") {
+      if (typeof accessTokenExpires === 'string') {
         accessTokenExpires = new Date(accessTokenExpires);
       }
       if (accessTokenExpires < new Date()) {

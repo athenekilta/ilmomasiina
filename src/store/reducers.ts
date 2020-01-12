@@ -1,13 +1,13 @@
-import { connectRouter } from "connected-react-router";
-import { combineReducers, Store, Reducer } from "redux";
-import { History } from "history";
+import { connectRouter } from 'connected-react-router';
+import { History } from 'history';
+import { combineReducers, Reducer, Store } from 'redux';
 
-import admin from "../modules/admin/reducer";
-import editor from "../modules/editor/reducer";
-import editSignup from "../modules/editSignup/reducer";
-import events from "../modules/events/reducer";
-import singleEvent from "../modules/singleEvent/reducer";
-import { AppState, AppActions } from "./types";
+import admin from '../modules/admin/reducer';
+import editor from '../modules/editor/reducer';
+import editSignup from '../modules/editSignup/reducer';
+import events from '../modules/events/reducer';
+import singleEvent from '../modules/singleEvent/reducer';
+import { AppActions, AppState } from './types';
 
 type AsyncReducers = {
   [key: string]: Reducer;

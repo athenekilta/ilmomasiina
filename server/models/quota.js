@@ -9,15 +9,15 @@ module.exports = function() {
     {
       title: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       size: {
-        type: Sequelize.INTEGER,
-      },
+        type: Sequelize.INTEGER
+      }
     },
     {
       freezeTableName: true,
-      paranoid: true,
+      paranoid: true
     }
   );
 

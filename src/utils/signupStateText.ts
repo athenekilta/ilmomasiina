@@ -5,7 +5,7 @@ const signupState = (eventTime, starts, closes) => {
   if (_.isEmpty(starts) || _.isEmpty(closes)) {
     return {
       label: 'Auki toistaiseksi.',
-      class: 'signup-opened',
+      class: 'signup-opened'
     };
   }
 
@@ -19,14 +19,14 @@ const signupState = (eventTime, starts, closes) => {
   if (signupOpens.isSameOrAfter(now)) {
     return {
       label: `Alkaa ${moment(signupOpens).format(timeFormat)}.`,
-      class: 'signup-not-opened',
+      class: 'signup-not-opened'
     };
   }
 
   if (signupCloses.isSameOrAfter(now)) {
     return {
       label: `Auki ${moment(signupCloses).format(timeFormat)} asti.`,
-      class: 'signup-opened',
+      class: 'signup-opened'
     };
   }
 

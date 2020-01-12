@@ -1,29 +1,35 @@
 import React from 'react';
 
 import _ from 'lodash';
-import moment from 'moment-timezone';
-import PropTypes from 'prop-types';
 import { CSVLink } from 'react-csv';
-import ReactTable from 'react-table';
 
-import {
-  getSignupsArrayFormatted,
-  OPENQUOTA,
-  WAITLIST,
-} from '../../../utils/signupUtils';
-import SignupList from './SignupList';
+import { Event } from '../../../modules/types';
+import { getSignupsArrayFormatted } from '../../../utils/signupUtils';
 
 import 'react-table/react-table.css';
 import '../Editor.scss';
 
-class SignupsTab extends React.Component {
-  static propTypes = {
-    event: PropTypes.object,
-  };
+type Props = {
+  event: Event;
+  deleteSignup: (id: string, eventId: string) => boolean;
+};
 
-  renderTable(signups) {
-    const { event } = this.props;
-    return (
+const SignupsTab = (props: Props) => {
+  const { event } = props;
+
+  const signups = getSignupsArrayFormatted(event);
+
+  return (
+    <div>
+      <CSVLink
+        data={signups}
+        separator={'\t'}
+        filename={`${event.title} osallistujalista`}
+      >
+        Lataa osallistujalista
+      </CSVLink>
+      <br />
+      <br />
       <table className="table table-condensed table-responsive">
         <thead>
           <tr className="active">
@@ -41,7 +47,7 @@ class SignupsTab extends React.Component {
         </thead>
         <tbody>
           {_.map(signups, (s, index) => (
-            <tr key={s.id}>
+            <tr key={`${s.id}-${index}`}>
               <td key="position">{index + 1}.</td>
               <td key="firstName">{s.Etunimi}</td>
               <td key="lastName">{s.Sukunimi}</td>
@@ -60,7 +66,7 @@ class SignupsTab extends React.Component {
                       'Oletko varma? Poistamista ei voi perua.'
                     );
                     if (confirmation) {
-                      this.props.deleteSignup(s.id, event.id);
+                      deleteSignup(s.id, event.id);
                     }
                   }}
                 >
@@ -71,49 +77,8 @@ class SignupsTab extends React.Component {
           ))}
         </tbody>
       </table>
-    );
-  }
-
-  render() {
-    const { event } = this.props;
-    const signups = getSignupsArrayFormatted(event);
-
-    if (!signups || signups.length === 0) {
-      return (
-        <div>
-          <p>
-            Tapahtumaan ei vielä ole yhtään ilmoittautumista. Kun tapahtumaan
-            tulee ilmoittautumisia, näet ne tästä.
-          </p>
-        </div>
-      );
-    }
-
-    return (
-      <div>
-        <CSVLink
-          data={signups}
-          separator={'\t'}
-          filename={`${event.title} osallistujalista`}
-        >
-          Lataa osallistujalista
-        </CSVLink>
-        <br />
-        <br />
-        {this.renderTable(signups)}
-
-        {/* {this.renderSignupLists(this.props.event)}
-        {event.openQuotaSize ? (
-          <SignupList
-            title={'Avoin kiintiö'}
-            questions={_.filter(formattedQuestions, 'public')}
-            rows={openQuota}
-            key={'openQuota'}
-          />
-        ) : null} */}
-      </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
 export default SignupsTab;

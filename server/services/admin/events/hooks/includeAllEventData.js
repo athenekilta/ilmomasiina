@@ -21,13 +21,13 @@ module.exports = () => hook => {
       'facebookUrl',
       'draft',
       'signupsPublic',
-      'verificationEmail',
+      'verificationEmail'
     ],
     include: [
       // First include all questions
       {
         attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
-        model: question,
+        model: question
       },
       // Include quotas..
       {
@@ -42,10 +42,10 @@ module.exports = () => hook => {
           include: {
             required: false,
             attributes: ['questionId', 'answer'],
-            model: answer,
-          },
-        },
-      },
-    ],
+            model: answer
+          }
+        }
+      }
+    ]
   };
 };

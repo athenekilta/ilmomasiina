@@ -1,5 +1,5 @@
-import { setEvents, setEventsLoading, setEventsError } from "./actions";
-import { Event } from "../types";
+import { Event } from '../types';
+import { setEvents, setEventsError, setEventsLoading } from './actions';
 
 interface EventsState {
   events: { [key: string]: Event };

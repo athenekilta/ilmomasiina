@@ -1,11 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import _ from "lodash";
-import Countdown from "react-countdown-now";
+import _ from 'lodash';
+import Countdown from 'react-countdown-now';
 
-import SignupButton from "./SignupButton";
-
-import { Event, Quota } from "../../../../modules/types";
+import { Event, Quota } from '../../../../modules/types';
+import SignupButton from './SignupButton';
 
 type CountDownProps = {
   event: Event;

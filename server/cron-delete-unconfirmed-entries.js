@@ -11,16 +11,16 @@ module.exports = app => {
         [Op.and]: {
           // Is confirmed
           confirmedAt: {
-            [Op.eq]: null, // $means ==
+            [Op.eq]: null // $means ==
           },
           // Over 30 minutes old
           createdAt: {
             [Op.lt]: moment()
               .subtract(30, 'minutes')
-              .toDate(),
-          },
-        },
-      },
+              .toDate()
+          }
+        }
+      }
     })
     .then(r => {
       console.log('Unconfirmed signups: ');
@@ -34,8 +34,8 @@ module.exports = app => {
           .unscoped()
           .destroy({
             where: {
-              id,
-            },
+              id
+            }
           })
           .then(res => console.log(res))
           .catch(error => console.log(error));

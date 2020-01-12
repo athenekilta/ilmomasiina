@@ -18,14 +18,14 @@ module.exports = () => hook => {
       'facebookUrl',
       'draft',
       'signupsPublic',
-      'verificationEmail',
+      'verificationEmail'
     ],
     raw: false,
     include: [
       // First include all questions (also non-public for the form)
       {
         attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
-        model: sequelize.models.question,
+        model: sequelize.models.question
       },
       // Include quotas..
       {
@@ -42,12 +42,12 @@ module.exports = () => hook => {
               {
                 attributes: ['questionId', 'answer'],
                 model: sequelize.models.answer,
-                required: false,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+                required: false
+              }
+            ]
+          }
+        ]
+      }
+    ]
   };
 };

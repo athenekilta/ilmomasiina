@@ -12,7 +12,7 @@ module.exports = () => hook => {
       attributes: ['id', 'openQuotaSize', 'signupsPublic'],
       distinct: true,
       where: {
-        id: quota.eventId,
+        id: quota.eventId
       },
       // Include quotas of event and count of signups
       include: [
@@ -23,8 +23,8 @@ module.exports = () => hook => {
             'size',
             [
               sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
-              'signupsBefore',
-            ],
+              'signupsBefore'
+            ]
           ],
           include: [
             {
@@ -32,14 +32,14 @@ module.exports = () => hook => {
               attributes: [],
               where: {
                 createdAt: {
-                  [Op.lte]: hook.result.createdAt,
-                },
-              },
-            },
-          ],
-        },
+                  [Op.lte]: hook.result.createdAt
+                }
+              }
+            }
+          ]
+        }
       ],
-      group: [sequelize.col('event.id'), sequelize.col('quota.id')],
+      group: [sequelize.col('event.id'), sequelize.col('quota.id')]
     };
 
     return models.event.findOne(query).then(event => {
@@ -91,7 +91,7 @@ module.exports = () => hook => {
         status,
         quotaId,
         editHash: hook.result.editHash,
-        createdAt: hook.result.createdAt,
+        createdAt: hook.result.createdAt
       };
     });
   });

@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 
-import _ from "lodash";
-import moment from "moment";
-import nl2br from "react-nl2br";
-import { connect } from "react-redux";
-import { Link, RouteComponentProps } from "react-router-dom";
-import { toast } from "react-toastify";
+import _ from 'lodash';
+import moment from 'moment';
+import nl2br from 'react-nl2br';
+import { connect } from 'react-redux';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import {
-  updateEventAsync,
   attachPositionAsync,
+  cancelSignupAsync,
   completeSignupAsync,
-  cancelSignupAsync
-} from "../../modules/singleEvent/actions";
+  updateEventAsync
+} from '../../modules/singleEvent/actions';
 import {
   getFormattedQuestions,
   getQuotaData
-} from "../../modules/singleEvent/selectors";
-import EnrollForm from "./components/EnrollForm";
-import SignupCountdown from "./components/SignupCountdown";
-import SignupList from "./components/SignupList";
-import QuotaStatus from "./components/QuotaStatus";
+} from '../../modules/singleEvent/selectors';
+import { Event, Question, Quota, Signup } from '../../modules/types';
+import { AppState } from '../../store/types';
+import EnrollForm from './components/EnrollForm';
+import QuotaStatus from './components/QuotaStatus';
+import SignupCountdown from './components/SignupCountdown';
+import SignupList from './components/SignupList';
 
-import "./SingleEvent.scss";
-import { Event, Quota, Signup, Question } from "../../modules/types";
-import { AppState } from "../../store/types";
+import './SingleEvent.scss';
 
 interface MatchParams {
   id?: string;
@@ -66,7 +66,7 @@ const SingleEvent: React.FC = (props: Props) => {
 
   function closeForm() {
     const close = window.confirm(
-      "Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt."
+      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.'
     );
 
     if (close) {
@@ -77,7 +77,7 @@ const SingleEvent: React.FC = (props: Props) => {
   }
 
   async function submitForm(answers) {
-    const toastId = toast.info("Ilmoittautuminen käynnissä", {});
+    const toastId = toast.info('Ilmoittautuminen käynnissä', {});
 
     const response = completeSignupAsync(signup.id, {
       editToken: signup.editToken,
@@ -87,7 +87,7 @@ const SingleEvent: React.FC = (props: Props) => {
     const success = response === true;
     if (success) {
       toast.update(toastId, {
-        render: "Ilmoittautuminen onnistui!",
+        render: 'Ilmoittautuminen onnistui!',
         type: toast.TYPE.SUCCESS,
         autoClose: 5000
       });
@@ -95,7 +95,7 @@ const SingleEvent: React.FC = (props: Props) => {
       setFormOpen(false);
     } else {
       const toast_text =
-        "Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.";
+        'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
       toast.update(toastId, {
         render: toast_text,
         type: toast.TYPE.ERROR,
@@ -128,8 +128,8 @@ const SingleEvent: React.FC = (props: Props) => {
               <div className="event-heading">
                 {event.date && (
                   <p>
-                    <strong>Ajankohta:</strong>{" "}
-                    {moment(event.date).format("D.M.Y [klo] HH:mm")}
+                    <strong>Ajankohta:</strong>{' '}
+                    {moment(event.date).format('D.M.Y [klo] HH:mm')}
                   </p>
                 )}
                 {event.location && (
@@ -144,7 +144,7 @@ const SingleEvent: React.FC = (props: Props) => {
                 )}
                 {event.homepage && (
                   <p>
-                    <strong>Kotisivut:</strong>{" "}
+                    <strong>Kotisivut:</strong>{' '}
                     <a href={event.homepage} title="Kotisivut">
                       {event.homepage}
                     </a>
@@ -152,7 +152,7 @@ const SingleEvent: React.FC = (props: Props) => {
                 )}
                 {event.facebook && (
                   <p>
-                    <strong>Facebook-tapahtuma:</strong>{" "}
+                    <strong>Facebook-tapahtuma:</strong>{' '}
                     <a href={event.facebook} title="Facebook-tapahtuma">
                       {event.facebook}
                     </a>
@@ -170,7 +170,7 @@ const SingleEvent: React.FC = (props: Props) => {
               {_.map(_.keys(quotaData), quotaName => (
                 <SignupList
                   quotaName={quotaName}
-                  questions={_.filter(formattedQuestions, "public")}
+                  questions={_.filter(formattedQuestions, 'public')}
                   signups={quotaData[quotaName].signups}
                   key={quotaName}
                 />
@@ -195,7 +195,7 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
-  updateEventAsync: (eventId: String) => void;
+  updateEventAsync: (eventId: string) => void;
   attachPositionAsync: (quotaId: string) => void;
   completeSignupAsync: (signupId: string, data: any) => boolean;
   cancelSignupAsync: (signupId: string, editToken: string) => void;

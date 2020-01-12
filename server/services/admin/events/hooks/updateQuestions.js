@@ -15,7 +15,7 @@ module.exports = () => hook => {
       return questionModel
         .destroy(
           {
-            where: { eventId },
+            where: { eventId }
           },
           { transaction: t }
         )
@@ -34,8 +34,8 @@ module.exports = () => hook => {
                   'createdAt',
                   'updatedAt',
                   'deletedAt',
-                  'eventId',
-                ],
+                  'eventId'
+                ]
               },
               { transaction: t }
             )

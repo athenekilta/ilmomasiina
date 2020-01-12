@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import _ from "lodash";
-import moment from "moment-timezone";
-import { Link } from "react-router-dom";
+import _ from 'lodash';
+import moment from 'moment-timezone';
+import { Link } from 'react-router-dom';
 
-import Separator from "../../components/Separator";
-import { Event, Signup } from "../../modules/types";
+import Separator from '../../components/Separator';
+import { Event, Signup } from '../../modules/types';
 
 type Props = {
   onDelete: (eventId: string) => void;
@@ -21,8 +21,8 @@ const AdminEventListItem = (props: Props) => {
       <td>
         <Link to={`${PREFIX_URL}/event/${data.id}`}>{data.title}</Link>
       </td>
-      <td>{data.date ? moment(data.date).format("DD.MM.YYYY") : ""}</td>
-      <td>{data.draft ? "Luonnos" : "Julkaistu"}</td>
+      <td>{data.date ? moment(data.date).format('DD.MM.YYYY') : ''}</td>
+      <td>{data.draft ? 'Luonnos' : 'Julkaistu'}</td>
       <td>{Number(signups)}</td>
       <td>
         <Link to={`${PREFIX_URL}/admin/edit/${data.id}`}>

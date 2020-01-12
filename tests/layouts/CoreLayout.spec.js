@@ -23,7 +23,7 @@ describe('(Layout) Core', () => {
   beforeEach(() => {
     child = <h1 className="child">Child</h1>;
     props = {
-      children: child,
+      children: child
     };
 
     component = shallowRenderWithProps(props);

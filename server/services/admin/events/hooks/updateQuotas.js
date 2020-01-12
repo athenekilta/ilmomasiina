@@ -12,7 +12,7 @@ module.exports = () => hook => {
       return quotaModel
         .destroy(
           {
-            where: { eventId },
+            where: { eventId }
           },
           { transaction: t }
         )
@@ -28,8 +28,8 @@ module.exports = () => hook => {
                   'creatdAt',
                   'updatedAt',
                   'deletedAt',
-                  'eventId',
-                ],
+                  'eventId'
+                ]
               },
               { transaction: t }
             )
@@ -38,7 +38,7 @@ module.exports = () => hook => {
                 {
                   where: {
                     eventId,
-                    deletedAt: null,
+                    deletedAt: null
                   },
                   include: [
                     {
@@ -46,12 +46,12 @@ module.exports = () => hook => {
                         'firstName',
                         'lastName',
                         'email',
-                        'createdAt',
+                        'createdAt'
                       ],
                       model: sequelize.models.signup,
-                      required: false,
-                    },
-                  ],
+                      required: false
+                    }
+                  ]
                 },
                 { transaction: t }
               );

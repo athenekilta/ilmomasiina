@@ -1,26 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
 
-import _ from "lodash";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
+import _ from 'lodash';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import {
-  getEventsAsync,
+  createUserAsync,
   deleteEventAsync,
-  createUserAsync
-} from "../../modules/admin/actions";
+  getEventsAsync
+} from '../../modules/admin/actions';
 import {
   eventsError,
   eventsLoading,
   getEvents
-} from "../../modules/admin/selectors";
-import AdminEventListItem from "./AdminEventListItem";
-import UserForm from "./UserForm";
+} from '../../modules/admin/selectors';
+import { Event } from '../../modules/types';
+import { AppState } from '../../store/types';
+import AdminEventListItem from './AdminEventListItem';
+import UserForm from './UserForm';
 
-import "./AdminEventsList.scss";
-import { AppState } from "../../store/types";
-import { Event } from "../../modules/types";
+import './AdminEventsList.scss';
 
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([
@@ -59,12 +59,12 @@ const AdminEventList = (props: Props) => {
           // TODO: better error handling
           const success = await minDelay(createUserAsync({ email }), 1000);
           if (success) {
-            toast.success("Käyttäjän luominen onnistui,", { autoClose: 2000 });
+            toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 });
           } else {
-            toast.error("Käyttäjän luominen epäonnistui.", { autoClose: 2000 });
+            toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
           }
         } catch (error) {
-          toast.error("Käyttäjän luominen epäonnistui.", { autoClose: 2000 });
+          toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
         }
 
         setUserFormLoading(false);
@@ -75,12 +75,12 @@ const AdminEventList = (props: Props) => {
   function onDeleteEvent(eventId) {
     if (
       window.confirm(
-        "Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua."
+        'Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.'
       )
     ) {
       deleteEvent(eventId).then(success => {
         if (!success) {
-          console.alert("Poisto epäonnistui :(");
+          console.alert('Poisto epäonnistui :(');
         }
         updateEvents();
       });

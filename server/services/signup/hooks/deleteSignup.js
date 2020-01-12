@@ -13,8 +13,8 @@ module.exports = () => hook => {
   return models.signup
     .destroy({
       where: {
-        id,
-      },
+        id
+      }
     })
     .then(res => {
       hook.result = res;

@@ -1,15 +1,16 @@
-import request from "then-request";
-import { DispatchAction } from "../../store/types";
-import { Event, Signup } from "../types";
+import request from 'then-request';
+
+import { DispatchAction } from '../../store/types';
+import { Event, Signup } from '../types';
 import {
-  SET_SIGNUP_AND_EVENT,
-  SET_SIGNUP,
+  RESET,
+  SET_DELETED,
+  SET_ERROR,
   SET_EVENT,
   SET_LOADING,
-  SET_ERROR,
-  SET_DELETED,
-  RESET
-} from "./actionTypes";
+  SET_SIGNUP,
+  SET_SIGNUP_AND_EVENT
+} from './actionTypes';
 
 export const setSignupAndEvent = (signup: Signup, event: Event) => {
   return <const>{
@@ -51,12 +52,12 @@ export const getSignupAndEventAsync = (id: string, editToken: string) => (
   dispatch(setLoading());
 
   return request(
-    "GET",
+    'GET',
     `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
   )
     .then(res => JSON.parse(res.body.toString()))
     .then(res => {
-      if (res.signup === null) throw new Error("Signup not found");
+      if (res.signup === null) throw new Error('Signup not found');
       dispatch(setSignupAndEvent(res.signup, res.event));
       return true;
     })
@@ -71,7 +72,7 @@ export const deleteSignupAsync = (id: string, editToken: string) => (
 ) => {
   dispatch(setLoading());
   return request(
-    "DELETE",
+    'DELETE',
     `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
   )
     .then(res => JSON.parse(res.body.toString()))

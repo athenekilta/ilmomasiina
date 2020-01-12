@@ -2,8 +2,8 @@ import {
   SET_EVENTS,
   SET_EVENTS_ERROR,
   SET_EVENTS_LOADING
-} from "./actionTypes";
-import { EventsState, EventsActions } from "./types";
+} from './actionTypes';
+import { EventsActions, EventsState } from './types';
 
 const initialState: EventsState = {
   events: {},

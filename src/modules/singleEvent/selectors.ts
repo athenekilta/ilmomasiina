@@ -1,7 +1,8 @@
-import _ from "lodash";
-import { createSelector } from "reselect";
-import { AppState } from "../../store/types";
-import { getSignupsByQuota } from "../../utils/signupUtils";
+import _ from 'lodash';
+import { createSelector } from 'reselect';
+
+import { AppState } from '../../store/types';
+import { getSignupsByQuota } from '../../utils/signupUtils';
 
 const getEvent = (state: AppState) => state.singleEvent.event;
 const eventLoading = (state: AppState) => state.singleEvent.eventLoading;
@@ -24,11 +25,11 @@ export const getFormattedQuestions = createSelector(
       return [];
     }
     return _.concat(event.questions, {
-      id: "quota",
+      id: 'quota',
       options: null,
       public: true,
-      question: "Kiintiö",
-      type: "text"
+      question: 'Kiintiö',
+      type: 'text'
     });
   }
 );

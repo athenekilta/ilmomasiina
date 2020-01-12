@@ -82,8 +82,8 @@ seq.models.event
   .then(() => seq.models.question.bulkCreate(questions))
   .then(() =>
     console.log(
-    `${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`
-  )
+      `${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`
+    )
   )
   .then(() => seq.close())
   .then(() => console.log('Creating fake data finished.'))
@@ -102,14 +102,14 @@ setTimeout(() => {
             editToken: response.data.editToken,
             email: 'fake@example.com',
             firstName: `Rasitusgubbe ${i}`,
-            lastName: faker.name.lastName(),
+            lastName: faker.name.lastName()
           };
           axios
             .patch(apiUrl + response.data.id, postData)
-            .then((response) => {
+            .then(response => {
               console.log('Success');
             })
-            .catch((error) => {
+            .catch(error => {
               console.log(error);
             });
         })
@@ -129,14 +129,14 @@ setTimeout(() => {
             editToken: response.data.editToken,
             email: 'fake@example.com',
             firstName: `Rasitusgubbe ${i}`,
-            lastName: faker.name.lastName(),
+            lastName: faker.name.lastName()
           };
           axios
             .patch(apiUrl + response.data.id, postData)
-            .then((response) => {
+            .then(response => {
               console.log('Success');
             })
-            .catch((error) => {
+            .catch(error => {
               console.log(error);
             });
         })

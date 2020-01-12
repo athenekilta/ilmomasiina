@@ -9,25 +9,25 @@ module.exports = function() {
     {
       question: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       type: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       options: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       required: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
+        defaultValue: true
       },
       public: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
-      },
+        defaultValue: false
+      }
     },
     {
       freezeTableName: true,
@@ -39,10 +39,10 @@ module.exports = function() {
           this.belongsTo(models.event, {});
 
           this.hasMany(models.answer, {
-            onDelete: 'CASCADE',
+            onDelete: 'CASCADE'
           });
-        },
-      },
+        }
+      }
     }
   );
 

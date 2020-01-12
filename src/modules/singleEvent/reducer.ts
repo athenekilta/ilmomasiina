@@ -1,12 +1,12 @@
 import {
   SET_EVENT,
-  SET_EVENT_LOADING,
   SET_EVENT_ERROR,
+  SET_EVENT_LOADING,
   SET_SIGNUP,
-  SET_SIGNUP_LOADING,
-  SET_SIGNUP_ERROR
-} from "./actionTypes";
-import { SingleEventState, SingleEventActions } from "./types";
+  SET_SIGNUP_ERROR,
+  SET_SIGNUP_LOADING
+} from './actionTypes';
+import { SingleEventActions, SingleEventState } from './types';
 
 const initialState: SingleEventState = {
   event: {},

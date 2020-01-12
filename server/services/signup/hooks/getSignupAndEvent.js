@@ -20,49 +20,49 @@ module.exports = () => hook => {
       models.signup
         .findOne({
           where: {
-            id,
-          },
+            id
+          }
         })
         .then(signup => {
           if (signup === null) {
             // Event not found with id, probably deleted
             hook.result = {
               signup,
-              event: null,
+              event: null
             };
             return hook;
           }
           return models.quota
             .findOne({
               where: {
-                id: signup.quotaId,
-              },
+                id: signup.quotaId
+              }
             })
             .then(quota =>
               models.event
                 .findOne({
                   where: {
-                    id: quota.eventId,
-                  },
+                    id: quota.eventId
+                  }
                 })
                 .then(event =>
                   event.getQuestions().then(questions => {
                     questions.map(question => {
                       const answer = _.find(userAnswers, {
-                        questionId: question.id,
+                        questionId: question.id
                       });
 
                       if (answer) {
                         fields.push({
                           ...question.dataValues,
                           answer: answer.answer,
-                          answerId: answer.id,
+                          answerId: answer.id
                         });
                       }
                     });
                     hook.result = {
                       signup: { ...signup.dataValues, answers: fields },
-                      event,
+                      event
                     };
                     return hook;
                   })

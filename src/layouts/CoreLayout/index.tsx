@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { withRouter } from "react-router-dom";
+import { withRouter } from 'react-router-dom';
 
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import Footer from '../../components/Footer';
+import Header from '../../components/Header';
 
-import "./CoreLayout.scss";
-import "../../styles/core.scss";
+import './CoreLayout.scss';
+import '../../styles/core.scss';
 
 const CoreLayout: React.FC = ({ children }) => (
   <div className="layout-wrapper">

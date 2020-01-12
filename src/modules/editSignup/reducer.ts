@@ -1,13 +1,13 @@
 import {
-  SET_SIGNUP_AND_EVENT,
-  SET_SIGNUP,
+  RESET,
+  SET_DELETED,
+  SET_ERROR,
   SET_EVENT,
   SET_LOADING,
-  SET_ERROR,
-  SET_DELETED,
-  RESET
-} from "./actionTypes";
-import { EditSignupState, EditSignupActions } from "./types";
+  SET_SIGNUP,
+  SET_SIGNUP_AND_EVENT
+} from './actionTypes';
+import { EditSignupActions, EditSignupState } from './types';
 
 const initialState: EditSignupState = {
   event: {},

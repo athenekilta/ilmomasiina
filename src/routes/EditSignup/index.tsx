@@ -1,24 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import { connect } from "react-redux";
-import { Link, RouteComponentProps } from "react-router-dom";
-import Spinner from "react-spinkit";
-import { toast } from "react-toastify";
+import { connect } from 'react-redux';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import Spinner from 'react-spinkit';
+import { toast } from 'react-toastify';
+
 import {
-  getSignupAndEventAsync,
   deleteSignupAsync,
+  getSignupAndEventAsync,
   resetEventState
-} from "../../modules/editSignup/actions";
+} from '../../modules/editSignup/actions';
 import {
-  updateEventAsync,
   completeSignupAsync,
-  CompleteSignupData
-} from "../../modules/singleEvent/actions";
-import EditForm from "./components/EditForm";
+  CompleteSignupData,
+  updateEventAsync
+} from '../../modules/singleEvent/actions';
+import { Event, Signup } from '../../modules/types';
+import { AppState, DispatchAction } from '../../store/types';
+import EditForm from './components/EditForm';
 
-import "./EditSignup.scss";
-import { Event, Signup } from "../../modules/types";
-import { AppState } from "../../store/types";
+import './EditSignup.scss';
 
 interface MatchParams {
   id: string;
@@ -61,7 +62,7 @@ const EditSignup = (props: Props) => {
   }
 
   async function updateSignup(answers) {
-    this.toastId = toast.info("Ilmoittautuminen käynnissä", {});
+    this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
 
     const response = await updateSignupAsync(signup.id, {
       editToken: match.params.editToken,
@@ -72,7 +73,7 @@ const EditSignup = (props: Props) => {
 
     if (success) {
       toast.update(this.toastId, {
-        render: "Muokkaus onnistui!",
+        render: 'Muokkaus onnistui!',
         type: toast.TYPE.SUCCESS,
         autoClose: 5000
       });
@@ -80,7 +81,7 @@ const EditSignup = (props: Props) => {
       updateEventAsync(event.id);
     } else {
       const toastText =
-        "Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.";
+        'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
       toast.update(this.toastId, {
         render: toastText,
         type: toast.TYPE.ERROR,
@@ -154,13 +155,13 @@ const EditSignup = (props: Props) => {
       <div className="EditSignup--wrapper">
         <h2>Poista ilmoittautuminen</h2>
         <p>
-          Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan{" "}
+          Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan{' '}
           <strong>{event.title}?</strong>
         </p>
         <p>
           Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos kuitenkin
           muutat mielesi, voit aina ilmoittautua tapahtumaan uudelleen
-          myöhemmin, mutta siirryt silloin jonon hännille.{" "}
+          myöhemmin, mutta siirryt silloin jonon hännille.{' '}
           <strong>Tätä toimintoa ei voi perua.</strong>
         </p>
         <button onClick={deleteSignup} className="btn btn-danger">
@@ -198,12 +199,12 @@ const mapStateToProps = (state: AppState) => ({
   deleted: state.editSignup.deleted
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps = (dispatch: DispatchAction) => ({
   updateEventAsync: updateEventAsync,
   updateSignupAsync: completeSignupAsync,
   getSignupAndEventAsync: getSignupAndEventAsync,
   deleteSignupAsync: deleteSignupAsync,
-  resetEventState: resetEventState
-};
+  resetEventState: dispatch(resetEventState)
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditSignup);

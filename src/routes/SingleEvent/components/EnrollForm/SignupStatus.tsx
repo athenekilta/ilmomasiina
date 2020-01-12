@@ -1,6 +1,8 @@
-import React from "react";
-import _ from "lodash";
-import { Event, Signup } from "../../../../modules/types";
+import React from 'react';
+
+import _ from 'lodash';
+
+import { Event, Signup } from '../../../../modules/types';
 
 type Props = {
   event: Event;
@@ -15,17 +17,17 @@ const SignupStatus = (props: Props) => {
 
   if (!signup.status) return null;
 
-  if (status == "in-quota") {
+  if (status == 'in-quota') {
     const quota = _.find(quotas, { id: quotaId })!;
     return (
       <p>
         Olet kiintiössä ${quota.title} sijalla $
-        {position + (quota.size ? ` / ${quota.size}` : "")}.
+        {position + (quota.size ? ` / ${quota.size}` : '')}.
       </p>
     );
   }
 
-  if (status == "in-open") {
+  if (status == 'in-open') {
     return (
       <p>
         Olet avoimessa kiintiössä sijalla ${position} / ${openQuotaSize}.

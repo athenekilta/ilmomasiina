@@ -1,12 +1,14 @@
-import React from "react";
-import _ from "lodash";
+import React from 'react';
+
 import {
   CheckboxGroup,
   Input,
   Select,
   Textarea
-} from "formsy-react-components";
-import { Question } from "../../modules/types";
+} from 'formsy-react-components';
+import _ from 'lodash';
+
+import { Question } from '../../modules/types';
 
 type Props = {
   questions: Question[];
@@ -15,10 +17,10 @@ type Props = {
 const QuestionFields = ({ questions }: Props) => (
   <>
     {_.map(questions, question => {
-      const help = question.public && "Tämän kentän vastaukset ovat julkisia.";
+      const help = question.public && 'Tämän kentän vastaukset ovat julkisia.';
 
       switch (question.type) {
-        case "text":
+        case 'text':
           return (
             <Input
               name={String(question.id)}
@@ -30,7 +32,7 @@ const QuestionFields = ({ questions }: Props) => (
               value={question.answer}
             />
           );
-        case "number":
+        case 'number':
           return (
             <Input
               name={String(question.id)}
@@ -42,21 +44,21 @@ const QuestionFields = ({ questions }: Props) => (
               value={question.answer}
             />
           );
-        case "checkbox":
+        case 'checkbox':
           return (
             <CheckboxGroup
               name={String(question.id)}
               label={question.question}
               required={question.required}
               options={question.options
-                .split(";")
+                .split(';')
                 .map(option => ({ label: option, value: option }))}
               key={question.id}
               help={help}
-              value={question.answer.split(";")}
+              value={question.answer.split(';')}
             />
           );
-        case "textarea":
+        case 'textarea':
           return (
             <Textarea
               className="open-question form-control"
@@ -70,11 +72,11 @@ const QuestionFields = ({ questions }: Props) => (
               value={question.answer}
             />
           );
-        case "select":
-          const optionsArray = [{ label: "Valitse...", value: null }];
+        case 'select':
+          const optionsArray = [{ label: 'Valitse...', value: null }];
 
           question.options
-            .split(";")
+            .split(';')
             .map(option => optionsArray.push({ label: option }));
 
           return (

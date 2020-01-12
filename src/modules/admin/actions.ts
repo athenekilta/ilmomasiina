@@ -1,9 +1,10 @@
-import { push } from "connected-react-router";
-import request from "then-request";
-import { DispatchAction, GetState } from "../../store/types";
-import { getEventAsync } from "../editor/actions";
-import { setError } from "../editSignup/actions";
-import { Event } from "../types";
+import { push } from 'connected-react-router';
+import request from 'then-request';
+
+import { DispatchAction, GetState } from '../../store/types';
+import { getEventAsync } from '../editor/actions';
+import { setError } from '../editSignup/actions';
+import { Event } from '../types';
 import {
   CLEAR_STATE,
   SET_ACCESS_TOKEN,
@@ -13,7 +14,7 @@ import {
   SET_LOGIN_ERROR,
   SET_LOGIN_LOADING,
   SET_LOGIN_STATUS
-} from "./actionTypes";
+} from './actionTypes';
 
 export const setEvents = (events: Event[]) => {
   return <const>{
@@ -74,7 +75,7 @@ export const getEventsAsync = () => (
 
   const { accessToken } = getState().admin;
 
-  request("GET", `${PREFIX_URL}/api/admin/events`, {
+  request('GET', `${PREFIX_URL}/api/admin/events`, {
     headers: { Authorization: accessToken }
   })
     .then(res => JSON.parse(res.body.toString()))
@@ -92,7 +93,7 @@ export const createUserAsync = (data: { email: string }) => (
 ) => {
   const { accessToken } = getState().admin;
 
-  return request("POST", `${PREFIX_URL}/api/users`, {
+  return request('POST', `${PREFIX_URL}/api/users`, {
     headers: { Authorization: accessToken },
     json: data
   })
@@ -106,8 +107,8 @@ export const createUserAsync = (data: { email: string }) => (
 export const login = (email: string, password: string) => dispatch => {
   dispatch(setLoginLoading());
 
-  request("POST", `${PREFIX_URL}/api/authentication`, {
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  request('POST', `${PREFIX_URL}/api/authentication`, {
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: `strategy=local&email=${email}&password=${password}`
   })
     .then(res => {
@@ -138,7 +139,7 @@ export const redirectToLogin = () => dispatch => {
 export const deleteEventAsync = (id: string) => (_dispatch, getState) => {
   const { accessToken } = getState().admin;
 
-  return request("DELETE", `${PREFIX_URL}/api/admin/events/${id}`, {
+  return request('DELETE', `${PREFIX_URL}/api/admin/events/${id}`, {
     headers: { Authorization: accessToken }
   })
     .then(() => true)
@@ -152,7 +153,7 @@ export const deleteSignupAsync = (id: string, eventId: string) => (
   getState
 ) => {
   const { accessToken } = getState().admin;
-  return request("DELETE", `${PREFIX_URL}/api/admin/signups/${id}`, {
+  return request('DELETE', `${PREFIX_URL}/api/admin/signups/${id}`, {
     headers: { Authorization: accessToken }
   })
     .then(res => JSON.parse(res.body.toString()))

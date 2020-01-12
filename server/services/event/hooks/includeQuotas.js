@@ -12,7 +12,7 @@ module.exports = () => hook => {
       'registrationStartDate',
       'registrationEndDate',
       'openQuotaSize',
-      'signupsPublic',
+      'signupsPublic'
     ],
     distinct: true,
     raw: false,
@@ -22,8 +22,8 @@ module.exports = () => hook => {
       date: {
         [Op.gt]: moment()
           .subtract(1, 'days')
-          .toDate(),
-      },
+          .toDate()
+      }
     },
     // Include quotas of event and count of signups
     include: [
@@ -34,18 +34,18 @@ module.exports = () => hook => {
           'size',
           [
             sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
-            'signupCount',
-          ],
+            'signupCount'
+          ]
         ],
         include: [
           {
             model: sequelize.models.signup,
             required: false,
-            attributes: [],
-          },
-        ],
-      },
+            attributes: []
+          }
+        ]
+      }
     ],
-    group: [sequelize.col('event.id'), sequelize.col('quota.id')],
+    group: [sequelize.col('event.id'), sequelize.col('quota.id')]
   };
 };

@@ -13,13 +13,13 @@ if (config.adminRegistrationAllowed) {
   createHook = [
     validateRegistration(),
     createPassword(),
-    hashPassword('password'),
+    hashPassword('password')
   ];
 } else {
   createHook = [
     authenticate('jwt'),
     createPassword(),
-    hashPassword('password'),
+    hashPassword('password')
   ];
 }
 
@@ -30,7 +30,7 @@ exports.before = {
   create: createHook,
   update: [hooks.disallow('external'), hashPassword('password')],
   patch: [hooks.disallow('external'), hashPassword('password')],
-  remove: [hooks.disallow('external')],
+  remove: [hooks.disallow('external')]
 };
 
 exports.after = {
@@ -40,5 +40,5 @@ exports.after = {
   create: [sendEmail()],
   update: [],
   patch: [],
-  remove: [],
+  remove: []
 };

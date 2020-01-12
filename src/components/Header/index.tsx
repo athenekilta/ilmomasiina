@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { connect } from "react-redux";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { connect } from 'react-redux';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { redirectToLogin } from "../../modules/admin/actions";
+import { redirectToLogin } from '../../modules/admin/actions';
+import { AppState } from '../../store/types';
 
-import "./Header.scss";
-import { AppState } from "../../store/types";
+import './Header.scss';
 
 interface HeaderProps {}
 
@@ -25,14 +25,14 @@ const Header = (props: Props) => {
           onClick={() => props.history.push(`${PREFIX_URL}/`)}
           className="navbar-brand"
         >
-          {" "}
+          {' '}
           {BRANDING_HEADER_TITLE}
         </a>
         {loggedIn && (
           <a
             onClick={() => props.redirectToLogin()}
             className="navbar-brand"
-            style={{ float: "right" }}
+            style={{ float: 'right' }}
           >
             Logout
           </a>

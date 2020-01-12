@@ -16,7 +16,7 @@ exports.before = {
   create: [validateNewSignup()],
   update: [hooks.disallow('external')],
   patch: [validateSignupFields()],
-  remove: [deleteSignup()],
+  remove: [deleteSignup()]
 };
 
 exports.after = {
@@ -26,5 +26,5 @@ exports.after = {
   create: [attachPosition(), attachEditToken()],
   update: [],
   patch: [insertAnswers(), sendConfirmationMail()],
-  remove: [],
+  remove: []
 };

@@ -14,32 +14,32 @@ module.exports = function() {
       firstName: {
         type: Sequelize.STRING,
         validate: {
-          notEmpty: true,
-        },
+          notEmpty: true
+        }
       },
       lastName: {
         type: Sequelize.STRING,
         validate: {
-          notEmpty: true,
-        },
+          notEmpty: true
+        }
       },
       email: {
         type: Sequelize.STRING,
         validate: {
-          isEmail: true,
-        },
+          isEmail: true
+        }
       },
       editToken: {
-        type: Sequelize.VIRTUAL,
+        type: Sequelize.VIRTUAL
       },
       confirmedAt: {
-        type: Sequelize.DATE(3),
+        type: Sequelize.DATE(3)
       },
       // Added manually createdAt field to support milliseconds
       createdAt: {
         type: Sequelize.DATE(3),
-        defaultValue: () => new Date(),
-      },
+        defaultValue: () => new Date()
+      }
     },
     {
       freezeTableName: true,
@@ -49,17 +49,17 @@ module.exports = function() {
           [Op.or]: {
             // Is confirmed
             confirmedAt: {
-              [Op.ne]: null, // $means !=
+              [Op.ne]: null // $means !=
             },
             // Under 30 minutes old
             createdAt: {
               [Op.gt]: moment()
                 .subtract(30, 'minutes')
-                .toDate(),
-            },
-          },
-        },
-      },
+                .toDate()
+            }
+          }
+        }
+      }
     }
   );
 

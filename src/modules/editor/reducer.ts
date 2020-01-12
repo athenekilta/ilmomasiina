@@ -1,12 +1,12 @@
 import {
   SET_EVENT,
-  SET_EVENT_LOADING,
   SET_EVENT_ERROR,
-  SET_EVENT_PUBLISH_LOADING,
+  SET_EVENT_LOADING,
   SET_EVENT_PUBLISH_ERROR,
+  SET_EVENT_PUBLISH_LOADING,
   UPDATE_EVENT_FIELD
-} from "./actionTypes";
-import { EditorState, EditorActions } from "./types";
+} from './actionTypes';
+import { EditorActions, EditorState } from './types';
 
 const initialState: EditorState = {
   event: {},

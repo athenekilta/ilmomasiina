@@ -15,7 +15,7 @@ module.exports = function() {
   let sequelize;
   if (process.env.CLEARDB_DATABASE_URL) {
     sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, {
-      logging: false,
+      logging: false
     });
   } else {
     sequelize = new Sequelize(
@@ -25,7 +25,7 @@ module.exports = function() {
       {
         host: config.useDocker === 'true' ? 'db' : 'localhost',
         dialect: config.dbDialect,
-        logging: false,
+        logging: false
       }
     );
   }
@@ -58,31 +58,31 @@ module.exports = function() {
 
   models.event.hasMany(models.quota, {
     foreignKey: 'eventId',
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE'
   });
 
   models.event.hasMany(models.question, {
     foreignKey: 'eventId',
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE'
   });
 
   models.quota.hasMany(models.signup, {
     onDelete: 'CASCADE',
-    foreignKey: 'quotaId',
+    foreignKey: 'quotaId'
   });
 
   models.signup.belongsTo(models.quota, {
-    foreignKey: 'quotaId',
+    foreignKey: 'quotaId'
   });
 
   models.signup.hasMany(models.answer, {
     foreignKey: 'signupId',
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE'
   });
 
   models.question.hasMany(models.answer, {
     foreignKey: 'questionId',
-    onDelete: 'CASCADE',
+    onDelete: 'CASCADE'
   });
 
   app.set('models', models);

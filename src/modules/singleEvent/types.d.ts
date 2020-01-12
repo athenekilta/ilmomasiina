@@ -1,12 +1,12 @@
+import { Event, Signup } from '../types';
 import {
   setEvent,
-  setEventLoading,
   setEventError,
+  setEventLoading,
   setSignup,
-  setSignupLoading,
-  setSignupError
-} from "./actions";
-import { Event, Signup } from "../types";
+  setSignupError,
+  setSignupLoading
+} from './actions';
 
 interface SingleEventState {
   event: { [key: string]: Event } | {};

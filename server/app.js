@@ -1,4 +1,5 @@
 const feathers = require('@feathersjs/feathers');
+const Sentry = require('@sentry/node');
 const express = require('@feathersjs/express');
 const debug = require('debug')('app:server');
 const compression = require('compression');
@@ -7,12 +8,19 @@ const cron = require('node-cron');
 const enforce = require('express-sslify');
 const history = require('connect-history-api-fallback');
 const webpackConfig = require('../config/webpack.config');
+const config = require('../config/ilmomasiina.config');
 const project = require('../config/project.config');
 const models = require('./models');
 const services = require('./services');
 const deleteUnconfirmedEntries = require('./cron-delete-unconfirmed-entries');
 
 const app = express(feathers());
+
+if (project.env === 'production' && config.useSentry) {
+  Sentry.init({ dsn: config.sentryDsn });
+  app.use(Sentry.Handlers.requestHandler());
+  app.use(Sentry.Handlers.errorHandler());
+}
 
 app
   .use(compression())
@@ -48,18 +56,15 @@ if (project.env === 'development') {
 
   app.use(
     require('webpack-dev-middleware')(compiler, {
-      // eslint-disable-line
       publicPath: webpackConfig.output.publicPath,
       contentBase: project.paths.client(),
-      hot: true,
       quiet: project.compiler_quiet,
       noInfo: project.compiler_quiet,
-      lazy: false,
-      stats: project.compiler_stats,
+      stats: project.compiler_stats
     })
   );
 
-  app.use(require("webpack-hot-middleware")(compiler)); // eslint-disable-line
+  app.use(require('webpack-hot-middleware')(compiler));
 
   // Serve static assets from ~/public since Webpack is unaware of
   // these files. This middleware doesn't need to be enabled outside

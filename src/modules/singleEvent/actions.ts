@@ -1,14 +1,15 @@
-import request from "then-request";
-import { DispatchAction } from "../../store/types";
-import { Event, Signup, Answer } from "../types";
+import request from 'then-request';
+
+import { DispatchAction } from '../../store/types';
+import { Answer, Event, Signup } from '../types';
 import {
   SET_EVENT,
-  SET_EVENT_LOADING,
   SET_EVENT_ERROR,
+  SET_EVENT_LOADING,
   SET_SIGNUP,
-  SET_SIGNUP_LOADING,
-  SET_SIGNUP_ERROR
-} from "./actionTypes";
+  SET_SIGNUP_ERROR,
+  SET_SIGNUP_LOADING
+} from './actionTypes';
 
 export const setEvent = (event: Event) => {
   return <const>{ type: SET_EVENT, payload: event };
@@ -34,11 +35,11 @@ export const setSignupError = () => {
   return <const>{ type: SET_SIGNUP_ERROR };
 };
 
-export const updateEventAsync = (eventId: String) => (
+export const updateEventAsync = (eventId: string) => (
   dispatch: DispatchAction
 ) => {
   dispatch(setEventLoading());
-  return request("GET", `${PREFIX_URL}/api/events/${eventId}`)
+  return request('GET', `${PREFIX_URL}/api/events/${eventId}`)
     .then(res => JSON.parse(res.body.toString()))
     .then(res => {
       dispatch(setEvent(res));
@@ -52,7 +53,7 @@ export const attachPositionAsync = (quotaId: string) => (
   dispatch: DispatchAction
 ) => {
   dispatch(setSignupLoading());
-  return request("POST", `${PREFIX_URL}/api/signups`, { json: { quotaId } })
+  return request('POST', `${PREFIX_URL}/api/signups`, { json: { quotaId } })
     .then(res => JSON.parse(res.body.toString()))
     .then(res => {
       dispatch(setSignup(res));
@@ -76,7 +77,7 @@ export const completeSignupAsync = (
 ) => (dispatch: DispatchAction) => {
   dispatch(setSignupLoading());
 
-  return request("PATCH", `${PREFIX_URL}/api/signups/${signupId}`, {
+  return request('PATCH', `${PREFIX_URL}/api/signups/${signupId}`, {
     json: {
       editToken: data.editToken,
       firstName: data.firstName,
@@ -104,7 +105,7 @@ export const cancelSignupAsync = (signupId: string, editToken: string) => (
 ) => {
   dispatch(setSignupLoading());
   return request(
-    "DELETE",
+    'DELETE',
     `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`
   )
     .then(res => JSON.parse(res.body.toString()))

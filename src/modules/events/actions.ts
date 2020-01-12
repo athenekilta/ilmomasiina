@@ -1,11 +1,12 @@
-import request from "then-request";
-import { Event } from "../types";
-import { DispatchAction } from "../../store/types";
+import request from 'then-request';
+
+import { DispatchAction } from '../../store/types';
+import { Event } from '../types';
 import {
   SET_EVENTS,
   SET_EVENTS_ERROR,
   SET_EVENTS_LOADING
-} from "./actionTypes";
+} from './actionTypes';
 
 export const setEvents = (events: Event[]) => {
   return <const>{
@@ -28,7 +29,7 @@ export const setEventsError = () => {
 
 export const getEventsAsync = () => (dispatch: DispatchAction) => {
   dispatch(setEventsLoading());
-  request("GET", `${PREFIX_URL}/api/events`)
+  request('GET', `${PREFIX_URL}/api/events`)
     .then(res => JSON.parse(res.body.toString()))
     .then(res => {
       dispatch(setEvents(res));

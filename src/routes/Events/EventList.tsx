@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
-import _ from "lodash";
-import moment from "moment";
-import { connect } from "react-redux";
+import _ from 'lodash';
+import moment from 'moment';
+import { connect } from 'react-redux';
 
-import TableRow from "./TableRow";
-import { getEventsAsync } from "../../modules/events/actions";
-import signupState from "../../utils/signupStateText";
+import { AdminState } from '../../modules/admin/types';
+import { getEventsAsync } from '../../modules/events/actions';
+import { Event } from '../../modules/types';
+import { AppState } from '../../store/types';
+import signupState from '../../utils/signupStateText';
+import TableRow from './TableRow';
 
-import "./EventList.scss";
-import { AdminState } from "../../modules/admin/types";
-import { Event } from "../../modules/types";
-import { AppState } from "../../store/types";
+import './EventList.scss';
 
 const sortFunction = (event: Event) => {
   const now = moment();
@@ -31,7 +31,7 @@ const EventList = (props: Props) => {
     getEventsAsync();
   }, []);
 
-  const eventsSorted = _.sortBy(props.events, [sortFunction, "date", "title"]);
+  const eventsSorted = _.sortBy(props.events, [sortFunction, 'date', 'title']);
 
   const tableRows = eventsSorted.map(event => {
     const eventState = signupState(
@@ -48,10 +48,10 @@ const EventList = (props: Props) => {
         signupLabel={eventState.label}
         signups={
           event.quota.length < 2
-            ? _.sumBy(event.quota, "signupCount") || 0
+            ? _.sumBy(event.quota, 'signupCount') || 0
             : null
         }
-        size={event.quota.length < 2 ? _.sumBy(event.quota, "size") : null}
+        size={event.quota.length < 2 ? _.sumBy(event.quota, 'size') : null}
         className={eventState.class}
         key={`e${event.id}`}
       />

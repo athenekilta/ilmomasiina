@@ -1,14 +1,14 @@
+import { Event } from '../types';
 import {
-  setEvents,
-  setEventsLoading,
-  setEventsError,
-  setAccessToken,
   clearState,
-  setLoginStatus,
+  setAccessToken,
+  setEvents,
+  setEventsError,
+  setEventsLoading,
+  setLoginError,
   setLoginLoading,
-  setLoginError
-} from "./actions";
-import { Event } from "../types";
+  setLoginStatus
+} from './actions';
 
 interface AdminState {
   events: Event[];

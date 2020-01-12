@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.ayy.fi',
-  port: 25,
+  port: 25
 });
 
 const EmailService = {
@@ -14,7 +14,7 @@ const EmailService = {
       to,
       from: ilmoconfig.mailFrom,
       subject,
-      html,
+      html
     };
 
     return transporter.sendMail(msg);
@@ -26,16 +26,16 @@ const EmailService = {
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: path.join(__dirname, 'css'),
-        },
-      },
+          relativeTo: path.join(__dirname, 'css')
+        }
+      }
     });
     const brandedParams = {
       ...params,
       branding: {
         footerText: ilmoconfig.brandingMailFooterText,
-        footerLink: ilmoconfig.brandingMailFooterLink,
-      },
+        footerLink: ilmoconfig.brandingMailFooterLink
+      }
     };
 
     return email
@@ -54,17 +54,17 @@ const EmailService = {
       juiceResources: {
         preserveImportant: true,
         webResources: {
-          relativeTo: path.join(__dirname, 'css'),
-        },
-      },
+          relativeTo: path.join(__dirname, 'css')
+        }
+      }
     });
     const brandedParams = {
       ...params,
       branding: {
         footerText: ilmoconfig.brandingMailFooterText,
         footerLink: ilmoconfig.brandingMailFooterLink,
-        siteUrl: ilmoconfig.baseUrl,
-      },
+        siteUrl: ilmoconfig.baseUrl
+      }
     };
 
     return email
@@ -73,7 +73,7 @@ const EmailService = {
         const subject = 'Käyttäjätunnukset Ilmomasiinaan';
         return EmailService.send(to, subject, html);
       });
-  },
+  }
 };
 
 module.exports = EmailService;

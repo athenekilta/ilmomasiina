@@ -9,9 +9,9 @@ module.exports = () => hook => {
   const fields = [
     {
       label: 'Nimi',
-      answer: `${hook.result.firstName} ${hook.result.lastName}`,
+      answer: `${hook.result.firstName} ${hook.result.lastName}`
     },
-    { label: 'Sähköposti', answer: `${hook.result.email}` },
+    { label: 'Sähköposti', answer: `${hook.result.email}` }
   ];
 
   const userAnswers = [];
@@ -34,7 +34,7 @@ module.exports = () => hook => {
               if (answer) {
                 fields.push({
                   label: question.question,
-                  answer: answer.answer,
+                  answer: answer.answer
                 });
               }
             });
@@ -51,7 +51,7 @@ module.exports = () => hook => {
               .tz('Europe/Helsinki')
               .format('DD.MM.YYYY HH:mm'),
             event: event.dataValues,
-            cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
+            cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${hook.result.id}/${hook.data.editToken}`
           };
           EmailService.sendConfirmationMail(hook.result.email, params);
         });

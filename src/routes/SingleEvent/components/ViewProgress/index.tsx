@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import Separator from "../../../../components/Separator";
+import Separator from '../../../../components/Separator';
 
-import "./ViewProgress.scss";
+import './ViewProgress.scss';
 
 type Props = {
   max: number;
@@ -24,7 +24,7 @@ const ViewProgress = (props: Props) => {
           className="progress-bar"
           role="progressbar"
           style={{
-            minWidth: "5em",
+            minWidth: '5em',
             width: `${(value / max) * 100}%`
           }}
         >

@@ -1,7 +1,8 @@
-import React from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import React from 'react';
 
-import "./Footer.scss";
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
+import './Footer.scss';
 
 type Props = RouteComponentProps;
 

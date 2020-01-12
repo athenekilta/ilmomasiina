@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Form, Input } from "formsy-react-components";
-import _ from "lodash";
-import QuestionFields from "./QuestionFields";
-import SignupStatus from "./SignupStatus";
+import { Form, Input } from 'formsy-react-components';
+import _ from 'lodash';
 
-import "./EnrollForm.scss";
-import { Event, Signup, Question } from "../../../../modules/types";
+import { Event, Question, Signup } from '../../../../modules/types';
+import QuestionFields from './QuestionFields';
+import SignupStatus from './SignupStatus';
+
+import './EnrollForm.scss';
 
 interface CommonFormFields {
   firstName: string;
@@ -61,8 +62,8 @@ const EnrollForm = (props: Props) => {
           const answer = data[question.id];
 
           if (answer && answer.length > 0) {
-            if (question.type === "checkbox") {
-              return { questionId, answer: answer.join(";") };
+            if (question.type === 'checkbox') {
+              return { questionId, answer: answer.join(';') };
             }
             return { questionId, answer };
           }
@@ -79,7 +80,7 @@ const EnrollForm = (props: Props) => {
         <a className="close" onClick={() => closeForm()} />
         <div className="col-xs-12 col-md-8 col-md-offset-2">
           {inputError && (
-            <p style={{ color: "#a94442" }}>
+            <p style={{ color: '#a94442' }}>
               Ilmoittautumisessasi on virheitä.
             </p>
           )}

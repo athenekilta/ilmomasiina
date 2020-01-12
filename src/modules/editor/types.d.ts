@@ -1,12 +1,12 @@
+import { Event } from '../types';
 import {
   setEvent,
-  setEventLoading,
   setEventError,
-  setEventPublishLoading,
+  setEventLoading,
   setEventPublishError,
+  setEventPublishLoading,
   updateEventField
-} from "./actions";
-import { Event } from "../types";
+} from './actions';
 
 interface EditorState {
   event: { [key: string]: Event };

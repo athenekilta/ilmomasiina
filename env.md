@@ -1,8 +1,13 @@
 # Create .env file at the root of the project with the following contents
 
+# Sentry variables
+USE_SENTRY=true # Set this if you want to configure sentry error tracking
+SENTRY_DSN=<REPLACE_WITH_PUBLIC_DSN>
+
 # Docker variables
 DOCKER=true # Set this if running with docker
-DB_DIALECT=<mysql|postgres> # Set the desired databasee type
+DB_DIALECT=<mysql|postgres> # Set the desired database
+ type
 
 DB_USER=ilmomasiina
 DB_PASSWORD=secret

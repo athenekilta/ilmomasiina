@@ -13,7 +13,7 @@ exports.before = {
   create: [hooks.disallow('external')],
   update: [hooks.disallow('external')],
   patch: [hooks.disallow('external')],
-  remove: [hooks.disallow('external')],
+  remove: [hooks.disallow('external')]
 };
 
 exports.after = {
@@ -23,5 +23,5 @@ exports.after = {
   create: [],
   update: [],
   patch: [],
-  remove: [],
+  remove: []
 };

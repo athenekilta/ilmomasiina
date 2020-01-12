@@ -12,8 +12,8 @@ module.exports = () => hook => {
         'createdAt',
         'updatedAt',
         'deletedAt',
-        'eventId',
-      ],
+        'eventId'
+      ]
     })
     .then(() => hook);
 };

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Form, Input } from "formsy-react-components";
-import { connect } from "react-redux";
+import { Form, Input } from 'formsy-react-components';
+import { connect } from 'react-redux';
 
-import { login } from "../../modules/admin/actions";
-import { AppState } from "../../store/types";
+import { login } from '../../modules/admin/actions';
+import { AppState } from '../../store/types';
 
 interface LoginProps {}
 
@@ -13,11 +13,11 @@ type Props = LoginProps & LinkStateProps & LinkDispatchProps;
 const Login = (props: Props) => {
   const { loginError, loginLoading, login } = props;
 
-  const [email, setEmail] = useState("");
-  const [password, stePassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, stePassword] = useState('');
 
   return (
-    <div className="container" style={{ maxWidth: "400px" }}>
+    <div className="container" style={{ maxWidth: '400px' }}>
       <h1>Kirjaudu</h1>
       {loginError && <p>Kirjautuminen epäonnistui</p>}
       <Form>

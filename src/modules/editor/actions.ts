@@ -1,8 +1,9 @@
-import _ from "lodash";
-import request from "then-request";
-import { isArray } from "util";
-import { Event, Question } from "../types";
-import { DispatchAction } from "../../store/types";
+import _ from 'lodash';
+import request from 'then-request';
+import { isArray } from 'util';
+
+import { DispatchAction } from '../../store/types';
+import { Event, Question } from '../types';
 import {
   SET_EVENT,
   SET_EVENT_ERROR,
@@ -10,7 +11,7 @@ import {
   SET_EVENT_PUBLISH_ERROR,
   SET_EVENT_PUBLISH_LOADING,
   UPDATE_EVENT_FIELD
-} from "./actionTypes";
+} from './actionTypes';
 
 export const setEvent = (event: Event) => {
   return <const>{
@@ -61,7 +62,7 @@ const cleanEventData = (event: Event) => ({
       delete q.id;
     }
     if (q.options && Array.isArray(q.options)) {
-      q.options = q.options.join(";");
+      q.options = q.options.join(';');
     }
     return q;
   }),
@@ -77,7 +78,7 @@ const cleanServerEventdata = res => {
   if (res.questions) {
     res.questions = _.map(res.questions, q => {
       if (q.options && !isArray(q.options)) {
-        q.options = q.options.split(";");
+        q.options = q.options.split(';');
       }
       return q;
     });
@@ -91,7 +92,7 @@ export const publishEventAsync = (data, token) => async (
 ) => {
   dispatch(setEventPublishLoading());
   const cleaned = cleanEventData(data);
-  const event = await request("POST", `${PREFIX_URL}/api/admin/events`, {
+  const event = await request('POST', `${PREFIX_URL}/api/admin/events`, {
     json: cleaned,
     headers: { Authorization: token }
   })
@@ -120,7 +121,7 @@ export const updateEventAsync = (data, token) => async (
   dispatch(setEventPublishLoading());
   const cleaned = cleanEventData(data);
   const event = await request(
-    "PATCH",
+    'PATCH',
     `${PREFIX_URL}/api/admin/events/${data.id}`,
     {
       json: cleaned,
@@ -151,7 +152,7 @@ export const getEventAsync = (eventId: string, token: string) => async (
 ) => {
   dispatch(setEventLoading());
   const res = await request(
-    "GET",
+    'GET',
     `${PREFIX_URL}/api/admin/events/${eventId}`,
     {
       headers: { Authorization: token }

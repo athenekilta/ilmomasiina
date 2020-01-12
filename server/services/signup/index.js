@@ -5,7 +5,7 @@ module.exports = function() {
   const app = this;
 
   const options = {
-    Model: app.get('models').signup,
+    Model: app.get('models').signup
   };
 
   // Initialize our service with any options it requires
@@ -16,6 +16,6 @@ module.exports = function() {
 
   signupService.hooks({
     before: hooks.before,
-    after: hooks.after,
+    after: hooks.after
   });
 };

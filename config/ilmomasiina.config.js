@@ -2,6 +2,8 @@ const _ = require('lodash');
 
 const {
   DOCKER,
+  USE_SENTRY,
+  SENTRY_DSN,
   DB_DIALECT,
   DB_USER,
   DB_PASSWORD,
@@ -19,6 +21,8 @@ const {
 
 const config = {
   useDocker: DOCKER,
+  useSentry: USE_SENTRY,
+  sentryDsn: SENTRY_DSN,
   dbDialect: DB_DIALECT,
   dbUser: DB_USER,
   dbPassword: DB_PASSWORD,

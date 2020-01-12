@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import _ from "lodash";
-import moment from "moment-timezone";
-import { Quota, Answer, Question } from "../../../../modules/types";
+import _ from 'lodash';
+import moment from 'moment-timezone';
+
+import { Answer, Question, Quota } from '../../../../modules/types';
 
 type Props = {
   answers: Answer[];
@@ -26,26 +27,26 @@ const TableRow = (props: Props) => {
   } = props;
 
   const getAnswer = (answers: Answer[], questionId: string, quota: Quota) => {
-    if (questionId === "quota") {
+    if (questionId === 'quota') {
       return quota;
     }
     const answer = _.find(answers, { questionId });
-    return answer == null ? "" : answer.answer;
+    return answer == null ? '' : answer.answer;
   };
 
   return (
-    <tr className={firstName == null ? "text-muted" : ""}>
+    <tr className={firstName == null ? 'text-muted' : ''}>
       <td>{index}.</td>
       <td>
-        {firstName || "Vahvistamatta"} {lastName || ""}
+        {firstName || 'Vahvistamatta'} {lastName || ''}
       </td>
       {questions.map((q, i) => (
-        <td key={i}>{getAnswer(answers, q.id, quota) || ""}</td>
+        <td key={i}>{getAnswer(answers, q.id, quota) || ''}</td>
       ))}
       <td>
-        {moment.tz(createdAt, "Europe/Helsinki").format("DD.MM.YYYY HH:mm:ss")}
+        {moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss')}
         <span className="hover">
-          {moment.tz(createdAt, "Europe/Helsinki").format(".SSS")}
+          {moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}
         </span>
       </td>
     </tr>

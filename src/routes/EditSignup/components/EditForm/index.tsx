@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Form, Input } from "formsy-react-components";
-import _ from "lodash";
-import { Link } from "react-router-dom";
+import { Form, Input } from 'formsy-react-components';
+import _ from 'lodash';
+import { Link } from 'react-router-dom';
 
-import QuestionFields from "../../QuestionFields";
+import { Answer, Question, Signup } from '../../../../modules/types';
+import QuestionFields from '../../QuestionFields';
 
-import "./EditForm.scss";
-import { Answer, Signup, Question } from "../../../../modules/types";
+import './EditForm.scss';
 
 type Props = {
   signup: Signup;
@@ -34,11 +34,11 @@ const EditForm = (props: Props) => {
           const answer = data[question.id];
 
           if (answer && answer.length > 0) {
-            if (question.type === "checkbox") {
+            if (question.type === 'checkbox') {
               return {
                 id: question.answerId,
                 questionId,
-                answer: answer.join(";")
+                answer: answer.join(';')
               };
             }
             return { id: question.answerId, questionId, answer };
@@ -57,7 +57,7 @@ const EditForm = (props: Props) => {
       <div className="container">
         <div className="col-xs-12 col-md-8 col-md-offset-2">
           {inputError && (
-            <p style={{ color: "#a94442" }}>
+            <p style={{ color: '#a94442' }}>
               Ilmoittautumisessasi on virheitä.
             </p>
           )}

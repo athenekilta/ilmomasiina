@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Form, Input } from "formsy-react-components";
-import Spinner from "react-spinkit";
+import { Form, Input } from 'formsy-react-components';
+import Spinner from 'react-spinkit';
 
 type Props = {
   onSubmit: (email: string) => void;
@@ -10,10 +10,10 @@ type Props = {
 
 const UserForm = (props: Props) => {
   const { onSubmit, loading } = props;
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   return (
-    <Form style={{ maxWidth: "300px" }}>
+    <Form style={{ maxWidth: '300px' }}>
       <Input
         id="email"
         placeholder="Sähköposti"
@@ -26,10 +26,10 @@ const UserForm = (props: Props) => {
       />
       <button
         className="btn btn-default"
-        style={{ marginTop: "1em" }}
+        style={{ marginTop: '1em' }}
         onClick={() => onSubmit(email)}
       >
-        {loading ? <Spinner /> : "Luo uusi käyttäjä"}
+        {loading ? <Spinner /> : 'Luo uusi käyttäjä'}
       </button>
     </Form>
   );

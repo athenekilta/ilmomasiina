@@ -1,13 +1,15 @@
-import React from "react";
-import _ from "lodash";
+import React from 'react';
+
 import {
   CheckboxGroup,
   Input,
   RadioGroup,
   Select,
   Textarea
-} from "formsy-react-components";
-import { Question } from "../../../../modules/types";
+} from 'formsy-react-components';
+import _ from 'lodash';
+
+import { Question } from '../../../../modules/types';
 
 type Props = {
   questions: Question[];
@@ -16,10 +18,10 @@ type Props = {
 const QuestionFields = ({ questions }: Props) => (
   <>
     {_.map(questions, question => {
-      const help = question.public && "Tämän kentän vastaukset ovat julkisia.";
+      const help = question.public && 'Tämän kentän vastaukset ovat julkisia.';
 
       switch (question.type) {
-        case "text":
+        case 'text':
           return (
             <Input
               name={String(question.id)}
@@ -30,7 +32,7 @@ const QuestionFields = ({ questions }: Props) => (
               help={help}
             />
           );
-        case "number":
+        case 'number':
           return (
             <Input
               name={String(question.id)}
@@ -41,7 +43,7 @@ const QuestionFields = ({ questions }: Props) => (
               help={help}
             />
           );
-        case "checkbox":
+        case 'checkbox':
           return (
             <CheckboxGroup
               value={[]}
@@ -57,7 +59,7 @@ const QuestionFields = ({ questions }: Props) => (
               help={help}
             />
           );
-        case "textarea":
+        case 'textarea':
           return (
             <Textarea
               className="open-question form-control"
@@ -70,10 +72,10 @@ const QuestionFields = ({ questions }: Props) => (
               help={help}
             />
           );
-        case "select":
+        case 'select':
           if (question?.options?.length > 3) {
             // render select if more than 3 options
-            const optionsArray = [{ label: "Valitse...", value: null }];
+            const optionsArray = [{ label: 'Valitse...', value: null }];
 
             question.options.map(option =>
               optionsArray.push({ label: option, value: null })

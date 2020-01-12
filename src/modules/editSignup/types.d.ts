@@ -1,13 +1,13 @@
+import { Event, Signup } from '../types';
 import {
-  setSignupAndEvent,
-  setSignup,
+  resetEventState,
+  setDeleted,
+  setError,
   setEvent,
   setLoading,
-  setError,
-  setDeleted,
-  resetEventState
-} from "./actions";
-import { Event, Signup } from "../types";
+  setSignup,
+  setSignupAndEvent
+} from './actions';
 
 interface EditSignupState {
   event: Event | {};

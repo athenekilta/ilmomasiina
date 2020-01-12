@@ -1,9 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
 
-import moment from "moment";
+import moment from 'moment';
+import { Link } from 'react-router-dom';
 
-import Separator from "../../components/Separator";
+import Separator from '../../components/Separator';
 
 type Props = {
   title: string;
@@ -24,7 +24,7 @@ const TableRow = (props: Props) => {
         {link ? <Link to={link}>{title}</Link> : title}
       </td>
       <td key="date" className="date">
-        {date ? moment(date).format("DD.MM.YYYY") : ""}
+        {date ? moment(date).format('DD.MM.YYYY') : ''}
       </td>
       <td key="signup" className="signup">
         {signupLabel}
@@ -32,11 +32,11 @@ const TableRow = (props: Props) => {
       <td
         key="signups"
         className="signups"
-        data-xs-prefix={signups || size ? "Ilmoittautuneita: " : ""}
+        data-xs-prefix={signups || size ? 'Ilmoittautuneita: ' : ''}
       >
         {signups}
-        {size ? <Separator /> : ""}
-        {size || ""}
+        {size ? <Separator /> : ''}
+        {size || ''}
       </td>
     </tr>
   );

@@ -1,6 +1,6 @@
 const {
   AuthenticationService,
-  JWTStrategy,
+  JWTStrategy
 } = require('@feathersjs/authentication');
 const { LocalStrategy } = require('@feathersjs/authentication-local');
 const config = require('./../../../config/ilmomasiina.config.js');
@@ -15,12 +15,12 @@ module.exports = app => {
     jwtOptions: {
       header: { typ: 'access' },
       algorithm: 'HS256',
-      expiresIn: '1h',
+      expiresIn: '1h'
     },
     local: {
       usernameField: 'email',
-      passwordField: 'password',
-    },
+      passwordField: 'password'
+    }
   });
 
   const authService = new AuthenticationService(app);

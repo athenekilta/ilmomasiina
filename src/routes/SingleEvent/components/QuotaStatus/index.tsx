@@ -1,8 +1,10 @@
-import React from "react";
-import _ from "lodash";
-import { OPENQUOTA, WAITLIST } from "../../../../utils/signupUtils";
-import ViewProgress from "../ViewProgress";
-import { Event, Quota } from "../../../../modules/types";
+import React from 'react';
+
+import _ from 'lodash';
+
+import { Event, Quota } from '../../../../modules/types';
+import { OPENQUOTA, WAITLIST } from '../../../../utils/signupUtils';
+import ViewProgress from '../ViewProgress';
 
 type Props = {
   event: Event;

@@ -179,9 +179,9 @@ const createAnswers = (eventId, signupId) => {
     questionsToAnswer.map(
       question =>
         answers.push({
-        signupId,
-        questionId: question.id,
-        answer: faker.lorem.sentence()
+          signupId,
+          questionId: question.id,
+          answer: faker.lorem.sentence()
         }) // eslint-disable-line
     );
   }
@@ -223,8 +223,8 @@ seq
   .then(() => seq.models.question.bulkCreate(questions))
   .then(() =>
     debug(
-    `${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`
-  )
+      `${events.length} events with ${quotas.length} quotas and ${questions.length} questions created.`
+    )
   )
   .then(() => seq.models.signup.bulkCreate(signups))
   .then(() => seq.models.answer.bulkCreate(answers))

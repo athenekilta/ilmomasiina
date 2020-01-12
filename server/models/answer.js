@@ -9,8 +9,8 @@ module.exports = function() {
     {
       answer: {
         type: Sequelize.STRING,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     },
     {
       freezeTableName: true,
@@ -20,13 +20,13 @@ module.exports = function() {
           const models = app.get('models');
 
           this.belongsTo(models.signup, {
-            foreignKey: { unique: 'signup_and_question' },
+            foreignKey: { unique: 'signup_and_question' }
           });
           this.belongsTo(models.question, {
-            foreignKey: { unique: 'signup_and_question' },
+            foreignKey: { unique: 'signup_and_question' }
           });
-        },
-      },
+        }
+      }
     }
   );
 

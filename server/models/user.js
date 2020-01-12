@@ -12,15 +12,15 @@ module.exports = function() {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
+        unique: true
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
-      },
+        allowNull: false
+      }
     },
     {
-      freezeTableName: true,
+      freezeTableName: true
     }
   );
 

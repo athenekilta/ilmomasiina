@@ -14,7 +14,7 @@ exports.before = {
   create: [includeAllEventData()],
   update: [includeAllEventData()],
   patch: [includeAllEventData()],
-  remove: [],
+  remove: []
 };
 
 exports.after = {
@@ -26,5 +26,5 @@ exports.after = {
   ],
   update: [updateQuotas(), updateQuestions()],
   patch: [updateQuotas(), updateQuestions()],
-  remove: [],
+  remove: []
 };

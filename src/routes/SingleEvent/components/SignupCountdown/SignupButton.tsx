@@ -1,9 +1,9 @@
-import React from "react";
-import signupState from "../../../../utils/signupStateText";
+import React from 'react';
 
-import { Event, Quota } from "../../../../modules/types";
+import { Event, Quota } from '../../../../modules/types';
+import signupState from '../../../../utils/signupStateText';
 
-import "./SignupButton.scss";
+import './SignupButton.scss';
 
 type SignupButtonProps = {
   event: Event;
@@ -29,7 +29,7 @@ const SignupButton = (props: SignupButtonProps) => {
           ).label
         }
         {total < 60000 && !isOpen ? (
-          <span style={{ color: "green" }}> {` (${seconds}  s)`}</span>
+          <span style={{ color: 'green' }}> {` (${seconds}  s)`}</span>
         ) : null}
       </p>
       {event.quota
@@ -40,11 +40,11 @@ const SignupButton = (props: SignupButtonProps) => {
                 className="btn btn-default btn-block btn-whitespace-normal"
                 onClick={() => (isOpen ? openForm(quota) : {})}
               >
-                {isOnly ? "Ilmoittaudu nyt" : `Ilmoittaudu: ${quota.title}`}
+                {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
               </button>
             </p>
           ))
-        : ""}
+        : ''}
     </div>
   );
 };

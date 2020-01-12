@@ -1,6 +1,7 @@
-import { createSelector } from "reselect";
-import { AppState } from "../../store/types";
-import { Event, Quota } from "../types";
+import { createSelector } from 'reselect';
+
+import { AppState } from '../../store/types';
+import { Event, Quota } from '../types';
 
 const _getEvents = (state: AppState) => state.admin.events;
 export const eventsLoading = (state: AppState) => state.admin.eventsLoading;

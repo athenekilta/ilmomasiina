@@ -1,11 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import _ from "lodash";
+import _ from 'lodash';
 
-import TableRow from "./TableRow";
-import "./SignupList.scss";
-import { OPENQUOTA, WAITLIST } from "../../../../utils/signupUtils";
-import { Signup, Question } from "../../../../modules/types";
+import { Question, Signup } from '../../../../modules/types';
+import { OPENQUOTA, WAITLIST } from '../../../../utils/signupUtils';
+import TableRow from './TableRow';
+
+import './SignupList.scss';
 
 type Props = {
   questions: Question[];
@@ -16,9 +17,9 @@ type Props = {
 function getTitle(quotaName: string) {
   switch (quotaName) {
     case WAITLIST:
-      return "Jonossa";
+      return 'Jonossa';
     case OPENQUOTA:
-      return "Avoin kiintiö";
+      return 'Avoin kiintiö';
     default:
       return quotaName;
   }

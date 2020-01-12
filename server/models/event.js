@@ -11,55 +11,55 @@ module.exports = function() {
     {
       title: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: false
       },
       date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       registrationStartDate: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       registrationEndDate: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       openQuotaSize: {
         type: Sequelize.INTEGER,
         validate: {
-          min: 0,
+          min: 0
         },
-        defaultValue: 0,
+        defaultValue: 0
       },
       description: {
-        type: Sequelize.TEXT,
+        type: Sequelize.TEXT
       },
       price: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       location: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       homepage: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       facebookUrl: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       webpageUrl: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       draft: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: true,
+        defaultValue: true
       },
       signupsPublic: {
         type: Sequelize.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: false
       },
       verificationEmail: {
-        type: Sequelize.TEXT,
-      },
+        type: Sequelize.TEXT
+      }
     },
     {
       freezeTableName: true,
@@ -74,12 +74,12 @@ module.exports = function() {
                 [Op.gt]: moment()
                   .tz('Europe/Helsinki')
                   .subtract(7, 'days')
-                  .format(),
-              },
-            },
-          },
-        },
-      },
+                  .format()
+              }
+            }
+          }
+        }
+      }
     }
   );
 

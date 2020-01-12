@@ -1,15 +1,16 @@
-import moment from "moment";
+import moment from 'moment';
+
 import {
-  SET_EVENTS,
-  SET_EVENTS_LOADING,
-  SET_EVENTS_ERROR,
-  SET_ACCESS_TOKEN,
   CLEAR_STATE,
-  SET_LOGIN_LOADING,
+  SET_ACCESS_TOKEN,
+  SET_EVENTS,
+  SET_EVENTS_ERROR,
+  SET_EVENTS_LOADING,
   SET_LOGIN_ERROR,
+  SET_LOGIN_LOADING,
   SET_LOGIN_STATUS
-} from "./actionTypes";
-import { AdminState, AdminActions } from "./types";
+} from './actionTypes';
+import { AdminActions, AdminState } from './types';
 
 const initialState: AdminState = {
   events: [],
@@ -50,7 +51,7 @@ export default function reducer(
         ...state,
         accessToken: action.payload,
         accessTokenExpires: moment(new Date())
-          .add(60, "m")
+          .add(60, 'm')
           .toDate()
           .toISOString(),
         loginLoading: false

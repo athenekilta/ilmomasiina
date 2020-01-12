@@ -10,7 +10,7 @@ module.exports = () => hook => {
       'registrationStartDate',
       'registrationEndDate',
       'openQuotaSize',
-      'signupsPublic',
+      'signupsPublic'
     ],
     distinct: true,
     raw: false,
@@ -22,15 +22,15 @@ module.exports = () => hook => {
         'size',
         [
           sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
-          'signupCount',
-        ],
+          'signupCount'
+        ]
       ],
       include: {
         model: sequelize.models.signup,
         required: false,
-        attributes: [],
-      },
+        attributes: []
+      }
     },
-    group: [sequelize.col('event.id'), sequelize.col('quota.id')],
+    group: [sequelize.col('event.id'), sequelize.col('quota.id')]
   };
 };
