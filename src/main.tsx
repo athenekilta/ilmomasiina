@@ -1,46 +1,17 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "react-dates/initialize";
-import AppContainer from "./containers/AppContainer";
-import "react-dates/lib/css/_datepicker.css";
+import React from 'react';
 
-const MOUNT_NODE = document.getElementById("root");
+import * as Sentry from '@sentry/browser';
+import ReactDOM from 'react-dom';
 
-let render = () => {
-  ReactDOM.render(<AppContainer />, MOUNT_NODE);
-};
+import 'react-dates/initialize';
 
-// This code is excluded from production bundle
-if (DEV) {
-  if (module.hot) {
-    // Development render functions
-    const renderApp = render;
-    const renderError = error => {
-      const RedBox = require("redbox-react").default; // eslint-disable-line
+import { sentryDsn } from '../config/ilmomasiina.config.js';
+import AppContainer from './containers/AppContainer';
 
-      ReactDOM.render(<RedBox error={error} />, MOUNT_NODE);
-    };
+import 'react-dates/lib/css/_datepicker.css';
 
-    // Wrap render in try/catch
-    render = () => {
-      try {
-        renderApp();
-      } catch (error) {
-        renderError(error);
-      }
-    };
-
-    // Setup hot module replacement
-    module.hot.accept(() =>
-      setImmediate(() => {
-        ReactDOM.unmountComponentAtNode(MOUNT_NODE);
-        render();
-      })
-    );
-  }
+if (PROD) {
+  Sentry.init({ dsn: sentryDsn });
 }
 
-// ========================================================
-// Go!
-// ========================================================
-render();
+ReactDOM.render(<AppContainer />, document.getElementById('root'));

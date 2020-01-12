@@ -8,7 +8,11 @@ const project = require('./project.config');
 module.exports = {
   mode: 'development',
   context: __dirname,
-  entry: { app: project.paths.client('main.tsx') },
+  entry: [
+    'react-hot-loader/patch',
+    'webpack-hot-middleware/client',
+    project.paths.client('main.tsx')
+  ],
   output: {
     path: project.paths.dist(),
     publicPath: project.compiler_public_path,
@@ -16,7 +20,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '../src/styles')
+      '@': path.resolve(__dirname, '../src/styles'),
+      'react-dom': '@hot-loader/react-dom'
     },
     extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
