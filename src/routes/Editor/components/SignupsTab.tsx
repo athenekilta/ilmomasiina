@@ -15,7 +15,7 @@ type Props = {
 };
 
 const SignupsTab = (props: Props) => {
-  const { event } = props;
+  const { event, deleteSignup } = props;
 
   const signups = getSignupsArrayFormatted(event);
 
@@ -30,7 +30,7 @@ const SignupsTab = (props: Props) => {
       </CSVLink>
       <br />
       <br />
-      <table className="table table-condensed table-responsive">
+      <table className="event.editor--signup-table table table-condensed table-responsive">
         <thead>
           <tr className="active">
             <th key="position">#</th>

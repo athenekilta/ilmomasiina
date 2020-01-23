@@ -1,21 +1,21 @@
 import React from 'react';
 
-import { Textarea } from 'formsy-react-components';
+import { Textarea } from '@theme-ui/components';
 
 import { Event } from '../../../modules/types';
 
 type Props = {
   event: Event;
-  onDataChange: (field: string, value: any) => void;
+  register: any;
 };
 
-const EmailsTab = ({ event, onDataChange }: Props) => (
+const EmailsTab = ({ event, register }: Props) => (
   <Textarea
     rows={10}
     name="verificationEmail"
-    value={event.verificationEmail || ''}
+    defaultValue={event.verificationEmail || ''}
     label="Vahvistusviesti sähköpostiin"
-    onChange={onDataChange}
+    ref={register}
   />
 );
 

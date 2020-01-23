@@ -1,3 +1,9 @@
+.tab {
+  border-left: 1px solid grey;
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+}
+
 .event-editor {
   .panel-default {
     position: relative;
@@ -5,6 +11,10 @@
     .panel-body {
       background: $secondary-background;
       padding-left: 50px;
+
+      .no-focus {
+        user-select: none;
+      }
     }
 
     .handler {
@@ -19,7 +29,7 @@
       cursor: move;
 
       &:after {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         left: 5px;
@@ -30,7 +40,7 @@
       }
 
       &:before {
-        content: '';
+        content: "";
         display: block;
         position: absolute;
         left: 5px;
@@ -121,4 +131,8 @@
 .event-editor--nav {
   clear: both;
   padding-top: 1em;
+}
+
+.event.editor--signup-table {
+  overflow-y: scroll;
 }

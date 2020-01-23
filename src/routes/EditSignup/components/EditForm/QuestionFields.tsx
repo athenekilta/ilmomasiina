@@ -8,7 +8,7 @@ import {
 } from 'formsy-react-components';
 import _ from 'lodash';
 
-import { Question } from '../../modules/types';
+import { Question } from '../../../../modules/types';
 
 type Props = {
   questions: Question[];

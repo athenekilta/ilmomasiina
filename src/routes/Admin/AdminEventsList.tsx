@@ -1,14 +1,17 @@
+/** @jsx jsx */
 import React, { useEffect, useState } from 'react';
 
+import { Button } from '@theme-ui/components';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { jsx } from 'theme-ui';
 
 import {
-  createUserAsync,
-  deleteEventAsync,
-  getEventsAsync
+  createUser,
+  deleteEvent,
+  getAdminEvents
 } from '../../modules/admin/actions';
 import {
   eventsError,
@@ -39,37 +42,32 @@ const AdminEventList = (props: Props) => {
     events,
     eventsLoading,
     eventsError,
-    updateEvents,
+    getAdminEvents,
     deleteEvent,
-    createUserAsync
+    createUser
   } = props;
   const [userFormLoading, setUserFormLoading] = useState(false);
 
   useEffect(() => {
-    updateEvents();
+    getAdminEvents();
   }, []);
 
-  function createUser(email: string) {
-    this.setState(
-      {
-        userFormLoading: true
-      },
-      async () => {
-        try {
-          // TODO: better error handling
-          const success = await minDelay(createUserAsync({ email }), 1000);
-          if (success) {
-            toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 });
-          } else {
-            toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
-          }
-        } catch (error) {
-          toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
-        }
+  async function handleCreateUser(email: string) {
+    setUserFormLoading(true);
 
-        setUserFormLoading(false);
+    try {
+      // TODO: better error handling
+      const success = await minDelay(createUser({ email }), 1000);
+      if (success) {
+        toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 });
+      } else {
+        toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
       }
-    );
+    } catch (error) {
+      toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+    }
+
+    setUserFormLoading(false);
   }
 
   function onDeleteEvent(eventId) {
@@ -82,7 +80,7 @@ const AdminEventList = (props: Props) => {
         if (!success) {
           console.alert('Poisto epäonnistui :(');
         }
-        updateEvents();
+        getAdminEvents();
       });
     }
   }
@@ -111,11 +109,19 @@ const AdminEventList = (props: Props) => {
           ))}
         </tbody>
       </table>
-      <Link to={`${PREFIX_URL}/admin/edit/new`} className="btn btn-default">
-        + Uusi tapahtuma
-      </Link>
+      <Button variant="secondary">
+        <Link
+          to={`${PREFIX_URL}/admin/edit/new`}
+          sx={{
+            color: 'inherit'
+          }}
+        >
+          + Uusi tapahtuma
+        </Link>
+      </Button>
+
       <h1>Luo uusi käyttäjä</h1>
-      <UserForm onSubmit={createUser} loading={userFormLoading} />
+      <UserForm handleCreateUser={handleCreateUser} loading={userFormLoading} />
     </div>
   );
 };
@@ -127,9 +133,9 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
-  updateEvents: () => void;
+  getAdminEvents: () => void;
   deleteEvent: (eventId: string) => Promise<boolean>;
-  createUserAsync: (data: { email: string }) => Promise<boolean>;
+  createUser: (data: { email: string }) => Promise<boolean>;
 }
 
 const mapStateToProps = (state: AppState) => ({
@@ -139,9 +145,9 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = {
-  updateEvents: getEventsAsync,
-  deleteEvent: deleteEventAsync,
-  createUserAsync: createUserAsync
+  getAdminEvents: getAdminEvents,
+  deleteEvent: deleteEvent,
+  createUser: createUser
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminEventList);

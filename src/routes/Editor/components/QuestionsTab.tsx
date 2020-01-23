@@ -7,11 +7,11 @@ import Questions from './Questions';
 
 type Props = {
   event: Event;
-  onDataChange: (field: string, value: any) => void;
+  updateEventField: any;
 };
 
 const QuestionsTab = (props: Props) => {
-  const { event, onDataChange } = props;
+  const { event, updateEventField } = props;
 
   function addQuestion() {
     const questions = event.questions ? event.questions : [];
@@ -25,14 +25,14 @@ const QuestionsTab = (props: Props) => {
       type: 'text'
     });
 
-    onDataChange('questions', newQuestions);
+    updateEventField('questions', newQuestions);
   }
 
   return (
     <div>
       <p>Kaikilta osallistujilta kerätään aina nimi ja sähköpostiosoite.</p>
       <div>
-        <Questions event={event} onDataChange={onDataChange} />
+        <Questions {...props} />
         <a className="btn btn-primary pull-right" onClick={addQuestion}>
           Lisää kysymys
         </a>

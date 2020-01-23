@@ -1,58 +1,60 @@
-import React, { useState } from 'react';
+/** @jsx jsx */
+import React from 'react';
 
-import { Form, Input } from 'formsy-react-components';
+import { Button, Container, Input, Label } from '@theme-ui/components';
+import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
+import { jsx } from 'theme-ui';
 
 import { login } from '../../modules/admin/actions';
 import { AppState } from '../../store/types';
 
 interface LoginProps {}
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
 type Props = LoginProps & LinkStateProps & LinkDispatchProps;
 
 const Login = (props: Props) => {
+  const { register, handleSubmit, errors } = useForm<FormData>();
   const { loginError, loginLoading, login } = props;
 
-  const [email, setEmail] = useState('');
-  const [password, stePassword] = useState('');
+  const onSubmit = data => {
+    const { email, password } = data;
+    login(email, password);
+  };
 
   return (
-    <div className="container" style={{ maxWidth: '400px' }}>
+    <Container sx={{ variant: 'layout.container.loginContainer' }}>
       <h1>Kirjaudu</h1>
-      {loginError && <p>Kirjautuminen epäonnistui</p>}
-      <Form>
+      {loginError && <p sx={{ color: 'error' }}>Kirjautuminen epäonnistui</p>}
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <Label htmlFor="email">Sähköposti</Label>
         <Input
-          value={email}
-          onChange={(_key, value: string) => setEmail(value)}
+          sx={errors.email && { variant: 'forms.input.error' }}
           name="email"
-          label="Sähköposti"
-          title="Sähköposti"
+          type="email"
           placeholder="admin@athene.fi"
-          layout="vertical"
-          required
+          ref={register({ required: true })}
         />
+        {errors.email && <p>Tämä kenttä vaaditaan</p>}
+        <Label htmlFor="password">Salasana</Label>
         <Input
-          value={password}
-          onChange={(_key, value: string) => stePassword(value)}
+          sx={errors.password && { variant: 'forms.input.error' }}
           name="password"
-          label="Salasana"
-          title="Salasana"
           type="password"
           placeholder="••••••••"
-          layout="vertical"
-          required
+          ref={register({ required: true })}
         />
-        <button
-          className="btn btn-default"
-          onClick={e => {
-            e.preventDefault();
-            login(email, password);
-          }}
-        >
+        {errors.password && <p>Tämä kenttä vaaditaan</p>}
+        <Button type="submit" variant="secondary">
           Kirjaudu
-        </button>
-      </Form>
-    </div>
+        </Button>
+      </form>
+    </Container>
   );
 };
 

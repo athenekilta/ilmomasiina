@@ -1,37 +1,44 @@
-import React, { useState } from 'react';
+/** @jsx jsx */
+import { Box, Button, Input } from '@theme-ui/components';
+import { Spinner } from '@theme-ui/components';
+import { useForm } from 'react-hook-form';
+import { jsx } from 'theme-ui';
 
-import { Form, Input } from 'formsy-react-components';
-import Spinner from 'react-spinkit';
+type FormData = {
+  email: string;
+};
 
 type Props = {
-  onSubmit: (email: string) => void;
+  handleCreateUser: (email: string) => void;
   loading: boolean;
 };
 
 const UserForm = (props: Props) => {
-  const { onSubmit, loading } = props;
-  const [email, setEmail] = useState('');
+  const { handleCreateUser, loading } = props;
+  const { register, setValue, handleSubmit, errors } = useForm<FormData>();
+
+  const onSubmit = data => {
+    handleCreateUser(data.email);
+  };
 
   return (
-    <Form style={{ maxWidth: '300px' }}>
+    <Box
+      sx={{
+        maxWidth: 256
+      }}
+      as="form"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Input
-        id="email"
-        placeholder="Sähköposti"
         name="email"
-        title="Sähköposti"
-        layout="elementOnly"
-        value={email}
-        onChange={(_field, value) => setEmail(value)}
-        required
+        type="email"
+        placeholder="Sähköposti"
+        ref={register({ required: true })}
       />
-      <button
-        className="btn btn-default"
-        style={{ marginTop: '1em' }}
-        onClick={() => onSubmit(email)}
-      >
+      <Button type="submit" variant="secondary">
         {loading ? <Spinner /> : 'Luo uusi käyttäjä'}
-      </button>
-    </Form>
+      </Button>
+    </Box>
   );
 };
 

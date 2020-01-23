@@ -87,86 +87,86 @@ const cleanServerEventdata = res => {
   return res;
 };
 
-export const publishEventAsync = (data, token) => async (
-  dispatch: DispatchAction
-) => {
-  dispatch(setEventPublishLoading());
-  const cleaned = cleanEventData(data);
-  const event = await request('POST', `${PREFIX_URL}/api/admin/events`, {
-    json: cleaned,
-    headers: { Authorization: token }
-  })
-    .then(res => {
-      if (res.statusCode > 201) {
-        throw new Error(res.body.toString());
-      }
-      return JSON.parse(res.body.toString());
-    })
-    .then(res => {
-      const cleaned = cleanServerEventdata(res);
-      dispatch(setEvent(cleaned));
-      return cleaned;
-    })
-    .catch(error => {
-      dispatch(setEventPublishError());
-      throw new Error(error);
-    });
+export function clearEvent() {
+  return function(dispatch: DispatchAction) {
+    dispatch(setEvent({}));
+  };
+}
 
-  return event;
-};
-
-export const updateEventAsync = (data, token) => async (
-  dispatch: DispatchAction
-) => {
-  dispatch(setEventPublishLoading());
-  const cleaned = cleanEventData(data);
-  const event = await request(
-    'PATCH',
-    `${PREFIX_URL}/api/admin/events/${data.id}`,
-    {
+export function publishEvent(data, token) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setEventPublishLoading());
+    const cleaned = cleanEventData(data);
+    const event = request('POST', `${PREFIX_URL}/api/admin/events`, {
       json: cleaned,
       headers: { Authorization: token }
-    }
-  )
-    .then(res => {
-      if (res.statusCode > 201) {
-        throw new Error(res.body.toString());
+    })
+      .then(res => {
+        if (res.statusCode > 201) {
+          throw new Error(res.body.toString());
+        }
+        return JSON.parse(res.body.toString());
+      })
+      .then(res => {
+        const cleaned = cleanServerEventdata(res);
+        dispatch(setEvent(cleaned));
+        return cleaned;
+      })
+      .catch(error => {
+        dispatch(setEventPublishError());
+        throw new Error(error);
+      });
+
+    return event;
+  };
+}
+
+export function updateEventEditor(data, token) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setEventPublishLoading());
+    const cleaned = cleanEventData(data);
+    const event = request(
+      'PATCH',
+      `${PREFIX_URL}/api/admin/events/${data.id}`,
+      {
+        json: cleaned,
+        headers: { Authorization: token }
       }
-      return JSON.parse(res.body.toString());
-    })
-    .then(res => {
-      const cleaned = cleanServerEventdata(res);
-      dispatch(setEvent(cleaned));
-      return cleaned;
-    })
-    .catch(error => {
-      dispatch(setEventPublishError());
-      throw new Error(error);
-    });
+    )
+      .then(res => {
+        if (res.statusCode > 201) {
+          throw new Error(res.body.toString());
+        }
+        return JSON.parse(res.body.toString());
+      })
+      .then(res => {
+        const cleaned = cleanServerEventdata(res);
+        dispatch(setEvent(cleaned));
+        return cleaned;
+      })
+      .catch(error => {
+        dispatch(setEventPublishError());
+        throw new Error(error);
+      });
 
-  return event;
-};
+    return event;
+  };
+}
 
-export const getEventAsync = (eventId: string, token: string) => async (
-  dispatch: DispatchAction
-) => {
-  dispatch(setEventLoading());
-  const res = await request(
-    'GET',
-    `${PREFIX_URL}/api/admin/events/${eventId}`,
-    {
+export function getEvent(eventId: string, token: string) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setEventLoading());
+    return request('GET', `${PREFIX_URL}/api/admin/events/${eventId}`, {
       headers: { Authorization: token }
-    }
-  )
-    .then(res => JSON.parse(res.body.toString()))
-    .then((res: Event) => {
-      res.useOpenQuota = res.openQuotaSize > 0;
-      dispatch(setEvent(res));
-      return res;
     })
-    .catch(error => {
-      dispatch(setEventError());
-    });
-
-  return res;
-};
+      .then(res => JSON.parse(res.body.toString()))
+      .then((res: Event) => {
+        res.useOpenQuota = res.openQuotaSize > 0;
+        dispatch(setEvent(res));
+        return res;
+      })
+      .catch(error => {
+        dispatch(setEventError());
+      });
+  };
+}

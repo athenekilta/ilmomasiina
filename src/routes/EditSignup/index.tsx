@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 
+import { Spinner } from '@theme-ui/components';
 import { connect } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import Spinner from 'react-spinkit';
 import { toast } from 'react-toastify';
 
 import {

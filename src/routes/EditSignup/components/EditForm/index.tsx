@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
 import { Answer, Question, Signup } from '../../../../modules/types';
-import QuestionFields from '../../QuestionFields';
+import QuestionFields from './QuestionFields';
 
 import './EditForm.scss';
 

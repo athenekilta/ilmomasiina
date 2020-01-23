@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
 import Separator from '../../components/Separator';
-import { Event, Signup } from '../../modules/types';
+import { Event } from '../../modules/types';
 
 type Props = {
   onDelete: (eventId: string) => void;

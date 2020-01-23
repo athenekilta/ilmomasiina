@@ -1,68 +1,70 @@
 import React from 'react';
 
-import { Checkbox, Input, Textarea } from 'formsy-react-components';
+import { Checkbox, Input, Label, Textarea } from '@theme-ui/components';
 
 import { Event } from '../../../modules/types';
 import DateTimePicker from './DateTimePicker';
 
 type Props = {
   event: Event;
-  onDataChange: (field: string, value: any) => void;
+  formMethods: any;
+  updateEventField: any;
 };
 
 const BasicDetailsTab = (props: Props) => {
-  const { event, onDataChange } = props;
+  const { event, formMethods } = props;
+  const { register } = formMethods;
 
   return (
     <div>
+      <Label htmlFor="title">Tapahtuman nimi</Label>
       <Input
         name="title"
-        value={event.title ? event.title : ''}
-        label="Tapahtuman nimi"
         type="text"
-        required
-        onChange={onDataChange}
+        defaultValue={event.title ? event.title : ''}
+        placeholder="Tapahtuman nimi"
+        ref={register({ required: true })}
       />
+      <Label htmlFor="date">Ajankohta</Label>
       <DateTimePicker
         name="date"
         value={event.date}
-        label="Ajankohta"
-        required
-        onChange={onDataChange}
+        formMethods={formMethods}
       />
+      <Label htmlFor="webpageUrl">Kotisivujen osoite</Label>
       <Input
         name="webpageUrl"
-        value={event.webpageUrl ? event.webpageUrl : ''}
-        label="Kotisivujen osoite"
         type="text"
-        onChange={onDataChange}
+        defaultValue={event.webpageUrl ? event.webpageUrl : ''}
+        placeholder="Kotisivujen osoite"
+        ref={register}
       />
+      <Label htmlFor="facebookUrl">Facebook-tapahtuma</Label>
       <Input
         name="facebookUrl"
-        value={event.facebookUrl ? event.facebookUrl : ''}
-        label="Facebook-tapahtuma"
+        defaultValue={event.facebookUrl ? event.facebookUrl : ''}
         type="text"
-        onChange={onDataChange}
+        ref={register}
       />
+      <Label htmlFor="location">Paikka</Label>
       <Input
         name="location"
-        value={event.location ? event.location : ''}
-        label="Paikka"
+        defaultValue={event.location ? event.location : ''}
         type="text"
-        onChange={onDataChange}
+        ref={register}
       />
+      <Label htmlFor="description">Kuvaus</Label>
       <Textarea
         rows={10}
         name="description"
-        value={event.description ? event.description : ''}
-        label="Kuvaus"
-        onChange={onDataChange}
+        defaultValue={event.description ? event.description : ''}
+        ref={register}
       />
+      <Label htmlFor="signupsPublic">Ilmoittautumiset ovat julkisia</Label>
       <Checkbox
         name="signupsPublic"
-        value={event.signupsPublic ? event.signupsPublic : false}
-        label="Ilmoittautumiset ovat julkisia"
-        onChange={onDataChange}
+        defaultChecked={event.signupsPublic ? event.signupsPublic : false}
+        ref={register}
       />
     </div>
   );

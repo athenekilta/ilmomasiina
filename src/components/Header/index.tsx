@@ -16,13 +16,13 @@ type Props = HeaderProps &
   RouteComponentProps;
 
 const Header = (props: Props) => {
-  const { loggedIn } = props;
+  const { loggedIn, redirectToLogin, history } = props;
 
   return (
     <div className="navbar navbar-default">
       <div className="container">
         <a
-          onClick={() => props.history.push(`${PREFIX_URL}/`)}
+          onClick={() => history.push(`${PREFIX_URL}/`)}
           className="navbar-brand"
         >
           {' '}
@@ -30,7 +30,7 @@ const Header = (props: Props) => {
         </a>
         {loggedIn && (
           <a
-            onClick={() => props.redirectToLogin()}
+            onClick={() => redirectToLogin()}
             className="navbar-brand"
             style={{ float: 'right' }}
           >
@@ -58,4 +58,4 @@ const mapDispatchToProps = {
   redirectToLogin
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

@@ -2,7 +2,7 @@ import { push } from 'connected-react-router';
 import request from 'then-request';
 
 import { DispatchAction, GetState } from '../../store/types';
-import { getEventAsync } from '../editor/actions';
+import { getEvent } from '../editor/actions';
 import { setError } from '../editSignup/actions';
 import { Event } from '../types';
 import {
@@ -67,27 +67,26 @@ export const setLoginError = () => {
   };
 };
 
-export const getEventsAsync = () => (
-  dispatch: DispatchAction,
-  getState: GetState
-) => {
-  dispatch(setEventsLoading());
+export function getAdminEvents() {
+  return function(dispatch: DispatchAction, getState: GetState) {
+    dispatch(setEventsLoading());
 
-  const { accessToken } = getState().admin;
+    const { accessToken } = getState().admin;
 
-  request('GET', `${PREFIX_URL}/api/admin/events`, {
-    headers: { Authorization: accessToken }
-  })
-    .then(res => JSON.parse(res.body.toString()))
-    .then(res => {
-      dispatch(setEvents(res));
+    request('GET', `${PREFIX_URL}/api/admin/events`, {
+      headers: { Authorization: accessToken }
     })
-    .catch(error => {
-      dispatch(setEventsError());
-    });
-};
+      .then(res => JSON.parse(res.body.toString()))
+      .then(res => {
+        dispatch(setEvents(res));
+      })
+      .catch(error => {
+        dispatch(setEventsError());
+      });
+  };
+}
 
-export const createUserAsync = (data: { email: string }) => (
+export const createUser = (data: { email: string }) => (
   _dispatch: DispatchAction,
   getState: GetState
 ) => {
@@ -104,65 +103,70 @@ export const createUserAsync = (data: { email: string }) => (
     });
 };
 
-export const login = (email: string, password: string) => dispatch => {
-  dispatch(setLoginLoading());
+export function login(email: string, password: string) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setLoginLoading());
 
-  request('POST', `${PREFIX_URL}/api/authentication`, {
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: `strategy=local&email=${email}&password=${password}`
-  })
-    .then(res => {
-      if (res.statusCode >= 300) {
+    request('POST', `${PREFIX_URL}/api/authentication`, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `strategy=local&email=${email}&password=${password}`
+    })
+      .then(res => {
+        if (res.statusCode >= 300) {
+          dispatch(setLoginError());
+          return false;
+        }
+        return JSON.parse(res.body.toString());
+      })
+      .then(res => {
+        if (!res) {
+          return false;
+        }
+        dispatch(setAccessToken(res.accessToken));
+        dispatch(setLoginStatus());
+        dispatch(push(`${PREFIX_URL}/admin`));
+      })
+      .catch(error => {
         dispatch(setLoginError());
+      });
+  };
+}
+
+export function redirectToLogin() {
+  return function(dispatch: DispatchAction) {
+    dispatch(clearState());
+    dispatch(push(`${PREFIX_URL}/login`));
+  };
+}
+
+export function deleteEvent(id: string) {
+  return function(_dispatch, getState) {
+    const { accessToken } = getState().admin;
+
+    return request('DELETE', `${PREFIX_URL}/api/admin/events/${id}`, {
+      headers: { Authorization: accessToken }
+    })
+      .then(() => true)
+      .catch(error => {
         return false;
-      }
-      return JSON.parse(res.body.toString());
+      });
+  };
+}
+
+export function deleteSignupAsync(id: string, eventId: string) {
+  return function(dispatch, getState) {
+    const { accessToken } = getState().admin;
+    return request('DELETE', `${PREFIX_URL}/api/admin/signups/${id}`, {
+      headers: { Authorization: accessToken }
     })
-    .then(res => {
-      if (!res) {
+      .then(res => JSON.parse(res.body.toString()))
+      .then(res => {
+        dispatch(getEvent(eventId, accessToken)); // TODO UPDATE THE ROWS, THIS DOESNT WORK
+        return true;
+      })
+      .catch(error => {
+        dispatch(setError());
         return false;
-      }
-      dispatch(setAccessToken(res.accessToken));
-      dispatch(setLoginStatus());
-      dispatch(push(`${PREFIX_URL}/admin`));
-    })
-    .catch(error => {
-      dispatch(setLoginError());
-    });
-};
-
-export const redirectToLogin = () => dispatch => {
-  dispatch(clearState());
-  dispatch(push(`${PREFIX_URL}/login`));
-};
-
-export const deleteEventAsync = (id: string) => (_dispatch, getState) => {
-  const { accessToken } = getState().admin;
-
-  return request('DELETE', `${PREFIX_URL}/api/admin/events/${id}`, {
-    headers: { Authorization: accessToken }
-  })
-    .then(() => true)
-    .catch(error => {
-      return false;
-    });
-};
-
-export const deleteSignupAsync = (id: string, eventId: string) => (
-  dispatch,
-  getState
-) => {
-  const { accessToken } = getState().admin;
-  return request('DELETE', `${PREFIX_URL}/api/admin/signups/${id}`, {
-    headers: { Authorization: accessToken }
-  })
-    .then(res => JSON.parse(res.body.toString()))
-    .then(res => {
-      dispatch(getEventAsync(eventId, accessToken)); // TODO UPDATE THE ROWS, THIS DOESNT WORK
-      return true;
-    })
-    .catch(error => {
-      dispatch(setError());
-      return false;
-    });
-};
+      });
+  };
+}

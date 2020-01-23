@@ -27,14 +27,16 @@ export const setEventsError = () => {
   };
 };
 
-export const getEventsAsync = () => (dispatch: DispatchAction) => {
-  dispatch(setEventsLoading());
-  request('GET', `${PREFIX_URL}/api/events`)
-    .then(res => JSON.parse(res.body.toString()))
-    .then(res => {
-      dispatch(setEvents(res));
-    })
-    .catch(error => {
-      dispatch(setEventsError());
-    });
-};
+export function getEvents() {
+  return function(dispatch: DispatchAction) {
+    dispatch(setEventsLoading());
+    request('GET', `${PREFIX_URL}/api/events`)
+      .then(res => JSON.parse(res.body.toString()))
+      .then(res => {
+        dispatch(setEvents(res));
+      })
+      .catch(error => {
+        dispatch(setEventsError());
+      });
+  };
+}

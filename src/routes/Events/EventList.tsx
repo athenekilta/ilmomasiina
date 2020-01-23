@@ -5,7 +5,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 
 import { AdminState } from '../../modules/admin/types';
-import { getEventsAsync } from '../../modules/events/actions';
+import { getEvents } from '../../modules/events/actions';
 import { Event } from '../../modules/types';
 import { AppState } from '../../store/types';
 import signupState from '../../utils/signupStateText';
@@ -25,13 +25,13 @@ interface EventListProps {}
 type Props = EventListProps & LinkStateProps & LinkDispatchProps;
 
 const EventList = (props: Props) => {
-  const { getEventsAsync, events, eventsLoading, eventsError } = props;
+  const { getEvents, events, eventsLoading, eventsError } = props;
 
   useEffect(() => {
-    getEventsAsync();
+    getEvents();
   }, []);
 
-  const eventsSorted = _.sortBy(props.events, [sortFunction, 'date', 'title']);
+  const eventsSorted = _.sortBy(events, [sortFunction, 'date', 'title']);
 
   const tableRows = eventsSorted.map(event => {
     const eventState = signupState(
@@ -47,9 +47,7 @@ const EventList = (props: Props) => {
         date={event.date}
         signupLabel={eventState.label}
         signups={
-          event.quota.length < 2
-            ? _.sumBy(event.quota, 'signupCount') || 0
-            : null
+          (event.quota.length < 2 && _.sumBy(event.quota, 'signupCount')) || 0
         }
         size={event.quota.length < 2 ? _.sumBy(event.quota, 'size') : null}
         className={eventState.class}
@@ -116,7 +114,7 @@ interface LinkStateProps {
 }
 
 interface LinkDispatchProps {
-  getEventsAsync: () => void;
+  getEvents: () => void;
 }
 
 const mapStateToProps = (state: AppState) => ({
@@ -127,7 +125,7 @@ const mapStateToProps = (state: AppState) => ({
 });
 
 const mapDispatchToProps = {
-  getEventsAsync: getEventsAsync
+  getEvents: getEvents
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventList);

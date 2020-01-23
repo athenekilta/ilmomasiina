@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Checkbox, Input, Select } from 'formsy-react-components';
+import { Checkbox, Input, Select } from '@theme-ui/components';
 import _ from 'lodash';
 
 import { Event } from '../../../modules/types';
@@ -16,11 +16,11 @@ const QUESTION_TYPES = [
 
 type Props = {
   event: Event;
-  onDataChange: (field: string, value: any) => void;
+  updateEventField: any;
 };
 
 const Quotas = (props: Props) => {
-  const { event, onDataChange } = props;
+  const { event, updateEventField } = props;
 
   function updateQuestion(itemId, field, value) {
     const { questions } = event;
@@ -43,7 +43,7 @@ const Quotas = (props: Props) => {
       return question;
     });
 
-    onDataChange('questions', newQuestions);
+    updateEventField('questions', newQuestions);
   }
 
   function removeQuestion(itemId: string) {
@@ -54,7 +54,7 @@ const Quotas = (props: Props) => {
       return true;
     });
 
-    onDataChange('questions', newQuestions);
+    updateEventField('questions', newQuestions);
   }
 
   function updateOrder(args) {
@@ -64,7 +64,7 @@ const Quotas = (props: Props) => {
     newQuestions.splice(args.oldIndex, 1);
     newQuestions.splice(args.newIndex, 0, elementToMove);
 
-    onDataChange('questions', newQuestions);
+    updateEventField('questions', newQuestions);
   }
 
   function updateQuestionOption(itemId, index, value) {
@@ -76,7 +76,7 @@ const Quotas = (props: Props) => {
       return question;
     });
 
-    onDataChange('questions', newQuestions);
+    updateEventField('questions', newQuestions);
   }
 
   function addOption(questionId) {
@@ -87,7 +87,7 @@ const Quotas = (props: Props) => {
       return question;
     });
 
-    onDataChange('questions', newQuestions);
+    updateEventField('questions', newQuestions);
   }
 
   const questions = _.map(event.questions, question => (
@@ -99,8 +99,8 @@ const Quotas = (props: Props) => {
           label="Kysymys"
           type="text"
           required
-          onChange={(field, value) =>
-            updateQuestion(question.id, 'question', value)
+          onChange={e =>
+            updateQuestion(question.id, 'question', e.target.value)
           }
         />
         <Select
@@ -108,9 +108,7 @@ const Quotas = (props: Props) => {
           value={question.type}
           label="Tyyppi"
           options={QUESTION_TYPES}
-          onChange={(field, value) =>
-            updateQuestion(question.id, 'type', value)
-          }
+          onChange={e => updateQuestion(question.id, 'type', e.target.value)}
           required
         />
         <div>
@@ -122,8 +120,8 @@ const Quotas = (props: Props) => {
               label="Vastausvaihtoehto "
               type="text"
               required
-              onChange={(field, value) =>
-                updateQuestionOption(question.id, index, value)
+              onChange={e =>
+                updateQuestionOption(question.id, index, e.target.value)
               }
             />
           ))}
@@ -135,17 +133,15 @@ const Quotas = (props: Props) => {
           name={`question-${question.id}-required`}
           value={question.required}
           label="Pakollinen"
-          onChange={(field, value) =>
-            updateQuestion(question.id, 'required', value)
+          onChange={e =>
+            updateQuestion(question.id, 'required', e.target.value)
           }
         />
         <Checkbox
           name={`question-${question.id}-public`}
           value={question.public}
           label="Julkinen"
-          onChange={(field, value) =>
-            updateQuestion(question.id, 'public', value)
-          }
+          onChange={e => updateQuestion(question.id, 'public', e.target.value)}
         />
         <a onClick={() => removeQuestion(question.id)}>Poista</a>
       </div>

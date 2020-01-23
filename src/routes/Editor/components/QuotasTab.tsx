@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Checkbox, Input } from 'formsy-react-components';
+import { Checkbox, Input } from '@theme-ui/components';
 import _ from 'lodash';
 
 import { Event } from '../../../modules/types';
@@ -9,21 +9,24 @@ import Quotas from './Quotas';
 
 type Props = {
   event: Event;
-  onDataChange: (field: string, value: any) => void;
+  formMethods: any;
+  updateEventField: any;
 };
 
 const QuotasTab = (props: Props) => {
-  const { event, onDataChange } = props;
+  const { event, formMethods, updateEventField } = props;
+  const { register } = formMethods;
 
   function addQuota() {
     const quotas = event.quota ? event.quota : [];
     const newQuotas = _.concat(quotas, {
       id: (_.max(quotas.map(n => n.id)) || 0) + 1,
+      order: (_.max(quotas.map(n => n.order)) || 0) + 1,
       title: '',
       existsInDb: false
     });
 
-    onDataChange('quota', newQuotas);
+    updateEventField('quota', newQuotas);
   }
 
   return (
@@ -32,19 +35,17 @@ const QuotasTab = (props: Props) => {
         name="registrationStartDate"
         value={event.registrationStartDate}
         label="Ilmo alkaa"
-        required
-        onChange={onDataChange}
+        formMethods={formMethods}
       />
       <DateTimePicker
         name="registrationEndDate"
         value={event.registrationEndDate}
         label="Ilmo päättyy"
-        required
-        onChange={onDataChange}
+        formMethods={formMethods}
       />
       <hr />
       <div>
-        <Quotas event={event} onDataChange={onDataChange} />
+        <Quotas {...props} />
         <div className="text-center">
           <a className="btn btn-primary" onClick={addQuota}>
             Lisää kiintiö
@@ -53,19 +54,17 @@ const QuotasTab = (props: Props) => {
         <div className="clearfix" />
         <Checkbox
           name="useOpenQuota"
-          value={event.useOpenQuota}
+          defaultChecked={event.useOpenQuota}
           label="Käytä lisäksi yhteistä kiintiötä"
-          onChange={onDataChange}
+          ref={register}
         />
         {!event.useOpenQuota || (
           <Input
             name="openQuotaSize"
             label="Avoimen kiintiön koko"
-            value={event.openQuotaSize}
+            defaultValue={event.openQuotaSize}
             type="number"
-            validations="minLength:0"
-            required
-            onChange={onDataChange}
+            ref={register({ required: true, min: 0 })}
           />
         )}
       </div>
