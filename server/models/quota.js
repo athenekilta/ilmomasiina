@@ -13,6 +13,9 @@ module.exports = function() {
       },
       size: {
         type: Sequelize.INTEGER
+      },
+      order: {
+        type: Sequelize.INTEGER.UNSIGNED
       }
     },
     {

@@ -1,9 +1,7 @@
 const service = require('feathers-sequelize');
 const hooks = require('./hooks');
 
-module.exports = function() {
-  const app = this;
-
+module.exports = app => {
   const options = {
     Model: app.get('models').event
   };

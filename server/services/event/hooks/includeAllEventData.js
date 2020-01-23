@@ -1,6 +1,8 @@
 module.exports = () => hook => {
   const sequelize = hook.app.get('sequelize');
 
+  const { question, quota, signup, answer } = sequelize.models;
+
   hook.params.sequelize = {
     distinct: true,
     attributes: [
@@ -25,29 +27,30 @@ module.exports = () => hook => {
       // First include all questions (also non-public for the form)
       {
         attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
-        model: sequelize.models.question
+        model: question
       },
       // Include quotas..
       {
-        attributes: ['title', 'size', 'id'],
-        model: sequelize.models.quota,
+        attributes: ['id', 'title', 'size', 'order'],
+        model: quota,
         // ... and signups of quotas
         include: [
           {
             attributes: ['firstName', 'lastName', 'createdAt'],
-            model: sequelize.models.signup,
+            model: signup,
             required: false,
             // ... and answers of signups
             include: [
               {
                 attributes: ['questionId', 'answer'],
-                model: sequelize.models.answer,
+                model: answer,
                 required: false
               }
             ]
           }
         ]
       }
-    ]
+    ],
+    order: [[quota, 'order', 'ASC']]
   };
 };

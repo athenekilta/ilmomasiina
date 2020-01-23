@@ -31,7 +31,7 @@ module.exports = () => hook => {
       },
       // Include quotas..
       {
-        attributes: ['title', 'size', 'id'],
+        attributes: ['id', 'title', 'size', 'order'],
         model: quota,
         // ... and signups of quotas
         include: {
@@ -46,6 +46,7 @@ module.exports = () => hook => {
           }
         }
       }
-    ]
+    ],
+    order: [[quota, 'order', 'ASC']]
   };
 };

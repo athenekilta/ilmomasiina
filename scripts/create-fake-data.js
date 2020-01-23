@@ -72,42 +72,49 @@ const quotas = [
     title: 'Minuuttikalja 2016',
     // going fields doesn't exist in db, but it's used to create right amount of signups
     going: 18,
-    size: 20
+    size: 20,
+    order: 0
   },
   {
     eventId: 2,
     title: 'Athene',
     going: 0,
-    size: 20
+    size: 20,
+    order: 0
   },
   {
     eventId: 2,
     title: 'Tietokilta',
     going: 29,
-    size: 20
+    size: 20,
+    order: 1
   },
   {
     eventId: 3,
     title: 'Athene',
     going: 29,
-    size: 20
+    size: 20,
+    order: 0
   },
   {
     eventId: 3,
     title: 'Prodeko',
     going: 27,
-    size: 20
+    size: 20,
+    order: 1
   },
   {
     eventId: 3,
     title: 'Tietokilta',
     going: 29,
-    size: 20
+    size: 20,
+    order: 2
   },
   {
     eventId: 4,
     title: 'Athene Alumni',
-    going: 5
+    going: 5,
+    order: 0
   }
 ];
 

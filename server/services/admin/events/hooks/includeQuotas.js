@@ -20,6 +20,7 @@ module.exports = () => hook => {
       attributes: [
         'title',
         'size',
+        'order',
         [
           sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
           'signupCount'
