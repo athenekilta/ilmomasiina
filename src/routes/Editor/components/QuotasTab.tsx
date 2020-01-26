@@ -35,13 +35,13 @@ const QuotasTab = (props: Props) => {
         name="registrationStartDate"
         value={event.registrationStartDate}
         label="Ilmo alkaa"
-        formMethods={formMethods}
+        updateEventField={updateEventField}
       />
       <DateTimePicker
         name="registrationEndDate"
         value={event.registrationEndDate}
         label="Ilmo päättyy"
-        formMethods={formMethods}
+        updateEventField={updateEventField}
       />
       <hr />
       <div>

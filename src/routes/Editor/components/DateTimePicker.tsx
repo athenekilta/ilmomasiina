@@ -4,18 +4,16 @@ import DatePicker from 'antd/lib/date-picker';
 import locale from 'antd/lib/date-picker/locale/fi_FI';
 import TimePicker from 'antd/lib/time-picker';
 import moment from 'moment-timezone';
-import { Controller } from 'react-hook-form';
 
 type Props = {
-  label: string;
+  label?: string;
   name: string;
-  formMethods: any;
   value: string;
+  updateEventField: any;
 };
 
 const DateTimePicker = (props: Props) => {
-  const { formMethods, label, name, value } = props;
-  const { control } = formMethods;
+  const { label, name, value, updateEventField } = props;
 
   return (
     <div className="form-group row">
@@ -25,22 +23,18 @@ const DateTimePicker = (props: Props) => {
         </label>
       )}
       <div className="col-sm-9">
-        <Controller
-          as={DatePicker}
+        <DatePicker
           locale={locale}
           format="DD.MM.YYYY"
-          name={name}
-          control={control}
-          defaultValue={moment(value)}
+          onChange={time => updateEventField(name, time.toDate())}
+          value={moment(value)}
         />
-        <Controller
-          as={TimePicker}
-          locale={locale}
-          format="HH.mm"
-          name={name}
-          control={control}
-          defaultValue={moment(value)}
+        <TimePicker
           placeholder="Valitse aika"
+          onChange={time => updateEventField(name, time.toDate())}
+          minuteStep={5}
+          format="HH.mm"
+          value={moment(value)}
         />
       </div>
     </div>

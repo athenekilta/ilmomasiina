@@ -12,7 +12,7 @@ type Props = {
 };
 
 const BasicDetailsTab = (props: Props) => {
-  const { event, formMethods } = props;
+  const { event, formMethods, updateEventField } = props;
   const { register } = formMethods;
 
   return (
@@ -29,7 +29,7 @@ const BasicDetailsTab = (props: Props) => {
       <DateTimePicker
         name="date"
         value={event.date}
-        formMethods={formMethods}
+        updateEventField={updateEventField}
       />
       <Label htmlFor="webpageUrl">Kotisivujen osoite</Label>
       <Input
