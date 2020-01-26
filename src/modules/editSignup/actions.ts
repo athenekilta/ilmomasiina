@@ -46,42 +46,42 @@ export const resetEventState = () => {
   return <const>{ type: RESET };
 };
 
-export const getSignupAndEventAsync = (id: string, editToken: string) => (
-  dispatch: DispatchAction
-) => {
-  dispatch(setLoading());
+export function getSignupAndEvent(id: string, editToken: string) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setLoading());
 
-  return request(
-    'GET',
-    `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
-  )
-    .then(res => JSON.parse(res.body.toString()))
-    .then(res => {
-      if (res.signup === null) throw new Error('Signup not found');
-      dispatch(setSignupAndEvent(res.signup, res.event));
-      return true;
-    })
-    .catch(error => {
-      dispatch(setError());
-      return false;
-    });
-};
+    return request(
+      'GET',
+      `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
+    )
+      .then(res => JSON.parse(res.body.toString()))
+      .then(res => {
+        if (res.signup === null) throw new Error('Signup not found');
+        dispatch(setSignupAndEvent(res.signup, res.event));
+        return true;
+      })
+      .catch(error => {
+        dispatch(setError());
+        return false;
+      });
+  };
+}
 
-export const deleteSignupAsync = (id: string, editToken: string) => (
-  dispatch: DispatchAction
-) => {
-  dispatch(setLoading());
-  return request(
-    'DELETE',
-    `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
-  )
-    .then(res => JSON.parse(res.body.toString()))
-    .then(res => {
-      dispatch(setDeleted());
-      return true;
-    })
-    .catch(error => {
-      dispatch(setError());
-      return false;
-    });
-};
+export function deleteSignupAsync(id: string, editToken: string) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setLoading());
+    return request(
+      'DELETE',
+      `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
+    )
+      .then(res => JSON.parse(res.body.toString()))
+      .then(res => {
+        dispatch(setDeleted());
+        return true;
+      })
+      .catch(error => {
+        dispatch(setError());
+        return false;
+      });
+  };
+}

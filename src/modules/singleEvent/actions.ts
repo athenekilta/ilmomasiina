@@ -63,7 +63,7 @@ export const attachPositionAsync = (quotaId: string) => (
     });
 };
 
-export interface CompleteSignupData {
+export interface SignupData {
   editToken: string;
   firstName: string;
   lastName: string;
@@ -71,48 +71,48 @@ export interface CompleteSignupData {
   answers: Answer[];
 }
 
-export const completeSignupAsync = (
-  signupId: string,
-  data: CompleteSignupData
-) => (dispatch: DispatchAction) => {
-  dispatch(setSignupLoading());
+export function completeSignupAsync(signupId: string, data: SignupData) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setSignupLoading());
 
-  return request('PATCH', `${PREFIX_URL}/api/signups/${signupId}`, {
-    json: {
-      editToken: data.editToken,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      answers: data.answers
-    }
-  })
-    .then(res => JSON.parse(res.body.toString()))
-    .then(res => {
-      if (res.code && res.code !== 200) {
-        throw new Error(res.message);
+    return request('PATCH', `${PREFIX_URL}/api/signups/${signupId}`, {
+      json: {
+        editToken: data.editToken,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        answers: data.answers
       }
-      dispatch(setSignup(res));
-      return true;
     })
-    .catch(error => {
-      dispatch(setSignupError());
-      return false;
-    });
-};
+      .then(res => JSON.parse(res.body.toString()))
+      .then(res => {
+        if (res.code && res.code !== 200) {
+          throw new Error(res.message);
+        }
+        dispatch(setSignup(res));
+        console.log('hereeee');
+        return true;
+      })
+      .catch(error => {
+        dispatch(setSignupError());
+        return false;
+      });
+  };
+}
 
-export const cancelSignupAsync = (signupId: string, editToken: string) => (
-  dispatch: DispatchAction
-) => {
-  dispatch(setSignupLoading());
-  return request(
-    'DELETE',
-    `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`
-  )
-    .then(res => JSON.parse(res.body.toString()))
-    .then(() => {
-      dispatch(setSignup({}));
-    })
-    .catch(error => {
-      dispatch(setSignupError());
-    });
-};
+export function cancelSignupAsync(signupId: string, editToken: string) {
+  return function(dispatch: DispatchAction) {
+    dispatch(setSignupLoading());
+    return request(
+      'DELETE',
+      `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`
+    )
+      .then(res => JSON.parse(res.body.toString()))
+      .then(() => {
+        dispatch(setSignup({}));
+      })
+      .catch(error => {
+        dispatch(setSignupError());
+      });
+  };
+}
