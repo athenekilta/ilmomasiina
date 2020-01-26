@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Checkbox, Input, Select } from '@theme-ui/components';
+import { Checkbox, Flex, Input, Label, Select } from '@theme-ui/components';
 import _ from 'lodash';
 
 import { Event } from '../../../modules/types';
@@ -19,10 +19,11 @@ type Props = {
   updateEventField: any;
 };
 
-const Quotas = (props: Props) => {
+const Questions = (props: Props) => {
   const { event, updateEventField } = props;
 
   function updateQuestion(itemId, field, value) {
+    console.log('here');
     const { questions } = event;
     const newQuestions = _.map(questions, question => {
       if (question.id === itemId) {
@@ -110,14 +111,18 @@ const Quotas = (props: Props) => {
           options={QUESTION_TYPES}
           onChange={e => updateQuestion(question.id, 'type', e.target.value)}
           required
-        />
+        >
+          {QUESTION_TYPES.map(type => {
+            return <option value={type.value}>{type.label}</option>;
+          })}
+        </Select>
         <div>
           {_.map(question.options, (option, index) => (
             <Input
               key={`question-${index}`}
-              name={`question-${question.id}-question-option-${index}`}
+              name={`question-${question.id}-option-${index}`}
               value={option}
-              label="Vastausvaihtoehto "
+              label="Vastausvaihtoehto"
               type="text"
               required
               onChange={e =>
@@ -125,24 +130,44 @@ const Quotas = (props: Props) => {
               }
             />
           ))}
-          <a onClick={() => addOption(question.id)}>Lisää vastausvaihtoehto</a>
+          {question.options && (
+            <a onClick={() => addOption(question.id)}>
+              Lisää vastausvaihtoehto
+            </a>
+          )}
         </div>
       </div>
       <div className="col-xs-12 col-sm-2">
-        <Checkbox
-          name={`question-${question.id}-required`}
-          value={question.required}
-          label="Pakollinen"
-          onChange={e =>
-            updateQuestion(question.id, 'required', e.target.value)
-          }
-        />
-        <Checkbox
-          name={`question-${question.id}-public`}
-          value={question.public}
-          label="Julkinen"
-          onChange={e => updateQuestion(question.id, 'public', e.target.value)}
-        />
+        <Flex pt={2}>
+          <Checkbox
+            name={`question-${question.id}-required`}
+            defaultChecked={question.required}
+            onChange={e =>
+              updateQuestion(question.id, 'required', e.target.value)
+            }
+          />
+          <Label
+            sx={{ variant: 'forms.label.checkbox' }}
+            htmlFor={`question-${question.id}-required`}
+          >
+            Pakollinen
+          </Label>
+        </Flex>
+        <Flex pb={2}>
+          <Checkbox
+            name={`question-${question.id}-public`}
+            defaultChecked={question.public}
+            onChange={e =>
+              updateQuestion(question.id, 'public', e.target.value)
+            }
+          />
+          <Label
+            sx={{ variant: 'forms.label.checkbox' }}
+            htmlFor={`question-${question.id}-public`}
+          >
+            Julkinen
+          </Label>
+        </Flex>
         <a onClick={() => removeQuestion(question.id)}>Poista</a>
       </div>
     </div>
@@ -158,4 +183,4 @@ const Quotas = (props: Props) => {
   );
 };
 
-export default Quotas;
+export default Questions;

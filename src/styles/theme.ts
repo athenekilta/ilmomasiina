@@ -53,7 +53,16 @@ export default {
       marginTop: 2,
       color: 'black',
       fontSize: 3,
-      fontWeight: 'heading'
+      fontWeight: 'heading',
+      checkbox: {
+        lineHeight: 1,
+        marginBottom: 0,
+        marginTop: 0,
+        color: 'black',
+        fontSize: 1,
+        fontWeight: 'body',
+        alignSelf: 'center'
+      }
     },
     input: {
       marginBottom: 2,
@@ -88,6 +97,7 @@ export default {
         outline: 'none'
       }
     },
+    checkbox: {},
     slider: {
       bg: 'muted'
     }
