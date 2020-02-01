@@ -1,5 +1,5 @@
-import { DispatchAction } from '../../store/types';
-import { Event, Signup } from '../types';
+import { DispatchAction } from "../../store/types";
+import { Event, Signup } from "../types";
 import {
   RESET,
   SET_DELETED,
@@ -8,7 +8,7 @@ import {
   SET_LOADING,
   SET_SIGNUP,
   SET_SIGNUP_AND_EVENT
-} from './actionTypes';
+} from "./actionTypes";
 
 export const setSignupAndEvent = (signup: Signup, event: Event) => {
   return <const>{
@@ -49,9 +49,9 @@ export function getSignupAndEvent(id: string, editToken: string) {
     dispatch(setLoading());
 
     return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`)
-      .then(res => JSON.parse(res.body.toString()))
+      .then(res => res.json())
       .then(res => {
-        if (res.signup === null) throw new Error('Signup not found');
+        if (res.signup === null) throw new Error("Signup not found");
         dispatch(setSignupAndEvent(res.signup, res.event));
         return true;
       })
@@ -66,9 +66,9 @@ export function deleteSignupAsync(id: string, editToken: string) {
   return function(dispatch: DispatchAction) {
     dispatch(setLoading());
     return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`, {
-      method: 'DELETE'
+      method: "DELETE"
     })
-      .then(res => JSON.parse(res.body.toString()))
+      .then(res => res.json())
       .then(res => {
         dispatch(setDeleted());
         return true;

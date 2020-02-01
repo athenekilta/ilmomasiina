@@ -1,10 +1,10 @@
-import { DispatchAction } from '../../store/types';
-import { Event } from '../types';
+import { DispatchAction } from "../../store/types";
+import { Event } from "../types";
 import {
   SET_EVENTS,
   SET_EVENTS_ERROR,
   SET_EVENTS_LOADING
-} from './actionTypes';
+} from "./actionTypes";
 
 export const setEvents = (events: Event[]) => {
   return <const>{
@@ -29,8 +29,8 @@ export function getEvents() {
   return function(dispatch: DispatchAction) {
     dispatch(setEventsLoading());
 
-    fetch('GET', `${PREFIX_URL}/api/events`)
-      .then(res => JSON.parse(res.body.toString()))
+    fetch("GET", `${PREFIX_URL}/api/events`)
+      .then(res => res.json())
       .then(res => {
         dispatch(setEvents(res));
       })

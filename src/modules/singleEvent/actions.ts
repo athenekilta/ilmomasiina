@@ -56,7 +56,7 @@ export const attachPositionAsync = (quotaId: string) => (
     headers: { 'Content-Type': 'application/json; charset=utf-8' },
     body: JSON.stringify({ quotaId })
   })
-    .then(res => JSON.parse(res.body.toString()))
+    .then(res => res.json())
     .then(res => {
       dispatch(setSignup(res));
     })
