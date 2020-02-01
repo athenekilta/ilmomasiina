@@ -1,5 +1,3 @@
-import request from 'then-request';
-
 import { DispatchAction } from '../../store/types';
 import { Event } from '../types';
 import {
@@ -30,7 +28,8 @@ export const setEventsError = () => {
 export function getEvents() {
   return function(dispatch: DispatchAction) {
     dispatch(setEventsLoading());
-    request('GET', `${PREFIX_URL}/api/events`)
+
+    fetch('GET', `${PREFIX_URL}/api/events`)
       .then(res => JSON.parse(res.body.toString()))
       .then(res => {
         dispatch(setEvents(res));

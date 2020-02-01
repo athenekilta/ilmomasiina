@@ -1,5 +1,3 @@
-import request from 'then-request';
-
 import { DispatchAction } from '../../store/types';
 import { Answer, Event, Signup } from '../types';
 import {
@@ -39,8 +37,8 @@ export const updateEventAsync = (eventId: string) => (
   dispatch: DispatchAction
 ) => {
   dispatch(setEventLoading());
-  return request('GET', `${PREFIX_URL}/api/events/${eventId}`)
-    .then(res => JSON.parse(res.body.toString()))
+  return fetch(`${PREFIX_URL}/api/events/${eventId}`)
+    .then(res => res.json())
     .then(res => {
       dispatch(setEvent(res));
     })
@@ -53,7 +51,11 @@ export const attachPositionAsync = (quotaId: string) => (
   dispatch: DispatchAction
 ) => {
   dispatch(setSignupLoading());
-  return request('POST', `${PREFIX_URL}/api/signups`, { json: { quotaId } })
+  return fetch(`${PREFIX_URL}/api/signups`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    body: JSON.stringify({ quotaId })
+  })
     .then(res => JSON.parse(res.body.toString()))
     .then(res => {
       dispatch(setSignup(res));
@@ -71,26 +73,21 @@ export interface SignupData {
   answers: Answer[];
 }
 
-export function completeSignupAsync(signupId: string, data: SignupData) {
+export function completeSignup(signupId: string, data: SignupData) {
   return function(dispatch: DispatchAction) {
     dispatch(setSignupLoading());
 
-    return request('PATCH', `${PREFIX_URL}/api/signups/${signupId}`, {
-      json: {
-        editToken: data.editToken,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        answers: data.answers
-      }
+    return fetch(`${PREFIX_URL}/api/signups/${signupId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify(data)
     })
-      .then(res => JSON.parse(res.body.toString()))
+      .then(res => res.json())
       .then(res => {
         if (res.code && res.code !== 200) {
           throw new Error(res.message);
         }
         dispatch(setSignup(res));
-        console.log('hereeee');
         return true;
       })
       .catch(error => {
@@ -103,11 +100,13 @@ export function completeSignupAsync(signupId: string, data: SignupData) {
 export function cancelSignupAsync(signupId: string, editToken: string) {
   return function(dispatch: DispatchAction) {
     dispatch(setSignupLoading());
-    return request(
-      'DELETE',
-      `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`
+    return fetch(
+      `${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`,
+      {
+        method: 'DELETE'
+      }
     )
-      .then(res => JSON.parse(res.body.toString()))
+      .then(res => res.json())
       .then(() => {
         dispatch(setSignup({}));
       })

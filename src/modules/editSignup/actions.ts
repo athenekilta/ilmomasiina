@@ -1,5 +1,3 @@
-import request from 'then-request';
-
 import { DispatchAction } from '../../store/types';
 import { Event, Signup } from '../types';
 import {
@@ -50,10 +48,7 @@ export function getSignupAndEvent(id: string, editToken: string) {
   return function(dispatch: DispatchAction) {
     dispatch(setLoading());
 
-    return request(
-      'GET',
-      `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
-    )
+    return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`)
       .then(res => JSON.parse(res.body.toString()))
       .then(res => {
         if (res.signup === null) throw new Error('Signup not found');
@@ -70,10 +65,9 @@ export function getSignupAndEvent(id: string, editToken: string) {
 export function deleteSignupAsync(id: string, editToken: string) {
   return function(dispatch: DispatchAction) {
     dispatch(setLoading());
-    return request(
-      'DELETE',
-      `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`
-    )
+    return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`, {
+      method: 'DELETE'
+    })
       .then(res => JSON.parse(res.body.toString()))
       .then(res => {
         dispatch(setDeleted());

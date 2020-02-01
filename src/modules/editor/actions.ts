@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import request from 'then-request';
 import { isArray } from 'util';
 
 import { DispatchAction } from '../../store/types';
@@ -96,16 +95,21 @@ export function clearEvent() {
 export function publishEvent(data, token) {
   return function(dispatch: DispatchAction) {
     dispatch(setEventPublishLoading());
+
     const cleaned = cleanEventData(data);
-    const event = request('POST', `${PREFIX_URL}/api/admin/events`, {
-      json: cleaned,
-      headers: { Authorization: token }
+    return fetch(`${PREFIX_URL}/api/admin/events`, {
+      method: 'POST',
+      body: JSON.stringify(cleaned),
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json; charset=utf-8'
+      }
     })
       .then(res => {
-        if (res.statusCode > 201) {
+        if (res.status > 201) {
           throw new Error(res.body.toString());
         }
-        return JSON.parse(res.body.toString());
+        return res.json();
       })
       .then(res => {
         const cleaned = cleanServerEventdata(res);
@@ -116,28 +120,28 @@ export function publishEvent(data, token) {
         dispatch(setEventPublishError());
         throw new Error(error);
       });
-
-    return event;
   };
 }
 
 export function updateEventEditor(data, token) {
   return function(dispatch: DispatchAction) {
     dispatch(setEventPublishLoading());
+
     const cleaned = cleanEventData(data);
-    const event = request(
-      'PATCH',
-      `${PREFIX_URL}/api/admin/events/${data.id}`,
-      {
-        json: cleaned,
-        headers: { Authorization: token }
+    return fetch(`${PREFIX_URL}/api/admin/events/${data.id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(cleaned),
+      headers: {
+        Authorization: token,
+        'Content-Type': 'application/json; charset=utf-8'
       }
-    )
+    })
       .then(res => {
-        if (res.statusCode > 201) {
+        console.log(res);
+        if (res.status > 201) {
           throw new Error(res.body.toString());
         }
-        return JSON.parse(res.body.toString());
+        return res.json();
       })
       .then(res => {
         const cleaned = cleanServerEventdata(res);
@@ -148,18 +152,16 @@ export function updateEventEditor(data, token) {
         dispatch(setEventPublishError());
         throw new Error(error);
       });
-
-    return event;
   };
 }
 
 export function getEvent(eventId: string, token: string) {
   return function(dispatch: DispatchAction) {
     dispatch(setEventLoading());
-    return request('GET', `${PREFIX_URL}/api/admin/events/${eventId}`, {
+    return fetch(`${PREFIX_URL}/api/admin/events/${eventId}`, {
       headers: { Authorization: token }
     })
-      .then(res => JSON.parse(res.body.toString()))
+      .then(res => res.json())
       .then((res: Event) => {
         res.useOpenQuota = res.openQuotaSize > 0;
         dispatch(setEvent(res));

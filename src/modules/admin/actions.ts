@@ -1,5 +1,4 @@
 import { push } from 'connected-react-router';
-import request from 'then-request';
 
 import { DispatchAction, GetState } from '../../store/types';
 import { getEvent } from '../editor/actions';
@@ -73,7 +72,7 @@ export function getAdminEvents() {
 
     const { accessToken } = getState().admin;
 
-    request('GET', `${PREFIX_URL}/api/admin/events`, {
+    fetch(`${PREFIX_URL}/api/admin/events`, {
       headers: { Authorization: accessToken }
     })
       .then(res => JSON.parse(res.body.toString()))
@@ -92,9 +91,13 @@ export const createUser = (data: { email: string }) => (
 ) => {
   const { accessToken } = getState().admin;
 
-  return request('POST', `${PREFIX_URL}/api/users`, {
-    headers: { Authorization: accessToken },
-    json: data
+  return fetch(`${PREFIX_URL}/api/users`, {
+    method: 'POST',
+    headers: {
+      Authorization: accessToken,
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    body: JSON.stringify(data)
   })
     .then(res => JSON.parse(res.body.toString()))
     .then(() => true)
@@ -107,7 +110,8 @@ export function login(email: string, password: string) {
   return function(dispatch: DispatchAction) {
     dispatch(setLoginLoading());
 
-    request('POST', `${PREFIX_URL}/api/authentication`, {
+    fetch(`${PREFIX_URL}/api/authentication`, {
+      method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `strategy=local&email=${email}&password=${password}`
     })
@@ -143,7 +147,8 @@ export function deleteEvent(id: string) {
   return function(_dispatch, getState) {
     const { accessToken } = getState().admin;
 
-    return request('DELETE', `${PREFIX_URL}/api/admin/events/${id}`, {
+    return fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
+      method: 'DELETE',
       headers: { Authorization: accessToken }
     })
       .then(() => true)
@@ -156,7 +161,8 @@ export function deleteEvent(id: string) {
 export function deleteSignupAsync(id: string, eventId: string) {
   return function(dispatch, getState) {
     const { accessToken } = getState().admin;
-    return request('DELETE', `${PREFIX_URL}/api/admin/signups/${id}`, {
+    return fetch(`${PREFIX_URL}/api/admin/signups/${id}`, {
+      method: 'DELETE',
       headers: { Authorization: accessToken }
     })
       .then(res => JSON.parse(res.body.toString()))
