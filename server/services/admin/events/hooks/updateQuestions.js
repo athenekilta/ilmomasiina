@@ -29,6 +29,7 @@ module.exports = () => hook => {
                   'question',
                   'type',
                   'options',
+                  'order',
                   'required',
                   'public',
                   'createdAt',
@@ -41,7 +42,10 @@ module.exports = () => hook => {
             )
             .then(() => {
               return questionModel.findAll(
-                { where: { eventId, deletedAt: null } },
+                {
+                  where: { eventId, deletedAt: null },
+                  order: [['order', 'ASC']]
+                },
                 { transaction: t }
               );
             });

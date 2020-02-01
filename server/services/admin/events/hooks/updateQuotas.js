@@ -7,8 +7,6 @@ module.exports = () => hook => {
   const quotasToAdd = hook.data.quota.map(quota => _.merge(quota, { eventId }));
   const quotaModel = hook.app.get('models').quota;
 
-  console.log(quotasToAdd);
-
   return sequelize
     .transaction(t => {
       return quotaModel
@@ -57,7 +55,6 @@ module.exports = () => hook => {
                   ],
                   order: [['order', 'ASC']]
                 },
-
                 { transaction: t }
               );
             });

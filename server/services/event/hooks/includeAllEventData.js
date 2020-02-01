@@ -26,7 +26,15 @@ module.exports = () => hook => {
     include: [
       // First include all questions (also non-public for the form)
       {
-        attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
+        attributes: [
+          'id',
+          'question',
+          'type',
+          'options',
+          'order',
+          'required',
+          'public'
+        ],
         model: question
       },
       // Include quotas..
@@ -51,6 +59,9 @@ module.exports = () => hook => {
         ]
       }
     ],
-    order: [[quota, 'order', 'ASC']]
+    order: [
+      [quota, 'order', 'ASC'],
+      [question, 'order', 'ASC']
+    ]
   };
 };

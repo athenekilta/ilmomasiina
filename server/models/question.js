@@ -18,6 +18,9 @@ module.exports = function() {
       options: {
         type: Sequelize.STRING
       },
+      order: {
+        type: Sequelize.INTEGER.UNSIGNED
+      },
       required: {
         type: Sequelize.BOOLEAN,
         allowNull: false,

@@ -23,14 +23,20 @@ const Questions = (props: Props) => {
   const { event, updateEventField } = props;
 
   function updateQuestion(itemId, field, value) {
-    console.log('here');
     const { questions } = event;
     const newQuestions = _.map(questions, question => {
       if (question.id === itemId) {
-        if (value === 'select' || value === 'checkbox') {
-          if (!question.options) {
-            question.options = [''];
+        if (field == 'type') {
+          // Don't overwrite questino options
+          if (value === 'select' || value === 'checkbox') {
+            // Only display set options if the fied value is 'select' or 'checkbox'
+            if (!question.options) {
+              // Don't reset options if the field is
+              // switched between single and multiple choice
+              question.options = [''];
+            }
           } else {
+            // Reset options field if the field is changed to e.g. text or number
             question.options = null;
           }
         }
@@ -59,7 +65,26 @@ const Questions = (props: Props) => {
   }
 
   function updateOrder(args) {
-    const newQuestions = event.questions;
+    const { newIndex, oldIndex } = args;
+
+    const newQuestions = event.questions.map((question, index) => {
+      if (oldIndex < newIndex) {
+        // Moved the question down
+        if (index > oldIndex && index <= newIndex) {
+          question.order -= 1;
+        }
+      }
+      if (oldIndex > newIndex) {
+        // Moved the question up
+        if (index >= newIndex && index < oldIndex) {
+          question.order += 1;
+        }
+      }
+      if (index === oldIndex) {
+        question.order = newIndex;
+      }
+      return question;
+    });
 
     const elementToMove = newQuestions[args.oldIndex];
     newQuestions.splice(args.oldIndex, 1);
@@ -91,7 +116,9 @@ const Questions = (props: Props) => {
     updateEventField('questions', newQuestions);
   }
 
-  const questions = _.map(event.questions, question => (
+  const orderedQuestions = _.orderBy(event.questions, 'order', 'asc');
+
+  const questions = _.map(orderedQuestions, question => (
     <div className="panel-body" key={question.id}>
       <div className="col-xs-12 col-sm-10">
         <Input

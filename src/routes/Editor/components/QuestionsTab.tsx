@@ -17,7 +17,8 @@ const QuestionsTab = (props: Props) => {
     const questions = event.questions ? event.questions : [];
 
     const newQuestions = _.concat(questions, {
-      id: (_.max(questions.map(n => n.id)) || 0) + 1,
+      id: (_.max(questions.map(q => q.id)) || 0) + 1,
+      order: (_.max(questions.map(q => q.order)) || 0) + 1,
       existsInDb: false,
       required: false,
       public: false,

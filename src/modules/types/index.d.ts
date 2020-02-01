@@ -44,6 +44,7 @@ export interface Question extends SequelizeType {
   eventId: string;
   existsInDb: boolean;
   options: string[];
+  order: number;
   public: boolean;
   required: boolean;
   type: string;
