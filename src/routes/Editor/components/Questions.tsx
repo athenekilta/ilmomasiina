@@ -174,7 +174,7 @@ const Questions = (props: Props) => {
             }
           />
           <Label
-            sx={{ variant: 'forms.label.checkbox' }}
+            sx={{ variant: 'forms.label.editor--checkbox' }}
             htmlFor={`question-${question.id}-required`}
           >
             Pakollinen
@@ -189,7 +189,7 @@ const Questions = (props: Props) => {
             }
           />
           <Label
-            sx={{ variant: 'forms.label.checkbox' }}
+            sx={{ variant: 'forms.label.editor--checkbox' }}
             htmlFor={`question-${question.id}-public`}
           >
             Julkinen

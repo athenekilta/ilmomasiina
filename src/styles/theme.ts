@@ -48,13 +48,16 @@ export default {
     label: {
       lineHeight: 2,
       textAlign: 'left',
-      display: 'block',
       marginBottom: 2,
       marginTop: 2,
       color: 'black',
-      fontSize: 3,
-      fontWeight: 'heading',
-      checkbox: {
+      fontSize: 1,
+      login: {
+        fontWeight: 'heading',
+        color: 'black',
+        fontSize: 3
+      },
+      'editor--checkbox': {
         lineHeight: 1,
         marginBottom: 0,
         marginTop: 0,
