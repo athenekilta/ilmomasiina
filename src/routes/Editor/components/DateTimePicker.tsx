@@ -1,9 +1,11 @@
 import React from 'react';
 
-import DatePicker from 'antd/lib/date-picker';
-import locale from 'antd/lib/date-picker/locale/fi_FI';
-import TimePicker from 'antd/lib/time-picker';
+import { DatePicker, TimePicker } from 'antd';
 import moment from 'moment-timezone';
+
+import 'antd/lib/input/style/index.css';
+import 'antd/lib/date-picker/style/index.css';
+import 'antd/lib/time-picker/style/index.css';
 
 type Props = {
   label?: string;
@@ -24,16 +26,14 @@ const DateTimePicker = (props: Props) => {
       )}
       <div className="col-sm-9">
         <DatePicker
-          locale={locale}
           format="DD.MM.YYYY"
           onChange={time => updateEventField(name, time.toDate())}
           value={moment(value)}
         />
         <TimePicker
-          placeholder="Valitse aika"
-          onChange={time => updateEventField(name, time.toDate())}
           minuteStep={5}
           format="HH.mm"
+          onChange={time => updateEventField(name, time.toDate())}
           value={moment(value)}
         />
       </div>
