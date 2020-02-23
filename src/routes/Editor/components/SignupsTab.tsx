@@ -3,7 +3,9 @@ import React from 'react';
 import _ from 'lodash';
 import { CSVLink } from 'react-csv';
 
+import { deleteSignupAsync } from '../../../modules/admin/actions';
 import { Event } from '../../../modules/types';
+import { useTypedDispatch } from '../../../store/reducers';
 import { getSignupsArrayFormatted } from '../../../utils/signupUtils';
 
 import 'react-table/react-table.css';
@@ -11,11 +13,12 @@ import '../Editor.scss';
 
 type Props = {
   event: Event;
-  deleteSignup: (id: string, eventId: string) => boolean;
 };
 
 const SignupsTab = (props: Props) => {
-  const { event, deleteSignup } = props;
+  const { event } = props;
+
+  const dispatch = useTypedDispatch();
 
   const signups = getSignupsArrayFormatted(event);
 
@@ -66,7 +69,7 @@ const SignupsTab = (props: Props) => {
                       'Oletko varma? Poistamista ei voi perua.'
                     );
                     if (confirmation) {
-                      deleteSignup(s.id, event.id);
+                      dispatch(deleteSignupAsync(s.id, event.id));
                     }
                   }}
                 >

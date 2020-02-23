@@ -1,21 +1,23 @@
 import React from 'react';
 
-import { Checkbox, Input } from '@theme-ui/components';
+import { Checkbox, Input, Label } from '@theme-ui/components';
 import _ from 'lodash';
 
+import { updateEventField } from '../../../modules/editor/actions';
 import { Event } from '../../../modules/types';
+import { useTypedDispatch } from '../../../store/reducers';
 import DateTimePicker from './DateTimePicker';
 import Quotas from './Quotas';
 
 type Props = {
   event: Event;
   formMethods: any;
-  updateEventField: any;
 };
 
 const QuotasTab = (props: Props) => {
-  const { event, formMethods, updateEventField } = props;
-  const { register } = formMethods;
+  const { event, formMethods } = props;
+  const { watch, register } = formMethods;
+  const dispatch = useTypedDispatch();
 
   function addQuota() {
     const quotas = event.quota ? event.quota : [];
@@ -26,7 +28,7 @@ const QuotasTab = (props: Props) => {
       existsInDb: false
     });
 
-    updateEventField('quota', newQuotas);
+    dispatch(updateEventField('quota', newQuotas));
   }
 
   return (
@@ -35,13 +37,13 @@ const QuotasTab = (props: Props) => {
         name="registrationStartDate"
         value={event.registrationStartDate}
         label="Ilmo alkaa"
-        updateEventField={updateEventField}
+        formMethods={formMethods}
       />
       <DateTimePicker
         name="registrationEndDate"
         value={event.registrationEndDate}
         label="Ilmo päättyy"
-        updateEventField={updateEventField}
+        formMethods={formMethods}
       />
       <hr />
       <div>
@@ -52,17 +54,14 @@ const QuotasTab = (props: Props) => {
           </a>
         </div>
         <div className="clearfix" />
-        <Checkbox
-          name="useOpenQuota"
-          defaultChecked={event.useOpenQuota}
-          label="Käytä lisäksi yhteistä kiintiötä"
-          ref={register}
-        />
-        {!event.useOpenQuota || (
+        <Label>
+          <Checkbox name="useOpenQuota" ref={register} />
+          Käytä lisäksi yhteistä kiintiötä
+        </Label>
+        {watch('useOpenQuota') && (
           <Input
             name="openQuotaSize"
             label="Avoimen kiintiön koko"
-            defaultValue={event.openQuotaSize}
             type="number"
             ref={register({ required: true, min: 0 })}
           />

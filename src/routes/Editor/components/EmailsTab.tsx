@@ -13,7 +13,6 @@ const EmailsTab = ({ event, register }: Props) => (
   <Textarea
     rows={10}
     name="verificationEmail"
-    defaultValue={event.verificationEmail || ''}
     label="Vahvistusviesti sähköpostiin"
     ref={register}
   />

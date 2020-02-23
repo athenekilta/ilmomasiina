@@ -3,16 +3,18 @@ import React from 'react';
 import { Input } from '@theme-ui/components';
 import _ from 'lodash';
 
+import { updateEventField } from '../../../modules/editor/actions';
 import { Event } from '../../../modules/types';
+import { useTypedDispatch } from '../../../store/reducers';
 import { SortableItems } from './Sortable';
 
 type Props = {
   event: Event;
-  updateEventField: any;
 };
 
 const Quotas = (props: Props) => {
-  const { event, updateEventField } = props;
+  const { event } = props;
+  const dispatch = useTypedDispatch();
 
   function updateQuota(itemId, field, value) {
     const quotas = event.quota ? event.quota : [];
@@ -33,7 +35,7 @@ const Quotas = (props: Props) => {
       return quota;
     });
 
-    updateEventField('quota', newQuotas);
+    dispatch(updateEventField('quota', newQuotas));
   }
 
   function removeQuota(itemId) {
@@ -45,7 +47,7 @@ const Quotas = (props: Props) => {
       return true;
     });
 
-    updateEventField('quota', newQuotas);
+    dispatch(updateEventField('quota', newQuotas));
   }
 
   function updateOrder(args) {
@@ -74,7 +76,7 @@ const Quotas = (props: Props) => {
     newQuotas.splice(args.oldIndex, 1);
     newQuotas.splice(args.newIndex, 0, elementToMove);
 
-    updateEventField('quota', newQuotas);
+    dispatch(updateEventField('quota', newQuotas));
   }
 
   const orderedQuotas = _.orderBy(event.quota, 'order', 'asc');

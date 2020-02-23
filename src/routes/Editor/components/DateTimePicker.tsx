@@ -1,7 +1,7 @@
-import React from 'react';
-
+/** @jsx jsx */
 import { DatePicker, TimePicker } from 'antd';
-import moment from 'moment-timezone';
+import moment from 'moment';
+import { jsx } from 'theme-ui';
 
 import 'antd/lib/input/style/index.css';
 import 'antd/lib/date-picker/style/index.css';
@@ -11,11 +11,12 @@ type Props = {
   label?: string;
   name: string;
   value: string;
-  updateEventField: any;
+  formMethods: any;
 };
 
 const DateTimePicker = (props: Props) => {
-  const { label, name, value, updateEventField } = props;
+  const { formMethods, label, name, value } = props;
+  const { setValue, errors } = formMethods;
 
   return (
     <div className="form-group row">
@@ -27,15 +28,18 @@ const DateTimePicker = (props: Props) => {
       <div className="col-sm-9">
         <DatePicker
           format="DD.MM.YYYY"
-          onChange={time => updateEventField(name, time.toDate())}
-          value={moment(value)}
+          onChange={date => setValue(name, date.toDate().toISOString())}
+          defaultValue={moment(value)}
         />
         <TimePicker
           minuteStep={5}
           format="HH.mm"
-          onChange={time => updateEventField(name, time.toDate())}
-          value={moment(value)}
+          onChange={date => setValue(name, date.toDate().toISOString())}
+          defaultValue={moment(value)}
         />
+        <span sx={{ color: 'error' }}>
+          {errors[name] && '* Tämä kenttä vaaditaan.'}
+        </span>
       </div>
     </div>
   );

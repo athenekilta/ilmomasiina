@@ -2,16 +2,18 @@ import React from 'react';
 
 import _ from 'lodash';
 
+import { updateEventField } from '../../../modules/editor/actions';
 import { Event } from '../../../modules/types';
+import { useTypedDispatch } from '../../../store/reducers';
 import Questions from './Questions';
 
 type Props = {
   event: Event;
-  updateEventField: any;
 };
 
 const QuestionsTab = (props: Props) => {
-  const { event, updateEventField } = props;
+  const { event } = props;
+  const dispatch = useTypedDispatch();
 
   function addQuestion() {
     const questions = event.questions ? event.questions : [];
@@ -26,7 +28,7 @@ const QuestionsTab = (props: Props) => {
       type: 'text'
     });
 
-    updateEventField('questions', newQuestions);
+    dispatch(updateEventField('questions', newQuestions));
   }
 
   return (

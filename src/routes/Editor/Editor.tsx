@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Spinner } from '@theme-ui/components';
 import _ from 'lodash';
 import { useForm } from 'react-hook-form';
-import { connect } from 'react-redux';
+import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { deleteSignupAsync } from '../../modules/admin/actions';
 import {
   clearEvent,
   getEvent,
@@ -15,14 +14,14 @@ import {
   updateEventEditor,
   updateEventField
 } from '../../modules/editor/actions';
-import { Event } from '../../modules/types';
-import { AppState } from '../../store/types';
+import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import BasicDetailsTab from './components/BasicDetailsTab';
 import EmailsTab from './components/EmailsTab';
 import QuestionsTab from './components/QuestionsTab';
 import QuotasTab from './components/QuotasTab';
 import SignupsTab from './components/SignupsTab';
 import EditorTabs from './EditorTabs';
+import EditorToolbar from './EditorToolbar';
 
 import './Editor.scss';
 
@@ -33,10 +32,7 @@ interface MatchParams {
 
 interface EditSignupProps {}
 
-type Props = EditSignupProps &
-  LinkStateProps &
-  LinkDispatchProps &
-  RouteComponentProps<MatchParams>;
+type Props = EditSignupProps & RouteComponentProps<MatchParams>;
 
 const baseQuota = [
   {
@@ -48,74 +44,82 @@ const baseQuota = [
 ];
 
 const Editor = (props: Props) => {
-  const {
-    adminToken,
-    deleteSignup,
-    event,
-    eventError,
-    eventLoading,
-    eventPublishLoading,
-    eventPublishError,
-    getEvent,
-    history,
-    match,
-    publishEvent,
-    clearEvent,
-    updateEventEditor,
-    updateEventField
-  } = props;
-  const formMethods = useForm();
-  const {
-    control,
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    errors
-  } = formMethods;
+  const { history, match } = props;
+
+  const dispatch = useTypedDispatch();
+  const { event, eventError, eventLoading } = useTypedSelector(
+    state => state.editor,
+    shallowEqual
+  );
+  const adminToken = useTypedSelector(state => state.admin.accessToken);
+
+  const formMethods = useForm({ defaultValues: event });
+  const { register, handleSubmit, setValue, reset } = formMethods;
   const [activeTab, setActiveTab] = useState(1);
+
+  useEffect(() => {
+    // https://github.com/react-hook-form/react-hook-form/issues/1042
+    if (event) {
+      reset(event);
+    }
+  }, [event]);
+
+  useEffect(() => {
+    const fieldsToRegister = [
+      'date',
+      'registrationStartDate',
+      'registrationEndDate'
+    ];
+
+    fieldsToRegister.forEach(field => {
+      register({ name: field }, { required: true });
+      setValue(field, event[field]);
+    });
+  }, []);
 
   useEffect(() => {
     const eventId = match.params.id;
     if (eventId === 'new') {
-      updateEventField('quota', baseQuota);
-      updateEventField('questions', []);
+      dispatch(updateEventField('quota', baseQuota));
+      dispatch(updateEventField('questions', []));
     } else {
-      getEvent(eventId, adminToken);
+      dispatch(getEvent(eventId, adminToken));
     }
-    return () => clearEvent({});
+    return () => dispatch(clearEvent({}));
   }, []);
 
-  function publish(isDraft = false) {
-    const { adminToken } = props;
-    const event = {
-      ...props.event,
+  function onSubmit(data) {
+    let isDraft = false;
+    if (match.params.id == 'new' || event.draft) {
+      isDraft = true;
+    }
+    publish(data, isDraft);
+  }
+
+  function publish(data, isDraft = false) {
+    const modifiedEvent = {
+      ...data,
+      questions: event.questions,
+      quota: event.quota,
+      id: Number(match.params.id),
       draft: isDraft
     };
 
-    console.log(event);
-
-    if (match.params.id === 'new') {
-      try {
-        const res = publishEvent(event, adminToken);
+    try {
+      if (match.params.id === 'new') {
+        const res = dispatch(publishEvent(modifiedEvent, adminToken));
         history.push(`${PREFIX_URL}/admin/edit/${res.id}`);
-      } catch (error) {
-        toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', {
-          autoClose: 2000
-        });
-      }
-    } else {
-      try {
-        updateEventEditor(event, adminToken);
+      } else {
+        dispatch(updateEventEditor(modifiedEvent, adminToken));
         toast.success('Muutoksesi tallennettiin onnistuneesti!', {
           autoClose: 2000
         });
-      } catch (error) {
-        toast.error(
-          'Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.',
-          { autoClose: 2000 }
-        );
       }
+    } catch (error) {
+      toast.error(
+        'Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.',
+        { autoClose: 2000 }
+      );
     }
   }
 
@@ -143,49 +147,11 @@ const Editor = (props: Props) => {
 
   return (
     <div className="event-editor">
-      <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
-      <form className="form-horizontal col-xs-12 col-md-10 col-md-offset-1">
-        <h1>
-          {match.params.id === 'new'
-            ? 'Luo uusi tapahtuma'
-            : 'Muokkaa tapahtumaa'}
-        </h1>
-
-        <div className="pull-right event-editor--buttons-wrapper">
-          {eventPublishLoading && <Spinner />}
-          {match.params.id !== 'new' && (
-            <>
-              <div className="event-editor--public-status">
-                <div className="event-editor--bubble draft event-editor--animated" />
-                <span>Luonnos</span>
-              </div>
-              <input
-                disabled={eventPublishLoading}
-                className={
-                  event.draft
-                    ? 'btn btn-success event-editor--animated'
-                    : 'btn btn-warning event-editor--animated'
-                }
-                formNoValidate
-                onClick={() => (event.draft ? publish(false) : publish(true))}
-                value={event.draft ? 'Julkaise' : 'Muuta luonnokseksi'}
-              />
-            </>
-          )}
-          <input
-            disabled={eventPublishLoading}
-            className="btn btn-info event-editor--animated"
-            formNoValidate
-            onClick={() =>
-              match.params.id == 'new' ? publish(event.draft) : publish(true)
-            }
-            value={
-              match.params.id == 'new'
-                ? 'Tallenna luonnoksena'
-                : 'Tallenna muutokset'
-            }
-          />
-        </div>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="form-horizontal col-xs-12 col-md-10 col-md-offset-1"
+      >
+        <EditorToolbar publish={publish} />
         <EditorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
         <div className={'event-editor--valid-notice collapsed'}>
@@ -196,27 +162,19 @@ const Editor = (props: Props) => {
         </div>
         <div className="tab-content">
           <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`}>
-            <BasicDetailsTab
-              event={event}
-              formMethods={formMethods}
-              updateEventField={updateEventField}
-            />
+            <BasicDetailsTab event={event} formMethods={formMethods} />
           </div>
           <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`}>
-            <QuotasTab
-              event={event}
-              formMethods={formMethods}
-              updateEventField={updateEventField}
-            />
+            <QuotasTab event={event} formMethods={formMethods} />
           </div>
           <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`}>
-            <QuestionsTab event={event} updateEventField={updateEventField} />
+            <QuestionsTab event={event} />
           </div>
           <div className={`tab-pane ${activeTab === 4 ? 'active' : ''}`}>
             <EmailsTab event={event} register={register} />
           </div>
           <div className={`tab-pane ${activeTab === 5 ? 'active' : ''}`}>
-            <SignupsTab event={event} deleteSignup={deleteSignup} />
+            <SignupsTab event={event} />
           </div>
         </div>
       </form>
@@ -224,42 +182,6 @@ const Editor = (props: Props) => {
   );
 };
 
-interface LinkStateProps {
-  event: Event;
-  eventLoading: boolean;
-  eventError: boolean;
-  eventPublishLoading: boolean;
-  eventPublishError: boolean;
-  adminToken: string;
-}
-
-interface LinkDispatchProps {
-  publishEvent: (data: any, token: string) => Event;
-  updateEventEditor: (data: any, token: string) => Event;
-  getEvent: (eventId: string, token: string) => Event;
-  clearEvent: (event: Event) => void;
-  updateEventField: (field: string, value: any) => void;
-  deleteSignup: (id: string, eventId: string) => boolean;
-}
-
-const mapStateToProps = (state: AppState) => ({
-  event: state.editor.event,
-  eventLoading: state.editor.eventLoading,
-  eventError: state.editor.eventError,
-  eventPublishLoading: state.editor.eventPublishLoading,
-  eventPublishError: state.editor.eventPublishError,
-  adminToken: state.admin.accessToken
-});
-
-const mapDispatchToProps = {
-  publishEvent: publishEvent,
-  updateEventEditor: updateEventEditor,
-  getEvent: getEvent,
-  clearEvent: clearEvent,
-  updateEventField: updateEventField,
-  deleteSignup: deleteSignupAsync
-};
-
 // Editor.whyDidYouRender = true;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default Editor;

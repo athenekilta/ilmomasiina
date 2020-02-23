@@ -3,7 +3,9 @@ import React from 'react';
 import { Checkbox, Flex, Input, Label, Select } from '@theme-ui/components';
 import _ from 'lodash';
 
+import { updateEventField } from '../../../modules/editor/actions';
 import { Event } from '../../../modules/types';
+import { useTypedDispatch } from '../../../store/reducers';
 import { SortableItems } from './Sortable';
 
 const QUESTION_TYPES = [
@@ -16,20 +18,21 @@ const QUESTION_TYPES = [
 
 type Props = {
   event: Event;
-  updateEventField: any;
 };
 
 const Questions = (props: Props) => {
-  const { event, updateEventField } = props;
+  const { event } = props;
+
+  const dispatch = useTypedDispatch();
 
   function updateQuestion(itemId, field, value) {
     const { questions } = event;
     const newQuestions = _.map(questions, question => {
       if (question.id === itemId) {
         if (field == 'type') {
-          // Don't overwrite questino options
+          // Don't overwrite question options
           if (value === 'select' || value === 'checkbox') {
-            // Only display set options if the fied value is 'select' or 'checkbox'
+            // Only display set options if the field value is 'select' or 'checkbox'
             if (!question.options) {
               // Don't reset options if the field is
               // switched between single and multiple choice
@@ -50,7 +53,7 @@ const Questions = (props: Props) => {
       return question;
     });
 
-    updateEventField('questions', newQuestions);
+    dispatch(updateEventField('questions', newQuestions));
   }
 
   function removeQuestion(itemId: string) {
@@ -61,7 +64,7 @@ const Questions = (props: Props) => {
       return true;
     });
 
-    updateEventField('questions', newQuestions);
+    dispatch(updateEventField('questions', newQuestions));
   }
 
   function updateOrder(args) {
@@ -90,7 +93,7 @@ const Questions = (props: Props) => {
     newQuestions.splice(args.oldIndex, 1);
     newQuestions.splice(args.newIndex, 0, elementToMove);
 
-    updateEventField('questions', newQuestions);
+    dispatch(updateEventField('questions', newQuestions));
   }
 
   function updateQuestionOption(itemId, index, value) {
@@ -102,7 +105,7 @@ const Questions = (props: Props) => {
       return question;
     });
 
-    updateEventField('questions', newQuestions);
+    dispatch(updateEventField('questions', newQuestions));
   }
 
   function addOption(questionId) {
@@ -113,7 +116,7 @@ const Questions = (props: Props) => {
       return question;
     });
 
-    updateEventField('questions', newQuestions);
+    dispatch(updateEventField('questions', newQuestions));
   }
 
   const orderedQuestions = _.orderBy(event.questions, 'order', 'asc');
@@ -140,7 +143,11 @@ const Questions = (props: Props) => {
           required
         >
           {QUESTION_TYPES.map(type => {
-            return <option value={type.value}>{type.label}</option>;
+            return (
+              <option key={type.label} value={type.value}>
+                {type.label}
+              </option>
+            );
           })}
         </Select>
         <div>
@@ -166,32 +173,26 @@ const Questions = (props: Props) => {
       </div>
       <div className="col-xs-12 col-sm-2">
         <Flex pt={2}>
-          <Checkbox
-            name={`question-${question.id}-required`}
-            defaultChecked={question.required}
-            onChange={e =>
-              updateQuestion(question.id, 'required', e.target.value)
-            }
-          />
-          <Label
-            sx={{ variant: 'forms.label.editor--checkbox' }}
-            htmlFor={`question-${question.id}-required`}
-          >
+          <Label sx={{ fontWeight: 'body' }} mb={0}>
+            <Checkbox
+              name={`question-${question.id}-required`}
+              defaultChecked={question.required}
+              onChange={e =>
+                updateQuestion(question.id, 'required', e.target.checked)
+              }
+            />
             Pakollinen
           </Label>
         </Flex>
         <Flex pb={2}>
-          <Checkbox
-            name={`question-${question.id}-public`}
-            defaultChecked={question.public}
-            onChange={e =>
-              updateQuestion(question.id, 'public', e.target.value)
-            }
-          />
-          <Label
-            sx={{ variant: 'forms.label.editor--checkbox' }}
-            htmlFor={`question-${question.id}-public`}
-          >
+          <Label sx={{ fontWeight: 'body' }} mb={0}>
+            <Checkbox
+              name={`question-${question.id}-public`}
+              defaultChecked={question.public}
+              onChange={e =>
+                updateQuestion(question.id, 'public', e.target.checked)
+              }
+            />
             Julkinen
           </Label>
         </Flex>
