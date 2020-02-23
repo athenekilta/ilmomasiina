@@ -21,8 +21,8 @@ const SignupStatus = (props: Props) => {
     const quota = _.find(quotas, { id: quotaId })!;
     return (
       <p>
-        Olet kiintiössä ${quota.title} sijalla $
-        {position + (quota.size ? ` / ${quota.size}` : '')}.
+        Olet kiintiössä {quota.title} sijalla{' '}
+        {`${position} / ${quota.size || ''}`}
       </p>
     );
   }

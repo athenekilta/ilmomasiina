@@ -76,7 +76,7 @@ const SingleEvent: React.FC = (props: Props) => {
     updateEventAsync(event.id);
   }
 
-  async function submitForm(answers) {
+  function submitForm(answers) {
     const toastId = toast.info('Ilmoittautuminen käynnissä', {});
 
     const response = completeSignup(signup.id, {

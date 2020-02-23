@@ -1,51 +1,36 @@
 import React, { useEffect } from 'react';
 
-import { connect } from 'react-redux';
-
 import { redirectToLogin } from '../modules/admin/actions';
-import { AppState } from '../store/types';
-
-interface Props {
-  accessToken: string;
-  accessTokenExpires: string | Date;
-  redirectToLogin: () => void;
-}
+import { useTypedDispatch, useTypedSelector } from '../store/reducers';
 
 const requireAuth = WrappedComponent => {
-  const Comp = (props: Props) => {
-    const { accessToken, redirectToLogin } = props;
+  const InnerComponent = props => {
+    const dispatch = useTypedDispatch();
+    const { accessToken, accessTokenExpires } = useTypedSelector(
+      state => state.admin
+    );
 
     useEffect(() => {
-      let { accessTokenExpires } = props;
-
+      let newExpires;
       if (!accessTokenExpires) {
         redirectToLogin();
       }
       if (typeof accessTokenExpires === 'string') {
-        accessTokenExpires = new Date(accessTokenExpires);
+        newExpires = new Date(accessTokenExpires);
       }
-      if (accessTokenExpires < new Date()) {
-        redirectToLogin();
+      if (newExpires < new Date()) {
+        dispatch(redirectToLogin());
       }
     }, []);
 
     if (!accessToken) {
-      redirectToLogin();
+      dispatch(redirectToLogin());
       return null;
     }
     return <WrappedComponent {...props} />;
   };
 
-  const mapStateToProps = (state: AppState) => ({
-    accessToken: state.admin.accessToken,
-    accessTokenExpires: state.admin.accessTokenExpires
-  });
-
-  const mapDispatchToProps = {
-    redirectToLogin: redirectToLogin
-  };
-
-  return connect(mapStateToProps, mapDispatchToProps)(Comp);
+  return InnerComponent;
 };
 
 export default requireAuth;

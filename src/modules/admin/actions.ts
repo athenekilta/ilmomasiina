@@ -1,9 +1,9 @@
-import { push } from "connected-react-router";
+import { push } from 'connected-react-router';
 
-import { DispatchAction, GetState } from "../../store/types";
-import { getEvent } from "../editor/actions";
-import { setError } from "../editSignup/actions";
-import { Event } from "../types";
+import { DispatchAction, GetState } from '../../store/types';
+import { getEvent } from '../editor/actions';
+import { setError } from '../editSignup/actions';
+import { Event } from '../types';
 import {
   CLEAR_STATE,
   SET_ACCESS_TOKEN,
@@ -13,7 +13,7 @@ import {
   SET_LOGIN_ERROR,
   SET_LOGIN_LOADING,
   SET_LOGIN_STATUS
-} from "./actionTypes";
+} from './actionTypes';
 
 export const setEvents = (events: Event[]) => {
   return <const>{
@@ -92,10 +92,10 @@ export const createUser = (data: { email: string }) => (
   const { accessToken } = getState().admin;
 
   return fetch(`${PREFIX_URL}/api/users`, {
-    method: "POST",
+    method: 'POST',
     headers: {
       Authorization: accessToken,
-      "Content-Type": "application/json; charset=utf-8"
+      'Content-Type': 'application/json; charset=utf-8'
     },
     body: JSON.stringify(data)
   })
@@ -111,12 +111,12 @@ export function login(email: string, password: string) {
     dispatch(setLoginLoading());
 
     fetch(`${PREFIX_URL}/api/authentication`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: `strategy=local&email=${email}&password=${password}`
     })
       .then(res => {
-        if (res.statusCode >= 300) {
+        if (res.status >= 300) {
           dispatch(setLoginError());
           return false;
         }
@@ -148,7 +148,7 @@ export function deleteEvent(id: string) {
     const { accessToken } = getState().admin;
 
     return fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: { Authorization: accessToken }
     })
       .then(() => true)
@@ -162,7 +162,7 @@ export function deleteSignupAsync(id: string, eventId: string) {
   return function(dispatch, getState) {
     const { accessToken } = getState().admin;
     return fetch(`${PREFIX_URL}/api/admin/signups/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: { Authorization: accessToken }
     })
       .then(res => res.json())

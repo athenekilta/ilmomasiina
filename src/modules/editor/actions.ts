@@ -97,6 +97,7 @@ export function publishEvent(data, token) {
     dispatch(setEventPublishLoading());
 
     const cleaned = cleanEventData(data);
+
     return fetch(`${PREFIX_URL}/api/admin/events`, {
       method: 'POST',
       body: JSON.stringify(cleaned),
@@ -107,7 +108,7 @@ export function publishEvent(data, token) {
     })
       .then(res => {
         if (res.status > 201) {
-          throw new Error(res.body.toString());
+          throw new Error(res.statusText);
         }
         return res.json();
       })
@@ -128,6 +129,7 @@ export function updateEventEditor(data, token) {
     dispatch(setEventPublishLoading());
 
     const cleaned = cleanEventData(data);
+
     return fetch(`${PREFIX_URL}/api/admin/events/${data.id}`, {
       method: 'PATCH',
       body: JSON.stringify(cleaned),
@@ -137,9 +139,8 @@ export function updateEventEditor(data, token) {
       }
     })
       .then(res => {
-        console.log(res);
         if (res.status > 201) {
-          throw new Error(res.body.toString());
+          throw new Error(res.statusText);
         }
         return res.json();
       })

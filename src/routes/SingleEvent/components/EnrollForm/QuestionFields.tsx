@@ -1,76 +1,98 @@
 import React from 'react';
 
 import {
-  CheckboxGroup,
+  Checkbox,
   Input,
-  RadioGroup,
+  Label,
+  Radio,
   Select,
   Textarea
-} from 'formsy-react-components';
+} from '@theme-ui/components';
 import _ from 'lodash';
 
 import { Question } from '../../../../modules/types';
 
+import './EnrollForm.scss';
+
 type Props = {
   questions: Question[];
+  register: any;
 };
 
-const QuestionFields = ({ questions }: Props) => (
+const QuestionFields = ({ questions, register }: Props) => (
   <>
     {_.map(questions, question => {
-      const help = question.public && 'Tämän kentän vastaukset ovat julkisia.';
+      const help = question.public && (
+        <span>Tämän kentän vastaukset ovat julkisia.</span>
+      );
 
       switch (question.type) {
         case 'text':
           return (
-            <Input
-              name={String(question.id)}
-              label={question.question}
-              type="text"
-              required={question.required}
-              key={question.id}
-              help={help}
-            />
+            <li key={question.id}>
+              <Label hitmlFor={question.id}>{question.question}</Label>
+              <div>
+                <Input
+                  name={question.id}
+                  label={question.question}
+                  type="text"
+                  ref={register({ required: question.required })}
+                />
+                {help}
+              </div>
+            </li>
           );
         case 'number':
           return (
-            <Input
-              name={String(question.id)}
-              label={question.question}
-              type="number"
-              required={question.required}
-              key={question.id}
-              help={help}
-            />
+            <li key={question.id}>
+              <Label htmlFor={question.id}>{question.question}</Label>
+              <div>
+                <Input
+                  name={question.id}
+                  label={question.question}
+                  type="number"
+                  ref={register({ required: question.required })}
+                />
+                {help}
+              </div>
+            </li>
           );
         case 'checkbox':
           return (
-            <CheckboxGroup
-              value={[]}
-              type="inline"
-              name={String(question.id)}
-              label={question.question}
-              required={question.required}
-              options={question.options.map(option => ({
-                label: option,
-                value: option
-              }))}
-              key={question.id}
-              help={help}
-            />
+            <li key={question.id}>
+              <p>{question.question}</p>
+              <ul className="flex-inner">
+                {question.options.map(option => (
+                  <li>
+                    <Label mr={3}>
+                      <Checkbox
+                        name={question.id}
+                        ref={register({ required: question.required })}
+                      />
+                      {option}
+                    </Label>
+                  </li>
+                ))}
+                {help}
+              </ul>
+            </li>
           );
         case 'textarea':
           return (
-            <Textarea
-              className="open-question form-control"
-              rows={3}
-              cols={40}
-              name={String(question.id)}
-              label={question.question}
-              required={question.required}
-              key={question.id}
-              help={help}
-            />
+            <li key={question.id}>
+              <Label htmlFor={question.id}>{question.question}</Label>
+              <div>
+                <Textarea
+                  className="open-question form-control"
+                  rows={3}
+                  cols={40}
+                  name={question.id}
+                  label={question.question}
+                  ref={register({ required: question.required })}
+                />
+                {help}
+              </div>
+            </li>
           );
         case 'select':
           if (question?.options?.length > 3) {
@@ -82,30 +104,44 @@ const QuestionFields = ({ questions }: Props) => (
             );
 
             return (
-              <Select
-                validations="isExisty"
-                name={String(question.id)}
-                label={question.question}
-                options={optionsArray}
-                required={question.required}
-                key={question.id}
-                help={help}
-              />
+              <li key={question.id}>
+                <Label htmlFor={question.id}>{question.question}</Label>
+                <div>
+                  <Select
+                    defaultValue="Valitse..."
+                    name={question.id}
+                    ref={register({ required: question.required })}
+                    mb={2}
+                  >
+                    {question.options.map(option => (
+                      <option key={question.id} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Select>
+                  {help}
+                </div>
+              </li>
             );
           } else if (question?.options) {
             return (
-              <RadioGroup
-                name={String(question.id)}
-                type="inline"
-                label={question.question}
-                options={question?.options.map(option => ({
-                  label: option,
-                  value: option
-                }))}
-                required={question.required}
-                key={question.id}
-                help={help}
-              />
+              <li key={question.id}>
+                <p>{question.question}</p>
+                <ul className="flex-inner">
+                  {question.options.map(option => (
+                    <li>
+                      <Label htmlFor={question.id} mr={3}>
+                        <Radio
+                          name={question.id}
+                          required={question.required}
+                        />
+                        {option}
+                      </Label>
+                    </li>
+                  ))}
+                  {help}
+                </ul>
+              </li>
             );
           }
         default:

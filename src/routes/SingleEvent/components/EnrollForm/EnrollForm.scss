@@ -10,7 +10,7 @@
 
   &::before,
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     height: 1px;
     width: 100%;
@@ -45,19 +45,55 @@
   }
 }
 
-.input-wrapper {
-  position: relative;
+.wrapper {
+  background-color: whitesmoke;
+  list-style-type: none;
+  padding: 0;
+  border-radius: 3px;
 }
 
-.loading-wrapper {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 1em;
-  background: $green;
+.flex-outer,
+.flex-inner {
+  list-style-type: none;
+  padding: 0;
+}
 
+.flex-outer {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.flex-outer li,
+.flex-inner {
   display: flex;
-  justify-content: center;
-  align-items: center; 
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.flex-inner {
+  justify-content: flex-start;
+}
+
+.flex-outer > li:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+.flex-outer > li > label,
+.flex-outer li p {
+  flex: 1 0 120px;
+  max-width: 220px;
+}
+
+.flex-outer > li > label + *,
+.flex-inner {
+  flex: 1 0 220px;
+}
+
+.flex-outer li p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.flex-inner li label {
+  font-weight: normal;
 }

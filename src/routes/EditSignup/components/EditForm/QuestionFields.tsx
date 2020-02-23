@@ -1,20 +1,16 @@
 import React from 'react';
 
-import {
-  CheckboxGroup,
-  Input,
-  Select,
-  Textarea
-} from 'formsy-react-components';
+import { Checkbox, Input, Label, Select, Textarea } from '@theme-ui/components';
 import _ from 'lodash';
 
 import { Question } from '../../../../modules/types';
 
 type Props = {
   questions: Question[];
+  register: any;
 };
 
-const QuestionFields = ({ questions }: Props) => (
+const QuestionFields = ({ questions, register }: Props) => (
   <>
     {_.map(questions, question => {
       const help = question.public && 'Tämän kentän vastaukset ovat julkisia.';
@@ -22,6 +18,13 @@ const QuestionFields = ({ questions }: Props) => (
       switch (question.type) {
         case 'text':
           return (
+            //   <Label htmlFor={question.question}>{question.question}</Label>
+            //     <Input
+            //       name={question.question}
+            //       type="text"
+            //       value={question.answer}
+            //       ref={register({ required: true })}
+            //     />
             <Input
               name={String(question.id)}
               label={question.question}
@@ -46,17 +49,14 @@ const QuestionFields = ({ questions }: Props) => (
           );
         case 'checkbox':
           return (
-            <CheckboxGroup
-              name={String(question.id)}
-              label={question.question}
-              required={question.required}
-              options={question.options
-                .split(';')
-                .map(option => ({ label: option, value: option }))}
-              key={question.id}
-              help={help}
-              value={question.answer.split(';')}
-            />
+            <>
+              {question.options.split(';').map(option => (
+                <div key={`${question.id}-${option}`}>
+                  <Label htmlFor={question.id}>{option}</Label>
+                  <Checkbox required={question.required} />
+                </div>
+              ))}
+            </>
           );
         case 'textarea':
           return (

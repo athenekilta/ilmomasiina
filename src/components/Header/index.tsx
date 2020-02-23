@@ -1,22 +1,21 @@
 import React from 'react';
 
-import { connect } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { redirectToLogin } from '../../modules/admin/actions';
-import { AppState } from '../../store/types';
+import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
 import './Header.scss';
 
 interface HeaderProps {}
 
-type Props = HeaderProps &
-  LinkStateProps &
-  LinkDispatchProps &
-  RouteComponentProps;
+type Props = HeaderProps & RouteComponentProps;
 
 const Header = (props: Props) => {
-  const { loggedIn, redirectToLogin, history } = props;
+  const { history } = props;
+
+  const dispatch = useTypedDispatch();
+  const loggedIn = useTypedSelector(state => state.admin.loggedIn);
 
   return (
     <div className="navbar navbar-default">
@@ -25,12 +24,11 @@ const Header = (props: Props) => {
           onClick={() => history.push(`${PREFIX_URL}/`)}
           className="navbar-brand"
         >
-          {' '}
           {BRANDING_HEADER_TITLE}
         </a>
         {loggedIn && (
           <a
-            onClick={() => redirectToLogin()}
+            onClick={() => dispatch(redirectToLogin())}
             className="navbar-brand"
             style={{ float: 'right' }}
           >
@@ -42,20 +40,4 @@ const Header = (props: Props) => {
   );
 };
 
-interface LinkStateProps {
-  loggedIn: boolean;
-}
-
-interface LinkDispatchProps {
-  redirectToLogin: () => void;
-}
-
-const mapStateToProps = (state: AppState) => ({
-  loggedIn: state.admin.loggedIn
-});
-
-const mapDispatchToProps = {
-  redirectToLogin
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));
+export default withRouter(Header);

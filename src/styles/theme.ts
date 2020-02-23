@@ -46,8 +46,6 @@ export default {
   },
   forms: {
     label: {
-      lineHeight: 2,
-      textAlign: 'left',
       marginBottom: 2,
       marginTop: 2,
       color: 'black',
@@ -56,15 +54,6 @@ export default {
         fontWeight: 'heading',
         color: 'black',
         fontSize: 3
-      },
-      'editor--checkbox': {
-        lineHeight: 1,
-        marginBottom: 0,
-        marginTop: 0,
-        color: 'black',
-        fontSize: 1,
-        fontWeight: 'body',
-        alignSelf: 'center'
       }
     },
     input: {

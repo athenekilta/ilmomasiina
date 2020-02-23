@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 
 import _ from 'lodash';
 import moment from 'moment';
-import { connect } from 'react-redux';
+import { shallowEqual } from 'react-redux';
 
-import { AdminState } from '../../modules/admin/types';
 import { getEvents } from '../../modules/events/actions';
 import { Event } from '../../modules/types';
-import { AppState } from '../../store/types';
+import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import signupState from '../../utils/signupStateText';
 import TableRow from './TableRow';
 
@@ -20,15 +19,15 @@ const sortFunction = (event: Event) => {
   return 0; // Default last events that are over
 };
 
-interface EventListProps {}
-
-type Props = EventListProps & LinkStateProps & LinkDispatchProps;
-
-const EventList = (props: Props) => {
-  const { getEvents, events, eventsLoading, eventsError } = props;
+const EventList = () => {
+  const dispatch = useTypedDispatch();
+  const { events, eventError, eventLoading } = useTypedSelector(
+    state => state.events,
+    shallowEqual
+  );
 
   useEffect(() => {
-    getEvents();
+    dispatch(getEvents());
   }, []);
 
   const eventsSorted = _.sortBy(events, [sortFunction, 'date', 'title']);
@@ -106,26 +105,4 @@ const EventList = (props: Props) => {
   );
 };
 
-interface LinkStateProps {
-  events: Event[];
-  eventsLoading: boolean;
-  eventsError: boolean;
-  admin: AdminState;
-}
-
-interface LinkDispatchProps {
-  getEvents: () => void;
-}
-
-const mapStateToProps = (state: AppState) => ({
-  events: state.events.events,
-  eventsLoading: state.events.eventsLoading,
-  eventsError: state.events.eventsError,
-  admin: state.admin
-});
-
-const mapDispatchToProps = {
-  getEvents: getEvents
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EventList);
+export default EventList;

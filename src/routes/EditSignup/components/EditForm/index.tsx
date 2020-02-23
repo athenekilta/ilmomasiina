@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 
-import { Form, Input } from 'formsy-react-components';
+import { Input, Label } from '@theme-ui/components';
 import _ from 'lodash';
+import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import { Answer, Question, Signup } from '../../../../modules/types';
 import QuestionFields from './QuestionFields';
 
 import './EditForm.scss';
+
+type FormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  answers: any[];
+};
 
 type Props = {
   signup: Signup;
@@ -17,18 +25,19 @@ type Props = {
 
 const EditForm = (props: Props) => {
   const { signup, submitForm, questions } = props;
+  const { register, setValue, handleSubmit, errors } = useForm<FormData>();
   const [inputError, setInputError] = useState(false);
 
-  function parseSubmit(data) {
-    const answers = {
-      firstName: signup.firstName,
-      lastName: signup.lastName,
-      email: signup.email,
+  function onSubmit(data) {
+    const formData = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
       answers: []
     };
 
     if (questions) {
-      answers.answers = questions
+      formData.answers = questions
         .map(question => {
           const questionId = question.id;
           const answer = data[question.id];
@@ -49,7 +58,7 @@ const EditForm = (props: Props) => {
         .filter(x => x);
     }
 
-    return submitForm(answers);
+    return submitForm(formData);
   }
 
   return (
@@ -62,40 +71,33 @@ const EditForm = (props: Props) => {
             </p>
           )}
           <h2>Muokkaa ilmoittautumista</h2>
-          {signup.status != null && <p>{signupStatus()}</p>}
-
-          <Form
-            onValidSubmit={parseSubmit}
-            onInvalidSubmit={() => setInputError(true)}
-          >
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Label htmlFor="firstName">Etunimi</Label>
             <Input
               name="firstName"
-              value={signup.firstName}
-              label="Etunimi"
               type="text"
               placeholder="Etunimi"
-              disabled
+              defaultValue={signup.firstName}
+              ref={register({ required: true })}
             />
+            <Label htmlFor="lastName">Sukunimi</Label>
             <Input
               name="lastName"
-              value={signup.lastName}
-              label="Sukunimi"
               type="text"
               placeholder="Sukunimi"
-              disabled
+              defaultValue={signup.lastName}
+              ref={register({ required: true })}
             />
-
+            <Label htmlFor="email">Sähköposti</Label>
             <Input
               name="email"
-              value={signup.email}
-              label="Sähköposti"
-              type="email"
+              type="text"
               placeholder="Sähköpostisi"
-              validations="isEmail"
-              disabled
+              defaultValue={signup.email}
+              ref={register({ required: true })}
             />
 
-            <QuestionFields questions={questions} />
+            <QuestionFields questions={questions} register={register} />
 
             <div className="input-wrapper pull-right">
               <input
@@ -103,13 +105,12 @@ const EditForm = (props: Props) => {
                 formNoValidate
                 type="submit"
                 value="Päivitä"
-                disabled={loading}
               />
             </div>
             <Link className="btn btn-link pull-right" to={`${PREFIX_URL}/`}>
               Peruuta
             </Link>
-          </Form>
+          </form>
         </div>
         <div className="cf" />
       </div>

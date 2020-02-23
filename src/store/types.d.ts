@@ -1,4 +1,4 @@
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
+import { TypedUseSelectorHook } from 'react-redux';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
@@ -32,6 +32,3 @@ type DispatchAction<T extends AnyAction = Action> = ThunkDispatch<
 >;
 
 type GetState = () => AppState;
-
-export const useTypedSelector: TypedUseSelectorHook<AppState> = useSelector;
-export const useTypedDispatch: () => DispatchAction = useDispatch;

@@ -1,7 +1,10 @@
+/** @jsx jsx */
 import React, { useState } from 'react';
 
-import { Form, Input } from 'formsy-react-components';
+import { Box, Flex, Input, Label } from '@theme-ui/components';
 import _ from 'lodash';
+import { useForm } from 'react-hook-form';
+import { jsx } from 'theme-ui';
 
 import { Event, Question, Signup } from '../../../../modules/types';
 import QuestionFields from './QuestionFields';
@@ -40,6 +43,7 @@ const EnrollForm = (props: Props) => {
     submitForm
   } = props;
 
+  const { register, setValue, handleSubmit, errors } = useForm<FormData>();
   const [inputError, setInputError] = useState(false);
 
   function parseSubmit(data: {
@@ -80,47 +84,47 @@ const EnrollForm = (props: Props) => {
         <a className="close" onClick={() => closeForm()} />
         <div className="col-xs-12 col-md-8 col-md-offset-2">
           {inputError && (
-            <p style={{ color: '#a94442' }}>
-              Ilmoittautumisessasi on virheitä.
-            </p>
+            <p sx={{ color: 'error' }}>Ilmoittautumisessasi on virheitä.</p>
           )}
           <h2>Ilmoittaudu</h2>
 
           <SignupStatus event={event} signup={signup} />
 
-          <Form
-            onValidSubmit={parseSubmit}
-            onInvalidSubmit={() => setInputError(true)}
-          >
-            <Input
-              name="firstName"
-              value=""
-              label="Etunimi / First name"
-              type="text"
-              placeholder="Etunimi"
-              required
-            />
-            <Input
-              name="lastName"
-              value=""
-              label="Sukunimi / Last name"
-              type="text"
-              placeholder="Sukunimi"
-              required
-              help="Nimi on julkinen tieto. Voit halutessasi ilmoittautua tapahtumaan salanimellä."
-            />
-
-            <Input
-              name="email"
-              value=""
-              label="Sähköposti / Email"
-              type="email"
-              placeholder="Sähköpostisi"
-              validations="isEmail"
-              required
-            />
-
-            <QuestionFields questions={questions} />
+          <form onSubmit={handleSubmit(parseSubmit)}>
+            <ul className="flex-outer">
+              <li>
+                <Label htmlFor="firstName">Etunimi / First name</Label>
+                <Input
+                  name="firstName"
+                  value=""
+                  type="text"
+                  placeholder="Etunimi"
+                  ref={register({ required: true })}
+                />
+              </li>
+              <li>
+                <Label htmlFor="lastName">Sukunimi / Last name</Label>
+                <Input
+                  name="lastName"
+                  value=""
+                  type="text"
+                  placeholder="Sukunimi"
+                  ref={register({ required: true })}
+                />
+              </li>
+              <li>
+                <Label htmlFor="email">Sähköposti / Email</Label>
+                <Input
+                  name="email"
+                  value=""
+                  type="email"
+                  placeholder="Sähköpostisi"
+                  validations="isEmail"
+                  ref={register({ required: true })}
+                />
+              </li>
+              <QuestionFields questions={questions} register={register} />
+            </ul>
 
             <div className="input-wrapper pull-right">
               <input
@@ -134,7 +138,7 @@ const EnrollForm = (props: Props) => {
             <a className="btn btn-link pull-right" onClick={() => closeForm()}>
               Peruuta
             </a>
-          </Form>
+          </form>
         </div>
         <div className="cf" />
       </div>

@@ -7,12 +7,11 @@ import { toast } from 'react-toastify';
 
 import {
   deleteSignupAsync,
-  getSignupAndEventAsync,
+  getSignupAndEvent,
   resetEventState
 } from '../../modules/editSignup/actions';
 import {
-  completeSignupAsync,
-  CompleteSignupData,
+  completeSignup,
   updateEventAsync
 } from '../../modules/singleEvent/actions';
 import { Event, Signup } from '../../modules/types';
@@ -39,7 +38,7 @@ const EditSignup = (props: Props) => {
     deleted,
     deleteSignupAsync,
     error,
-    getSignupAndEventAsync,
+    getSignupAndEvent,
     loading,
     match,
     resetEventState,
@@ -49,10 +48,10 @@ const EditSignup = (props: Props) => {
   } = props;
 
   useEffect(() => {
+    const { id, editToken } = match.params;
+    getSignupAndEvent(id, editToken);
     return () => {
       resetEventState();
-      const { id, editToken } = match.params;
-      getSignupAndEventAsync(id, editToken);
     };
   }, []);
 
@@ -186,7 +185,7 @@ interface LinkDispatchProps {
     signupId: string,
     data: CompleteSignupData
   ) => Promise<boolean>;
-  getSignupAndEventAsync: (id: string, editToken: string) => Promise<boolean>;
+  getSignupAndEvent: (id: string, editToken: string) => Promise<boolean>;
   deleteSignupAsync: (id: string, editToken: string) => Promise<boolean>;
   resetEventState: () => void;
 }
@@ -199,12 +198,12 @@ const mapStateToProps = (state: AppState) => ({
   deleted: state.editSignup.deleted
 });
 
-const mapDispatchToProps = (dispatch: DispatchAction) => ({
+const mapDispatchToProps = {
   updateEventAsync: updateEventAsync,
-  updateSignupAsync: completeSignupAsync,
-  getSignupAndEventAsync: getSignupAndEventAsync,
+  updateSignupAsync: completeSignup,
+  getSignupAndEvent: getSignupAndEvent,
   deleteSignupAsync: deleteSignupAsync,
-  resetEventState: dispatch(resetEventState)
-});
+  resetEventState: resetEventState
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditSignup);
