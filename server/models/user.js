@@ -8,7 +8,7 @@ module.exports = function () {
 
   const User = sequelize.define('user', {
     email: {
-      type: Sequelize.STRING,
+      type: Sequelize.STRING(127),
       allowNull: false,
       unique: true,
     },

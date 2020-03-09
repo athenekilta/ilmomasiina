@@ -10,3 +10,7 @@ coverage
 .vscode/
 
 .env
+
+.mariapassword
+custom.patch
+v8-compile-cache-0/

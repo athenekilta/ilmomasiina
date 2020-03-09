@@ -220,4 +220,6 @@ if (!DEV) {
   );
 }
 
+webpackConfig.devtool = 'cheap-source-map';
+
 module.exports = webpackConfig;

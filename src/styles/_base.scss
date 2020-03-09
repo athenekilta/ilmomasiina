@@ -1,14 +1,15 @@
+
 // Colors
-$brand-primary: #319236;
-$brand-secondary: #0288D1;
-$secondary-background: #f1f1f1;
+$brand-primary: #201E1E;
+$brand-secondary: #FF8A04;
+$secondary-background: #F1F1F1;
 $alt-text: #7a7a7a;
 $text-muted: #888;
 $red: #d74949;
 $green: #319236;
+$brown: #DA690D;
 
 // Buttons
-
 $btn-default-bg: $brand-secondary;
 $btn-default-color: #fff;
 $btn-default-border: darken($btn-default-bg, 10%);
@@ -35,15 +36,24 @@ $navbar-default-brand-color: #fff;
 $border-radius-base: 0;
 $btn-border-radius-large: 2px;
 
-
 // Typography
-$font-family-sans-serif: 'Open Sans', sans-serif;
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap');
+//$font-family-sans-serif: 'Open Sans', sans-serif;
+$font-family-sans-serif: 'Source Sans Pro', sans-serif;
 $font-size-base: 14px;
 $line-height-base: 1.618;
 $font-size-large: 16px;
 
 // Inputs
 $input-height-base: 33px;
+
+// Link customization
+a {
+	color: $brand-secondary;
+}
+a:hover {
+	color: $brown;
+}
 
 // Bootstrap core mixins
 @import '~bootstrap-sass/assets/stylesheets/bootstrap/variables';

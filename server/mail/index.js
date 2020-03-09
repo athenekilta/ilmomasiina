@@ -4,6 +4,7 @@ const path = require('path');
 const mailgun = require('mailgun-js')({
   apiKey: ilmoconfig.mailgunApiKey,
   domain: ilmoconfig.mailgunDomain,
+  host: 'api.eu.mailgun.net'
 });
 
 const EmailService = {
