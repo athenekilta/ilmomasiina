@@ -51,7 +51,7 @@ module.exports = () => (hook) => {
               const quotaOverflows = event.quota.map(q => Math.min(0, q.dataValues.size - q.dataValues.signupsBefore));
               const positionInOpen = Math.max(0, Number(event.openQuotaSize) - _.sum(quotaOverflows) - currentQuota.size);
 
-              if (positionInOpen <= event.openQuotaSize) {
+              if (positionInOpen <= event.openQuotaSize && event.openQuotaSize > 0) {
                 position = positionInOpen;
                 status = 'in-open';
               } else {

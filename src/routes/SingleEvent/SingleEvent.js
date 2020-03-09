@@ -154,7 +154,7 @@ class SingleEvent extends React.Component {
   renderQuotaStatus() {
     const { event, quotaData } = this.props;
 
-    if (!event.quota || event.quota.length === 0) {
+    if (!event.quota || event.quota.length === 0 || !event.signupsPublic) {
       return null;
     }
 
@@ -234,7 +234,7 @@ class SingleEvent extends React.Component {
   }
 
   render() {
-    const { event, signup, quotaData, formattedQuestions } = this.props;
+    const { event, signup } = this.props;
 
     return (
       <div>
@@ -247,6 +247,7 @@ class SingleEvent extends React.Component {
             loading={this.props.signupLoading}
             error={this.props.signupError}
             event={event}
+            key={event.id}
           />
         ) : (
             <div className="container singleEventContainer">
