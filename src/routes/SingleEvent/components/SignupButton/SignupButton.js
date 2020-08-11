@@ -14,7 +14,7 @@ export class SignupButton extends React.Component {
           className="btn btn-default btn-block btn-whitespace-normal"
           onClick={() => (isOpen ? this.props.openForm() : {})}
         >
-          {this.props.isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${this.props.title}`}
+          {this.props.isOnly ? 'Ilmoittaudu / Register ' : `Ilmoittaudu / Register: ${this.props.title}`}
         </button>
       </p>
     );

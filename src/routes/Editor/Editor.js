@@ -111,7 +111,7 @@ class Editor extends React.Component {
         browserHistory.push(`${PREFIX_URL}/admin/edit/${res.id}`);
       } catch (error) {
         console.log(error);
-        toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', { autoClose: 2000 });
+        toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui. / Something went wrong… failed creating event.', { autoClose: 2000 });
       }
       this.setState({
         eventPublishing: false,
@@ -119,10 +119,10 @@ class Editor extends React.Component {
     } else {
       try {
         await minDelay(this.props.updateEventAsync(event, adminToken), 1000);
-        toast.success('Muutoksesi tallennettiin onnistuneesti!', { autoClose: 2000 });
+        toast.success('Muutoksesi tallennettiin onnistuneesti! / Your changes were saved!', { autoClose: 2000 });
       } catch (error) {
         console.log(error);
-        toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
+        toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui. / Something went wrong… failed updating event.', { autoClose: 2000 });
       }
     }
   }
@@ -137,7 +137,7 @@ class Editor extends React.Component {
             className="btn btn-info pull-right event-editor--animated"
             formNoValidate
             type="submit"
-            defaultValue="Tallenna luonnoksena"
+            defaultValue="Tallenna luonnoksena / Save as draft"
             onClick={() => this.publishEvent(true)}
           />
         </div>
@@ -157,7 +157,7 @@ class Editor extends React.Component {
             className="btn btn-success event-editor--animated"
             formNoValidate
             type="submit"
-            defaultValue="Julkaise"
+            defaultValue="Julkaise / Publish"
             onClick={() => this.publishEvent(false)}
           />
           <input
@@ -165,7 +165,7 @@ class Editor extends React.Component {
             className="btn btn-info event-editor--animated"
             formNoValidate
             type="submit"
-            defaultValue="Tallenna muutokset"
+            defaultValue="Tallenna muutokset / Save changes"
             onClick={() => this.publishEvent(this.props.event.draft)}
           />
         </div>
@@ -184,7 +184,7 @@ class Editor extends React.Component {
           className="btn btn-warning event-editor--animated"
           formNoValidate
           type="submit"
-          defaultValue="Muuta luonnokseksi"
+          defaultValue="Muuta luonnokseksi / Turn to draft"
           onClick={() => this.publishEvent(true)}
         />
         <input
@@ -192,7 +192,7 @@ class Editor extends React.Component {
           className="btn btn-info event-editor--animated"
           formNoValidate
           type="submit"
-          defaultValue="Tallenna muutokset"
+          defaultValue="Tallenna muutokset / Save changes"
           onClick={() => this.publishEvent(this.props.event.draft)}
         />
       </div>
@@ -206,7 +206,7 @@ class Editor extends React.Component {
       <div className={className}>
         <span>
           <b>*</b>
-          Tähdellä merkityt kentät ovat pakollisia
+          Tähdellä merkityt kentät ovat pakollisia / Fields with an asterisk are required
         </span>
       </div>
     );
@@ -229,9 +229,9 @@ class Editor extends React.Component {
       return (
         <div className="event-editor">
           <div className="event-editor--loading-container">
-            <h1>Hups, jotain meni pieleen</h1>
-            <p>{`Tapahtumaa id:llä "${this.props.params.id}" ei löytynyt`}</p>
-            <Link to={`${PREFIX_URL}/admin/`}>Palaa tapahtumalistaukseen</Link>
+            <h1>Hups, jotain meni pieleen / Oops, something went wrong</h1>
+            <p>{`Tapahtumaa id:llä "${this.props.params.id}" ei löytynyt / Event not found with the id "${this.props.params.id}"`}</p>
+            <Link to={`${PREFIX_URL}/admin/`}>Palaa tapahtumalistaukseen / Go back to event listing</Link>
           </div>
         </div>
       );
@@ -239,29 +239,29 @@ class Editor extends React.Component {
 
     return (
       <div className="event-editor">
-        <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
+        <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin / Back</Link>
         <Formsy.Form
           onValid={() => this.setValidState(true)}
           onInvalid={() => this.setValidState(false)}
           className="form-horizontal col-xs-12 col-md-10 col-md-offset-1"
         >
-          <h1>{isNewEvent ? 'Luo uusi tapahtuma' : 'Muokkaa tapahtumaa'}</h1>
+          <h1>{isNewEvent ? 'Luo uusi tapahtuma / New event' : 'Muokkaa tapahtumaa / Edit event'}</h1>
           {this.renderButtons()}
           <ul className="event-editor--nav nav nav-tabs">
             <li className={this.state.activeTab === 1 ? 'active' : ''}>
-              <a onClick={() => this.changeTab(1)}>Perustiedot</a>
+              <a onClick={() => this.changeTab(1)}>Perustiedot / Basic info</a>
             </li>
             <li className={this.state.activeTab === 2 ? 'active' : ''}>
-              <a onClick={() => this.changeTab(2)}>Ilmoittautumisasetukset</a>
+              <a onClick={() => this.changeTab(2)}>Ilmoittautumisasetukset / Participant settings</a>
             </li>
             <li className={this.state.activeTab === 3 ? 'active' : ''}>
-              <a onClick={() => this.changeTab(3)}>Kysymykset</a>
+              <a onClick={() => this.changeTab(3)}>Kysymykset / Questions</a>
             </li>
             <li className={this.state.activeTab === 4 ? 'active' : ''}>
-              <a onClick={() => this.changeTab(4)}>Vahvistusviestit</a>
+              <a onClick={() => this.changeTab(4)}>Sähköposti / Email</a>
             </li>
             <li className={this.state.activeTab === 5 ? 'active' : ''}>
-              <a onClick={() => this.changeTab(5)}>Ilmoittautuneet</a>
+              <a onClick={() => this.changeTab(5)}>Ilmoittautuneet / Participants</a>
             </li>
           </ul>
           {this.renderValidNotice()}

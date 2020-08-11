@@ -67,7 +67,7 @@ class DateTimePicker extends React.PureComponent {
           />
           <DatePicker locale={locale} format="DD.MM.YYYY" onChange={this.changeDate} value={value} />
           <TimePicker
-            placeholder={'Valitse aika'}
+            placeholder={'Valitse aika / Choose a time'}
             onChange={this.changeTime}
             minuteStep={5}
             format="HH.mm"

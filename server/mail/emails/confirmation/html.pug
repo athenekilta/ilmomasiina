@@ -4,24 +4,25 @@ block mainContent
 	div.content-block
 		p.bodyText #{event.verificationEmail}
 	div.content-block
-		p.bodyText Tapahtuman tiedot:
+		p.bodyText Tapahtuman tiedot / Event info:
 		ul
 			li
-				strong Tapahtuma: 
+				strong Tapahtuma / Event:
 				| #{event.title}
-			li 
-				strong Sijainti: 
+			li
+				strong Sijainti / Location:
 				| #{event.location}
-			li 
-				strong Aika: 
+			li
+				strong Aika / Date:
 				| #{date}
 	div.content-block
-		p.bodyText Ilmoittautumisesi tiedot:
+		p.bodyText Ilmoittautumisesi tiedot / Registraion:
 		ul
 			each val in answers
 				li
-					strong #{val.label}: 
+					strong #{val.label}:
 					| #{val.answer}
 	div.content-block
-		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].
-	
+		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä]. / Press #[a( href=cancelLink ) here] to edit or cancel your registration.
+	div.content-block
+		p.bodyText Tapahtumasta voi antaa palautetta osoitteessa #[a( href='www.fyysikkokilta.fi/palaute-raadille/' ) fyysikkokilta.fi/palaute-raadille/]. / Give feedback about the event at #[a( href='www.fyysikkokilta.fi/en/palaute-raadille/' ) fyysikkokilta.fi/en/palaute-raadille/]

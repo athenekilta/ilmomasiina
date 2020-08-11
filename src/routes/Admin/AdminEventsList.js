@@ -39,11 +39,11 @@ class AdminEventList extends React.Component {
   }
 
   onDeleteEvent(eventId) {
-    if (window.confirm("Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.")) {
+    if (window.confirm('Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua. / Are you sure you want to delete this event? This cannot be undone.')) {
       this.props.deleteEvent(eventId)
         .then((success) => {
           if (!success) {
-            console.alert("Poisto epäonnistui :(")
+            console.alert('Poisto epäonnistui :c');
           }
           this.props.updateEvents();
         });
@@ -51,22 +51,21 @@ class AdminEventList extends React.Component {
   }
 
   createUser(email) {
-    console.log(email)
+    console.log(email);
     this.setState({
       userFormLoading: true,
     }, async () => {
       try {
         // TODO: better error handling
-        let success = await minDelay(this.props.createUserAsync({ email }), 1000);
+        const success = await minDelay(this.props.createUserAsync({ email }), 1000);
         if (success) {
-          toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 })
-        }
-        else {
-          toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+          toast.success('Käyttäjän luominen onnistui / Successfully created account', { autoClose: 2000 });
+        } else {
+          toast.error('Käyttäjän luominen epäonnistui / Failed creating account', { autoClose: 2000 });
         }
       } catch (error) {
-        console.log(error)
-        toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+        console.log(error);
+        toast.error('Käyttäjän luominen epäonnistui / Failed creating account', { autoClose: 2000 });
       }
 
       this.setState({ userFormLoading: false });
@@ -79,16 +78,14 @@ class AdminEventList extends React.Component {
 
   renderEventRows() {
     const { events } = this.props;
-    return _.map(events, (e) => {
-      return (
-        <AdminEventListItem
-          key={e.id}
-          signups={_.sum(_.map(e.quota, q => q.signupCount))}
-          data={e}
-          onDelete={this.onDeleteEvent}
+    return _.map(events, e => (
+      <AdminEventListItem
+        key={e.id}
+        signups={_.sum(_.map(e.quota, q => q.signupCount))}
+        data={e}
+        onDelete={this.onDeleteEvent}
         />
-      );
-    });
+      ));
   }
 
   render() {
@@ -98,11 +95,11 @@ class AdminEventList extends React.Component {
         <table className="table">
           <thead>
             <tr>
-              <th>Nimi</th>
-              <th>Ajankohta</th>
-              <th>Tila</th>
-              <th>Ilmoittautuneita</th>
-              <th>Toiminnot</th>
+              <th>Nimi / Name</th>
+              <th>Ajankohta / Date</th>
+              <th>Tila / Status</th>
+              <th>Ilmoittautuneita / Participants</th>
+              <th>Toiminnot / Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -110,9 +107,9 @@ class AdminEventList extends React.Component {
           </tbody>
         </table>
         <Link to={`${PREFIX_URL}/admin/edit/new`} className="btn btn-default">
-          + Uusi tapahtuma
+          + Uusi tapahtuma / New event
         </Link>
-        <h1>Luo uusi käyttäjä</h1>
+        <h1>Luo uusi käyttäjä / New account</h1>
         <UserForm onSubmit={this.createUser} loading={this.state.userFormLoading} />
       </div>
     );
@@ -122,7 +119,7 @@ class AdminEventList extends React.Component {
 const mapDispatchToProps = {
   updateEvents: AdminActions.getEventsAsync,
   deleteEvent: AdminActions.deleteEventAsync,
-  createUserAsync: AdminActions.createUserAsync
+  createUserAsync: AdminActions.createUserAsync,
 };
 
 const mapStateToProps = state => ({

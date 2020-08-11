@@ -9,11 +9,11 @@ export class EnrollForm extends React.Component {
   constructor(props) {
     super(props);
     this.parseSubmit = this.parseSubmit.bind(this);
-    this.setError = this.setError.bind(this)
-    this.state = { inputError: false }
+    this.setError = this.setError.bind(this);
+    this.state = { inputError: false };
   }
   setError() {
-    this.setState({ inputError: true })
+    this.setState({ inputError: true });
   }
   parseSubmit(data) {
     const answers = {
@@ -46,7 +46,7 @@ export class EnrollForm extends React.Component {
 
   renderQuestionFields() {
     return _.map(this.props.questions, (question) => {
-      const help = question.public ? 'Tämän kentän vastaukset ovat julkisia.' : null;
+      const help = question.public ? 'Tämän kentän vastaukset ovat julkisia. / Answers to this field are public.' : null;
 
       if (question.type === 'text') {
         return (
@@ -90,7 +90,7 @@ export class EnrollForm extends React.Component {
 
       if (question.type === 'select') {
         if (question.options.length > 3) { // render select if more than 3 options
-          let optionsArray = [{ label: "Valitse...", value: null }];
+          let optionsArray = [{ label: "Valitse… / Choose…", value: null }]; // eslint-disable-line
 
           question.options.map(option => optionsArray.push({ label: option }));
 
@@ -144,12 +144,12 @@ export class EnrollForm extends React.Component {
       const { openQuotaSize } = this.props.event;
       const quotas = this.props.event.quota;
 
-      if (status == 'in-quota') {
+      if (status === 'in-quota') {
         const quota = _.find(quotas, { id: quotaId });
-        return `Olet kiintiössä ${quota.title} sijalla ${position + (quota.size ? " / " + quota.size : "")}.`;
+        return `Olet kiintiössä ${quota.title} sijalla ${position + (quota.size ? ` / ${quota.size}` : '')}.`;
       }
 
-      if (status == 'in-open') {
+      if (status === 'in-open') {
         return `Olet avoimessa kiintiössä sijalla ${position} / ${openQuotaSize}.`;
       }
 
@@ -161,13 +161,13 @@ export class EnrollForm extends React.Component {
         <div className="container">
           <a className="close" onClick={() => this.props.closeForm()} />
           <div className="col-xs-12 col-md-8 col-md-offset-2">
-            {this.state.inputError ? <p style={{ color: "#a94442" }}>Ilmoittautumisessasi on virheitä.</p> : null}
-            <h2>Ilmoittaudu</h2>
+            {this.state.inputError ? <p style={{ color: '#a94442' }}>Ilmoittautumisessasi on virheitä. / There are errors in your info.</p> : null}
+            <h2>Ilmoittaudu / Register</h2>
             {this.props.signup.status != null ? <p>{signupStatus()}</p> : null}
 
             <Formsy.Form onValidSubmit={this.parseSubmit} onInvalidSubmit={this.setError}>
               <Input name="firstName" value="" label="Etunimi / First name" type="text" placeholder="Etunimi" required />
-              <Input name="lastName" value="" label="Sukunimi / Last name" type="text" placeholder="Sukunimi" required help="Nimi on julkinen tieto. Voit halutessasi ilmoittautua tapahtumaan salanimellä." />
+              <Input name="lastName" value="" label="Sukunimi / Surname" type="text" placeholder="Sukunimi" required help="Nimi on julkinen tieto. Voit halutessasi ilmoittautua tapahtumaan salanimellä. / The name is public. You can also use a pseudonym." />
 
               <Input
                 name="email"
@@ -186,7 +186,7 @@ export class EnrollForm extends React.Component {
                   className="btn btn-primary pull-right"
                   formNoValidate
                   type="submit"
-                  defaultValue="Lähetä"
+                  defaultValue="Lähetä / Submit"
                   disabled={this.props.loading}
                 />
               </div>

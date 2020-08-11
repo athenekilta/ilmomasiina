@@ -48,7 +48,7 @@ class QuotasTab extends React.Component {
   }
 
   updateOrder(args) {
-    let newQuotas = this.props.event.quota;
+    let newQuotas = this.props.event.quota; //eslint-disable-line
 
     const elementToMove = newQuotas[args.oldIndex];
     newQuotas.splice(args.oldIndex, 1);
@@ -62,19 +62,16 @@ class QuotasTab extends React.Component {
 
     const newQuotas = _.map(quotas, (quota) => {
       if (quota.id === itemId) {
-        if (field === "size" && value === '') {
+        if (field === 'size' && value === '') {
           return {
             ...quota,
             [field]: null,
           };
         }
-        else {
-          return {
-            ...quota,
-            [field]: value,
-          };
-        }
-
+        return {
+          ...quota,
+          [field]: value,
+        };
       }
 
       return quota;
@@ -103,25 +100,25 @@ class QuotasTab extends React.Component {
           <Input
             name={`quota-${item.id}-title`}
             value={item.title}
-            label="Kiintiön nimi"
+            label="Kiintiön nimi / Quota name"
             type="text"
             required
             onChange={(field, value) => this.updateQuota(item.id, 'title', value)}
             help={
               index === 0
-                ? 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.'
+                ? "Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta. / If there's only one quota, consider naming it after the event. Yoo can reorder quotas by dragging from the left."
                 : null
             }
           />
           <Input
             name={`quota-${item.id}-max-attendees`}
             value={item.size}
-            label="Kiintiön koko"
+            label="Kiintiön koko / Quota size"
             type="number"
             validations="isInt"
             min={0}
             onChange={(field, value) => this.updateQuota(item.id, 'size', value)}
-            help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi."
+            help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi. / If there is no quota, leave this field empty."
           />
         </div>
         {index > 0 ? (
@@ -148,13 +145,13 @@ class QuotasTab extends React.Component {
         <Checkbox
           name="useOpenQuota"
           value={this.props.event.useOpenQuota}
-          label="Käytä lisäksi yhteistä kiintiötä"
+          label="Käytä lisäksi yhteistä kiintiötä / Use shared quota"
           onChange={this.props.onDataChange}
         />
         {!this.props.event.useOpenQuota || (
           <Input
             name="openQuotaSize"
-            label="Avoimen kiintiön koko"
+            label="Avoimen kiintiön koko / Size of shared quota"
             type="number"
             value={this.props.event.openQuotaSize}
             required

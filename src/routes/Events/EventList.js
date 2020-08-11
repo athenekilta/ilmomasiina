@@ -50,7 +50,7 @@ class TableRow extends React.Component {
         <td
           key="signups"
           className="signups"
-          data-xs-prefix={signups || size ? 'Ilmoittautuneita: ' : ''}
+          data-xs-prefix={signups || size ? 'Ilmoittautuneita / Participants: ' : ''}
         >
           {signups}
           {size ? <Separator /> : ''}
@@ -77,7 +77,7 @@ class EventList extends React.Component {
   }
 
   render() {
-    const sortFunction = event => {
+    const sortFunction = (event) => {
       const now = moment();
 
       // First upcoming events
@@ -96,7 +96,7 @@ class EventList extends React.Component {
       'title',
     ]);
 
-    const tableRows = eventsSorted.map(event => {
+    const tableRows = eventsSorted.map((event) => {
       const eventState = signupState(
         event.date,
         event.registrationStartDate,
@@ -139,7 +139,7 @@ class EventList extends React.Component {
       if (event.openQuotaSize > 0) {
         rows.push(
           <TableRow
-            title="Avoin"
+            title="Avoin / Open"
             signupLabel=""
             signups={Math.min(
               _.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size))),
@@ -157,14 +157,14 @@ class EventList extends React.Component {
 
     return (
       <div className="container">
-        <h1>Tapahtumat</h1>
+        <h1>Tapahtumat / Events</h1>
         <table className="table eventlist">
           <thead>
             <tr>
-              <th>Nimi</th>
-              <th>Ajankohta</th>
-              <th>Ilmoittautuminen</th>
-              <th>Ilmoittautuneita</th>
+              <th>Nimi / Title</th>
+              <th>Ajankohta / Date</th>
+              <th>Ilmoittautuminen / Registration until</th>
+              <th>Ilmoittautuneita / Participants</th>
             </tr>
           </thead>
           <tbody>{tableRows}</tbody>

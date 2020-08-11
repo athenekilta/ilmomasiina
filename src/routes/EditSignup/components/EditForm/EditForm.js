@@ -10,11 +10,11 @@ export class EditForm extends React.Component {
   constructor(props) {
     super(props);
     this.parseSubmit = this.parseSubmit.bind(this);
-    this.setError = this.setError.bind(this)
-    this.state = { inputError: false }
+    this.setError = this.setError.bind(this);
+    this.state = { inputError: false };
   }
   setError() {
-    this.setState({ inputError: true })
+    this.setState({ inputError: true });
   }
   parseSubmit(data) {
     const answers = {
@@ -47,7 +47,7 @@ export class EditForm extends React.Component {
 
   renderQuestionFields() {
     return _.map(this.props.questions, (question) => {
-      const help = question.public ? 'Tämän kentän vastaukset ovat julkisia.' : null;
+      const help = question.public ? 'Tämän kentän vastaukset ovat julkisia. / Answers to this field are public.' : null;
 
       if (question.type === 'text') {
         return (
@@ -93,8 +93,8 @@ export class EditForm extends React.Component {
       }
 
       if (question.type === 'select') {
-
-        let optionsArray = [{ label: "Valitse...", value: null }];
+        let optionsArray = [{ label: 'Valitse… / Choose…', value: null }];
+        optionsArray = optionsArray;
 
         question.options.split(';').map(option => optionsArray.push({ label: option }));
 
@@ -135,15 +135,15 @@ export class EditForm extends React.Component {
       <div className="form-wrapper">
         <div className="container">
           <div className="col-xs-12 col-md-8 col-md-offset-2">
-            {this.state.inputError ? <p style={{ color: "#a94442" }}>Ilmoittautumisessasi on virheitä.</p> : null}
-            <h2>Muokkaa ilmoittautumista</h2>
+            {this.state.inputError ? <p style={{ color: '#a94442' }}>Ilmoittautumisessasi on virheitä. / There are errors in your info.</p> : null}
+            <h2>Muokkaa ilmoittautumista / Edit registration</h2>
             {this.props.signup.status != null ? <p>{signupStatus()}</p> : null}
 
             <Formsy.Form onValidSubmit={this.parseSubmit} onInvalidSubmit={this.setError}>
               <Input
                 name="firstName"
                 value={this.props.signup.firstName}
-                label="Etunimi"
+                label="Etunimi / Firstname"
                 type="text"
                 placeholder="Etunimi"
                 disabled
@@ -151,7 +151,7 @@ export class EditForm extends React.Component {
               <Input
                 name="lastName"
                 value={this.props.signup.lastName}
-                label="Sukunimi"
+                label="Sukunimi / Surname"
                 type="text"
                 placeholder="Sukunimi"
                 disabled
@@ -160,7 +160,7 @@ export class EditForm extends React.Component {
               <Input
                 name="email"
                 value={this.props.signup.email}
-                label="Sähköposti"
+                label="Sähköposti / Email"
                 type="email"
                 placeholder="Sähköpostisi"
                 validations="isEmail"

@@ -39,7 +39,7 @@ class EditSignup extends React.Component {
   }
 
   async updateSignup(answers) {
-    this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
+    this.toastId = toast.info('Ilmoittautuminen käynnissä / Registration in progress', {});
 
     const response = await this.props.updateSignupAsync(
       this.props.signup.id,
@@ -51,7 +51,7 @@ class EditSignup extends React.Component {
     const success = response === true;
     if (success) {
       toast.update(this.toastId, {
-        render: 'Muokkaus onnistui!',
+        render: 'Muokkaus onnistui! / Updated successfully!',
         type: toast.TYPE.SUCCESS,
         autoClose: 5000,
       });
@@ -61,14 +61,13 @@ class EditSignup extends React.Component {
       });
     } else {
       const toastText =
-        'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
+        'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan. / Changes failed. Check that are required fields are filled.';
       toast.update(this.toastId, {
         render: toastText,
         type: toast.TYPE.ERROR,
         autoClose: 5000,
       });
     }
-
   }
 
   render() {
@@ -76,10 +75,11 @@ class EditSignup extends React.Component {
       return (
         <div className="container align-items-center">
           <div className="EditSignup--wrapper">
-            <h1>Hups, jotain meni pieleen</h1>
+            <h1>Hups, jotain meni pieleen / Oops, something went wrong</h1>
             <p>Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman ilmoittautuminen on sulkeutunut.</p>
+            <p>Your registration cannot be changed or removed, as the registration for the event is closed.</p>
             <Link to={`${PREFIX_URL}/`} className="btn btn-default">
-              Takaisin etusivulle
+              Takaisin etusivulle / Back to homepage
             </Link>
           </div>
         </div>
@@ -89,9 +89,9 @@ class EditSignup extends React.Component {
       return (
         <div className="container align-items-center">
           <div className="EditSignup--wrapper">
-            <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
+            <h1>Ilmoittautumisesi poistettiin onnistuneesti / Your registration was removed successfully</h1>
             <Link to={`${PREFIX_URL}/`} className="btn btn-default">
-              Takaisin etusivulle
+              Takaisin etusivulle / Back to homepage
             </Link>
           </div>
         </div>
@@ -101,10 +101,14 @@ class EditSignup extends React.Component {
       return (
         <div className="container align-items-center">
           <div className="EditSignup--wrapper">
-            <h1>Hups, jotain meni pieleen</h1>
+            <h1>Hups, jotain meni pieleen / Oops, something went wrong</h1>
             <p>
               Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai sitten jotain muuta kummallista
               tapahtui. Jos ilmoittautumisesi ei ole vielä poistunut, yritä kohta uudestaan.
+            </p>
+            <p>
+              Your registration was not found. It might have been removed, or not.
+              If you're registration is not removed, try again soon.
             </p>
           </div>
         </div>
@@ -131,17 +135,25 @@ class EditSignup extends React.Component {
           loading={this.props.loading}
         />
         <div className="EditSignup--wrapper">
-          <h2>Poista ilmoittautuminen</h2>
+          <h2>Poista ilmoittautuminen / Remove registration</h2>
           <p>
             Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan <strong>{this.props.event.title}?</strong>
+          </p>
+          <p>
+            Are you sure you want to remove your registration to <strong>{this.props.event.title}?</strong>
           </p>
           <p>
             Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos kuitenkin muutat mielesi, voit aina
             ilmoittautua tapahtumaan uudelleen myöhemmin, mutta siirryt silloin jonon hännille.{' '}
             <strong>Tätä toimintoa ei voi perua.</strong>
           </p>
+          <p>
+            By removing your registration, you'll lose your place in the queue.
+            Although you can always register later, you'll be sent to the back of the queue.{' '}
+            <strong>This cannot be undone.</strong>
+          </p>
           <button onClick={this.deleteSignup} className="btn btn-danger">
-            Poista ilmoittautuminen
+            Poista ilmoittautuminen / Remove registration
           </button>
         </div>
       </div>

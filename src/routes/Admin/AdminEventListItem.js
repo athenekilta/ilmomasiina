@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment-timezone';
 import { Link } from 'react-router';
-import _ from 'lodash';
 import Separator from '../../components/Separator';
 
 /* Render a single item
@@ -16,7 +15,6 @@ class AdminEventListItem extends React.Component {
   };
 
   render() {
-
     const { onDelete, onDownload, data, signups } = this.props;
 
     return (
@@ -25,14 +23,14 @@ class AdminEventListItem extends React.Component {
           <Link to={`${PREFIX_URL}/event/${data.id}`}>{data.title}</Link>
         </td>
         <td>{data.date ? moment(data.date).format('DD.MM.YYYY') : ''}</td>
-        <td>{data.draft ? "Luonnos" : "Julkaistu"}</td>
+        <td>{data.draft ? 'Luonnos / Draft' : 'Julkaistu / Published'}</td>
         <td>{signups}</td>
         <td>
-          <Link to={`${PREFIX_URL}/admin/edit/${data.id}`}>Muokkaa tapahtumaa</Link>
+          <Link to={`${PREFIX_URL}/admin/edit/${data.id}`}>Muokkaa / Edit</Link>
 
           <Separator />
 
-          <a onClick={() => this.props.onDelete(data.id)}>Poista tapahtuma</a>
+          <a onClick={() => this.props.onDelete(data.id)}>Poista / Delete</a>
         </td>
       </tr>
     );

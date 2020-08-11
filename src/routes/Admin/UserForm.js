@@ -13,7 +13,7 @@ async function minDelay(func, ms = 1000) {
 class UserForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired
+    loading: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -37,9 +37,9 @@ class UserForm extends React.Component {
       <Formsy.Form style={{ maxWidth: '300px' }}>
         <Input
           id="email"
-          placeholder="Sähköposti"
+          placeholder="Sähköposti / Email"
           name="email"
-          title="Sähköposti"
+          title="Sähköposti / Email"
           layout="elementOnly"
           value={this.state.email}
           onChange={this.updateInputValue}
@@ -50,7 +50,7 @@ class UserForm extends React.Component {
           style={{ marginTop: '1em' }}
           onClick={() => this.props.onSubmit(this.state.email)}
         >
-          {this.props.loading ? <Spinner /> : 'Luo uusi käyttäjä'}
+          {this.props.loading ? <Spinner /> : 'Luo uusi käyttäjä / New account'}
         </button>
       </Formsy.Form>
     );

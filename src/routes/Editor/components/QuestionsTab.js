@@ -22,11 +22,11 @@ const SortableItems = SortableContainer(({ collection, items }) => (
 ));
 
 const QUESTION_TYPES = [
-  { value: 'text', label: 'Teksti (lyhyt)' },
-  { value: 'textarea', label: 'Teksti (pitkä)' },
-  { value: 'number', label: 'Numero' },
-  { value: 'select', label: 'Monivalinta (voi valita yhden)' },
-  { value: 'checkbox', label: 'Monivalinta (voi valita monta)' },
+  { value: 'text', label: 'Teksti (lyhyt) / Text (short)' },
+  { value: 'textarea', label: 'Teksti (pitkä) / Text (longer)' },
+  { value: 'number', label: 'Numero / Number' },
+  { value: 'select', label: 'Monivalinta (voi valita yhden) / Select one' },
+  { value: 'checkbox', label: 'Monivalinta (voi valita monta) / Select multiple' },
 ];
 
 class QuestionsTab extends React.Component {
@@ -60,7 +60,7 @@ class QuestionsTab extends React.Component {
   }
 
   updateOrder(args) {
-    let newQuestions = this.props.event.questions;
+    let newQuestions = this.props.event.questions; //eslint-disable-line
 
     const elementToMove = newQuestions[args.oldIndex];
     newQuestions.splice(args.oldIndex, 1);
@@ -73,12 +73,11 @@ class QuestionsTab extends React.Component {
     const questions = this.props.event.questions;
     const newQuestions = _.map(questions, (question) => {
       if (question.id === itemId) {
-        if (value === "select" || value === "checkbox") {
+        if (value === 'select' || value === 'checkbox') {
           if (!question.options) {
-            question.options = [""]
-          }
-          else {
-            question.options = null
+            question.options = [''];
+          } else {
+            question.options = null;
           }
         }
 
@@ -97,9 +96,8 @@ class QuestionsTab extends React.Component {
   updateQuestionOption(itemId, index, value) {
     const questions = this.props.event.questions;
     const newQuestions = _.map(questions, (question) => {
-
       if (question.id === itemId) {
-        question.options[index] = value
+        question.options[index] = value;
       }
 
       return question;
@@ -111,11 +109,10 @@ class QuestionsTab extends React.Component {
   addOption(questionId) {
     const questions = this.props.event.questions;
     const newQuestions = _.map(questions, (question) => {
-
       if (question.id === questionId) {
-        question.options.push("");
+        question.options.push('');
       }
-      return question
+      return question;
     });
 
     this.props.onDataChange('questions', newQuestions);
@@ -133,22 +130,21 @@ class QuestionsTab extends React.Component {
     this.props.onDataChange('questions', newQuestions);
   }
   renderQuestionOptions(question) {
-    if (!question.options) { return null }
+    if (!question.options) { return null; }
     return (
       <div>
         {_.map(question.options, (option, index) => (
           <Input
             name={`question-${question.id}-question-option-${index}`}
             value={option}
-            label={"Vastausvaihtoehto "}
+            label={'Vastausvaihtoehto / Option '}
             type="text"
             required
             onChange={(field, value) => this.updateQuestionOption(question.id, index, value)}
           />
         ))}
         <a onClick={() => this.addOption(question.id)}>Lisää vastausvaihtoehto</a>
-      </div>)
-
+      </div>);
   }
   renderQuestions() {
     const q = _.map(this.props.event.questions, item => (
@@ -157,7 +153,7 @@ class QuestionsTab extends React.Component {
           <Input
             name={`question-${item.id}-question`}
             value={item.question}
-            label="Kysymys"
+            label="Kysymys / Question"
             type="text"
             required
             onChange={(field, value) => this.updateQuestion(item.id, 'question', value)}
@@ -165,7 +161,7 @@ class QuestionsTab extends React.Component {
           <Select
             name={`question-${item.id}-type`}
             value={item.type}
-            label="Tyyppi"
+            label="Tyyppi / Type"
             options={QUESTION_TYPES}
             onChange={(field, value) => this.updateQuestion(item.id, 'type', value)}
             required
@@ -176,13 +172,13 @@ class QuestionsTab extends React.Component {
           <Checkbox
             name={`question-${item.id}-required`}
             value={item.required}
-            label="Pakollinen"
+            label="Pakollinen / Required"
             onChange={(field, value) => this.updateQuestion(item.id, 'required', value)}
           />
           <Checkbox
             name={`question-${item.id}-public`}
             value={item.public}
-            label="Julkinen"
+            label="Julkinen / Public"
             onChange={(field, value) => this.updateQuestion(item.id, 'public', value)}
           />
           <a onClick={() => this.removeQuestion(item.id)}>Poista</a>
@@ -197,10 +193,11 @@ class QuestionsTab extends React.Component {
     return (
       <div>
         <p>Kaikilta osallistujilta kerätään aina nimi ja sähköpostiosoite.</p>
+        <p>Participants are always asked name and email.</p>
         <div>
           {this.renderQuestions()}
           <a className="btn btn-primary pull-right" onClick={this.addQuestion}>
-            Lisää kysymys
+            Lisää kysymys / Add a question
           </a>
         </div>
       </div>

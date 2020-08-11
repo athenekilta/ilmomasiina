@@ -34,7 +34,7 @@ class Login extends React.Component {
             name="email"
             label="Sähköposti"
             title="Sähköposti"
-            placeholder="admin@athene.fi"
+            placeholder="filip@fyysikko.fi"
             layout="vertical"
             required
           />
@@ -56,7 +56,7 @@ class Login extends React.Component {
               this.props.login(this.state.email, this.state.password);
             }}
           >
-            Kirjaudu
+            Kirjaudu / Login
           </button>
         </Formsy.Form>
       </div>

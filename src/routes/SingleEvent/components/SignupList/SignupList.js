@@ -6,8 +6,8 @@ import moment from 'moment-timezone';
 export class SignupList extends React.Component {
   render() {
     const getAnswer = (answers, questionId, quota) => {
-      if (questionId === "quota") {
-        return quota
+      if (questionId === 'quota') {
+        return quota;
       }
       const answer = _.find(answers, { questionId });
       return (answer == null ? '' : answer.answer);
@@ -16,7 +16,7 @@ export class SignupList extends React.Component {
     const TableRow = ({ answers, firstName, lastName, createdAt, index, quota }) =>
       <tr className={(firstName == null ? 'text-muted' : '')}>
         <td>{index}.</td>
-        <td>{firstName || 'Vahvistamatta'} {lastName || ''}</td>
+        <td>{firstName || 'Vahvistamatta / Not verified'} {lastName || ''}</td>
         {this.props.questions.map((q, i) => <td key={i}>{getAnswer(answers, q.id, quota) || ''}</td>)}
         <td>{moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss')}<span className="hover">{moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}</span></td>
       </tr>;
@@ -24,29 +24,29 @@ export class SignupList extends React.Component {
     return (
       <div className="quota">
         {this.props.title ? <h3>{this.props.title}</h3> : ''}
-        {!this.props.rows.length ? <p>Ei ilmoittautumisia.</p> :
-          <table className='table table-condensed table-responsive'>
-            <thead>
-              <tr className='active'>
-                <th key="position">Sija</th>
-                <th key="attendee" style={{ minWidth: 90 }} >Nimi</th>
-                {this.props.questions.map((q, i) => <th key={i}>{q.question}</th>)}
-                <th key="datetime" style={{ minWidth: 130 }}>Ilmoittautumisaika</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.props.rows.map((row, i) =>
+        {!this.props.rows.length ? <p>Ei ilmoittautumisia. / No participants.</p> :
+        <table className='table table-condensed table-responsive'>
+          <thead>
+            <tr className='active'>
+              <th key="position">#</th>
+              <th key="attendee" style={{ minWidth: 90 }} >Nimi / Name</th>
+              {this.props.questions.map((q, i) => <th key={i}>{q.question}</th>)}
+              <th key="datetime" style={{ minWidth: 130 }}>Ilmoittautumisaika / Registration time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.props.rows.map((row, i) =>
 
-                <TableRow
-                  answers={row.answers}
-                  quota={row.quota}
-                  firstName={row.firstName}
-                  lastName={row.lastName}
-                  createdAt={row.createdAt}
-                  index={i + 1}
-                  key={i} />)}
-            </tbody>
-          </table>
+              <TableRow
+                answers={row.answers}
+                quota={row.quota}
+                firstName={row.firstName}
+                lastName={row.lastName}
+                createdAt={row.createdAt}
+                index={i + 1}
+                key={i} />)}
+          </tbody>
+        </table>
         }
       </div>
     );
