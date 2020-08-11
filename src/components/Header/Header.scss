@@ -8,8 +8,10 @@
   a.navbar-brand:hover {
     color: #fff;
     font-size: 18px;
-    text-transform: uppercase;
-    font-weight: 600;
+    font-family: $font-family-serif;
+    font-style: italic;
+    //text-transform: uppercase;
+    font-weight: 700;
     letter-spacing: 1px;
   }
 }

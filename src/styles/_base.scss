@@ -37,9 +37,10 @@ $border-radius-base: 0;
 $btn-border-radius-large: 2px;
 
 // Typography
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i|Source+Sans+Pro&display=swap');
 //$font-family-sans-serif: 'Open Sans', sans-serif;
 $font-family-sans-serif: 'Source Sans Pro', sans-serif;
+$font-family-serif: 'Lora', 'Georgia', serif;
 $font-size-base: 14px;
 $line-height-base: 1.618;
 $font-size-large: 16px;

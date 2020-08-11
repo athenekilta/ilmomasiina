@@ -96,7 +96,7 @@ body {
 h1,
 h2,
 h3 {
-  font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+  font-family: 'Lora', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
   color: #000;
   margin: 40px 0 0;
   line-height: 1.2em;
@@ -144,7 +144,7 @@ ol li {
     LINKS & BUTTONS
 ------------------------------------- */
 a {
-  color: #348eda;
+  color: #FF8A04;
   text-decoration: underline;
 }
 

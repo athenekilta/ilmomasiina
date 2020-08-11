@@ -12,9 +12,11 @@ html {
 }
 #root {
   h1 {
-    font-weight: 800;
+    font-weight: 700;
+    font-family: $font-family-serif;
     font-size: 32px;
-    text-transform: uppercase;
+    font-style: italic;
+    //text-transform: uppercase;
     margin: 1em 0;
   }
 
