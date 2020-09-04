@@ -22,6 +22,9 @@ module.exports = () => (hook) => {
             id
           },
         })
+        .then((res) => {
+          return hook;
+        });
     })
-    .finally(() => hook);
+    .catch(error => hook);
 };

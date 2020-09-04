@@ -41,7 +41,7 @@ module.exports = () => (hook) => {
             offset: currentQuota.size + event.openQuotaSize - 1 // notify the last person in line
           })
             .then(signup => {
-              if (signup.count > currentQuota.size) {
+              if (signup.count >= currentQuota.size) {
                 // there are people in the queue
                 const personToNotify = signup.rows[0].dataValues
                 console.log(personToNotify)
