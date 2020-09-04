@@ -26,7 +26,7 @@ exports.before = {
 };
 
 exports.after = {
-  all: [],
+  all: [hooks.remove('password')],
   find: [],
   get: [],
   create: [sendEmail()],
