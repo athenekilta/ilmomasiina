@@ -25,15 +25,9 @@ export const usersError = state => state.admin.usersError;
 
 export const getUsers = createSelector(
     [
-        _getUsers,
-        usersLoading,
-        usersError
+        _getUsers
     ],
-    (users, loading, error) => {
-        if (!users || loading || error) {
-            return [];
-        }
-
+    (users) => {
         return users;
     }
 )

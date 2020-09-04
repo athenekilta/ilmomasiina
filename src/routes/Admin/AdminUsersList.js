@@ -82,23 +82,28 @@ class AdminUserList extends React.Component {
     }
 
     render() {
+        const { usersLoading, usersError, users } = this.props;
         return (
             <div className="container">
                 <Link to={`${PREFIX_URL}/admin`} style={{ margin: 0 }}>
                     &#8592; Takaisin
             </Link>
                 <h1>Käyttäjien hallinta</h1>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Sähköposti</th>
-                            <th>Toiminnot</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.renderUserRows()}
-                    </tbody>
-                </table>
+                {usersLoading && <p>Ladataan...</p>}
+                {usersError && <p>Käyttäjien haku epäonnistui</p>}
+                {users &&
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Sähköposti</th>
+                                <th>Toiminnot</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.renderUserRows()}
+                        </tbody>
+                    </table>
+                }
                 <h1>Luo uusi käyttäjä</h1>
                 <UserForm onSubmit={this.createUser} loading={this.state.userFormLoading} />
 
