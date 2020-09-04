@@ -31,12 +31,17 @@ export const setDeleted = () => (dispatch) => {
   dispatch({ type: ActionTypes.SET_DELETED });
 };
 
+export const resetEventState = () => (dispatch) => {
+  dispatch({ type: ActionTypes.RESET });
+};
+
 export const getSignupAndEventAsync = (id, editToken) => (dispatch) => {
   dispatch(setLoading());
 
-  return request('GET', `/api/signups/${id}?editToken=${editToken}`)
+  return request('GET', `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`)
     .then(res => JSON.parse(res.body))
     .then((res) => {
+      if (res.signup === null) throw new Error('signup not found');
       dispatch(setSignupAndEvent(res.signup, res.event));
       return true;
     })
@@ -49,7 +54,7 @@ export const getSignupAndEventAsync = (id, editToken) => (dispatch) => {
 
 export const deleteSignupAsync = (id, editToken) => (dispatch) => {
   dispatch(setLoading());
-  return request('DELETE', `/api/signups/${id}?editToken=${editToken}`)
+  return request('DELETE', `${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`)
     .then(res => JSON.parse(res.body))
     .then((res) => {
       dispatch(setDeleted());

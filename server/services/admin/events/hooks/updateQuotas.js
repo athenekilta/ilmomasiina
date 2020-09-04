@@ -5,26 +5,33 @@ module.exports = () => (hook) => {
 
   const eventId = hook.result.id;
   const quotasToAdd = hook.data.quota.map(quota => _.merge(quota, { eventId }));
-
   const quotaModel = hook.app.get('models').quota;
 
-  return quotaModel.bulkCreate(quotasToAdd, { updateOnDuplicate: true })
-    .then(() => quotaModel.findAll({
-      where: { eventId },
-      include: [{
-        attributes: ['firstName', 'lastName', 'createdAt'],
-        model: sequelize.models.signup,
-        // ... and answers of signups
-        include: [
-          {
-            attributes: ['questionId', 'answer'],
-            model: sequelize.models.answer,
-          },
-        ],
-      }],
-    })
-    .then((quota) => {
-      hook.result.dataValues.quota = quota;
-      return hook;
-    }));
+  return sequelize.transaction(t => {
+    return quotaModel.destroy({
+      where: { eventId }
+    }, { transaction: t }).then(() => {
+      return quotaModel.bulkCreate(quotasToAdd, { updateOnDuplicate: true }, { transaction: t })
+        .then(() => {
+          return quotaModel.findAll({
+            where: {
+              eventId,
+              deletedAt: null
+            },
+            include: [{
+              attributes: ['firstName', 'lastName', 'email', 'createdAt'],
+              model: sequelize.models.signup,
+              required: false
+            }]
+          }, { transaction: t });
+        });
+    });
+  }).then((quota) => {
+    hook.result.dataValues.quota = quota;
+    return hook;
+  }).catch((error => {
+    throw new Error('Quota update failed');
+  }));
+
+
 };

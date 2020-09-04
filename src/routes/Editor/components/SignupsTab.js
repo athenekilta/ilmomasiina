@@ -1,64 +1,102 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import moment from 'moment-timezone';
+import SignupList from './SignupList';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import '../Editor.scss';
+import { CSVLink } from "react-csv";
+import { WAITLIST, OPENQUOTA, getSignupsArrayFormatted } from '../../../utils/signupUtils';
 
 class SignupsTab extends React.Component {
   static propTypes = {
-    onDataChange: PropTypes.func.isRequired,
     event: PropTypes.object,
   };
 
-  // constructor(props) {
-  //   super(props);
-  // }
+  renderTable(signups) {
+    const { event } = this.props;
+    return (
+      <table className='table table-condensed table-responsive'>
+        <thead>
+          <tr className="active">
+            <th key="position">#</th>
+            <th key="firstName">Etunimi</th>
+            <th key="lastName">Sukunimi</th>
+            <th key="email">Sähköposti</th>
+            <th key="quota">Kiintiö</th>
+            {_.map(event.questions, q => {
+              return <th key={q.id}>{q.question}</th>;
+            })}
+            <th key="timestamp">Ilmoittautumisaika</th>
+            <th key="delete"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {_.map(signups, (s, index) => {
+            return (
+              <tr key={s.id}>
+                <td key="position">{index + 1}.</td>
+                <td key="firstName">{s['Etunimi']}</td>
+                <td key="lastName">{s['Sukunimi']}</td>
+                <td key="email">{s['Sähköposti']}</td>
+                <td key="quota">{s['Kiintiö']}</td>
+                {_.map(event.questions, q => {
+                  const answer = s[q.question];
+                  return <td key={q.id}>{answer}</td>;
+                })}
+                <td key="timestamp">{s['Ilmoittautumisaika']}</td>
+                <td key="delete"><button className="btn btn-danger" onClick={() => {
+                  var confirmation = window.confirm("Oletko varma? Poistamista ei voi perua.")
+                  if (confirmation) {
+                    this.props.deleteSignup(s.id, event.id)
+                  }
+
+                }}>Poista</button></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
+  }
 
   render() {
-    const { questions, quota } = this.props.event;
+    const { event } = this.props
+    const signups = getSignupsArrayFormatted(event);
 
-    if (!questions || !quota) return null;
+    if (!signups || signups.length === 0) {
+      return (
+        <div>
+          <p>Tapahtumaan ei vielä ole yhtään ilmoittautumista. Kun tapahtumaan tulee ilmoittautumisia, näet ne tästä.</p>
+        </div>
+      );
+    }
 
-    const data = quota.flatMap(q => q.signups.map((signup) => {
-      const base = {
-        firstName: signup.firstName,
-        lastName: signup.lastName,
-        timestamp: signup.createdAt,
-        quota: q.title,
-      };
+    return (
+      <div>
+        <CSVLink
+          data={signups}
+          separator={"\t"}
+          filename={event.title + " osallistujalista"}
+        >
+          Lataa osallistujalista
+        </CSVLink>
+        <br />
+        <br />
+        {this.renderTable(signups)}
 
-      const answers = Object.assign(...signup.answers.map(answer => ({
-        [`answer${answer.questionId}`]: answer.answer,
-      })));
-
-      return { ...base, ...answers };
-    }));
-
-    const baseColumns = [{
-      Header: 'Kiintiö',
-      accessor: 'quota',
-    },
-    {
-      Header: 'Etunimi',
-      accessor: 'firstName',
-    },
-    {
-      Header: 'Sukunimi',
-      accessor: 'lastName',
-    },
-    {
-      Header: 'Ilmoittautumisaika',
-      accessor: 'timestamp',
-    }];
-
-    const columns = baseColumns.concat(questions.map(q => ({ Header: q.question, accessor: `answer${q.id}` })));
-
-    return <ReactTable
-      data={data}
-      columns={columns}
-      defaultPageSize={100}
-    />;
+        {/* {this.renderSignupLists(this.props.event)}
+        {event.openQuotaSize ? (
+          <SignupList
+            title={'Avoin kiintiö'}
+            questions={_.filter(formattedQuestions, 'public')}
+            rows={openQuota}
+            key={'openQuota'}
+          />
+        ) : null} */}
+      </div>
+    );
   }
 }
 

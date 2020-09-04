@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const EmailService = require('../../../mail/');
-
+const moment = require('moment');
+const config = require('../../../../config/ilmomasiina.config.js');
 module.exports = () => (hook) => {
   const models = hook.app.get('models');
 
@@ -40,8 +41,10 @@ module.exports = () => (hook) => {
         .then((event) => {
           const params = {
             answers: fields,
+            edited: userAnswers.some(a => a.createdAt.getTime() !== a.updatedAt.getTime()),
+            date: moment(event.dataValues.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm'),
             event: event.dataValues,
-            cancelLink: `http://localhost:3000/signup/${hook.result.id}/${hook.data.editToken}`,
+            cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
           };
           // console.log(hook.data);
           // console.log('=====CONFIRMATION MAIL DISABLED!=====');

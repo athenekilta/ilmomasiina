@@ -8,20 +8,26 @@ const answer = require('./answer');
 const user = require('./user');
 
 const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
-const sequelizeHeroku = require('sequelize-heroku');
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
 
   let sequelize;
-  if (process.env.NODE_ENV === 'production') {
-    sequelize = sequelizeHeroku.connect(Sequelize);
-  } else {
-    sequelize = new Sequelize(config.mysqlDatabase, config.mysqlUser, config.mysqlPassword, {
-      host: 'localhost',
-      dialect: 'mysql',
+  if (process.env.CLEARDB_DATABASE_URL) {
+    sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, {
       logging: false,
     });
+  } else {
+    sequelize = new Sequelize(
+      config.mysqlDatabase,
+      config.mysqlUser,
+      config.mysqlPassword,
+      {
+        host: 'localhost',
+        dialect: 'mysql',
+        logging: false,
+      },
+    );
   }
 
   if (sequelize) {
@@ -29,11 +35,13 @@ module.exports = function () {
       .authenticate()
       .then(() => {
         const cfg = sequelize.connectionManager.config;
-        console.log(`sequelize-heroku: Connected to ${cfg.host} as ${cfg.username}.`);
+        console.log(`Sequelize: Connected to ${cfg.host} as ${cfg.username}.`);
       })
-      .catch((err) => {
+      .catch(err => {
         const cfg = sequelize.connectionManager.config;
-        console.log(`Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`);
+        console.log(
+          `Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`,
+        );
       });
   }
 
@@ -79,7 +87,7 @@ module.exports = function () {
 
   app.set('models', models);
 
-  Object.keys(sequelize.models).forEach((modelName) => {
+  Object.keys(sequelize.models).forEach(modelName => {
     if ('associate' in sequelize.models[modelName]) {
       sequelize.models[modelName].associate();
     }
