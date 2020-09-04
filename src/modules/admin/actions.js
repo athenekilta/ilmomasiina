@@ -21,6 +21,26 @@ export const setEventsError = () => dispatch => {
   });
 };
 
+export const setUsers = users => dispatch => {
+  dispatch({
+    type: ActionTypes.SET_USERS,
+    payload: users,
+  });
+};
+
+export const setUsersLoading = () => dispatch => {
+  dispatch({
+    type: ActionTypes.SET_USERS_LOADING,
+  });
+};
+
+export const setUsersError = () => dispatch => {
+  dispatch({
+    type: ActionTypes.SET_USERS_ERROR,
+  });
+};
+
+
 export const getEventsAsync = () => (dispatch, getState) => {
   dispatch(setEventsLoading());
 
@@ -39,15 +59,35 @@ export const getEventsAsync = () => (dispatch, getState) => {
     });
 };
 
+export const getUsersAsync = () => (dispatch, getState) => {
+  dispatch(setUsersLoading());
+
+  const accessToken = getState().admin.accessToken;
+
+  request('GET', `${PREFIX_URL}/api/users`, {
+    headers: { Authorization: accessToken },
+  })
+    .then(res => JSON.parse(res.body))
+    .then(res => {
+      dispatch(setUsers(res));
+    })
+    .catch(error => {
+      console.error('Error in getUsersAsync', error);
+      dispatch(setUsersError());
+    });
+};
+
 export const createUserAsync = (data) => (dispatch, getState) => {
   const accessToken = getState().admin.accessToken;
-  console.log(email)
   return request('POST', `${PREFIX_URL}/api/users`, {
     headers: { Authorization: accessToken },
     json: { email: data.email }
   })
     .then(res => JSON.parse(res.body))
     .then(res => {
+      if (res.code == 400) {
+        return false
+      }
       return true
     })
     .catch(error => {
@@ -127,6 +167,21 @@ export const deleteEventAsync = id => (dispatch, getState) => {
     })
     .catch(error => {
       console.error('Error in deleteEventAsync', error);
+      return false;
+    });
+};
+
+export const deleteUserAsync = id => (dispatch, getState) => {
+  const accessToken = getState().admin.accessToken;
+
+  return request('DELETE', `${PREFIX_URL}/api/users/${id}`, {
+    headers: { Authorization: accessToken },
+  })
+    .then(res => {
+      return true;
+    })
+    .catch(error => {
+      console.error('Error in deleteUserAsync', error);
       return false;
     });
 };

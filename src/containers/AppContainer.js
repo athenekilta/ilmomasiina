@@ -13,6 +13,7 @@ import CoreLayout from '../layouts/CoreLayout';
 import requireAuth from './requireAuth';
 
 import Admin from '../routes/Admin/AdminEventsList';
+import AdminUsers from '../routes/Admin/AdminUsersList';
 import Editor from '../routes/Editor/Editor';
 import Events from '../routes/Events/EventList';
 import SingleEvent from '../routes/SingleEvent/SingleEvent';
@@ -45,6 +46,7 @@ class AppContainer extends Component {
                 <Route path={`${PREFIX_URL}/signup/:id/:editToken`} component={EditSignup} />
                 <Route path={`${PREFIX_URL}/login`} component={Login} />
                 <Route path={`${PREFIX_URL}/admin`} component={requireAuth(Admin)} />
+                <Route path={`${PREFIX_URL}/admin/users`} component={requireAuth(AdminUsers)} />
                 <Route path={`${PREFIX_URL}/admin/edit/:id`} component={requireAuth(Editor)} />
                 <Route path="*" component={PageNotFound} />
                 <Route />
