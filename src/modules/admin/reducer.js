@@ -1,12 +1,15 @@
-import * as ActionTypes from './actionTypes';
+import * as ActionTypes from "./actionTypes";
+import moment from 'moment';
 
 const initialState = {
   events: [],
   eventsLoading: false,
   eventsError: false,
   accessToken: null,
+  accessTokenExpires: null,
   loginLoading: false,
   loginError: false,
+  loggedIn: false,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -33,6 +36,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         accessToken: action.payload,
+        accessTokenExpires: moment(new Date()).add(60, 'm').toDate().toISOString(),
         loginLoading: false,
       };
     case ActionTypes.SET_LOGIN_LOADING:
@@ -46,6 +50,11 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loginLoading: false,
         loginError: true,
+      };
+    case ActionTypes.SET_LOGIN_STATUS:
+      return {
+        ...state,
+        loggedIn: action.payload,
       };
     case ActionTypes.CLEAR_STATE:
       return initialState;

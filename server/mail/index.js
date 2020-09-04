@@ -1,9 +1,12 @@
 const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
-const sgMail = require('@sendgrid/mail');
 const Email = require('email-templates');
 const path = require('path');
+const nodemailer = require('nodemailer')
 
-sgMail.setApiKey(ilmoconfig.sendgridApiKey);
+const transporter = nodemailer.createTransport({
+  host: 'smtp.ayy.fi',
+  port: 25,
+});
 
 const EmailService = {
   send: (to, subject, html) => {
@@ -14,14 +17,7 @@ const EmailService = {
       html,
     };
 
-    sgMail
-      .send(msg)
-      .then((res) => {
-        console.log('SUCCESS');
-      })
-      .catch((error) => {
-        console.log('ERROR', error);
-      });
+    return transporter.sendMail(msg);
   },
 
   sendConfirmationMail(to, params) {
@@ -34,11 +30,20 @@ const EmailService = {
         },
       },
     });
+    const brandedParams = {
+      ...params,
+      branding: {
+        footerText: ilmoconfig.brandingMailFooterText,
+        footerLink: ilmoconfig.brandingMailFooterLink,
+      },
+    };
 
-    return email.render('../server/mail/emails/confirmation/html', params).then((html) => {
-      const subject = `Ilmoittautumisvahvistus: ${params.event.title}`;
-      return EmailService.send(to, subject, html);
-    });
+    return email
+      .render('../server/mail/emails/confirmation/html', brandedParams)
+      .then(html => {
+        const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
+        return EmailService.send(to, subject, html);
+      });
   },
 
   sendNewUserMail(to, params) {
@@ -51,11 +56,21 @@ const EmailService = {
         },
       },
     });
+    const brandedParams = {
+      ...params,
+      branding: {
+        footerText: ilmoconfig.brandingMailFooterText,
+        footerLink: ilmoconfig.brandingMailFooterLink,
+        siteUrl: ilmoconfig.baseUrl,
+      },
+    };
 
-    return email.render('../server/mail/emails/newUser/html', params).then((html) => {
-      const subject = 'Käyttäjätunnukset Ilmomasiinaan';
-      return EmailService.send(to, subject, html);
-    });
+    return email
+      .render('../server/mail/emails/newUser/html', brandedParams)
+      .then(html => {
+        const subject = 'Käyttäjätunnukset Ilmomasiinaan';
+        return EmailService.send(to, subject, html);
+      });
   },
 };
 

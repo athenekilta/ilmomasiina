@@ -1,10 +1,21 @@
 .quota {
   margin: 1em 0 3em;
+  overflow-x: scroll;
+
   table {
     font-size: 0.9em;
+
     tr {
-      td:first-child {
-        width: 4em;
+      th:first-child {
+        min-width: 40px;
+      }
+
+      th {
+        min-width: 120px;
+      }
+
+      th:last-child {
+        min-width: 180px;
       }
     }
   }
@@ -12,12 +23,12 @@
 
 td {
   span.hover {
-    display: none;
+      visibility: hidden;
   }
 
   &:hover {
     span.hover {
-      display: inline;
+    visibility: visible;
     }
   }
 }
