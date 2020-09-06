@@ -9,7 +9,7 @@ const user = require('./user');
 
 const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
 
-module.exports = function() {
+module.exports = function () {
   const app = this;
 
   let sequelize;
