@@ -3,6 +3,7 @@
 MYSQL_USER=your-mysql-user
 MYSQL_PASSWORD=your-mysql-password
 MYSQL_DATABASE=ilmomasiina
+MYSQL_HOST=localhost
 ADMIN_REGISTRATION_ALLOWED=true
 
 EDIT_TOKEN_SALT=randomly-generated-token

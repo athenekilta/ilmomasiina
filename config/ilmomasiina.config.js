@@ -4,6 +4,7 @@ const config = {
   mysqlUser: process.env.MYSQL_USER,
   mysqlPassword: process.env.MYSQL_PASSWORD,
   mysqlDatabase: process.env.MYSQL_DATABASE,
+  mysqlHost: process.env.MYSQL_HOST,
   editTokenSalt: process.env.EDIT_TOKEN_SALT,
   mailFrom: process.env.MAIL_FROM,
   feathersAuthSecret: process.env.FEATHERS_AUTH_SECRET,

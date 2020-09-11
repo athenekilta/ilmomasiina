@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+    database:
+        image: mysql:8
+        command: --default-authentication-plugin=mysql_native_password
+        env_file:
+            - .env
+    backend:
+        # Use Dockerfile from root directory
+        build: .
+        environment: 
+            - MYSQL_HOST=database
+        env_file:
+            - .env
+        ports:
+            - "3000:3000"
