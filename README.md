@@ -23,6 +23,7 @@ Ilmomasiina is Athene's event registration system.
 - MySQL `^8.0`
 
 These are automatically installed when you use the Docker container.
+
 ## Using Docker container
 In project root directory
 ```bash
@@ -32,9 +33,11 @@ This should build and run the environment so that it is accesible at [localhost:
 
 ### Create fake data
 Use `docker exec ilmomasiina_backend_1 npm run create-fake-data` to create some data to dockerized Ilmomasiina. The server does not like an empty database, so this is a really good idea to do when first starting the server. 
-## MYSQL Setup (Mac)
 
+## MySQL Setup
 Only follow this if you don't use the Docker container.
+
+### Mac
 1. Install `mysql` (8.x) with Homebrew (https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e)
 2. Start the mysql service with `brew services start mysql`
 3. Open the mysql terminal with `mysql -u root`
@@ -42,8 +45,7 @@ Only follow this if you don't use the Docker container.
 5. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
 6. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
 
-### MYSQL Setup (Ubuntu)
-Only follow this if you don't use the Docker container.
+### Ubuntu
 1. Install mysql with `sudo apt install mysql-server`
 2. Service should start automatically
 3. Same as with Mac, but use `sudo mysql -u root`
@@ -54,11 +56,15 @@ Only follow this if you don't use the Docker container.
 
 ## Getting started
 If you are using the Docker container, only follow step 1 as rest are automatically executed.
+
 1. Create an `.env` file at the root of the project. For the contents of the .env file, check [ENV.MD](./ENV.MD)
 2. `npm install`
 3. `npm start`
 
 **Optional**: You can create mockup data for development by running `npm run create-fake-data`. During development, database can be resetted with `npm run reset-db`.
+
+### Troubleshooting (Ubuntu)
+If `npm start` gives error `Error: You must provide a 'secret' in your authentication configuration`, it probably means that the `.env` file is not loaded correctly. A quick fix for this is to run `source .env`.
 
 ## Mailgun setup
 
