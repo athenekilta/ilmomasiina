@@ -20,7 +20,6 @@ const events = [
     registrationEndDate: moment(now).add(5, 'days'),
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
-    homepage: '',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
     signupsPublic: 1,
