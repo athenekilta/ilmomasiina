@@ -51,7 +51,10 @@ class SingleEvent extends React.Component {
     this.props.updateEventAsync(this.props.params.id);
   }
   openForm(quota) {
-    this.props.attachPositionAsync(quota.id);
+    const { signup } = this.props;
+    if (!signup || !signup.editToken || signup.quotaId !== quota.id) {
+      this.props.attachPositionAsync(quota.id);
+    }
     this.setState({ formOpened: true });
   }
 
