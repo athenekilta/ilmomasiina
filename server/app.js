@@ -13,6 +13,7 @@ const enforce = require('express-sslify');
 const models = require('./models');
 const services = require('./services');
 const deleteUnconfirmedEntries = require('./cron-delete-unconfirmed-entries');
+const anonymizeOldSignups = require('./cron-anonymize-old-signups');
 
 const app = feathers();
 
@@ -32,10 +33,13 @@ app.get('sequelize').sync();
  * cron script that removes signups that have not been confirmed within 30 minutes
  * runs every minute
  */
-
 cron.schedule('* * * * *', () => {
-  console.log('running a task every minute');
   deleteUnconfirmedEntries(app);
+});
+
+// Anonymize old signups daily at 8am
+cron.schedule('0 8 * * *', () => {
+  anonymizeOldSignups(app);
 });
 
 if (project.env === 'development') {
