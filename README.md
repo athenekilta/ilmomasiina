@@ -28,8 +28,9 @@ Ilmomasiina is Athene's event registration system.
 2. Start the mysql service with `brew services start mysql`
 3. Open the mysql terminal with `mysql -u root`
 4. In the mysql terminal, create a new user e.g. `CREATE USER 'juuso'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';`
-5. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
-6. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
+5. Fix permissions (this is probably too permissive, but it works): `GRANT ALL PRIVILEGES ON *.* TO 'sampo'@'localhost' WITH GRANT OPTION;`
+6. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
+7. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
 
 ### Ubuntu
 1. Install mysql with `sudo apt install mysql-server`
