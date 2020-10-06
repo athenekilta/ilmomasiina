@@ -52,7 +52,7 @@ class SingleEvent extends React.Component {
   }
   openForm(quota) {
     const { signup } = this.props;
-    const signupTimePassed = moment(signup.createdAt).isBefore(moment().subtract(20, 'seconds'))
+    const signupTimePassed = moment(signup.createdAt).isBefore(moment().subtract(30, 'minutes'))
 
     if (!signup || !signup.editToken || signup.quotaId !== quota.id || signupTimePassed) {
       this.props.attachPositionAsync(quota.id);
