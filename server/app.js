@@ -37,6 +37,7 @@ cron.schedule('* * * * *', () => {
   deleteUnconfirmedEntries(app);
 });
 
+// Anonymize old signups daily at 8am
 cron.schedule('0 8 * * *', () => {
   anonymizeOldSignups(app);
 });
