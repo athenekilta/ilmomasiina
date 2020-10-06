@@ -24,7 +24,7 @@ const events = [
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Columbia Road -excu',
@@ -39,7 +39,7 @@ const events = [
     facebooklink: '',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Ystävänpäiväsitsit',
@@ -54,7 +54,7 @@ const events = [
     facebooklink: '',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Athene Alumni',
@@ -62,6 +62,17 @@ const events = [
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
+  },
+  {
+    title: 'Vanha tapahtuma',
+    date: moment(now).add(15, 'days'),
+    registrationStartDate: moment(now).subtract(1, 'days'),
+    registrationEndDate: moment(now).add(10, 'days'),
+    description: 'Tällä voi testata vanhojen tapahtumien automaattista sensurointia. Tämän tapahtuman ilmoittautuneiden nimet ja sähköpostit pitäisi sensuroitua minuutin kuluttua skriptin ajamisesta.',
+    facebooklink: 'https://www.facebook.com/events/1715883881987829/',
+    draft: 0,
+    confirmationMessage: faker.lorem.paragraphs(),
+    signupsPublic: 1,
   },
 ];
 
@@ -107,6 +118,12 @@ const quotas = [
     eventId: 4,
     title: 'Athene Alumni',
     going: 5,
+  },
+  {
+    eventId: 5,
+    title: 'Vanha tapahtuma',
+    going: 5,
+    old: true,
   },
 ];
 
@@ -170,7 +187,7 @@ const answers = [];
 
 let signupIndex = 0;
 
-faker.locale = 'pl';
+faker.locale = 'en';
 
 const createAnswers = (eventId, signupId) => {
   const questionsToAnswer = _.filter(questions, ['eventId', eventId]) || [];
@@ -188,11 +205,11 @@ const createAnswers = (eventId, signupId) => {
 };
 
 quotas.map((quota, quotaIndex) => {
+  const createdAt = quota.old ? moment().subtract('6', 'months').add('1', 'minutes') : moment().subtract('5', 'minutes');
   for (let i = 0; i < quota.going; i += 1) {
     signups.push({
       quotaId: quotaIndex + 1,
-      createdAt: moment()
-        .subtract('5', 'minutes'),
+      createdAt,
       confirmedAt: moment()
         .subtract('1', 'minutes'),
       firstName: faker.name.firstName(),

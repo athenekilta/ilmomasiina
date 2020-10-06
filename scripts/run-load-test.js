@@ -81,8 +81,7 @@ seq.models.event
   .then(() => seq.models.question.bulkCreate(questions))
   .then(() =>
     console.log(
-      `${events.length} events with ${quotas.length} quotas and ${
-        questions.length
+      `${events.length} events with ${quotas.length} quotas and ${questions.length
       } questions created.`,
     ),
   )
@@ -96,7 +95,7 @@ setTimeout(function delay() {
     setTimeout(function timer() {
       axios
         .post(apiUrl, { quotaId: 1 })
-        .then(function(response) {
+        .then(function (response) {
           console.log('Got edit token ' + response.data.editToken);
           let postData = {
             answers: [],
@@ -107,14 +106,14 @@ setTimeout(function delay() {
           };
           axios
             .patch(apiUrl + response.data.id, postData)
-            .then(function(response) {
+            .then(function (response) {
               console.log('Success');
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.log(error);
             });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     }, i * 100);
@@ -123,7 +122,7 @@ setTimeout(function delay() {
     setTimeout(function timer() {
       axios
         .post(apiUrl, { quotaId: 2 })
-        .then(function(response) {
+        .then(function (response) {
           console.log('Got edit token ' + response.data.editToken);
           let postData = {
             answers: [],
@@ -134,14 +133,14 @@ setTimeout(function delay() {
           };
           axios
             .patch(apiUrl + response.data.id, postData)
-            .then(function(response) {
+            .then(function (response) {
               console.log('Success');
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.log(error);
             });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     }, i * 100);
