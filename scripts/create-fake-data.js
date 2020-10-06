@@ -212,8 +212,8 @@ quotas.map((quota, quotaIndex) => {
       createdAt,
       confirmedAt: moment()
         .subtract('1', 'minutes'),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+      firstName: i === 0 ? 'Deleted' : faker.name.firstName(),
+      lastName: i === 0 ? 'Deleted' : faker.name.lastName(),
       email: faker.internet.email(),
     });
 

@@ -10,11 +10,16 @@ module.exports = (app) => {
     .findAll({
       where: {
         $and: {
-          firstName: {
-            [sequelize.Op.ne]: redactionKey,
-          },
-          lastName: {
-            [sequelize.Op.ne]: redactionKey,
+          $or: {
+              firstName: {
+                [sequelize.Op.ne]: redactionKey,
+            },
+            lastName: {
+              [sequelize.Op.ne]: redactionKey,
+            },
+            email: {
+              [sequelize.Op.not]: null,
+            },
           },
           createdAt: {
             $lt: moment()
