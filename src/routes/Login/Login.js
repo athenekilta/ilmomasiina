@@ -32,7 +32,7 @@ class Login extends React.Component {
             value={this.state.email}
             onChange={(key, value) => this.setState({ email: value })}
             name="email"
-            label="Sähköposti"
+            label="Sähköposti / Email"
             title="Sähköposti"
             placeholder="filip@fyysikko.fi"
             layout="vertical"
@@ -42,7 +42,7 @@ class Login extends React.Component {
             value={this.state.password}
             onChange={(key, value) => this.setState({ password: value })}
             name="password"
-            label="Salasana"
+            label="Salasana / Password"
             title="Salasana"
             type="password"
             placeholder="••••••••"

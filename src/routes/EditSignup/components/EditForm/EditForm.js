@@ -179,7 +179,7 @@ export class EditForm extends React.Component {
                 />
               </div>
               <Link className="btn btn-link pull-right" to={`${PREFIX_URL}/`} >
-                Peruuta
+                Peruuta / Cancel
               </Link>
             </Formsy.Form>
           </div>

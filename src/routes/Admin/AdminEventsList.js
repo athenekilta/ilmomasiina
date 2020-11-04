@@ -91,7 +91,7 @@ class AdminEventList extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1>Hallinta</h1>
+        <h1>Hallinta / Management</h1>
         <table className="table">
           <thead>
             <tr>
