@@ -14,7 +14,6 @@ module.exports = () => hook => {
       'description',
       'price',
       'location',
-      'homepage',
       'webpageUrl',
       'facebookUrl',
       'draft',

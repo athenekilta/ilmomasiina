@@ -1,5 +1,6 @@
 const authentication = require('feathers-authentication');
 const deleteSignup = require('./deleteSignup.js');
+const sendEmailToQueue = require('../../../signup/hooks/sendEmailToQueue');
 const hooks = require('feathers-hooks-common');
 
 exports.before = {
@@ -9,7 +10,7 @@ exports.before = {
     create: [hooks.disable('external')],
     update: [hooks.disable('external')],
     patch: [hooks.disable('external')],
-    remove: [deleteSignup()],
+    remove: [deleteSignup(), sendEmailToQueue()],
 
 };
 
