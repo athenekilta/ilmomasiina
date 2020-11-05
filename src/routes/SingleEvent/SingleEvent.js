@@ -274,7 +274,8 @@ class SingleEvent extends React.Component {
                     ) : null}
                   {event.location ? (
                     <p>
-                      <strong>Sijainti / Location:</strong> {event.location}
+                      <strong>Sijainti / Location:</strong>{' '}
+                      <a href={`https://www.google.com/maps?q=${event.location}`}>{event.location}</a>
                     </p>
                     ) : null}
                   {event.price ? (
@@ -290,15 +291,18 @@ class SingleEvent extends React.Component {
                       </a>
                     </p>
                     ) : null}
-                  {event.facebook ? (
+                  {event.facebookUrl ? (
                     <p>
                       <strong>Facebook-tapahtuma / Facebook event:</strong>{' '}
-                      <a href={event.facebook} title="Facebook-tapahtuma">
-                        {event.facebook}
+                      <a href={event.facebookUrl} title="Facebook-tapahtuma">
+                        {event.facebookUrl}
                       </a>
                     </p>
                     ) : null}
                 </div>
+                {event.image ? (
+                  <img src={event.image} alt="Banner" />
+                  ) : null}
                 <p>{nl2br(event.description)}</p>
               </div>
               <div className="col-xs-12 col-sm-4 pull-right">

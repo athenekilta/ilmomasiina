@@ -3,9 +3,15 @@
 .navbar-default {
   border: none !important;
 
-  a.navbar-brand,
-  a.navbar-brand:focus,
-  a.navbar-brand:hover {
+  // Guild logo
+  img {
+    max-width: 5.2rem;
+    float: left;
+    vertical-align: middle;
+  }
+
+  a.navbar-brand {
+    transition: 0.5s;
     color: #fff;
     font-size: 18px;
     font-family: $font-family-sans-serif;
@@ -13,5 +19,11 @@
     //text-transform: uppercase;
     font-weight: 700;
     letter-spacing: 1px;
+    padding-right: 25px;
+  }
+
+  a.navbar-brand:focus,
+  a.navbar-brand:hover {
+    padding-right: 30px;
   }
 }

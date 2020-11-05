@@ -22,10 +22,11 @@ const events = [
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
     homepage: '',
+    image: 'https://lh5.googleusercontent.com/p/AF1QipNXIuSYpsHhMCSFJXPgz9FsxFqXtzdq45WYXZCh=w408-h255-k-no',
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Columbia Road -excu',
@@ -37,10 +38,11 @@ const events = [
     price: '0 €',
     location: 'Eerikinkatu 5, Helsinki',
     homepage: 'http://crexcu2017.wordpress.com/',
+    image: 'https://lh5.googleusercontent.com/p/AF1QipNXIuSYpsHhMCSFJXPgz9FsxFqXtzdq45WYXZCh=w408-h255-k-no',
     facebooklink: '',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Ystävänpäiväsitsit',
@@ -52,10 +54,11 @@ const events = [
     price: '14 € (12 € alkoholiton)',
     location: 'Smökki',
     homepage: 'http://crexcu2017.wordpress.com/',
+    image: 'https://lh5.googleusercontent.com/p/AF1QipNXIuSYpsHhMCSFJXPgz9FsxFqXtzdq45WYXZCh=w408-h255-k-no',
     facebooklink: '',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Athene Alumni',

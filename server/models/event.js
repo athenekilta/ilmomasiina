@@ -46,6 +46,9 @@ module.exports = function () {
       webpageUrl: {
         type: Sequelize.STRING,
       },
+      image: {
+        type: Sequelize.STRING,
+      },
       draft: {
         type: Sequelize.BOOLEAN,
         allowNull: false,

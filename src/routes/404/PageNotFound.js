@@ -3,7 +3,8 @@ import { IndexLink } from 'react-router';
 
 const PageNotFound = () => (
   <div className="container text-center">
-    <h1>Error 404 😢</h1>
+    <p style={{ justifyContent: 'center', alignItems: 'center', fontSize: 30 }}>😢</p>
+    <h1>Error 404</h1>
     <p>Sivua ei löydy. Tapahtuma on varmaan vanhentunut ja poistettu näkyvistä.</p>
     <p>Page not found. The event has probably expired or was removed.</p>
     <p>
