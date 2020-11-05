@@ -7,9 +7,43 @@ html {
   height: 100%;
 }
 
+.btn {
+  transition: all 0.5s;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.btn:hover span {
+  padding-right: 25px;
+}
+
+.btn:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
 .btn[disabled]{
   opacity: 0.35;
 }
+
+.navbar img {
+  max-width: 3rem;
+}
+
 #root {
   h1 {
     font-weight: 700;
