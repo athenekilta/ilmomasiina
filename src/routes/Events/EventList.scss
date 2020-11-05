@@ -18,6 +18,11 @@ table.eventlist {
     td.signup { color: $red; }
     opacity: 0.45;
   }
+
+  img {
+    max-width: 30vw;
+    max-height: 600;
+  }
 }
 
 @media (min-width: $screen-md-min) {
@@ -74,6 +79,11 @@ table.eventlist {
           font-size: 0.85em;
         }
       }
+    }
+
+    img {
+      max-width: 90vw;
+      max-height: 200;
     }
   }
 }
