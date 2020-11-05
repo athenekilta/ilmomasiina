@@ -82,7 +82,7 @@ class SingleEvent extends React.Component {
     const success = response === true;
     if (success) {
       toast.update(this.toastId, {
-        render: 'Ilmoittautuminen onnistui! / Registration failed!',
+        render: 'Ilmoittautuminen onnistui! / Registration succeeded!',
         type: toast.TYPE.SUCCESS,
         autoClose: 5000,
       });
@@ -228,6 +228,19 @@ class SingleEvent extends React.Component {
     );
   }
 
+  /*
+  facebookEventPhoto(eventId) {
+    FB.api(
+      `/${eventId}/photos`,
+      'GET',
+      {},
+      (response) => {
+        response.data
+      },
+    );
+  } */
+  // TODO Facebook event photo here https://developers.facebook.com/docs/graph-api/reference/v8.0/event/photos
+
   render() {
     const { event, signup } = this.props;
 
@@ -286,7 +299,6 @@ class SingleEvent extends React.Component {
                     </p>
                     ) : null}
                 </div>
-                // TODO Facebook event photo here https://developers.facebook.com/docs/graph-api/reference/v8.0/event/photos
                 <p>{nl2br(event.description)}</p>
               </div>
               <div className="col-xs-12 col-sm-4 pull-right">
