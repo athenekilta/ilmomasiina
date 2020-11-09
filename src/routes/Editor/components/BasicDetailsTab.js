@@ -53,6 +53,13 @@ class BasicDetailsTab extends React.Component {
           onChange={this.props.onDataChange}
         />
         <Input
+          name="image"
+          value={event.image ? event.image : ''}
+          label="Kuva / Photo (URL)"
+          type="text"
+          onChange={this.props.onDataChange}
+        />
+        <Input
           name="location"
           value={event.location ? event.location : ''}
           label="Paikka / Location"

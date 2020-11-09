@@ -1,13 +1,15 @@
-const moment = require('moment')
-module.exports = () => hook => {
+const moment = require('moment');
+
+module.exports = () => (hook) => {
   const sequelize = hook.app.get('sequelize');
 
-  const Op = sequelize.Op
+  const Op = sequelize.Op;
   hook.params.sequelize = {
     attributes: [
       'id',
       'title',
       'date',
+      'image',
       'registrationStartDate',
       'registrationEndDate',
       'openQuotaSize',
@@ -19,8 +21,8 @@ module.exports = () => hook => {
     where: {
       draft: 0,
       date: {
-        [Op.gt]: moment().subtract(1, 'days').toDate()
-      }
+        [Op.gt]: moment().subtract(1, 'days').toDate(),
+      },
     },
     // Include quotas of event and count of signups
     include: [

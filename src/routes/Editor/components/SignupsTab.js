@@ -73,8 +73,8 @@ class SignupsTab extends React.Component {
       <div>
         <CSVLink
           data={signups}
-          separator={'\t'}
-          filename={`${event.title} osallistujalista / participant list`}
+          separator={','}
+          filename={`${event.title}.csv`}
           className="btn btn-default"
         >
           Lataa osallistujalista / Download participants
