@@ -77,11 +77,11 @@ export const getUsersAsync = () => (dispatch, getState) => {
     });
 };
 
-export const createUserAsync = (data) => (dispatch, getState) => {
+export const createUserAsync = (email, password) => (dispatch, getState) => {
   const accessToken = getState().admin.accessToken;
   return request('POST', `${PREFIX_URL}/api/users`, {
     headers: { Authorization: accessToken },
-    json: { email: data.email }
+    json: { email: email, password: password }
   })
     .then(res => JSON.parse(res.body))
     .then(res => {

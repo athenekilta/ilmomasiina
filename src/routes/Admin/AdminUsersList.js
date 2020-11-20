@@ -33,13 +33,12 @@ class AdminUserList extends React.Component {
         this.props.updateUsers();
     }
 
-    createUser(email) {
-        console.log(email)
+    createUser(data) {
         this.setState({
             userFormLoading: true,
         }, async () => {
             try {
-                let success = await this.props.createUserAsync({ email });
+                let success = await this.props.createUserAsync(data.email, data.password );
                 if (success) {
                     toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 })
                 }
