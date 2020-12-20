@@ -23,7 +23,7 @@ module.exports = function() {
       config.mysqlUser,
       config.mysqlPassword,
       {
-        host: 'localhost',
+        host: config.mysqlHost,
         dialect: 'mysql',
         logging: false,
       },

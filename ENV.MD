@@ -1,8 +1,11 @@
-# Create .env file at the root of the project with the following contents
+# Create .env file at the root of the project with the following contents (notice that each value should be on their own line, so copy this file instead of copy-paste from GitHub's markdown view on browser)
 
 MYSQL_USER=your-mysql-user
 MYSQL_PASSWORD=your-mysql-password
 MYSQL_DATABASE=ilmomasiina
+MYSQL_HOST=localhost
+# MYSQL in Docker container requires some root password, by default use a random one
+MYSQL_RANDOM_ROOT_PASSWORD=true
 ADMIN_REGISTRATION_ALLOWED=true
 
 EDIT_TOKEN_SALT=randomly-generated-token
