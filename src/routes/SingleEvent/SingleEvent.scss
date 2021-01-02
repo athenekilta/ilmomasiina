@@ -27,5 +27,17 @@
   .singleEventContainer {
     overflow: hidden;
     word-break: break-word;
+
+    img {
+      max-height: 22em;
+      max-width: 38vw;
+    }
+
+    @media (max-width: 768px) {
+      img {
+        max-height: 22em;
+        max-width: 90vw;
+      }
+    }
   }
 }

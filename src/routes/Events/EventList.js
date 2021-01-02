@@ -16,6 +16,7 @@ class TableRow extends React.Component {
     title: PropTypes.string.isRequired,
     date: PropTypes.string,
     link: PropTypes.string,
+    image: PropTypes.string,
     signupLabel: PropTypes.string,
     className: PropTypes.string,
     signups: PropTypes.number,
@@ -26,6 +27,7 @@ class TableRow extends React.Component {
     const {
       title,
       link,
+      image,
       date,
       signupLabel,
       signups,
@@ -36,7 +38,11 @@ class TableRow extends React.Component {
     return (
       <tr className={className}>
         <td key="title" className="title">
-          {link ? <Link to={link}>{title}</Link> : title}
+          {link ? <Link to={link}>{title}<br />
+            {image ? (
+              <img src={image} alt="Banner" />
+          ) : null}</Link> : title}
+
         </td>
         <td key="date" className="date">
           {date ? moment(date).format('DD.MM.YYYY') : ''}
@@ -107,6 +113,7 @@ class EventList extends React.Component {
         <TableRow
           title={event.title}
           link={`${PREFIX_URL}/event/${event.id}`}
+          image={event.image}
           date={event.date}
           signupLabel={eventState.label}
           signups={

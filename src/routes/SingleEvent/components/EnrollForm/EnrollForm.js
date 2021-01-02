@@ -191,7 +191,7 @@ export class EnrollForm extends React.Component {
                 />
               </div>
               <a className="btn btn-link pull-right" onClick={() => this.props.closeForm()}>
-                Peruuta
+                Peruuta / Cancel
               </a>
             </Formsy.Form>
           </div>

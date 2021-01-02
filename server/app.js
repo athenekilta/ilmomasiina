@@ -27,7 +27,7 @@ app
   .configure(services);
 
 // Create tables if not exist
-app.get('sequelize').sync();
+app.get('sequelize').sync({ alter: { drop: false } });
 
 /*
  * cron script that removes signups that have not been confirmed within 30 minutes
