@@ -109,8 +109,13 @@ class AdminEventList extends React.Component {
         <Link to={`${PREFIX_URL}/admin/edit/new`} className="btn btn-default">
           + Uusi tapahtuma / New event
         </Link>
-        <h1>Luo uusi käyttäjä / New account</h1>
-        <UserForm onSubmit={this.createUser} loading={this.state.userFormLoading} />
+        <div>
+          <Link to={`${PREFIX_URL}/admin/users`} className="btn btn-default">
+            Käyttäjien hallintapaneeli / Account control panel
+        </Link>
+        </div>
+
+
       </div>
     );
   }

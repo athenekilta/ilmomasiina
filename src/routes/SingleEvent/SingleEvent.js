@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import nl2br from 'react-nl2br';
 import _ from 'lodash';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
+import ReactAutolinker from 'react-autolinker';
+
 import * as SingleEventActions from '../../modules/singleEvent/actions';
 import SignupButton from './components/SignupButton';
 import SignupList from './components/SignupList';
@@ -283,13 +284,13 @@ class SingleEvent extends React.Component {
                       <strong>Hinta / Price:</strong> {event.price}
                     </p>
                     ) : null}
-                  {event.homepage ? (
-                    <p>
-                      <strong>Kotisivut / Homepage:</strong>{' '}
-                      <a href={event.homepage} title="Kotisivut">
-                        {event.homepage}
-                      </a>
-                    </p>
+                    {event.webpageUrl ? (
+                      <p>
+                        <strong>Kotisivut / Homepage:</strong>{' '}
+                        <a href={event.webpageUrl} title="Kotisivut">
+                          {event.webpageUrl}
+                        </a>
+                      </p>
                     ) : null}
                   {event.facebookUrl ? (
                     <p>
@@ -299,6 +300,10 @@ class SingleEvent extends React.Component {
                       </a>
                     </p>
                     ) : null}
+                  </div>
+                  <p className="description">
+                    <ReactAutolinker text={event.description} options={{ newWindow: true, phone: false, mention: false, hashtag: false }} />
+                  </p>
                 </div>
                 {event.image ? (
                   <img src={event.image} alt="Banner" />
