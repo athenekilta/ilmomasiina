@@ -37,6 +37,9 @@ module.exports = function () {
       location: {
         type: Sequelize.STRING,
       },
+      homepage: {
+        type: Sequelize.STRING,
+      },
       facebookUrl: {
         type: Sequelize.STRING,
       },
