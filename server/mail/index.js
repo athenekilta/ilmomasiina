@@ -17,7 +17,10 @@ const EmailService = {
       html,
     };
 
-    return transporter.sendMail(msg);
+    mailgun.messages().send(msg, (error, body) => {
+      console.log(error);
+      console.log(body);
+    });
   },
 
   sendConfirmationMail(to, params) {
