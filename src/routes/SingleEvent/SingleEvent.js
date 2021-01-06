@@ -5,7 +5,6 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import ReactAutolinker from 'react-autolinker';
-
 import * as SingleEventActions from '../../modules/singleEvent/actions';
 import SignupButton from './components/SignupButton';
 import SignupList from './components/SignupList';
@@ -284,13 +283,13 @@ class SingleEvent extends React.Component {
                       <strong>Hinta / Price:</strong> {event.price}
                     </p>
                     ) : null}
-                    {event.webpageUrl ? (
-                      <p>
-                        <strong>Kotisivut / Homepage:</strong>{' '}
-                        <a href={event.webpageUrl} title="Kotisivut">
-                          {event.webpageUrl}
-                        </a>
-                      </p>
+                  {event.webpageUrl ? (
+                    <p>
+                      <strong>Kotisivut / Homepage:</strong>{' '}
+                      <a href={event.webpageUrl} title="Kotisivut">
+                        {event.webpageUrl}
+                      </a>
+                    </p>
                     ) : null}
                   {event.facebookUrl ? (
                     <p>
@@ -300,22 +299,21 @@ class SingleEvent extends React.Component {
                       </a>
                     </p>
                     ) : null}
-                  </div>
-                  <p className="description">
-                    <ReactAutolinker text={event.description} options={{ newWindow: true, phone: false, mention: false, hashtag: false }} />
-                  </p>
                 </div>
-                {event.image ? (
-                  <img src={event.image} alt="Banner" />
+                <p className="description">
+                  <ReactAutolinker text={event.description}
+                    options={{ newWindow: true, phone: false, mention: false, hashtag: false }} />
+                </p>
+              </div>
+              {event.image ? (
+                <img src={event.image} alt="Banner" />
                   ) : null}
-                <p>{nl2br(event.description)}</p>
-              </div>
-              <div className="col-xs-12 col-sm-4 pull-right">
-                {this.renderSignupButtons()}
-                {this.renderQuotaStatus()}
-              </div>
-              <div className="col-xs-12">{this.renderSignupLists()}</div>
             </div>
+            <div className="col-xs-12 col-sm-4 pull-right">
+              {this.renderSignupButtons()}
+              {this.renderQuotaStatus()}
+            </div>
+            <div className="col-xs-12">{this.renderSignupLists()}</div>
           </div>
           )
         }
