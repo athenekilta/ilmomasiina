@@ -5,6 +5,9 @@ const initialState = {
   events: [],
   eventsLoading: false,
   eventsError: false,
+  users: [],
+  usersLoading: false,
+  usersError: false,
   accessToken: null,
   accessTokenExpires: null,
   loginLoading: false,
@@ -31,6 +34,24 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         eventsLoading: false,
         eventsError: true,
+      };
+    case ActionTypes.SET_USERS:
+      return {
+        ...state,
+        users: action.payload,
+        usersLoading: false,
+      };
+    case ActionTypes.SET_USERS_LOADING:
+      return {
+        ...state,
+        usersLoading: true,
+        usersError: false,
+      };
+    case ActionTypes.SET_USERS_ERROR:
+      return {
+        ...state,
+        usersLoading: false,
+        usersError: true,
       };
     case ActionTypes.SET_ACCESS_TOKEN:
       return {

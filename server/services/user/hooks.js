@@ -17,16 +17,16 @@ else {
 
 exports.before = {
   all: [],
-  find: [hooks.disable('external')],
+  find: [authentication.hooks.authenticate('jwt')],
   get: [hooks.disable('external')],
   create: createHook,
   update: [hooks.disable('external'), hashPassword()],
   patch: [hooks.disable('external'), hashPassword()],
-  remove: [hooks.disable('external')],
+  remove: [authentication.hooks.authenticate('jwt')],
 };
 
 exports.after = {
-  all: [],
+  all: [hooks.remove('password')],
   find: [],
   get: [],
   create: [sendEmail()],

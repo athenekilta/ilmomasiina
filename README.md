@@ -22,22 +22,35 @@ Ilmomasiina is Athene's event registration system.
 - npm `^5.6.0`
 - MySQL `^8.0`
 
-## MYSQL Setup (Mac)
-
+## MYSQL Setup
+### Mac
 1. Install `mysql` (8.x) with Homebrew (https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e)
 2. Start the mysql service with `brew services start mysql`
 3. Open the mysql terminal with `mysql -u root`
 4. In the mysql terminal, create a new user e.g. `CREATE USER 'juuso'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';`
-5. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
-6. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
+5. Fix permissions (this is probably too permissive, but it works): `GRANT ALL PRIVILEGES ON *.* TO 'sampo'@'localhost' WITH GRANT OPTION;`
+6. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
+7. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
+
+### Ubuntu
+1. Install mysql with `sudo apt install mysql-server`
+2. Service should start automatically
+3. Same as with Mac, but use `sudo mysql -u root`
+4. Follow Mac instructions
+5. Fix permissions (this is probably too permissive, but it works): `GRANT ALL PRIVILEGES ON *.* TO 'sampo'@'localhost' WITH GRANT OPTION;`
+6. Exit with `exit` and sign in with your new user e. g. `mysql -u juuso -p` (don't use `mysql -u juuso -p password`)
+7. Follow Mac instructions step 6 
 
 ## Getting started
 
-1. Create an `.env` file at the root of the project. For the contents of the .env file, check `ENV.MD`
+1. Create an `.env` file at the root of the project. For the contents of the .env file, check [ENV.MD](./ENV.MD)
 2. `npm install`
 3. `npm start`
 
 **Optional**: You can create mockup data for development by running `npm run create-fake-data`. During development, database can be resetted with `npm run reset-db`.
+
+### Troubleshooting (Ubuntu)
+If `npm start` gives error `Error: You must provide a 'secret' in your authentication configuration`, it probably means that the `.env` file is not loaded correctly. A quick fix for this is to either use `export VARIABLE=value` for all the variables.
 
 ## Mailgun setup
 

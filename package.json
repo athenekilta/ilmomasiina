@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "compile": "better-npm-run compile",
+    "compile:dev": "better-npm-run compile:dev",
     "lint": "eslint bin build config server src tests",
     "lint:fix": "npm run lint -- --fix",
     "start": "better-npm-run start",
@@ -33,6 +34,13 @@
       "command": "node bin/compile",
       "env": {
         "NODE_ENV": "production",
+        "DEBUG": "app:*"
+      }
+    },
+    "compile:dev": {
+      "command": "node bin/compile",
+      "env": {
+        "NODE_ENV": "development",
         "DEBUG": "app:*"
       }
     },
@@ -171,11 +179,11 @@
     "postcss-loader": "^1.1.0",
     "prop-types": "^15.6.2",
     "react": "^15.6.2",
+    "react-autolinker": "^1.0.7",
     "react-countdown-now": "^2.1.0",
     "react-csv": "^1.0.19",
     "react-dates": "^17.2.0",
     "react-dom": "^15.0.0",
-    "react-nl2br": "^0.2.0",
     "react-redux": "^5.0.1",
     "react-router": "^3.0.0",
     "react-router-redux": "^4.0.8",
