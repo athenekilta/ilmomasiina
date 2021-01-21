@@ -1,9 +1,9 @@
-import React from 'react';
-import './Header.scss';
-import { browserHistory } from 'react-router';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { redirectToLogin } from '../../modules/admin/actions';
+import React from 'react'
+import './Header.scss'
+import { browserHistory } from 'react-router'
+import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import { redirectToLogin } from '../../modules/admin/actions'
 
 class Header extends React.Component {
   static propTypes = {
@@ -15,7 +15,10 @@ class Header extends React.Component {
     return (
       <div className="navbar navbar-default">
         <div className="container">
-          <a onClick={() => browserHistory.push(`${PREFIX_URL}/`)} className="navbar-brand">
+          <a
+            onClick={() => browserHistory.push(`${PREFIX_URL}/`)}
+            className="navbar-brand"
+          >
             {' '}
             {BRANDING_HEADER_TITLE}
           </a>
@@ -32,19 +35,16 @@ class Header extends React.Component {
           )}
         </div>
       </div>
-    );
+    )
   }
 }
 
 const mapDispatchToProps = {
   redirectToLogin,
-};
+}
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   loggedIn: state.admin.loggedIn,
-});
+})
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header)
