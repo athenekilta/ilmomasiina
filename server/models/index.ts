@@ -1,26 +1,27 @@
-const Sequelize = require('sequelize');
+import { Application } from '@feathersjs/express';
+import { Sequelize } from 'sequelize';
 
-const event = require('./event');
-const quota = require('./quota');
-const signup = require('./signup');
-const question = require('./question');
-const answer = require('./answer');
-const user = require('./user');
+import event from './event';
+import quota from './quota';
+import signup from './signup';
+import question from './question';
+import answer from './answer';
+import user from './user';
 
-const config = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
+import config from '../config/ilmomasiina.config'; // eslint-disable-line
 
-module.exports = function() {
+export default function (this: Application) {
   const app = this;
 
-  let sequelize;
+  let sequelize: Sequelize;
   if (process.env.CLEARDB_DATABASE_URL) {
     sequelize = new Sequelize(process.env.CLEARDB_DATABASE_URL, {
       logging: false,
     });
   } else {
     sequelize = new Sequelize(
-      config.mysqlDatabase,
-      config.mysqlUser,
+      config.mysqlDatabase!,
+      config.mysqlUser!,
       config.mysqlPassword,
       {
         host: config.mysqlHost,
@@ -29,16 +30,15 @@ module.exports = function() {
       },
     );
   }
-
   if (sequelize) {
     sequelize
       .authenticate()
       .then(() => {
-        const cfg = sequelize.connectionManager.config;
+        const cfg = (sequelize.connectionManager as any).config;
         console.log(`Sequelize: Connected to ${cfg.host} as ${cfg.username}.`);
       })
       .catch(err => {
-        const cfg = sequelize.connectionManager.config;
+        const cfg = (sequelize.connectionManager as any).config;
         console.log(
           `Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`,
         );
@@ -86,10 +86,4 @@ module.exports = function() {
   });
 
   app.set('models', models);
-
-  Object.keys(sequelize.models).forEach(modelName => {
-    if ('associate' in sequelize.models[modelName]) {
-      sequelize.models[modelName].associate();
-    }
-  });
 };

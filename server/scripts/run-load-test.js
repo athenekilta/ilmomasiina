@@ -1,5 +1,5 @@
 const debug = require('debug')('app:script');
-const feathers = require('feathers');
+const feathers = require('@feathersjs/feathers');
 const _ = require('lodash');
 const moment = require('moment');
 const faker = require('faker');

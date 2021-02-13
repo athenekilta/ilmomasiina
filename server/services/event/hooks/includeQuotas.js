@@ -1,8 +1,8 @@
 const moment = require('moment')
+const { Op } = require('sequelize')
 module.exports = () => hook => {
   const sequelize = hook.app.get('sequelize');
 
-  const Op = sequelize.Op
   hook.params.sequelize = {
     attributes: [
       'id',

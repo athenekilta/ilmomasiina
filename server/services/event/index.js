@@ -14,9 +14,5 @@ module.exports = function () {
   // Get our initialize service to that we can bind hooks
   const eventService = app.service('/api/events');
 
-  // Set up our before hooks
-  eventService.before(hooks.before);
-
-  // Set up our after hooks
-  eventService.after(hooks.after);
+  eventService.hooks(hooks);
 };

@@ -4,71 +4,79 @@
   "description": "Get started with React, Redux, and React-Router!",
   "main": "index.js",
   "engines": {
-    "node": "^8.9.4",
-    "npm": "^5.6.0"
+    "node": "^12.20.1",
+    "npm": "^7.5.2"
   },
   "scripts": {
-    "clean": "rimraf dist",
-    "compile": "better-npm-run compile",
-    "lint": "eslint bin build config server src tests",
-    "lint:fix": "npm run lint -- --fix",
-    "start": "better-npm-run start",
-    "start:prod": "better-npm-run start:prod",
-    "monit:prod": "better-npm-run monit:prod",
-    "stop:prod": "better-npm-run stop:prod",
-    "dev": "better-npm-run dev",
-    "test": "npm run lint && better-npm-run test",
+    "clean": "bnr clean",
+    "compile:client": "bnr compile:client",
+    "compile:server": "bnr compile:server",
+    "deploy": "bnr deploy",
+    "deploy:dev": "bnr deploy:dev",
+    "deploy:prod": "bnr deploy:prod",
+    "start": "bnr start:dev",
+    "dev": "bnr dev",
+    "start:dev": "bnr start:dev",
+    "start:prod": "bnr start:prod",
+    "monit:prod": "bnr monit:prod",
+    "stop:prod": "bnr stop:prod",
+    "lint": "bnr lint",
+    "lint:fix": "bnr lint:fix",
+    "test": "bnr lint && bnr test",
     "test:dev": "npm run test -- --watch",
-    "deploy": "better-npm-run deploy",
-    "deploy:dev": "better-npm-run deploy:dev",
-    "deploy:prod": "better-npm-run deploy:prod",
     "codecov": "cat coverage/*/lcov.info | codecov",
-    "reset-db": "better-npm-run reset-db",
-    "create-fake-data": "better-npm-run create-fake-data",
-    "create-user": "better-npm-run create-user",
-    "test-email": "better-npm-run test-email"
+    "reset-db": "bnr reset-db",
+    "create-fake-data": "bnr create-fake-data",
+    "create-user": "bnr create-user",
+    "test-email": "bnr test-email"
+  },
+  "directories": {
+    "lib": "server"
   },
   "betterScripts": {
-    "compile": {
+    "compile:client": {
       "command": "node bin/compile",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
     },
+    "compile:server": {
+      "command": "tsc -p server"
+    },
     "dev": {
-      "command": "nodemon bin/dev-server --ignore dist --ignore coverage --ignore tests --ignore src",
+      "command": "nodemon server/dist/bin/dev-server --ignore dist --ignore server/dist --ignore coverage --ignore tests --ignore src",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*"
       }
     },
     "reset-db": {
-      "command": "node scripts/reset-database",
+      "command": "node server/scripts/reset-database",
       "env": {
         "DEBUG": "app:*"
       }
     },
     "create-fake-data": {
-      "command": "node scripts/create-fake-data",
+      "command": "node server/scripts/create-fake-data",
       "env": {
         "DEBUG": "app:*"
       }
     },
     "create-user": {
-      "command": "node scripts/create-user",
+      "command": "node server/scripts/create-user",
       "env": {
         "DEBUG": "app:*"
       }
     },
     "test-email": {
-      "command": "node scripts/test-email",
+      "command": "node server/scripts/test-email",
       "env": {
         "DEBUG": "app:*"
       }
     },
     "deploy": {
-      "command": "npm run lint && npm run test && npm run clean && npm run compile",
+      "command": "npm run lint && npm run test && npm run clean && npm run compile:server && npm run compile:client",
       "env": {
         "DEBUG": "app:*"
       }
@@ -87,14 +95,14 @@
         "DEBUG": "app:*"
       }
     },
-    "start": {
-      "command": "node bin/dev-server",
+    "start:dev": {
+      "command": "npm run compile:server && node server/dist/bin/dev-server",
       "env": {
         "DEBUG": "app:*"
       }
     },
     "start:prod": {
-      "command": "pm2 start ./bin/prod-server.js",
+      "command": "npm run compile:server && pm2 start ./server/dist/bin/prod-server.js",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
@@ -107,11 +115,20 @@
       "command": "pm2 monit"
     },
     "test": {
-      "command": "node ./node_modules/karma/bin/karma start config/karma.config",
+      "command": "npm run compile:server && node ./node_modules/karma/bin/karma start config/karma.config",
       "env": {
         "NODE_ENV": "test",
         "DEBUG": "app:*"
       }
+    },
+    "lint": {
+      "command": "eslint bin config server src tests"
+    },
+    "lint:fix": {
+      "command": "npm run lint -- --fix"
+    },
+    "clean": {
+      "command": "rimraf dist server/dist"
     }
   },
   "repository": {
@@ -121,8 +138,21 @@
   "author": "David Zukowski <david@zuko.me> (http://zuko.me)",
   "license": "MIT",
   "dependencies": {
-    "@feathersjs/express": "^1.3.1",
+    "@feathersjs/authentication": "^4.5.11",
+    "@feathersjs/authentication-local": "^4.5.11",
+    "@feathersjs/authentication-oauth": "^4.5.11",
+    "@feathersjs/express": "^4.5.11",
+    "@feathersjs/feathers": "^4.5.11",
     "@sendgrid/mail": "^6.3.1",
+    "@types/babel-core": "^6.17.0",
+    "@types/compression": "^1.7.0",
+    "@types/email-templates": "^8.0.1",
+    "@types/express-sslify": "^1.2.1",
+    "@types/md5": "^2.3.0",
+    "@types/node": "^14.14.27",
+    "@types/node-cron": "^2.0.3",
+    "@types/node-sass": "^4.11.1",
+    "@types/validator": "^13.1.3",
     "antd": "^3.8.2",
     "axios": "^0.21.1",
     "babel-core": "^6.17.0",
@@ -140,18 +170,12 @@
     "css-loader": "^0.26.0",
     "cssnano": "^3.7.4",
     "debug": "^2.2.0",
-    "email-templates": "^4.0.4",
+    "email-templates": "^8.0.3",
     "express": "^4.14.0",
     "express-sslify": "^1.2.0",
     "extract-text-webpack-plugin": "^1.0.0",
-    "feathers": "^2.1.7",
-    "feathers-authentication": "^1.3.1",
-    "feathers-authentication-jwt": "^0.3.2",
-    "feathers-authentication-local": "^0.4.4",
-    "feathers-hooks": "^1.7.1",
-    "feathers-hooks-common": "^2.0.3",
-    "feathers-rest": "^1.5.2",
-    "feathers-sequelize": "^3.1.2",
+    "feathers-hooks-common": "^5.0.5",
+    "feathers-sequelize": "^6.2.0",
     "file-loader": "^0.9.0",
     "formsy-react": "^0.19.5",
     "formsy-react-components": "^0.9.0",
@@ -189,15 +213,18 @@
     "reselect": "^4.0.0",
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.0",
-    "sequelize": "^4.22.12",
+    "sequelize": "^6.5.0",
     "stackframe": "^1.0.4",
     "style-loader": "^0.13.1",
     "then-request": "^2.2.0",
+    "typescript": "^4.1.5",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
     "yargs": "^6.3.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/parser": "^4.15.0",
     "babel-eslint": "^10.1.0",
     "babel-plugin-istanbul": "^3.0.0",
     "bootstrap-sass": "^3.3.7",
@@ -208,15 +235,15 @@
     "codecov": "^1.0.1",
     "enzyme": "^2.0.0",
     "eslint": "^7.12.1",
-    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-standard": "^16.0.2",
     "eslint-config-standard-react": "^11.0.1",
     "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-standard": "^2.0.0",
-    "eslint-plugin-node": "^11.1.0",
     "faker": "^3.1.0",
     "nodemon": "^1.18.10",
     "pm2": "^3.3.1",

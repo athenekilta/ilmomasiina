@@ -1,7 +1,7 @@
-const ilmoconfig = require('../../config/ilmomasiina.config.js'); // eslint-disable-line
-const Email = require('email-templates');
-const path = require('path');
-const nodemailer = require('nodemailer')
+import ilmoconfig from '../../config/ilmomasiina.config.js'; // eslint-disable-line
+import Email from 'email-templates';
+import path from 'path';
+import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.ayy.fi',

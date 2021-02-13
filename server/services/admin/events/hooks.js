@@ -1,5 +1,4 @@
-const hooks = require('feathers-hooks-common');
-const authentication = require('feathers-authentication');
+const authentication = require('@feathersjs/authentication');
 
 const includeQuotas = require('./hooks/includeQuotas');
 const includeAllEventData = require('./hooks/includeAllEventData');

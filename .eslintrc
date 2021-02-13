@@ -1,14 +1,15 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "extends": [
     "standard",
     "standard-react",
-    "airbnb-base"
+    "airbnb-typescript"
   ],
   "plugins": [
     "babel",
     "react",
-    "promise"
+    "promise",
+    "@typescript-eslint"
   ],
   "env": {
     "browser": true
@@ -32,6 +33,6 @@
       "exports": "always-multiline",
       "functions": "always-multiline"
     }],
-    "semi": [2, "never"]
+    "semi": ["error", "always"]
   }
 }

@@ -10,10 +10,10 @@ exports.before = {
   all: [],
   find: [includeQuotas()],
   get: [includeAllEventData()],
-  create: [hooks.disable('external')],
-  update: [hooks.disable('external')],
-  patch: [hooks.disable('external')],
-  remove: [hooks.disable('external')],
+  create: [hooks.disallow('external')],
+  update: [hooks.disallow('external')],
+  patch: [hooks.disallow('external')],
+  remove: [hooks.disallow('external')],
 };
 
 exports.after = {
