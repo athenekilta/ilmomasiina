@@ -1,5 +1,5 @@
-import { Application } from '@feathersjs/express';
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import { IlmoApplication } from '../defs';
 
 export interface UserAttributes {
   id: number;
@@ -7,7 +7,7 @@ export interface UserAttributes {
   password: string;
 }
 
-export interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
+export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
@@ -20,8 +20,8 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
 // User for local auth admin signup
 
-export default function (this: Application) {
-  const sequelize: Sequelize = this.get('sequelize');
+export default function (this: IlmoApplication) {
+  const sequelize = this.get('sequelize');
 
   User.init({
     id: {
@@ -40,9 +40,9 @@ export default function (this: Application) {
     },
   }, {
     sequelize,
-    modelName: "user",
+    modelName: 'user',
     freezeTableName: true,
   });
 
   return User;
-};
+}

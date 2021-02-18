@@ -1,6 +1,12 @@
-import { Application } from '@feathersjs/express';
-import { DataTypes, Model, Op, Optional, Sequelize } from 'sequelize';
+import {
+  DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, Model, Op, Optional,
+} from 'sequelize';
 import moment from 'moment-timezone';
+import { IlmoApplication } from '../defs';
+import { Quota } from './quota';
+import { Question } from './question';
 
 export interface EventAttributes {
   id: number;
@@ -19,7 +25,7 @@ export interface EventAttributes {
   verificationEmail: string | null;
 }
 
-export interface EventCreationAttributes extends Optional<EventAttributes, "id" | "openQuotaSize" | "draft" | "signupsPublic"> {}
+export interface EventCreationAttributes extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'draft' | 'signupsPublic'> {}
 
 export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: number;
@@ -37,12 +43,36 @@ export class Event extends Model<EventAttributes, EventCreationAttributes> imple
   public signupsPublic!: boolean;
   public verificationEmail!: string | null;
 
+  public questions?: Question[];
+  public getQuestions!: HasManyGetAssociationsMixin<Question>;
+  public countQuestions!: HasManyCountAssociationsMixin;
+  public hasQuestion!: HasManyHasAssociationMixin<Question, number>;
+  public hasQuestions!: HasManyHasAssociationsMixin<Question, number>;
+  public setQuestions!: HasManySetAssociationsMixin<Question, number>;
+  public addQuestion!: HasManyAddAssociationMixin<Question, number>;
+  public addQuestions!: HasManyAddAssociationsMixin<Question, number>;
+  public removeQuestion!: HasManyRemoveAssociationMixin<Question, number>;
+  public removeQuestions!: HasManyRemoveAssociationsMixin<Question, number>;
+  public createQuestion!: HasManyCreateAssociationMixin<Question>;
+
+  public quotas?: Quota[];
+  public getQuotas!: HasManyGetAssociationsMixin<Quota>;
+  public countQuotas!: HasManyCountAssociationsMixin;
+  public hasQuota!: HasManyHasAssociationMixin<Quota, number>;
+  public hasQuotas!: HasManyHasAssociationsMixin<Quota, number>;
+  public setQuotas!: HasManySetAssociationsMixin<Quota, number>;
+  public addQuota!: HasManyAddAssociationMixin<Quota, number>;
+  public addQuotas!: HasManyAddAssociationsMixin<Quota, number>;
+  public removeQuota!: HasManyRemoveAssociationMixin<Quota, number>;
+  public removeQuotas!: HasManyRemoveAssociationsMixin<Quota, number>;
+  public createQuota!: HasManyCreateAssociationMixin<Quota>;
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-export default function (this: Application) {
-  const sequelize: Sequelize = this.get('sequelize');
+export default function (this: IlmoApplication) {
+  const sequelize = this.get('sequelize');
 
   Event.init(
     {
@@ -130,4 +160,4 @@ export default function (this: Application) {
   );
 
   return Event;
-};
+}

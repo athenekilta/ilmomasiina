@@ -1,5 +1,8 @@
 {
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["tsconfig.json", "server/tsconfig.json"]
+  },
   "extends": [
     "standard",
     "standard-react",
@@ -33,6 +36,13 @@
       "exports": "always-multiline",
       "functions": "always-multiline"
     }],
-    "semi": ["error", "always"]
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    // To allow grouping of class members - especially for Models.
+    "@typescript-eslint/lines-between-class-members": "off",
+    // TypeScript causes lots of circular imports for types, which the plugin
+    // does not currently handle properly.
+    // see https://github.com/benmosher/eslint-plugin-import/issues/1453
+    "import/no-cycle": "off"
   }
 }

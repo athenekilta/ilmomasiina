@@ -1,8 +1,11 @@
-const moment = require('moment')
-const { Op } = require('sequelize')
-module.exports = () => hook => {
-  const sequelize = hook.app.get('sequelize');
+import moment from 'moment';
+import { Op, fn, col } from 'sequelize';
+import { IlmoHookContext } from '../../../defs';
+import { Event } from '../../../models/event';
+import { Quota } from '../../../models/quota';
+import { Signup } from '../../../models/signup';
 
+export default () => (hook: IlmoHookContext<Event>) => {
   hook.params.sequelize = {
     attributes: [
       'id',
@@ -19,30 +22,30 @@ module.exports = () => hook => {
     where: {
       draft: 0,
       date: {
-        [Op.gt]: moment().subtract(1, 'days').toDate()
-      }
+        [Op.gt]: moment().subtract(1, 'days').toDate(),
+      },
     },
     // Include quotas of event and count of signups
     include: [
       {
-        model: sequelize.models.quota,
+        model: Quota,
         attributes: [
           'title',
           'size',
           [
-            sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
+            fn('COUNT', col('quota->signups.id')),
             'signupCount',
           ],
         ],
         include: [
           {
-            model: sequelize.models.signup,
+            model: Signup,
             required: false,
             attributes: [],
           },
         ],
       },
     ],
-    group: [sequelize.col('event.id'), sequelize.col('quota.id')],
+    group: [col('event.id'), col('quota.id')],
   };
 };

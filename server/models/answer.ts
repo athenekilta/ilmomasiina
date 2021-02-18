@@ -1,23 +1,37 @@
-import { Application } from '@feathersjs/express';
-import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
+import { DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize } from 'sequelize';
+import { IlmoApplication } from '../defs';
+import { Question } from './question';
+import { Signup } from './signup';
 
 export interface AnswerAttributes {
   id: number;
   answer: string;
 }
 
-export interface AnswerCreationAttributes extends Optional<AnswerAttributes, "id"> {}
+export interface AnswerCreationAttributes extends Optional<AnswerAttributes, 'id'> {}
 
 export class Answer extends Model<AnswerAttributes, AnswerCreationAttributes> implements AnswerAttributes {
   public id!: number;
   public answer!: string;
 
+  public questionId!: number;
+  public question?: Question;
+  public getQuestion!: HasOneGetAssociationMixin<Question>;
+  public setQuestion!: HasOneSetAssociationMixin<Question, number>;
+  public createQuestion!: HasOneCreateAssociationMixin<Question>;
+
+  public signupId!: number;
+  public signup?: Signup;
+  public getSignup!: HasOneGetAssociationMixin<Signup>;
+  public setSignup!: HasOneSetAssociationMixin<Signup, number>;
+  public createSignup!: HasOneCreateAssociationMixin<Signup>;
+
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
-export default function (this: Application) {
-  const sequelize: Sequelize = this.get('sequelize');
+export default function (this: IlmoApplication) {
+  const sequelize = this.get('sequelize');
 
   Answer.init({
     id: {
@@ -31,7 +45,7 @@ export default function (this: Application) {
     },
   }, {
     sequelize,
-    modelName: "answer",
+    modelName: 'answer',
     freezeTableName: true,
     paranoid: true,
   });

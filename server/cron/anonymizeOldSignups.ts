@@ -1,20 +1,18 @@
-import { Application } from '@feathersjs/express';
 import moment from 'moment';
 import { Op, Sequelize } from 'sequelize';
+import { IlmoApplication } from '../defs';
 import { Signup } from '../models/signup';
 
 const redactionKey = 'Deleted';
 
-export default (app: Application) => {
-  const sequelize: Sequelize = app.get('sequelize');
-
+export default (app: IlmoApplication) => {
   Signup
     .findAll({
       where: {
         [Op.and]: {
           [Op.or]: {
-              firstName: {
-                [Op.ne]: redactionKey,
+            firstName: {
+              [Op.ne]: redactionKey,
             },
             lastName: {
               [Op.ne]: redactionKey,

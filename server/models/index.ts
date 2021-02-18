@@ -1,16 +1,25 @@
 import { Application } from '@feathersjs/express';
 import { Sequelize } from 'sequelize';
 
-import event from './event';
-import quota from './quota';
-import signup from './signup';
-import question from './question';
-import answer from './answer';
-import user from './user';
+import event, { Event } from './event';
+import quota, { Quota } from './quota';
+import signup, { Signup } from './signup';
+import question, { Question } from './question';
+import answer, { Answer } from './answer';
+import user, { User } from './user';
 
 import config from '../config/ilmomasiina.config'; // eslint-disable-line
+import { IlmoApplication } from '../defs';
 
-export default function (this: Application) {
+export interface IlmoModels {
+  user: typeof User;
+  event: typeof Event;
+  question: typeof Question;
+  signup: typeof Signup;
+  answer: typeof Answer;
+}
+
+export default function (this: IlmoApplication) {
   const app = this;
 
   let sequelize: Sequelize;
@@ -37,11 +46,9 @@ export default function (this: Application) {
         const cfg = (sequelize.connectionManager as any).config;
         console.log(`Sequelize: Connected to ${cfg.host} as ${cfg.username}.`);
       })
-      .catch(err => {
+      .catch((err) => {
         const cfg = (sequelize.connectionManager as any).config;
-        console.log(
-          `Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`,
-        );
+        console.log(`Sequelize: Error connecting ${cfg.host} as ${cfg.user}: ${err}`);
       });
   }
 
@@ -54,36 +61,48 @@ export default function (this: Application) {
   app.configure(answer);
   app.configure(user);
 
-  const { models } = sequelize;
-
-  models.event.hasMany(models.quota, {
-    foreignKey: 'eventId',
+  Event.hasMany(Question, {
+    foreignKey: {
+      name: 'eventId',
+      allowNull: false,
+    },
     onDelete: 'CASCADE',
   });
+  Question.belongsTo(Event);
 
-  models.event.hasMany(models.question, {
-    foreignKey: 'eventId',
+  Event.hasMany(Quota, {
+    foreignKey: {
+      name: 'eventId',
+      allowNull: false,
+    },
     onDelete: 'CASCADE',
   });
+  Quota.belongsTo(Event);
 
-  models.quota.hasMany(models.signup, {
+  Quota.hasMany(Signup, {
     onDelete: 'CASCADE',
-    foreignKey: 'quotaId',
+    foreignKey: {
+      name: 'quotaId',
+      allowNull: false,
+    },
   });
+  Signup.belongsTo(Quota);
 
-  models.signup.belongsTo(models.quota, {
-    foreignKey: 'quotaId',
-  });
-
-  models.signup.hasMany(models.answer, {
-    foreignKey: 'signupId',
+  Signup.hasMany(Answer, {
+    foreignKey: {
+      name: 'signupId',
+      allowNull: false,
+    },
     onDelete: 'CASCADE',
   });
+  Answer.belongsTo(Signup);
 
-  models.question.hasMany(models.answer, {
-    foreignKey: 'questionId',
+  Question.hasMany(Answer, {
+    foreignKey: {
+      name: 'questionId',
+      allowNull: false,
+    },
     onDelete: 'CASCADE',
   });
-
-  app.set('models', models);
-};
+  Answer.belongsTo(Question);
+}

@@ -1,7 +1,7 @@
 const authentication = require('@feathersjs/authentication');
 const hooks = require('feathers-hooks-common');
 const deleteSignup = require('./deleteSignup.js');
-const sendEmailToQueue = require('../../../signup/hooks/sendEmailToQueue');
+const sendEmailToQueue = require('../../../signup/hooks/advanceQueueAfterDeletion');
 
 exports.before = {
     all: [authentication.hooks.authenticate('jwt')],

@@ -1,11 +1,9 @@
-import { Application } from '@feathersjs/express';
 import moment from 'moment';
 import { Op } from 'sequelize';
+import { IlmoApplication } from '../defs';
 import { Signup } from '../models/signup';
 
-export default (app: Application) => {
-  const models = app.get('models');
-
+export default (app: IlmoApplication) => {
   Signup
     .unscoped()
     .findAll({

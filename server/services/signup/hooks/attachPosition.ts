@@ -1,12 +1,10 @@
-const _ = require('lodash');
+import _ from 'lodash';
+import { IlmoHookContext } from '../../../defs';
+import { Signup } from '../../../models/signup';
 
-module.exports = () => (hook) => {
-  const models = hook.app.get('models');
-  const sequelize = hook.app.get('sequelize');
-
-  const quotaId = hook.result.quotaId;
-
-  return models.quota.findById(quotaId)
+module.exports = () => async (hook: IlmoHookContext<Signup>) => {
+  const quota = await hook.result!.getQuota()!;
+  return Quota.findById(quota)
     .then((quota) => {
       const query = {
         attributes: ['id', 'openQuotaSize', 'signupsPublic'],
