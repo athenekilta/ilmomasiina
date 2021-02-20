@@ -1,14 +1,20 @@
+import { disallow } from 'feathers-hooks-common';
 import sequelizeService from 'feathers-sequelize';
-import { IlmoApplication, IlmoService } from '../../defs';
+import { IlmoService } from '..';
+import { IlmoApplication } from '../../defs';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import hooks from './hooks';
+import addRegistrationOpenStatus from './hooks/addRegistrationOpenStatus';
+import eventDetailsFetchOptions from './hooks/eventDetailsFetchOptions';
+import eventListFetchOptions from './hooks/eventListFetchOptions';
+import removeNonpublicAnswers from './hooks/removeNonpublicAnswers';
+import splitAnswerOptionsToArray from './hooks/splitAnswerOptionsToArray';
 
 // Attributes included in results for Event instances.
-export const eventServiceAttrs = [
+export const eventServiceEventAttrs = [
   'id',
   'title',
   'date',
@@ -55,8 +61,7 @@ export const eventServiceAnswerAttrs = [
   'answer',
 ] as const;
 
-// Type definitions for the service: pick the columns above and add associations
-// and attributes added by hooks. This ensures the columns are only listed once.
+// Type definitions for the service: pick the columns above and add associations and attributes added by hooks.
 
 export interface EventServiceQuestionItem extends Omit<Pick<Question, typeof eventServiceQuestionAttrs[number]>, 'options'> {
   options: string | string[];
@@ -69,10 +74,11 @@ export interface EventServiceSignupItem extends Pick<Signup, typeof eventService
 }
 
 export interface EventServiceQuotaItem extends Pick<Quota, typeof eventServiceQuotaAttrs[number]> {
-  signups: EventServiceSignupItem[] | null;
+  signups?: EventServiceSignupItem[] | null;
+  signupCount?: number;
 }
 
-export interface EventServiceItem extends Pick<Event, typeof eventServiceAttrs[number]> {
+export interface EventServiceItem extends Pick<Event, typeof eventServiceEventAttrs[number]> {
   questions: EventServiceQuestionItem[];
   quotas: EventServiceQuotaItem[];
   millisTillOpening: number;
@@ -94,5 +100,24 @@ export default function (this: IlmoApplication) {
   // Get our initialize service to that we can bind hooks
   const eventService = app.service('/api/events');
 
-  eventService.hooks(hooks);
-};
+  eventService.hooks({
+    before: {
+      all: [],
+      find: [eventListFetchOptions()],
+      get: [eventDetailsFetchOptions()],
+      create: [disallow()],
+      update: [disallow()],
+      patch: [disallow()],
+      remove: [disallow()],
+    },
+    after: {
+      all: [],
+      find: [],
+      get: [removeNonpublicAnswers(), splitAnswerOptionsToArray(), addRegistrationOpenStatus()],
+      create: [],
+      update: [],
+      patch: [],
+      remove: [],
+    },
+  });
+}

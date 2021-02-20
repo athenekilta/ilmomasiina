@@ -1,13 +1,13 @@
+import { Service } from 'feathers-sequelize';
+import { HooksObject } from '@feathersjs/feathers';
+import { AuthenticationService } from '@feathersjs/authentication';
 import adminevents from './admin/events';
 import adminsignups from './admin/signups';
 import event, { EventsService } from './event';
-import signup from './signup';
+import signup, { SignupsService } from './signup';
 import user, { UsersService } from './user';
 import authentication from './authentication';
 import { IlmoApplication } from '../defs';
-import { Service } from 'feathers-sequelize/types';
-import { HooksObject } from '@feathersjs/feathers';
-import { AuthenticationService } from '@feathersjs/authentication/lib';
 import { Event } from '../models/event';
 import { Signup } from '../models/signup';
 

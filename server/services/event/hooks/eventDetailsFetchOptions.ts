@@ -1,5 +1,5 @@
 import {
-  eventServiceAnswerAttrs, eventServiceAttrs, eventServiceQuestionAttrs, eventServiceQuotaAttrs,
+  eventServiceAnswerAttrs, eventServiceEventAttrs, eventServiceQuestionAttrs, eventServiceQuotaAttrs,
   eventServiceSignupAttrs,
 } from '..';
 import { IlmoHookContext } from '../../../defs';
@@ -12,7 +12,7 @@ import { Signup } from '../../../models/signup';
 export default () => (hook: IlmoHookContext<Event>) => {
   hook.params.sequelize = {
     distinct: true,
-    attributes: eventServiceAttrs,
+    attributes: eventServiceEventAttrs,
     raw: false,
     include: [
       // First include all questions (also non-public for the form)

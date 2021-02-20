@@ -12,6 +12,7 @@ export default () => (hook: IlmoHookContext<EventServiceItem>) => {
         signups: null,
       }));
     }
+    return hook;
   }
 
   // Find IDs of public questions

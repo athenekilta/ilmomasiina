@@ -83,4 +83,4 @@ export default function (this: IlmoApplication) {
   });
 
   return Question;
-};
+}

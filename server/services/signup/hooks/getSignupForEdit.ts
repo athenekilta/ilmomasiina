@@ -3,7 +3,7 @@ import { Model } from 'sequelize';
 import { IlmoHookContext } from '../../../defs';
 import { Answer } from '../../../models/answer';
 import { Event } from '../../../models/event';
-import { Question, QuestionAttributes } from '../../../models/question';
+import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 import { Signup } from '../../../models/signup';
 import { eventServiceEventAttrs } from '../../event';
@@ -30,7 +30,9 @@ const signupGetQuestionAttrs = [
   'public',
 ] as const;
 
-interface SignupGetAnswerItem extends QuestionAttributes {
+// Data type definitions for this endpoint - pick columns and add included relations
+
+interface SignupGetAnswerItem extends Pick<Question, typeof signupGetQuestionAttrs[number]> {
   answer: string;
   answerId: number;
 }
@@ -47,18 +49,20 @@ interface SignupGetRootItem {
 }
 
 export default () => async (hook: IlmoHookContext<SignupGetRootItem>) => {
-  const id = hook.id as number; // TODO need checks for the type?
-  const editToken = hook.params.query?.editToken;
+  const id = hook.id as number; // TODO need to check the type?
 
+  const editToken = hook.params.query?.editToken;
   if (!verifyToken(id, editToken)) {
     throw new Error('Invalid editToken');
   }
 
-  const signup = await Signup.findOne({
-    where: { id },
+  const signup = await Signup.findByPk(id, {
+    attributes: [...signupGetSignupAttrs],
     include: [
       {
         model: Answer as typeof Model,
+        required: false,
+        attributes: ['id', 'answer'],
       },
       {
         model: Quota as typeof Model,
@@ -66,9 +70,12 @@ export default () => async (hook: IlmoHookContext<SignupGetRootItem>) => {
         include: [
           {
             model: Event as typeof Model,
+            attributes: [...signupGetEventAttrs],
             include: [
               {
                 model: Question as typeof Model,
+                required: false,
+                attributes: [...signupGetQuestionAttrs],
               },
             ],
           },
@@ -79,7 +86,7 @@ export default () => async (hook: IlmoHookContext<SignupGetRootItem>) => {
   if (signup === null) {
     // Event not found with id, probably deleted
     hook.result = {
-      signup,
+      signup: null,
       event: null,
     };
     return hook;
@@ -87,8 +94,9 @@ export default () => async (hook: IlmoHookContext<SignupGetRootItem>) => {
 
   const answers = signup.answers!;
   const event = signup.quota!.event!;
-  const questions = await event.getQuestions();
+  const questions = event.questions!;
 
+  // attach answers to the respective questions
   const answersByQuestion: SignupGetAnswerItem[] = [];
   questions.forEach((question) => {
     const answer = _.find(answers, { questionId: question.id });
@@ -96,8 +104,8 @@ export default () => async (hook: IlmoHookContext<SignupGetRootItem>) => {
     if (answer) {
       answersByQuestion.push({
         ...question,
-        answer: answer.answer,
         answerId: answer.id,
+        answer: answer.answer,
       });
     }
   });
@@ -107,7 +115,7 @@ export default () => async (hook: IlmoHookContext<SignupGetRootItem>) => {
       ..._.pick(signup, signupGetSignupAttrs),
       answers: answersByQuestion,
     },
-    event,
+    event: _.pick(event, signupGetEventAttrs),
   };
   return hook;
 };

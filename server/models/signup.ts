@@ -11,11 +11,10 @@ import { Answer } from './answer';
 
 export interface SignupAttributes {
   id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  confirmedAt: Date;
-  editToken: any;
+  firstName: string | null;
+  lastName: string | null;
+  email: string | null;
+  confirmedAt: Date | null;
   createdAt: Date;
 }
 
@@ -23,10 +22,10 @@ export interface SignupCreationAttributes extends Optional<SignupAttributes, 'id
 
 export class Signup extends Model<SignupAttributes, SignupCreationAttributes> implements SignupAttributes {
   public id!: number;
-  public firstName!: string;
-  public lastName!: string;
-  public email!: string;
-  public confirmedAt!: Date;
+  public firstName!: string | null;
+  public lastName!: string | null;
+  public email!: string | null;
+  public confirmedAt!: Date | null;
 
   public editToken!: string; // TODO: move to service item type
 
@@ -80,13 +79,10 @@ export default function (this: IlmoApplication) {
           isEmail: true,
         },
       },
-      editToken: {
-        type: DataTypes.VIRTUAL,
-      },
       confirmedAt: {
         type: DataTypes.DATE(3),
       },
-      // Added manually createdAt field to support milliseconds
+      // Add createdAt manually to support milliseconds
       createdAt: {
         type: DataTypes.DATE(3),
         defaultValue: () => new Date(),

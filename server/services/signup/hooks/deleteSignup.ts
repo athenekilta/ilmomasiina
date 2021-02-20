@@ -1,30 +1,17 @@
-const config = require('../../../../config/ilmomasiina.config'); // eslint-disable-line
-const md5 = require('md5');
+import { IlmoHookContext } from '../../../defs';
+import { Signup } from '../../../models/signup';
+import { verifyToken } from '../editToken';
 
-module.exports = () => (hook) => {
-  const models = hook.app.get('models');
-  const id = hook.id;
-  const editToken = hook.params.query.editToken;
-  if (editToken !== md5(`${`${hook.id}`}${config.editTokenSalt}`)) {
+export default () => async (hook: IlmoHookContext<Signup | null>) => {
+  const id = hook.id as number;
+  const editToken = hook.params.query?.editToken;
+
+  if (!verifyToken(id, editToken)) {
     throw new Error('Invalid editToken');
   }
-  return models.signup
-    .findOne({
-      where: {
-        id
-      },
-    })
-    .then((res) => {
-      hook.result = res;
-      return models.signup
-        .destroy({
-          where: {
-            id
-          },
-        })
-        .then((res) => {
-          return hook;
-        });
-    })
-    .catch(error => hook);
+
+  // TODO: ensure that no data is actually returned here
+  const signup = await Signup.findByPk(id);
+  hook.result = signup;
+  await signup?.destroy();
 };

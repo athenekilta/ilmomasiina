@@ -1,11 +1,11 @@
 import { HookContext } from '@feathersjs/feathers';
 import moment from 'moment';
-import { Model } from 'sequelize/types';
+import { Model } from 'sequelize';
 import EmailService from '../../../mail';
 import { Event } from '../../../models/event';
 import { Signup } from '../../../models/signup';
 
-module.exports = () => async (hook: HookContext<Signup>) => {
+export default () => async (hook: HookContext<Signup>) => {
   const signup = hook.result!;
 
   const currentQuota = await signup.getQuota({
@@ -17,6 +17,7 @@ module.exports = () => async (hook: HookContext<Signup>) => {
   })!;
   const event = currentQuota.event!;
 
+  // TODO: fix this, currently doesn't handle open quota correctly
   const { count, rows } = await Signup.findAndCountAll({
     where: { quotaId: currentQuota.id } /* TODO */ as any,
     // Only retrieve the entry that just got accepted from the queue

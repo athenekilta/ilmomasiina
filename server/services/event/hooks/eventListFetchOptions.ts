@@ -32,10 +32,7 @@ export default () => (hook: IlmoHookContext<Event>) => {
         attributes: [
           'title',
           'size',
-          [
-            fn('COUNT', col('quota->signups.id')),
-            'signupCount',
-          ],
+          [fn('COUNT', col('quota->signups.id')), 'signupCount'],
         ],
         include: [
           {

@@ -1,10 +1,8 @@
 import { HookContext, Application } from '@feathersjs/feathers';
-import { Sequelize } from 'sequelize/types';
+import { Sequelize } from 'sequelize';
 import { IlmoServices } from './services';
 
 export interface IlmoApplication extends Application<IlmoServices> {
-  // TODO: remove 'models' when everything is TS
-
   get(key: 'sequelize'): Sequelize;
   get(key: string): any;
 
