@@ -1,4 +1,3 @@
-import { Application } from '@feathersjs/express';
 import { Sequelize } from 'sequelize';
 
 import event, { Event } from './event';

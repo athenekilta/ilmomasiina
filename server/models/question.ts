@@ -1,11 +1,19 @@
-import { DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin, HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin, HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize } from 'sequelize';
+import {
+  DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin,
+  HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
+} from 'sequelize';
 import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
+
+export const questionTypes = ['text', 'textarea', 'number', 'select', 'checkbox'] as const;
+export type QuestionType = typeof questionTypes[number];
 
 export interface QuestionAttributes {
   id: number;
   question: string;
-  type: string;
+  type: QuestionType;
   options: string | null;
   required: boolean;
   public: boolean;
@@ -17,7 +25,7 @@ export interface QuestionCreationAttributes
 export class Question extends Model<QuestionAttributes, QuestionCreationAttributes> implements QuestionAttributes {
   public id!: number;
   public question!: string;
-  public type!: string;
+  public type!: QuestionType;
   public options!: string | null;
   public required!: boolean;
   public public!: boolean;
@@ -58,7 +66,7 @@ export default function (this: IlmoApplication) {
       allowNull: false,
     },
     type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM(...questionTypes),
       allowNull: false,
     },
     options: {

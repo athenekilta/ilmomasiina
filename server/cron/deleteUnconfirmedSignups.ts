@@ -1,9 +1,8 @@
 import moment from 'moment';
 import { Op } from 'sequelize';
-import { IlmoApplication } from '../defs';
 import { Signup } from '../models/signup';
 
-export default (app: IlmoApplication) => {
+export default () => {
   Signup
     .unscoped()
     .findAll({
@@ -15,30 +14,21 @@ export default (app: IlmoApplication) => {
           },
           // Over 30 minutes old
           createdAt: {
-            [Op.lt]: moment()
-              .subtract(30, 'minutes')
-              .toDate(),
+            [Op.lt]: moment().subtract(30, 'minutes').toDate(),
           },
         },
       },
     })
-    .then(r => {
-      console.log('Unconfirmed signups: ');
-      console.log(r);
-      console.log(r.map(s => s.id));
-      return r.map(s => s.id);
-    })
-    .then(r => {
-      r.map(id => {
+    .then((signups) => signups.map((signup) => signup.id))
+    .then((signups) => {
+      console.log('Deleting unconfirmed signups:');
+      console.log(signups);
+      signups.map((id) => {
         Signup
           .unscoped()
-          .destroy({
-            where: {
-              id,
-            },
-          })
-          .then(res => console.log(res))
-          .catch(error => console.log(error));
+          .destroy({ where: { id } })
+          .then((res) => console.log(res))
+          .catch((error) => console.error(error));
       });
     });
 };

@@ -1,4 +1,6 @@
-import { DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize } from 'sequelize';
+import {
+  DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional,
+} from 'sequelize';
 import { IlmoApplication } from '../defs';
 import { Question } from './question';
 import { Signup } from './signup';

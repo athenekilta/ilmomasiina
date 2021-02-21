@@ -63,7 +63,8 @@ export const eventServiceAnswerAttrs = [
 
 // Type definitions for the service: pick the columns above and add associations and attributes added by hooks.
 
-export interface EventServiceQuestionItem extends Omit<Pick<Question, typeof eventServiceQuestionAttrs[number]>, 'options'> {
+export interface EventServiceQuestionItem
+  extends Omit<Pick<Question, typeof eventServiceQuestionAttrs[number]>, 'options'> {
   options: string | string[];
 }
 

@@ -24,7 +24,6 @@
     "COVERAGE": false
   },
   "rules": {
-    "indent": ["error", 2],
     "max-len": [2, 120, 2],
     "no-param-reassign": 0,
     "func-names": 0,

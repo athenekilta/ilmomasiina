@@ -1,15 +1,14 @@
+import { HookContext } from '@feathersjs/feathers';
 import {
   eventServiceAnswerAttrs, eventServiceEventAttrs, eventServiceQuestionAttrs, eventServiceQuotaAttrs,
   eventServiceSignupAttrs,
 } from '..';
-import { IlmoHookContext } from '../../../defs';
 import { Answer } from '../../../models/answer';
-import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 import { Signup } from '../../../models/signup';
 
-export default () => (hook: IlmoHookContext<Event>) => {
+export default () => (hook: HookContext) => {
   hook.params.sequelize = {
     distinct: true,
     attributes: eventServiceEventAttrs,

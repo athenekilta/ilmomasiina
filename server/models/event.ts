@@ -25,7 +25,8 @@ export interface EventAttributes {
   verificationEmail: string | null;
 }
 
-export interface EventCreationAttributes extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'draft' | 'signupsPublic'> {}
+export interface EventCreationAttributes
+  extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'draft' | 'signupsPublic'> {}
 
 export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: number;
@@ -132,7 +133,7 @@ export default function (this: IlmoApplication) {
     },
     {
       sequelize,
-      modelName: "event",
+      modelName: 'event',
       freezeTableName: true,
       paranoid: true,
       // by default, show events that:

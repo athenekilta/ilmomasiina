@@ -1,5 +1,4 @@
-import { Service } from 'feathers-sequelize';
-import { HooksObject } from '@feathersjs/feathers';
+import { Service } from '@feathersjs/feathers';
 import { AuthenticationService } from '@feathersjs/authentication';
 import adminevents from './admin/events';
 import adminsignups from './admin/signups';
@@ -11,13 +10,9 @@ import { IlmoApplication } from '../defs';
 import { Event } from '../models/event';
 import { Signup } from '../models/signup';
 
-export interface IlmoService<T> extends Service<T> {
-  hooks(hooks: Partial<HooksObject>): this;
-}
-
 // TODO: update these to match the actual result types
-export type AdminEventsService = IlmoService<Event>;
-export type AdminSignupsService = IlmoService<Signup>;
+export type AdminEventsService = Service<Event>;
+export type AdminSignupsService = Service<Signup>;
 
 export interface IlmoServices {
   '/api/admin/events': AdminEventsService;
@@ -37,4 +32,4 @@ export default function (this: IlmoApplication) {
   app.configure(event);
   app.configure(signup);
   app.configure(user);
-};
+}

@@ -1,11 +1,10 @@
+import { HookContext } from '@feathersjs/feathers';
 import moment from 'moment';
-import { Op, fn, col } from 'sequelize';
-import { IlmoHookContext } from '../../../defs';
-import { Event } from '../../../models/event';
+import { col, fn, Op } from 'sequelize';
 import { Quota } from '../../../models/quota';
 import { Signup } from '../../../models/signup';
 
-export default () => (hook: IlmoHookContext<Event>) => {
+export default () => (hook: HookContext) => {
   hook.params.sequelize = {
     attributes: [
       'id',

@@ -1,57 +1,48 @@
-import { disallow } from 'feathers-hooks-common';
-import sequelizeService from 'feathers-sequelize';
-import { IlmoService } from '..';
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-underscore-dangle */
+import { MethodNotAllowed } from '@feathersjs/errors';
+import { Id, Params } from '@feathersjs/feathers';
+import { Service as SequelizeService } from 'feathers-sequelize';
 import { IlmoApplication } from '../../defs';
 import { Signup } from '../../models/signup';
-import addEditTokenToNewSignup from './hooks/addEditTokenToNewSignup';
-import addPositionToNewSignup from './hooks/addPositionToNewSignup';
-import advanceQueueAfterDeletion from './hooks/advanceQueueAfterDeletion';
-import deleteSignup from './hooks/deleteSignup';
-import getSignupForEdit from './hooks/getSignupForEdit';
-import sendConfirmationMailAfterUpdate from './hooks/sendConfirmationMailAfterUpdate';
-import updateAnswersAfterUpdate from './hooks/updateAnswersAfterUpdate';
-import validateSignupAnswers from './hooks/validateSignupAnswers';
-import validateSignupCreation from './hooks/validateSignupCreation';
+import createNewSignup, { SignupCreateBody, SignupCreateResponse } from './createNewSignup';
+import deleteSignup from './deleteSignup';
+import getSignupForEdit, { SignupGetResponse } from './getSignupForEdit';
+import updateSignup, { SignupUpdateBody, SignupUpdateResponse } from './updateSignup';
 
-export type SignupsService = IlmoService<any>;
+export class SignupsService
+  extends SequelizeService<SignupGetResponse | SignupCreateResponse | SignupUpdateResponse | Signup> {
+  constructor() {
+    super({ Model: Signup });
+  }
+
+  _find(): never {
+    throw new MethodNotAllowed('Cannot GET /api/signups');
+  }
+
+  _get(id: Id, params?: Params) {
+    return getSignupForEdit(id, params);
+  }
+
+  _create(data: SignupCreateBody) {
+    return createNewSignup(data);
+  }
+
+  _update(): never {
+    throw new MethodNotAllowed('Cannot PUT /api/signups/ID');
+  }
+
+  _patch(id: Id, data: SignupUpdateBody, params?: Params) {
+    return updateSignup(id, data, params);
+  }
+
+  _remove(id: Id, params?: Params) {
+    return deleteSignup(id, params);
+  }
+}
 
 export default function (this: IlmoApplication) {
   const app = this;
 
-  const options = {
-    Model: Signup,
-  };
-
-  // Initialize our service with any options it requires
-  app.use('/api/signups', sequelizeService(options));
-
-  // Get our initialize service to that we can bind hooks
-  const signupService = app.service('/api/signups');
-
-  signupService.hooks({
-    before: {
-      all: [],
-      // Unused.
-      find: [disallow()],
-      // Used for loading signup edit form. Custom DB read.
-      get: [getSignupForEdit()],
-      // Used for creating new signups. Verify registration is allowed and pass to feathers-sequelize.
-      create: [validateSignupCreation()],
-      // Unused.
-      update: [disallow()],
-      // Used for editing signups. Validate and pass data to feathers-sequelize.
-      patch: [validateSignupAnswers()],
-      // Used for deleting signups.
-      remove: [deleteSignup()],
-    },
-    after: {
-      all: [],
-      find: [],
-      get: [],
-      create: [addPositionToNewSignup(), addEditTokenToNewSignup()],
-      update: [],
-      patch: [updateAnswersAfterUpdate(), sendConfirmationMailAfterUpdate()],
-      remove: [advanceQueueAfterDeletion()],
-    },
-  });
+  app.use('/api/signups', new SignupsService());
 }

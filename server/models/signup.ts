@@ -16,9 +16,11 @@ export interface SignupAttributes {
   email: string | null;
   confirmedAt: Date | null;
   createdAt: Date;
+  quotaId: number;
 }
 
-export interface SignupCreationAttributes extends Optional<SignupAttributes, 'id'> {}
+export interface SignupCreationAttributes
+  extends Optional<SignupAttributes, 'id' | 'firstName' | 'lastName' | 'email' | 'confirmedAt' | 'createdAt'> {}
 
 export class Signup extends Model<SignupAttributes, SignupCreationAttributes> implements SignupAttributes {
   public id!: number;
@@ -60,6 +62,10 @@ export default function (this: IlmoApplication) {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
+      },
+      quotaId: {
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false,
       },
       firstName: {
         type: DataTypes.STRING,

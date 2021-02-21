@@ -35,7 +35,11 @@ cron.schedule('0 8 * * *', () => {
 });
 
 if (process.env.NODE_ENV === 'development') {
+  // Development: enable error messages
   app.use(express.errorHandler());
+} else {
+  // Production: enforce HTTPS
+  app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 app.use(require('connect-history-api-fallback')());

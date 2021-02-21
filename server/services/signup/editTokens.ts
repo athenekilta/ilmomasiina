@@ -1,3 +1,4 @@
+import { Forbidden } from '@feathersjs/errors';
 import md5 from 'md5';
 import config from '../../config/ilmomasiina.config';
 import { Signup } from '../../models/signup';
@@ -7,6 +8,8 @@ export function generateToken(signup: Signup | number): string {
   return md5(`${id}${config.editTokenSalt}`);
 }
 
-export function verifyToken(signup: Signup | number, token: string): boolean {
-  return token === generateToken(signup);
+export function verifyToken(signup: Signup | number, token: string): void {
+  if (!token || token !== generateToken(signup)) {
+    throw new Forbidden('Invalid editToken');
+  }
 }

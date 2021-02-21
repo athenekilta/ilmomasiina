@@ -1,7 +1,7 @@
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
-import { IlmoApplication } from '../../defs';
-import config from '../../config/ilmomasiina.config';
+import { IlmoApplication } from '../defs';
+import config from '../config/ilmomasiina.config';
 
 export default function (this: IlmoApplication) {
   const app = this;
@@ -30,4 +30,4 @@ export default function (this: IlmoApplication) {
   auth.register('local', new LocalStrategy());
 
   app.use('/api/authentication', auth);
-};
+}

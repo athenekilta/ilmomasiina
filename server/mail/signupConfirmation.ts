@@ -1,13 +1,12 @@
 import _ from 'lodash';
 import moment from 'moment';
-import EmailService from '../../../mail';
-import config from '../../../config/ilmomasiina.config';
-import { IlmoHookContext } from '../../../defs';
-import { Signup } from '../../../models/signup';
+import EmailService from '.';
+import config from '../config/ilmomasiina.config';
+import { Signup } from '../models/signup';
+import { generateToken } from '../services/signup/editTokens';
 
-export default () => async (hook: IlmoHookContext<Signup>) => {
-  const signup = hook.result!;
-
+export default async (signup: Signup) => {
+  // TODO: convert to include
   const answers = await signup.getAnswers();
   const quota = await signup.getQuota();
   const event = await quota.getEvent();
@@ -30,13 +29,15 @@ export default () => async (hook: IlmoHookContext<Signup>) => {
     }
   });
 
+  const editToken = generateToken(signup);
+
   const params = {
     answers: fields,
     edited: answers.some((answer) => answer.createdAt.getTime() !== answer.updatedAt.getTime()),
     date: moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm'),
     event,
-    cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${signup.id}/${hook.data!.editToken}`,
+    cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${signup.id}/${editToken}`,
   };
 
-  EmailService.sendConfirmationMail(signup.email, params);
+  EmailService.sendConfirmationMail(signup.email!, params);
 };

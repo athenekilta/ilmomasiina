@@ -1,4 +1,4 @@
-import { HookContext, Application } from '@feathersjs/feathers';
+import { Application } from '@feathersjs/feathers';
 import { Sequelize } from 'sequelize';
 import { IlmoServices } from './services';
 
@@ -8,8 +8,4 @@ export interface IlmoApplication extends Application<IlmoServices> {
 
   set(key: 'sequelize', value: Sequelize): this;
   set(key: 'authentication', value: {}): this;
-}
-
-export interface IlmoHookContext<T> extends HookContext<T> {
-  readonly app: IlmoApplication;
 }

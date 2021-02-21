@@ -68,4 +68,4 @@ export default function (this: IlmoApplication) {
   });
 
   return Quota;
-};
+}

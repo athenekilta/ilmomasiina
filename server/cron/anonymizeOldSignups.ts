@@ -1,30 +1,28 @@
 import moment from 'moment';
-import { Op, Sequelize } from 'sequelize';
-import { IlmoApplication } from '../defs';
+import { Op } from 'sequelize';
 import { Signup } from '../models/signup';
 
-const redactionKey = 'Deleted';
+const redactedName = 'Deleted';
+const redactedEmail = 'deleted@gdpr';
 
-export default (app: IlmoApplication) => {
+export default () => {
   Signup
     .findAll({
       where: {
         [Op.and]: {
           [Op.or]: {
             firstName: {
-              [Op.ne]: redactionKey,
+              [Op.ne]: redactedName,
             },
             lastName: {
-              [Op.ne]: redactionKey,
+              [Op.ne]: redactedName,
             },
             email: {
-              [Op.not]: null,
+              [Op.ne]: redactedEmail,
             },
           },
           createdAt: {
-            [Op.lt]: moment()
-              .subtract(6, 'months')
-              .toDate(),
+            [Op.lt]: moment().subtract(6, 'months').toDate(),
           },
         },
         // Over 6 months old
@@ -34,9 +32,13 @@ export default (app: IlmoApplication) => {
     .then((signups) => {
       if (signups.length !== 0) {
         console.log('Redacting older signups: ');
-        console.log(signups.map(s => s.id));
+        console.log(signups.map((s) => s.id));
         signups.forEach((signup) => {
-          signup.update({ firstName: redactionKey, lastName: redactionKey, email: null });
+          signup.update({
+            firstName: redactedName,
+            lastName: redactedName,
+            email: redactedEmail,
+          });
         });
       }
     });

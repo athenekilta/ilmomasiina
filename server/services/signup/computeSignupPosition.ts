@@ -1,21 +1,10 @@
 import _ from 'lodash';
 import { col, fn, Model, Op } from 'sequelize';
-import { IlmoHookContext } from '../../../defs';
-import { Quota } from '../../../models/quota';
-import { Signup } from '../../../models/signup';
+import { Quota } from '../../models/quota';
+import { Signup } from '../../models/signup';
+import { SignupState } from './createNewSignup';
 
-type SignupState = 'in-quota' | 'in-open' | 'in-queue';
-
-interface SignupServiceCreateResult {
-  id: number;
-  position: number | null;
-  status: SignupState | null;
-  quotaId: number;
-  createdAt: Date;
-}
-
-export default () => async (hook: IlmoHookContext<Signup | SignupServiceCreateResult>) => {
-  const signup = hook.result! as Signup;
+export default async (signup: Signup) => {
   const currentQuota = await signup.getQuota()!;
 
   const event = await currentQuota.getEvent({
@@ -69,11 +58,8 @@ export default () => async (hook: IlmoHookContext<Signup | SignupServiceCreateRe
     }
   }
 
-  hook.result = {
-    id: signup.id, // signup id
+  return {
     position,
     status,
-    quotaId: currentQuota.id,
-    createdAt: signup.createdAt,
   };
 };
