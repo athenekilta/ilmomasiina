@@ -5,41 +5,53 @@ import { Signup } from '../models/signup';
 const redactedName = 'Deleted';
 const redactedEmail = 'deleted@gdpr';
 
-export default () => {
-  Signup
-    .findAll({
-      where: {
-        [Op.and]: {
-          [Op.or]: {
-            firstName: {
-              [Op.ne]: redactedName,
-            },
-            lastName: {
-              [Op.ne]: redactedName,
-            },
-            email: {
-              [Op.ne]: redactedEmail,
-            },
+export default async function () {
+  const signups = await Signup.findAll({
+    where: {
+      [Op.and]: {
+        // Only anonymize if name and email aren't anonymized already
+        [Op.or]: {
+          firstName: {
+            [Op.ne]: redactedName,
           },
-          createdAt: {
-            [Op.lt]: moment().subtract(6, 'months').toDate(),
+          lastName: {
+            [Op.ne]: redactedName,
+          },
+          email: {
+            [Op.ne]: redactedEmail,
           },
         },
-        // Over 6 months old
-
+        // Only anonymize 6 months old signups
+        // TODO: make the time configurable, or maybe dependent on event date
+        createdAt: {
+          [Op.lt]: moment().subtract(6, 'months').toDate(),
+        },
+        // Don't touch unconfirmed signups
+        confirmedAt: {
+          [Op.not]: null,
+        },
       },
-    })
-    .then((signups) => {
-      if (signups.length !== 0) {
-        console.log('Redacting older signups: ');
-        console.log(signups.map((s) => s.id));
-        signups.forEach((signup) => {
-          signup.update({
-            firstName: redactedName,
-            lastName: redactedName,
-            email: redactedEmail,
-          });
-        });
-      }
+    },
+  });
+  if (signups.length === 0) {
+    return;
+  }
+
+  const ids = signups.map((s) => s.id);
+
+  console.log('Redacting older signups:');
+  console.log(ids);
+
+  try {
+    await Signup.unscoped().update({
+      firstName: redactedName,
+      lastName: redactedName,
+      email: redactedEmail,
+    }, {
+      where: { id: ids },
     });
-};
+    console.log('Signups anonymized');
+  } catch (error) {
+    console.error(error);
+  }
+}

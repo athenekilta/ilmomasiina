@@ -21,18 +21,11 @@ app
 // Create tables if not exist
 app.get('sequelize').sync();
 
-/*
- * cron script that removes signups that have not been confirmed within 30 minutes
- * runs every minute
- */
-cron.schedule('* * * * *', () => {
-  deleteUnconfirmedSignups(app);
-});
+// Every minute, remove signups that haven't been confirmed fast enough
+cron.schedule('* * * * *', deleteUnconfirmedSignups);
 
-// Anonymize old signups daily at 8am
-cron.schedule('0 8 * * *', () => {
-  anonymizeOldSignups(app);
-});
+// Daily at 8am, anonymize old signups
+cron.schedule('0 8 * * *', anonymizeOldSignups);
 
 if (process.env.NODE_ENV === 'development') {
   // Development: enable error messages
