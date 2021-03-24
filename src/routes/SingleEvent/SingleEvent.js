@@ -304,14 +304,14 @@ class SingleEvent extends React.Component {
                   <ReactAutolinker text={event.description}
                     options={{ newWindow: true, phone: false, mention: false, hashtag: false }} />
                 </p>
+                {event.image ? (
+                  <img src={event.image} alt="Banner" />
+                  ) : null}
               </div>
               <div className="col-xs-12 col-sm-4 pull-right">
                 {this.renderSignupButtons()}
                 {this.renderQuotaStatus()}
               </div>
-              {event.image ? (
-                <img src={event.image} alt="Banner" />
-                  ) : null}
             </div>
             <div className="col-xs-12">{this.renderSignupLists()}</div>
           </div>
