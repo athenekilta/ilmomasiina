@@ -305,13 +305,13 @@ class SingleEvent extends React.Component {
                     options={{ newWindow: true, phone: false, mention: false, hashtag: false }} />
                 </p>
               </div>
+              <div className="col-xs-12 col-sm-4 pull-right">
+                {this.renderSignupButtons()}
+                {this.renderQuotaStatus()}
+              </div>
               {event.image ? (
                 <img src={event.image} alt="Banner" />
                   ) : null}
-            </div>
-            <div className="col-xs-12 col-sm-4 pull-right">
-              {this.renderSignupButtons()}
-              {this.renderQuotaStatus()}
             </div>
             <div className="col-xs-12">{this.renderSignupLists()}</div>
           </div>
