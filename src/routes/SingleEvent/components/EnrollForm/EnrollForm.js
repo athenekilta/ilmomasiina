@@ -96,7 +96,6 @@ export class EnrollForm extends React.Component {
 
           return (
             <Select
-              validations="isExisty"
               name={String(question.id)}
               label={question.question}
               options={optionsArray}
