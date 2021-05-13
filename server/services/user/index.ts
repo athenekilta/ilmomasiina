@@ -13,12 +13,8 @@ export type UsersService = Service<UserServiceItem>;
 export default function (this: IlmoApplication) {
   const app = this;
 
-  const options = {
-    Model: app.get('models').user,
-  };
-
   // Initialize our service with any options it requires
-  app.use('/api/users', sequelizeService(options));
+  app.use('/api/users', sequelizeService({ Model: User }));
 
   // Get our initialize service to that we can bind hooks
   const userService = app.service('/api/users');

@@ -1,6 +1,5 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
-import { Model } from 'sequelize';
 import _ from 'lodash';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
@@ -36,7 +35,7 @@ export const eventGetQuestionAttrs = [
   'public',
 ] as const;
 
-// Attributes included in results for QuotaA instances.
+// Attributes included in results for Quota instances.
 export const eventGetQuotaAttrs = [
   'title',
   'size',
@@ -91,23 +90,23 @@ export default async (id: Id): Promise<EventGetResponse> => {
     include: [
       // First include all questions (also non-public for the form)
       {
-        model: Question as typeof Model,
+        model: Question,
         attributes: [...eventGetQuestionAttrs],
       },
       // Include quotas..
       {
-        model: Quota as typeof Model,
+        model: Quota,
         attributes: [...eventGetQuotaAttrs],
         // ... and signups of quotas
         include: [
           {
-            model: Signup as typeof Model,
+            model: Signup,
             attributes: [...eventGetSignupAttrs],
             required: false,
             // ... and answers of signups
             include: [
               {
-                model: Answer as typeof Model,
+                model: Answer,
                 attributes: [...eventGetAnswerAttrs],
                 required: false,
               },

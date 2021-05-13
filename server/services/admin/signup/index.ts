@@ -2,7 +2,7 @@
 /* eslint-disable class-methods-use-this */
 import { AdapterService } from '@feathersjs/adapter-commons';
 import { MethodNotAllowed } from '@feathersjs/errors';
-import authentication from '@feathersjs/authentication';
+import { hooks as authHooks } from '@feathersjs/authentication';
 import { Id } from '@feathersjs/feathers';
 import { IlmoApplication } from '../../../defs';
 import deleteSignup from '../../signup/deleteSignup';
@@ -41,7 +41,9 @@ export default function (this: IlmoApplication) {
 
   app.use('/api/admin/signups', new AdminSignupsService({}));
 
-  app.service('/api/admin/signups').before({
-    all: [authentication.hooks.authenticate('jwt')],
+  app.service('/api/admin/signups').hooks({
+    before: {
+      all: [authHooks.authenticate('jwt')],
+    },
   });
 }

@@ -1,7 +1,6 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import { Id, Params } from '@feathersjs/feathers';
 import _ from 'lodash';
-import { Model } from 'sequelize';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
@@ -49,15 +48,15 @@ export default async (id: Id, data: SignupUpdateBody, params?: Params): Promise<
     attributes: [],
     include: [
       {
-        model: Quota as typeof Model,
+        model: Quota,
         attributes: [],
         include: [
           {
-            model: Event as typeof Model,
+            model: Event,
             attributes: [],
             include: [
               {
-                model: Question as typeof Model,
+                model: Question,
                 attributes: ['question', 'options'],
               },
             ],

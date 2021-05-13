@@ -1,6 +1,5 @@
 import { BadRequest, Forbidden, NotFound } from '@feathersjs/errors';
 import moment from 'moment';
-import { Model } from 'sequelize';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
@@ -47,7 +46,7 @@ export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateRespon
     attributes: [],
     include: [
       {
-        model: Event as typeof Model,
+        model: Event,
         attributes: ['registrationStartDate', 'registrationEndDate'],
       },
     ],

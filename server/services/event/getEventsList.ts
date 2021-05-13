@@ -1,6 +1,4 @@
-import {
-  col, fn, Model, Op,
-} from 'sequelize';
+import { col, fn, Op } from 'sequelize';
 import _ from 'lodash';
 import moment from 'moment';
 import { Event } from '../../models/event';
@@ -49,7 +47,7 @@ export default async (): Promise<EventListResponse> => {
     // Include quotas of event and count of signups
     include: [
       {
-        model: Quota as typeof Model,
+        model: Quota,
         attributes: [
           'title',
           'size',
@@ -57,7 +55,7 @@ export default async (): Promise<EventListResponse> => {
         ],
         include: [
           {
-            model: Signup as typeof Model,
+            model: Signup,
             required: false,
             attributes: [],
           },

@@ -1,7 +1,5 @@
 import _ from 'lodash';
-import {
-  col, fn, Model, Op,
-} from 'sequelize';
+import { col, fn, Op } from 'sequelize';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
 import { SignupState } from './createNewSignup';
@@ -13,7 +11,7 @@ export default async (signup: Signup) => {
     attributes: ['id', 'openQuotaSize', 'signupsPublic'],
     // Include all quotas for the event
     include: [{
-      model: Quota as typeof Model,
+      model: Quota,
       attributes: [
         'id',
         'size',
@@ -21,7 +19,7 @@ export default async (signup: Signup) => {
         [fn('COUNT', col('quota->signups.id')), 'signupCount'],
       ],
       include: [{
-        model: Signup as typeof Model,
+        model: Signup,
         attributes: [],
         where: {
           // Only include this signup and ones older than it.

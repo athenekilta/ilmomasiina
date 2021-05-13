@@ -1,7 +1,6 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import { Id, Params } from '@feathersjs/feathers';
 import moment from 'moment';
-import { Model } from 'sequelize';
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Signup } from '../../models/signup';
@@ -13,7 +12,7 @@ async function advanceQueueAfterDeletion(deletedSignup: Signup) {
   const currentQuota = await deletedSignup.getQuota({
     include: [
       {
-        model: Event as typeof Model,
+        model: Event,
       },
     ],
   })!;
