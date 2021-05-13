@@ -2,7 +2,7 @@ import { Service } from '@feathersjs/feathers';
 import { AuthenticationService } from '@feathersjs/authentication';
 import { AdapterService } from '@feathersjs/adapter-commons';
 import adminevents from './admin/events';
-import adminsignups from './admin/signups';
+import adminsignups, { AdminSignupsService } from './admin/signup';
 import event, { EventsService } from './event';
 import signup, { SignupsService } from './signup';
 import user, { UsersService } from './user';
@@ -13,13 +13,12 @@ import { Signup } from '../models/signup';
 
 // TODO: update these to match the actual result types
 export type AdminEventsService = Service<Event>;
-export type AdminSignupsService = Service<Signup>;
 
 type WrapAdapter<S> = S extends AdapterService<infer T> ? S & Service<T> : never;
 
 export interface IlmoServices {
   '/api/admin/events': AdminEventsService;
-  '/api/admin/signups': AdminSignupsService;
+  '/api/admin/signups': WrapAdapter<AdminSignupsService>;
   '/api/authentication': AuthenticationService;
   '/api/events': WrapAdapter<EventsService>;
   '/api/signups': WrapAdapter<SignupsService>;

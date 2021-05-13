@@ -7,6 +7,8 @@ import { Event } from '../../models/event';
 import { Signup } from '../../models/signup';
 import { verifyToken } from './editTokens';
 
+type AdminParams = { adminAuthenticated: true };
+
 async function advanceQueueAfterDeletion(deletedSignup: Signup) {
   const currentQuota = await deletedSignup.getQuota({
     include: [
@@ -41,13 +43,15 @@ async function advanceQueueAfterDeletion(deletedSignup: Signup) {
   }
 }
 
-export default async (id: Id, params?: Params): Promise<Signup> => {
+export default async (id: Id, params?: Params | AdminParams): Promise<Signup> => {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
   }
 
-  const editToken = params?.query?.editToken;
-  verifyToken(Number(id), editToken);
+  if (!params?.adminAuthenticated) {
+    const editToken = (params as Params)?.query?.editToken;
+    verifyToken(Number(id), editToken);
+  }
 
   const signup = await Signup.findByPk(id);
   if (signup === null) {

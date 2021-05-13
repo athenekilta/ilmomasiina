@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
 import { AdapterService } from '@feathersjs/adapter-commons';
+import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
-import { disallow } from 'feathers-hooks-common';
 import { IlmoApplication } from '../../defs';
 import getEventDetails, { EventGetResponse } from './getEventDetails';
 import getEventsList, { EventListResponse } from './getEventsList';
@@ -18,6 +18,22 @@ export class EventsService extends AdapterService<EventsServiceResponses> {
   _get(id: Id) {
     return getEventDetails(id);
   }
+
+  _create(): never {
+    throw new MethodNotAllowed('Cannot POST /api/events');
+  }
+
+  _update(): never {
+    throw new MethodNotAllowed('Cannot PUT /api/events/ID');
+  }
+
+  _patch(): never {
+    throw new MethodNotAllowed('Cannot PATCH /api/events/ID');
+  }
+
+  _remove(): never {
+    throw new MethodNotAllowed('Cannot DELETE /api/events/ID');
+  }
 }
 
 export default function (this: IlmoApplication) {
@@ -25,11 +41,4 @@ export default function (this: IlmoApplication) {
 
   // Initialize our service with any options it requires
   app.use('/api/events', new EventsService({}));
-
-  app.service('/api/events').before({
-    create: [disallow()],
-    update: [disallow()],
-    patch: [disallow()],
-    remove: [disallow()],
-  });
 }

@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { col, fn, Model, Op } from 'sequelize';
+import {
+  col, fn, Model, Op,
+} from 'sequelize';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
 import { SignupState } from './createNewSignup';
