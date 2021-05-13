@@ -29,8 +29,6 @@ export class Signup extends Model<SignupAttributes, SignupCreationAttributes> im
   public email!: string | null;
   public confirmedAt!: Date | null;
 
-  public editToken!: string; // TODO: move to service item type
-
   public quotaId!: number;
   public quota?: Quota;
   public getQuota!: HasOneGetAssociationMixin<Quota>;

@@ -41,6 +41,9 @@ export class Quota extends Model<QuotaAttributes, QuotaCreationAttributes> imple
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  // Virtual columns for some queries (TODO: is there a cleaner way?)
+  public readonly signupsBefore?: number;
 }
 
 export default function (this: IlmoApplication) {

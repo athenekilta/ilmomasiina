@@ -1,5 +1,5 @@
+import { Service } from '@feathersjs/feathers';
 import sequelizeService from 'feathers-sequelize';
-import { IlmoService } from '..';
 import { IlmoApplication } from '../../defs';
 import { User } from '../../models/user';
 import hooks from './hooks';
@@ -8,7 +8,7 @@ export interface UserServiceItem extends User {
   passwordPlain?: string;
 }
 
-export type UsersService = IlmoService<UserServiceItem>;
+export type UsersService = Service<UserServiceItem>;
 
 export default function (this: IlmoApplication) {
   const app = this;

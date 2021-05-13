@@ -11,9 +11,9 @@ import { Question } from './question';
 export interface EventAttributes {
   id: number;
   title: string;
-  date: Date | null;
-  registrationStartDate: Date | null;
-  registrationEndDate: Date | null;
+  date: Date;
+  registrationStartDate: Date;
+  registrationEndDate: Date;
   openQuotaSize: number;
   description: string | null;
   price: string | null;
@@ -26,14 +26,15 @@ export interface EventAttributes {
 }
 
 export interface EventCreationAttributes
-  extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'draft' | 'signupsPublic'> {}
+  extends Optional<EventAttributes, 'id' | 'description' | 'price' | 'location' | 'facebookUrl'
+  | 'webpageUrl' | 'openQuotaSize' | 'draft' | 'signupsPublic'> {}
 
 export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: number;
   public title!: string;
-  public date!: Date | null;
-  public registrationStartDate!: Date | null;
-  public registrationEndDate!: Date | null;
+  public date!: Date;
+  public registrationStartDate!: Date;
+  public registrationEndDate!: Date;
   public openQuotaSize!: number;
   public description!: string | null;
   public price!: string | null;
@@ -88,12 +89,15 @@ export default function (this: IlmoApplication) {
       },
       date: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
       registrationStartDate: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
       registrationEndDate: {
         type: DataTypes.DATE,
+        allowNull: false,
       },
       openQuotaSize: {
         type: DataTypes.INTEGER,

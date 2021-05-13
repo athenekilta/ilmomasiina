@@ -1,8 +1,8 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-underscore-dangle */
+import { AdapterService } from '@feathersjs/adapter-commons';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id, Params } from '@feathersjs/feathers';
-import { Service as SequelizeService } from 'feathers-sequelize';
 import { IlmoApplication } from '../../defs';
 import { Signup } from '../../models/signup';
 import createNewSignup, { SignupCreateBody, SignupCreateResponse } from './createNewSignup';
@@ -10,12 +10,9 @@ import deleteSignup from './deleteSignup';
 import getSignupForEdit, { SignupGetResponse } from './getSignupForEdit';
 import updateSignup, { SignupUpdateBody, SignupUpdateResponse } from './updateSignup';
 
-export class SignupsService
-  extends SequelizeService<SignupGetResponse | SignupCreateResponse | SignupUpdateResponse | Signup> {
-  constructor() {
-    super({ Model: Signup });
-  }
+type SignupsServiceResponses = SignupGetResponse | SignupCreateResponse | SignupUpdateResponse | Signup;
 
+export class SignupsService extends AdapterService<SignupsServiceResponses> {
   _find(): never {
     throw new MethodNotAllowed('Cannot GET /api/signups');
   }
@@ -44,5 +41,5 @@ export class SignupsService
 export default function (this: IlmoApplication) {
   const app = this;
 
-  app.use('/api/signups', new SignupsService());
+  app.use('/api/signups', new SignupsService({}));
 }

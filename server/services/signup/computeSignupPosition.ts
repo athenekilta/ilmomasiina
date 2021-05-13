@@ -32,7 +32,7 @@ export default async (signup: Signup) => {
     }],
     group: [col('event.id'), col('quota.id')],
   });
-  const positionInQuota = _.find(event.quotas!, { id: currentQuota.id })!.signupsBefore;
+  const positionInQuota = _.find(event.quotas!, { id: currentQuota.id })!.signupsBefore!;
 
   let position = null;
   let status: SignupState | null = null;
@@ -45,7 +45,7 @@ export default async (signup: Signup) => {
     } else {
       // Count how many signups (older than this one) don't fit each quota.
       // This is our position in the open quota.
-      const positionInOpen = _.sum(event.quotas!.map((quota) => Math.max(0, quota.signupsBefore - quota.size)));
+      const positionInOpen = _.sum(event.quotas!.map((quota) => Math.max(0, quota.signupsBefore! - quota.size)));
 
       if (positionInOpen <= event.openQuotaSize && event.openQuotaSize > 0) {
         position = positionInOpen;

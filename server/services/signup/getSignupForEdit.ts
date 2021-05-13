@@ -7,11 +7,11 @@ import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { eventServiceEventAttrs } from '../event';
+import { eventGetEventAttrs } from '../event/getEventDetails';
 import { verifyToken } from './editTokens';
 
 // Include the same attributes from Event as /api/events.
-const signupGetEventAttrs = eventServiceEventAttrs;
+const signupGetEventAttrs = eventGetEventAttrs;
 
 // Attributes included from Signup.
 const signupGetSignupAttrs = [
