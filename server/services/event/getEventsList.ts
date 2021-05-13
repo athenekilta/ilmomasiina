@@ -18,9 +18,20 @@ export const eventListEventAttrs = [
   'signupsPublic',
 ] as const;
 
+export const eventListQuotaAttrs = [
+  'title',
+  'size',
+  'signupCount',
+] as const;
+
 // Type definitions for the endpoint: pick the columns above and add relations.
 
+export interface EventListQuotaItem extends Pick<Quota, typeof eventListQuotaAttrs[number]> {
+  signupCount: number;
+}
+
 export interface EventListItem extends Pick<Event, typeof eventListEventAttrs[number]> {
+  quotas: EventListQuotaItem[];
 }
 
 export type EventListResponse = EventListItem[];
@@ -59,6 +70,10 @@ export default async (): Promise<EventListResponse> => {
   // Convert event list to response
   const result: EventListResponse = events.map((event) => ({
     ..._.pick(event, eventListEventAttrs),
+    quotas: event.quotas!.map((quota) => ({
+      ..._.pick(quota, eventListQuotaAttrs),
+      signupCount: quota.signupCount!,
+    })),
   }));
 
   return result;
