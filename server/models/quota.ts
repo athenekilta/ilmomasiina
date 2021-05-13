@@ -66,6 +66,12 @@ export default function (this: IlmoApplication) {
   }, {
     sequelize,
     modelName: 'quota',
+    // Apparently 'quota' is plural of 'quotum', and sequelize + node-inflection
+    // would _really_ like to call our foreign key 'quotumId'.
+    name: {
+      singular: 'quota',
+      plural: 'quotas',
+    },
     freezeTableName: true,
     paranoid: true,
   });

@@ -62,7 +62,6 @@ export default function (this: IlmoApplication) {
 
   Event.hasMany(Question, {
     foreignKey: {
-      name: 'eventId',
       allowNull: false,
     },
     onDelete: 'CASCADE',
@@ -71,7 +70,6 @@ export default function (this: IlmoApplication) {
 
   Event.hasMany(Quota, {
     foreignKey: {
-      name: 'eventId',
       allowNull: false,
     },
     onDelete: 'CASCADE',
@@ -79,17 +77,15 @@ export default function (this: IlmoApplication) {
   Quota.belongsTo(Event);
 
   Quota.hasMany(Signup, {
-    onDelete: 'CASCADE',
     foreignKey: {
-      name: 'quotaId',
       allowNull: false,
     },
+    onDelete: 'CASCADE',
   });
   Signup.belongsTo(Quota);
 
   Signup.hasMany(Answer, {
     foreignKey: {
-      name: 'signupId',
       allowNull: false,
     },
     onDelete: 'CASCADE',
@@ -98,7 +94,6 @@ export default function (this: IlmoApplication) {
 
   Question.hasMany(Answer, {
     foreignKey: {
-      name: 'questionId',
       allowNull: false,
     },
     onDelete: 'CASCADE',

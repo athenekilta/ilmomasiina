@@ -26,8 +26,8 @@ export interface EventAttributes {
 }
 
 export interface EventCreationAttributes
-  extends Optional<EventAttributes, 'id' | 'description' | 'price' | 'location' | 'facebookUrl'
-  | 'webpageUrl' | 'openQuotaSize' | 'draft' | 'signupsPublic'> {}
+  extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'description' | 'price' | 'location'
+  | 'facebookUrl' | 'webpageUrl' | 'draft' | 'signupsPublic' | 'verificationEmail'> {}
 
 export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: number;
