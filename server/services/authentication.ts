@@ -1,10 +1,26 @@
 import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
-import { IlmoApplication } from '../defs';
+import { Params } from '@feathersjs/feathers';
+import _ from 'lodash';
 import config from '../config/ilmomasiina.config';
+import { IlmoApplication } from '../defs';
+
+// By default, LocalStrategy calls GET /api/users with provider=rest to get the subject.
+// As we disallow that API externally, we need to drop the provider param from the call.
+// We then only pass on the user ID and email to be safe.
+// https://github.com/feathersjs/feathers/issues/1496
+class CustomLocalStrategy extends LocalStrategy {
+  async getEntity(result: any, params: Params) {
+    const entity = await super.getEntity(result, _.omit(params, 'provider'));
+    return entity && _.pick(entity, 'id', 'email');
+  }
+}
 
 export default function (this: IlmoApplication) {
   const app = this;
+
+  // Generate super-long-lived JWTs in development mode
+  const expiresIn = process.env.NODE_ENV === 'development' ? '365d' : '1h';
 
   // Set up authentication with the secret
   app.set('authentication', {
@@ -16,7 +32,7 @@ export default function (this: IlmoApplication) {
     ],
     entity: 'user',
     jwtOptions: {
-      expiresIn: '1h',
+      expiresIn,
     },
     local: {
       usernameField: 'email',
@@ -27,7 +43,7 @@ export default function (this: IlmoApplication) {
   const auth = new AuthenticationService(app);
 
   auth.register('jwt', new JWTStrategy());
-  auth.register('local', new LocalStrategy());
+  auth.register('local', new CustomLocalStrategy());
 
   app.use('/api/authentication', auth);
 }
