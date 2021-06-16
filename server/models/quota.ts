@@ -12,6 +12,7 @@ export interface QuotaAttributes {
   id: number;
   title: string;
   size: number;
+  eventId: number;
 }
 
 export interface QuotaCreationAttributes extends Optional<QuotaAttributes, 'id'> {}
@@ -54,6 +55,10 @@ export default function (this: IlmoApplication) {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
+    },
+    eventId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
     },
     title: {
       type: DataTypes.STRING,

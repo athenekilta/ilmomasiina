@@ -17,6 +17,7 @@ export interface QuestionAttributes {
   options: string | null;
   required: boolean;
   public: boolean;
+  eventId: number;
 }
 
 export interface QuestionCreationAttributes
@@ -60,6 +61,10 @@ export default function (this: IlmoApplication) {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
+    },
+    eventId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
     },
     question: {
       type: DataTypes.STRING,

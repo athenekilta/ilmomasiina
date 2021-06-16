@@ -8,6 +8,8 @@ import { Signup } from './signup';
 export interface AnswerAttributes {
   id: number;
   answer: string;
+  questionId: number;
+  signupId: number;
 }
 
 export interface AnswerCreationAttributes extends Optional<AnswerAttributes, 'id'> {}
@@ -40,6 +42,14 @@ export default function (this: IlmoApplication) {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
+    },
+    questionId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+    },
+    signupId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
     },
     answer: {
       type: DataTypes.STRING,
