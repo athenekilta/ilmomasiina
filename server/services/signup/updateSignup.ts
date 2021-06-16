@@ -134,7 +134,12 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
       signupId: signup.id,
     }));
 
-    await signup.removeAnswers(undefined, { transaction });
+    await Answer.destroy({
+      where: {
+        signupId: signup.id,
+      },
+      transaction,
+    });
     await Answer.bulkCreate(newAnswers, { transaction });
 
     return signup;
