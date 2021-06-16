@@ -23,11 +23,7 @@
     "lint:fix": "bnr lint:fix",
     "test": "bnr lint && bnr test",
     "test:dev": "npm run test -- --watch",
-    "codecov": "cat coverage/*/lcov.info | codecov",
-    "reset-db": "bnr reset-db",
-    "create-fake-data": "bnr create-fake-data",
-    "create-user": "bnr create-user",
-    "test-email": "bnr test-email"
+    "codecov": "cat coverage/*/lcov.info | codecov"
   },
   "directories": {
     "lib": "server"
@@ -42,30 +38,6 @@
     },
     "compile:server": {
       "command": "tsc -p server"
-    },
-    "reset-db": {
-      "command": "node server/scripts/reset-database",
-      "env": {
-        "DEBUG": "app:*"
-      }
-    },
-    "create-fake-data": {
-      "command": "node server/scripts/create-fake-data",
-      "env": {
-        "DEBUG": "app:*"
-      }
-    },
-    "create-user": {
-      "command": "node server/scripts/create-user",
-      "env": {
-        "DEBUG": "app:*"
-      }
-    },
-    "test-email": {
-      "command": "node server/scripts/test-email",
-      "env": {
-        "DEBUG": "app:*"
-      }
     },
     "deploy": {
       "command": "npm run lint && npm run test && npm run clean && npm run compile:server && npm run compile:client",
