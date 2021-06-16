@@ -18,6 +18,7 @@ export interface SignupUpdateBody {
     questionId: number;
     answer: string;
   }[];
+  editToken?: string;
 }
 
 // Response schema.
@@ -31,7 +32,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
     throw new BadRequest('Invalid id');
   }
 
-  const editToken = params?.query?.editToken;
+  const editToken = params?.query?.editToken || data.editToken;
   verifyToken(Number(id), editToken);
 
   // Check that all common fields are present
