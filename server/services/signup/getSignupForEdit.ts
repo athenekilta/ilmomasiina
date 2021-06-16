@@ -94,7 +94,7 @@ export default async (id: number, params?: Params): Promise<SignupGetResponse> =
 
     if (answer) {
       answersByQuestion.push({
-        ...question,
+        ..._.pick(question, signupGetQuestionAttrs),
         answerId: answer.id,
         answer: answer.answer,
       });

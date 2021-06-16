@@ -130,7 +130,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
 
     // Update the Answers for the Signup
     const newAnswers = data.answers!.map((answer) => ({
-      ...answer,
+      ..._.pick(answer, ['questionId', 'answer']),
       signupId: signup.id,
     }));
 
