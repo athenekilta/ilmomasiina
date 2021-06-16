@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
 import { Signup } from '../models/signup';
@@ -23,7 +24,7 @@ export default async function () {
     return;
   }
 
-  const ids = signups.map((signup) => signup.id);
+  const ids = _.map(signups, 'id');
 
   console.log('Deleting unconfirmed signups:');
   console.log(ids);

@@ -71,7 +71,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
     const questions = quota.event!.questions!;
 
     // Remove answers to unrelated questions
-    const validQuestions = questions.map((question) => question.id);
+    const validQuestions = _.map(questions, 'id');
     data.answers = data.answers.filter((answer) => validQuestions.includes(answer.questionId));
 
     // Check that all questions are answered with a valid answer

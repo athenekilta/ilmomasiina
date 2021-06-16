@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
 import { Signup } from '../models/signup';
@@ -37,7 +38,7 @@ export default async function () {
     return;
   }
 
-  const ids = signups.map((s) => s.id);
+  const ids = _.map(signups, 'id');
 
   console.log('Redacting older signups:');
   console.log(ids);

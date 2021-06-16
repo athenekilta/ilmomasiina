@@ -166,9 +166,7 @@ export default async (id: number, admin = false): Promise<EventGetResponse> => {
       });
     } else {
       // Find IDs of public questions
-      const publicQuestions = event.questions!
-        .filter((question) => question.public)
-        .map((question) => question.id);
+      const publicQuestions = _.map(_.filter(event.questions!, 'public'), 'id');
 
       // Hide answers of non-public questions
       result.quota.forEach((quota) => {

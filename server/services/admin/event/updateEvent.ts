@@ -73,7 +73,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
         attributes: ['id'],
         transaction,
       });
-      const newIds = data.questions.map((question) => question.id).filter((newId) => newId) as number[];
+      const newIds = _.filter(_.map(data.questions, 'id')) as number[];
       await Question.destroy({
         where: {
           id: {
@@ -86,7 +86,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
       await Promise.all(data.questions.map(async (question) => {
         const questionAttribs = _.pick(question, adminEventCreateQuestionAttrs);
         // See if the question already exists
-        const existing = question.id && oldQuestions.find((old) => old.id === question.id);
+        const existing = question.id && _.find(oldQuestions, { id: question.id });
         if (existing) {
           await existing.update(questionAttribs, { transaction });
         } else {
@@ -105,7 +105,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
         attributes: ['id'],
         transaction,
       });
-      const newIds = data.quota.map((quota) => quota.id).filter((newId) => newId) as number[];
+      const newIds = _.filter(_.map(data.quota, 'id')) as number[];
       await Quota.destroy({
         where: {
           id: {
@@ -118,7 +118,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
       await Promise.all(data.quota.map(async (quota) => {
         const quotaAttribs = _.pick(quota, adminEventCreateQuotaAttrs);
         // See if the quota already exists
-        const existing = quota.id && oldQuotas.find((old) => old.id === quota.id);
+        const existing = quota.id && _.find(oldQuotas, { id: quota.id });
         if (existing) {
           await existing.update(quotaAttribs, { transaction });
         } else {
