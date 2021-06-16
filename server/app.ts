@@ -3,6 +3,7 @@ import express, { rest, json, urlencoded } from '@feathersjs/express';
 import compress from 'compression';
 import cron from 'node-cron';
 import enforce from 'express-sslify';
+import { NextFunction } from 'express';
 import models from './models';
 import services from './services';
 import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
@@ -27,8 +28,15 @@ cron.schedule('* * * * *', deleteUnconfirmedSignups);
 // Daily at 8am, anonymize old signups
 cron.schedule('0 8 * * *', anonymizeOldSignups);
 
+// Serve compiled frontend (TODO: implement Webpack dev server)
+app.use(express.static('../../dist'));
+
 if (process.env.NODE_ENV === 'development') {
   // Development: enable error messages
+  app.use((error: any, req: any, res: any, next: NextFunction) => {
+    console.error(error);
+    next(error);
+  });
   app.use(express.errorHandler());
 } else {
   // Production: enforce HTTPS
