@@ -1,6 +1,6 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
-import { Op } from 'sequelize';
+import { Op, Transaction } from 'sequelize';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
@@ -55,6 +55,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
         },
       ],
       transaction,
+      lock: Transaction.LOCK.SHARE,
     });
     if (event === null) {
       throw new NotFound('No event found with id');
