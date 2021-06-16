@@ -1,5 +1,5 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
-import { Id, Params } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
@@ -48,7 +48,7 @@ export interface SignupGetResponse {
   event: SignupGetEventItem | null;
 }
 
-export default async (id: Id, params?: Params): Promise<SignupGetResponse> => {
+export default async (id: number, params?: Params): Promise<SignupGetResponse> => {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
   }

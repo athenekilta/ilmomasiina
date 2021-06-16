@@ -1,5 +1,5 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
-import { Id, Params } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 import moment from 'moment';
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
@@ -42,7 +42,7 @@ async function advanceQueueAfterDeletion(deletedSignup: Signup) {
   }
 }
 
-export default async (id: Id, params?: Params | AdminParams): Promise<Signup> => {
+export default async (id: number, params?: Params | AdminParams): Promise<null> => {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
   }
@@ -63,6 +63,5 @@ export default async (id: Id, params?: Params | AdminParams): Promise<Signup> =>
   // Advance the queue and send emails to people that were accepted
   await advanceQueueAfterDeletion(signup);
 
-  // TODO: ensure that no secret data is actually returned here
-  return signup;
+  return null;
 };

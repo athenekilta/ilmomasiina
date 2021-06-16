@@ -32,7 +32,7 @@ export class AdminSignupsService extends AdapterService<AdminSignupsServiceRespo
 
   async _remove(id: Id) {
     // Invoke regular signup deletion with admin override
-    return deleteSignup(id, { adminAuthenticated: true });
+    return deleteSignup(Number(id), { adminAuthenticated: true });
   }
 }
 

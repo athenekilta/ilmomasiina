@@ -1,5 +1,5 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
-import { Id, Params } from '@feathersjs/feathers';
+import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
@@ -26,7 +26,7 @@ export interface SignupUpdateResponse {
   confirmedAt: Date;
 }
 
-export default async (id: Id, data: SignupUpdateBody, params?: Params): Promise<SignupUpdateResponse> => {
+export default async (id: number, data: SignupUpdateBody, params?: Params): Promise<SignupUpdateResponse> => {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
   }

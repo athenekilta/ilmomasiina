@@ -4,13 +4,12 @@ import { AdapterService } from '@feathersjs/adapter-commons';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id, Params } from '@feathersjs/feathers';
 import { IlmoApplication } from '../../defs';
-import { Signup } from '../../models/signup';
 import createNewSignup, { SignupCreateBody, SignupCreateResponse } from './createNewSignup';
 import deleteSignup from './deleteSignup';
 import getSignupForEdit, { SignupGetResponse } from './getSignupForEdit';
 import updateSignup, { SignupUpdateBody, SignupUpdateResponse } from './updateSignup';
 
-type SignupsServiceResponses = SignupGetResponse | SignupCreateResponse | SignupUpdateResponse | Signup;
+type SignupsServiceResponses = SignupGetResponse | SignupCreateResponse | SignupUpdateResponse | null;
 
 export class SignupsService extends AdapterService<SignupsServiceResponses> {
   _find(): never {
@@ -18,7 +17,7 @@ export class SignupsService extends AdapterService<SignupsServiceResponses> {
   }
 
   _get(id: Id, params?: Params) {
-    return getSignupForEdit(id, params);
+    return getSignupForEdit(Number(id), params);
   }
 
   _create(data: SignupCreateBody) {
@@ -30,11 +29,11 @@ export class SignupsService extends AdapterService<SignupsServiceResponses> {
   }
 
   _patch(id: Id, data: SignupUpdateBody, params?: Params) {
-    return updateSignup(id, data, params);
+    return updateSignup(Number(id), data, params);
   }
 
   _remove(id: Id, params?: Params) {
-    return deleteSignup(id, params);
+    return deleteSignup(Number(id), params);
   }
 }
 
