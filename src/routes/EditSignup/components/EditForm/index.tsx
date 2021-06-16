@@ -25,7 +25,9 @@ type Props = {
 
 const EditForm = (props: Props) => {
   const { signup, submitForm, questions } = props;
-  const { register, setValue, handleSubmit, errors } = useForm<FormData>();
+  const {
+    register, setValue, handleSubmit, errors,
+  } = useForm<FormData>();
   const [inputError, setInputError] = useState(false);
 
   function onSubmit(data) {
@@ -33,12 +35,12 @@ const EditForm = (props: Props) => {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
-      answers: []
+      answers: [],
     };
 
     if (questions) {
       formData.answers = questions
-        .map(question => {
+        .map((question) => {
           const questionId = question.id;
           const answer = data[question.id];
 
@@ -47,7 +49,7 @@ const EditForm = (props: Props) => {
               return {
                 id: question.answerId,
                 questionId,
-                answer: answer.join(';')
+                answer: answer.join(';'),
               };
             }
             return { id: question.answerId, questionId, answer };
@@ -55,7 +57,7 @@ const EditForm = (props: Props) => {
 
           return null;
         })
-        .filter(x => x);
+        .filter((x) => x);
     }
 
     return submitForm(formData);

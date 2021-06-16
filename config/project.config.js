@@ -12,7 +12,7 @@ const {
   BRANDING_FOOTER_GDPR_TEXT,
   BRANDING_FOOTER_GDPR_LINK,
   BRANDING_FOOTER_HOME_TEXT,
-  BRANDING_FOOTER_HOME_LINK
+  BRANDING_FOOTER_HOME_LINK,
 } = process.env;
 
 debug('Creating default configuration.');
@@ -47,18 +47,18 @@ const config = {
       '@babel/plugin-transform-runtime',
       '@babel/plugin-proposal-class-properties',
       '@babel/plugin-proposal-optional-chaining',
-      'react-hot-loader/babel'
+      'react-hot-loader/babel',
     ],
     presets: [
       [
         '@babel/preset-env',
         {
-          modules: 'commonjs'
-        }
+          modules: 'commonjs',
+        },
       ],
       '@babel/preset-react',
-      '@babel/preset-typescript'
-    ]
+      '@babel/preset-typescript',
+    ],
   },
   compiler_devtool: 'source-map',
   compiler_hash_type: 'hash',
@@ -68,7 +68,7 @@ const config = {
   compiler_stats: {
     chunks: false,
     chunkModules: false,
-    colors: true
+    colors: true,
   },
   compiler_vendors: ['react', 'react-redux', 'react-router', 'redux'],
 
@@ -77,8 +77,8 @@ const config = {
   // ----------------------------------
   coverage_reporters: [
     { type: 'text-summary' },
-    { type: 'lcov', dir: 'coverage' }
-  ]
+    { type: 'lcov', dir: 'coverage' },
+  ],
 };
 
 /************************************************
@@ -96,7 +96,7 @@ Edit at Your Own Risk
 // N.B.: globals added here must _also_ be added to .eslintrc
 config.globals = {
   'process.env': {
-    NODE_ENV: JSON.stringify(config.env)
+    NODE_ENV: JSON.stringify(config.env),
   },
   NODE_ENV: config.env,
   DEV: config.env === 'development',
@@ -109,7 +109,7 @@ config.globals = {
   BRANDING_FOOTER_GDPR_TEXT: JSON.stringify(BRANDING_FOOTER_GDPR_TEXT),
   BRANDING_FOOTER_GDPR_LINK: JSON.stringify(BRANDING_FOOTER_GDPR_LINK),
   BRANDING_FOOTER_HOME_TEXT: JSON.stringify(BRANDING_FOOTER_HOME_TEXT),
-  BRANDING_FOOTER_HOME_LINK: JSON.stringify(BRANDING_FOOTER_HOME_LINK)
+  BRANDING_FOOTER_HOME_LINK: JSON.stringify(BRANDING_FOOTER_HOME_LINK),
 };
 
 // ------------------------------------
@@ -117,7 +117,7 @@ config.globals = {
 // ------------------------------------
 const pkg = require('../package.json');
 
-config.compiler_vendors = config.compiler_vendors.filter(dep => {
+config.compiler_vendors = config.compiler_vendors.filter((dep) => {
   // eslint-disable-line
   if (pkg.dependencies[dep]) return true;
 
@@ -142,7 +142,7 @@ config.paths = {
   base,
   client: base.bind(null, config.dir_client),
   public: base.bind(null, config.dir_public),
-  dist: base.bind(null, config.dir_dist)
+  dist: base.bind(null, config.dir_dist),
 };
 
 // ========================================================

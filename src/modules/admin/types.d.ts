@@ -7,7 +7,7 @@ import {
   setEventsLoading,
   setLoginError,
   setLoginLoading,
-  setLoginStatus
+  setLoginStatus,
 } from './actions';
 
 interface AdminState {

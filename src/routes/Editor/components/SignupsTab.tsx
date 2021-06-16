@@ -41,7 +41,7 @@ const SignupsTab = (props: Props) => {
             <th key="lastName">Sukunimi</th>
             <th key="email">Sähköposti</th>
             <th key="quota">Kiintiö</th>
-            {_.map(event.questions, q => (
+            {_.map(event.questions, (q) => (
               <th key={q.id}>{q.question}</th>
             ))}
             <th key="timestamp">Ilmoittautumisaika</th>
@@ -51,12 +51,15 @@ const SignupsTab = (props: Props) => {
         <tbody>
           {_.map(signups, (s, index) => (
             <tr key={`${s.id}-${index}`}>
-              <td key="position">{index + 1}.</td>
+              <td key="position">
+                {index + 1}
+                .
+              </td>
               <td key="firstName">{s.Etunimi}</td>
               <td key="lastName">{s.Sukunimi}</td>
               <td key="email">{s['Sähköposti']}</td>
               <td key="quota">{s['Kiintiö']}</td>
-              {_.map(event.questions, q => {
+              {_.map(event.questions, (q) => {
                 const answer = s[q.question];
                 return <td key={q.id}>{answer}</td>;
               })}
@@ -66,7 +69,7 @@ const SignupsTab = (props: Props) => {
                   className="btn btn-danger"
                   onClick={() => {
                     const confirmation = window.confirm(
-                      'Oletko varma? Poistamista ei voi perua.'
+                      'Oletko varma? Poistamista ei voi perua.',
                     );
                     if (confirmation) {
                       dispatch(deleteSignupAsync(s.id, event.id));

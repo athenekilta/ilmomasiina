@@ -12,7 +12,7 @@ import {
   getEvent,
   publishEvent,
   updateEventEditor,
-  updateEventField
+  updateEventField,
 } from '../../modules/editor/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import BasicDetailsTab from './components/BasicDetailsTab';
@@ -39,8 +39,8 @@ const baseQuota = [
     id: 0,
     title: 'Kiintiö',
     size: 20,
-    existsInDb: false
-  }
+    existsInDb: false,
+  },
 ];
 
 const Editor = (props: Props) => {
@@ -48,13 +48,15 @@ const Editor = (props: Props) => {
 
   const dispatch = useTypedDispatch();
   const { event, eventError, eventLoading } = useTypedSelector(
-    state => state.editor,
-    shallowEqual
+    (state) => state.editor,
+    shallowEqual,
   );
-  const adminToken = useTypedSelector(state => state.admin.accessToken);
+  const adminToken = useTypedSelector((state) => state.admin.accessToken);
 
   const formMethods = useForm({ defaultValues: event });
-  const { register, handleSubmit, setValue, reset } = formMethods;
+  const {
+    register, handleSubmit, setValue, reset,
+  } = formMethods;
   const [activeTab, setActiveTab] = useState(1);
 
   useEffect(() => {
@@ -68,10 +70,10 @@ const Editor = (props: Props) => {
     const fieldsToRegister = [
       'date',
       'registrationStartDate',
-      'registrationEndDate'
+      'registrationEndDate',
     ];
 
-    fieldsToRegister.forEach(field => {
+    fieldsToRegister.forEach((field) => {
       register({ name: field }, { required: true });
       setValue(field, event[field]);
     });
@@ -102,7 +104,7 @@ const Editor = (props: Props) => {
       questions: event.questions,
       quota: event.quota,
       id: Number(match.params.id),
-      draft: isDraft
+      draft: isDraft,
     };
 
     try {
@@ -112,13 +114,13 @@ const Editor = (props: Props) => {
       } else {
         dispatch(updateEventEditor(modifiedEvent, adminToken));
         toast.success('Muutoksesi tallennettiin onnistuneesti!', {
-          autoClose: 2000
+          autoClose: 2000,
         });
       }
     } catch (error) {
       toast.error(
         'Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.',
-        { autoClose: 2000 }
+        { autoClose: 2000 },
       );
     }
   }
@@ -154,7 +156,7 @@ const Editor = (props: Props) => {
         <EditorToolbar publish={publish} />
         <EditorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        <div className={'event-editor--valid-notice collapsed'}>
+        <div className="event-editor--valid-notice collapsed">
           <span>
             <b>*</b>
             Tähdellä merkityt kentät ovat pakollisia

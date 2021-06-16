@@ -16,7 +16,9 @@ type Props = {
 };
 
 const TableRow = (props: Props) => {
-  const { title, link, date, signupLabel, signups, size, className } = props;
+  const {
+    title, link, date, signupLabel, signups, size, className,
+  } = props;
 
   return (
     <tr className={className}>

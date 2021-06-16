@@ -15,7 +15,7 @@ export const getQuotaData = createSelector(
       return null;
     }
     return getSignupsByQuota(event);
-  }
+  },
 );
 
 export const getFormattedQuestions = createSelector(
@@ -29,7 +29,7 @@ export const getFormattedQuestions = createSelector(
       options: null,
       public: true,
       question: 'Kiintiö',
-      type: 'text'
+      type: 'text',
     });
-  }
+  },
 );

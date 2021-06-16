@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Checkbox, Input, Label, Select, Textarea } from '@theme-ui/components';
+import {
+  Checkbox, Input, Label, Select, Textarea,
+} from '@theme-ui/components';
 import _ from 'lodash';
 
 import { Question } from '../../../../modules/types';
@@ -12,7 +14,7 @@ type Props = {
 
 const QuestionFields = ({ questions, register }: Props) => (
   <>
-    {_.map(questions, question => {
+    {_.map(questions, (question) => {
       const help = question.public && 'Tämän kentän vastaukset ovat julkisia.';
 
       switch (question.type) {
@@ -50,7 +52,7 @@ const QuestionFields = ({ questions, register }: Props) => (
         case 'checkbox':
           return (
             <>
-              {question.options.split(';').map(option => (
+              {question.options.split(';').map((option) => (
                 <div key={`${question.id}-${option}`}>
                   <Label htmlFor={question.id}>{option}</Label>
                   <Checkbox required={question.required} />
@@ -77,7 +79,7 @@ const QuestionFields = ({ questions, register }: Props) => (
 
           question.options
             .split(';')
-            .map(option => optionsArray.push({ label: option }));
+            .map((option) => optionsArray.push({ label: option }));
 
           return (
             <Select

@@ -1,5 +1,7 @@
 /** @jsx jsx */
-import { Checkbox, Input, Label, Textarea } from '@theme-ui/components';
+import {
+  Checkbox, Input, Label, Textarea,
+} from '@theme-ui/components';
 import { jsx } from 'theme-ui';
 
 import { Event } from '../../../modules/types';

@@ -15,7 +15,9 @@ type SignupButtonProps = {
 };
 
 const SignupButton = (props: SignupButtonProps) => {
-  const { event, isOnly, isOpen, openForm, seconds, total } = props;
+  const {
+    event, isOnly, isOpen, openForm, seconds, total,
+  } = props;
 
   return (
     <div className="sidebar-widget">
@@ -25,25 +27,28 @@ const SignupButton = (props: SignupButtonProps) => {
           signupState(
             event.date,
             event.registrationStartDate,
-            event.registrationEndDate
+            event.registrationEndDate,
           ).label
         }
         {total < 60000 && !isOpen ? (
-          <span style={{ color: 'green' }}> {` (${seconds}  s)`}</span>
+          <span style={{ color: 'green' }}>
+            {' '}
+            {` (${seconds}  s)`}
+          </span>
         ) : null}
       </p>
       {event.quota
         ? event.quota.map((quota, index) => (
-            <p key={index}>
-              <button
-                disabled={!isOpen}
-                className="btn btn-default btn-block btn-whitespace-normal"
-                onClick={() => (isOpen ? openForm(quota) : {})}
-              >
-                {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
-              </button>
-            </p>
-          ))
+          <p key={index}>
+            <button
+              disabled={!isOpen}
+              className="btn btn-default btn-block btn-whitespace-normal"
+              onClick={() => (isOpen ? openForm(quota) : {})}
+            >
+              {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
+            </button>
+          </p>
+        ))
         : ''}
     </div>
   );

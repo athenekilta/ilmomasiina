@@ -6,7 +6,7 @@ import {
   Label,
   Radio,
   Select,
-  Textarea
+  Textarea,
 } from '@theme-ui/components';
 import _ from 'lodash';
 
@@ -21,7 +21,7 @@ type Props = {
 
 const QuestionFields = ({ questions, register }: Props) => (
   <>
-    {_.map(questions, question => {
+    {_.map(questions, (question) => {
       const help = question.public && (
         <span>Tämän kentän vastaukset ovat julkisia.</span>
       );
@@ -62,7 +62,7 @@ const QuestionFields = ({ questions, register }: Props) => (
             <li key={question.id}>
               <p>{question.question}</p>
               <ul className="flex-inner">
-                {question.options.map(option => (
+                {question.options.map((option) => (
                   <li>
                     <Label mr={3}>
                       <Checkbox
@@ -99,9 +99,7 @@ const QuestionFields = ({ questions, register }: Props) => (
             // render select if more than 3 options
             const optionsArray = [{ label: 'Valitse...', value: null }];
 
-            question.options.map(option =>
-              optionsArray.push({ label: option, value: null })
-            );
+            question.options.map((option) => optionsArray.push({ label: option, value: null }));
 
             return (
               <li key={question.id}>
@@ -113,7 +111,7 @@ const QuestionFields = ({ questions, register }: Props) => (
                     ref={register({ required: question.required })}
                     mb={2}
                   >
-                    {question.options.map(option => (
+                    {question.options.map((option) => (
                       <option key={question.id} value={option}>
                         {option}
                       </option>
@@ -123,12 +121,12 @@ const QuestionFields = ({ questions, register }: Props) => (
                 </div>
               </li>
             );
-          } else if (question?.options) {
+          } if (question?.options) {
             return (
               <li key={question.id}>
                 <p>{question.question}</p>
                 <ul className="flex-inner">
-                  {question.options.map(option => (
+                  {question.options.map((option) => (
                     <li>
                       <Label htmlFor={question.id} mr={3}>
                         <Radio

@@ -1,5 +1,7 @@
 /** @jsx jsx */
-import { Button, Container, Input, Label } from '@theme-ui/components';
+import {
+  Button, Container, Input, Label,
+} from '@theme-ui/components';
 import { useForm } from 'react-hook-form';
 import { jsx } from 'theme-ui';
 
@@ -19,9 +21,9 @@ const Login = (props: Props) => {
   const { register, handleSubmit, errors } = useForm<FormData>();
 
   const dispatch = useTypedDispatch();
-  const { loginLoading, loginError } = useTypedSelector(state => state.admin);
+  const { loginLoading, loginError } = useTypedSelector((state) => state.admin);
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     const { email, password } = data;
     dispatch(login(email, password));
   };

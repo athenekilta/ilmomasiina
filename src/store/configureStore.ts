@@ -14,24 +14,24 @@ export const history = createBrowserHistory();
 export default function configureStore(initialState = {}) {
   const middleware = [
     routerMiddleware(history),
-    thunk as ThunkMiddleware<AppState, AppActions>
+    thunk as ThunkMiddleware<AppState, AppActions>,
   ];
 
   const persistConfig = {
     key: DEV ? 'ilmomasiina-dev' : 'ilmomasiina',
     storage,
-    blacklist: ['location', 'router']
+    blacklist: ['location', 'router'],
   };
 
   const persistedReducer = persistReducer(
     persistConfig,
-    makeRootReducer({}, history)
+    makeRootReducer({}, history),
   );
 
   const store = createStore(
     persistedReducer,
     initialState,
-    composeWithDevTools(applyMiddleware(...middleware))
+    composeWithDevTools(applyMiddleware(...middleware)),
   );
   store.asyncReducers = {};
 

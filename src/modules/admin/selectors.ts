@@ -15,7 +15,7 @@ export const getEvents = createSelector(
     }
 
     return events;
-  }
+  },
 );
 
 // export const isAuthenticated = (state) => state.admin.accessToken !== null;
@@ -29,7 +29,7 @@ export const getOpenQuotas = (event: Event) => {
   const extraSignups = [];
 
   _.each(event.quota, (quota: Quota) => {
-    _.each(quota.signups.slice(quota.size), signup => {
+    _.each(quota.signups.slice(quota.size), (signup) => {
       extraSignups.push({ ...signup, quotaTitle: quota.title });
     });
   });

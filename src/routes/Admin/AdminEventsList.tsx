@@ -11,12 +11,12 @@ import { jsx } from 'theme-ui';
 import {
   createUser,
   deleteEvent,
-  getAdminEvents
+  getAdminEvents,
 } from '../../modules/admin/actions';
 import {
   eventsError,
   eventsLoading,
-  getEvents
+  getEvents,
 } from '../../modules/admin/selectors';
 import { Event } from '../../modules/types';
 import { AppState } from '../../store/types';
@@ -28,7 +28,7 @@ import './AdminEventsList.scss';
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([
     func,
-    new Promise(resolve => setTimeout(resolve, ms))
+    new Promise((resolve) => setTimeout(resolve, ms)),
   ]);
   return res[0];
 }
@@ -44,7 +44,7 @@ const AdminEventList = (props: Props) => {
     eventsError,
     getAdminEvents,
     deleteEvent,
-    createUser
+    createUser,
   } = props;
   const [userFormLoading, setUserFormLoading] = useState(false);
 
@@ -73,10 +73,10 @@ const AdminEventList = (props: Props) => {
   function onDeleteEvent(eventId) {
     if (
       window.confirm(
-        'Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.'
+        'Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.',
       )
     ) {
-      deleteEvent(eventId).then(success => {
+      deleteEvent(eventId).then((success) => {
         if (!success) {
           console.alert('Poisto epäonnistui :(');
         }
@@ -102,7 +102,7 @@ const AdminEventList = (props: Props) => {
           {_.map(events, (e: Event) => (
             <AdminEventListItem
               key={e.id}
-              signups={_.sum(_.map(e.quota, q => q.signupCount))}
+              signups={_.sum(_.map(e.quota, (q) => q.signupCount))}
               data={e}
               onDelete={onDeleteEvent}
             />
@@ -113,7 +113,7 @@ const AdminEventList = (props: Props) => {
         <Link
           to={`${PREFIX_URL}/admin/edit/new`}
           sx={{
-            color: 'inherit'
+            color: 'inherit',
           }}
         >
           + Uusi tapahtuma
@@ -141,13 +141,13 @@ interface LinkDispatchProps {
 const mapStateToProps = (state: AppState) => ({
   events: getEvents(state),
   eventsLoading: eventsLoading(state),
-  eventsError: eventsError(state)
+  eventsError: eventsError(state),
 });
 
 const mapDispatchToProps = {
-  getAdminEvents: getAdminEvents,
-  deleteEvent: deleteEvent,
-  createUser: createUser
+  getAdminEvents,
+  deleteEvent,
+  createUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminEventList);

@@ -1,7 +1,9 @@
 /** @jsx jsx */
 import React, { useState } from 'react';
 
-import { Box, Flex, Input, Label } from '@theme-ui/components';
+import {
+  Box, Flex, Input, Label,
+} from '@theme-ui/components';
 import _ from 'lodash';
 import { useForm } from 'react-hook-form';
 import { jsx } from 'theme-ui';
@@ -40,10 +42,12 @@ const EnrollForm = (props: Props) => {
     loading,
     questions,
     signup,
-    submitForm
+    submitForm,
   } = props;
 
-  const { register, setValue, handleSubmit, errors } = useForm<FormData>();
+  const {
+    register, setValue, handleSubmit, errors,
+  } = useForm<FormData>();
   const [inputError, setInputError] = useState(false);
 
   function parseSubmit(data: {
@@ -56,12 +60,12 @@ const EnrollForm = (props: Props) => {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
-      answers: []
+      answers: [],
     };
 
     if (questions) {
       answers.answers = questions
-        .map(question => {
+        .map((question) => {
           const questionId = question.id;
           const answer = data[question.id];
 
@@ -72,7 +76,7 @@ const EnrollForm = (props: Props) => {
             return { questionId, answer };
           }
         })
-        .filter(x => x);
+        .filter((x) => x);
     }
 
     return submitForm(answers);

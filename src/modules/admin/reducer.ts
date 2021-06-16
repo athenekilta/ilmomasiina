@@ -8,7 +8,7 @@ import {
   SET_EVENTS_LOADING,
   SET_LOGIN_ERROR,
   SET_LOGIN_LOADING,
-  SET_LOGIN_STATUS
+  SET_LOGIN_STATUS,
 } from './actionTypes';
 import { AdminActions, AdminState } from './types';
 
@@ -20,31 +20,31 @@ const initialState: AdminState = {
   accessTokenExpires: undefined,
   loginLoading: false,
   loginError: false,
-  loggedIn: false
+  loggedIn: false,
 };
 
 export default function reducer(
   state = initialState,
-  action: AdminActions
+  action: AdminActions,
 ): AdminState {
   switch (action.type) {
     case SET_EVENTS:
       return {
         ...state,
         events: action.payload,
-        eventsLoading: false
+        eventsLoading: false,
       };
     case SET_EVENTS_LOADING:
       return {
         ...state,
         eventsLoading: true,
-        eventsError: false
+        eventsError: false,
       };
     case SET_EVENTS_ERROR:
       return {
         ...state,
         eventsLoading: false,
-        eventsError: true
+        eventsError: true,
       };
     case SET_ACCESS_TOKEN:
       return {
@@ -54,24 +54,24 @@ export default function reducer(
           .add(60, 'm')
           .toDate()
           .toISOString(),
-        loginLoading: false
+        loginLoading: false,
       };
     case SET_LOGIN_LOADING:
       return {
         ...state,
         loginLoading: true,
-        loginError: false
+        loginError: false,
       };
     case SET_LOGIN_ERROR:
       return {
         ...state,
         loginLoading: false,
-        loginError: true
+        loginError: true,
       };
     case SET_LOGIN_STATUS:
       return {
         ...state,
-        loggedIn: action.payload
+        loggedIn: action.payload,
       };
     case CLEAR_STATE:
       return initialState;

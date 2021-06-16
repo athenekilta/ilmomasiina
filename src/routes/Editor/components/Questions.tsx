@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { Checkbox, Flex, Input, Label, Select } from '@theme-ui/components';
+import {
+  Checkbox, Flex, Input, Label, Select,
+} from '@theme-ui/components';
 import _ from 'lodash';
 
 import { updateEventField } from '../../../modules/editor/actions';
@@ -13,7 +15,7 @@ const QUESTION_TYPES = [
   { value: 'textarea', label: 'Teksti (pitkä)' },
   { value: 'number', label: 'Numero' },
   { value: 'select', label: 'Monivalinta (voi valita yhden)' },
-  { value: 'checkbox', label: 'Monivalinta (voi valita monta)' }
+  { value: 'checkbox', label: 'Monivalinta (voi valita monta)' },
 ];
 
 type Props = {
@@ -27,7 +29,7 @@ const Questions = (props: Props) => {
 
   function updateQuestion(itemId, field, value) {
     const { questions } = event;
-    const newQuestions = _.map(questions, question => {
+    const newQuestions = _.map(questions, (question) => {
       if (question.id === itemId) {
         if (field == 'type') {
           // Don't overwrite question options
@@ -46,7 +48,7 @@ const Questions = (props: Props) => {
 
         return {
           ...question,
-          [field]: value
+          [field]: value,
         };
       }
 
@@ -57,7 +59,7 @@ const Questions = (props: Props) => {
   }
 
   function removeQuestion(itemId: string) {
-    const newQuestions = _.filter(event.questions, question => {
+    const newQuestions = _.filter(event.questions, (question) => {
       if (question.id === itemId) {
         return false;
       }
@@ -97,7 +99,7 @@ const Questions = (props: Props) => {
   }
 
   function updateQuestionOption(itemId, index, value) {
-    const newQuestions = _.map(event.questions, question => {
+    const newQuestions = _.map(event.questions, (question) => {
       if (question.id === itemId) {
         question.options[index] = value;
       }
@@ -109,7 +111,7 @@ const Questions = (props: Props) => {
   }
 
   function addOption(questionId) {
-    const newQuestions = _.map(event.questions, question => {
+    const newQuestions = _.map(event.questions, (question) => {
       if (question.id === questionId) {
         question.options.push('');
       }
@@ -121,7 +123,7 @@ const Questions = (props: Props) => {
 
   const orderedQuestions = _.orderBy(event.questions, 'order', 'asc');
 
-  const questions = _.map(orderedQuestions, question => (
+  const questions = _.map(orderedQuestions, (question) => (
     <div className="panel-body" key={question.id}>
       <div className="col-xs-12 col-sm-10">
         <Input
@@ -130,25 +132,21 @@ const Questions = (props: Props) => {
           label="Kysymys"
           type="text"
           required
-          onChange={e =>
-            updateQuestion(question.id, 'question', e.target.value)
-          }
+          onChange={(e) => updateQuestion(question.id, 'question', e.target.value)}
         />
         <Select
           name={`question-${question.id}-type`}
           value={question.type}
           label="Tyyppi"
           options={QUESTION_TYPES}
-          onChange={e => updateQuestion(question.id, 'type', e.target.value)}
+          onChange={(e) => updateQuestion(question.id, 'type', e.target.value)}
           required
         >
-          {QUESTION_TYPES.map(type => {
-            return (
-              <option key={type.label} value={type.value}>
-                {type.label}
-              </option>
-            );
-          })}
+          {QUESTION_TYPES.map((type) => (
+            <option key={type.label} value={type.value}>
+              {type.label}
+            </option>
+          ))}
         </Select>
         <div>
           {_.map(question.options, (option, index) => (
@@ -159,9 +157,7 @@ const Questions = (props: Props) => {
               label="Vastausvaihtoehto"
               type="text"
               required
-              onChange={e =>
-                updateQuestionOption(question.id, index, e.target.value)
-              }
+              onChange={(e) => updateQuestionOption(question.id, index, e.target.value)}
             />
           ))}
           {question.options && (
@@ -177,9 +173,7 @@ const Questions = (props: Props) => {
             <Checkbox
               name={`question-${question.id}-required`}
               defaultChecked={question.required}
-              onChange={e =>
-                updateQuestion(question.id, 'required', e.target.checked)
-              }
+              onChange={(e) => updateQuestion(question.id, 'required', e.target.checked)}
             />
             Pakollinen
           </Label>
@@ -189,9 +183,7 @@ const Questions = (props: Props) => {
             <Checkbox
               name={`question-${question.id}-public`}
               defaultChecked={question.public}
-              onChange={e =>
-                updateQuestion(question.id, 'public', e.target.checked)
-              }
+              onChange={(e) => updateQuestion(question.id, 'public', e.target.checked)}
             />
             Julkinen
           </Label>

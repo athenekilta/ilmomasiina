@@ -36,19 +36,9 @@
     "BRANDING_FOOTER_HOME_LINK": true
   },
   "rules": {
-    "max-len": [2, 120, 2],
-    "no-param-reassign": 0,
-    "func-names": 0,
-    "array-callback-return": 0,
-    "comma-dangle": ["error", {
-      "arrays": "always-multiline",
-      "objects": "always-multiline",
-      "imports": "always-multiline",
-      "exports": "always-multiline",
-      "functions": "always-multiline"
-    }],
-    "semi": ["error", "always"],
-    "quotes": ["error", "single"],
+    "max-len": ["error", 120, 2],
+    "@typescript-eslint/semi": ["error", "always"],
+    "@typescript-eslint/quotes": ["error", "single"],
     // To allow grouping of class members - especially for Models.
     "@typescript-eslint/lines-between-class-members": "off",
     // TypeScript causes lots of circular imports for types, which the plugin

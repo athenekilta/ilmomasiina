@@ -11,19 +11,19 @@ module.exports = {
   entry: [
     'react-hot-loader/patch',
     'webpack-hot-middleware/client',
-    project.paths.client('main.tsx')
+    project.paths.client('main.tsx'),
   ],
   output: {
     path: project.paths.dist(),
     publicPath: project.compiler_public_path,
-    filename: `[name].[${project.compiler_hash_type}].js`
+    filename: `[name].[${project.compiler_hash_type}].js`,
   },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, '../src/styles'),
-      'react-dom': '@hot-loader/react-dom'
+      'react-dom': '@hot-loader/react-dom',
     },
-    extensions: ['.js', '.jsx', '.ts', '.tsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   module: {
     rules: [
@@ -33,14 +33,14 @@ module.exports = {
         use: [
           {
             loader: 'babel-loader',
-            options: project.compiler_babel
-          }
-        ]
+            options: project.compiler_babel,
+          },
+        ],
       },
       {
         test: /\.json$/,
         exclude: /node_modules/,
-        loader: 'json-loader'
+        loader: 'json-loader',
       },
       {
         test: /\.scss$/i,
@@ -51,12 +51,12 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sassOptions: {
-                includePaths: [project.paths.client('styles')]
+                includePaths: [project.paths.client('styles')],
               },
-              prependData: "@import '@/_base.scss';"
-            }
-          }
-        ]
+              prependData: '@import \'@/_base.scss\';',
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
@@ -66,10 +66,10 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
@@ -78,20 +78,20 @@ module.exports = {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
-        ]
+              outputPath: 'fonts/',
+            },
+          },
+        ],
       },
       {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
-            loader: 'file-loader'
-          }
-        ]
-      }
-    ]
+            loader: 'file-loader',
+          },
+        ],
+      },
+    ],
   },
   devtool: 'source-map',
   plugins: [
@@ -103,10 +103,10 @@ module.exports = {
       filename: 'index.html',
       inject: 'body',
       minify: {
-        collapseWhitespace: true
-      }
+        collapseWhitespace: true,
+      },
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new ForkTsCheckerWebpackPlugin()
-  ]
+    new ForkTsCheckerWebpackPlugin(),
+  ],
 };

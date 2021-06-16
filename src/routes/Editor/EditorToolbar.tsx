@@ -16,7 +16,7 @@ type Props = EditorToolbarProps & RouteComponentProps;
 const EditorToolbar = (props: Props) => {
   const { publish, match } = props;
 
-  const editor = useTypedSelector(state => state.editor);
+  const editor = useTypedSelector((state) => state.editor);
   const { event, eventPublishLoading } = editor;
 
   return (

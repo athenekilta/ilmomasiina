@@ -7,55 +7,41 @@ import {
   SET_EVENT,
   SET_LOADING,
   SET_SIGNUP,
-  SET_SIGNUP_AND_EVENT
+  SET_SIGNUP_AND_EVENT,
 } from './actionTypes';
 
-export const setSignupAndEvent = (signup: Signup, event: Event) => {
-  return <const>{
-    type: SET_SIGNUP_AND_EVENT,
-    payload: {
-      signup,
-      event
-    }
-  };
+export const setSignupAndEvent = (signup: Signup, event: Event) => <const>{
+  type: SET_SIGNUP_AND_EVENT,
+  payload: {
+    signup,
+    event,
+  },
 };
 
-export const setSignup = (signup: Signup) => {
-  return <const>{ type: SET_SIGNUP, payload: signup };
-};
+export const setSignup = (signup: Signup) => <const>{ type: SET_SIGNUP, payload: signup };
 
-export const setEvent = (event: Event) => {
-  return <const>{ type: SET_EVENT, payload: event };
-};
+export const setEvent = (event: Event) => <const>{ type: SET_EVENT, payload: event };
 
-export const setLoading = () => {
-  return <const>{ type: SET_LOADING };
-};
+export const setLoading = () => <const>{ type: SET_LOADING };
 
-export const setError = () => {
-  return <const>{ type: SET_ERROR };
-};
+export const setError = () => <const>{ type: SET_ERROR };
 
-export const setDeleted = () => {
-  return <const>{ type: SET_DELETED };
-};
+export const setDeleted = () => <const>{ type: SET_DELETED };
 
-export const resetEventState = () => {
-  return <const>{ type: RESET };
-};
+export const resetEventState = () => <const>{ type: RESET };
 
 export function getSignupAndEvent(id: string, editToken: string) {
-  return function(dispatch: DispatchAction) {
+  return function (dispatch: DispatchAction) {
     dispatch(setLoading());
 
     return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`)
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         if (res.signup === null) throw new Error('Signup not found');
         dispatch(setSignupAndEvent(res.signup, res.event));
         return true;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(setError());
         return false;
       });
@@ -63,17 +49,17 @@ export function getSignupAndEvent(id: string, editToken: string) {
 }
 
 export function deleteSignupAsync(id: string, editToken: string) {
-  return function(dispatch: DispatchAction) {
+  return function (dispatch: DispatchAction) {
     dispatch(setLoading());
     return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`, {
-      method: 'DELETE'
+      method: 'DELETE',
     })
-      .then(res => res.json())
-      .then(res => {
+      .then((res) => res.json())
+      .then((res) => {
         dispatch(setDeleted());
         return true;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(setError());
         return false;
       });

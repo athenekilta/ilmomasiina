@@ -1,7 +1,7 @@
 import { injectReducer } from '../../store/reducers';
 import adminWrapper from '../authWrapper';
 
-export default store => ({
+export default (store) => ({
   path: `${PREFIX_URL}/admin`,
   /*  Async getComponent is only invoked when route matches   */
   getComponent(nextState, cb) {
@@ -9,7 +9,7 @@ export default store => ({
         and embed an async module loader (jsonp) when bundling   */
     require.ensure(
       [],
-      require => {
+      (require) => {
         /*  Webpack - use require callback to define
           dependencies for bundling   */
         const Events = require('./containers/AdminEventListContainer').default;
@@ -23,7 +23,7 @@ export default store => ({
 
         /* Webpack named bundle   */
       },
-      'events'
+      'events',
     );
-  }
+  },
 });

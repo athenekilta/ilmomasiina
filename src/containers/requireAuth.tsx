@@ -3,11 +3,11 @@ import React, { useEffect } from 'react';
 import { redirectToLogin } from '../modules/admin/actions';
 import { useTypedDispatch, useTypedSelector } from '../store/reducers';
 
-const requireAuth = WrappedComponent => {
-  const InnerComponent = props => {
+const requireAuth = (WrappedComponent) => {
+  const InnerComponent = (props) => {
     const dispatch = useTypedDispatch();
     const { accessToken, accessTokenExpires } = useTypedSelector(
-      state => state.admin
+      (state) => state.admin,
     );
 
     useEffect(() => {

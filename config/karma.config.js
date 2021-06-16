@@ -11,21 +11,21 @@ const karmaConfig = {
       pattern: `./${project.dir_test}/test-bundler.js`,
       watched: false,
       served: true,
-      included: true
-    }
+      included: true,
+    },
   ],
   singleRun: !argv.watch,
   frameworks: ['mocha'],
   reporters: ['mocha'],
   preprocessors: {
-    [`${project.dir_test}/test-bundler.js`]: ['webpack']
+    [`${project.dir_test}/test-bundler.js`]: ['webpack'],
   },
   browsers: ['PhantomJS'],
   webpack: {
     devtool: 'cheap-module-source-map',
     resolve: {
       ...webpackConfig.resolve,
-      alias: { ...webpackConfig.resolve.alias, sinon: 'sinon/pkg/sinon.js' }
+      alias: { ...webpackConfig.resolve.alias, sinon: 'sinon/pkg/sinon.js' },
     },
     plugins: webpackConfig.plugins,
     module: {
@@ -33,9 +33,9 @@ const karmaConfig = {
       loaders: webpackConfig.module.loaders.concat([
         {
           test: /sinon(\\|\/)pkg(\\|\/)sinon\.js/,
-          loader: 'imports?define=>false,require=>false'
-        }
-      ])
+          loader: 'imports?define=>false,require=>false',
+        },
+      ]),
     },
     // Enzyme fix, see:
     // https://github.com/airbnb/enzyme/issues/47
@@ -43,16 +43,16 @@ const karmaConfig = {
       ...webpackConfig.externals,
       'react/addons': true,
       'react/lib/ExecutionEnvironment': true,
-      'react/lib/ReactContext': 'window'
+      'react/lib/ReactContext': 'window',
     },
-    sassLoader: webpackConfig.sassLoader
+    sassLoader: webpackConfig.sassLoader,
   },
   webpackMiddleware: {
-    noInfo: true
+    noInfo: true,
   },
   coverageReporter: {
-    reporters: project.coverage_reporters
-  }
+    reporters: project.coverage_reporters,
+  },
 };
 
 if (project.globals.COVERAGE) {
@@ -65,10 +65,10 @@ if (project.globals.COVERAGE) {
       loader: 'babel',
       query: {
         ...project.compiler_babel,
-        plugins: (project.compiler_babel.plugins || []).concat('istanbul')
-      }
-    }
+        plugins: (project.compiler_babel.plugins || []).concat('istanbul'),
+      },
+    },
   ];
 }
 
-module.exports = cfg => cfg.set(karmaConfig);
+module.exports = (cfg) => cfg.set(karmaConfig);

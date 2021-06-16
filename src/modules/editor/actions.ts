@@ -9,48 +9,36 @@ import {
   SET_EVENT_LOADING,
   SET_EVENT_PUBLISH_ERROR,
   SET_EVENT_PUBLISH_LOADING,
-  UPDATE_EVENT_FIELD
+  UPDATE_EVENT_FIELD,
 } from './actionTypes';
 
-export const setEvent = (event: Event) => {
-  return <const>{
-    type: SET_EVENT,
-    payload: event
-  };
+export const setEvent = (event: Event) => <const>{
+  type: SET_EVENT,
+  payload: event,
 };
 
-export const setEventLoading = () => {
-  return <const>{
-    type: SET_EVENT_LOADING
-  };
+export const setEventLoading = () => <const>{
+  type: SET_EVENT_LOADING,
 };
 
-export const setEventError = () => {
-  return <const>{
-    type: SET_EVENT_ERROR
-  };
+export const setEventError = () => <const>{
+  type: SET_EVENT_ERROR,
 };
 
-export const setEventPublishLoading = () => {
-  return <const>{
-    type: SET_EVENT_PUBLISH_LOADING
-  };
+export const setEventPublishLoading = () => <const>{
+  type: SET_EVENT_PUBLISH_LOADING,
 };
 
-export const setEventPublishError = () => {
-  return <const>{
-    type: SET_EVENT_PUBLISH_ERROR
-  };
+export const setEventPublishError = () => <const>{
+  type: SET_EVENT_PUBLISH_ERROR,
 };
 
-export const updateEventField = (field: string, value: any) => {
-  return <const>{
-    type: UPDATE_EVENT_FIELD,
-    payload: {
-      field,
-      value
-    }
-  };
+export const updateEventField = (field: string, value: any) => <const>{
+  type: UPDATE_EVENT_FIELD,
+  payload: {
+    field,
+    value,
+  },
 };
 
 const cleanEventData = (event: Event) => ({
@@ -70,12 +58,12 @@ const cleanEventData = (event: Event) => ({
       delete q.id;
     }
     return q;
-  })
+  }),
 });
 
-const cleanServerEventdata = res => {
+const cleanServerEventdata = (res) => {
   if (res.questions) {
-    res.questions = _.map(res.questions, q => {
+    res.questions = _.map(res.questions, (q) => {
       if (q.options && !isArray(q.options)) {
         q.options = q.options.split(';');
       }
@@ -87,13 +75,13 @@ const cleanServerEventdata = res => {
 };
 
 export function clearEvent() {
-  return function(dispatch: DispatchAction) {
+  return function (dispatch: DispatchAction) {
     dispatch(setEvent({}));
   };
 }
 
 export function publishEvent(data, token) {
-  return function(dispatch: DispatchAction) {
+  return function (dispatch: DispatchAction) {
     dispatch(setEventPublishLoading());
 
     const cleaned = cleanEventData(data);
@@ -103,21 +91,21 @@ export function publishEvent(data, token) {
       body: JSON.stringify(cleaned),
       headers: {
         Authorization: token,
-        'Content-Type': 'application/json; charset=utf-8'
-      }
+        'Content-Type': 'application/json; charset=utf-8',
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res.status > 201) {
           throw new Error(res.statusText);
         }
         return res.json();
       })
-      .then(res => {
+      .then((res) => {
         const cleaned = cleanServerEventdata(res);
         dispatch(setEvent(cleaned));
         return cleaned;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(setEventPublishError());
         throw new Error(error);
       });
@@ -125,7 +113,7 @@ export function publishEvent(data, token) {
 }
 
 export function updateEventEditor(data, token) {
-  return function(dispatch: DispatchAction) {
+  return function (dispatch: DispatchAction) {
     dispatch(setEventPublishLoading());
 
     const cleaned = cleanEventData(data);
@@ -135,21 +123,21 @@ export function updateEventEditor(data, token) {
       body: JSON.stringify(cleaned),
       headers: {
         Authorization: token,
-        'Content-Type': 'application/json; charset=utf-8'
-      }
+        'Content-Type': 'application/json; charset=utf-8',
+      },
     })
-      .then(res => {
+      .then((res) => {
         if (res.status > 201) {
           throw new Error(res.statusText);
         }
         return res.json();
       })
-      .then(res => {
+      .then((res) => {
         const cleaned = cleanServerEventdata(res);
         dispatch(setEvent(cleaned));
         return cleaned;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(setEventPublishError());
         throw new Error(error);
       });
@@ -157,18 +145,18 @@ export function updateEventEditor(data, token) {
 }
 
 export function getEvent(eventId: string, token: string) {
-  return function(dispatch: DispatchAction) {
+  return function (dispatch: DispatchAction) {
     dispatch(setEventLoading());
     return fetch(`${PREFIX_URL}/api/admin/events/${eventId}`, {
-      headers: { Authorization: token }
+      headers: { Authorization: token },
     })
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((res: Event) => {
         res.useOpenQuota = res.openQuotaSize > 0;
         dispatch(setEvent(res));
         return res;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(setEventError());
       });
   };

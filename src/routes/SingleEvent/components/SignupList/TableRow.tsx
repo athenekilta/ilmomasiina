@@ -23,7 +23,7 @@ const TableRow = (props: Props) => {
     index,
     lastName,
     questions,
-    quota
+    quota,
   } = props;
 
   const getAnswer = (answers: Answer[], questionId: string, quota: Quota) => {
@@ -36,9 +36,14 @@ const TableRow = (props: Props) => {
 
   return (
     <tr className={firstName == null ? 'text-muted' : ''}>
-      <td>{index}.</td>
       <td>
-        {firstName || 'Vahvistamatta'} {lastName || ''}
+        {index}
+        .
+      </td>
+      <td>
+        {firstName || 'Vahvistamatta'}
+        {' '}
+        {lastName || ''}
       </td>
       {questions.map((q, i) => (
         <td key={i}>{getAnswer(answers, q.id, quota) || ''}</td>

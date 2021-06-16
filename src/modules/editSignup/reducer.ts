@@ -5,7 +5,7 @@ import {
   SET_EVENT,
   SET_LOADING,
   SET_SIGNUP,
-  SET_SIGNUP_AND_EVENT
+  SET_SIGNUP_AND_EVENT,
 } from './actionTypes';
 import { EditSignupActions, EditSignupState } from './types';
 
@@ -14,12 +14,12 @@ const initialState: EditSignupState = {
   signup: {},
   loading: false,
   error: false,
-  deleted: false
+  deleted: false,
 };
 
 export default function reducer(
   state = initialState,
-  action: EditSignupActions
+  action: EditSignupActions,
 ) {
   switch (action.type) {
     case RESET:
@@ -29,37 +29,37 @@ export default function reducer(
         ...state,
         signup: action.payload.signup,
         event: action.payload.event,
-        loading: false
+        loading: false,
       };
     case SET_SIGNUP:
       return {
         ...state,
         signup: action.payload,
-        loading: false
+        loading: false,
       };
     case SET_EVENT:
       return {
         ...state,
         event: action.payload,
-        loading: false
+        loading: false,
       };
     case SET_LOADING:
       return {
         ...state,
         loading: true,
-        error: false
+        error: false,
       };
     case SET_ERROR:
       return {
         ...state,
         loading: false,
-        error: true
+        error: true,
       };
     case SET_DELETED: {
       return {
         ...state,
         deleted: true,
-        loading: false
+        loading: false,
       };
     }
 

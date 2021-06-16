@@ -21,7 +21,7 @@ const QuotaStatus = (props: Props) => {
   return (
     <div className="sidebar-widget">
       <h3>Ilmoittautuneet</h3>
-      {_.map(_.keys(quotaData), quotaName => {
+      {_.map(_.keys(quotaData), (quotaName) => {
         const quota = quotaData[quotaName];
         if (quotaName === OPENQUOTA) {
           return (

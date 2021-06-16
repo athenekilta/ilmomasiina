@@ -5,7 +5,7 @@ import {
   setEventLoading,
   setEventPublishError,
   setEventPublishLoading,
-  updateEventField
+  updateEventField,
 } from './actions';
 
 interface EditorState {

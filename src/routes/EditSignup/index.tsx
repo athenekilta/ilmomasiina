@@ -8,11 +8,11 @@ import { toast } from 'react-toastify';
 import {
   deleteSignupAsync,
   getSignupAndEvent,
-  resetEventState
+  resetEventState,
 } from '../../modules/editSignup/actions';
 import {
   completeSignup,
-  updateEventAsync
+  updateEventAsync,
 } from '../../modules/singleEvent/actions';
 import { Event, Signup } from '../../modules/types';
 import { AppState, DispatchAction } from '../../store/types';
@@ -28,9 +28,9 @@ interface MatchParams {
 interface EditSignupProps {}
 
 type Props = EditSignupProps &
-  LinkStateProps &
-  LinkDispatchProps &
-  RouteComponentProps<MatchParams>;
+LinkStateProps &
+LinkDispatchProps &
+RouteComponentProps<MatchParams>;
 
 const EditSignup = (props: Props) => {
   const {
@@ -44,7 +44,7 @@ const EditSignup = (props: Props) => {
     resetEventState,
     signup,
     updateSignupAsync,
-    updateEventAsync
+    updateEventAsync,
   } = props;
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const EditSignup = (props: Props) => {
 
     const response = await updateSignupAsync(signup.id, {
       editToken: match.params.editToken,
-      ...answers
+      ...answers,
     });
 
     const success = response === true;
@@ -74,17 +74,16 @@ const EditSignup = (props: Props) => {
       toast.update(this.toastId, {
         render: 'Muokkaus onnistui!',
         type: toast.TYPE.SUCCESS,
-        autoClose: 5000
+        autoClose: 5000,
       });
 
       updateEventAsync(event.id);
     } else {
-      const toastText =
-        'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
+      const toastText = 'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
       toast.update(this.toastId, {
         render: toastText,
         type: toast.TYPE.ERROR,
-        autoClose: 5000
+        autoClose: 5000,
       });
     }
   }
@@ -154,13 +153,18 @@ const EditSignup = (props: Props) => {
       <div className="EditSignup--wrapper">
         <h2>Poista ilmoittautuminen</h2>
         <p>
-          Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan{' '}
-          <strong>{event.title}?</strong>
+          Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan
+          {' '}
+          <strong>
+            {event.title}
+            ?
+          </strong>
         </p>
         <p>
           Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos kuitenkin
           muutat mielesi, voit aina ilmoittautua tapahtumaan uudelleen
-          myöhemmin, mutta siirryt silloin jonon hännille.{' '}
+          myöhemmin, mutta siirryt silloin jonon hännille.
+          {' '}
           <strong>Tätä toimintoa ei voi perua.</strong>
         </p>
         <button onClick={deleteSignup} className="btn btn-danger">
@@ -195,15 +199,15 @@ const mapStateToProps = (state: AppState) => ({
   signup: state.editSignup.signup,
   error: state.editSignup.error,
   loading: state.editSignup.loading,
-  deleted: state.editSignup.deleted
+  deleted: state.editSignup.deleted,
 });
 
 const mapDispatchToProps = {
-  updateEventAsync: updateEventAsync,
+  updateEventAsync,
   updateSignupAsync: completeSignup,
-  getSignupAndEvent: getSignupAndEvent,
-  deleteSignupAsync: deleteSignupAsync,
-  resetEventState: resetEventState
+  getSignupAndEvent,
+  deleteSignupAsync,
+  resetEventState,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditSignup);

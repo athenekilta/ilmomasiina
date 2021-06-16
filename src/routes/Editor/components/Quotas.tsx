@@ -19,17 +19,17 @@ const Quotas = (props: Props) => {
   function updateQuota(itemId, field, value) {
     const quotas = event.quota ? event.quota : [];
 
-    const newQuotas = _.map(quotas, quota => {
+    const newQuotas = _.map(quotas, (quota) => {
       if (quota.id === itemId) {
         if (field === 'size' && value === '') {
           return {
             ...quota,
-            [field]: null
+            [field]: null,
           };
         }
         return {
           ...quota,
-          [field]: value
+          [field]: value,
         };
       }
       return quota;
@@ -40,7 +40,7 @@ const Quotas = (props: Props) => {
 
   function removeQuota(itemId) {
     const quotas = event.quota ? event.quota : [];
-    const newQuotas = _.filter(quotas, quota => {
+    const newQuotas = _.filter(quotas, (quota) => {
       if (quota.id === itemId) {
         return false;
       }
@@ -81,38 +81,36 @@ const Quotas = (props: Props) => {
 
   const orderedQuotas = _.orderBy(event.quota, 'order', 'asc');
 
-  const quotaItems = _.map(orderedQuotas, (item, index) => {
-    return (
-      <div className="panel-body" key={index}>
-        <div className="col-xs-12 col-sm-10">
-          <Input
-            name={`quota-${item.id}-title`}
-            value={item.title}
-            label="Kiintiön nimi"
-            type="text"
-            onChange={e => updateQuota(item.id, 'title', e.target.value)}
-            help={
-              index === 0 &&
-              'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.'
+  const quotaItems = _.map(orderedQuotas, (item, index) => (
+    <div className="panel-body" key={index}>
+      <div className="col-xs-12 col-sm-10">
+        <Input
+          name={`quota-${item.id}-title`}
+          value={item.title}
+          label="Kiintiön nimi"
+          type="text"
+          onChange={(e) => updateQuota(item.id, 'title', e.target.value)}
+          help={
+              index === 0
+              && 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.'
             }
-          />
-          <Input
-            name={`quota-${item.id}-max-attendees`}
-            value={item.size}
-            label="Kiintiön koko"
-            type="number"
-            onChange={e => updateQuota(item.id, 'size', e.target.value)}
-            help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi."
-          />
-        </div>
-        {index > 0 && (
-          <div className="col-xs-12 col-sm-2 no-focus">
-            <a onClick={() => removeQuota(item.id)}>Poista</a>
-          </div>
-        )}
+        />
+        <Input
+          name={`quota-${item.id}-max-attendees`}
+          value={item.size}
+          label="Kiintiön koko"
+          type="number"
+          onChange={(e) => updateQuota(item.id, 'size', e.target.value)}
+          help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi."
+        />
       </div>
-    );
-  });
+      {index > 0 && (
+      <div className="col-xs-12 col-sm-2 no-focus">
+        <a onClick={() => removeQuota(item.id)}>Poista</a>
+      </div>
+      )}
+    </div>
+  ));
 
   return (
     <SortableItems

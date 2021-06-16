@@ -22,10 +22,10 @@ const QuotasTab = (props: Props) => {
   function addQuota() {
     const quotas = event.quota ? event.quota : [];
     const newQuotas = _.concat(quotas, {
-      id: (_.max(quotas.map(n => n.id)) || 0) + 1,
-      order: (_.max(quotas.map(n => n.order)) || 0) + 1,
+      id: (_.max(quotas.map((n) => n.id)) || 0) + 1,
+      order: (_.max(quotas.map((n) => n.order)) || 0) + 1,
       title: '',
-      existsInDb: false
+      existsInDb: false,
     });
 
     dispatch(updateEventField('quota', newQuotas));

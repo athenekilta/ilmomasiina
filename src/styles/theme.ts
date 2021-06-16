@@ -5,7 +5,7 @@ import theme from '@theme-ui/preset-base';
 export default {
   ...theme,
   styles: {
-    ...theme
+    ...theme,
   },
   colors: {
     text: '#000',
@@ -15,14 +15,14 @@ export default {
     secondary: '#0288d1',
     secondaryDark: '#026397',
     muted: '#888',
-    error: 'red'
+    error: 'red',
   },
   layout: {
     container: {
       loginContainer: {
-        maxWidth: 540
-      }
-    }
+        maxWidth: 540,
+      },
+    },
   },
   buttons: {
     primary: {
@@ -31,8 +31,8 @@ export default {
       color: 'white',
       bg: 'primary',
       '&:hover': {
-        bg: 'primaryDark'
-      }
+        bg: 'primaryDark',
+      },
     },
     secondary: {
       marginTop: 3,
@@ -40,9 +40,9 @@ export default {
       color: 'background',
       bg: 'secondary',
       '&:hover': {
-        bg: 'secondaryDark'
-      }
-    }
+        bg: 'secondaryDark',
+      },
+    },
   },
   forms: {
     label: {
@@ -53,45 +53,45 @@ export default {
       login: {
         fontWeight: 'heading',
         color: 'black',
-        fontSize: 3
-      }
+        fontSize: 3,
+      },
     },
     input: {
       marginBottom: 2,
       borderColor: 'gray',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: t => `0 0 0 2px ${t.colors.primary}`,
-        outline: 'none'
+        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        outline: 'none',
       },
       error: {
         borderColor: 'error',
         '&:focus': {
           borderColor: 'error',
-          boxShadow: t => `0 0 0 2px ${t.colors.error}`,
-          outline: 'none'
-        }
-      }
+          boxShadow: (t) => `0 0 0 2px ${t.colors.error}`,
+          outline: 'none',
+        },
+      },
     },
     select: {
       borderColor: 'gray',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: t => `0 0 0 2px ${t.colors.primary}`,
-        outline: 'none'
-      }
+        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        outline: 'none',
+      },
     },
     textarea: {
       borderColor: 'gray',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: t => `0 0 0 2px ${t.colors.primary}`,
-        outline: 'none'
-      }
+        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        outline: 'none',
+      },
     },
     checkbox: {},
     slider: {
-      bg: 'muted'
-    }
-  }
+      bg: 'muted',
+    },
+  },
 };

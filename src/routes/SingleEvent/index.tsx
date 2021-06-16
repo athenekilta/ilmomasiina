@@ -11,13 +11,15 @@ import {
   attachPositionAsync,
   cancelSignupAsync,
   completeSignup,
-  updateEventAsync
+  updateEventAsync,
 } from '../../modules/singleEvent/actions';
 import {
   getFormattedQuestions,
-  getQuotaData
+  getQuotaData,
 } from '../../modules/singleEvent/selectors';
-import { Event, Question, Quota, Signup } from '../../modules/types';
+import {
+  Event, Question, Quota, Signup,
+} from '../../modules/types';
 import { AppState } from '../../store/types';
 import EnrollForm from './components/EnrollForm';
 import QuotaStatus from './components/QuotaStatus';
@@ -50,7 +52,7 @@ const SingleEvent: React.FC = (props: Props) => {
     quotaData,
     signup,
     signupLoading,
-    signupError
+    signupError,
   } = props;
 
   const [formOpen, setFormOpen] = useState(false);
@@ -66,7 +68,7 @@ const SingleEvent: React.FC = (props: Props) => {
 
   function closeForm() {
     const close = window.confirm(
-      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.'
+      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.',
     );
 
     if (close) {
@@ -81,7 +83,7 @@ const SingleEvent: React.FC = (props: Props) => {
 
     const response = completeSignup(signup.id, {
       editToken: signup.editToken,
-      ...answers
+      ...answers,
     });
 
     const success = response === true;
@@ -89,17 +91,16 @@ const SingleEvent: React.FC = (props: Props) => {
       toast.update(toastId, {
         render: 'Ilmoittautuminen onnistui!',
         type: toast.TYPE.SUCCESS,
-        autoClose: 5000
+        autoClose: 5000,
       });
       updateEventAsync(event.id);
       setFormOpen(false);
     } else {
-      const toast_text =
-        'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
+      const toast_text = 'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
       toast.update(toastId, {
         render: toast_text,
         type: toast.TYPE.ERROR,
-        autoClose: 5000
+        autoClose: 5000,
       });
     }
   }
@@ -128,23 +129,29 @@ const SingleEvent: React.FC = (props: Props) => {
               <div className="event-heading">
                 {event.date && (
                   <p>
-                    <strong>Ajankohta:</strong>{' '}
+                    <strong>Ajankohta:</strong>
+                    {' '}
                     {moment(event.date).format('D.M.Y [klo] HH:mm')}
                   </p>
                 )}
                 {event.location && (
                   <p>
-                    <strong>Sijainti:</strong> {event.location}
+                    <strong>Sijainti:</strong>
+                    {' '}
+                    {event.location}
                   </p>
                 )}
                 {event.price && (
                   <p>
-                    <strong>Hinta:</strong> {event.price}
+                    <strong>Hinta:</strong>
+                    {' '}
+                    {event.price}
                   </p>
                 )}
                 {event.homepage && (
                   <p>
-                    <strong>Kotisivut:</strong>{' '}
+                    <strong>Kotisivut:</strong>
+                    {' '}
                     <a href={event.homepage} title="Kotisivut">
                       {event.homepage}
                     </a>
@@ -152,7 +159,8 @@ const SingleEvent: React.FC = (props: Props) => {
                 )}
                 {event.facebook && (
                   <p>
-                    <strong>Facebook-tapahtuma:</strong>{' '}
+                    <strong>Facebook-tapahtuma:</strong>
+                    {' '}
                     <a href={event.facebook} title="Facebook-tapahtuma">
                       {event.facebook}
                     </a>
@@ -167,7 +175,7 @@ const SingleEvent: React.FC = (props: Props) => {
             </div>
             <div className="col-xs-12">
               <h2>Ilmoittautuneet</h2>
-              {_.map(_.keys(quotaData), quotaName => (
+              {_.map(_.keys(quotaData), (quotaName) => (
                 <SignupList
                   quotaName={quotaName}
                   questions={_.filter(formattedQuestions, 'public')}
@@ -202,7 +210,7 @@ interface LinkDispatchProps {
 }
 
 const mapStateToProps = (state: AppState) => ({
-  state: state,
+  state,
   event: state.singleEvent.event,
   eventLoading: state.singleEvent.eventLoading,
   eventError: state.singleEvent.eventError,
@@ -210,14 +218,14 @@ const mapStateToProps = (state: AppState) => ({
   signupLoading: state.singleEvent.signupLoading,
   signupError: state.singleEvent.signupError,
   quotaData: getQuotaData(state),
-  formattedQuestions: getFormattedQuestions(state)
+  formattedQuestions: getFormattedQuestions(state),
 });
 
 const mapDispatchToProps = {
-  updateEventAsync: updateEventAsync,
-  attachPositionAsync: attachPositionAsync,
-  completeSignup: completeSignup,
-  cancelSignupAsync: cancelSignupAsync
+  updateEventAsync,
+  attachPositionAsync,
+  completeSignup,
+  cancelSignupAsync,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SingleEvent);

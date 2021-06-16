@@ -15,7 +15,7 @@ const Header = (props: Props) => {
   const { history } = props;
 
   const dispatch = useTypedDispatch();
-  const loggedIn = useTypedSelector(state => state.admin.loggedIn);
+  const loggedIn = useTypedSelector((state) => state.admin.loggedIn);
 
   return (
     <div className="navbar navbar-default">

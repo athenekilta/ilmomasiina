@@ -20,7 +20,7 @@ const CountDown = (props: CountDownProps) => {
     <Countdown
       daysInHours
       date={new Date(new Date().getTime() + event.millisTillOpening)}
-      renderer={props => (
+      renderer={(props) => (
         <SignupButton
           event={event}
           isOnly={event.quota.length === 1}

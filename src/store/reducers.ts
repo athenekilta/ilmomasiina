@@ -16,21 +16,20 @@ type AsyncReducers = {
 
 export const makeRootReducer = (
   asyncReducers: AsyncReducers,
-  history: History
-) =>
-  combineReducers({
-    router: connectRouter(history),
-    admin,
-    editor,
-    events,
-    singleEvent,
-    editSignup,
-    ...asyncReducers
-  });
+  history: History,
+) => combineReducers({
+  router: connectRouter(history),
+  admin,
+  editor,
+  events,
+  singleEvent,
+  editSignup,
+  ...asyncReducers,
+});
 
 export const injectReducer = (
   store: Store<AppState, AppActions>,
-  { key, reducer }: { key: string; reducer: Reducer }
+  { key, reducer }: { key: string; reducer: Reducer },
 ) => {
   if (Object.hasOwnProperty.call(store.asyncReducers, key)) return;
 

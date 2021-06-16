@@ -5,7 +5,7 @@ import {
   setEventLoading,
   setSignup,
   setSignupError,
-  setSignupLoading
+  setSignupLoading,
 } from './actions';
 
 interface SingleEventState {

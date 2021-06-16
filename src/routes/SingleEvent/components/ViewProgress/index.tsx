@@ -25,7 +25,7 @@ const ViewProgress = (props: Props) => {
           role="progressbar"
           style={{
             minWidth: '5em',
-            width: `${(value / max) * 100}%`
+            width: `${(value / max) * 100}%`,
           }}
         >
           {value}

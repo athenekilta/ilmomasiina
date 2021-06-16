@@ -15,16 +15,18 @@ type Props = {
 
 const UserForm = (props: Props) => {
   const { handleCreateUser, loading } = props;
-  const { register, setValue, handleSubmit, errors } = useForm<FormData>();
+  const {
+    register, setValue, handleSubmit, errors,
+  } = useForm<FormData>();
 
-  const onSubmit = data => {
+  const onSubmit = (data) => {
     handleCreateUser(data.email);
   };
 
   return (
     <Box
       sx={{
-        maxWidth: 256
+        maxWidth: 256,
       }}
       as="form"
       onSubmit={handleSubmit(onSubmit)}

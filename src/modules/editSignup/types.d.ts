@@ -6,7 +6,7 @@ import {
   setEvent,
   setLoading,
   setSignup,
-  setSignupAndEvent
+  setSignupAndEvent,
 } from './actions';
 
 interface EditSignupState {

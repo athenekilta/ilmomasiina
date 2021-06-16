@@ -22,8 +22,8 @@ const sortFunction = (event: Event) => {
 const EventList = () => {
   const dispatch = useTypedDispatch();
   const { events, eventError, eventLoading } = useTypedSelector(
-    state => state.events,
-    shallowEqual
+    (state) => state.events,
+    shallowEqual,
   );
 
   useEffect(() => {
@@ -32,11 +32,11 @@ const EventList = () => {
 
   const eventsSorted = _.sortBy(events, [sortFunction, 'date', 'title']);
 
-  const tableRows = eventsSorted.map(event => {
+  const tableRows = eventsSorted.map((event) => {
     const eventState = signupState(
       event.date,
       event.registrationStartDate,
-      event.registrationEndDate
+      event.registrationEndDate,
     );
 
     const rows = [
@@ -51,21 +51,19 @@ const EventList = () => {
         size={event.quota.length < 2 ? _.sumBy(event.quota, 'size') : null}
         className={eventState.class}
         key={`e${event.id}`}
-      />
+      />,
     ];
 
     if (event.quota.length > 1) {
-      event.quota.map((quota, i) =>
-        rows.push(
-          <TableRow
-            title={quota.title}
-            signups={Math.min(quota.signupCount, quota.size)}
-            size={quota.size}
-            className="child"
-            key={`q${i}`}
-          />
-        )
-      );
+      event.quota.map((quota, i) => rows.push(
+        <TableRow
+          title={quota.title}
+          signups={Math.min(quota.signupCount, quota.size)}
+          size={quota.size}
+          className="child"
+          key={`q${i}`}
+        />,
+      ));
     }
 
     if (event.openQuotaSize > 0) {
@@ -74,13 +72,13 @@ const EventList = () => {
           title="Avoin"
           signupLabel=""
           signups={Math.min(
-            _.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size))),
-            event.openQuotaSize
+            _.sum(event.quota.map((q) => Math.max(0, q.signupCount - q.size))),
+            event.openQuotaSize,
           )}
           size={event.openQuotaSize}
           className="child"
           key={`open${event.id}`}
-        />
+        />,
       );
     }
 

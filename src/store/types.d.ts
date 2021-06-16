@@ -19,16 +19,16 @@ type AppActions =
   | SingleEventActions;
 
 type AsyncAction<R = void> = ThunkAction<
-  Promise<R>,
-  AppState,
-  undefined,
-  AnyAction
+Promise<R>,
+AppState,
+undefined,
+AnyAction
 >;
 
 type DispatchAction<T extends AnyAction = Action> = ThunkDispatch<
-  AppState,
-  undefined,
-  T
+AppState,
+undefined,
+T
 >;
 
 type GetState = () => AppState;

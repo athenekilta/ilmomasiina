@@ -11,47 +11,47 @@ export const getSignupsByQuota = (event: Event) => {
   const quotas = {};
 
   if (event.quota) {
-    _.each(event.quota, quota => {
-      const sorted = _.sortBy(quota.signups, s => new Date(s.createdAt));
+    _.each(event.quota, (quota) => {
+      const sorted = _.sortBy(quota.signups, (s) => new Date(s.createdAt));
       const quotaSignups = [];
       _.each(sorted, (s, index) => {
         if (index < quota.size || !quota.size) {
           // size may be null
           quotaSignups.push({
             ...s,
-            quota: quota.title
+            quota: quota.title,
           });
         } else {
           extraSignups.push({
             ...s,
-            quota: quota.title
+            quota: quota.title,
           });
         }
       });
 
       quotas[quota.title] = {
         size: quota.size,
-        signups: quotaSignups
+        signups: quotaSignups,
       };
     });
   }
 
-  extraSignups = _.sortBy(extraSignups, s => new Date(s.createdAt));
+  extraSignups = _.sortBy(extraSignups, (s) => new Date(s.createdAt));
 
   if (event.openQuotaSize > 0) {
     quotas[OPENQUOTA] = {
       size: event.openQuotaSize,
-      signups: extraSignups.slice(0, event.openQuotaSize)
+      signups: extraSignups.slice(0, event.openQuotaSize),
     };
 
     quotas[WAITLIST] = {
       size: Infinity,
-      signups: extraSignups.slice(event.openQuotaSize)
+      signups: extraSignups.slice(event.openQuotaSize),
     };
   } else {
     quotas[WAITLIST] = {
       size: Infinity,
-      signups: extraSignups
+      signups: extraSignups,
     };
   }
 
@@ -65,11 +65,11 @@ export const getSignupsArray = (event: Event, includeWaitlist = true) => {
 
   _.forOwn(byQuota, (data, quotaName) => {
     if (quotaName !== WAITLIST || includeWaitlist) {
-      _.each(data.signups, s => {
+      _.each(data.signups, (s) => {
         signups.push({
           ...s,
           isWaitlist: quotaName === WAITLIST,
-          isOpenQuota: quotaName === OPENQUOTA
+          isOpenQuota: quotaName === OPENQUOTA,
         });
       });
     }
@@ -81,7 +81,7 @@ export const getSignupsArray = (event: Event, includeWaitlist = true) => {
 export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
   const signupsArray = getSignupsArray(event, includeWaitlist);
 
-  const sorted = _.sortBy(signupsArray, s => {
+  const sorted = _.sortBy(signupsArray, (s) => {
     if (s.isOpenQuota) {
       return new Date(s.createdAt) + 315360000000;
     }
@@ -93,7 +93,7 @@ export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
     return new Date(s.createdAt);
   });
 
-  return _.map(sorted, signup => {
+  return _.map(sorted, (signup) => {
     const result = {
       id: signup.id,
       Etunimi: signup.firstName,
@@ -104,11 +104,11 @@ export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
         .format('DD.MM.YYYY HH:mm:ss'),
       Kiintiö: `${signup.quota} ${signup.isOpenQuota ? '(Avoin)' : ''}${
         signup.isWaitlist ? '(Jonossa)' : ''
-      }`
+      }`,
     };
 
-    _.each(event.questions, q => {
-      const answer = _.find(signup.answers, a => a.questionId === q.id);
+    _.each(event.questions, (q) => {
+      const answer = _.find(signup.answers, (a) => a.questionId === q.id);
 
       if (!answer) {
         result[q.question] = '';

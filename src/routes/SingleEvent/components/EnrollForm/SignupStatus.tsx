@@ -21,7 +21,12 @@ const SignupStatus = (props: Props) => {
     const quota = _.find(quotas, { id: quotaId })!;
     return (
       <p>
-        Olet kiintiössä {quota.title} sijalla{' '}
+        Olet kiintiössä
+        {' '}
+        {quota.title}
+        {' '}
+        sijalla
+        {' '}
         {`${position} / ${quota.size || ''}`}
       </p>
     );
@@ -30,12 +35,23 @@ const SignupStatus = (props: Props) => {
   if (status == 'in-open') {
     return (
       <p>
-        Olet avoimessa kiintiössä sijalla ${position} / ${openQuotaSize}.
+        Olet avoimessa kiintiössä sijalla $
+        {position}
+        {' '}
+        / $
+        {openQuotaSize}
+        .
       </p>
     );
   }
 
-  return <p>Olet jonossa sijalla {position}.</p>;
+  return (
+    <p>
+      Olet jonossa sijalla
+      {position}
+      .
+    </p>
+  );
 };
 
 export default SignupStatus;

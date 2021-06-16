@@ -15,7 +15,9 @@ type Props = {
 };
 
 const DateTimePicker = (props: Props) => {
-  const { formMethods, label, name, value } = props;
+  const {
+    formMethods, label, name, value,
+  } = props;
   const { setValue, errors } = formMethods;
 
   return (
@@ -28,13 +30,13 @@ const DateTimePicker = (props: Props) => {
       <div className="col-sm-9">
         <DatePicker
           format="DD.MM.YYYY"
-          onChange={date => setValue(name, date.toDate().toISOString())}
+          onChange={(date) => setValue(name, date.toDate().toISOString())}
           defaultValue={moment(value)}
         />
         <TimePicker
           minuteStep={5}
           format="HH.mm"
-          onChange={date => setValue(name, date.toDate().toISOString())}
+          onChange={(date) => setValue(name, date.toDate().toISOString())}
           defaultValue={moment(value)}
         />
         <span sx={{ color: 'error' }}>
