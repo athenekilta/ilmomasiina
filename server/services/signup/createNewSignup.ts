@@ -43,7 +43,6 @@ export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateRespon
 
   // Find the given quota and event.
   const quota = await Quota.findByPk(quotaId, {
-    attributes: [],
     include: [
       {
         model: Event,

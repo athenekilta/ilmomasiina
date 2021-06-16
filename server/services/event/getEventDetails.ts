@@ -41,9 +41,9 @@ export const eventGetQuestionAttrs = [
 
 // Attributes included in results for Quota instances.
 export const eventGetQuotaAttrs = [
+  'id',
   'title',
   'size',
-  'id',
 ] as const;
 
 // Attributes included in results for Signup instances.

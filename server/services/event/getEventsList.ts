@@ -53,6 +53,7 @@ export default async (admin = false): Promise<EventListResponse> => {
       {
         model: Quota,
         attributes: [
+          'id',
           'title',
           'size',
           [fn('COUNT', col('quotas->signups.id')), 'signupCount'],

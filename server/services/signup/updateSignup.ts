@@ -47,7 +47,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
   const updatedSignup = await Signup.sequelize!.transaction(async (transaction) => {
     // Retrieve event data and lock the row for editing
     const signup = await Signup.findByPk(id, {
-      attributes: ['id'],
+      attributes: ['id', 'quotaId'],
       transaction,
       lock: Transaction.LOCK.UPDATE,
     });
@@ -56,15 +56,12 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
     }
 
     const quota = await signup.getQuota({
-      attributes: [],
       include: [
         {
           model: Event,
-          attributes: [],
           include: [
             {
               model: Question,
-              attributes: ['question', 'options'],
             },
           ],
         },

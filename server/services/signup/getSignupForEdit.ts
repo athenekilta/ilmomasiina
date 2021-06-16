@@ -57,25 +57,20 @@ export default async (id: number, params?: Params): Promise<SignupGetResponse> =
   verifyToken(Number(id), editToken);
 
   const signup = await Signup.findByPk(id, {
-    attributes: [...signupGetSignupAttrs],
     include: [
       {
         model: Answer,
         required: false,
-        attributes: ['id', 'answer'],
       },
       {
         model: Quota,
-        attributes: [],
         include: [
           {
             model: Event,
-            attributes: [...signupGetEventAttrs],
             include: [
               {
                 model: Question,
                 required: false,
-                attributes: [...signupGetQuestionAttrs],
               },
             ],
           },
