@@ -1,5 +1,4 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
-import { Id } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
@@ -7,7 +6,7 @@ import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
 
-// Attributes included in results for Event instances.
+// Attributes included in GET /api/events/ID for Event instances.
 export const eventGetEventAttrs = [
   'id',
   'title',
@@ -20,8 +19,13 @@ export const eventGetEventAttrs = [
   'location',
   'webpageUrl',
   'facebookUrl',
-  'draft',
   'signupsPublic',
+] as const;
+
+// Attributes included in GET /api/admin/events/ID for Event instances.
+export const adminEventGetEventAttrs = [
+  ...eventGetEventAttrs,
+  'draft',
   'verificationEmail',
 ] as const;
 
@@ -47,6 +51,13 @@ export const eventGetSignupAttrs = [
   'firstName',
   'lastName',
   'createdAt',
+] as const;
+
+// Attributes included in results for Signup instances.
+export const adminEventGetSignupAttrs = [
+  ...eventGetSignupAttrs,
+  'id',
+  'email',
 ] as const;
 
 // Attributes included in results for Answer instances.
@@ -80,13 +91,20 @@ export interface EventGetResponse extends Pick<Event, typeof eventGetEventAttrs[
   registrationClosed?: boolean;
 }
 
-export default async (id: Id): Promise<EventGetResponse> => {
+export default async (id: number, admin = false): Promise<EventGetResponse> => {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
   }
 
-  const event = await Event.findByPk(id, {
-    attributes: [...eventGetEventAttrs],
+  // Admin queries include internal data such as confirmation email contents
+  const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;
+  // Admin queries include emails and signup IDs
+  const signupAttrs = admin ? adminEventGetSignupAttrs : eventGetSignupAttrs;
+  // Admin queries also show past and draft events.
+  const scope = admin ? Event.unscoped() : Event;
+
+  const event = await scope.findByPk(id, {
+    attributes: [...eventAttrs],
     include: [
       // First include all questions (also non-public for the form)
       {
@@ -101,7 +119,7 @@ export default async (id: Id): Promise<EventGetResponse> => {
         include: [
           {
             model: Signup,
-            attributes: [...eventGetSignupAttrs],
+            attributes: [...signupAttrs],
             required: false,
             // ... and answers of signups
             include: [
@@ -123,7 +141,7 @@ export default async (id: Id): Promise<EventGetResponse> => {
 
   // Convert event to response
   const result: EventGetResponse = {
-    ..._.pick(event, eventGetEventAttrs),
+    ..._.pick(event, eventAttrs),
     questions: event.questions!.map((question) => ({
       ..._.pick(question, eventGetQuestionAttrs),
       // Split answer options into array
@@ -132,42 +150,45 @@ export default async (id: Id): Promise<EventGetResponse> => {
     quotas: event.quotas!.map((quota) => ({
       ..._.pick(quota, eventGetQuotaAttrs),
       signups: quota.signups!.map((signup) => ({
-        ..._.pick(signup, eventGetSignupAttrs),
+        ..._.pick(signup, signupAttrs),
         answers: signup.answers!,
       })),
     })),
   };
 
-  // Hide all signups if answers are not public
-  if (!event.signupsPublic) {
-    result.quotas.forEach((quota) => {
-      quota.signups = null;
-    });
-  } else {
-    // Find IDs of public questions
-    const publicQuestions = event.questions!
-      .filter((question) => question.public)
-      .map((question) => question.id);
-
-    // Hide answers of non-public questions
-    result.quotas.forEach((quota) => {
-      quota.signups!.forEach((signup) => {
-        signup.answers = signup.answers.filter((answer) => publicQuestions.includes(answer.questionId));
+  // Admins get to see all signup data
+  if (!admin) {
+    // Hide all signups if answers are not public
+    if (!event.signupsPublic) {
+      result.quotas.forEach((quota) => {
+        quota.signups = null;
       });
-    });
-  }
+    } else {
+      // Find IDs of public questions
+      const publicQuestions = event.questions!
+        .filter((question) => question.public)
+        .map((question) => question.id);
 
-  // Add millisTillOpening or registrationClosed if necessary
-  const startDate = new Date(result.registrationStartDate);
-  const now = new Date();
-  const endDate = new Date(result.registrationEndDate);
-  if (now > startDate) {
-    result.millisTillOpening = 0;
-  } else {
-    result.millisTillOpening = startDate.getTime() - now.getTime();
-  }
-  if (now > endDate) {
-    result.registrationClosed = true;
+      // Hide answers of non-public questions
+      result.quotas.forEach((quota) => {
+        quota.signups!.forEach((signup) => {
+          signup.answers = signup.answers.filter((answer) => publicQuestions.includes(answer.questionId));
+        });
+      });
+    }
+
+    // Add millisTillOpening or registrationClosed if necessary
+    const startDate = new Date(result.registrationStartDate);
+    const now = new Date();
+    const endDate = new Date(result.registrationEndDate);
+    if (now > startDate) {
+      result.millisTillOpening = 0;
+    } else {
+      result.millisTillOpening = startDate.getTime() - now.getTime();
+    }
+    if (now > endDate) {
+      result.registrationClosed = true;
+    }
   }
 
   return result;

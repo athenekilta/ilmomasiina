@@ -1,6 +1,5 @@
-import { col, fn, Op } from 'sequelize';
+import { col, fn } from 'sequelize';
 import _ from 'lodash';
-import moment from 'moment';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
@@ -14,6 +13,12 @@ export const eventListEventAttrs = [
   'registrationEndDate',
   'openQuotaSize',
   'signupsPublic',
+] as const;
+
+// Attributes included in GET /api/admin/events for Event instances.
+const adminEventListEventAttrs = [
+  ...eventListEventAttrs,
+  'draft',
 ] as const;
 
 export const eventListQuotaAttrs = [
@@ -34,16 +39,14 @@ export interface EventListItem extends Pick<Event, typeof eventListEventAttrs[nu
 
 export type EventListResponse = EventListItem[];
 
-export default async (): Promise<EventListResponse> => {
-  const events = await Event.findAll({
-    attributes: [...eventListEventAttrs],
-    // Filter out events that are saved as draft
-    where: {
-      draft: 0,
-      date: {
-        [Op.gt]: moment().subtract(1, 'days').toDate(),
-      },
-    },
+export default async (admin = false): Promise<EventListResponse> => {
+  // Admin view also shows draft field.
+  const eventAttrs = admin ? adminEventListEventAttrs : eventListEventAttrs;
+  // Admin view shows all events, user view only shows future events.
+  const scope = admin ? Event.unscoped() : Event;
+
+  const events = await scope.findAll({
+    attributes: [...eventAttrs],
     // Include quotas of event and count of signups
     include: [
       {
@@ -51,7 +54,7 @@ export default async (): Promise<EventListResponse> => {
         attributes: [
           'title',
           'size',
-          [fn('COUNT', col('quota->signups.id')), 'signupCount'],
+          [fn('COUNT', col('quotas->signups.id')), 'signupCount'],
         ],
         include: [
           {
@@ -62,12 +65,12 @@ export default async (): Promise<EventListResponse> => {
         ],
       },
     ],
-    group: [col('event.id'), col('quota.id')],
+    group: [col('event.id'), col('quotas.id')],
   });
 
   // Convert event list to response
   const result: EventListResponse = events.map((event) => ({
-    ..._.pick(event, eventListEventAttrs),
+    ..._.pick(event, eventAttrs),
     quotas: event.quotas!.map((quota) => ({
       ..._.pick(quota, eventListQuotaAttrs),
       signupCount: quota.signupCount!,

@@ -16,7 +16,7 @@ export default async (signup: Signup) => {
         'id',
         'size',
         // Count all signups for each quota
-        [fn('COUNT', col('quota->signups.id')), 'signupCount'],
+        [fn('COUNT', col('quotas->signups.id')), 'signupCount'],
       ],
       include: [{
         model: Signup,
@@ -30,7 +30,7 @@ export default async (signup: Signup) => {
         },
       }],
     }],
-    group: [col('event.id'), col('quota.id')],
+    group: [col('event.id'), col('quotas.id')],
   });
   const positionInQuota = _.find(event.quotas!, { id: currentQuota.id })!.signupCount!;
 
