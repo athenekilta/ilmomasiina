@@ -2,7 +2,7 @@ import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
-import config from '../config/ilmomasiina.config';
+import config from '../config';
 import { IlmoApplication } from '../defs';
 
 // By default, LocalStrategy calls GET /api/users with provider=rest to get the subject.

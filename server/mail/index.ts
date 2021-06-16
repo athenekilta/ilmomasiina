@@ -1,7 +1,7 @@
-import ilmoconfig from '../config/ilmomasiina.config.js'; // eslint-disable-line
 import Email from 'email-templates';
 import path from 'path';
 import nodemailer from 'nodemailer';
+import ilmoconfig from '../config';
 import { Event } from '../models/event.js';
 
 const transporter = nodemailer.createTransport({

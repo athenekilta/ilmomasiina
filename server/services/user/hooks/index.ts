@@ -3,7 +3,7 @@ import { hooks as localHooks } from '@feathersjs/authentication-local';
 import { disallow } from 'feathers-hooks-common';
 import createPassword from './createPassword';
 import sendEmail from './sendEmail';
-import config from '../../../config/ilmomasiina.config';
+import config from '../../../config';
 
 const createHook = config.adminRegistrationAllowed
   ? [createPassword(), localHooks.hashPassword('password')]

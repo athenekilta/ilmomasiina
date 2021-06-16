@@ -1,4 +1,4 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
 const config = {
   mysqlUser: process.env.MYSQL_USER,
@@ -12,19 +12,15 @@ const config = {
   mailgunDomain: process.env.MAILGUN_DOMAIN,
   baseUrl: process.env.BASE_URL,
   prefixUrl: process.env.PREFIX_URL || '',
-  adminRegistrationAllowed:
-    process.env.ADMIN_REGISTRATION_ALLOWED == 'true' || false,
+  adminRegistrationAllowed: process.env.ADMIN_REGISTRATION_ALLOWED === 'true',
   brandingMailFooterText: process.env.BRANDING_MAIL_FOOTER_TEXT,
-  brandingMailFooterLink: `${process.env.BASE_URL}${process.env.PREFIX_URL ||
-    ''}`,
+  brandingMailFooterLink: `${process.env.BASE_URL}${process.env.PREFIX_URL || ''}`,
 };
 
 _.forOwn(config, (value, key) => {
-  if (!value) {
-    console.error(
-      `Missing .env variable: ${key}, please check /config/ilmomasiina.config.js`,
-    );
+  if (value === undefined) {
+    throw new Error(`Missing .env variable: ${key}, please check server/config.ts`);
   }
 });
 
-module.exports = config;
+export default config;

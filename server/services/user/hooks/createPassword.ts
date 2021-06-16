@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { HookContext } from '@feathersjs/feathers';
 import { UserServiceItem } from '..';
-import config from '../../../config/ilmomasiina.config';
+import config from '../../../config';
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzåäö0123456789';
 const LENGTH = 24;

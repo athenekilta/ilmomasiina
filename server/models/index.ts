@@ -7,7 +7,7 @@ import question, { Question } from './question';
 import answer, { Answer } from './answer';
 import user, { User } from './user';
 
-import config from '../config/ilmomasiina.config'; // eslint-disable-line
+import config from '../config';
 import { IlmoApplication } from '../defs';
 
 export interface IlmoModels {

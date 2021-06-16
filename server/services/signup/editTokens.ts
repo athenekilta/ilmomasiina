@@ -1,6 +1,6 @@
 import { Forbidden } from '@feathersjs/errors';
 import md5 from 'md5';
-import config from '../../config/ilmomasiina.config';
+import config from '../../config';
 import { Signup } from '../../models/signup';
 
 export function generateToken(signup: Signup | number): string {

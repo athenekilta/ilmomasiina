@@ -15,7 +15,6 @@
     "deploy:dev": "bnr deploy:dev",
     "deploy:prod": "bnr deploy:prod",
     "start": "bnr start:dev",
-    "dev": "bnr dev",
     "start:dev": "bnr start:dev",
     "start:prod": "bnr start:prod",
     "monit:prod": "bnr monit:prod",
@@ -43,13 +42,6 @@
     },
     "compile:server": {
       "command": "tsc -p server"
-    },
-    "dev": {
-      "command": "nodemon server/dist/bin/dev-server --ignore dist --ignore server/dist --ignore coverage --ignore tests --ignore src",
-      "env": {
-        "NODE_ENV": "development",
-        "DEBUG": "app:*"
-      }
     },
     "reset-db": {
       "command": "node server/scripts/reset-database",
@@ -96,14 +88,14 @@
       }
     },
     "start:dev": {
-      "command": "ts-node-dev --respawn --project server/tsconfig.json server/bin/dev-server.ts",
+      "command": "ts-node-dev --respawn --project server/tsconfig.json server/bin/server.ts",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*"
       }
     },
     "start:prod": {
-      "command": "npm run compile:server && pm2 start ./server/dist/bin/prod-server.js",
+      "command": "npm run compile:server && pm2 start ./server/dist/bin/server.js",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
