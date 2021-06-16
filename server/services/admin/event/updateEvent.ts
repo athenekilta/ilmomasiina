@@ -18,7 +18,8 @@ export interface AdminEventUpdateQuota extends Pick<Quota, typeof adminEventCrea
 
 export interface AdminEventUpdateBody extends Pick<Event, typeof adminEventCreateEventAttrs[number]> {
   questions: AdminEventUpdateQuestion[];
-  quotas: AdminEventUpdateQuota[];
+  // intentionally misnamed to match old API
+  quota: AdminEventUpdateQuota[];
 }
 
 export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
@@ -97,14 +98,14 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
       }));
     }
 
-    if (data.quotas !== undefined) {
+    if (data.quota !== undefined) {
       // Remove previous Quotas not present in request
       // (TODO: require confirmation if there are signups)
       const oldQuotas = await event.getQuotas({
         attributes: ['id'],
         transaction,
       });
-      const newIds = data.quotas.map((quota) => quota.id).filter((newId) => newId) as number[];
+      const newIds = data.quota.map((quota) => quota.id).filter((newId) => newId) as number[];
       await Quota.destroy({
         where: {
           id: {
@@ -114,7 +115,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
         transaction,
       });
       // Update the Quotas
-      await Promise.all(data.quotas.map(async (quota) => {
+      await Promise.all(data.quota.map(async (quota) => {
         const quotaAttribs = _.pick(quota, adminEventCreateQuotaAttrs);
         // See if the quota already exists
         const existing = quota.id && oldQuotas.find((old) => old.id === quota.id);

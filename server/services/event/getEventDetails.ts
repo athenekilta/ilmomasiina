@@ -86,7 +86,8 @@ export interface EventGetQuotaItem extends Pick<Quota, typeof eventGetQuotaAttrs
 
 export interface EventGetResponse extends Pick<Event, typeof eventGetEventAttrs[number]> {
   questions: EventGetQuestionItem[];
-  quotas: EventGetQuotaItem[];
+  // intentionally misnamed to match old API
+  quota: EventGetQuotaItem[];
   millisTillOpening?: number;
   registrationClosed?: boolean;
 }
@@ -147,7 +148,7 @@ export default async (id: number, admin = false): Promise<EventGetResponse> => {
       // Split answer options into array
       options: question.options ? question.options.split(';') : null,
     })),
-    quotas: event.quotas!.map((quota) => ({
+    quota: event.quotas!.map((quota) => ({
       ..._.pick(quota, eventGetQuotaAttrs),
       signups: quota.signups!.map((signup) => ({
         ..._.pick(signup, signupAttrs),
@@ -160,7 +161,7 @@ export default async (id: number, admin = false): Promise<EventGetResponse> => {
   if (!admin) {
     // Hide all signups if answers are not public
     if (!event.signupsPublic) {
-      result.quotas.forEach((quota) => {
+      result.quota.forEach((quota) => {
         quota.signups = null;
       });
     } else {
@@ -170,7 +171,7 @@ export default async (id: number, admin = false): Promise<EventGetResponse> => {
         .map((question) => question.id);
 
       // Hide answers of non-public questions
-      result.quotas.forEach((quota) => {
+      result.quota.forEach((quota) => {
         quota.signups!.forEach((signup) => {
           signup.answers = signup.answers.filter((answer) => publicQuestions.includes(answer.questionId));
         });
