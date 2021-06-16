@@ -1,13 +1,12 @@
-@import 'base';
-@import 'bootstrap';
-@import '~antd/dist/antd.css';
+@import "base";
+@import "bootstrap";
 
 body,
 html {
   height: 100%;
 }
 
-.btn[disabled]{
+.btn[disabled] {
   opacity: 0.35;
 }
 #root {
@@ -35,8 +34,7 @@ html {
     margin-bottom: 1.5em;
   }
 
-  strong,
-  label {
+  strong {
     font-weight: 600;
   }
 

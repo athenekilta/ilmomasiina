@@ -1,7 +1,7 @@
 # Current status
 
 ```diff
-- Hello you random bypasser! 
+- Hello you random bypasser!
 
 - Ilmomasiina is currently at alpha testing phase. You use it. Something breaks? You fix it.
 
@@ -10,7 +10,6 @@
 ```
 
 Current defelopment is being held on `otax/production` branch.
-
 
 # Ilmomasiina
 

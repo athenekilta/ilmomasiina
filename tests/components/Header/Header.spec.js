@@ -1,6 +1,8 @@
 import React from 'react';
+
 import { shallow } from 'enzyme';
-import { Header } from '../../../src/components/Header/Header';
+
+import { Header } from '../../src/components/Header/Header';
 
 describe('(Component) Header', () => {
   let wrapper;

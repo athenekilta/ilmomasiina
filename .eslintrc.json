@@ -3,6 +3,10 @@
   "parserOptions": {
     "project": ["tsconfig.json", "server/tsconfig.json"]
   },
+  "settings": {
+    "pragma": "React",
+    "version": "detect"
+  },
   "extends": [
     "standard",
     "standard-react",
@@ -12,7 +16,8 @@
     "babel",
     "react",
     "promise",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "simple-import-sort"
   ],
   "env": {
     "browser": true
@@ -21,7 +26,14 @@
     "DEV": false,
     "TEST": false,
     "PROD": false,
-    "COVERAGE": false
+    "COVERAGE": false,
+    "BASENAME": true,
+    "PREFIX_URL": true,
+    "BRANDING_HEADER_TITLE": true,
+    "BRANDING_FOOTER_GDPR_TEXT": true,
+    "BRANDING_FOOTER_GDPR_LINK": true,
+    "BRANDING_FOOTER_HOME_TEXT": true,
+    "BRANDING_FOOTER_HOME_LINK": true
   },
   "rules": {
     "max-len": [2, 120, 2],
@@ -42,6 +54,21 @@
     // TypeScript causes lots of circular imports for types, which the plugin
     // does not currently handle properly.
     // see https://github.com/benmosher/eslint-plugin-import/issues/1453
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "simple-import-sort/sort": [
+      "error",
+      {
+        "groups": [
+          ["^react$"],
+          ["^@?\\w"],
+          // Anything that does not start with a dot.
+          ["^[^.]"],
+          // Anything that starts with a dot.
+          ["^."],
+          // Css
+          ["css$"]
+        ]
+      }
+    ]
   }
 }
