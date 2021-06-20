@@ -35,7 +35,7 @@ FEATHERS_AUTH_SECRET=randomly-generated-token
 MAILGUN_API_KEY=ask-someone-for-this
 MAILGUN_DOMAIN=ask-someone-for-this
 BASE_URL=http://localhost:3000
-PREFIX_URL=
+PREFIX_URL=''
 
 # These can be configured if so desired
 BRANDING_HEADER_TITLE_TEXT=Athenen ilmomasiina

@@ -16,7 +16,7 @@ module.exports = {
   // Overrides when NODE_ENV === 'production'
   // ======================================================
   production: () => ({
-    compiler_public_path: `${process.env.PREFIX_URL}/`,
+    compiler_public_path: `${process.env.PREFIX_URL || ''}/`,
     compiler_fail_on_warning: false,
     compiler_hash_type: 'chunkhash',
     compiler_devtool: null,

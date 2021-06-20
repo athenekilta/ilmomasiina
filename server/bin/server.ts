@@ -10,7 +10,7 @@ const server = app.listen(port);
 
 const url = process.env.NODE_ENV === 'development'
   ? `http://localhost:${port}`
-  : `${process.env.BASE_URL}${process.env.PREFIX_URL}`;
+  : `${process.env.BASE_URL}${process.env.PREFIX_URL || ''}`;
 
 const debugLog = debug('app:bin:server');
 server.on('listening', () => debugLog(`Server is now running at ${url}.`));
