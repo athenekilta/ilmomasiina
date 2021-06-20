@@ -71,9 +71,13 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
     });
     const questions = quota.event!.questions!;
 
-    // Remove answers to unrelated questions
+    // Filter fields and remove answers to unrelated questions
     const validQuestions = _.map(questions, 'id');
-    data.answers = data.answers.filter((answer) => validQuestions.includes(answer.questionId));
+    const updatedFields = {
+      ..._.pick(data, requiredFields),
+      answers: data.answers.filter((answer) => validQuestions.includes(answer.questionId)),
+      confirmedAt: new Date(),
+    };
 
     // Check that all questions are answered with a valid answer
     questions.forEach((question) => {
@@ -120,12 +124,6 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
         }
       }
     });
-
-    // Update the Signup
-    const updatedFields = {
-      ..._.pick(data, requiredFields),
-      confirmedAt: new Date(),
-    };
 
     await signup.update(updatedFields, { transaction });
 
