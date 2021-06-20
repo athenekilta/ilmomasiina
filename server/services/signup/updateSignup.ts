@@ -2,6 +2,7 @@ import { BadRequest, NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Transaction } from 'sequelize';
+
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';

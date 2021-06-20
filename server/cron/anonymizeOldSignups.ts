@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
+
 import { Signup } from '../models/signup';
 
 const redactedName = 'Deleted';

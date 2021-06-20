@@ -1,6 +1,7 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import moment from 'moment';
+
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Signup } from '../../models/signup';

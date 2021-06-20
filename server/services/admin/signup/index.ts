@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
 import { AdapterService } from '@feathersjs/adapter-commons';
-import { MethodNotAllowed } from '@feathersjs/errors';
 import { hooks as authHooks } from '@feathersjs/authentication';
+import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
+
 import { IlmoApplication } from '../../../defs';
 import deleteSignup from '../../signup/deleteSignup';
 

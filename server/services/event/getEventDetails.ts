@@ -1,5 +1,6 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
+
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';

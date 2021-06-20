@@ -1,13 +1,14 @@
-import { Service } from '@feathersjs/feathers';
-import { AuthenticationService } from '@feathersjs/authentication';
 import { AdapterService } from '@feathersjs/adapter-commons';
+import { AuthenticationService } from '@feathersjs/authentication';
+import { Service } from '@feathersjs/feathers';
+
+import { IlmoApplication } from '../defs';
 import adminevents, { AdminEventsService } from './admin/event';
 import adminsignups, { AdminSignupsService } from './admin/signup';
+import authentication from './authentication';
 import event, { EventsService } from './event';
 import signup, { SignupsService } from './signup';
 import user, { UsersService } from './user';
-import authentication from './authentication';
-import { IlmoApplication } from '../defs';
 
 // Wraps AdapterService into feathers Service for hooks() etc.
 type WrapAdapter<S> = S extends AdapterService<infer T> ? S & Service<T> : never;

@@ -1,5 +1,6 @@
-import _ from 'lodash';
 import { HookContext } from '@feathersjs/feathers';
+import _ from 'lodash';
+
 import { UserServiceItem } from '..';
 import config from '../../../config';
 

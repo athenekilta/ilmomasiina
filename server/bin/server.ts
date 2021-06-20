@@ -1,4 +1,5 @@
 import debug from 'debug';
+
 import app from '../app';
 
 if (!process.env.PORT && process.env.NODE_ENV !== 'development') {

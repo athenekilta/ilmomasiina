@@ -4,6 +4,7 @@ import {
   HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin,
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
+
 import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
 

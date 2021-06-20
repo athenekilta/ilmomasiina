@@ -1,6 +1,7 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 import { Op, Transaction } from 'sequelize';
+
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';

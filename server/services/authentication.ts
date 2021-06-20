@@ -2,6 +2,7 @@ import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
+
 import config from '../config';
 import { IlmoApplication } from '../defs';
 

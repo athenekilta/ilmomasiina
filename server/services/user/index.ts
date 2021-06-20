@@ -1,5 +1,6 @@
 import { Service } from '@feathersjs/feathers';
 import sequelizeService from 'feathers-sequelize';
+
 import { IlmoApplication } from '../../defs';
 import { User } from '../../models/user';
 import hooks from './hooks';

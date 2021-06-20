@@ -1,4 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
+
 import { IlmoApplication } from '../defs';
 
 export interface UserAttributes {

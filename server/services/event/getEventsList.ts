@@ -1,5 +1,6 @@
-import { col, fn } from 'sequelize';
 import _ from 'lodash';
+import { col, fn } from 'sequelize';
+
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';

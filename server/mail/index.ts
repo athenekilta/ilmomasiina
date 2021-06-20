@@ -1,6 +1,7 @@
 import Email from 'email-templates';
-import path from 'path';
 import nodemailer from 'nodemailer';
+import path from 'path';
+
 import ilmoconfig from '../config';
 import { Event } from '../models/event.js';
 

@@ -1,9 +1,10 @@
 import _ from 'lodash';
 import moment from 'moment';
-import EmailService from '.';
+
 import config from '../config';
 import { Signup } from '../models/signup';
 import { generateToken } from '../services/signup/editTokens';
+import EmailService from '.';
 
 export default async (signup: Signup) => {
   // TODO: convert to include

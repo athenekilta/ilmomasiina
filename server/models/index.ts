@@ -1,14 +1,13 @@
 import { Sequelize } from 'sequelize';
 
-import event, { Event } from './event';
-import quota, { Quota } from './quota';
-import signup, { Signup } from './signup';
-import question, { Question } from './question';
-import answer, { Answer } from './answer';
-import user, { User } from './user';
-
 import config from '../config';
 import { IlmoApplication } from '../defs';
+import answer, { Answer } from './answer';
+import event, { Event } from './event';
+import question, { Question } from './question';
+import quota, { Quota } from './quota';
+import signup, { Signup } from './signup';
+import user, { User } from './user';
 
 export interface IlmoModels {
   user: typeof User;
