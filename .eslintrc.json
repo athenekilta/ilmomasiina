@@ -45,6 +45,10 @@
     // does not currently handle properly.
     // see https://github.com/benmosher/eslint-plugin-import/issues/1453
     "import/no-cycle": "off",
+    // Not usable with formik.
+    "react/jsx-props-no-spreading": "off",
+    // TypeScript validates prop types, no need for this.
+    "react/require-default-props": "off",
     "simple-import-sort/sort": [
       "error",
       {
