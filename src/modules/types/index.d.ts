@@ -1,5 +1,7 @@
+type ApiId = number;
+
 interface SequelizeType {
-  id: string;
+  id: ApiId;
   createdAt: string;
   deletedAt: string;
   updatedAt: string;
@@ -7,48 +9,48 @@ interface SequelizeType {
 
 export interface Answer extends SequelizeType {
   answer: string;
+  questionId: Question['id'];
 }
 
 export interface Event extends SequelizeType {
+  title: string;
   date: string;
-  description: string;
-  draft: boolean;
-  facebook: string;
+  webpageUrl: string;
   facebookUrl: string;
-  homepage: string;
   location: string;
-  millisTillOpening: number;
-  openQuotaSize: number;
   price: string;
-  questions: Question[];
-  quota: Quota[];
-  registrationClosed: boolean;
+  description: string;
+  signupsPublic: boolean;
+
   registrationStartDate: string;
   registrationEndDate: string;
-  signupsPublic: boolean;
-  title: string;
-  useOpenQuota: boolean;
+  quota: Quota[];
+  openQuotaSize: number;
+
+  questions: Question[];
+
   verificationEmail: string;
-  webpageUrl: string;
+
+  draft: boolean;
+
+  registrationClosed: boolean;
+  millisTillOpening: number;
 }
 
 export interface Quota extends SequelizeType {
   title: string;
   size: number;
-  order: number;
   signups: Signup[];
   signupCount: number;
 }
 
 export interface Question extends SequelizeType {
-  eventId: string;
-  existsInDb: boolean;
-  options: string[];
-  order: number;
+  eventId: Event['id'];
+  type: 'text' | 'textarea' | 'number' | 'select' | 'checkbox';
+  question: string;
+  options: string[] | null;
   public: boolean;
   required: boolean;
-  type: string;
-  question: string;
 }
 
 export interface Signup extends SequelizeType {
@@ -60,11 +62,6 @@ export interface Signup extends SequelizeType {
   lastName: string;
   position: number;
   quota: Quota;
-  quotaId: string;
+  quotaId: Quota['id'];
   status: string;
-}
-
-export interface Signup extends SequelizeType {
-  email: string;
-  password: string;
 }
