@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { DatePicker, TimePicker } from 'antd';
+import { useField } from 'formik';
 import moment from 'moment';
 import { jsx } from 'theme-ui';
 
@@ -8,43 +9,43 @@ import 'antd/lib/date-picker/style/index.css';
 import 'antd/lib/time-picker/style/index.css';
 
 type Props = {
-  label?: string;
   name: string;
-  value: string;
-  formMethods: any;
+  label?: string;
+  required?: boolean;
 };
 
-const DateTimePicker = (props: Props) => {
-  const {
-    formMethods, label, name, value,
-  } = props;
-  const { setValue, errors } = formMethods;
+export default function DateTimePicker({
+  name, label, required = false,
+}: Props) {
+  const [{ onBlur, onChange, value }, { error }] = useField({ name, required });
 
   return (
     <div className="form-group row">
       {label && (
-        <label className="control-label col-sm-3" data-required="false">
+        <label className="control-label col-sm-3" data-required="false" htmlFor={`${name}-date`}>
           {label}
         </label>
       )}
       <div className="col-sm-9">
         <DatePicker
+          id={`${name}-date`}
           format="DD.MM.YYYY"
-          onChange={(date) => setValue(name, date.toDate().toISOString())}
-          defaultValue={moment(value)}
+          value={moment(value)}
+          onChange={(date) => onChange(date?.toDate().toISOString())}
+          onBlur={onBlur}
         />
         <TimePicker
+          id={`${name}-time`}
           minuteStep={5}
           format="HH.mm"
-          onChange={(date) => setValue(name, date.toDate().toISOString())}
-          defaultValue={moment(value)}
+          value={moment(value)}
+          onChange={(date) => onChange(date?.toDate().toISOString())}
+          onBlur={onBlur}
         />
         <span sx={{ color: 'error' }}>
-          {errors[name] && '* Tämä kenttä vaaditaan.'}
+          {error && '* Tämä kenttä vaaditaan.'}
         </span>
       </div>
     </div>
   );
-};
-
-export default DateTimePicker;
+}

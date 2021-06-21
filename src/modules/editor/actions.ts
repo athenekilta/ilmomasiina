@@ -1,20 +1,18 @@
-import _ from 'lodash';
-import { isArray } from 'util';
-
+import { AdminEventGetResponse, AdminEventUpdateBody } from '../../api/adminEvents';
 import { DispatchAction } from '../../store/types';
-import { Event, Question } from '../types';
 import {
   SET_EVENT,
   SET_EVENT_ERROR,
   SET_EVENT_LOADING,
   SET_EVENT_PUBLISH_ERROR,
   SET_EVENT_PUBLISH_LOADING,
-  UPDATE_EVENT_FIELD,
 } from './actionTypes';
+import { EditorEvent } from './types';
 
-export const setEvent = (event: Event) => <const>{
+export const setEvent = (event: AdminEventGetResponse | null, formData: EditorEvent | null) => <const>{
   type: SET_EVENT,
-  payload: event,
+  event,
+  formData,
 };
 
 export const setEventLoading = () => <const>{
@@ -33,131 +31,96 @@ export const setEventPublishError = () => <const>{
   type: SET_EVENT_PUBLISH_ERROR,
 };
 
-export const updateEventField = (field: string, value: any) => <const>{
-  type: UPDATE_EVENT_FIELD,
-  payload: {
-    field,
-    value,
-  },
-};
-
-const cleanEventData = (event: Event) => ({
+const serverEventToEditor = (event: AdminEventGetResponse): EditorEvent => ({
   ...event,
-  openQuotaSize: event.useOpenQuota ? event.openQuotaSize : 0,
-  questions: _.map(event.questions, (q: Question) => {
-    if (q.existsInDb === false) {
-      delete q.id;
-    }
-    if (q.options && Array.isArray(q.options)) {
-      q.options = q.options.join(';');
-    }
-    return q;
-  }),
-  quota: _.map(event.quota, (q: Question) => {
-    if (q.existsInDb === false) {
-      delete q.id;
-    }
-    return q;
-  }),
+  quotas: event.quota,
+  useOpenQuota: event.openQuotaSize > 0,
+  questions: event.questions.map((question) => ({
+    ...question,
+    options: question.options || [''],
+  })),
 });
 
-const cleanServerEventdata = (res) => {
-  if (res.questions) {
-    res.questions = _.map(res.questions, (q) => {
-      if (q.options && !isArray(q.options)) {
-        q.options = q.options.split(';');
-      }
-      return q;
-    });
-  }
-  res.useOpenQuota = res.openQuotaSize > 0;
-  return res;
+const editorEventToServer = (form: EditorEvent): AdminEventUpdateBody => ({
+  ...form,
+  quota: form.quotas,
+  openQuotaSize: form.useOpenQuota ? form.openQuotaSize : 0,
+  questions: form.questions.map((question) => ({
+    ...question,
+    options: question.type === 'select' || question.type === 'checkbox' ? question.options.join(';') : null,
+  })),
+});
+
+export const clearEvent = () => (dispatch: DispatchAction) => {
+  dispatch(setEvent(null, null));
 };
 
-export function clearEvent() {
-  return function (dispatch: DispatchAction) {
-    dispatch(setEvent({}));
-  };
-}
+export const publishNewEvent = (data: EditorEvent, token: string) => async (dispatch: DispatchAction) => {
+  dispatch(setEventPublishLoading());
 
-export function publishEvent(data, token) {
-  return function (dispatch: DispatchAction) {
-    dispatch(setEventPublishLoading());
+  const cleaned = editorEventToServer(data);
 
-    const cleaned = cleanEventData(data);
-
-    return fetch(`${PREFIX_URL}/api/admin/events`, {
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/admin/events`, {
       method: 'POST',
       body: JSON.stringify(cleaned),
       headers: {
         Authorization: token,
         'Content-Type': 'application/json; charset=utf-8',
       },
-    })
-      .then((res) => {
-        if (res.status > 201) {
-          throw new Error(res.statusText);
-        }
-        return res.json();
-      })
-      .then((res) => {
-        const cleaned = cleanServerEventdata(res);
-        dispatch(setEvent(cleaned));
-        return cleaned;
-      })
-      .catch((error) => {
-        dispatch(setEventPublishError());
-        throw new Error(error);
-      });
-  };
-}
+    });
+    if (response.status > 201) {
+      throw new Error(response.statusText);
+    }
+    const newEvent = await response.json();
+    const newFormData = serverEventToEditor(newEvent);
+    dispatch(setEvent(newEvent, newFormData));
+    return newEvent;
+  } catch (e) {
+    dispatch(setEventPublishError());
+    throw new Error(e);
+  }
+};
 
-export function updateEventEditor(data, token) {
-  return function (dispatch: DispatchAction) {
-    dispatch(setEventPublishLoading());
+export const publishEventUpdate = (id: AdminEventGetResponse['id'], data: EditorEvent, token: string) => async (
+  dispatch: DispatchAction,
+) => {
+  dispatch(setEventPublishLoading());
 
-    const cleaned = cleanEventData(data);
+  const cleaned = editorEventToServer(data);
 
-    return fetch(`${PREFIX_URL}/api/admin/events/${data.id}`, {
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(cleaned),
       headers: {
         Authorization: token,
         'Content-Type': 'application/json; charset=utf-8',
       },
-    })
-      .then((res) => {
-        if (res.status > 201) {
-          throw new Error(res.statusText);
-        }
-        return res.json();
-      })
-      .then((res) => {
-        const cleaned = cleanServerEventdata(res);
-        dispatch(setEvent(cleaned));
-        return cleaned;
-      })
-      .catch((error) => {
-        dispatch(setEventPublishError());
-        throw new Error(error);
-      });
-  };
-}
+    });
+    if (response.status > 201) {
+      throw new Error(response.statusText);
+    }
+    const newEvent = await response.json();
+    const newFormData = serverEventToEditor(newEvent);
+    dispatch(setEvent(newEvent, newFormData));
+    return newEvent;
+  } catch (e) {
+    dispatch(setEventPublishError());
+    throw new Error(e);
+  }
+};
 
-export function getEvent(eventId: string, token: string) {
-  return function (dispatch: DispatchAction) {
-    dispatch(setEventLoading());
-    return fetch(`${PREFIX_URL}/api/admin/events/${eventId}`, {
+export const getEvent = (id: number, token: string) => async (dispatch: DispatchAction) => {
+  dispatch(setEventLoading());
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
       headers: { Authorization: token },
-    })
-      .then((res) => res.json())
-      .then((res: Event) => {
-        res.useOpenQuota = res.openQuotaSize > 0;
-        dispatch(setEvent(res));
-        return res;
-      })
-      .catch((error) => {
-        dispatch(setEventError());
-      });
-  };
-}
+    });
+    const event = await response.json() as AdminEventGetResponse;
+    const formData = serverEventToEditor(event);
+    dispatch(setEvent(event, formData));
+  } catch (e) {
+    dispatch(setEventError());
+  }
+};

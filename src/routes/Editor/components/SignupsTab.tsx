@@ -1,10 +1,9 @@
 import React from 'react';
 
-import _ from 'lodash';
 import { CSVLink } from 'react-csv';
 
+import { AdminEventGetResponse } from '../../../api/adminEvents';
 import { deleteSignupAsync } from '../../../modules/admin/actions';
-import { Event } from '../../../modules/types';
 import { useTypedDispatch } from '../../../store/reducers';
 import { getSignupsArrayFormatted } from '../../../utils/signupUtils';
 
@@ -12,12 +11,10 @@ import 'react-table/react-table.css';
 import '../Editor.scss';
 
 type Props = {
-  event: Event;
+  event: AdminEventGetResponse;
 };
 
-const SignupsTab = (props: Props) => {
-  const { event } = props;
-
+const SignupsTab = ({ event }: Props) => {
   const dispatch = useTypedDispatch();
 
   const signups = getSignupsArrayFormatted(event);
@@ -25,7 +22,7 @@ const SignupsTab = (props: Props) => {
   return (
     <div>
       <CSVLink
-        data={signups}
+        data={signups} // TODO implement translated headers
         separator={'\t'}
         filename={`${event.title} osallistujalista`}
       >
@@ -41,38 +38,38 @@ const SignupsTab = (props: Props) => {
             <th key="lastName">Sukunimi</th>
             <th key="email">Sähköposti</th>
             <th key="quota">Kiintiö</th>
-            {_.map(event.questions, (q) => (
+            {event.questions.map((q) => (
               <th key={q.id}>{q.question}</th>
             ))}
             <th key="timestamp">Ilmoittautumisaika</th>
-            <th key="delete" />
+            <th key="delete" aria-label="Poista" />
           </tr>
         </thead>
         <tbody>
-          {_.map(signups, (s, index) => (
-            <tr key={`${s.id}-${index}`}>
+          {signups.map((signup, index) => (
+            <tr key={signup.id}>
               <td key="position">
                 {index + 1}
                 .
               </td>
-              <td key="firstName">{s.Etunimi}</td>
-              <td key="lastName">{s.Sukunimi}</td>
-              <td key="email">{s['Sähköposti']}</td>
-              <td key="quota">{s['Kiintiö']}</td>
-              {_.map(event.questions, (q) => {
-                const answer = s[q.question];
-                return <td key={q.id}>{answer}</td>;
-              })}
-              <td key="timestamp">{s.Ilmoittautumisaika}</td>
+              <td key="firstName">{signup.firstName}</td>
+              <td key="lastName">{signup.lastName}</td>
+              <td key="email">{signup.lastName}</td>
+              <td key="quota">{signup.quota}</td>
+              {event.questions.map((question) => (
+                <td key={question.id}>{signup.answers[question.id]}</td>
+              ))}
+              <td key="timestamp">{signup.createdAt}</td>
               <td key="delete">
                 <button
+                  type="button"
                   className="btn btn-danger"
                   onClick={() => {
                     const confirmation = window.confirm(
                       'Oletko varma? Poistamista ei voi perua.',
                     );
                     if (confirmation) {
-                      dispatch(deleteSignupAsync(s.id, event.id));
+                      dispatch(deleteSignupAsync(signup.id, event.id));
                     }
                   }}
                 >

@@ -1,22 +1,35 @@
 import React from 'react';
 
-const EditorTabs = ({ activeTab, setActiveTab }) => (
+export type EditorTabId = 1 | 2 | 3 | 4 | 5;
+
+type Props = {
+  activeTab: EditorTabId;
+  setActiveTab: (tab: EditorTabId) => void
+};
+
+const TABS: [EditorTabId, string][] = [
+  [1, 'Perustiedot'],
+  [2, 'Ilmoittautumisasetukset'],
+  [3, 'Kysymykset'],
+  [4, 'Vahvistusviestit'],
+  [5, 'Ilmoittautuneet'],
+];
+
+const EditorTabs = ({ activeTab, setActiveTab }: Props) => (
   <ul className="event-editor--nav nav nav-tabs">
-    <li className={activeTab === 1 ? 'active' : undefined}>
-      <a onClick={() => setActiveTab(1)}>Perustiedot</a>
-    </li>
-    <li className={activeTab === 2 ? 'active' : undefined}>
-      <a onClick={() => setActiveTab(2)}>Ilmoittautumisasetukset</a>
-    </li>
-    <li className={activeTab === 3 ? 'active' : undefined}>
-      <a onClick={() => setActiveTab(3)}>Kysymykset</a>
-    </li>
-    <li className={activeTab === 4 ? 'active' : undefined}>
-      <a onClick={() => setActiveTab(4)}>Vahvistusviestit</a>
-    </li>
-    <li className={activeTab === 5 ? 'active' : undefined}>
-      <a onClick={() => setActiveTab(5)}>Ilmoittautuneet</a>
-    </li>
+    {TABS.map(([id, label]) => (
+      <li className={activeTab === id ? 'active' : undefined}>
+        <button
+          type="button"
+          onClick={() => setActiveTab(1)}
+          role="tab"
+          aria-selected={activeTab === id}
+          aria-controls={`editor-tab-${id}`}
+        >
+          {label}
+        </button>
+      </li>
+    ))}
   </ul>
 );
 

@@ -1,116 +1,105 @@
 import React from 'react';
 
-import { Input } from '@theme-ui/components';
+import { Input, Label } from '@theme-ui/components';
+import { useField } from 'formik';
 import _ from 'lodash';
+import { SortEnd } from 'react-sortable-hoc';
 
-import { updateEventField } from '../../../modules/editor/actions';
-import { Event } from '../../../modules/types';
-import { useTypedDispatch } from '../../../store/reducers';
+import { EditorQuota } from '../../../modules/editor/types';
 import { SortableItems } from './Sortable';
 
-type Props = {
-  event: Event;
-};
+const Quotas = () => {
+  const [{ value: quotas }, , { setValue }] = useField<EditorQuota[]>('quota');
 
-const Quotas = (props: Props) => {
-  const { event } = props;
-  const dispatch = useTypedDispatch();
+  function addQuota() {
+    setValue([
+      ...quotas,
+      {
+        title: '',
+        size: 0,
+      },
+    ]);
+  }
 
-  function updateQuota(itemId, field, value) {
-    const quotas = event.quota ? event.quota : [];
+  function updateOrder({ newIndex, oldIndex }: SortEnd) {
+    const newQuotas = quotas.slice();
+    const [elementToMove] = newQuotas.splice(oldIndex, 1);
+    newQuotas.splice(newIndex, 0, elementToMove);
+    setValue(newQuotas);
+  }
 
-    const newQuotas = _.map(quotas, (quota) => {
-      if (quota.id === itemId) {
-        if (field === 'size' && value === '') {
+  const quotaItems = quotas.map((quota, index) => {
+    const thisQuota = quota.id;
+
+    function updateField<F extends keyof EditorQuota>(field: F, value: EditorQuota[F]) {
+      setValue(quotas.map((item) => {
+        if (item.id === thisQuota) {
+          if (field === 'size' && !value) {
+            return {
+              ...item,
+              [field]: null,
+            };
+          }
           return {
-            ...quota,
-            [field]: null,
+            ...item,
+            [field]: value,
           };
         }
-        return {
-          ...quota,
-          [field]: value,
-        };
-      }
-      return quota;
-    });
+        return item;
+      }));
+    }
 
-    dispatch(updateEventField('quota', newQuotas));
-  }
+    function removeQuota() {
+      setValue(_.reject(quotas, { id: thisQuota }));
+    }
 
-  function removeQuota(itemId) {
-    const quotas = event.quota ? event.quota : [];
-    const newQuotas = _.filter(quotas, (quota) => {
-      if (quota.id === itemId) {
-        return false;
-      }
-      return true;
-    });
-
-    dispatch(updateEventField('quota', newQuotas));
-  }
-
-  function updateOrder(args) {
-    const { newIndex, oldIndex } = args;
-
-    const newQuotas = event.quota.map((quota, index) => {
-      if (oldIndex < newIndex) {
-        // Moved the quota down
-        if (index > oldIndex && index <= newIndex) {
-          quota.order -= 1;
-        }
-      }
-      if (oldIndex > newIndex) {
-        // Moved the quota up
-        if (index >= newIndex && index < oldIndex) {
-          quota.order += 1;
-        }
-      }
-      if (index === oldIndex) {
-        quota.order = newIndex;
-      }
-      return quota;
-    });
-
-    const elementToMove = newQuotas[args.oldIndex];
-    newQuotas.splice(args.oldIndex, 1);
-    newQuotas.splice(args.newIndex, 0, elementToMove);
-
-    dispatch(updateEventField('quota', newQuotas));
-  }
-
-  const orderedQuotas = _.orderBy(event.quota, 'order', 'asc');
-
-  const quotaItems = _.map(orderedQuotas, (item, index) => (
-    <div className="panel-body" key={index}>
-      <div className="col-xs-12 col-sm-10">
-        <Input
-          name={`quota-${item.id}-title`}
-          value={item.title}
-          label="Kiintiön nimi"
-          type="text"
-          onChange={(e) => updateQuota(item.id, 'title', e.target.value)}
-          help={
-              index === 0
-              && 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.'
-            }
-        />
-        <Input
-          name={`quota-${item.id}-max-attendees`}
-          value={item.size}
-          label="Kiintiön koko"
-          type="number"
-          onChange={(e) => updateQuota(item.id, 'size', e.target.value)}
-          help="Jos kiintiön kokoa ole rajoitettu määrää, jätä kenttä tyhjäksi."
-        />
-      </div>
-      {index > 0 && (
-      <div className="col-xs-12 col-sm-2 no-focus">
-        <a onClick={() => removeQuota(item.id)}>Poista</a>
-      </div>
-      )}
-    </div>
-  ));
+    return (
+      <>
+        <div className="panel-body" key={quota.id}>
+          <div className="col-xs-12 col-sm-10">
+            <Label htmlFor={`quota-${quota.id}-title`}>
+              Kiintiön nimi
+            </Label>
+            <Input
+              name={`quota-${quota.id}-title`}
+              value={quota.title}
+              type="text"
+              onChange={(e) => updateField('title', e.target.value)}
+            />
+            <div className="form-text">
+              {quotas.length === 1 && 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen.'}
+              Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.
+            </div>
+            <Label htmlFor={`quota-${quota.id}-max-attendees`}>
+              Kiintiön koko
+            </Label>
+            <Input
+              id={`quota-${quota.id}-max-attendees`}
+              value={quota.size || ''}
+              type="number"
+              min={1}
+              onChange={(e) => updateField('size', Number(e.target.value))}
+            />
+            <div className="form-text">
+              Jos kiintiön kokoa ole rajoitettu, jätä kenttä tyhjäksi.
+            </div>
+          </div>
+          {index > 0 && (
+            <div className="col-xs-12 col-sm-2 no-focus">
+              <button type="button" className="btn btn-link" onClick={() => removeQuota()}>
+                Poista kiintiö
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="text-center">
+          <button type="button" className="btn btn-primary" onClick={addQuota}>
+            Lisää kiintiö
+          </button>
+        </div>
+      </>
+    );
+  });
 
   return (
     <SortableItems

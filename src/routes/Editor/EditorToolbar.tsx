@@ -1,35 +1,35 @@
 import React from 'react';
 
 import { Spinner } from '@theme-ui/components';
+import { useFormikContext } from 'formik';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { useTypedSelector } from '../../store/reducers';
+import { FormEvent } from './Editor';
 
 import './Editor.scss';
 
 interface EditorToolbarProps {
-  publish: (isDraft?: boolean) => void;
+  event: FormEvent;
+  isNew: boolean;
 }
 
-type Props = EditorToolbarProps & RouteComponentProps;
+type Props = EditorToolbarProps & RouteComponentProps<{ id: string }>;
 
 const EditorToolbar = (props: Props) => {
-  const { publish, match } = props;
-
-  const editor = useTypedSelector((state) => state.editor);
-  const { event, eventPublishLoading } = editor;
+  const { event, isNew } = props;
+  const { isSubmitting } = useFormikContext<FormEvent>();
 
   return (
     <>
       <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
       <h1>
-        {match.params.id === 'new'
+        {isNew
           ? 'Luo uusi tapahtuma'
           : 'Muokkaa tapahtumaa'}
       </h1>
       <div className="pull-right event-editor--buttons-wrapper">
-        {eventPublishLoading && <Spinner />}
-        {match.params.id !== 'new' && (
+        {isSubmitting && <Spinner />}
+        {!isNew && (
           <>
             <div className="event-editor--public-status">
               <div className="event-editor--bubble draft event-editor--animated" />
@@ -37,7 +37,7 @@ const EditorToolbar = (props: Props) => {
             </div>
             <input
               type="submit"
-              disabled={eventPublishLoading}
+              disabled={isSubmitting}
               className={
                 event.draft
                   ? 'btn btn-success event-editor--animated'
@@ -50,14 +50,10 @@ const EditorToolbar = (props: Props) => {
         )}
         <input
           type="submit"
-          disabled={eventPublishLoading}
+          disabled={isSubmitting}
           className="btn btn-info event-editor--animated"
           formNoValidate
-          value={
-            match.params.id == 'new'
-              ? 'Tallenna luonnoksena'
-              : 'Tallenna muutokset'
-          }
+          value={isNew ? 'Tallenna luonnoksena' : 'Tallenna muutokset'}
         />
       </div>
     </>

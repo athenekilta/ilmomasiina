@@ -4,12 +4,12 @@ import {
   SET_EVENT_LOADING,
   SET_EVENT_PUBLISH_ERROR,
   SET_EVENT_PUBLISH_LOADING,
-  UPDATE_EVENT_FIELD,
 } from './actionTypes';
 import { EditorActions, EditorState } from './types';
 
 const initialState: EditorState = {
-  event: {},
+  event: null,
+  formData: null,
   eventLoading: false,
   eventError: false,
   eventPublishLoading: false,
@@ -24,19 +24,12 @@ export default function reducer(
     case SET_EVENT:
       return {
         ...state,
-        event: action.payload,
+        event: action.event,
+        formData: action.formData,
         eventLoading: false,
         eventError: false,
         eventPublishLoading: false,
         eventPublishError: false,
-      };
-    case UPDATE_EVENT_FIELD:
-      return {
-        ...state,
-        event: {
-          ...state.event,
-          [action.payload.field]: action.payload.value,
-        },
       };
     case SET_EVENT_LOADING:
       return {

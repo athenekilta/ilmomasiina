@@ -1,21 +1,18 @@
 import React from 'react';
 
-import { Textarea } from '@theme-ui/components';
+import { Label, Textarea } from '@theme-ui/components';
+import { Field } from 'formik';
 
-import { Event } from '../../../modules/types';
-
-type Props = {
-  event: Event;
-  register: any;
-};
-
-const EmailsTab = ({ event, register }: Props) => (
-  <Textarea
-    rows={10}
-    name="verificationEmail"
-    label="Vahvistusviesti sähköpostiin"
-    ref={register}
-  />
+const EmailsTab = () => (
+  <div className="form-group">
+    <Label htmlFor="verificationEmail">Vahvistusviesti sähköpostiin</Label>
+    <Field
+      as={Textarea}
+      name="verificationEmail"
+      id="verificationEmail"
+      rows={10}
+    />
+  </div>
 );
 
 export default EmailsTab;

@@ -1,15 +1,17 @@
-import { Event } from '../types';
+import {
+  AdminEventGetResponse, AdminEventUpdateBody, AdminEventUpdateQuestion, AdminEventUpdateQuota,
+} from '../../api/adminEvents';
 import {
   setEvent,
   setEventError,
   setEventLoading,
   setEventPublishError,
   setEventPublishLoading,
-  updateEventField,
 } from './actions';
 
 interface EditorState {
-  event: { [key: string]: Event };
+  event: AdminEventGetResponse | null;
+  formData: EditorEvent | null;
   eventLoading: boolean;
   eventError: boolean;
   eventPublishLoading: boolean;
@@ -21,5 +23,20 @@ type EditorActions =
   | ReturnType<typeof setEventLoading>
   | ReturnType<typeof setEventError>
   | ReturnType<typeof setEventPublishLoading>
-  | ReturnType<typeof setEventPublishError>
-  | ReturnType<typeof updateEventField>;
+  | ReturnType<typeof setEventPublishError>;
+
+/** Question type for event editor */
+export interface EditorQuestion extends AdminEventUpdateQuestion {
+  options: string[];
+}
+
+/** Quota type for event editor */
+export interface EditorQuota extends AdminEventUpdateQuota {}
+
+/** Root form data type for event editor */
+export interface EditorEvent extends Omit<AdminEventUpdateBody, 'quota'> {
+  questions: EditorQuestion[];
+
+  quotas: EditorQuota[];
+  useOpenQuota: boolean;
+}

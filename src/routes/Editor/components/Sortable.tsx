@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import {
+  Offset,
   SortableContainer,
   SortableElement,
   SortableHandle,
@@ -8,14 +9,23 @@ import {
 
 const DragHandle = SortableHandle(() => <span className="handler" />);
 
-const SortableItem = SortableElement(({ value }) => (
+type SortableItemProps = {
+  value: ReactNode;
+};
+
+const SortableItem = SortableElement(({ value }: SortableItemProps) => (
   <div className="panel panel-default">
     <DragHandle />
     {value}
   </div>
 ));
 
-export const SortableItems = SortableContainer(({ collection, items }) => (
+type SortableItemsProps = {
+  collection: Offset;
+  items: ReactNode[];
+};
+
+export const SortableItems = SortableContainer(({ collection, items }: SortableItemsProps) => (
   <div>
     {items.map((value, index) => (
       <SortableItem
