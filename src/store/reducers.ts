@@ -1,14 +1,14 @@
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { combineReducers, Reducer, Store } from 'redux';
+import { combineReducers, Reducer } from 'redux';
 
 import admin from '../modules/admin/reducer';
 import editor from '../modules/editor/reducer';
 import editSignup from '../modules/editSignup/reducer';
 import events from '../modules/events/reducer';
 import singleEvent from '../modules/singleEvent/reducer';
-import { AppActions, AppState, DispatchAction } from './types';
+import { AppState, AppStore, DispatchAction } from './types';
 
 type AsyncReducers = {
   [key: string]: Reducer;
@@ -28,7 +28,7 @@ export const makeRootReducer = (
 });
 
 export const injectReducer = (
-  store: Store<AppState, AppActions>,
+  store: AppStore,
   { key, reducer }: { key: string; reducer: Reducer },
 ) => {
   if (Object.hasOwnProperty.call(store.asyncReducers, key)) return;

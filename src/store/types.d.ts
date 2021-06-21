@@ -1,4 +1,3 @@
-import { TypedUseSelectorHook } from 'react-redux';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 
@@ -9,7 +8,8 @@ import { EventsActions } from '../modules/events/types';
 import { SingleEventActions } from '../modules/singleEvent/types';
 import { makeRootReducer } from './reducers';
 
-type AppState = ReturnType<typeof makeRootReducer>;
+type AppReducer = ReturnType<typeof makeRootReducer>;
+type AppState = ReturnType<AppReducer>;
 
 type AppActions =
   | AdminActions
@@ -32,3 +32,5 @@ T
 >;
 
 type GetState = () => AppState;
+
+type AppStore = Store<AppState, AppActions>;
