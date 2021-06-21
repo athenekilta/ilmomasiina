@@ -41,6 +41,17 @@ export interface EventListItem extends Pick<Event, typeof eventListEventAttrs[nu
 
 export type EventListResponse = EventListItem[];
 
+// Type definitions for the admin variant of the endpoint.
+
+export type AdminEventListQuotaItem = EventListQuotaItem;
+
+export interface AdminEventListItem extends Pick<Event, typeof adminEventListEventAttrs[number]> {
+  // intentionally misnamed to match old API
+  quota: AdminEventListQuotaItem[];
+}
+
+export type AdminEventListResponse = AdminEventListItem[];
+
 export default async (admin = false): Promise<EventListResponse> => {
   // Admin view also shows draft field.
   const eventAttrs = admin ? adminEventListEventAttrs : eventListEventAttrs;

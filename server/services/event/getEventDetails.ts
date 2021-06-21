@@ -74,10 +74,10 @@ export interface EventGetQuestionItem
   options: string[] | null;
 }
 
-export interface EventGetAnswersItem extends Pick<Answer, typeof eventGetAnswerAttrs[number]> {}
+export interface EventGetAnswerItem extends Pick<Answer, typeof eventGetAnswerAttrs[number]> {}
 
 export interface EventGetSignupItem extends Pick<Signup, typeof eventGetSignupAttrs[number]> {
-  answers: EventGetAnswersItem[];
+  answers: EventGetAnswerItem[];
 }
 
 export interface EventGetQuotaItem extends Pick<Quota, typeof eventGetQuotaAttrs[number]> {
@@ -89,6 +89,29 @@ export interface EventGetResponse extends Pick<Event, typeof eventGetEventAttrs[
   questions: EventGetQuestionItem[];
   // intentionally misnamed to match old API
   quota: EventGetQuotaItem[];
+  millisTillOpening?: number;
+  registrationClosed?: boolean;
+}
+
+// Type definitions for the admin variant of the endpoint.
+
+export type AdminEventGetQuestionItem = EventGetQuestionItem;
+
+export type AdminEventGetAnswerItem = EventGetAnswerItem;
+
+export interface AdminEventGetSignupItem extends Pick<Signup, typeof adminEventGetSignupAttrs[number]> {
+  answers: AdminEventGetAnswerItem[];
+}
+
+export interface AdminEventGetQuotaItem extends Pick<Quota, typeof eventGetQuotaAttrs[number]> {
+  signups?: AdminEventGetSignupItem[] | null;
+  signupCount?: number;
+}
+
+export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetEventAttrs[number]> {
+  questions: AdminEventGetQuestionItem[];
+  // intentionally misnamed to match old API
+  quota: AdminEventGetQuotaItem[];
   millisTillOpening?: number;
   registrationClosed?: boolean;
 }
