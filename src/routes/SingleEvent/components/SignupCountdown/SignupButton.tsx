@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { Event, Quota } from '../../../../modules/types';
+import { EventGetQuotaItem, EventGetResponse } from '../../../../api/events';
 import signupState from '../../../../utils/signupStateText';
 
 import './SignupButton.scss';
 
 type SignupButtonProps = {
-  event: Event;
+  event: EventGetResponse;
   isOnly: boolean;
   isOpen: boolean;
-  openForm: (quota: Quota) => void;
+  openForm: (quotaId: EventGetQuotaItem['id']) => void;
   seconds: number;
   total: number;
 };
@@ -32,24 +32,22 @@ const SignupButton = (props: SignupButtonProps) => {
         }
         {total < 60000 && !isOpen ? (
           <span style={{ color: 'green' }}>
-            {' '}
             {` (${seconds}  s)`}
           </span>
         ) : null}
       </p>
-      {event.quota
-        ? event.quota.map((quota, index) => (
-          <p key={index}>
-            <button
-              disabled={!isOpen}
-              className="btn btn-default btn-block btn-whitespace-normal"
-              onClick={() => (isOpen ? openForm(quota) : {})}
-            >
-              {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
-            </button>
-          </p>
-        ))
-        : ''}
+      {event.quota.map((quota) => (
+        <p key={quota.id}>
+          <button
+            type="button"
+            disabled={!isOpen}
+            className="btn btn-default btn-block btn-whitespace-normal"
+            onClick={() => isOpen && openForm(quota.id)}
+          >
+            {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
+          </button>
+        </p>
+      ))}
     </div>
   );
 };

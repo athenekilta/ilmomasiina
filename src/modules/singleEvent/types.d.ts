@@ -1,4 +1,5 @@
-import { Event, Signup } from '../types';
+import { EventGetResponse } from '../../api/events';
+import { SignupCreateResponse } from '../../api/signups';
 import {
   setEvent,
   setEventError,
@@ -9,11 +10,10 @@ import {
 } from './actions';
 
 interface SingleEventState {
-  event: { [key: string]: Event } | {};
-
+  event: EventGetResponse | null;
   eventLoading: boolean;
   eventError: boolean;
-  signup: { [key: string]: Signup } | {};
+  signup: SignupCreateResponse | null;
   signupLoading: boolean;
   signupError: boolean;
 }

@@ -1,50 +1,44 @@
 import React from 'react';
 
-import _ from 'lodash';
-
-import { Event, Quota } from '../../../../modules/types';
-import { OPENQUOTA, WAITLIST } from '../../../../utils/signupUtils';
+import { useTypedSelector } from '../../../../store/reducers';
+import { getSignupsByQuota, OPENQUOTA, WAITLIST } from '../../../../utils/signupUtils';
 import ViewProgress from '../ViewProgress';
 
-type Props = {
-  event: Event;
-  quotaData: Quota;
-};
+const QuotaStatus = () => {
+  const event = useTypedSelector((state) => state.singleEvent.event)!;
 
-const QuotaStatus = (props: Props) => {
-  const { event, quotaData } = props;
-
-  if (!event.quota || event.quota.length === 0 || !event.signupsPublic) {
+  if (!event.signupsPublic) {
     return null;
   }
+
+  const quotaData = getSignupsByQuota(event);
 
   return (
     <div className="sidebar-widget">
       <h3>Ilmoittautuneet</h3>
-      {_.map(_.keys(quotaData), (quotaName) => {
-        const quota = quotaData[quotaName];
-        if (quotaName === OPENQUOTA) {
+      {quotaData!.map((quota) => {
+        if (quota.id === OPENQUOTA) {
           return (
             <ViewProgress
+              key={quota.id}
               title="Avoin"
               value={quota.signups.length}
               max={event.openQuotaSize}
-              key={quotaName}
             />
           );
         }
-        if (quotaName === WAITLIST) {
-          if (quota.signups && quota.signups.length > 0) {
-            return <p key={quotaName}>{`Jonossa: ${quota.signups.length}`}</p>;
+        if (quota.id === WAITLIST) {
+          if (quota.signups.length > 0) {
+            return <p key={quota.id}>{`Jonossa: ${quota.signups.length}`}</p>;
           }
           return null;
         }
         return (
           <ViewProgress
-            title={quotaName}
+            key={quota.id}
+            title={quota.title!}
             value={Math.min(quota.signups.length, quota.size)}
             max={quota.size}
-            key={quotaName}
           />
         );
       })}

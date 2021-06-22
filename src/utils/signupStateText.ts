@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import moment from 'moment';
 
-const signupState = (eventTime, starts, closes) => {
+const signupState = (eventTime: string, starts: string, closes: string) => {
   if (_.isEmpty(starts) || _.isEmpty(closes)) {
     return {
       label: 'Auki toistaiseksi.',

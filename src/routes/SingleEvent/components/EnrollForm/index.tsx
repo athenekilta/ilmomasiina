@@ -1,152 +1,130 @@
 /** @jsx jsx */
-import React, { useState } from 'react';
-
 import {
-  Box, Flex, Input, Label,
+  Input, Label,
 } from '@theme-ui/components';
-import _ from 'lodash';
-import { useForm } from 'react-hook-form';
+import { Field, Formik } from 'formik';
+import { shallowEqual } from 'react-redux';
+import { toast } from 'react-toastify';
 import { jsx } from 'theme-ui';
 
-import { Event, Question, Signup } from '../../../../modules/types';
-import QuestionFields from './QuestionFields';
+import { SignupUpdateBody } from '../../../../api/signups';
+import QuestionFields from '../../../../components/QuestionFields';
+import { completeSignup, getEvent } from '../../../../modules/singleEvent/actions';
+import { useTypedDispatch, useTypedSelector } from '../../../../store/reducers';
 import SignupStatus from './SignupStatus';
 
 import './EnrollForm.scss';
 
-interface CommonFormFields {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
-
-interface FormData extends CommonFormFields {
-  answers: { questionId: number; answer: string }[] | undefined[];
-}
-
 type Props = {
-  error: boolean;
-  event: Event;
   closeForm: () => void;
-  loading: boolean;
-  questions: Question[];
-  signup: Signup;
-  submitForm: (answers: any) => void;
 };
 
-const EnrollForm = (props: Props) => {
+const EnrollForm = ({ closeForm }: Props) => {
+  const dispatch = useTypedDispatch();
   const {
-    error,
-    event,
-    closeForm,
-    loading,
-    questions,
-    signup,
-    submitForm,
-  } = props;
+    event, signup, signupError,
+  } = useTypedSelector((state) => state.singleEvent, shallowEqual);
 
-  const {
-    register, setValue, handleSubmit, errors,
-  } = useForm<FormData>();
-  const [inputError, setInputError] = useState(false);
+  async function onSubmit(answers: SignupUpdateBody) {
+    const progressToast = toast.info('Ilmoittautuminen käynnissä', {});
 
-  function parseSubmit(data: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    [key: string]: string | string[];
-  }) {
-    const answers: FormData = {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      answers: [],
-    };
+    const success = await dispatch(completeSignup(signup!.id, answers, signup!.editToken));
 
-    if (questions) {
-      answers.answers = questions
-        .map((question) => {
-          const questionId = question.id;
-          const answer = data[question.id];
-
-          if (answer && answer.length > 0) {
-            if (question.type === 'checkbox') {
-              return { questionId, answer: answer.join(';') };
-            }
-            return { questionId, answer };
-          }
-        })
-        .filter((x) => x);
+    if (success) {
+      toast.update(progressToast, {
+        render: 'Ilmoittautuminen onnistui!',
+        type: toast.TYPE.SUCCESS,
+        autoClose: 5000,
+      });
+      dispatch(getEvent(event!.id));
+      closeForm();
+    } else {
+      toast.update(progressToast, {
+        render: 'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki '
+          + 'pakolliset kentät on täytetty ja yritä uudestaan.',
+        type: toast.TYPE.ERROR,
+        autoClose: 5000,
+      });
     }
-
-    return submitForm(answers);
   }
 
+  const emptySignup: SignupUpdateBody = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    answers: [],
+  };
+
   return (
-    <div className="form-wrapper">
-      <div className="container">
-        <a className="close" onClick={() => closeForm()} />
-        <div className="col-xs-12 col-md-8 col-md-offset-2">
-          {inputError && (
-            <p sx={{ color: 'error' }}>Ilmoittautumisessasi on virheitä.</p>
-          )}
-          <h2>Ilmoittaudu</h2>
+    <Formik
+      initialValues={emptySignup}
+      onSubmit={onSubmit}
+    >
+      {({ handleSubmit, isSubmitting }) => (
+        <div className="form-wrapper">
+          <div className="container">
+            <button type="button" className="close" onClick={() => closeForm()} aria-label="Sulje" />
+            <div className="col-xs-12 col-md-8 col-md-offset-2">
+              {signupError && (
+                <p sx={{ color: 'error' }}>Ilmoittautumisessasi on virheitä.</p>
+              )}
+              <h2>Ilmoittaudu</h2>
 
-          <SignupStatus event={event} signup={signup} />
+              <SignupStatus />
 
-          <form onSubmit={handleSubmit(parseSubmit)}>
-            <ul className="flex-outer">
-              <li>
-                <Label htmlFor="firstName">Etunimi / First name</Label>
-                <Input
-                  name="firstName"
-                  value=""
-                  type="text"
-                  placeholder="Etunimi"
-                  ref={register({ required: true })}
-                />
-              </li>
-              <li>
-                <Label htmlFor="lastName">Sukunimi / Last name</Label>
-                <Input
-                  name="lastName"
-                  value=""
-                  type="text"
-                  placeholder="Sukunimi"
-                  ref={register({ required: true })}
-                />
-              </li>
-              <li>
-                <Label htmlFor="email">Sähköposti / Email</Label>
-                <Input
-                  name="email"
-                  value=""
-                  type="email"
-                  placeholder="Sähköpostisi"
-                  validations="isEmail"
-                  ref={register({ required: true })}
-                />
-              </li>
-              <QuestionFields questions={questions} register={register} />
-            </ul>
+              <form onSubmit={handleSubmit}>
+                <ul className="flex-outer">
+                  <li>
+                    <Label htmlFor="firstName">Etunimi / First name</Label>
+                    <Field
+                      as={Input}
+                      name="firstName"
+                      id="firstName"
+                      type="text"
+                      placeholder="Etunimi"
+                    />
+                  </li>
+                  <li>
+                    <Label htmlFor="lastName">Sukunimi / Last name</Label>
+                    <Field
+                      as={Input}
+                      name="lastName"
+                      id="lastName"
+                      type="text"
+                      placeholder="Sukunimi"
+                    />
+                  </li>
+                  <li>
+                    <Label htmlFor="email">Sähköposti / Email</Label>
+                    <Field
+                      as={Input}
+                      name="email"
+                      id="email"
+                      type="email"
+                      placeholder="Sähköpostisi"
+                    />
+                  </li>
+                  <QuestionFields name="answers" questions={event!.questions} />
+                </ul>
 
-            <div className="input-wrapper pull-right">
-              <input
-                className="btn btn-primary pull-right"
-                formNoValidate
-                type="submit"
-                value="Lähetä"
-                disabled={loading}
-              />
+                <button
+                  className="btn btn-primary pull-right"
+                  formNoValidate
+                  type="submit"
+                  disabled={isSubmitting}
+                >
+                  Lähetä
+                </button>
+                <button type="button" className="btn btn-link pull-right" onClick={() => closeForm()}>
+                  Peruuta
+                </button>
+              </form>
             </div>
-            <a className="btn btn-link pull-right" onClick={() => closeForm()}>
-              Peruuta
-            </a>
-          </form>
+            <div className="cf" />
+          </div>
         </div>
-        <div className="cf" />
-      </div>
-    </div>
+      )}
+    </Formik>
   );
 };
 

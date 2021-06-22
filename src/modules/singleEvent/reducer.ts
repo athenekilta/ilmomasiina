@@ -9,10 +9,10 @@ import {
 import { SingleEventActions, SingleEventState } from './types';
 
 const initialState: SingleEventState = {
-  event: {},
+  event: null,
   eventLoading: false,
   eventError: false,
-  signup: {},
+  signup: null,
   signupLoading: false,
   signupError: false,
 };

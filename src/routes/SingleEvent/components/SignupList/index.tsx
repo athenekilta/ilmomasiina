@@ -2,36 +2,35 @@ import React from 'react';
 
 import _ from 'lodash';
 
-import { Question, Signup } from '../../../../modules/types';
-import { OPENQUOTA, WAITLIST } from '../../../../utils/signupUtils';
+import { useTypedSelector } from '../../../../store/reducers';
+import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../../utils/signupUtils';
 import TableRow from './TableRow';
 
 import './SignupList.scss';
 
 type Props = {
-  questions: Question[];
-  quotaName: string;
-  signups: Signup[];
+  quota: QuotaSignups;
 };
 
-function getTitle(quotaName: string) {
-  switch (quotaName) {
+function getTitle(quota: QuotaSignups) {
+  switch (quota.id) {
     case WAITLIST:
       return 'Jonossa';
     case OPENQUOTA:
       return 'Avoin kiintiö';
     default:
-      return quotaName;
+      return quota.title!;
   }
 }
 
-const SignupList = (props: Props) => {
-  const { questions, quotaName, signups } = props;
-
+const SignupList = ({ quota }: Props) => {
+  const { signups } = quota;
+  const { questions } = useTypedSelector((state) => state.singleEvent.event)!;
+  const showQuotas = quota.id !== OPENQUOTA && quota.id !== WAITLIST;
   return (
     <div className="quota">
-      <h3>{getTitle(quotaName)}</h3>
-      {!signups.length ? (
+      <h3>{getTitle(quota)}</h3>
+      {!signups?.length ? (
         <p>Ei ilmoittautumisia.</p>
       ) : (
         <table className="table table-condensed table-responsive">
@@ -41,9 +40,16 @@ const SignupList = (props: Props) => {
               <th key="attendee" style={{ minWidth: 90 }}>
                 Nimi
               </th>
-              {questions.map((q, i) => (
-                <th key={i}>{q.question}</th>
+              {_.filter(questions, 'public').map((question) => (
+                <th key={question.id}>
+                  {question.question}
+                </th>
               ))}
+              {showQuotas && (
+                <th key="quota">
+                  Kiintiö
+                </th>
+              )}
               <th key="datetime" style={{ minWidth: 130 }}>
                 Ilmoittautumisaika
               </th>
@@ -52,13 +58,10 @@ const SignupList = (props: Props) => {
           <tbody>
             {signups.map((signup, i) => (
               <TableRow
-                questions={questions}
-                answers={signup.answers}
-                quota={signup.quota}
-                firstName={signup.firstName}
-                lastName={signup.lastName}
-                createdAt={signup.createdAt}
                 index={i + 1}
+                signup={signup}
+                showQuota={showQuotas}
+                // eslint-disable-next-line react/no-array-index-key
                 key={i}
               />
             ))}

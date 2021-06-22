@@ -13,7 +13,7 @@ type Props = {
 const ViewProgress = (props: Props) => {
   const { max, title, value } = props;
 
-  // Don' return progress bar if no max limit
+  // Don't return progress bar if no max limit
   return !max ? (
     <div />
   ) : (
@@ -22,7 +22,6 @@ const ViewProgress = (props: Props) => {
       <div className="progress">
         <div
           className="progress-bar"
-          role="progressbar"
           style={{
             minWidth: '5em',
             width: `${(value / max) * 100}%`,

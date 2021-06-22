@@ -1,122 +1,123 @@
 import _ from 'lodash';
 import moment from 'moment-timezone';
 
-import { Event } from '../modules/types';
+import { AdminEventGetQuestionItem, EventGetQuestionItem } from '../../server/services/event/getEventDetails';
+import { AdminEventGetQuotaItem, AdminEventGetResponse, AdminEventGetSignupItem } from '../api/adminEvents';
+import { EventGetQuotaItem, EventGetResponse, EventGetSignupItem } from '../api/events';
 
-export const WAITLIST = '__waitlist';
-export const OPENQUOTA = '__open';
+export const WAITLIST = '__waitlist' as const;
+export const OPENQUOTA = '__open' as const;
 
-export const getSignupsByQuota = (event: Event) => {
-  let extraSignups = [];
-  const quotas = {};
+type AnyEventDetails = AdminEventGetResponse | EventGetResponse;
+type AnyQuotaDetails = AdminEventGetQuotaItem | EventGetQuotaItem;
+type AnySignupDetails = AdminEventGetSignupItem | EventGetSignupItem;
+type AnyQuestionDetails = AdminEventGetQuestionItem | EventGetQuestionItem;
 
-  if (event.quota) {
-    _.each(event.quota, (quota) => {
-      const sorted = _.sortBy(quota.signups, (s) => new Date(s.createdAt));
-      const quotaSignups = [];
-      _.each(sorted, (s, index) => {
-        if (index < quota.size || !quota.size) {
-          // size may be null
-          quotaSignups.push({
-            ...s,
-            quota: quota.title,
-          });
-        } else {
-          extraSignups.push({
-            ...s,
-            quota: quota.title,
-          });
-        }
-      });
+type EffectiveQuota = AnyQuotaDetails['id'] | typeof WAITLIST | typeof OPENQUOTA;
 
-      quotas[quota.title] = {
-        size: quota.size,
-        signups: quotaSignups,
-      };
+export type SignupWithQuotaName = AnySignupDetails & {
+  quotaName: string;
+};
+
+export type QuotaSignups = {
+  id: EffectiveQuota;
+  title?: string,
+  size: number;
+  signups: SignupWithQuotaName[];
+};
+
+export function getSignupsByQuota(event: AnyEventDetails) {
+  let overflow: SignupWithQuotaName[] = [];
+  const quotas: QuotaSignups[] = [];
+
+  event.quota.forEach((quota) => {
+    if (!quota.signups) return;
+
+    const sorted = _.sortBy(quota.signups, 'createdAt').map((signup) => ({
+      ...signup,
+      quotaName: quota.title,
+    }));
+    const overflowAfter = quota.size || quota.signups.length;
+
+    quotas.push({
+      id: quota.id,
+      title: quota.title,
+      size: quota.size,
+      signups: sorted.slice(0, overflowAfter),
     });
-  }
+    overflow = [...overflow, ...sorted.slice(overflowAfter)];
+  });
 
-  extraSignups = _.sortBy(extraSignups, (s) => new Date(s.createdAt));
+  overflow = _.sortBy(overflow, 'createdAt');
 
   if (event.openQuotaSize > 0) {
-    quotas[OPENQUOTA] = {
+    quotas.push({
+      id: OPENQUOTA,
       size: event.openQuotaSize,
-      signups: extraSignups.slice(0, event.openQuotaSize),
-    };
-
-    quotas[WAITLIST] = {
-      size: Infinity,
-      signups: extraSignups.slice(event.openQuotaSize),
-    };
-  } else {
-    quotas[WAITLIST] = {
-      size: Infinity,
-      signups: extraSignups,
-    };
+      signups: overflow.slice(0, event.openQuotaSize),
+    });
+    overflow = overflow.slice(event.openQuotaSize);
   }
 
+  quotas.push({
+    id: WAITLIST,
+    size: Infinity,
+    signups: overflow,
+  });
+
   return quotas;
+}
+
+type SignupWithQuotaInfo = SignupWithQuotaName & {
+  isWaitlist: boolean;
+  isOpenQuota: boolean;
 };
 
-export const getSignupsArray = (event: Event, includeWaitlist = true) => {
+function getSignupsAsList(event: AnyEventDetails, includeWaitlist = true): SignupWithQuotaInfo[] {
   const byQuota = getSignupsByQuota(event);
 
-  const signups = [];
+  return _.flatMap(byQuota, ({ id: quotaId, signups }) => {
+    if (!includeWaitlist && quotaId === WAITLIST) return [];
+    return signups.map((signup) => ({
+      ...signup,
+      isWaitlist: quotaId === WAITLIST,
+      isOpenQuota: quotaId === OPENQUOTA,
+    }));
+  });
+}
 
-  _.forOwn(byQuota, (data, quotaName) => {
-    if (quotaName !== WAITLIST || includeWaitlist) {
-      _.each(data.signups, (s) => {
-        signups.push({
-          ...s,
-          isWaitlist: quotaName === WAITLIST,
-          isOpenQuota: quotaName === OPENQUOTA,
-        });
-      });
-    }
+function getAnswersFromSignup(event: AdminEventGetResponse, signup: SignupWithQuotaInfo) {
+  const answers: Record<AnyQuestionDetails['id'], string> = {};
+
+  event.questions.forEach((question) => {
+    const answer = _.find(signup.answers, { questionId: question.id });
+    answers[question.id] = answer?.answer || '';
   });
 
-  return signups;
+  return answers;
+}
+
+type FormattedSignup = {
+  id?: AdminEventGetSignupItem['id'];
+  firstName: string;
+  lastName: string;
+  email?: string;
+  answers: Record<AnyQuestionDetails['id'], string>;
+  quota: string;
+  createdAt: string;
 };
 
-export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
-  const signupsArray = getSignupsArray(event, includeWaitlist);
+export function getSignupsForAdminList(event: AdminEventGetResponse, includeWaitlist = true): FormattedSignup[] {
+  const signupsArray = getSignupsAsList(event, includeWaitlist);
 
-  const sorted = _.sortBy(signupsArray, (s) => {
-    if (s.isOpenQuota) {
-      return new Date(s.createdAt) + 315360000000;
-    }
+  const sorted = _.orderBy(signupsArray, ['isWaitlist', 'isOpenQuota', 'createdAt']);
 
-    if (s.isWaitlist) {
-      return new Date(s.createdAt) + 315360000000 * 2;
-    }
-
-    return new Date(s.createdAt);
-  });
-
-  return _.map(sorted, (signup) => {
-    const result = {
-      id: signup.id,
-      Etunimi: signup.firstName,
-      Sukunimi: signup.lastName,
-      Sähköposti: signup.email,
-      Ilmoittautumisaika: moment(signup.createdAt)
-        .tz('Europe/Helsinki')
-        .format('DD.MM.YYYY HH:mm:ss'),
-      Kiintiö: `${signup.quota} ${signup.isOpenQuota ? '(Avoin)' : ''}${
-        signup.isWaitlist ? '(Jonossa)' : ''
-      }`,
-    };
-
-    _.each(event.questions, (q) => {
-      const answer = _.find(signup.answers, (a) => a.questionId === q.id);
-
-      if (!answer) {
-        result[q.question] = '';
-      } else {
-        result[q.question] = answer.answer.toString();
-      }
-    });
-
-    return result;
-  });
-};
+  return sorted.map((signup) => ({
+    ...signup,
+    createdAt: moment(signup.createdAt)
+      .tz('Europe/Helsinki')
+      .format('DD.MM.YYYY HH:mm:ss'),
+    quota: `${signup.quotaName}${signup.isOpenQuota ? ' (Avoin)' : ''}${signup.isWaitlist ? ' (Jonossa)' : ''}`,
+    answers: getAnswersFromSignup(event, signup),
+  }));
+}

@@ -11,8 +11,10 @@ import { EditorEvent } from './types';
 
 export const setEvent = (event: AdminEventGetResponse | null, formData: EditorEvent | null) => <const>{
   type: SET_EVENT,
-  event,
-  formData,
+  payload: {
+    event,
+    formData,
+  },
 };
 
 export const setEventLoading = () => <const>{
@@ -51,9 +53,7 @@ const editorEventToServer = (form: EditorEvent): AdminEventUpdateBody => ({
   })),
 });
 
-export const clearEvent = () => (dispatch: DispatchAction) => {
-  dispatch(setEvent(null, null));
-};
+export const clearEvent = () => setEvent(null, null);
 
 export const publishNewEvent = (data: EditorEvent, token: string) => async (dispatch: DispatchAction) => {
   dispatch(setEventPublishLoading());
@@ -82,7 +82,7 @@ export const publishNewEvent = (data: EditorEvent, token: string) => async (disp
   }
 };
 
-export const publishEventUpdate = (id: AdminEventGetResponse['id'], data: EditorEvent, token: string) => async (
+export const publishEventUpdate = (id: number | string, data: EditorEvent, token: string) => async (
   dispatch: DispatchAction,
 ) => {
   dispatch(setEventPublishLoading());
@@ -111,7 +111,7 @@ export const publishEventUpdate = (id: AdminEventGetResponse['id'], data: Editor
   }
 };
 
-export const getEvent = (id: number, token: string) => async (dispatch: DispatchAction) => {
+export const getEvent = (id: number | string, token: string) => async (dispatch: DispatchAction) => {
   dispatch(setEventLoading());
   try {
     const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {

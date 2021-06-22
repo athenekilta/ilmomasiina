@@ -4,12 +4,12 @@ import { Spinner } from '@theme-ui/components';
 import { useFormikContext } from 'formik';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { FormEvent } from './Editor';
+import { EditorEvent } from '../../modules/editor/types';
 
 import './Editor.scss';
 
 interface EditorToolbarProps {
-  event: FormEvent;
+  event: EditorEvent;
   isNew: boolean;
 }
 
@@ -17,7 +17,9 @@ type Props = EditorToolbarProps & RouteComponentProps<{ id: string }>;
 
 const EditorToolbar = (props: Props) => {
   const { event, isNew } = props;
-  const { isSubmitting } = useFormikContext<FormEvent>();
+  const { isSubmitting } = useFormikContext<EditorEvent>();
+
+  // TODO: fix submit buttons
 
   return (
     <>
@@ -35,7 +37,7 @@ const EditorToolbar = (props: Props) => {
               <div className="event-editor--bubble draft event-editor--animated" />
               <span>Luonnos</span>
             </div>
-            <input
+            <button
               type="submit"
               disabled={isSubmitting}
               className={
@@ -44,17 +46,19 @@ const EditorToolbar = (props: Props) => {
                   : 'btn btn-warning event-editor--animated'
               }
               formNoValidate
-              value={event.draft ? 'Julkaise' : 'Muuta luonnokseksi'}
-            />
+            >
+              {event.draft ? 'Julkaise' : 'Muuta luonnokseksi'}
+            </button>
           </>
         )}
-        <input
+        <button
           type="submit"
           disabled={isSubmitting}
           className="btn btn-info event-editor--animated"
           formNoValidate
-          value={isNew ? 'Tallenna luonnoksena' : 'Tallenna muutokset'}
-        />
+        >
+          {isNew ? 'Tallenna luonnoksena' : 'Tallenna muutokset'}
+        </button>
       </div>
     </>
   );

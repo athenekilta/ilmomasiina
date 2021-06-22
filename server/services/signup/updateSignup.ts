@@ -11,14 +11,16 @@ import { Signup } from '../../models/signup';
 import { verifyToken } from './editTokens';
 
 // Expected request schema.
+export interface SignupUpdateBodyAnswer {
+  questionId: number;
+  answer: string;
+}
+
 export interface SignupUpdateBody {
   firstName: string;
   lastName: string;
   email: string;
-  answers: {
-    questionId: number;
-    answer: string;
-  }[];
+  answers: SignupUpdateBodyAnswer[];
   editToken?: string;
 }
 
@@ -81,7 +83,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
 
     // Check that all questions are answered with a valid answer
     questions.forEach((question) => {
-      const answer = _.find(data.answers, { questionId: question.id });
+      const answer = _.find(data.answers, { questionId: question.id })?.answer;
 
       if (!answer) {
         if (question.required) {
@@ -96,7 +98,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
             break;
           case 'number':
             // Check that a numeric answer is valid
-            if (!Number.isFinite(answer.answer)) {
+            if (!Number.isFinite(answer)) {
               throw new BadRequest(`Invalid answer to question ${question.question}`);
             }
             break;
@@ -104,17 +106,17 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
             // Check that the select answer is valid
             options = question.options!.split(';');
 
-            if (options.indexOf(answer.answer) === -1) {
+            if (!options.includes(answer)) {
               throw new BadRequest(`Invalid answer to question ${question.question}`);
             }
             break;
           case 'checkbox':
             // Check that all checkbox answers are valid
             options = question.options!.split(';');
-            answers = answer.answer.split(';');
+            answers = answer.split(';');
 
             answers.forEach((option) => {
-              if (options.indexOf(option) === -1) {
+              if (!options.includes(option)) {
                 throw new BadRequest(`Invalid answer to question ${question.question}`);
               }
             });

@@ -3,9 +3,9 @@ import React from 'react';
 import { CSVLink } from 'react-csv';
 
 import { AdminEventGetResponse } from '../../../api/adminEvents';
-import { deleteSignupAsync } from '../../../modules/admin/actions';
+import { deleteSignup } from '../../../modules/admin/actions';
 import { useTypedDispatch } from '../../../store/reducers';
-import { getSignupsArrayFormatted } from '../../../utils/signupUtils';
+import { getSignupsForAdminList } from '../../../utils/signupUtils';
 
 import 'react-table/react-table.css';
 import '../Editor.scss';
@@ -17,7 +17,7 @@ type Props = {
 const SignupsTab = ({ event }: Props) => {
   const dispatch = useTypedDispatch();
 
-  const signups = getSignupsArrayFormatted(event);
+  const signups = getSignupsForAdminList(event);
 
   return (
     <div>
@@ -30,7 +30,7 @@ const SignupsTab = ({ event }: Props) => {
       </CSVLink>
       <br />
       <br />
-      <table className="event.editor--signup-table table table-condensed table-responsive">
+      <table className="event-editor--signup-table table table-condensed table-responsive">
         <thead>
           <tr className="active">
             <th key="position">#</th>
@@ -69,7 +69,7 @@ const SignupsTab = ({ event }: Props) => {
                       'Oletko varma? Poistamista ei voi perua.',
                     );
                     if (confirmation) {
-                      dispatch(deleteSignupAsync(signup.id, event.id));
+                      dispatch(deleteSignup(signup.id!, event.id));
                     }
                   }}
                 >

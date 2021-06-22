@@ -3,51 +3,44 @@ import React from 'react';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 
-import { Answer, Question, Quota } from '../../../../modules/types';
+import { useTypedSelector } from '../../../../store/reducers';
+import { SignupWithQuotaName } from '../../../../utils/signupUtils';
 
 type Props = {
-  answers: Answer[];
-  createdAt: string;
-  firstName: string;
   index: number;
-  lastName: string;
-  questions: Question[];
-  quota: Quota;
+  showQuota: boolean;
+  signup: SignupWithQuotaName;
 };
 
-const TableRow = (props: Props) => {
+const TableRow = ({ showQuota, signup, index }: Props) => {
   const {
-    answers,
-    createdAt,
     firstName,
-    index,
     lastName,
-    questions,
-    quota,
-  } = props;
+    answers,
+    quotaName,
+    createdAt,
+  } = signup;
 
-  const getAnswer = (answers: Answer[], questionId: string, quota: Quota) => {
-    if (questionId === 'quota') {
-      return quota;
-    }
-    const answer = _.find(answers, { questionId });
-    return answer == null ? '' : answer.answer;
-  };
+  const { questions } = useTypedSelector((state) => state.singleEvent.event)!;
 
   return (
     <tr className={firstName == null ? 'text-muted' : ''}>
       <td>
-        {index}
-        .
+        {`${index}.`}
       </td>
       <td>
-        {firstName || 'Vahvistamatta'}
-        {' '}
-        {lastName || ''}
+        {`${firstName || 'Vahvistamatta'} ${lastName || ''}`}
       </td>
-      {questions.map((q, i) => (
-        <td key={i}>{getAnswer(answers, q.id, quota) || ''}</td>
+      {_.filter(questions, 'public').map((question) => (
+        <td key={question.id}>
+          {_.find(answers, { questionId: question.id })?.answer || ''}
+        </td>
       ))}
+      {showQuota && (
+        <td>
+          {`${quotaName || ''}`}
+        </td>
+      )}
       <td>
         {moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss')}
         <span className="hover">

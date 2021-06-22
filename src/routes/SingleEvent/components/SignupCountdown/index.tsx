@@ -1,33 +1,31 @@
 import React from 'react';
 
-import _ from 'lodash';
 import Countdown from 'react-countdown-now';
 
-import { Event, Quota } from '../../../../modules/types';
+import { EventGetQuotaItem } from '../../../../api/events';
+import { useTypedSelector } from '../../../../store/reducers';
 import SignupButton from './SignupButton';
 
 type CountDownProps = {
-  event: Event;
-  openForm: (quota: Quota) => void;
+  openForm: (quotaId: EventGetQuotaItem['id']) => void;
 };
 
 const CountDown = (props: CountDownProps) => {
-  const { event, openForm } = props;
-
-  if (!event.id) return null;
+  const { openForm } = props;
+  const event = useTypedSelector((state) => state.singleEvent.event);
 
   return (
     <Countdown
       daysInHours
-      date={new Date(new Date().getTime() + event.millisTillOpening)}
-      renderer={(props) => (
+      date={new Date(new Date().getTime() + (event!.millisTillOpening || 0))}
+      renderer={({ completed, seconds, total }) => (
         <SignupButton
-          event={event}
-          isOnly={event.quota.length === 1}
-          isOpen={props.completed && !event.registrationClosed}
+          event={event!}
+          isOnly={event!.quota.length === 1}
+          isOpen={completed && !event!.registrationClosed}
           openForm={openForm}
-          seconds={props.seconds}
-          total={props.total}
+          seconds={seconds}
+          total={total}
         />
       )}
     />

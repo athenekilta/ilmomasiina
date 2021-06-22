@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
-import { Spinner } from '@theme-ui/components';
 import { Formik } from 'formik';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Spinner } from 'theme-ui';
 
 import {
   clearEvent, getEvent, publishEventUpdate, publishNewEvent, setEvent,
@@ -23,7 +23,6 @@ import './Editor.scss';
 
 interface MatchParams {
   id: string;
-  editToken: string;
 }
 
 interface EditSignupProps {}
@@ -60,12 +59,9 @@ const defaultEvent = (): EditorEvent => ({
   draft: true,
 });
 
-const Editor = (props: Props) => {
-  const { history, match } = props;
-
-  const adminToken = useTypedSelector((state) => state.admin.accessToken);
-
+const Editor = ({ history, match }: Props) => {
   const dispatch = useTypedDispatch();
+  const adminToken = useTypedSelector((state) => state.admin.accessToken);
   const {
     event, formData, eventError, eventLoading,
   } = useTypedSelector(
@@ -80,9 +76,11 @@ const Editor = (props: Props) => {
     if (eventId !== 'new') {
       dispatch(setEvent(null, defaultEvent()));
     } else {
-      dispatch(getEvent(Number(eventId), adminToken!));
+      dispatch(getEvent(eventId, adminToken!));
     }
-    return () => dispatch(clearEvent());
+    return () => {
+      dispatch(clearEvent());
+    };
   }, []);
 
   async function publish(data: EditorEvent) {
@@ -173,7 +171,7 @@ const Editor = (props: Props) => {
                 <EmailsTab />
               </div>
               <div className={`tab-pane ${activeTab === 5 ? 'active' : ''}`} role="tabpanel" id="editor-tab-5">
-                <SignupsTab event={event} />
+                <SignupsTab event={event!} />
               </div>
             </div>
           </form>
