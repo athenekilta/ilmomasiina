@@ -11,19 +11,18 @@ import { ThemeProvider } from 'theme-ui';
 import CoreLayout from '../layouts/CoreLayout';
 import PageNotFound from '../routes/404/PageNotFound';
 import Admin from '../routes/Admin/AdminEventsList';
-import Editor from '../routes/Editor/Editor';
+import Editor from '../routes/Editor';
 import EditSignup from '../routes/EditSignup';
 import Events from '../routes/Events/EventList';
 import Login from '../routes/Login/Login';
-import SingleEvent from '../routes/SingleEvent/SingleEvent';
+import SingleEvent from '../routes/SingleEvent';
 import configureStore, { history } from '../store/configureStore';
 import theme from '../styles/theme';
 import requireAuth from './requireAuth';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-const initialState = window.___INITIAL_STATE__; // eslint-disable-line no-underscore-dangle
-const { store, persistor } = configureStore(initialState);
+const { store, persistor } = configureStore();
 
 const AppContainer = () => (
   <Provider store={store}>

@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import './Footer.scss';
 
-type Props = RouteComponentProps;
-
-const Footer = (props: Props) => (
+const Footer = () => (
   <footer className="page-footer">
     <div className="container">
-      <a onClick={() => props.history.push(`${PREFIX_URL}/admin`)}> Hallinta</a>
+      <Link to={`${PREFIX_URL}/admin`}>
+        Hallinta
+      </Link>
       <a href={BRANDING_FOOTER_GDPR_LINK} className="navbar-link">
         {BRANDING_FOOTER_GDPR_TEXT}
       </a>
@@ -20,4 +20,4 @@ const Footer = (props: Props) => (
   </footer>
 );
 
-export default withRouter(Footer);
+export default Footer;

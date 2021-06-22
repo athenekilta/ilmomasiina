@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { ComponentType, useEffect } from 'react';
 
 import { redirectToLogin } from '../modules/admin/actions';
 import { useTypedDispatch, useTypedSelector } from '../store/reducers';
 
-const requireAuth = (WrappedComponent) => {
-  const InnerComponent = (props) => {
+export default function requireAuth<P>(WrappedComponent: ComponentType<P>) {
+  const InnerComponent = (props: P) => {
     const dispatch = useTypedDispatch();
     const { accessToken, accessTokenExpires } = useTypedSelector(
       (state) => state.admin,
@@ -18,7 +18,7 @@ const requireAuth = (WrappedComponent) => {
       if (typeof accessTokenExpires === 'string') {
         newExpires = new Date(accessTokenExpires);
       }
-      if (newExpires < new Date()) {
+      if (newExpires && newExpires < new Date()) {
         dispatch(redirectToLogin());
       }
     }, []);
@@ -31,6 +31,4 @@ const requireAuth = (WrappedComponent) => {
   };
 
   return InnerComponent;
-};
-
-export default requireAuth;
+}
