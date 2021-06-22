@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { SortEnd } from 'react-sortable-hoc';
 
 import { EditorQuota } from '../../../modules/editor/types';
-import { SortableItems } from './Sortable';
+import Sortable from './Sortable';
 
 const Quotas = () => {
   const [{ value: quotas }, , { setValue }] = useField<EditorQuota[]>('quota');
@@ -54,60 +54,60 @@ const Quotas = () => {
     }
 
     return (
-      <>
-        <div className="panel-body" key={quota.id}>
-          <div className="col-xs-12 col-sm-10">
-            <Label htmlFor={`quota-${quota.id}-title`}>
-              Kiintiön nimi
-            </Label>
-            <Input
-              name={`quota-${quota.id}-title`}
-              value={quota.title}
-              type="text"
-              onChange={(e) => updateField('title', e.target.value)}
-            />
-            <div className="form-text">
-              {quotas.length === 1 && 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen.'}
-              Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.
-            </div>
-            <Label htmlFor={`quota-${quota.id}-max-attendees`}>
-              Kiintiön koko
-            </Label>
-            <Input
-              id={`quota-${quota.id}-max-attendees`}
-              value={quota.size || ''}
-              type="number"
-              min={1}
-              onChange={(e) => updateField('size', Number(e.target.value))}
-            />
-            <div className="form-text">
-              Jos kiintiön kokoa ole rajoitettu, jätä kenttä tyhjäksi.
-            </div>
+      <div className="panel-body" key={quota.id}>
+        <div className="col-xs-12 col-sm-10">
+          <Label htmlFor={`quota-${quota.id}-title`}>
+            Kiintiön nimi
+          </Label>
+          <Input
+            name={`quota-${quota.id}-title`}
+            value={quota.title}
+            type="text"
+            onChange={(e) => updateField('title', e.target.value)}
+          />
+          <div className="form-text">
+            {quotas.length === 1 && 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen.'}
+            Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.
           </div>
-          {index > 0 && (
-            <div className="col-xs-12 col-sm-2 no-focus">
-              <button type="button" className="btn btn-link" onClick={() => removeQuota()}>
-                Poista kiintiö
-              </button>
-            </div>
-          )}
+          <Label htmlFor={`quota-${quota.id}-max-attendees`}>
+            Kiintiön koko
+          </Label>
+          <Input
+            id={`quota-${quota.id}-max-attendees`}
+            value={quota.size || ''}
+            type="number"
+            min={1}
+            onChange={(e) => updateField('size', Number(e.target.value))}
+          />
+          <div className="form-text">
+            Jos kiintiön kokoa ole rajoitettu, jätä kenttä tyhjäksi.
+          </div>
         </div>
-        <div className="text-center">
-          <button type="button" className="btn btn-primary" onClick={addQuota}>
-            Lisää kiintiö
-          </button>
-        </div>
-      </>
+        {index > 0 && (
+          <div className="col-xs-12 col-sm-2 no-focus">
+            <button type="button" className="btn btn-link" onClick={() => removeQuota()}>
+              Poista kiintiö
+            </button>
+          </div>
+        )}
+      </div>
     );
   });
 
   return (
-    <SortableItems
-      collection="quotas"
-      items={quotaItems}
-      onSortEnd={updateOrder}
-      useDragHandle
-    />
+    <>
+      <Sortable
+        collection="quotas"
+        items={quotaItems}
+        onSortEnd={updateOrder}
+        useDragHandle
+      />
+      <div className="text-center">
+        <button type="button" className="btn btn-primary" onClick={addQuota}>
+          Lisää kiintiö
+        </button>
+      </div>
+    </>
   );
 };
 

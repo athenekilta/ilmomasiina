@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Formik } from 'formik';
+import { Formik, FormikHelpers } from 'formik';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -83,11 +83,11 @@ const Editor = ({ history, match }: Props) => {
     };
   }, []);
 
-  async function publish(data: EditorEvent) {
+  async function onSubmit(data: EditorEvent, { setSubmitting }: FormikHelpers<EditorEvent>) {
     const modifiedEvent = {
       ...data,
-      questions: data!.questions,
-      quota: data!.quotas,
+      quota: data.quotas,
+      draft: data.draft || match.params.id === 'new',
     };
 
     try {
@@ -106,13 +106,7 @@ const Editor = ({ history, match }: Props) => {
         { autoClose: 2000 },
       );
     }
-  }
-
-  function onSubmit(data: EditorEvent) {
-    publish({
-      ...data,
-      draft: data.draft || match.params.id === 'new',
-    });
+    setSubmitting(false);
   }
 
   if (eventError) {
@@ -148,7 +142,7 @@ const Editor = ({ history, match }: Props) => {
             onSubmit={handleSubmit}
             className="form-horizontal col-xs-12 col-md-10 col-md-offset-1"
           >
-            <EditorToolbar event={event} isNew={match.params.id === 'new'} />
+            <EditorToolbar isNew={match.params.id === 'new'} />
             <EditorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
             <div className="event-editor--valid-notice collapsed">

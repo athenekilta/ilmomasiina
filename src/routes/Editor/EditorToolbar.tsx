@@ -9,15 +9,13 @@ import { EditorEvent } from '../../modules/editor/types';
 import './Editor.scss';
 
 interface EditorToolbarProps {
-  event: EditorEvent;
   isNew: boolean;
 }
 
 type Props = EditorToolbarProps & RouteComponentProps<{ id: string }>;
 
-const EditorToolbar = (props: Props) => {
-  const { event, isNew } = props;
-  const { isSubmitting } = useFormikContext<EditorEvent>();
+const EditorToolbar = ({ isNew }: Props) => {
+  const { isSubmitting, values: { draft } } = useFormikContext<EditorEvent>();
 
   // TODO: fix submit buttons
 
@@ -41,13 +39,13 @@ const EditorToolbar = (props: Props) => {
               type="submit"
               disabled={isSubmitting}
               className={
-                event.draft
+                draft
                   ? 'btn btn-success event-editor--animated'
                   : 'btn btn-warning event-editor--animated'
               }
               formNoValidate
             >
-              {event.draft ? 'Julkaise' : 'Muuta luonnokseksi'}
+              {draft ? 'Julkaise' : 'Muuta luonnokseksi'}
             </button>
           </>
         )}

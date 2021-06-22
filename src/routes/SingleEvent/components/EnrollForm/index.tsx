@@ -2,7 +2,7 @@
 import {
   Input, Label,
 } from '@theme-ui/components';
-import { Field, Formik } from 'formik';
+import { Field, Formik, FormikHelpers } from 'formik';
 import { shallowEqual } from 'react-redux';
 import { toast } from 'react-toastify';
 import { jsx } from 'theme-ui';
@@ -25,7 +25,7 @@ const EnrollForm = ({ closeForm }: Props) => {
     event, signup, signupError,
   } = useTypedSelector((state) => state.singleEvent, shallowEqual);
 
-  async function onSubmit(answers: SignupUpdateBody) {
+  async function onSubmit(answers: SignupUpdateBody, { setSubmitting }: FormikHelpers<SignupUpdateBody>) {
     const progressToast = toast.info('Ilmoittautuminen käynnissä', {});
 
     const success = await dispatch(completeSignup(signup!.id, answers, signup!.editToken));
@@ -46,6 +46,7 @@ const EnrollForm = ({ closeForm }: Props) => {
         autoClose: 5000,
       });
     }
+    setSubmitting(false);
   }
 
   const emptySignup: SignupUpdateBody = {

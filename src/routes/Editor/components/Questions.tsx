@@ -8,7 +8,7 @@ import _ from 'lodash';
 import { SortEnd } from 'react-sortable-hoc';
 
 import { EditorQuestion } from '../../../modules/editor/types';
-import { SortableItems } from './Sortable';
+import Sortable from './Sortable';
 
 const QUESTION_TYPES: { value: EditorQuestion['type'], label: string }[] = [
   { value: 'text', label: 'Teksti (lyhyt)' },
@@ -166,7 +166,7 @@ const Questions = () => {
 
   return (
     <>
-      <SortableItems
+      <Sortable
         collection="questions"
         items={questionItems}
         onSortEnd={updateOrder}

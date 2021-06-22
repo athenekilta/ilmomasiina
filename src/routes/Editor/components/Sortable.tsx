@@ -22,18 +22,20 @@ const SortableItem = SortableElement(({ value }: SortableItemProps) => (
 
 type SortableItemsProps = {
   collection: Offset;
-  items: ReactNode[];
+  items: JSX.Element[];
 };
 
-export const SortableItems = SortableContainer(({ collection, items }: SortableItemsProps) => (
+const Sortable = SortableContainer(({ collection, items }: SortableItemsProps) => (
   <div>
     {items.map((value, index) => (
       <SortableItem
         collection={collection}
-        key={index}
+        key={value.key}
         index={index}
         value={value}
       />
     ))}
   </div>
 ));
+
+export default Sortable;
