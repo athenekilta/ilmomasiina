@@ -22,20 +22,30 @@ import {
 } from '../../server/services/event/getEventsList';
 import { StringifyApi } from './utils';
 
-export type AdminEventListResponse = StringifyApi<_AdminEventListResponse>;
-export type AdminEventListItem = StringifyApi<_AdminEventListItem>;
-export type AdminEventListQuotaItem = StringifyApi<_AdminEventListQuotaItem>;
+export namespace AdminEvent {
+  export type List = StringifyApi<_AdminEventListResponse>;
+  export namespace List {
+    export type Event = StringifyApi<_AdminEventListItem>;
+    export type Quota = StringifyApi<_AdminEventListQuotaItem>;
+  }
 
-export type AdminEventGetResponse = StringifyApi<_AdminEventGetResponse>;
-export type AdminEventGetQuotaItem = StringifyApi<_AdminEventGetQuotaItem>;
-export type AdminEventGetSignupItem = StringifyApi<_AdminEventGetSignupItem>;
-export type AdminEventGetQuestionItem = StringifyApi<_AdminEventGetQuestionItem>;
-export type AdminEventGetAnswerItem = StringifyApi<_AdminEventGetAnswerItem>;
+  export type Details = StringifyApi<_AdminEventGetResponse>;
+  export namespace Details {
+    export type Quota = StringifyApi<_AdminEventGetQuotaItem>;
+    export type Signup = StringifyApi<_AdminEventGetSignupItem>;
+    export type Question = StringifyApi<_AdminEventGetQuestionItem>;
+    export type Answer = StringifyApi<_AdminEventGetAnswerItem>;
+  }
 
-export type AdminEventCreateBody = StringifyApi<_AdminEventCreateBody>;
-export type AdminEventCreateQuestion = StringifyApi<_AdminEventCreateQuestion>;
-export type AdminEventCreateQuota = StringifyApi<_AdminEventCreateQuota>;
+  export namespace Create {
+    export type Body = StringifyApi<_AdminEventCreateBody>;
+    export type Question = StringifyApi<_AdminEventCreateQuestion>;
+    export type Quota = StringifyApi<_AdminEventCreateQuota>;
+  }
 
-export type AdminEventUpdateBody = StringifyApi<_AdminEventUpdateBody>;
-export type AdminEventUpdateQuestion = StringifyApi<_AdminEventUpdateQuestion>;
-export type AdminEventUpdateQuota = StringifyApi<_AdminEventUpdateQuota>;
+  export namespace Update {
+    export type Body = StringifyApi<_AdminEventUpdateBody>;
+    export type Question = StringifyApi<_AdminEventUpdateQuestion>;
+    export type Quota = StringifyApi<_AdminEventUpdateQuota>;
+  }
+}

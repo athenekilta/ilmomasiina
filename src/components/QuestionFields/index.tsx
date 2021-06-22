@@ -6,17 +6,17 @@ import {
 import { useField } from 'formik';
 import _ from 'lodash';
 
-import { EventGetQuestionItem } from '../../api/events';
-import { SignupUpdateBodyAnswer } from '../../api/signups';
+import { Event } from '../../api/events';
+import { Signup } from '../../api/signups';
 
 type Props = {
   name: string;
-  questions: EventGetQuestionItem[];
+  questions: Event.Details.Question[];
 };
 
 const QuestionFields = ({ name, questions }: Props) => {
   // TODO: add formik-based validation
-  const [{ value }, , { setValue }] = useField<SignupUpdateBodyAnswer[]>(name);
+  const [{ value }, , { setValue }] = useField<Signup.Update.Body.Answer[]>(name);
   return (
     <>
       {questions.map((question) => {

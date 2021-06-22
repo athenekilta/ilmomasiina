@@ -1,6 +1,4 @@
-import {
-  AdminEventGetResponse, AdminEventUpdateBody, AdminEventUpdateQuestion, AdminEventUpdateQuota,
-} from '../../api/adminEvents';
+import { AdminEvent } from '../../api/adminEvents';
 import {
   setEvent,
   setEventError,
@@ -10,7 +8,7 @@ import {
 } from './actions';
 
 interface EditorState {
-  event: AdminEventGetResponse | null;
+  event: AdminEvent.Details | null;
   formData: EditorEvent | null;
   eventLoading: boolean;
   eventError: boolean;
@@ -26,15 +24,15 @@ type EditorActions =
   | ReturnType<typeof setEventPublishError>;
 
 /** Question type for event editor */
-export interface EditorQuestion extends AdminEventUpdateQuestion {
+export interface EditorQuestion extends AdminEvent.Update.Question {
   options: string[];
 }
 
 /** Quota type for event editor */
-export interface EditorQuota extends AdminEventUpdateQuota {}
+export interface EditorQuota extends AdminEvent.Update.Quota {}
 
 /** Root form data type for event editor */
-export interface EditorEvent extends Omit<AdminEventUpdateBody, 'quota'> {
+export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
   questions: EditorQuestion[];
 
   quotas: EditorQuota[];

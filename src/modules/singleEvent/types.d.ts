@@ -1,5 +1,5 @@
-import { EventGetResponse } from '../../api/events';
-import { SignupCreateResponse } from '../../api/signups';
+import { Event } from '../../api/events';
+import { Signup } from '../../api/signups';
 import {
   setEvent,
   setEventError,
@@ -10,10 +10,10 @@ import {
 } from './actions';
 
 interface SingleEventState {
-  event: EventGetResponse | null;
+  event: Event.Details | null;
   eventLoading: boolean;
   eventError: boolean;
-  signup: SignupCreateResponse | null;
+  signup: Signup.Create.Response | null;
   signupLoading: boolean;
   signupError: boolean;
 }

@@ -6,10 +6,8 @@ import nl2br from 'react-nl2br';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { EventGetQuotaItem } from '../../api/events';
-import {
-  cancelPendingSignup, clearEvent, createPendingSignup, getEvent,
-} from '../../modules/singleEvent/actions';
+import { Quota } from '../../api/events';
+import { clearEvent, createPendingSignup, getEvent } from '../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import { getSignupsByQuota } from '../../utils/signupUtils';
 import EnrollForm from './components/EnrollForm';
@@ -28,7 +26,7 @@ type Props = RouteComponentProps<MatchParams>;
 const SingleEvent = ({ match }: Props) => {
   const dispatch = useTypedDispatch();
   const {
-    event, eventLoading, eventError, signup,
+    event, eventLoading, eventError,
   } = useTypedSelector((state) => state.singleEvent, shallowEqual);
 
   const [formOpen, setFormOpen] = useState(false);
@@ -64,28 +62,16 @@ const SingleEvent = ({ match }: Props) => {
     );
   }
 
-  function openForm(quotaId: EventGetQuotaItem['id']) {
+  function beginSignup(quotaId: Quota.Id) {
     if (formOpen) return;
     dispatch(createPendingSignup(quotaId));
     setFormOpen(true);
   }
 
-  function closeForm() {
-    const close = window.confirm(
-      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.',
-    );
-
-    if (close) {
-      dispatch(cancelPendingSignup(signup!.id, signup!.editToken));
-      setFormOpen(false);
-    }
-    dispatch(getEvent(event!.id));
-  }
-
   if (formOpen) {
     return (
       <EnrollForm
-        closeForm={closeForm}
+        closeForm={() => setFormOpen(false)}
         key={event!.id}
       />
     );
@@ -145,7 +131,7 @@ const SingleEvent = ({ match }: Props) => {
           <p>{nl2br(event!.description)}</p>
         </div>
         <div className="col-xs-12 col-sm-4 pull-right">
-          <SignupCountdown openForm={openForm} />
+          <SignupCountdown beginSignup={beginSignup} />
           <QuotaStatus />
         </div>
         <div className="col-xs-12">

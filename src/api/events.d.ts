@@ -12,12 +12,28 @@ import {
 } from '../../server/services/event/getEventsList';
 import { StringifyApi } from './utils';
 
-export type EventGetResponse = StringifyApi<_EventGetResponse>;
-export type EventGetQuotaItem = StringifyApi<_EventGetQuotaItem>;
-export type EventGetSignupItem = StringifyApi<_EventGetSignupItem>;
-export type EventGetQuestionItem = StringifyApi<_EventGetQuestionItem>;
-export type EventGetAnswerItem = StringifyApi<_EventGetAnswerItem>;
+export namespace Event {
+  export type Id = Details['id'];
 
-export type EventListResponse = StringifyApi<_EventListResponse>;
-export type EventListItem = StringifyApi<_EventListItem>;
-export type EventListQuotaItem = StringifyApi<_EventListQuotaItem>;
+  export type Details = StringifyApi<_EventGetResponse>;
+  export namespace Details {
+    export type Quota = StringifyApi<_EventGetQuotaItem>;
+    export type Signup = StringifyApi<_EventGetSignupItem>;
+    export type Question = StringifyApi<_EventGetQuestionItem>;
+    export type Answer = StringifyApi<_EventGetAnswerItem>;
+  }
+
+  export type List = StringifyApi<_EventListResponse>;
+  export namespace List {
+    export type Event = StringifyApi<_EventListItem>;
+    export type Quota = StringifyApi<_EventListQuotaItem>;
+  }
+}
+
+export namespace Question {
+  export type Id = Event.Details.Question['id'];
+}
+
+export namespace Quota {
+  export type Id = Event.Details.Quota['id'];
+}

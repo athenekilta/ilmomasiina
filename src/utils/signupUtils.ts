@@ -1,17 +1,17 @@
 import _ from 'lodash';
 import moment from 'moment-timezone';
 
-import { AdminEventGetQuestionItem, EventGetQuestionItem } from '../../server/services/event/getEventDetails';
-import { AdminEventGetQuotaItem, AdminEventGetResponse, AdminEventGetSignupItem } from '../api/adminEvents';
-import { EventGetQuotaItem, EventGetResponse, EventGetSignupItem } from '../api/events';
+import { AdminEvent } from '../api/adminEvents';
+import { Event } from '../api/events';
+import { Signup } from '../api/signups';
 
 export const WAITLIST = '__waitlist' as const;
 export const OPENQUOTA = '__open' as const;
 
-type AnyEventDetails = AdminEventGetResponse | EventGetResponse;
-type AnyQuotaDetails = AdminEventGetQuotaItem | EventGetQuotaItem;
-type AnySignupDetails = AdminEventGetSignupItem | EventGetSignupItem;
-type AnyQuestionDetails = AdminEventGetQuestionItem | EventGetQuestionItem;
+type AnyEventDetails = AdminEvent.Details | Event.Details;
+type AnyQuotaDetails = AdminEvent.Details.Quota | Event.Details.Quota;
+type AnySignupDetails = AdminEvent.Details.Signup | Event.Details.Signup;
+type AnyQuestionDetails = AdminEvent.Details.Question | Event.Details.Question;
 
 type EffectiveQuota = AnyQuotaDetails['id'] | typeof WAITLIST | typeof OPENQUOTA;
 
@@ -86,7 +86,7 @@ function getSignupsAsList(event: AnyEventDetails, includeWaitlist = true): Signu
   });
 }
 
-function getAnswersFromSignup(event: AdminEventGetResponse, signup: SignupWithQuotaInfo) {
+function getAnswersFromSignup(event: AdminEvent.Details, signup: SignupWithQuotaInfo) {
   const answers: Record<AnyQuestionDetails['id'], string> = {};
 
   event.questions.forEach((question) => {
@@ -98,16 +98,16 @@ function getAnswersFromSignup(event: AdminEventGetResponse, signup: SignupWithQu
 }
 
 type FormattedSignup = {
-  id?: AdminEventGetSignupItem['id'];
-  firstName: string;
-  lastName: string;
-  email?: string;
+  id?: Signup.Id;
+  firstName: string | null;
+  lastName: string | null;
+  email?: string | null;
   answers: Record<AnyQuestionDetails['id'], string>;
   quota: string;
   createdAt: string;
 };
 
-export function getSignupsForAdminList(event: AdminEventGetResponse, includeWaitlist = true): FormattedSignup[] {
+export function getSignupsForAdminList(event: AdminEvent.Details, includeWaitlist = true): FormattedSignup[] {
   const signupsArray = getSignupsAsList(event, includeWaitlist);
 
   const sorted = _.orderBy(signupsArray, ['isWaitlist', 'isOpenQuota', 'createdAt']);

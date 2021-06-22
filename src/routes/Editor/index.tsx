@@ -165,7 +165,7 @@ const Editor = ({ history, match }: Props) => {
                 <EmailsTab />
               </div>
               <div className={`tab-pane ${activeTab === 5 ? 'active' : ''}`} role="tabpanel" id="editor-tab-5">
-                <SignupsTab event={event!} />
+                <SignupsTab />
               </div>
             </div>
           </form>

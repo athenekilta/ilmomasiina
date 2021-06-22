@@ -2,20 +2,16 @@ import React from 'react';
 
 import { CSVLink } from 'react-csv';
 
-import { AdminEventGetResponse } from '../../../api/adminEvents';
 import { deleteSignup } from '../../../modules/admin/actions';
-import { useTypedDispatch } from '../../../store/reducers';
+import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
 import { getSignupsForAdminList } from '../../../utils/signupUtils';
 
 import 'react-table/react-table.css';
 import '../Editor.scss';
 
-type Props = {
-  event: AdminEventGetResponse;
-};
-
-const SignupsTab = ({ event }: Props) => {
+const SignupsTab = () => {
   const dispatch = useTypedDispatch();
+  const event = useTypedSelector((state) => state.editor.event)!;
 
   const signups = getSignupsForAdminList(event);
 

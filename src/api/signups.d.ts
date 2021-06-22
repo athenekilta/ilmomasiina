@@ -3,7 +3,11 @@ import {
   SignupCreateResponse as _SignupCreateResponse,
 } from '../../server/services/signup/createNewSignup';
 import {
+  SignupGetAnswerItem as _SignupGetAnswerItem,
+  SignupGetEventItem as _SignupGetEventItem,
+  SignupGetQuestionItem as _SignupGetQuestionItem,
   SignupGetResponse as _SignupGetResponse,
+  SignupGetSignupItem as _SignupGetSignupItem,
 } from '../../server/services/signup/getSignupForEdit';
 import {
   SignupUpdateBody as _SignupUpdateBody,
@@ -12,9 +16,27 @@ import {
 } from '../../server/services/signup/updateSignup';
 import { StringifyApi } from './utils';
 
-export type SignupCreateBody = StringifyApi<_SignupCreateBody>;
-export type SignupCreateResponse = StringifyApi<_SignupCreateResponse>;
-export type SignupGetResponse = StringifyApi<_SignupGetResponse>;
-export type SignupUpdateBody = StringifyApi<_SignupUpdateBody>;
-export type SignupUpdateBodyAnswer = StringifyApi<_SignupUpdateBodyAnswer>;
-export type SignupUpdateResponse = StringifyApi<_SignupUpdateResponse>;
+export namespace Signup {
+  export type Id = Details['id'];
+
+  export type Details = StringifyApi<_SignupGetResponse>;
+  export namespace Details {
+    export type Event = StringifyApi<_SignupGetEventItem>;
+    export type Question = StringifyApi<_SignupGetQuestionItem>;
+    export type Signup = StringifyApi<_SignupGetSignupItem>;
+    export type Answer = StringifyApi<_SignupGetAnswerItem>;
+  }
+
+  export namespace Create {
+    export type Body = StringifyApi<_SignupCreateBody>;
+    export type Response = StringifyApi<_SignupCreateResponse>;
+  }
+
+  export namespace Update {
+    export type Body = StringifyApi<_SignupUpdateBody>;
+    export namespace Body {
+      export type Answer = StringifyApi<_SignupUpdateBodyAnswer>;
+    }
+    export type Response = StringifyApi<_SignupUpdateResponse>;
+  }
+}

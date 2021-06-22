@@ -1,23 +1,25 @@
 import React from 'react';
 
-import { EventGetQuotaItem, EventGetResponse } from '../../../../api/events';
+import { Quota } from '../../../../api/events';
+import { useTypedSelector } from '../../../../store/reducers';
 import signupState from '../../../../utils/signupStateText';
 
 import './SignupButton.scss';
 
 type SignupButtonProps = {
-  event: EventGetResponse;
-  isOnly: boolean;
   isOpen: boolean;
-  openForm: (quotaId: EventGetQuotaItem['id']) => void;
+  beginSignup: (quotaId: Quota.Id) => void;
   seconds: number;
   total: number;
 };
 
 const SignupButton = (props: SignupButtonProps) => {
   const {
-    event, isOnly, isOpen, openForm, seconds, total,
+    isOpen, beginSignup, seconds, total,
   } = props;
+
+  const event = useTypedSelector((state) => state.singleEvent.event)!;
+  const isOnly = event.quota.length === 1;
 
   return (
     <div className="sidebar-widget">
@@ -42,7 +44,7 @@ const SignupButton = (props: SignupButtonProps) => {
             type="button"
             disabled={!isOpen}
             className="btn btn-default btn-block btn-whitespace-normal"
-            onClick={() => isOpen && openForm(quota.id)}
+            onClick={() => isOpen && beginSignup(quota.id)}
           >
             {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
           </button>

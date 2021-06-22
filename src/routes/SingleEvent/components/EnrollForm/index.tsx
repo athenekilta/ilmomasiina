@@ -7,9 +7,9 @@ import { shallowEqual } from 'react-redux';
 import { toast } from 'react-toastify';
 import { jsx } from 'theme-ui';
 
-import { SignupUpdateBody } from '../../../../api/signups';
+import { Signup } from '../../../../api/signups';
 import QuestionFields from '../../../../components/QuestionFields';
-import { completeSignup, getEvent } from '../../../../modules/singleEvent/actions';
+import { cancelPendingSignup, completeSignup, getEvent } from '../../../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../../../store/reducers';
 import SignupStatus from './SignupStatus';
 
@@ -25,7 +25,7 @@ const EnrollForm = ({ closeForm }: Props) => {
     event, signup, signupError,
   } = useTypedSelector((state) => state.singleEvent, shallowEqual);
 
-  async function onSubmit(answers: SignupUpdateBody, { setSubmitting }: FormikHelpers<SignupUpdateBody>) {
+  async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
     const progressToast = toast.info('Ilmoittautuminen käynnissä', {});
 
     const success = await dispatch(completeSignup(signup!.id, answers, signup!.editToken));
@@ -49,7 +49,19 @@ const EnrollForm = ({ closeForm }: Props) => {
     setSubmitting(false);
   }
 
-  const emptySignup: SignupUpdateBody = {
+  function cancel() {
+    const close = window.confirm(
+      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.',
+    );
+
+    if (close) {
+      dispatch(cancelPendingSignup(signup!.id, signup!.editToken));
+      closeForm();
+    }
+    dispatch(getEvent(event!.id));
+  }
+
+  const emptySignup: Signup.Update.Body = {
     firstName: '',
     lastName: '',
     email: '',
@@ -64,7 +76,7 @@ const EnrollForm = ({ closeForm }: Props) => {
       {({ handleSubmit, isSubmitting }) => (
         <div className="form-wrapper">
           <div className="container">
-            <button type="button" className="close" onClick={() => closeForm()} aria-label="Sulje" />
+            <button type="button" className="close" onClick={() => cancel()} aria-label="Sulje" />
             <div className="col-xs-12 col-md-8 col-md-offset-2">
               {signupError && (
                 <p sx={{ color: 'error' }}>Ilmoittautumisessasi on virheitä.</p>
@@ -116,7 +128,7 @@ const EnrollForm = ({ closeForm }: Props) => {
                 >
                   Lähetä
                 </button>
-                <button type="button" className="btn btn-link pull-right" onClick={() => closeForm()}>
+                <button type="button" className="btn btn-link pull-right" onClick={() => cancel()}>
                   Peruuta
                 </button>
               </form>

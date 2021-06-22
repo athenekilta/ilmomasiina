@@ -24,8 +24,8 @@ export default function reducer(
     case SET_EVENT:
       return {
         ...state,
-        event: action.event,
-        formData: action.formData,
+        event: action.payload.event,
+        formData: action.payload.formData,
         eventLoading: false,
         eventError: false,
         eventPublishLoading: false,

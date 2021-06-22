@@ -1,4 +1,4 @@
-import { AdminEventGetResponse, AdminEventUpdateBody } from '../../api/adminEvents';
+import { AdminEvent } from '../../api/adminEvents';
 import { DispatchAction } from '../../store/types';
 import {
   SET_EVENT,
@@ -9,7 +9,7 @@ import {
 } from './actionTypes';
 import { EditorEvent } from './types';
 
-export const setEvent = (event: AdminEventGetResponse | null, formData: EditorEvent | null) => <const>{
+export const setEvent = (event: AdminEvent.Details | null, formData: EditorEvent | null) => <const>{
   type: SET_EVENT,
   payload: {
     event,
@@ -33,7 +33,7 @@ export const setEventPublishError = () => <const>{
   type: SET_EVENT_PUBLISH_ERROR,
 };
 
-const serverEventToEditor = (event: AdminEventGetResponse): EditorEvent => ({
+const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
   ...event,
   quotas: event.quota,
   useOpenQuota: event.openQuotaSize > 0,
@@ -43,7 +43,7 @@ const serverEventToEditor = (event: AdminEventGetResponse): EditorEvent => ({
   })),
 });
 
-const editorEventToServer = (form: EditorEvent): AdminEventUpdateBody => ({
+const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   ...form,
   quota: form.quotas,
   openQuotaSize: form.useOpenQuota ? form.openQuotaSize : 0,
@@ -72,7 +72,7 @@ export const publishNewEvent = (data: EditorEvent, token: string) => async (disp
     if (response.status > 201) {
       throw new Error(response.statusText);
     }
-    const newEvent = await response.json();
+    const newEvent = await response.json() as AdminEvent.Details;
     const newFormData = serverEventToEditor(newEvent);
     dispatch(setEvent(newEvent, newFormData));
     return newEvent;
@@ -101,7 +101,7 @@ export const publishEventUpdate = (id: number | string, data: EditorEvent, token
     if (response.status > 201) {
       throw new Error(response.statusText);
     }
-    const newEvent = await response.json();
+    const newEvent = await response.json() as AdminEvent.Details;
     const newFormData = serverEventToEditor(newEvent);
     dispatch(setEvent(newEvent, newFormData));
     return newEvent;
@@ -117,7 +117,7 @@ export const getEvent = (id: number | string, token: string) => async (dispatch:
     const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
       headers: { Authorization: token },
     });
-    const event = await response.json() as AdminEventGetResponse;
+    const event = await response.json() as AdminEvent.Details;
     const formData = serverEventToEditor(event);
     dispatch(setEvent(event, formData));
   } catch (e) {
