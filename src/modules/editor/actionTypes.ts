@@ -1,5 +1,6 @@
-export const SET_EVENT = 'editor/SET_EVENT';
-export const SET_EVENT_LOADING = 'editor/SET_EVENT_LOADING';
-export const SET_EVENT_ERROR = 'editor/SET_EVENT_ERROR';
-export const SET_EVENT_PUBLISH_LOADING = 'editor/SET_EVENT_PUBLISH_LOADING';
-export const SET_EVENT_PUBLISH_ERROR = 'editor/SET_EVENT_PUBLISH_ERROR';
+export const RESET = 'editor/RESET';
+export const EVENT_LOADED = 'editor/EVENT_LOADED';
+export const EVENT_LOAD_FAILED = 'editor/EVENT_LOAD_FAILED';
+export const EVENT_SAVING = 'editor/EVENT_SAVING';
+export const EVENT_SAVE_FAILED = 'editor/EVENT_SAVE_FAILED';
+export const EVENT_SAVED = 'editor/EVENT_SAVED';

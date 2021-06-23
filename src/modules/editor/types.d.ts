@@ -1,27 +1,26 @@
 import { AdminEvent } from '../../api/adminEvents';
 import {
-  setEvent,
-  setEventError,
-  setEventLoading,
-  setEventPublishError,
-  setEventPublishLoading,
+  loaded,
+  loadFailed,
+  resetState,
+  saveFailed,
+  saving,
 } from './actions';
 
 interface EditorState {
   event: AdminEvent.Details | null;
   formData: EditorEvent | null;
-  eventLoading: boolean;
-  eventError: boolean;
-  eventPublishLoading: boolean;
-  eventPublishError: boolean;
+  loadError: boolean;
+  saving: boolean;
+  saveError: boolean;
 }
 
 type EditorActions =
-  | ReturnType<typeof setEvent>
-  | ReturnType<typeof setEventLoading>
-  | ReturnType<typeof setEventError>
-  | ReturnType<typeof setEventPublishLoading>
-  | ReturnType<typeof setEventPublishError>;
+  | ReturnType<typeof resetState>
+  | ReturnType<typeof loaded>
+  | ReturnType<typeof loadFailed>
+  | ReturnType<typeof saving>
+  | ReturnType<typeof saveFailed>;
 
 /** Question type for event editor */
 export interface EditorQuestion extends AdminEvent.Update.Question {

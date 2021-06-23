@@ -2,57 +2,64 @@ import { Event, Quota } from '../../api/events';
 import { Signup } from '../../api/signups';
 import { DispatchAction } from '../../store/types';
 import {
-  SET_EVENT,
-  SET_EVENT_ERROR,
-  SET_EVENT_LOADING,
-  SET_SIGNUP,
-  SET_SIGNUP_ERROR,
-  SET_SIGNUP_LOADING,
+  EVENT_LOAD_FAILED,
+  EVENT_LOADED,
+  RESET,
+  SIGNUP_CANCELLED,
+  SIGNUP_COMPLETE,
+  SIGNUP_CREATED,
+  SIGNUP_SUBMIT_FAILED,
+  SIGNUP_SUBMITTING,
 } from './actionTypes';
 
-export const setEvent = (event: Event.Details | null) => <const>{
-  type: SET_EVENT,
+export const resetState = () => <const>{
+  type: RESET,
+};
+
+export const eventLoaded = (event: Event.Details) => <const>{
+  type: EVENT_LOADED,
   payload: event,
 };
 
-export const setEventLoading = () => <const>{
-  type: SET_EVENT_LOADING,
+export const eventLoadFailed = () => <const>{
+  type: EVENT_LOAD_FAILED,
 };
 
-export const setEventError = () => <const>{
-  type: SET_EVENT_ERROR,
-};
-
-export const setSignup = (signup: Signup.Create.Response | null) => <const>{
-  type: SET_SIGNUP,
+export const pendingSignupCreated = (signup: Signup.Create.Response) => <const>{
+  type: SIGNUP_CREATED,
   payload: signup,
 };
 
-export const setSignupLoading = () => <const>{
-  type: SET_SIGNUP_LOADING,
+export const signupSubmitting = () => <const>{
+  type: SIGNUP_SUBMITTING,
 };
 
-export const setSignupError = () => <const>{
-  type: SET_SIGNUP_ERROR,
+export const signupComplete = () => <const>{
+  type: SIGNUP_COMPLETE,
+};
+
+export const signupSubmitFailed = () => <const>{
+  type: SIGNUP_SUBMIT_FAILED,
+};
+
+export const signupCancelled = () => <const>{
+  type: SIGNUP_CANCELLED,
 };
 
 export const getEvent = (eventId: number | string) => async (
   dispatch: DispatchAction,
 ) => {
-  dispatch(setEventLoading());
   try {
     const response = await fetch(`${PREFIX_URL}/api/events/${eventId}`);
     const event = await response.json();
-    dispatch(setEvent(event));
+    dispatch(eventLoaded(event));
   } catch (e) {
-    dispatch(setEventError());
+    dispatch(eventLoadFailed());
   }
 };
 
-export const clearEvent = () => setEvent(null);
-
 export const createPendingSignup = (quotaId: Quota.Id) => async (dispatch: DispatchAction) => {
-  dispatch(setSignupLoading());
+  dispatch(signupSubmitting());
   try {
     const response = await fetch(`${PREFIX_URL}/api/signups`, {
       method: 'POST',
@@ -60,16 +67,18 @@ export const createPendingSignup = (quotaId: Quota.Id) => async (dispatch: Dispa
       body: JSON.stringify({ quotaId }),
     });
     const signup = await response.json();
-    dispatch(setSignup(signup as Signup.Create.Response));
+    dispatch(pendingSignupCreated(signup as Signup.Create.Response));
+    return true;
   } catch (e) {
-    dispatch(setSignupError());
+    dispatch(signupSubmitFailed());
+    return false;
   }
 };
 
 export const completeSignup = (
   signupId: Signup.Id, data: Signup.Update.Body, editToken: string,
 ) => async (dispatch: DispatchAction) => {
-  dispatch(setSignupLoading());
+  dispatch(signupSubmitting());
   try {
     const response = await fetch(`${PREFIX_URL}/api/signups/${signupId}`, {
       method: 'PATCH',
@@ -83,15 +92,16 @@ export const completeSignup = (
       const error = await response.json();
       throw new Error(error.message);
     }
+    dispatch(signupComplete());
     return true;
   } catch (e) {
-    dispatch(setSignupError());
+    dispatch(signupSubmitFailed());
     return false;
   }
 };
 
 export const cancelPendingSignup = (signupId: Signup.Id, editToken: string) => async (dispatch: DispatchAction) => {
-  dispatch(setSignupLoading());
+  dispatch(signupSubmitting());
   try {
     const response = await fetch(`${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`, {
       method: 'DELETE',
@@ -99,8 +109,12 @@ export const cancelPendingSignup = (signupId: Signup.Id, editToken: string) => a
     if (response.status > 299) {
       throw new Error(response.statusText);
     }
-    dispatch(setSignup(null));
+    dispatch(signupCancelled());
+    return true;
   } catch (e) {
-    dispatch(setSignupError());
+    // TODO: Own state variable for this? We don't want signupSubmitFailed() as that would show up as
+    //  a form error in the UI.
+    dispatch(signupCancelled());
+    return false;
   }
 };

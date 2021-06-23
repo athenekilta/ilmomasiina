@@ -1,22 +1,24 @@
 import React from 'react';
 
 import { useTypedSelector } from '../../../../store/reducers';
-import { getSignupsByQuota, OPENQUOTA, WAITLIST } from '../../../../utils/signupUtils';
+import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../../utils/signupUtils';
 import ViewProgress from '../ViewProgress';
 
-const QuotaStatus = () => {
+interface Props {
+  signups: QuotaSignups[];
+}
+
+const QuotaStatus = ({ signups }: Props) => {
   const event = useTypedSelector((state) => state.singleEvent.event)!;
 
   if (!event.signupsPublic) {
     return null;
   }
 
-  const quotaData = getSignupsByQuota(event);
-
   return (
     <div className="sidebar-widget">
       <h3>Ilmoittautuneet</h3>
-      {quotaData!.map((quota) => {
+      {signups.map((quota) => {
         if (quota.id === OPENQUOTA) {
           return (
             <ViewProgress

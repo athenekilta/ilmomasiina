@@ -1,36 +1,36 @@
 import { AdminEvent } from '../../api/adminEvents';
 import { DispatchAction } from '../../store/types';
 import {
-  SET_EVENT,
-  SET_EVENT_ERROR,
-  SET_EVENT_LOADING,
-  SET_EVENT_PUBLISH_ERROR,
-  SET_EVENT_PUBLISH_LOADING,
+  EVENT_LOAD_FAILED,
+  EVENT_LOADED,
+  EVENT_SAVE_FAILED,
+  EVENT_SAVING,
+  RESET,
 } from './actionTypes';
 import { EditorEvent } from './types';
 
-export const setEvent = (event: AdminEvent.Details | null, formData: EditorEvent | null) => <const>{
-  type: SET_EVENT,
+export const resetState = () => <const>{
+  type: RESET,
+};
+
+export const loaded = (event: AdminEvent.Details | null, formData: EditorEvent | null) => <const>{
+  type: EVENT_LOADED,
   payload: {
     event,
     formData,
   },
 };
 
-export const setEventLoading = () => <const>{
-  type: SET_EVENT_LOADING,
+export const loadFailed = () => <const>{
+  type: EVENT_LOAD_FAILED,
 };
 
-export const setEventError = () => <const>{
-  type: SET_EVENT_ERROR,
+export const saving = () => <const>{
+  type: EVENT_SAVING,
 };
 
-export const setEventPublishLoading = () => <const>{
-  type: SET_EVENT_PUBLISH_LOADING,
-};
-
-export const setEventPublishError = () => <const>{
-  type: SET_EVENT_PUBLISH_ERROR,
+export const saveFailed = () => <const>{
+  type: EVENT_SAVE_FAILED,
 };
 
 const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
@@ -53,10 +53,21 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   })),
 });
 
-export const clearEvent = () => setEvent(null, null);
+export const getEvent = (id: number | string, token: string) => async (dispatch: DispatchAction) => {
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
+      headers: { Authorization: token },
+    });
+    const event = await response.json() as AdminEvent.Details;
+    const formData = serverEventToEditor(event);
+    dispatch(loaded(event, formData));
+  } catch (e) {
+    dispatch(loadFailed());
+  }
+};
 
 export const publishNewEvent = (data: EditorEvent, token: string) => async (dispatch: DispatchAction) => {
-  dispatch(setEventPublishLoading());
+  dispatch(saving());
 
   const cleaned = editorEventToServer(data);
 
@@ -74,10 +85,10 @@ export const publishNewEvent = (data: EditorEvent, token: string) => async (disp
     }
     const newEvent = await response.json() as AdminEvent.Details;
     const newFormData = serverEventToEditor(newEvent);
-    dispatch(setEvent(newEvent, newFormData));
+    dispatch(loaded(newEvent, newFormData));
     return newEvent;
   } catch (e) {
-    dispatch(setEventPublishError());
+    dispatch(saveFailed());
     throw new Error(e);
   }
 };
@@ -85,7 +96,7 @@ export const publishNewEvent = (data: EditorEvent, token: string) => async (disp
 export const publishEventUpdate = (id: number | string, data: EditorEvent, token: string) => async (
   dispatch: DispatchAction,
 ) => {
-  dispatch(setEventPublishLoading());
+  dispatch(saving());
 
   const cleaned = editorEventToServer(data);
 
@@ -103,24 +114,10 @@ export const publishEventUpdate = (id: number | string, data: EditorEvent, token
     }
     const newEvent = await response.json() as AdminEvent.Details;
     const newFormData = serverEventToEditor(newEvent);
-    dispatch(setEvent(newEvent, newFormData));
+    dispatch(loaded(newEvent, newFormData));
     return newEvent;
   } catch (e) {
-    dispatch(setEventPublishError());
+    dispatch(saveFailed());
     throw new Error(e);
-  }
-};
-
-export const getEvent = (id: number | string, token: string) => async (dispatch: DispatchAction) => {
-  dispatch(setEventLoading());
-  try {
-    const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
-      headers: { Authorization: token },
-    });
-    const event = await response.json() as AdminEvent.Details;
-    const formData = serverEventToEditor(event);
-    dispatch(setEvent(event, formData));
-  } catch (e) {
-    dispatch(setEventError());
   }
 };

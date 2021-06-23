@@ -7,7 +7,7 @@ import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 import { Quota } from '../../api/events';
-import { clearEvent, createPendingSignup, getEvent } from '../../modules/singleEvent/actions';
+import { createPendingSignup, getEvent, resetState } from '../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import { getSignupsByQuota } from '../../utils/signupUtils';
 import EnrollForm from './components/EnrollForm';
@@ -26,7 +26,7 @@ type Props = RouteComponentProps<MatchParams>;
 const SingleEvent = ({ match }: Props) => {
   const dispatch = useTypedDispatch();
   const {
-    event, eventLoading, eventError,
+    event, eventLoadError,
   } = useTypedSelector((state) => state.singleEvent, shallowEqual);
 
   const [formOpen, setFormOpen] = useState(false);
@@ -34,11 +34,11 @@ const SingleEvent = ({ match }: Props) => {
   useEffect(() => {
     dispatch(getEvent(match.params.id));
     return () => {
-      dispatch(clearEvent());
+      dispatch(resetState());
     };
   }, [match.params.id]);
 
-  if (eventError) {
+  if (eventLoadError) {
     return (
       <div className="single-event">
         <div className="single-event--loading-container">
@@ -52,7 +52,7 @@ const SingleEvent = ({ match }: Props) => {
     );
   }
 
-  if (eventLoading) {
+  if (!event) {
     return (
       <div className="single-event">
         <div className="single-event--loading-container">
@@ -72,12 +72,12 @@ const SingleEvent = ({ match }: Props) => {
     return (
       <EnrollForm
         closeForm={() => setFormOpen(false)}
-        key={event!.id}
+        key={event.id}
       />
     );
   }
 
-  const quotaData = getSignupsByQuota(event!);
+  const signupsByQuota = getSignupsByQuota(event);
 
   return (
     <div className="container single-event">
@@ -86,57 +86,57 @@ const SingleEvent = ({ match }: Props) => {
       </Link>
       <div className="row">
         <div className="col-xs-12 col-sm-8">
-          <h1>{event!.title}</h1>
+          <h1>{event.title}</h1>
           <div className="event-heading">
-            {event!.date && (
+            {event.date && (
               <p>
                 <strong>Ajankohta:</strong>
                 {' '}
-                {moment(event!.date).format('D.M.Y [klo] HH:mm')}
+                {moment(event.date).format('D.M.Y [klo] HH:mm')}
               </p>
             )}
-            {event!.location && (
+            {event.location && (
               <p>
                 <strong>Sijainti:</strong>
                 {' '}
-                {event!.location}
+                {event.location}
               </p>
             )}
-            {event!.price && (
+            {event.price && (
               <p>
                 <strong>Hinta:</strong>
                 {' '}
-                {event!.price}
+                {event.price}
               </p>
             )}
-            {event!.webpageUrl && (
+            {event.webpageUrl && (
               <p>
                 <strong>Kotisivut:</strong>
                 {' '}
-                <a href={event!.webpageUrl} title="Kotisivut">
-                  {event!.webpageUrl}
+                <a href={event.webpageUrl} title="Kotisivut">
+                  {event.webpageUrl}
                 </a>
               </p>
             )}
-            {event!.facebookUrl && (
+            {event.facebookUrl && (
               <p>
                 <strong>Facebook-tapahtuma:</strong>
                 {' '}
-                <a href={event!.facebookUrl} title="Facebook-tapahtuma">
-                  {event!.facebookUrl}
+                <a href={event.facebookUrl} title="Facebook-tapahtuma">
+                  {event.facebookUrl}
                 </a>
               </p>
             )}
           </div>
-          <p>{nl2br(event!.description)}</p>
+          <p>{nl2br(event.description)}</p>
         </div>
         <div className="col-xs-12 col-sm-4 pull-right">
           <SignupCountdown beginSignup={beginSignup} />
-          <QuotaStatus />
+          <QuotaStatus signups={signupsByQuota} />
         </div>
         <div className="col-xs-12">
           <h2>Ilmoittautuneet</h2>
-          {quotaData!.map((quota) => (
+          {signupsByQuota.map((quota) => (
             <SignupList
               key={quota.id}
               quota={quota}

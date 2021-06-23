@@ -1,19 +1,18 @@
 import {
-  SET_EVENT,
-  SET_EVENT_ERROR,
-  SET_EVENT_LOADING,
-  SET_EVENT_PUBLISH_ERROR,
-  SET_EVENT_PUBLISH_LOADING,
+  EVENT_LOAD_FAILED,
+  EVENT_LOADED,
+  EVENT_SAVE_FAILED,
+  EVENT_SAVING,
+  RESET,
 } from './actionTypes';
 import { EditorActions, EditorState } from './types';
 
 const initialState: EditorState = {
   event: null,
   formData: null,
-  eventLoading: false,
-  eventError: false,
-  eventPublishLoading: false,
-  eventPublishError: false,
+  loadError: false,
+  saving: false,
+  saveError: false,
 };
 
 export default function reducer(
@@ -21,39 +20,32 @@ export default function reducer(
   action: EditorActions,
 ): EditorState {
   switch (action.type) {
-    case SET_EVENT:
+    case RESET:
+      return initialState;
+    case EVENT_LOADED:
       return {
         ...state,
         event: action.payload.event,
         formData: action.payload.formData,
-        eventLoading: false,
-        eventError: false,
-        eventPublishLoading: false,
-        eventPublishError: false,
+        loadError: false,
+        saving: false,
+        saveError: false,
       };
-    case SET_EVENT_LOADING:
+    case EVENT_LOAD_FAILED:
       return {
         ...state,
-        eventLoading: true,
-        eventError: false,
+        loadError: true,
       };
-    case SET_EVENT_ERROR:
+    case EVENT_SAVING:
       return {
         ...state,
-        eventLoading: false,
-        eventError: true,
+        saving: true,
       };
-    case SET_EVENT_PUBLISH_LOADING:
+    case EVENT_SAVE_FAILED:
       return {
         ...state,
-        eventPublishLoading: true,
-        eventPublishError: false,
-      };
-    case SET_EVENT_PUBLISH_ERROR:
-      return {
-        ...state,
-        eventPublishLoading: false,
-        eventPublishError: true,
+        saving: false,
+        saveError: true,
       };
     default:
       return state;

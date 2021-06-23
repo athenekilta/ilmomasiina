@@ -22,7 +22,7 @@ type Props = {
 const EnrollForm = ({ closeForm }: Props) => {
   const dispatch = useTypedDispatch();
   const {
-    event, signup, signupError,
+    event, signup, signupSubmitError,
   } = useTypedSelector((state) => state.singleEvent, shallowEqual);
 
   async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
@@ -49,16 +49,15 @@ const EnrollForm = ({ closeForm }: Props) => {
     setSubmitting(false);
   }
 
-  function cancel() {
+  async function cancel() {
     const close = window.confirm(
       'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.',
     );
+    if (!close) return;
 
-    if (close) {
-      dispatch(cancelPendingSignup(signup!.id, signup!.editToken));
-      closeForm();
-    }
+    dispatch(cancelPendingSignup(signup!.id, signup!.editToken));
     dispatch(getEvent(event!.id));
+    closeForm();
   }
 
   const emptySignup: Signup.Update.Body = {
@@ -78,7 +77,7 @@ const EnrollForm = ({ closeForm }: Props) => {
           <div className="container">
             <button type="button" className="close" onClick={() => cancel()} aria-label="Sulje" />
             <div className="col-xs-12 col-md-8 col-md-offset-2">
-              {signupError && (
+              {signupSubmitError && (
                 <p sx={{ color: 'error' }}>Ilmoittautumisessasi on virheitä.</p>
               )}
               <h2>Ilmoittaudu</h2>

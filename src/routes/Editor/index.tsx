@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { Spinner } from 'theme-ui';
 
 import {
-  clearEvent, getEvent, publishEventUpdate, publishNewEvent, setEvent,
+  getEvent, loaded, publishEventUpdate, publishNewEvent, resetState,
 } from '../../modules/editor/actions';
 import { EditorEvent } from '../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
@@ -63,7 +63,7 @@ const Editor = ({ history, match }: Props) => {
   const dispatch = useTypedDispatch();
   const adminToken = useTypedSelector((state) => state.admin.accessToken);
   const {
-    event, formData, eventError, eventLoading,
+    event, formData, loadError,
   } = useTypedSelector(
     (state) => state.editor,
     shallowEqual,
@@ -74,12 +74,12 @@ const Editor = ({ history, match }: Props) => {
   useEffect(() => {
     const eventId = match.params.id;
     if (eventId !== 'new') {
-      dispatch(setEvent(null, defaultEvent()));
+      dispatch(loaded(null, defaultEvent()));
     } else {
       dispatch(getEvent(eventId, adminToken!));
     }
     return () => {
-      dispatch(clearEvent());
+      dispatch(resetState());
     };
   }, []);
 
@@ -109,7 +109,7 @@ const Editor = ({ history, match }: Props) => {
     setSubmitting(false);
   }
 
-  if (eventError) {
+  if (loadError) {
     return (
       <div className="event-editor">
         <div className="event-editor--loading-container">
@@ -121,7 +121,7 @@ const Editor = ({ history, match }: Props) => {
     );
   }
 
-  if (eventLoading) {
+  if (!event) {
     return (
       <div className="event-editor">
         <div className="event-editor--loading-container">

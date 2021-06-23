@@ -1,6 +1,8 @@
-export const SET_EVENT = 'singleEvent/SET_EVENT';
-export const SET_EVENT_LOADING = 'singleEvent/SET_EVENT_LOADING';
-export const SET_EVENT_ERROR = 'singleEvent/SET_EVENT_ERROR';
-export const SET_SIGNUP = 'singleEvent/SET_SIGNUP';
-export const SET_SIGNUP_LOADING = 'singleEvent/SET_SIGNUP_LOADING';
-export const SET_SIGNUP_ERROR = 'singleEvent/SET_SIGNUP_ERROR';
+export const RESET = 'singleEvent/RESET';
+export const EVENT_LOADED = 'singleEvent/EVENT_LOADED';
+export const EVENT_LOAD_FAILED = 'singleEvent/EVENT_LOAD_FAILED';
+export const SIGNUP_CREATED = 'singleEvent/SIGNUP_CREATED';
+export const SIGNUP_SUBMITTING = 'singleEvent/SIGNUP_SUBMITTING';
+export const SIGNUP_SUBMIT_FAILED = 'singleEvent/SIGNUP_SUBMIT_FAILED';
+export const SIGNUP_COMPLETE = 'singleEvent/SIGNUP_COMPLETE';
+export const SIGNUP_CANCELLED = 'singleEvent/SIGNUP_CANCELLED';

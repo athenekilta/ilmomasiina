@@ -1,27 +1,30 @@
 import { Event } from '../../api/events';
 import { Signup } from '../../api/signups';
 import {
-  setEvent,
-  setEventError,
-  setEventLoading,
-  setSignup,
-  setSignupError,
-  setSignupLoading,
+  eventLoaded,
+  eventLoadFailed,
+  pendingSignupCreated,
+  resetState,
+  signupCancelled,
+  signupComplete,
+  signupSubmitFailed,
+  signupSubmitting,
 } from './actions';
 
 interface SingleEventState {
   event: Event.Details | null;
-  eventLoading: boolean;
-  eventError: boolean;
+  eventLoadError: boolean;
   signup: Signup.Create.Response | null;
-  signupLoading: boolean;
-  signupError: boolean;
+  signupSubmitting: boolean;
+  signupSubmitError: boolean;
 }
 
 type SingleEventActions =
-  | ReturnType<typeof setEvent>
-  | ReturnType<typeof setEventLoading>
-  | ReturnType<typeof setEventError>
-  | ReturnType<typeof setSignup>
-  | ReturnType<typeof setSignupLoading>
-  | ReturnType<typeof setSignupError>;
+  | ReturnType<typeof resetState>
+  | ReturnType<typeof eventLoaded>
+  | ReturnType<typeof eventLoadFailed>
+  | ReturnType<typeof pendingSignupCreated>
+  | ReturnType<typeof signupSubmitting>
+  | ReturnType<typeof signupSubmitFailed>
+  | ReturnType<typeof signupComplete>
+  | ReturnType<typeof signupCancelled>;
