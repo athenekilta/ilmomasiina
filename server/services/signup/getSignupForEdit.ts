@@ -7,11 +7,19 @@ import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { eventGetEventAttrs } from '../event/getEventDetails';
+import { eventGetEventAttrs, eventGetQuestionAttrs, EventGetQuestionItem } from '../event/getEventDetails';
 import { verifyToken } from './editTokens';
 
 // Include the same attributes from Event as /api/events.
 const signupGetEventAttrs = eventGetEventAttrs;
+
+const signupGetQuestionAttrs = eventGetQuestionAttrs;
+
+// Attributes included from Answer.
+const signupGetAnswerAttrs = [
+  'questionId',
+  'answer',
+] as const;
 
 // Attributes included from Signup.
 const signupGetSignupAttrs = [
@@ -21,28 +29,19 @@ const signupGetSignupAttrs = [
   'email',
 ] as const;
 
-// Attributes included from Question.
-const signupGetQuestionAttrs = [
-  'id',
-  'question',
-  'type',
-  'options',
-  'required',
-  'public',
-] as const;
-
 // Data type definitions for this endpoint - pick columns and add included relations
 
-interface SignupGetAnswerItem extends Pick<Question, typeof signupGetQuestionAttrs[number]> {
-  answer: string;
-  answerId: number;
-}
+export interface SignupGetAnswerItem extends Pick<Answer, typeof signupGetAnswerAttrs[number]> {}
 
-interface SignupGetSignupItem extends Pick<Signup, typeof signupGetSignupAttrs[number]> {
+export interface SignupGetSignupItem extends Pick<Signup, typeof signupGetSignupAttrs[number]> {
   answers: SignupGetAnswerItem[];
 }
 
-interface SignupGetEventItem extends Pick<Event, typeof signupGetEventAttrs[number]> {}
+export type SignupGetQuestionItem = EventGetQuestionItem;
+
+export interface SignupGetEventItem extends Pick<Event, typeof signupGetEventAttrs[number]> {
+  questions: SignupGetQuestionItem[];
+}
 
 export interface SignupGetResponse {
   signup: SignupGetSignupItem | null;
@@ -84,29 +83,20 @@ export default async (id: number, params?: Params): Promise<SignupGetResponse> =
     throw new NotFound('No signup found with id');
   }
 
-  const answers = signup.answers!;
   const event = signup.quota!.event!;
-  const questions = event.questions!;
-
-  // attach answers to the respective questions
-  const answersByQuestion: SignupGetAnswerItem[] = [];
-  questions.forEach((question) => {
-    const answer = _.find(answers, { questionId: question.id });
-
-    if (answer) {
-      answersByQuestion.push({
-        ..._.pick(question, signupGetQuestionAttrs),
-        answerId: answer.id,
-        answer: answer.answer,
-      });
-    }
-  });
 
   return {
     signup: {
       ..._.pick(signup, signupGetSignupAttrs),
-      answers: answersByQuestion,
+      answers: signup.answers!.map((answer) => _.pick(answer, signupGetAnswerAttrs)),
     },
-    event: _.pick(event, signupGetEventAttrs),
+    event: {
+      ..._.pick(event, signupGetEventAttrs),
+      questions: event.questions!.map((question) => ({
+        ..._.pick(question, signupGetQuestionAttrs),
+        // Split answer options into array
+        options: question.options ? question.options.split(';') : null,
+      })),
+    },
   };
 };
