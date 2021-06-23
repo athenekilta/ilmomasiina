@@ -5,7 +5,7 @@ import { Op, Transaction } from 'sequelize';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
-import getEventDetails from '../../event/getEventDetails';
+import getEventDetails, { AdminEventGetResponse } from '../../event/getEventDetails';
 import { adminEventCreateEventAttrs, adminEventCreateQuestionAttrs, adminEventCreateQuotaAttrs } from './createEvent';
 
 // Data type definitions for the request body, using attribute lists from createEvent.
@@ -23,7 +23,7 @@ export interface AdminEventUpdateBody extends Pick<Event, typeof adminEventCreat
   quota: AdminEventUpdateQuota[];
 }
 
-export default async (id: number, data: Partial<AdminEventUpdateBody>) => {
+export default async (id: number, data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
   }

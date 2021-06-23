@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
+import getEventDetails, { AdminEventGetResponse } from '../../event/getEventDetails';
 
 // Attributes included in POST /api/events for Event instances.
 export const adminEventCreateEventAttrs = [
@@ -47,7 +48,7 @@ export interface AdminEventCreateBody extends Pick<Event, typeof adminEventCreat
   quota: AdminEventCreateQuota[];
 }
 
-export default async (data: AdminEventCreateBody) => {
+export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse> => {
   // Pick only allowed attributes
   const attribs = {
     ..._.pick(data, adminEventCreateEventAttrs),
@@ -56,7 +57,7 @@ export default async (data: AdminEventCreateBody) => {
   };
 
   // Create the event with relations - Sequelize will handle validation
-  const event = Event.sequelize!.transaction((transaction) => (
+  const event = await Event.sequelize!.transaction((transaction) => (
     Event.create(attribs, {
       transaction,
       include: [
@@ -72,5 +73,5 @@ export default async (data: AdminEventCreateBody) => {
     })
   ));
 
-  return event;
+  return getEventDetails(event.id, true);
 };
