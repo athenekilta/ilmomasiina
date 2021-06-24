@@ -1,68 +1,64 @@
 import {
   RESET,
-  SET_DELETED,
-  SET_ERROR,
-  SET_EVENT,
-  SET_LOADING,
-  SET_SIGNUP,
-  SET_SIGNUP_AND_EVENT,
+  SIGNUP_DELETED,
+  SIGNUP_LOAD_FAILED,
+  SIGNUP_LOADED,
+  SIGNUP_SUBMITTING,
+  SIGNUP_UPDATE_FAILED,
+  SIGNUP_UPDATED,
 } from './actionTypes';
 import { EditSignupActions, EditSignupState } from './types';
 
 const initialState: EditSignupState = {
-  event: {},
-  signup: {},
-  loading: false,
-  error: false,
+  event: null,
+  signup: null,
+  loadError: false,
+  submitting: false,
+  submitError: false,
   deleted: false,
 };
 
 export default function reducer(
   state = initialState,
   action: EditSignupActions,
-) {
+): EditSignupState {
   switch (action.type) {
     case RESET:
       return initialState;
-    case SET_SIGNUP_AND_EVENT:
+    case SIGNUP_LOADED:
       return {
         ...state,
-        signup: action.payload.signup,
         event: action.payload.event,
-        loading: false,
+        signup: action.payload.signup,
       };
-    case SET_SIGNUP:
+    case SIGNUP_LOAD_FAILED:
       return {
         ...state,
-        signup: action.payload,
-        loading: false,
+        loadError: true,
       };
-    case SET_EVENT:
+    case SIGNUP_SUBMITTING:
       return {
         ...state,
-        event: action.payload,
-        loading: false,
+        submitting: true,
       };
-    case SET_LOADING:
+    case SIGNUP_UPDATE_FAILED:
       return {
         ...state,
-        loading: true,
-        error: false,
+        submitting: false,
+        submitError: true,
       };
-    case SET_ERROR:
+    case SIGNUP_UPDATED:
       return {
         ...state,
-        loading: false,
-        error: true,
+        submitting: false,
+        submitError: false,
       };
-    case SET_DELETED: {
+    case SIGNUP_DELETED:
       return {
         ...state,
         deleted: true,
-        loading: false,
+        submitting: false,
       };
-    }
-
     default:
       return state;
   }

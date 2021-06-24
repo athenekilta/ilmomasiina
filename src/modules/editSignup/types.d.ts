@@ -1,27 +1,30 @@
-import { Event, Signup } from '../types';
+import { Signup } from '../../api/signups';
 import {
-  resetEventState,
-  setDeleted,
-  setError,
-  setEvent,
-  setLoading,
-  setSignup,
-  setSignupAndEvent,
+  resetState,
+  signupDeleted,
+  signupDeleteFailed,
+  signupLoaded,
+  signupLoadFailed,
+  signupSubmitting,
+  signupUpdated,
+  signupUpdateFailed,
 } from './actions';
 
 interface EditSignupState {
-  event: Event | {};
-  signup: Signup | {};
-  loading: boolean;
-  error: boolean;
+  event: Signup.Details.Event | null;
+  signup: Signup.Details.Signup | null;
+  loadError: boolean;
+  submitting: boolean;
+  submitError: boolean;
   deleted: boolean;
 }
 
 type EditSignupActions =
-  | ReturnType<typeof setSignupAndEvent>
-  | ReturnType<typeof setSignup>
-  | ReturnType<typeof setEvent>
-  | ReturnType<typeof setLoading>
-  | ReturnType<typeof setError>
-  | ReturnType<typeof setDeleted>
-  | ReturnType<typeof resetEventState>;
+  | ReturnType<typeof signupLoaded>
+  | ReturnType<typeof signupLoadFailed>
+  | ReturnType<typeof signupSubmitting>
+  | ReturnType<typeof signupUpdateFailed>
+  | ReturnType<typeof signupUpdated>
+  | ReturnType<typeof signupDeleted>
+  | ReturnType<typeof signupDeleteFailed>
+  | ReturnType<typeof resetState>;

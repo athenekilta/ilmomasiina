@@ -1,7 +1,8 @@
-export const SET_SIGNUP_AND_EVENT = 'editSignup/SET_SIGNUP_AND_EVENT';
-export const SET_SIGNUP = 'editSignup/SET_SIGNUP';
-export const SET_EVENT = 'editSignup/SET_EVENT';
-export const SET_LOADING = 'editSignup/SET_LOADING';
-export const SET_ERROR = 'editSignup/SET_ERROR';
-export const SET_DELETED = 'editSignup/SET_DELETED';
+export const SIGNUP_LOADED = 'editSignup/SIGNUP_LOADED';
+export const SIGNUP_LOAD_FAILED = 'editSignup/SIGNUP_LOAD_FAILED';
+export const SIGNUP_SUBMITTING = 'editSignup/SIGNUP_SUBMITTING';
+export const SIGNUP_UPDATE_FAILED = 'editSignup/SIGNUP_UPDATE_FAILED';
+export const SIGNUP_UPDATED = 'editSignup/SIGNUP_UPDATED';
+export const SIGNUP_DELETE_FAILED = 'editSignup/SIGNUP_DELETE_FAILED';
+export const SIGNUP_DELETED = 'editSignup/SIGNUP_DELETED';
 export const RESET = 'editSignup/RESET';

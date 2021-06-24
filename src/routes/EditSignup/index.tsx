@@ -1,21 +1,18 @@
 import React, { useEffect } from 'react';
 
 import { Spinner } from '@theme-ui/components';
-import { connect } from 'react-redux';
+import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { Signup } from '../../api/signups';
 import {
-  deleteSignupAsync,
+  deleteSignup,
   getSignupAndEvent,
-  resetEventState,
+  resetState,
+  updateSignup,
 } from '../../modules/editSignup/actions';
-import {
-  completeSignup,
-  updateEventAsync,
-} from '../../modules/singleEvent/actions';
-import { Event, Signup } from '../../modules/types';
-import { AppState, DispatchAction } from '../../store/types';
+import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import EditForm from './components/EditForm';
 
 import './EditSignup.scss';
@@ -25,67 +22,56 @@ interface MatchParams {
   editToken: string;
 }
 
-interface EditSignupProps {}
-
-type Props = EditSignupProps &
-LinkStateProps &
-LinkDispatchProps &
-RouteComponentProps<MatchParams>;
-
-const EditSignup = (props: Props) => {
+const EditSignup = ({ match }: RouteComponentProps<MatchParams>) => {
+  const dispatch = useTypedDispatch();
   const {
-    event,
-    deleted,
-    deleteSignupAsync,
-    error,
-    getSignupAndEvent,
-    loading,
-    match,
-    resetEventState,
-    signup,
-    updateSignupAsync,
-    updateEventAsync,
-  } = props;
+    event, loadError, deleted, signup,
+  } = useTypedSelector((state) => state.editSignup, shallowEqual);
 
   useEffect(() => {
     const { id, editToken } = match.params;
-    getSignupAndEvent(id, editToken);
+    dispatch(getSignupAndEvent(id, editToken));
     return () => {
-      resetEventState();
+      dispatch(resetState());
     };
   }, []);
 
-  function deleteSignup() {
-    const { id, editToken } = match.params;
-    deleteSignupAsync(id, editToken);
+  if (deleted) {
+    return (
+      <div className="container align-items-center">
+        <div className="EditSignup--wrapper">
+          <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
+          <Link to={`${PREFIX_URL}/`} className="btn btn-default">
+            Takaisin etusivulle
+          </Link>
+        </div>
+      </div>
+    );
   }
 
-  async function updateSignup(answers) {
-    this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
+  if (loadError) {
+    return (
+      <div className="container align-items-center">
+        <div className="EditSignup--wrapper">
+          <h1>Hups, jotain meni pieleen</h1>
+          <p>
+            Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
+            sitten jotain muuta kummallista tapahtui. Jos ilmoittautumisesi ei
+            ole vielä poistunut, yritä kohta uudestaan.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-    const response = await updateSignupAsync(signup.id, {
-      editToken: match.params.editToken,
-      ...answers,
-    });
-
-    const success = response === true;
-
-    if (success) {
-      toast.update(this.toastId, {
-        render: 'Muokkaus onnistui!',
-        type: toast.TYPE.SUCCESS,
-        autoClose: 5000,
-      });
-
-      updateEventAsync(event.id);
-    } else {
-      const toastText = 'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
-      toast.update(this.toastId, {
-        render: toastText,
-        type: toast.TYPE.ERROR,
-        autoClose: 5000,
-      });
-    }
+  if (!event || !signup) {
+    return (
+      <div className="container align-items-center">
+        <div className="EditSignup--wrapper">
+          <Spinner />
+        </div>
+      </div>
+    );
   }
 
   if (new Date(event.registrationEndDate) < new Date()) {
@@ -104,70 +90,52 @@ const EditSignup = (props: Props) => {
       </div>
     );
   }
-  if (deleted) {
-    return (
-      <div className="container align-items-center">
-        <div className="EditSignup--wrapper">
-          <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-          <Link to={`${PREFIX_URL}/`} className="btn btn-default">
-            Takaisin etusivulle
-          </Link>
-        </div>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div className="container align-items-center">
-        <div className="EditSignup--wrapper">
-          <h1>Hups, jotain meni pieleen</h1>
-          <p>
-            Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
-            sitten jotain muuta kummallista tapahtui. Jos ilmoittautumisesi ei
-            ole vielä poistunut, yritä kohta uudestaan.
-          </p>
-        </div>
-      </div>
-    );
+
+  async function onSubmit(answers: Signup.Update.Body) {
+    const progressToast = toast.info('Ilmoittautuminen käynnissä', {});
+
+    const success = await dispatch(updateSignup(signup!.id, answers, match.params.editToken));
+
+    if (success) {
+      toast.update(progressToast, {
+        render: 'Muokkaus onnistui!',
+        type: toast.TYPE.SUCCESS,
+        autoClose: 5000,
+      });
+    } else {
+      toast.update(progressToast, {
+        render: 'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.',
+        type: toast.TYPE.ERROR,
+        autoClose: 5000,
+      });
+    }
   }
 
-  if (loading) {
-    return (
-      <div className="container align-items-center">
-        <div className="EditSignup--wrapper">
-          <Spinner name="circle" fadeIn="quarter" />
-        </div>
-      </div>
-    );
+  function onDelete() {
+    dispatch(deleteSignup(signup!.id, match.params.editToken));
   }
 
   return (
     <div className="container align-items-center">
-      <EditForm
-        submitForm={updateSignup}
-        signup={signup}
-        event={event}
-        questions={signup.answers}
-        loading={loading}
-      />
+      <EditForm submitForm={onSubmit} />
       <div className="EditSignup--wrapper">
         <h2>Poista ilmoittautuminen</h2>
         <p>
-          Oletko varma että haluat poistaa ilmoittautumisesi tapahtumaan
+          Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan
           {' '}
           <strong>
             {event.title}
-            ?
           </strong>
+          ?
         </p>
         <p>
-          Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos kuitenkin
+          Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos
           muutat mielesi, voit aina ilmoittautua tapahtumaan uudelleen
           myöhemmin, mutta siirryt silloin jonon hännille.
           {' '}
           <strong>Tätä toimintoa ei voi perua.</strong>
         </p>
-        <button onClick={deleteSignup} className="btn btn-danger">
+        <button type="button" onClick={onDelete} className="btn btn-danger">
           Poista ilmoittautuminen
         </button>
       </div>
@@ -175,39 +143,4 @@ const EditSignup = (props: Props) => {
   );
 };
 
-interface LinkStateProps {
-  event: Event | {};
-  signup: Signup | {};
-  loading: boolean;
-  error: boolean;
-  deleted: boolean;
-}
-
-interface LinkDispatchProps {
-  updateEventAsync: (eventId: string) => void;
-  updateSignupAsync: (
-    signupId: string,
-    data: CompleteSignupData
-  ) => Promise<boolean>;
-  getSignupAndEvent: (id: string, editToken: string) => Promise<boolean>;
-  deleteSignupAsync: (id: string, editToken: string) => Promise<boolean>;
-  resetEventState: () => void;
-}
-
-const mapStateToProps = (state: AppState) => ({
-  event: state.editSignup.event,
-  signup: state.editSignup.signup,
-  error: state.editSignup.error,
-  loading: state.editSignup.loading,
-  deleted: state.editSignup.deleted,
-});
-
-const mapDispatchToProps = {
-  updateEventAsync,
-  updateSignupAsync: completeSignup,
-  getSignupAndEvent,
-  deleteSignupAsync,
-  resetEventState,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditSignup);
+export default EditSignup;

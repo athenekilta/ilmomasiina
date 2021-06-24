@@ -1,67 +1,88 @@
+import { Signup } from '../../api/signups';
 import { DispatchAction } from '../../store/types';
-import { Event, Signup } from '../types';
 import {
   RESET,
-  SET_DELETED,
-  SET_ERROR,
-  SET_EVENT,
-  SET_LOADING,
-  SET_SIGNUP,
-  SET_SIGNUP_AND_EVENT,
+  SIGNUP_DELETE_FAILED,
+  SIGNUP_DELETED,
+  SIGNUP_LOAD_FAILED,
+  SIGNUP_LOADED,
+  SIGNUP_SUBMITTING,
+  SIGNUP_UPDATE_FAILED,
+  SIGNUP_UPDATED,
 } from './actionTypes';
 
-export const setSignupAndEvent = (signup: Signup, event: Event) => <const>{
-  type: SET_SIGNUP_AND_EVENT,
+export const signupLoaded = (response: Signup.Details) => <const>{
+  type: SIGNUP_LOADED,
   payload: {
-    signup,
-    event,
+    signup: response.signup,
+    event: response.event,
   },
 };
 
-export const setSignup = (signup: Signup) => <const>{ type: SET_SIGNUP, payload: signup };
+export const signupLoadFailed = () => <const>{ type: SIGNUP_LOAD_FAILED };
 
-export const setEvent = (event: Event) => <const>{ type: SET_EVENT, payload: event };
+export const signupSubmitting = () => <const>{ type: SIGNUP_SUBMITTING };
 
-export const setLoading = () => <const>{ type: SET_LOADING };
+export const signupUpdateFailed = () => <const>{ type: SIGNUP_UPDATE_FAILED };
 
-export const setError = () => <const>{ type: SET_ERROR };
+export const signupUpdated = () => <const>{ type: SIGNUP_UPDATED };
 
-export const setDeleted = () => <const>{ type: SET_DELETED };
+export const signupDeleteFailed = () => <const>{ type: SIGNUP_DELETE_FAILED };
 
-export const resetEventState = () => <const>{ type: RESET };
+export const signupDeleted = () => <const>{ type: SIGNUP_DELETED };
 
-export function getSignupAndEvent(id: string, editToken: string) {
-  return function (dispatch: DispatchAction) {
-    dispatch(setLoading());
+export const resetState = () => <const>{ type: RESET };
 
-    return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`)
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.signup === null) throw new Error('Signup not found');
-        dispatch(setSignupAndEvent(res.signup, res.event));
-        return true;
-      })
-      .catch((error) => {
-        dispatch(setError());
-        return false;
-      });
-  };
-}
+export const getSignupAndEvent = (id: Signup.Id | string, editToken: string) => async (dispatch: DispatchAction) => {
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`);
+    const data = await response.json();
+    dispatch(signupLoaded(data as Signup.Details));
+    return true;
+  } catch (e) {
+    dispatch(signupLoadFailed());
+    return false;
+  }
+};
 
-export function deleteSignupAsync(id: string, editToken: string) {
-  return function (dispatch: DispatchAction) {
-    dispatch(setLoading());
-    return fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`, {
+export const updateSignup = (
+  signupId: Signup.Id, data: Signup.Update.Body, editToken: string,
+) => async (dispatch: DispatchAction) => {
+  dispatch(signupSubmitting());
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/signups/${signupId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({
+        ...data,
+        editToken,
+      }),
+    });
+    if (response.status > 299) {
+      const error = await response.json();
+      throw new Error(error.message);
+    }
+    dispatch(signupUpdated());
+    return true;
+  } catch (e) {
+    dispatch(signupUpdateFailed());
+    return false;
+  }
+};
+
+export const deleteSignup = (id: Signup.Id, editToken: string) => async (dispatch: DispatchAction) => {
+  dispatch(signupSubmitting());
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`, {
       method: 'DELETE',
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        dispatch(setDeleted());
-        return true;
-      })
-      .catch((error) => {
-        dispatch(setError());
-        return false;
-      });
-  };
-}
+    });
+    if (response.status > 299) {
+      throw new Error(response.statusText);
+    }
+    dispatch(signupDeleted());
+    return true;
+  } catch (e) {
+    dispatch(signupDeleteFailed());
+    return false;
+  }
+};

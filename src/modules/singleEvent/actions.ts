@@ -46,7 +46,7 @@ export const signupCancelled = () => <const>{
   type: SIGNUP_CANCELLED,
 };
 
-export const getEvent = (eventId: number | string) => async (
+export const getEvent = (eventId: Event.Id | string) => async (
   dispatch: DispatchAction,
 ) => {
   try {
@@ -84,7 +84,7 @@ export const completeSignup = (
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: JSON.stringify({
-        data,
+        ...data,
         editToken,
       }),
     });
