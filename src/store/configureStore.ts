@@ -25,7 +25,7 @@ export default function configureStore(initialState = {}) {
 
   const persistedReducer = persistReducer(
     persistConfig,
-    makeRootReducer({}, history),
+    makeRootReducer(history),
   );
 
   const store = createStore(
@@ -33,12 +33,12 @@ export default function configureStore(initialState = {}) {
     initialState,
     composeWithDevTools(applyMiddleware(...middleware)),
   );
-  store.asyncReducers = {};
 
   if (module.hot) {
     module.hot.accept('./reducers', () => {
+      // eslint-disable-next-line global-require
       const reducers = require('./reducers').default;
-      store.replaceReducer(reducers(store.asyncReducers));
+      store.replaceReducer(reducers(history));
     });
   }
 

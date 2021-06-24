@@ -1,7 +1,7 @@
 import { connectRouter } from 'connected-react-router';
 import { History } from 'history';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import { combineReducers, Reducer } from 'redux';
+import { combineReducers } from 'redux';
 
 import admin from '../modules/admin/reducer';
 import auth from '../modules/auth/reducer';
@@ -9,14 +9,9 @@ import editor from '../modules/editor/reducer';
 import editSignup from '../modules/editSignup/reducer';
 import events from '../modules/events/reducer';
 import singleEvent from '../modules/singleEvent/reducer';
-import { AppState, AppStore, DispatchAction } from './types';
-
-type AsyncReducers = {
-  [key: string]: Reducer;
-};
+import { AppState, DispatchAction } from './types';
 
 export const makeRootReducer = (
-  asyncReducers: AsyncReducers,
   history: History,
 ) => combineReducers({
   router: connectRouter(history),
@@ -26,18 +21,7 @@ export const makeRootReducer = (
   events,
   singleEvent,
   editSignup,
-  ...asyncReducers,
 });
-
-export const injectReducer = (
-  store: AppStore,
-  { key, reducer }: { key: string; reducer: Reducer },
-) => {
-  if (Object.hasOwnProperty.call(store.asyncReducers, key)) return;
-
-  store.asyncReducers[key] = reducer;
-  store.replaceReducer(makeRootReducer(store.asyncReducers));
-};
 
 export const useTypedSelector: TypedUseSelectorHook<AppState> = useSelector;
 export const useTypedDispatch: () => DispatchAction = useDispatch;
