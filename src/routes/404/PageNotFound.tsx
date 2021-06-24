@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const PageNotFound = () => (
   <div className="container text-center">
-    <h1>Virhe 404</h1>
+    <h1>404</h1>
     <p>
-      Sivua ei löydy. Tapahtuma on varmaan vanhentunut ja poistettu näkyvistä.
+      Sivua ei löydy.
     </p>
     <p>
-      <NavLink to={`${PREFIX_URL}/`}>Palaa etusivulle</NavLink>
+      <Link to={`${PREFIX_URL}/`}>Palaa etusivulle</Link>
     </p>
   </div>
 );
