@@ -1,38 +1,31 @@
 import {
-  SET_EVENTS,
-  SET_EVENTS_ERROR,
-  SET_EVENTS_LOADING,
+  EVENTS_LOAD_FAILED,
+  EVENTS_LOADED,
+  RESET,
 } from './actionTypes';
 import { EventsActions, EventsState } from './types';
 
 const initialState: EventsState = {
-  events: {},
-  eventsLoading: false,
-  eventsError: false,
+  events: null,
+  eventsLoadError: false,
 };
 
-export default function reducer(state = initialState, action: EventsActions) {
+export default function reducer(state = initialState, action: EventsActions): EventsState {
   switch (action.type) {
-    case SET_EVENTS: {
+    case EVENTS_LOADED: {
       return {
         ...state,
         events: action.payload,
-        eventsLoading: false,
-        eventsError: false,
+        eventsLoadError: false,
       };
     }
-    case SET_EVENTS_LOADING:
+    case EVENTS_LOAD_FAILED:
       return {
         ...state,
-        eventsLoading: true,
-        eventsError: false,
+        eventsLoadError: true,
       };
-    case SET_EVENTS_ERROR:
-      return {
-        ...state,
-        eventsLoading: false,
-        eventsError: true,
-      };
+    case RESET:
+      return initialState;
     default:
       return state;
   }

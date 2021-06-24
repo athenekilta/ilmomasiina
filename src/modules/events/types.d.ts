@@ -1,13 +1,12 @@
-import { Event } from '../types';
-import { setEvents, setEventsError, setEventsLoading } from './actions';
+import { Event } from '../../api/events';
+import { eventsLoaded, eventsLoadFailed, resetState } from './actions';
 
 interface EventsState {
-  events: { [key: string]: Event };
-  eventsLoading: boolean;
-  eventsError: boolean;
+  events: Event.List | null;
+  eventsLoadError: boolean;
 }
 
 type EventsActions =
-  | ReturnType<typeof setEvents>
-  | ReturnType<typeof setEventsLoading>
-  | ReturnType<typeof setEventsError>;
+  | ReturnType<typeof eventsLoaded>
+  | ReturnType<typeof eventsLoadFailed>
+  | ReturnType<typeof resetState>;

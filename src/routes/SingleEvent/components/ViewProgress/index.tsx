@@ -10,30 +10,23 @@ type Props = {
   value: number;
 };
 
-const ViewProgress = (props: Props) => {
-  const { max, title, value } = props;
-
-  // Don't return progress bar if no max limit
-  return !max ? (
-    <div />
-  ) : (
-    <div>
-      {title}
-      <div className="progress">
-        <div
-          className="progress-bar"
-          style={{
-            minWidth: '5em',
-            width: `${(value / max) * 100}%`,
-          }}
-        >
-          {value}
-          <Separator />
-          {max}
-        </div>
+const ViewProgress = ({ max, title, value }: Props) => (
+  <div>
+    {title}
+    <div className="progress">
+      <div
+        className="progress-bar"
+        style={{
+          minWidth: '5em',
+          width: `${(value / max) * 100}%`,
+        }}
+      >
+        {value}
+        <Separator />
+        {max || <span title="Unlimited">&infin;</span>}
       </div>
     </div>
-  );
-};
+  </div>
+);
 
 export default ViewProgress;

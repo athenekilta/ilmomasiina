@@ -13,7 +13,7 @@ import PageNotFound from '../routes/404/PageNotFound';
 import Admin from '../routes/Admin';
 import Editor from '../routes/Editor';
 import EditSignup from '../routes/EditSignup';
-import Events from '../routes/Events/EventList';
+import Events from '../routes/Events';
 import Login from '../routes/Login/Login';
 import SingleEvent from '../routes/SingleEvent';
 import configureStore, { history } from '../store/configureStore';

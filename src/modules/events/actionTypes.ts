@@ -1,3 +1,3 @@
-export const SET_EVENTS = 'events/SET_EVENTS';
-export const SET_EVENTS_LOADING = 'events/SET_EVENTS_LOADING';
-export const SET_EVENTS_ERROR = 'events/SET_EVENTS_ERROR';
+export const EVENTS_LOADED = 'events/EVENTS_LOADED';
+export const EVENTS_LOAD_FAILED = 'events/EVENTS_LOAD_FAILED';
+export const RESET = 'events/RESET';

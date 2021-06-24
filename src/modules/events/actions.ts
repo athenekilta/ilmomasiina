@@ -1,35 +1,30 @@
+import { Event } from '../../api/events';
 import { DispatchAction } from '../../store/types';
-import { Event } from '../types';
 import {
-  SET_EVENTS,
-  SET_EVENTS_ERROR,
-  SET_EVENTS_LOADING,
+  EVENTS_LOAD_FAILED,
+  EVENTS_LOADED,
+  RESET,
 } from './actionTypes';
 
-export const setEvents = (events: Event[]) => <const>{
-  type: SET_EVENTS,
+export const eventsLoaded = (events: Event.List) => <const>{
+  type: EVENTS_LOADED,
   payload: events,
 };
 
-export const setEventsLoading = () => <const>{
-  type: SET_EVENTS_LOADING,
+export const eventsLoadFailed = () => <const>{
+  type: EVENTS_LOAD_FAILED,
 };
 
-export const setEventsError = () => <const>{
-  type: SET_EVENTS_ERROR,
+export const resetState = () => <const>{
+  type: RESET,
 };
 
-export function getEvents() {
-  return function (dispatch: DispatchAction) {
-    dispatch(setEventsLoading());
-
-    fetch(`${PREFIX_URL}/api/events`)
-      .then((res) => res.json())
-      .then((res) => {
-        dispatch(setEvents(res));
-      })
-      .catch((error) => {
-        dispatch(setEventsError());
-      });
-  };
-}
+export const getEvents = () => async (dispatch: DispatchAction) => {
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/events`);
+    const events = await response.json() as Event.List;
+    dispatch(eventsLoaded(events));
+  } catch (e) {
+    dispatch(eventsLoadFailed());
+  }
+};

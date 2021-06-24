@@ -23,6 +23,7 @@ const adminEventListEventAttrs = [
 ] as const;
 
 export const eventListQuotaAttrs = [
+  'id',
   'title',
   'size',
   'signupCount',
