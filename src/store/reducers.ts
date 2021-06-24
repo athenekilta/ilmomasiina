@@ -4,6 +4,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { combineReducers, Reducer } from 'redux';
 
 import admin from '../modules/admin/reducer';
+import auth from '../modules/auth/reducer';
 import editor from '../modules/editor/reducer';
 import editSignup from '../modules/editSignup/reducer';
 import events from '../modules/events/reducer';
@@ -19,6 +20,7 @@ export const makeRootReducer = (
   history: History,
 ) => combineReducers({
   router: connectRouter(history),
+  auth,
   admin,
   editor,
   events,

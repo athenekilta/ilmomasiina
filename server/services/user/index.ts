@@ -18,7 +18,9 @@ export interface UserCreateBody {
 }
 
 // Response schema for user requests.
-export interface UserListItem extends Pick<User, 'id' | 'email'> {}
+export interface UserDetails extends Pick<User, 'id' | 'email'> {}
+
+export type UserListItem = UserDetails;
 
 export type UserListResponse = UserListItem[];
 

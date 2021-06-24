@@ -2,7 +2,7 @@ import React from 'react';
 
 import { CSVLink } from 'react-csv';
 
-import { deleteSignup } from '../../../modules/admin/actions';
+import { deleteSignup, getEvent } from '../../../modules/editor/actions';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
 import { getSignupsForAdminList } from '../../../utils/signupUtils';
 
@@ -44,10 +44,7 @@ const SignupsTab = () => {
         <tbody>
           {signups.map((signup, index) => (
             <tr key={signup.id}>
-              <td key="position">
-                {index + 1}
-                .
-              </td>
+              <td key="position">{`${index + 1}.`}</td>
               <td key="firstName">{signup.firstName}</td>
               <td key="lastName">{signup.lastName}</td>
               <td key="email">{signup.lastName}</td>
@@ -60,12 +57,13 @@ const SignupsTab = () => {
                 <button
                   type="button"
                   className="btn btn-danger"
-                  onClick={() => {
+                  onClick={async () => {
                     const confirmation = window.confirm(
                       'Oletko varma? Poistamista ei voi perua.',
                     );
                     if (confirmation) {
-                      dispatch(deleteSignup(signup.id!, event.id));
+                      await dispatch(deleteSignup(signup.id!));
+                      dispatch(getEvent(event.id));
                     }
                   }}
                 >

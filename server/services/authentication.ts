@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 import config from '../config';
 import { IlmoApplication } from '../defs';
+import { UserDetails } from './user';
 
 // By default, LocalStrategy calls GET /api/users with provider=rest to get the subject.
 // As we disallow that API externally, we need to drop the provider param from the call.
@@ -15,6 +16,12 @@ class CustomLocalStrategy extends LocalStrategy {
     const entity = await super.getEntity(result, _.omit(params, 'provider'));
     return entity && _.pick(entity, 'id', 'email');
   }
+}
+
+// Response schema.
+export interface AuthResponse {
+  accessToken: string;
+  user: UserDetails;
 }
 
 export default function (this: IlmoApplication) {

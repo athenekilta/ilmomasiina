@@ -10,7 +10,7 @@ import { ThemeProvider } from 'theme-ui';
 
 import CoreLayout from '../layouts/CoreLayout';
 import PageNotFound from '../routes/404/PageNotFound';
-import Admin from '../routes/Admin/AdminEventsList';
+import Admin from '../routes/Admin';
 import Editor from '../routes/Editor';
 import EditSignup from '../routes/EditSignup';
 import Events from '../routes/Events/EventList';

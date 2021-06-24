@@ -1,8 +1,6 @@
-export const SET_EVENTS = 'admin/SET_EVENTS';
-export const SET_EVENTS_LOADING = 'admin/SET_EVENTS_LOADING';
-export const SET_EVENTS_ERROR = 'admin/SET_EVENTS_ERROR';
-export const SET_ACCESS_TOKEN = 'admin/SET_ACCESS_TOKEN';
-export const SET_LOGIN_LOADING = 'admin/SET_LOGIN_LOADING';
-export const SET_LOGIN_ERROR = 'admin/SET_LOGIN_ERROR';
-export const CLEAR_STATE = 'admin/CLEAR_STATE';
-export const SET_LOGIN_STATUS = 'admin/SET_LOGIN_STATUS';
+export const EVENTS_LOADED = 'admin/EVENTS_LOADED';
+export const EVENTS_LOAD_FAILED = 'admin/EVENTS_LOAD_FAILED';
+export const USER_CREATING = 'admin/USER_CREATING';
+export const USER_CREATE_FAILED = 'admin/USER_CREATE_FAILED';
+export const USER_CREATED = 'admin/USER_CREATED';
+export const RESET = 'admin/RESET';

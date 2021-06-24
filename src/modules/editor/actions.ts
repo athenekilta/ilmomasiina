@@ -1,5 +1,7 @@
 import { AdminEvent } from '../../api/adminEvents';
-import { DispatchAction } from '../../store/types';
+import { Event } from '../../api/events';
+import { Signup } from '../../api/signups';
+import { DispatchAction, GetState } from '../../store/types';
 import {
   EVENT_LOAD_FAILED,
   EVENT_LOADED,
@@ -53,10 +55,11 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   })),
 });
 
-export const getEvent = (id: number | string, token: string) => async (dispatch: DispatchAction) => {
+export const getEvent = (id: Event.Id | string) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
   try {
     const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
-      headers: { Authorization: token },
+      headers: { Authorization: accessToken! },
     });
     const event = await response.json() as AdminEvent.Details;
     const formData = serverEventToEditor(event);
@@ -66,17 +69,18 @@ export const getEvent = (id: number | string, token: string) => async (dispatch:
   }
 };
 
-export const publishNewEvent = (data: EditorEvent, token: string) => async (dispatch: DispatchAction) => {
+export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 
   const cleaned = editorEventToServer(data);
+  const { accessToken } = getState().auth;
 
   try {
     const response = await fetch(`${PREFIX_URL}/api/admin/events`, {
       method: 'POST',
       body: JSON.stringify(cleaned),
       headers: {
-        Authorization: token,
+        Authorization: accessToken!,
         'Content-Type': 'application/json; charset=utf-8',
       },
     });
@@ -93,19 +97,20 @@ export const publishNewEvent = (data: EditorEvent, token: string) => async (disp
   }
 };
 
-export const publishEventUpdate = (id: number | string, data: EditorEvent, token: string) => async (
-  dispatch: DispatchAction,
-) => {
+export const publishEventUpdate = (
+  id: Event.Id | string, data: EditorEvent,
+) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 
   const cleaned = editorEventToServer(data);
+  const { accessToken } = getState().auth;
 
   try {
     const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(cleaned),
       headers: {
-        Authorization: token,
+        Authorization: accessToken!,
         'Content-Type': 'application/json; charset=utf-8',
       },
     });
@@ -119,5 +124,25 @@ export const publishEventUpdate = (id: number | string, data: EditorEvent, token
   } catch (e) {
     dispatch(saveFailed());
     throw new Error(e);
+  }
+};
+
+export const deleteSignup = (id: Signup.Id) => async (
+  dispatch: DispatchAction,
+  getState: GetState,
+) => {
+  const { accessToken } = getState().auth;
+
+  try {
+    const response = await fetch(`${PREFIX_URL}/api/admin/signups/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: accessToken! },
+    });
+    if (response.status > 299) {
+      throw new Error(response.statusText);
+    }
+    return true;
+  } catch (e) {
+    return false;
   }
 };

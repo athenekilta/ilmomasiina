@@ -1,46 +1,62 @@
 /** @jsx jsx */
-import { Box, Button, Input } from '@theme-ui/components';
-import { Spinner } from '@theme-ui/components';
-import { useForm } from 'react-hook-form';
-import { jsx } from 'theme-ui';
+import { FormEventHandler } from 'react';
+
+import { Field, Formik, FormikHelpers } from 'formik';
+import { toast } from 'react-toastify';
+import {
+  Box, Button, Input, jsx, Spinner,
+} from 'theme-ui';
+
+import { createUser } from '../../modules/admin/actions';
+import { useTypedDispatch } from '../../store/reducers';
 
 type FormData = {
   email: string;
 };
 
-type Props = {
-  handleCreateUser: (email: string) => void;
-  loading: boolean;
-};
+const UserForm = () => {
+  const dispatch = useTypedDispatch();
 
-const UserForm = (props: Props) => {
-  const { handleCreateUser, loading } = props;
-  const {
-    register, setValue, handleSubmit, errors,
-  } = useForm<FormData>();
-
-  const onSubmit = (data) => {
-    handleCreateUser(data.email);
+  const onSubmit = async (data: FormData, { setSubmitting }: FormikHelpers<FormData>) => {
+    // TODO: better error handling
+    const success = await dispatch(createUser(data));
+    if (success) {
+      toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 });
+    } else {
+      toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
+    }
+    setSubmitting(false);
   };
 
   return (
-    <Box
-      sx={{
-        maxWidth: 256,
+    <Formik
+      initialValues={{
+        email: '',
       }}
-      as="form"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={onSubmit}
     >
-      <Input
-        name="email"
-        type="email"
-        placeholder="Sähköposti"
-        ref={register({ required: true })}
-      />
-      <Button type="submit" variant="secondary">
-        {loading ? <Spinner /> : 'Luo uusi käyttäjä'}
-      </Button>
-    </Box>
+      {({ isSubmitting, handleSubmit }) => (
+        <Box
+          sx={{
+            maxWidth: 256,
+          }}
+          as="form"
+          onSubmit={handleSubmit as any as FormEventHandler<HTMLDivElement>}
+        >
+          <Field
+            as={Input}
+            name="email"
+            id="email"
+            type="email"
+            placeholder="Sähköposti"
+            aria-label="Sähköposti"
+          />
+          <Button type="submit" variant="secondary" disabled={isSubmitting}>
+            {isSubmitting ? <Spinner /> : 'Luo uusi käyttäjä'}
+          </Button>
+        </Box>
+      )}
+    </Formik>
   );
 };
 

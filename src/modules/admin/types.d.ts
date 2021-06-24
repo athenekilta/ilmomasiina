@@ -1,32 +1,23 @@
-import { Event } from '../types';
+import { AdminEvent } from '../../api/adminEvents';
 import {
-  clearState,
-  setAccessToken,
-  setEvents,
-  setEventsError,
-  setEventsLoading,
-  setLoginError,
-  setLoginLoading,
-  setLoginStatus,
+  eventsLoaded,
+  eventsLoadFailed,
+  resetState,
+  userCreated,
+  userCreateFailed,
+  userCreating,
 } from './actions';
 
 interface AdminState {
-  events: Event[];
-  eventsLoading: boolean;
-  eventsError: boolean;
-  accessToken?: string;
-  accessTokenExpires?: string;
-  loginLoading: boolean;
-  loginError: boolean;
-  loggedIn: boolean;
+  events: AdminEvent.List | null;
+  eventsLoadError: boolean;
+  userCreating: boolean;
 }
 
 type AdminActions =
-  | ReturnType<typeof setEvents>
-  | ReturnType<typeof setEventsLoading>
-  | ReturnType<typeof setEventsError>
-  | ReturnType<typeof setAccessToken>
-  | ReturnType<typeof clearState>
-  | ReturnType<typeof setLoginStatus>
-  | ReturnType<typeof setLoginLoading>
-  | ReturnType<typeof setLoginError>;
+  | ReturnType<typeof eventsLoaded>
+  | ReturnType<typeof eventsLoadFailed>
+  | ReturnType<typeof userCreateFailed>
+  | ReturnType<typeof userCreating>
+  | ReturnType<typeof userCreated>
+  | ReturnType<typeof resetState>;

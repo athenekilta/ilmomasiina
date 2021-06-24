@@ -1,26 +1,17 @@
-import moment from 'moment';
-
 import {
-  CLEAR_STATE,
-  SET_ACCESS_TOKEN,
-  SET_EVENTS,
-  SET_EVENTS_ERROR,
-  SET_EVENTS_LOADING,
-  SET_LOGIN_ERROR,
-  SET_LOGIN_LOADING,
-  SET_LOGIN_STATUS,
+  EVENTS_LOAD_FAILED,
+  EVENTS_LOADED,
+  RESET,
+  USER_CREATE_FAILED,
+  USER_CREATED,
+  USER_CREATING,
 } from './actionTypes';
 import { AdminActions, AdminState } from './types';
 
 const initialState: AdminState = {
-  events: [],
-  eventsLoading: false,
-  eventsError: false,
-  accessToken: undefined,
-  accessTokenExpires: undefined,
-  loginLoading: false,
-  loginError: false,
-  loggedIn: false,
+  events: null,
+  eventsLoadError: false,
+  userCreating: false,
 };
 
 export default function reducer(
@@ -28,52 +19,29 @@ export default function reducer(
   action: AdminActions,
 ): AdminState {
   switch (action.type) {
-    case SET_EVENTS:
+    case EVENTS_LOADED:
       return {
         ...state,
         events: action.payload,
-        eventsLoading: false,
+        eventsLoadError: false,
       };
-    case SET_EVENTS_LOADING:
+    case EVENTS_LOAD_FAILED:
       return {
         ...state,
-        eventsLoading: true,
-        eventsError: false,
+        eventsLoadError: true,
       };
-    case SET_EVENTS_ERROR:
+    case USER_CREATING:
       return {
         ...state,
-        eventsLoading: false,
-        eventsError: true,
+        userCreating: true,
       };
-    case SET_ACCESS_TOKEN:
+    case USER_CREATE_FAILED:
+    case USER_CREATED:
       return {
         ...state,
-        accessToken: action.payload,
-        accessTokenExpires: moment(new Date())
-          .add(60, 'm')
-          .toDate()
-          .toISOString(),
-        loginLoading: false,
+        userCreating: false,
       };
-    case SET_LOGIN_LOADING:
-      return {
-        ...state,
-        loginLoading: true,
-        loginError: false,
-      };
-    case SET_LOGIN_ERROR:
-      return {
-        ...state,
-        loginLoading: false,
-        loginError: true,
-      };
-    case SET_LOGIN_STATUS:
-      return {
-        ...state,
-        loggedIn: action.payload,
-      };
-    case CLEAR_STATE:
+    case RESET:
       return initialState;
     default:
       return state;

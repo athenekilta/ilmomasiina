@@ -17,7 +17,7 @@ import {
 import { StringifyApi } from './utils';
 
 export namespace Signup {
-  export type Id = Details['id'];
+  export type Id = Details.Signup['id'];
 
   export type Details = StringifyApi<_SignupGetResponse>;
   export namespace Details {

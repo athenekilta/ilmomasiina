@@ -3,35 +3,51 @@ import React from 'react';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
+import { AdminEvent } from '../../api/adminEvents';
 import Separator from '../../components/Separator';
-import { Event } from '../../modules/types';
+import { deleteEvent, getAdminEvents } from '../../modules/admin/actions';
+import { useTypedDispatch } from '../../store/reducers';
 
 type Props = {
-  onDelete: (eventId: string) => void;
-  data: Event;
-  signups: number;
+  event: AdminEvent.List.Event;
 };
 
-const AdminEventListItem = (props: Props) => {
-  const { data, onDelete, signups } = props;
+const AdminEventListItem = ({ event }: Props) => {
+  const dispatch = useTypedDispatch();
+
+  async function onDelete() {
+    const confirmed = window.confirm(
+      'Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.',
+    );
+    if (confirmed) {
+      const success = await dispatch(deleteEvent(event.id));
+      if (!success) {
+        toast.error('Poisto epäonnistui :(', { autoClose: 2000 });
+      }
+      dispatch(getAdminEvents());
+    }
+  }
 
   return (
     <tr>
       <td>
-        <Link to={`${PREFIX_URL}/event/${data.id}`}>{data.title}</Link>
+        <Link to={`${PREFIX_URL}/event/${event.id}`}>{event.title}</Link>
       </td>
-      <td>{data.date ? moment(data.date).format('DD.MM.YYYY') : ''}</td>
-      <td>{data.draft ? 'Luonnos' : 'Julkaistu'}</td>
-      <td>{Number(signups)}</td>
+      <td>{event.date ? moment(event.date).format('DD.MM.YYYY') : ''}</td>
+      <td>{event.draft ? 'Luonnos' : 'Julkaistu'}</td>
+      <td>{_.sum(_.map(event.quota, 'signupCount'))}</td>
       <td>
-        <Link to={`${PREFIX_URL}/admin/edit/${data.id}`}>
+        <Link to={`${PREFIX_URL}/admin/edit/${event.id}`}>
           Muokkaa tapahtumaa
         </Link>
 
         <Separator />
 
-        <a onClick={() => onDelete(data.id)}>Poista tapahtuma</a>
+        <button type="button" className="btn btn-link" onClick={onDelete}>
+          Poista tapahtuma
+        </button>
       </td>
     </tr>
   );

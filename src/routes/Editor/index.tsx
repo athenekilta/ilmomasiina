@@ -61,7 +61,6 @@ const defaultEvent = (): EditorEvent => ({
 
 const Editor = ({ history, match }: Props) => {
   const dispatch = useTypedDispatch();
-  const adminToken = useTypedSelector((state) => state.admin.accessToken);
   const {
     event, formData, loadError,
   } = useTypedSelector(
@@ -76,7 +75,7 @@ const Editor = ({ history, match }: Props) => {
     if (eventId !== 'new') {
       dispatch(loaded(null, defaultEvent()));
     } else {
-      dispatch(getEvent(eventId, adminToken!));
+      dispatch(getEvent(eventId));
     }
     return () => {
       dispatch(resetState());
@@ -92,10 +91,10 @@ const Editor = ({ history, match }: Props) => {
 
     try {
       if (match.params.id === 'new') {
-        const newEvent = await dispatch(publishNewEvent(modifiedEvent, adminToken!));
+        const newEvent = await dispatch(publishNewEvent(modifiedEvent));
         history.push(`${PREFIX_URL}/admin/edit/${newEvent.id}`);
       } else {
-        await dispatch(publishEventUpdate(event!.id, modifiedEvent, adminToken!));
+        await dispatch(publishEventUpdate(event!.id, modifiedEvent));
         toast.success('Muutoksesi tallennettiin onnistuneesti!', {
           autoClose: 2000,
         });

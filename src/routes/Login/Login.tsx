@@ -5,7 +5,7 @@ import {
 import { Field, Formik, FormikHelpers } from 'formik';
 import { jsx } from 'theme-ui';
 
-import { login } from '../../modules/admin/actions';
+import { login } from '../../modules/auth/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
 type FormData = {
@@ -15,7 +15,7 @@ type FormData = {
 
 const Login = () => {
   const dispatch = useTypedDispatch();
-  const { loginError } = useTypedSelector((state) => state.admin);
+  const { loginError } = useTypedSelector((state) => state.auth);
 
   async function onSubmit(data: FormData, { setSubmitting }: FormikHelpers<FormData>) {
     const { email, password } = data;
