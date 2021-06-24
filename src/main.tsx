@@ -5,18 +5,18 @@ import ReactDOM from 'react-dom';
 
 import 'react-dates/initialize';
 
-import { sentryDsn } from '../config/ilmomasiina.config.js';
 import AppContainer from './containers/AppContainer';
 
 import 'react-dates/lib/css/_datepicker.css';
 
-if (process.env.NODE_ENV !== 'production') {
+if (!PROD) {
+  // eslint-disable-next-line global-require
   const whyDidYouRender = require('@welldone-software/why-did-you-render');
   whyDidYouRender(React);
 }
 
-if (PROD) {
-  Sentry.init({ dsn: sentryDsn });
+if (PROD && SENTRY_DSN) {
+  Sentry.init({ dsn: SENTRY_DSN });
 }
 
 ReactDOM.render(<AppContainer />, document.getElementById('root'));

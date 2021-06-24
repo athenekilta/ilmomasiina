@@ -24,11 +24,11 @@ export interface AuthResponse {
   user: UserDetails;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupAuthentication(this: IlmoApplication) {
   const app = this;
 
   // Generate super-long-lived JWTs in development mode
-  const expiresIn = process.env.NODE_ENV === 'development' ? '365d' : '1h';
+  const expiresIn = config.nodeEnv === 'development' ? '365d' : '1h';
 
   // Set up authentication with the secret
   app.set('authentication', {

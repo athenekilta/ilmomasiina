@@ -22,19 +22,6 @@
   "env": {
     "browser": true
   },
-  "globals": {
-    "DEV": false,
-    "TEST": false,
-    "PROD": false,
-    "COVERAGE": false,
-    "BASENAME": true,
-    "PREFIX_URL": true,
-    "BRANDING_HEADER_TITLE": true,
-    "BRANDING_FOOTER_GDPR_TEXT": true,
-    "BRANDING_FOOTER_GDPR_LINK": true,
-    "BRANDING_FOOTER_HOME_TEXT": true,
-    "BRANDING_FOOTER_HOME_LINK": true
-  },
   "rules": {
     "max-len": ["error", 120, 2],
     "@typescript-eslint/semi": ["error", "always"],

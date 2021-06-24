@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { withRouter } from 'react-router-dom';
+import React, { ReactNode } from 'react';
 
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
@@ -8,7 +6,11 @@ import Header from '../../components/Header';
 import './CoreLayout.scss';
 import '../../styles/core.scss';
 
-const CoreLayout: React.FC = ({ children }) => (
+type Props = {
+  children: ReactNode;
+};
+
+const CoreLayout = ({ children }: Props) => (
   <div className="layout-wrapper">
     <Header />
     <div className="page-wrapper">{children}</div>
@@ -16,4 +18,4 @@ const CoreLayout: React.FC = ({ children }) => (
   </div>
 );
 
-export default withRouter(CoreLayout);
+export default CoreLayout;

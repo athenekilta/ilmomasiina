@@ -3,24 +3,12 @@ const path = require('path');
 const debug = require('debug')('app:config:project');
 const { argv } = require('yargs');
 
-const {
-  NODE_ENV,
-  PREFIX_URL,
-  PORT,
-  BASENAME,
-  BRANDING_HEADER_TITLE_TEXT,
-  BRANDING_FOOTER_GDPR_TEXT,
-  BRANDING_FOOTER_GDPR_LINK,
-  BRANDING_FOOTER_HOME_TEXT,
-  BRANDING_FOOTER_HOME_LINK,
-} = process.env;
-
 debug('Creating default configuration.');
 // ========================================================
 // Default Configuration
 // ========================================================
 const config = {
-  env: NODE_ENV || 'development',
+  env: process.env.NODE_ENV || 'development',
 
   // ----------------------------------
   // Project Structure
@@ -36,7 +24,7 @@ const config = {
   // Server Configuration
   // ----------------------------------
   server_host: 'localhost', // use string 'localhost' to prevent exposure on local network
-  server_port: PORT || 3000,
+  server_port: process.env.PORT || 3000,
 
   // ----------------------------------
   // Compiler Configuration
@@ -103,13 +91,15 @@ config.globals = {
   PROD: config.env === 'production',
   TEST: config.env === 'test',
   COVERAGE: !argv.watch && config.env === 'test',
-  BASENAME: JSON.stringify(BASENAME || ''),
-  PREFIX_URL: JSON.stringify(PREFIX_URL || ''),
-  BRANDING_HEADER_TITLE: JSON.stringify(BRANDING_HEADER_TITLE_TEXT),
-  BRANDING_FOOTER_GDPR_TEXT: JSON.stringify(BRANDING_FOOTER_GDPR_TEXT),
-  BRANDING_FOOTER_GDPR_LINK: JSON.stringify(BRANDING_FOOTER_GDPR_LINK),
-  BRANDING_FOOTER_HOME_TEXT: JSON.stringify(BRANDING_FOOTER_HOME_TEXT),
-  BRANDING_FOOTER_HOME_LINK: JSON.stringify(BRANDING_FOOTER_HOME_LINK),
+
+  SENTRY_DSN: JSON.stringify(process.env.SENTRY_DSN || ''),
+
+  PREFIX_URL: JSON.stringify(process.env.PATH_PREFIX || ''),
+  BRANDING_HEADER_TITLE: JSON.stringify(process.env.BRANDING_HEADER_TITLE_TEXT),
+  BRANDING_FOOTER_GDPR_TEXT: JSON.stringify(process.env.BRANDING_FOOTER_GDPR_TEXT),
+  BRANDING_FOOTER_GDPR_LINK: JSON.stringify(process.env.BRANDING_FOOTER_GDPR_LINK),
+  BRANDING_FOOTER_HOME_TEXT: JSON.stringify(process.env.BRANDING_FOOTER_HOME_TEXT),
+  BRANDING_FOOTER_HOME_LINK: JSON.stringify(process.env.BRANDING_FOOTER_HOME_LINK),
 };
 
 // ------------------------------------
@@ -121,13 +111,12 @@ config.compiler_vendors = config.compiler_vendors.filter((dep) => {
   // eslint-disable-line
   if (pkg.dependencies[dep]) return true;
 
-  /* eslint-disable */
   debug(
-    `Package "${dep}" was not found as an npm dependency in package.json; ` +
-      `it won't be included in the webpack vendor bundle.
-       Consider removing it from \`compiler_vendors\` in ~/config/index.js`
+    `Package "${dep}" was not found as an npm dependency in package.json; `
+      + 'it won\'t be included in the webpack vendor bundle.\n'
+      + 'Consider removing it from `compiler_vendors` in ~/config/project.config.js',
   );
-  /* eslint-enable */
+  return false;
 });
 
 // ------------------------------------

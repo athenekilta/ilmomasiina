@@ -37,7 +37,7 @@ export default async (signup: Signup) => {
     edited: answers.some((answer) => answer.createdAt.getTime() !== answer.updatedAt.getTime()),
     date: moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm'),
     event,
-    cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${signup.id}/${editToken}`,
+    cancelLink: `${config.mailUrlBase}${config.pathPrefix}/signup/${signup.id}/${editToken}`,
   };
 
   EmailService.sendConfirmationMail(signup.email!, params);

@@ -17,7 +17,7 @@ export class EventsService extends AdapterService<EventsServiceResponses> {
   }
 
   _get(id: Id) {
-    return getEventDetails(Number(id));
+    return getEventDetails(Number(id), false);
   }
 
   _create(): never {

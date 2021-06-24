@@ -31,7 +31,7 @@ docker-compose up
 This should build and run the environment so that it is accesible at [localhost:3000](http://localhost:3000). You will need to create an `.env` file in project root (see [ENV.md](ENV.md)).
 
 ### Create fake data
-Use `docker exec ilmomasiina_backend_1 npm run create-fake-data` to create some data to dockerized Ilmomasiina. The server does not like an empty database, so this is a really good idea to do when first starting the server. 
+Use `docker exec ilmomasiina_backend_1 npm run create-fake-data` to create some data to dockerized Ilmomasiina. The server does not like an empty database, so this is a really good idea to do when first starting the server.
 
 ## MySQL Setup
 Only follow this if you don't use the Docker container.
@@ -52,7 +52,7 @@ Only follow this if you don't use the Docker container.
 4. Follow Mac instructions
 5. Fix permissions (this is probably too permissive, but it works): `GRANT ALL PRIVILEGES ON *.* TO 'sampo'@'localhost' WITH GRANT OPTION;`
 6. Exit with `exit` and sign in with your new user e. g. `mysql -u juuso -p` (don't use `mysql -u juuso -p password`)
-7. Follow Mac instructions step 6 
+7. Follow Mac instructions step 6
 
 ## Getting started
 If you are using the Docker container, only follow step 1 as rest are automatically executed.
@@ -111,8 +111,8 @@ Example of `.htaccess` config:
 Example of relevant lines in .env file
 
 ```
-BASE_URL=https://athene.fi
-PREFIX_URL=/ilmo
+EMAIL_BASE_URL=https://athene.fi
+PATH_PREFIX=/ilmo
 PORT=2011
 ```
 

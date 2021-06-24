@@ -77,7 +77,7 @@ export default function configureUserService(this: IlmoApplication) {
       // Return only id and email for API responses.
       find: [iff(isProvider('external'), keep('id', 'email'))],
       // Send welcome email to new users.
-      create: [sendEmail()],
+      create: [sendEmail(), keep('id', 'email')],
       // Return only id for delete responses.
       remove: [keep('id')],
     },
