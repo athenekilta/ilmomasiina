@@ -1,3 +1,4 @@
+import apiFetch from '../../api';
 import { Event } from '../../api/events';
 import { DispatchAction } from '../../store/types';
 import {
@@ -21,9 +22,8 @@ export const resetState = () => <const>{
 
 export const getEvents = () => async (dispatch: DispatchAction) => {
   try {
-    const response = await fetch(`${PREFIX_URL}/api/events`);
-    const events = await response.json() as Event.List;
-    dispatch(eventsLoaded(events));
+    const response = await apiFetch('events') as Event.List;
+    dispatch(eventsLoaded(response));
   } catch (e) {
     dispatch(eventsLoadFailed());
   }

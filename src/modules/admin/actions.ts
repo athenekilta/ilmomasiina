@@ -1,3 +1,4 @@
+import apiFetch from '../../api';
 import { AdminEvent } from '../../api/adminEvents';
 import { Event } from '../../api/events';
 import { User } from '../../api/users';
@@ -40,11 +41,8 @@ export const getAdminEvents = () => async (dispatch: DispatchAction, getState: G
   const { accessToken } = getState().auth;
 
   try {
-    const response = await fetch(`${PREFIX_URL}/api/admin/events`, {
-      headers: { Authorization: accessToken! },
-    });
-    const data = await response.json();
-    dispatch(eventsLoaded(data as AdminEvent.List));
+    const response = await apiFetch('admin/events', { accessToken });
+    dispatch(eventsLoaded(response as AdminEvent.List));
   } catch (e) {
     dispatch(eventsLoadFailed());
   }
@@ -57,13 +55,10 @@ export const deleteEvent = (id: Event.Id) => async (
   const { accessToken } = getState().auth;
 
   try {
-    const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
+    await apiFetch(`admin/events/${id}`, {
+      accessToken,
       method: 'DELETE',
-      headers: { Authorization: accessToken! },
     });
-    if (response.status > 299) {
-      throw new Error(response.statusText);
-    }
     return true;
   } catch (e) {
     return false;
@@ -76,17 +71,11 @@ export const createUser = (data: User.Create.Body) => async (dispatch: DispatchA
   const { accessToken } = getState().auth;
 
   try {
-    const response = await fetch(`${PREFIX_URL}/api/users`, {
+    await apiFetch('users', {
+      accessToken,
       method: 'POST',
-      headers: {
-        Authorization: accessToken!,
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      body: JSON.stringify(data),
+      body: data,
     });
-    if (response.status > 299) {
-      throw new Error(response.statusText);
-    }
     dispatch(userCreated());
     return true;
   } catch (e) {

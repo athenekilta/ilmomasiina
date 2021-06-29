@@ -1,3 +1,4 @@
+import apiFetch from '../../api';
 import { Event, Quota } from '../../api/events';
 import { Signup } from '../../api/signups';
 import { DispatchAction } from '../../store/types';
@@ -50,9 +51,8 @@ export const getEvent = (eventId: Event.Id | string) => async (
   dispatch: DispatchAction,
 ) => {
   try {
-    const response = await fetch(`${PREFIX_URL}/api/events/${eventId}`);
-    const event = await response.json();
-    dispatch(eventLoaded(event));
+    const response = await apiFetch(`events/${eventId}`) as Event.Details;
+    dispatch(eventLoaded(response));
   } catch (e) {
     dispatch(eventLoadFailed());
   }
@@ -61,13 +61,11 @@ export const getEvent = (eventId: Event.Id | string) => async (
 export const createPendingSignup = (quotaId: Quota.Id) => async (dispatch: DispatchAction) => {
   dispatch(signupSubmitting());
   try {
-    const response = await fetch(`${PREFIX_URL}/api/signups`, {
+    const response = await apiFetch('signups', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({ quotaId }),
-    });
-    const signup = await response.json();
-    dispatch(pendingSignupCreated(signup as Signup.Create.Response));
+      body: { quotaId },
+    }) as Signup.Create.Response;
+    dispatch(pendingSignupCreated(response));
     return true;
   } catch (e) {
     dispatch(signupSubmitFailed());
@@ -80,18 +78,13 @@ export const completeSignup = (
 ) => async (dispatch: DispatchAction) => {
   dispatch(signupSubmitting());
   try {
-    const response = await fetch(`${PREFIX_URL}/api/signups/${signupId}`, {
+    await apiFetch(`signups/${signupId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({
+      body: {
         ...data,
         editToken,
-      }),
+      },
     });
-    if (response.status > 299) {
-      const error = await response.json();
-      throw new Error(error.message);
-    }
     dispatch(signupComplete());
     return true;
   } catch (e) {
@@ -103,12 +96,9 @@ export const completeSignup = (
 export const cancelPendingSignup = (signupId: Signup.Id, editToken: string) => async (dispatch: DispatchAction) => {
   dispatch(signupSubmitting());
   try {
-    const response = await fetch(`${PREFIX_URL}/api/signups/${signupId}?editToken=${editToken}`, {
+    await apiFetch(`signups/${signupId}?editToken=${editToken}`, {
       method: 'DELETE',
     });
-    if (response.status > 299) {
-      throw new Error(response.statusText);
-    }
     dispatch(signupCancelled());
     return true;
   } catch (e) {

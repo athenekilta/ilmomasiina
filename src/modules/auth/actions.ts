@@ -1,5 +1,6 @@
 import { push } from 'connected-react-router';
 
+import apiFetch from '../../api';
 import { Auth } from '../../api/auth';
 import { DispatchAction } from '../../store/types';
 import {
@@ -30,16 +31,15 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
   dispatch(loggingIn());
 
   try {
-    const response = await fetch(`${PREFIX_URL}/api/authentication`, {
+    const response = await apiFetch('authentication', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: `strategy=local&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`,
-    });
-    if (response.status > 299) {
-      throw new Error(response.statusText);
-    }
-    const user = await response.json() as Auth.Response;
-    dispatch(loginSucceeded(user.accessToken));
+      body: {
+        strategy: 'local',
+        email,
+        password,
+      },
+    }) as Auth.Response;
+    dispatch(loginSucceeded(response.accessToken));
     dispatch(push(`${PREFIX_URL}/admin`));
     return true;
   } catch (e) {

@@ -1,3 +1,4 @@
+import apiFetch from '../../api';
 import { AdminEvent } from '../../api/adminEvents';
 import { Event } from '../../api/events';
 import { Signup } from '../../api/signups';
@@ -58,12 +59,9 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
 export const getEvent = (id: Event.Id | string) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
   try {
-    const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
-      headers: { Authorization: accessToken! },
-    });
-    const event = await response.json() as AdminEvent.Details;
-    const formData = serverEventToEditor(event);
-    dispatch(loaded(event, formData));
+    const response = await apiFetch(`admin/events/${id}`, { accessToken }) as AdminEvent.Details;
+    const formData = serverEventToEditor(response);
+    dispatch(loaded(response, formData));
   } catch (e) {
     dispatch(loadFailed());
   }
@@ -76,21 +74,14 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
   const { accessToken } = getState().auth;
 
   try {
-    const response = await fetch(`${PREFIX_URL}/api/admin/events`, {
+    const response = await apiFetch('admin/events', {
+      accessToken,
       method: 'POST',
-      body: JSON.stringify(cleaned),
-      headers: {
-        Authorization: accessToken!,
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    });
-    if (response.status > 201) {
-      throw new Error(response.statusText);
-    }
-    const newEvent = await response.json() as AdminEvent.Details;
-    const newFormData = serverEventToEditor(newEvent);
-    dispatch(loaded(newEvent, newFormData));
-    return newEvent;
+      body: cleaned,
+    }) as AdminEvent.Details;
+    const newFormData = serverEventToEditor(response);
+    dispatch(loaded(response, newFormData));
+    return response;
   } catch (e) {
     dispatch(saveFailed());
     throw new Error(e);
@@ -106,21 +97,14 @@ export const publishEventUpdate = (
   const { accessToken } = getState().auth;
 
   try {
-    const response = await fetch(`${PREFIX_URL}/api/admin/events/${id}`, {
+    const response = await apiFetch(`admin/events/${id}`, {
+      accessToken,
       method: 'PATCH',
-      body: JSON.stringify(cleaned),
-      headers: {
-        Authorization: accessToken!,
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    });
-    if (response.status > 201) {
-      throw new Error(response.statusText);
-    }
-    const newEvent = await response.json() as AdminEvent.Details;
-    const newFormData = serverEventToEditor(newEvent);
-    dispatch(loaded(newEvent, newFormData));
-    return newEvent;
+      body: cleaned,
+    }) as AdminEvent.Details;
+    const newFormData = serverEventToEditor(response);
+    dispatch(loaded(response, newFormData));
+    return response;
   } catch (e) {
     dispatch(saveFailed());
     throw new Error(e);
@@ -134,13 +118,10 @@ export const deleteSignup = (id: Signup.Id) => async (
   const { accessToken } = getState().auth;
 
   try {
-    const response = await fetch(`${PREFIX_URL}/api/admin/signups/${id}`, {
+    await apiFetch(`admin/signups/${id}`, {
+      accessToken,
       method: 'DELETE',
-      headers: { Authorization: accessToken! },
     });
-    if (response.status > 299) {
-      throw new Error(response.statusText);
-    }
     return true;
   } catch (e) {
     return false;

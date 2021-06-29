@@ -1,3 +1,4 @@
+import apiFetch from '../../api';
 import { Signup } from '../../api/signups';
 import { DispatchAction } from '../../store/types';
 import {
@@ -35,9 +36,8 @@ export const resetState = () => <const>{ type: RESET };
 
 export const getSignupAndEvent = (id: Signup.Id | string, editToken: string) => async (dispatch: DispatchAction) => {
   try {
-    const response = await fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`);
-    const data = await response.json();
-    dispatch(signupLoaded(data as Signup.Details));
+    const response = await apiFetch(`signups/${id}?editToken=${editToken}`);
+    dispatch(signupLoaded(response as Signup.Details));
     return true;
   } catch (e) {
     dispatch(signupLoadFailed());
@@ -50,18 +50,13 @@ export const updateSignup = (
 ) => async (dispatch: DispatchAction) => {
   dispatch(signupSubmitting());
   try {
-    const response = await fetch(`${PREFIX_URL}/api/signups/${signupId}`, {
+    await apiFetch(`signups/${signupId}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
-      body: JSON.stringify({
+      body: {
         ...data,
         editToken,
-      }),
+      },
     });
-    if (response.status > 299) {
-      const error = await response.json();
-      throw new Error(error.message);
-    }
     dispatch(signupUpdated());
     return true;
   } catch (e) {
@@ -73,12 +68,9 @@ export const updateSignup = (
 export const deleteSignup = (id: Signup.Id, editToken: string) => async (dispatch: DispatchAction) => {
   dispatch(signupSubmitting());
   try {
-    const response = await fetch(`${PREFIX_URL}/api/signups/${id}?editToken=${editToken}`, {
+    await apiFetch(`signups/${id}?editToken=${editToken}`, {
       method: 'DELETE',
     });
-    if (response.status > 299) {
-      throw new Error(response.statusText);
-    }
     dispatch(signupDeleted());
     return true;
   } catch (e) {
