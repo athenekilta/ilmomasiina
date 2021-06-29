@@ -46,7 +46,10 @@ export default async (signup: Signup) => {
     } else {
       // Count how many signups (older than this one) don't fit each quota.
       // This is our position in the open quota.
-      const positionInOpen = _.sum(event.quotas!.map((quota) => Math.max(0, quota.signupCount! - quota.size)));
+      const positionInOpen = _.sumBy(
+        event.quotas!,
+        (quota) => (quota.size ? Math.max(0, quota.signupCount! - quota.size) : 0),
+      );
 
       if (positionInOpen <= event.openQuotaSize && event.openQuotaSize > 0) {
         position = positionInOpen;

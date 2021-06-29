@@ -26,7 +26,6 @@ export const eventListQuotaAttrs = [
   'id',
   'title',
   'size',
-  'signupCount',
 ] as const;
 
 // Type definitions for the endpoint: pick the columns above and add relations.

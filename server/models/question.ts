@@ -70,6 +70,9 @@ export default function (this: IlmoApplication) {
     question: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     type: {
       type: DataTypes.ENUM(...questionTypes),

@@ -87,6 +87,9 @@ export default function (this: IlmoApplication) {
       title: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       date: {
         type: DataTypes.DATE,

@@ -12,8 +12,9 @@ import { Signup } from './signup';
 export interface QuotaAttributes {
   id: number;
   title: string;
-  size: number;
+  size: number | null;
   eventId: number;
+  signupCount?: number;
 }
 
 export interface QuotaCreationAttributes extends Optional<QuotaAttributes, 'id'> {}
@@ -21,7 +22,7 @@ export interface QuotaCreationAttributes extends Optional<QuotaAttributes, 'id'>
 export class Quota extends Model<QuotaAttributes, QuotaCreationAttributes> implements QuotaAttributes {
   public id!: number;
   public title!: string;
-  public size!: number;
+  public size!: number | null;
 
   public eventId!: number;
   public event?: Event;
@@ -64,10 +65,18 @@ export default function (this: IlmoApplication) {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     size: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      validate: {
+        min: 1,
+      },
+    },
+    signupCount: {
+      type: DataTypes.VIRTUAL,
     },
   }, {
     sequelize,

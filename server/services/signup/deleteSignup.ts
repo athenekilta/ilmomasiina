@@ -19,6 +19,9 @@ async function advanceQueueAfterDeletion(deletedSignup: Signup) {
   })!;
   const event = currentQuota.event!;
 
+  // No need to check if the quota is infinite
+  if (!currentQuota.size) return;
+
   // TODO: fix this, currently doesn't handle open quota correctly
   const { count, rows } = await Signup.findAndCountAll({
     where: { quotaId: currentQuota.id } /* TODO */ as any,
