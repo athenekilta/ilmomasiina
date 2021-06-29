@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Checkbox, Input, Label } from '@theme-ui/components';
 import { Field, useFormikContext } from 'formik';
+import { Form } from 'react-bootstrap';
 
 import { EditorEvent } from '../../../modules/editor/types';
 import DateTimePicker from './DateTimePicker';
@@ -25,25 +25,21 @@ const QuotasTab = () => {
       <div>
         <Quotas />
         <div className="clearfix" />
-        <Label>
-          <Field
-            as={Checkbox}
-            name="useOpenQuota"
-          />
-          Käytä lisäksi yhteistä kiintiötä
-        </Label>
+        <Field
+          as={Form.Check}
+          name="useOpenQuota"
+          label="Käytä lisäksi yhteistä kiintiötä"
+        />
         {useOpenQuota && (
-          <div className="form-group">
-            <Label htmlFor="openQuotaSize">
-              Avoimen kiintiön koko
-            </Label>
+          <Form.Group controlId="openQuotaSize">
+            <Form.Label>Avoimen kiintiön koko</Form.Label>
             <Field
-              as={Input}
+              as={Form.Control}
               name="openQuotaSize"
               min="0"
               type="number"
             />
-          </div>
+          </Form.Group>
         )}
       </div>
     </div>

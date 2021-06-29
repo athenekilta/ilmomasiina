@@ -1,3 +1,5 @@
+@import "../../styles/base";
+
 table.eventlist {
   tr.child {
     td:first-child {
@@ -20,13 +22,13 @@ table.eventlist {
   }
 }
 
-@media (min-width: $screen-md-min) {
+@include media-breakpoint-up(md) {
   table.eventlist tr td:first-child {
     min-width: 300px;
   }
 }
 
-@media (max-width: $screen-xs-max) {
+@include media-breakpoint-down(xs) {
   table.eventlist {
     max-width: 100%;
     overflow: hidden;

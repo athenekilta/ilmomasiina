@@ -1,11 +1,10 @@
-/** @jsx jsx */
-import { FormEventHandler } from 'react';
+import React from 'react';
 
 import { Field, Formik, FormikHelpers } from 'formik';
-import { toast } from 'react-toastify';
 import {
-  Box, Button, Input, jsx, Spinner,
-} from 'theme-ui';
+  Button, Form, Spinner,
+} from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 import { createUser } from '../../modules/admin/actions';
 import { useTypedDispatch } from '../../store/reducers';
@@ -36,15 +35,14 @@ const UserForm = () => {
       onSubmit={onSubmit}
     >
       {({ isSubmitting, handleSubmit }) => (
-        <Box
-          sx={{
+        <Form
+          /* THEMEUI sx={{
             maxWidth: 256,
-          }}
-          as="form"
-          onSubmit={handleSubmit as any as FormEventHandler<HTMLDivElement>}
+          }} */
+          onSubmit={handleSubmit}
         >
           <Field
-            as={Input}
+            as={Form.Control}
             name="email"
             id="email"
             type="email"
@@ -52,9 +50,9 @@ const UserForm = () => {
             aria-label="Sähköposti"
           />
           <Button type="submit" variant="secondary" disabled={isSubmitting}>
-            {isSubmitting ? <Spinner /> : 'Luo uusi käyttäjä'}
+            {isSubmitting ? <Spinner animation="border" /> : 'Luo uusi käyttäjä'}
           </Button>
-        </Box>
+        </Form>
       )}
     </Formik>
   );

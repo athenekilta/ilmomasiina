@@ -34,13 +34,13 @@ export default function configureStore(initialState = {}) {
     composeWithDevTools(applyMiddleware(...middleware)),
   );
 
-  if (module.hot) {
+  /* TODO if (module.hot) {
     module.hot.accept('./reducers', () => {
       // eslint-disable-next-line global-require
       const reducers = require('./reducers').default;
       store.replaceReducer(reducers(history));
     });
-  }
+  } */
 
   const persistor = persistStore(store);
 

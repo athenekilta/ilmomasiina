@@ -1,8 +1,9 @@
-/** @jsx jsx */
+import React from 'react';
+
 import { DatePicker, TimePicker } from 'antd';
 import { useField } from 'formik';
 import moment from 'moment';
-import { jsx } from 'theme-ui';
+import { Form, Row } from 'react-bootstrap';
 
 import 'antd/lib/input/style/index.css';
 import 'antd/lib/date-picker/style/index.css';
@@ -20,11 +21,11 @@ export default function DateTimePicker({
   const [{ onBlur, onChange, value }, { error }] = useField({ name, required });
 
   return (
-    <div className="form-group row">
+    <Form.Group as={Row}>
       {label && (
-        <label className="control-label col-sm-3" data-required="false" htmlFor={`${name}-date`}>
+        <Form.Label className="control-label col-sm-3" data-required="false" htmlFor={`${name}-date`}>
           {label}
-        </label>
+        </Form.Label>
       )}
       <div className="col-sm-9">
         <DatePicker
@@ -42,10 +43,10 @@ export default function DateTimePicker({
           onChange={(date) => onChange(date?.toDate().toISOString())}
           onBlur={onBlur}
         />
-        <span sx={{ color: 'error' }}>
+        <span className="text-invalid">
           {error && '* Tämä kenttä vaaditaan.'}
         </span>
       </div>
-    </div>
+    </Form.Group>
   );
 }

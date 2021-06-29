@@ -32,13 +32,13 @@ $btn-border-radius-large: 2px;
 
 // Typography
 $font-family-sans-serif: "Open Sans", sans-serif;
-$font-size-base: 14px;
+//$font-size-base: 14px;
 $line-height-base: 1.618;
-$font-size-large: 16px;
+//$font-size-large: 16px;
 
 // Inputs
 $input-height-base: 33px;
 
 // Bootstrap core mixins
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins";
+//@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/bootstrap";

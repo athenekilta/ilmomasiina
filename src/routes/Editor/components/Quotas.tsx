@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Input, Label } from '@theme-ui/components';
 import { useField } from 'formik';
 import _ from 'lodash';
+import { Form } from 'react-bootstrap';
 import { SortEnd } from 'react-sortable-hoc';
 
 import { EditorQuota } from '../../../modules/editor/types';
@@ -56,27 +56,27 @@ const Quotas = () => {
     return (
       <div className="panel-body" key={quota.id}>
         <div className="col-xs-12 col-sm-10">
-          <Label htmlFor={`quota-${quota.id}-title`}>
+          <Form.Label htmlFor={`quota-${quota.id}-title`}>
             Kiintiön nimi
-          </Label>
-          <Input
-            name={`quota-${quota.id}-title`}
-            value={quota.title}
+          </Form.Label>
+          <Form.Control
+            id={`quota-${quota.id}-title`}
             type="text"
+            value={quota.title}
             onChange={(e) => updateField('title', e.target.value)}
           />
           <div className="form-text">
             {quotas.length === 1 && 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen.'}
             Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.
           </div>
-          <Label htmlFor={`quota-${quota.id}-max-attendees`}>
+          <Form.Label htmlFor={`quota-${quota.id}-max-attendees`}>
             Kiintiön koko
-          </Label>
-          <Input
+          </Form.Label>
+          <Form.Control
             id={`quota-${quota.id}-max-attendees`}
-            value={quota.size || ''}
             type="number"
             min={1}
+            value={quota.size || ''}
             onChange={(e) => updateField('size', Number(e.target.value))}
           />
           <div className="form-text">

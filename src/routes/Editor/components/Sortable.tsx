@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 
+import { Card } from 'react-bootstrap';
 import {
   Offset,
   SortableContainer,
@@ -14,10 +15,10 @@ type SortableItemProps = {
 };
 
 const SortableItem = SortableElement(({ value }: SortableItemProps) => (
-  <div className="panel panel-default">
+  <Card>
     <DragHandle />
     {value}
-  </div>
+  </Card>
 ));
 
 type SortableItemsProps = {

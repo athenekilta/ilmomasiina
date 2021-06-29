@@ -1,9 +1,7 @@
-/** @jsx jsx */
-import {
-  Checkbox, Input, Label, Textarea,
-} from '@theme-ui/components';
+import React from 'react';
+
 import { Field, useFormikContext } from 'formik';
-import { jsx } from 'theme-ui';
+import { Form, Row } from 'react-bootstrap';
 
 import { EditorEvent } from '../../../modules/editor/types';
 import DateTimePicker from './DateTimePicker';
@@ -12,25 +10,24 @@ const BasicDetailsTab = () => {
   const { errors } = useFormikContext<EditorEvent>();
   return (
     <div>
-      <Label htmlFor="title">Tapahtuman nimi</Label>
-      <Field as={Input} name="title" id="webpageUrl" type="text" required />
-      <span sx={{ color: 'error' }}>
+      <Form.Group as={Row} controlId="title">
+        <Form.Label column sm="9" htmlFor="title">Tapahtuman nimi</Form.Label>
+        <Field as={Form.Control} column sm="3" name="title" id="title" type="text" required />
+      </Form.Group>
+      <Form.Control.Feedback type="invalid">
         {errors.title && '* Otsikko vaaditaan.'}
-      </span>
-      <Label htmlFor="date">Ajankohta</Label>
+      </Form.Control.Feedback>
+      <Form.Label htmlFor="date">Ajankohta</Form.Label>
       <Field as={DateTimePicker} name="date" />
-      <Label htmlFor="webpageUrl">Kotisivujen osoite</Label>
-      <Field as={Input} name="webpageUrl" id="webpageUrl" type="text" />
-      <Label htmlFor="facebookUrl">Facebook-tapahtuma</Label>
-      <Field as={Input} name="facebookUrl" id="facebookUrl" type="text" />
-      <Label htmlFor="location">Paikka</Label>
-      <Field as={Input} name="location" id="location" type="text" />
-      <Label htmlFor="description">Kuvaus</Label>
-      <Textarea rows={10} name="description" />
-      <Label>
-        <Checkbox name="signupsPublic" />
-        Ilmoittautumiset ovat julkisia
-      </Label>
+      <Form.Label htmlFor="webpageUrl">Kotisivujen osoite</Form.Label>
+      <Field as={Form.Control} name="webpageUrl" id="webpageUrl" type="text" />
+      <Form.Label htmlFor="facebookUrl">Facebook-tapahtuma</Form.Label>
+      <Field as={Form.Control} name="facebookUrl" id="facebookUrl" type="text" />
+      <Form.Label htmlFor="location">Paikka</Form.Label>
+      <Field as={Form.Control} name="location" id="location" type="text" />
+      <Form.Label htmlFor="description">Kuvaus</Form.Label>
+      <Field as={(props: any) => <Form.Control as="textarea" {...props} />} name="description" id="description" />
+      <Field as={Form.Check} name="signupsPublic" label="Ilmoittautumiset ovat julkisia" />
     </div>
   );
 };

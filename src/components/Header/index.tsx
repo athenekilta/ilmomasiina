@@ -1,15 +1,16 @@
 import React from 'react';
 
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { redirectToLogin } from '../../modules/admin/actions';
+import { redirectToLogin } from '../../modules/auth/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
 import './Header.scss';
 
 const Header = () => {
   const dispatch = useTypedDispatch();
-  const loggedIn = useTypedSelector((state) => state.admin.loggedIn);
+  const loggedIn = useTypedSelector((state) => state.auth.loggedIn);
 
   return (
     <div className="navbar navbar-default">
@@ -21,13 +22,11 @@ const Header = () => {
           {BRANDING_HEADER_TITLE}
         </Link>
         {loggedIn && (
-          <button
-            type="button"
+          <Button
             onClick={() => dispatch(redirectToLogin())}
-            className="btn" // TODO
           >
             Logout
-          </button>
+          </Button>
         )}
       </div>
     </div>

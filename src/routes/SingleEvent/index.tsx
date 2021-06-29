@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Spinner } from '@theme-ui/components';
 import moment from 'moment';
+import { Spinner } from 'react-bootstrap';
 import nl2br from 'react-nl2br';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -56,7 +56,7 @@ const SingleEvent = ({ match }: Props) => {
     return (
       <div className="single-event">
         <div className="single-event--loading-container">
-          <Spinner />
+          <Spinner animation="border" />
         </div>
       </div>
     );

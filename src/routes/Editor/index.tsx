@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
 import { Formik, FormikHelpers } from 'formik';
+import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Spinner } from 'theme-ui';
 
 import {
   getEvent, loaded, publishEventUpdate, publishNewEvent, resetState,
@@ -124,7 +124,7 @@ const Editor = ({ history, match }: Props) => {
     return (
       <div className="event-editor">
         <div className="event-editor--loading-container">
-          <Spinner />
+          <Spinner animation="border" />
         </div>
       </div>
     );

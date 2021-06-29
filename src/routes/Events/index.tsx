@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 
 import _ from 'lodash';
 import moment from 'moment';
+import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Spinner } from 'theme-ui';
 
 import { getEvents, resetState } from '../../modules/events/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
@@ -37,7 +37,7 @@ const EventList = () => {
     return (
       <div className="container">
         <h1>Tapahtumat</h1>
-        <Spinner />
+        <Spinner animation="border" />
       </div>
     );
   }

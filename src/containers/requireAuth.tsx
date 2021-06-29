@@ -1,13 +1,13 @@
 import React, { ComponentType, useEffect } from 'react';
 
-import { redirectToLogin } from '../modules/admin/actions';
+import { redirectToLogin } from '../modules/auth/actions';
 import { useTypedDispatch, useTypedSelector } from '../store/reducers';
 
 export default function requireAuth<P>(WrappedComponent: ComponentType<P>) {
   const InnerComponent = (props: P) => {
     const dispatch = useTypedDispatch();
     const { accessToken, accessTokenExpires } = useTypedSelector(
-      (state) => state.admin,
+      (state) => state.auth,
     );
 
     useEffect(() => {

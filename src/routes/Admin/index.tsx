@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
+import { Button, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button, jsx, Spinner } from 'theme-ui';
 
 import { getAdminEvents, resetState } from '../../modules/admin/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
@@ -36,7 +35,7 @@ const AdminEventList = () => {
     return (
       <div className="container">
         <h1>Hallinta</h1>
-        <Spinner />
+        <Spinner animation="border" />
       </div>
     );
   }
@@ -66,9 +65,9 @@ const AdminEventList = () => {
       <Button variant="secondary">
         <Link
           to={`${PREFIX_URL}/admin/edit/new`}
-          sx={{
+          /* THEMEUI sx={{
             color: 'inherit',
-          }}
+          }} */
         >
           + Uusi tapahtuma
         </Link>

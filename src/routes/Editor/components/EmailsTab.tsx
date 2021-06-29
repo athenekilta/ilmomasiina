@@ -1,18 +1,17 @@
 import React from 'react';
 
-import { Label, Textarea } from '@theme-ui/components';
 import { Field } from 'formik';
+import { Form, Row } from 'react-bootstrap';
 
 const EmailsTab = () => (
-  <div className="form-group">
-    <Label htmlFor="verificationEmail">Vahvistusviesti sähköpostiin</Label>
+  <Form.Group as={Row} controlId="verificationEmail">
+    <Form.Label column sm={3}>Vahvistusviesti sähköpostiin</Form.Label>
     <Field
-      as={Textarea}
+      as={(props: any) => <Form.Control as="textarea" {...props} />}
       name="verificationEmail"
-      id="verificationEmail"
       rows={10}
     />
-  </div>
+  </Form.Group>
 );
 
 export default EmailsTab;

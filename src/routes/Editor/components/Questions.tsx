@@ -1,10 +1,10 @@
 import React from 'react';
 
-import {
-  Checkbox, Flex, Input, Label, Select,
-} from '@theme-ui/components';
 import { useField } from 'formik';
 import _ from 'lodash';
+import {
+  Button, Card, Col, Form,
+} from 'react-bootstrap';
 import { SortEnd } from 'react-sortable-hoc';
 
 import { EditorQuestion } from '../../../modules/editor/types';
@@ -85,23 +85,24 @@ const Questions = () => {
     }
 
     return (
-      <div className="panel-body" key={question.id}>
-        <div className="col-xs-12 col-sm-10">
-          <Label htmlFor={`question-${question.id}-question`}>
+      <Card.Body key={question.id}>
+        <Col xs="12" sm="10">
+          <Form.Label htmlFor={`question-${question.id}-question`}>
             Kysymys
-          </Label>
-          <Input
-            name={`question-${question.id}-question`}
-            value={question.question}
+          </Form.Label>
+          <Form.Control
+            id={`question-${question.id}-question`}
             type="text"
             required
+            value={question.question}
             onChange={(e) => updateField('question', e.target.value)}
           />
-          <Label htmlFor={`question-${question.id}-type`}>
+          <Form.Label htmlFor={`question-${question.id}-type`}>
             Tyyppi
-          </Label>
-          <Select
-            name={`question-${question.id}-type`}
+          </Form.Label>
+          <Form.Control
+            as="select"
+            id={`question-${question.id}-type`}
             value={question.type}
             onChange={(e) => updateField('type', e.target.value as EditorQuestion['type'])}
             required
@@ -111,56 +112,48 @@ const Questions = () => {
                 {type.label}
               </option>
             ))}
-          </Select>
+          </Form.Control>
           {(question.type === 'select' || question.type === 'checkbox') && (
             <div>
               {question.options.map((option, optIndex) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <div className="form-row" key={optIndex}>
-                  <Label htmlFor={`question-${question.id}-options-${optIndex}`}>
-                    Tyyppi
-                  </Label>
-                  <Input
+                  <Form.Label htmlFor={`question-${question.id}-options-${optIndex}`}>
+                    Vastausvaihtoehto
+                  </Form.Label>
+                  <Form.Control
                     name={`question-${question.id}-option-${optIndex}`}
-                    value={option}
                     type="text"
                     required
+                    value={option}
                     onChange={(e) => updateOption(optIndex, e.target.value)}
                   />
                 </div>
               ))}
-              <button type="button" className="btn btn-link" onClick={() => addOption()}>
+              <Button variant="link" type="button" onClick={addOption}>
                 Lisää vastausvaihtoehto
-              </button>
+              </Button>
             </div>
           )}
-        </div>
-        <div className="col-xs-12 col-sm-2">
-          <Flex pt={2}>
-            <Label sx={{ fontWeight: 'body' }} mb={0}>
-              <Checkbox
-                name={`question-${question.id}-required`}
-                defaultChecked={question.required}
-                onChange={(e) => updateField('required', e.target.checked)}
-              />
-              Pakollinen
-            </Label>
-          </Flex>
-          <Flex pb={2}>
-            <Label sx={{ fontWeight: 'body' }} mb={0}>
-              <Checkbox
-                name={`question-${question.id}-public`}
-                defaultChecked={question.public}
-                onChange={(e) => updateField('public', e.target.checked)}
-              />
-              Julkinen
-            </Label>
-          </Flex>
-          <button type="button" className="btn btn-link" onClick={() => removeQuestion()}>
+        </Col>
+        <Col xs="12" sm="2">
+          <Form.Check
+            id={`question-${question.id}-required`}
+            label="Pakollinen"
+            checked={question.required}
+            onChange={(e) => updateField('required', e.target.checked)}
+          />
+          <Form.Check
+            id={`question-${question.id}-public`}
+            label="Julkinen"
+            checked={question.public}
+            onChange={(e) => updateField('public', e.target.checked)}
+          />
+          <Button variant="link" type="button" onClick={removeQuestion}>
             Poista kysymys
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Col>
+      </Card.Body>
     );
   });
 

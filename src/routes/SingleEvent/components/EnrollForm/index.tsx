@@ -1,11 +1,9 @@
-/** @jsx jsx */
-import {
-  Input, Label,
-} from '@theme-ui/components';
+import React from 'react';
+
 import { Field, Formik, FormikHelpers } from 'formik';
+import { Form } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { toast } from 'react-toastify';
-import { jsx } from 'theme-ui';
 
 import { Signup } from '../../../../api/signups';
 import QuestionFields from '../../../../components/QuestionFields';
@@ -78,7 +76,7 @@ const EnrollForm = ({ closeForm }: Props) => {
             <button type="button" className="close" onClick={() => cancel()} aria-label="Sulje" />
             <div className="col-xs-12 col-md-8 col-md-offset-2">
               {signupSubmitError && (
-                <p sx={{ color: 'error' }}>Ilmoittautumisessasi on virheitä.</p>
+                <p className="text-invalid">Ilmoittautumisessasi on virheitä.</p>
               )}
               <h2>Ilmoittaudu</h2>
 
@@ -86,36 +84,33 @@ const EnrollForm = ({ closeForm }: Props) => {
 
               <form onSubmit={handleSubmit}>
                 <ul className="flex-outer">
-                  <li>
-                    <Label htmlFor="firstName">Etunimi / First name</Label>
+                  <Form.Group as="li" controlId="firstName">
+                    <Form.Label>Etunimi / First name</Form.Label>
                     <Field
-                      as={Input}
+                      as={Form.Control}
                       name="firstName"
-                      id="firstName"
                       type="text"
                       placeholder="Etunimi"
                     />
-                  </li>
-                  <li>
-                    <Label htmlFor="lastName">Sukunimi / Last name</Label>
+                  </Form.Group>
+                  <Form.Group as="li" controlId="lastName">
+                    <Form.Label>Sukunimi / Last name</Form.Label>
                     <Field
-                      as={Input}
+                      as={Form.Control}
                       name="lastName"
-                      id="lastName"
                       type="text"
                       placeholder="Sukunimi"
                     />
-                  </li>
-                  <li>
-                    <Label htmlFor="email">Sähköposti / Email</Label>
+                  </Form.Group>
+                  <Form.Group as="li" controlId="email">
+                    <Form.Label>Sähköposti / Email</Form.Label>
                     <Field
-                      as={Input}
+                      as={Form.Control}
                       name="email"
-                      id="email"
                       type="email"
                       placeholder="Sähköpostisi"
                     />
-                  </li>
+                  </Form.Group>
                   <QuestionFields name="answers" questions={event!.questions} />
                 </ul>
 

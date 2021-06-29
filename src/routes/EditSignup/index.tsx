@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Spinner } from '@theme-ui/components';
+import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -68,7 +68,7 @@ const EditSignup = ({ match }: RouteComponentProps<MatchParams>) => {
     return (
       <div className="container align-items-center">
         <div className="EditSignup--wrapper">
-          <Spinner />
+          <Spinner animation="border" />
         </div>
       </div>
     );

@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Spinner } from '@theme-ui/components';
 import { useFormikContext } from 'formik';
+import { Spinner } from 'react-bootstrap';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { EditorEvent } from '../../modules/editor/types';
@@ -28,7 +28,7 @@ const EditorToolbar = ({ isNew }: Props) => {
           : 'Muokkaa tapahtumaa'}
       </h1>
       <div className="pull-right event-editor--buttons-wrapper">
-        {isSubmitting && <Spinner />}
+        {isSubmitting && <Spinner animation="border" />}
         {!isNew && (
           <>
             <div className="event-editor--public-status">

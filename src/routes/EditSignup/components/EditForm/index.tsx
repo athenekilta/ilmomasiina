@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Field, Formik, FormikHelpers } from 'formik';
+import { Form, Row } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Input, Label } from 'theme-ui';
 
 import { Signup } from '../../../../api/signups';
 import QuestionFields from '../../../../components/QuestionFields';
@@ -39,30 +39,36 @@ const EditForm = ({ submitForm }: Props) => {
               )}
               <h2>Muokkaa ilmoittautumista</h2>
               <form onSubmit={handleSubmit}>
-                <Label htmlFor="firstName">Etunimi</Label>
-                <Field
-                  as={Input}
-                  name="firstName"
-                  type="text"
-                  placeholder="Etunimi"
-                  disabled
-                />
-                <Label htmlFor="lastName">Sukunimi</Label>
-                <Field
-                  as={Input}
-                  name="lastName"
-                  type="text"
-                  placeholder="Sukunimi"
-                  disabled
-                />
-                <Label htmlFor="email">Sähköposti</Label>
-                <Field
-                  as={Input}
-                  name="email"
-                  type="text"
-                  placeholder="Sähköpostisi"
-                  disabled
-                />
+                <Form.Group as={Row} controlId="firstName">
+                  <Form.Label column sm="3">Etunimi</Form.Label>
+                  <Field
+                    as={Form.Control}
+                    name="firstName"
+                    type="text"
+                    placeholder="Etunimi"
+                    disabled
+                  />
+                </Form.Group>
+                <Form.Group as={Row} controlId="lastName">
+                  <Form.Label column sm="3">Sukunimi</Form.Label>
+                  <Field
+                    as={Form.Control}
+                    name="lastName"
+                    type="text"
+                    placeholder="Sukunimi"
+                    disabled
+                  />
+                </Form.Group>
+                <Form.Group as={Row} controlId="email">
+                  <Form.Label column sm="3">Sähköposti</Form.Label>
+                  <Field
+                    as={Form.Control}
+                    name="email"
+                    type="text"
+                    placeholder="Sähköpostisi"
+                    disabled
+                  />
+                </Form.Group>
 
                 <QuestionFields name="answers" questions={event!.questions} />
 

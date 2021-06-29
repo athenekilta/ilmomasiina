@@ -1,10 +1,8 @@
 import React, { ReactNode } from 'react';
 
-import {
-  Checkbox, Input, Label, Radio, Select, Textarea,
-} from '@theme-ui/components';
 import { useField } from 'formik';
 import _ from 'lodash';
+import { Form, Row } from 'react-bootstrap';
 
 import { Event } from '../../api/events';
 import { Signup } from '../../api/signups';
@@ -35,18 +33,17 @@ const QuestionFields = ({ name, questions }: Props) => {
           updateAnswer(newAnswers.join(';'));
         }
 
-        const help = question.public && (
-          <div className="form-text text-muted">Tämän kentän vastaukset ovat julkisia.</div>
-        );
+        const help = question.public ? (
+          <Form.Text muted>Tämän kentän vastaukset ovat julkisia.</Form.Text>
+        ) : null;
 
         let input: ReactNode;
         switch (question.type) {
           case 'text':
             input = (
-              <Input
-                name={`question-${question.id}`}
-                id={`question-${question.id}`}
+              <Form.Control
                 type="text"
+                required={question.required}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
@@ -54,8 +51,7 @@ const QuestionFields = ({ name, questions }: Props) => {
             break;
           case 'number':
             input = (
-              <Input
-                id={`question-${question.id}`}
+              <Form.Control
                 type="number"
                 required={question.required}
                 value={currentAnswer}
@@ -68,17 +64,16 @@ const QuestionFields = ({ name, questions }: Props) => {
             input = (
               <>
                 {question.options?.map((option, optIndex) => (
-                  // eslint-disable-next-line react/no-array-index-key
-                  <div key={optIndex}>
-                    <Label>
-                      <Checkbox
-                        required={question.required && !currentAnswers.some((answer) => answer !== option)}
-                        checked={currentAnswers.includes(option)}
-                        onChange={(e) => toggleChecked(option, e.target.checked)}
-                      />
-                      {option}
-                    </Label>
-                  </div>
+                  <Form.Check
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={optIndex}
+                    type="checkbox"
+                    value={option}
+                    label={option}
+                    required={question.required && !currentAnswers.some((answer) => answer !== option)}
+                    checked={currentAnswers.includes(option)}
+                    onChange={(e) => toggleChecked(option, e.target.checked)}
+                  />
                 ))}
               </>
             );
@@ -86,11 +81,11 @@ const QuestionFields = ({ name, questions }: Props) => {
           }
           case 'textarea':
             input = (
-              <Textarea
+              <Form.Control
+                as="textarea"
                 className="open-question form-control"
                 rows={3}
                 cols={40}
-                name={`question-${question.id}`}
                 required={question.required}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
@@ -100,10 +95,9 @@ const QuestionFields = ({ name, questions }: Props) => {
           case 'select':
             if (question.options && question.options.length > 3) {
               input = (
-                <Select
-                  name={`question-${question.id}`}
+                <Form.Control
+                  as="select"
                   required={question.required}
-                  key={question.id}
                   value={currentAnswer}
                   onChange={(e) => updateAnswer(e.target.value)}
                 >
@@ -115,21 +109,21 @@ const QuestionFields = ({ name, questions }: Props) => {
                       {option}
                     </option>
                   ))}
-                </Select>
+                </Form.Control>
               );
             } else {
               input = question.options?.map((option, optIndex) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <div key={optIndex}>
-                  <Label>
-                    <Radio
-                      required={question.required}
-                      checked={currentAnswer === option}
-                      onChange={(e) => updateAnswer(e.target.value)}
-                    />
-                    {option}
-                  </Label>
-                </div>
+                <Form.Check
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={optIndex}
+                  type="radio"
+                  inline
+                  value={option}
+                  label={option}
+                  required={question.required}
+                  checked={currentAnswer === option}
+                  onChange={(e) => updateAnswer(e.target.value)}
+                />
               ));
             }
             break;
@@ -138,11 +132,11 @@ const QuestionFields = ({ name, questions }: Props) => {
         }
 
         return (
-          <div className="form-group" key={question.id}>
-            <Label htmlFor={`question-${question.id}`}>{question.question}</Label>
+          <Form.Group as={Row} key={question.id} controlId={`question-${question.id}`}>
+            <Form.Label>{question.question}</Form.Label>
             {input}
             {help}
-          </div>
+          </Form.Group>
         );
       })}
     </>

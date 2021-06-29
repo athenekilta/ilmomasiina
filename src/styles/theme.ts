@@ -1,11 +1,12 @@
-// Refer to https://github.com/system-ui/theme-ui/blob/master/packages/preset-base/src/index.js
+// Refer to https://github.com/system-ui/theme-ui/blob/stable/packages/preset-base/src/index.ts
 // for the base theme presets
-import theme from '@theme-ui/preset-base';
+import base from '@theme-ui/preset-base';
+import { Theme } from 'theme-ui';
 
 export default {
-  ...theme,
+  ...base as Theme,
   styles: {
-    ...theme,
+    ...base.styles as Theme['styles'],
   },
   colors: {
     text: '#000',
@@ -61,14 +62,14 @@ export default {
       borderColor: 'gray',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        boxShadow: (t: Theme) => `0 0 0 2px ${t.colors!.primary}`,
         outline: 'none',
       },
       error: {
         borderColor: 'error',
         '&:focus': {
           borderColor: 'error',
-          boxShadow: (t) => `0 0 0 2px ${t.colors.error}`,
+          boxShadow: (t: Theme) => `0 0 0 2px ${t.colors!.error}`,
           outline: 'none',
         },
       },
@@ -77,7 +78,7 @@ export default {
       borderColor: 'gray',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        boxShadow: (t: Theme) => `0 0 0 2px ${t.colors!.primary}`,
         outline: 'none',
       },
     },
@@ -85,7 +86,7 @@ export default {
       borderColor: 'gray',
       '&:focus': {
         borderColor: 'primary',
-        boxShadow: (t) => `0 0 0 2px ${t.colors.primary}`,
+        boxShadow: (t: Theme) => `0 0 0 2px ${t.colors!.primary}`,
         outline: 'none',
       },
     },

@@ -1,9 +1,7 @@
-/** @jsx jsx */
-import {
-  Button, Container, Input, Label,
-} from '@theme-ui/components';
+import React from 'react';
+
 import { Field, Formik, FormikHelpers } from 'formik';
-import { jsx } from 'theme-ui';
+import { Button, Container, Form } from 'react-bootstrap';
 
 import { login } from '../../modules/auth/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
@@ -24,10 +22,10 @@ const Login = () => {
   }
 
   return (
-    <Container sx={{ variant: 'layout.container.loginContainer' }}>
+    <Container className="login-container">
       <h1>Kirjaudu</h1>
       {loginError && (
-        <p sx={{ color: 'error' }}>Kirjautuminen epäonnistui</p>
+        <p className="text-invalid">Kirjautuminen epäonnistui</p>
       )}
       <Formik
         initialValues={{
@@ -38,28 +36,28 @@ const Login = () => {
       >
         {({ handleSubmit, isSubmitting, errors }) => (
           <form onSubmit={handleSubmit} noValidate>
-            <Label sx={{ variant: 'forms.label.login' }} htmlFor="email">
+            <Form.Label htmlFor="email"/* THEMEUI sx={{ variant: 'forms.label.login' }} */>
               Sähköposti
-            </Label>
+            </Form.Label>
             <Field
-              as={Input}
+              as={Form.Control}
               name="email"
               id="email"
               type="email"
               placeholder="admin@athene.fi"
-              sx={errors.email && { variant: 'forms.input.error' }}
+              isInvalid={errors.email}
             />
             {errors.email && <p>Tämä kenttä vaaditaan</p>}
-            <Label sx={{ variant: 'forms.label.login' }} htmlFor="password">
+            <Form.Label htmlFor="password"/* THEMEUI sx={{ variant: 'forms.label.login' }} */>
               Salasana
-            </Label>
+            </Form.Label>
             <Field
-              as={Input}
+              as={Form.Control}
               name="password"
               id="password"
               type="password"
               placeholder="••••••••"
-              sx={errors.password && { variant: 'forms.input.error' }}
+              isInvalid={errors.password}
             />
             {errors.password && <p>Tämä kenttä vaaditaan</p>}
             <Button type="submit" variant="secondary" disabled={isSubmitting}>
