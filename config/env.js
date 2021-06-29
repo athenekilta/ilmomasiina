@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { argv } = require('yargs');
 const paths = require('./paths');
 
 // Make sure that including paths.js after env.js will read .env variables.
@@ -92,10 +93,32 @@ function getClientEnvironment(publicUrl) {
         FAST_REFRESH: process.env.FAST_REFRESH !== 'false',
       }
     );
+
+  // Globals defined in src/global.d.ts.
+  const ilmomasiina = {
+    DEV: (process.env.NODE_ENV || 'development') === 'development',
+    PROD: process.env.NODE_ENV === 'production',
+    TEST: process.env.NODE_ENV === 'test',
+    COVERAGE: !argv.watch && process.env.NODE_ENV === 'test',
+
+    SENTRY_DSN: process.env.SENTRY_DSN || '',
+
+    PREFIX_URL: process.env.PATH_PREFIX || '',
+    BRANDING_HEADER_TITLE: process.env.BRANDING_HEADER_TITLE_TEXT,
+    BRANDING_FOOTER_GDPR_TEXT: process.env.BRANDING_FOOTER_GDPR_TEXT,
+    BRANDING_FOOTER_GDPR_LINK: process.env.BRANDING_FOOTER_GDPR_LINK,
+    BRANDING_FOOTER_HOME_TEXT: process.env.BRANDING_FOOTER_HOME_TEXT,
+    BRANDING_FOOTER_HOME_LINK: process.env.BRANDING_FOOTER_HOME_LINK,
+  };
+
   // Stringify all values so we can feed into webpack DefinePlugin
   const stringified = {
     'process.env': Object.keys(raw).reduce((env, key) => {
       env[key] = JSON.stringify(raw[key]);
+      return env;
+    }, {}),
+    ...Object.keys(ilmomasiina).reduce((env, key) => {
+      env[key] = JSON.stringify(ilmomasiina[key]);
       return env;
     }, {}),
   };

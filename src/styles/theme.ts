@@ -1,7 +1,8 @@
 // Refer to https://github.com/system-ui/theme-ui/blob/stable/packages/preset-base/src/index.ts
 // for the base theme presets
-import base from '@theme-ui/preset-base';
-import { Theme } from 'theme-ui';
+// TODO: delete this file, theme-ui no longer used.
+type Theme = any;
+const base = {} as any;
 
 export default {
   ...base as Theme,
