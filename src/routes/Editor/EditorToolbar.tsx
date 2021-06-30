@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useFormikContext } from 'formik';
-import { Spinner } from 'react-bootstrap';
+import { Button, ButtonGroup, Spinner } from 'react-bootstrap';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { EditorEvent } from '../../modules/editor/types';
@@ -21,42 +21,40 @@ const EditorToolbar = ({ isNew }: Props) => {
 
   return (
     <>
-      <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
+      <nav className="d-flex justify-content-end">
+        <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
+      </nav>
       <h1>
         {isNew
           ? 'Luo uusi tapahtuma'
           : 'Muokkaa tapahtumaa'}
       </h1>
-      <div className="pull-right event-editor--buttons-wrapper">
+      <div className="event-editor--buttons-wrapper">
         {isSubmitting && <Spinner animation="border" />}
-        {!isNew && (
-          <>
-            <div className="event-editor--public-status">
-              <div className="event-editor--bubble draft event-editor--animated" />
-              <span>Luonnos</span>
-            </div>
-            <button
+        <div className="event-editor--public-status">
+          <div className={`event-editor--bubble ${draft ? 'draft' : 'public'} event-editor--animated`} />
+          <span>{draft ? 'Luonnos' : 'Julkaistu'}</span>
+        </div>
+        <ButtonGroup>
+          {!isNew && (
+            <Button
               type="submit"
               disabled={isSubmitting}
-              className={
-                draft
-                  ? 'btn btn-success event-editor--animated'
-                  : 'btn btn-warning event-editor--animated'
-              }
+              variant={draft ? 'success' : 'warning'}
               formNoValidate
             >
               {draft ? 'Julkaise' : 'Muuta luonnokseksi'}
-            </button>
-          </>
-        )}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="btn btn-info event-editor--animated"
-          formNoValidate
-        >
-          {isNew ? 'Tallenna luonnoksena' : 'Tallenna muutokset'}
-        </button>
+            </Button>
+          )}
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            variant="secondary"
+            formNoValidate
+          >
+            {isNew ? 'Tallenna luonnoksena' : 'Tallenna muutokset'}
+          </Button>
+        </ButtonGroup>
       </div>
     </>
   );

@@ -1,15 +1,13 @@
 @import "../../styles/base";
 
-.navbar-default {
-  border: none !important;
+.navbar {
+  background: $primary;
+  margin-bottom: 1.5rem;
+}
 
-  a.navbar-brand,
-  a.navbar-brand:focus,
-  a.navbar-brand:hover {
-    color: #fff;
-    font-size: 18px;
-    text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
+.navbar-brand {
+  color: #fff !important;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
 }

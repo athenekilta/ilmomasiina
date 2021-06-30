@@ -1,11 +1,14 @@
 import React from 'react';
 
-import { Field, Formik, FormikHelpers } from 'formik';
-import { Form } from 'react-bootstrap';
+import { Formik, FormikHelpers } from 'formik';
+import {
+  Button, Col, Container, Form, Row,
+} from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { Signup } from '../../../../api/signups';
+import FieldRow from '../../../../components/FieldRow';
 import QuestionFields from '../../../../components/QuestionFields';
 import { cancelPendingSignup, completeSignup, getEvent } from '../../../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../../../store/reducers';
@@ -71,10 +74,10 @@ const EnrollForm = ({ closeForm }: Props) => {
       onSubmit={onSubmit}
     >
       {({ handleSubmit, isSubmitting }) => (
-        <div className="form-wrapper">
-          <div className="container">
-            <button type="button" className="close" onClick={() => cancel()} aria-label="Sulje" />
-            <div className="col-xs-12 col-md-8 col-md-offset-2">
+        <Container className="pt-5 position-relative">
+          <button type="button" className="close" onClick={() => cancel()} aria-label="Sulje" />
+          <Row className="justify-content-md-center">
+            <Col xs="12" md="10" lg="8">
               {signupSubmitError && (
                 <p className="text-invalid">Ilmoittautumisessasi on virheitä.</p>
               )}
@@ -82,54 +85,39 @@ const EnrollForm = ({ closeForm }: Props) => {
 
               <SignupStatus />
 
-              <form onSubmit={handleSubmit}>
-                <ul className="flex-outer">
-                  <Form.Group as="li" controlId="firstName">
-                    <Form.Label>Etunimi / First name</Form.Label>
-                    <Field
-                      as={Form.Control}
-                      name="firstName"
-                      type="text"
-                      placeholder="Etunimi"
-                    />
-                  </Form.Group>
-                  <Form.Group as="li" controlId="lastName">
-                    <Form.Label>Sukunimi / Last name</Form.Label>
-                    <Field
-                      as={Form.Control}
-                      name="lastName"
-                      type="text"
-                      placeholder="Sukunimi"
-                    />
-                  </Form.Group>
-                  <Form.Group as="li" controlId="email">
-                    <Form.Label>Sähköposti / Email</Form.Label>
-                    <Field
-                      as={Form.Control}
-                      name="email"
-                      type="email"
-                      placeholder="Sähköpostisi"
-                    />
-                  </Form.Group>
-                  <QuestionFields name="answers" questions={event!.questions} />
-                </ul>
+              <Form onSubmit={handleSubmit}>
+                <FieldRow
+                  name="firstName"
+                  label="Etunimi / First name"
+                  placeholder="Etunimi"
+                  required
+                />
+                <FieldRow
+                  name="lastName"
+                  label="Sukunimi / Last name"
+                  placeholder="Sukunimi"
+                  help="Nimi on julkinen tieto. Voit halutessasi ilmoittautua tapahtumaan salanimellä."
+                  required
+                />
+                <FieldRow
+                  name="email"
+                  label="Sähköposti / Email"
+                  placeholder="Sähköpostisi"
+                  required
+                />
+                <QuestionFields name="answers" questions={event!.questions} />
 
-                <button
-                  className="btn btn-primary pull-right"
-                  formNoValidate
-                  type="submit"
-                  disabled={isSubmitting}
-                >
+                <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={isSubmitting}>
                   Lähetä
-                </button>
-                <button type="button" className="btn btn-link pull-right" onClick={() => cancel()}>
+                </Button>
+                <Button type="button" variant="link" className="float-right" onClick={() => cancel()}>
                   Peruuta
-                </button>
-              </form>
-            </div>
-            <div className="cf" />
-          </div>
-        </div>
+                </Button>
+                <div className="clearfix" />
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       )}
     </Formik>
   );

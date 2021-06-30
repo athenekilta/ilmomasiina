@@ -15,7 +15,7 @@ type SortableItemProps = {
 };
 
 const SortableItem = SortableElement(({ value }: SortableItemProps) => (
-  <Card>
+  <Card className="sortable-item">
     <DragHandle />
     {value}
   </Card>
@@ -27,7 +27,7 @@ type SortableItemsProps = {
 };
 
 const Sortable = SortableContainer(({ collection, items }: SortableItemsProps) => (
-  <div>
+  <div className="sortable">
     {items.map((value, index) => (
       <SortableItem
         collection={collection}

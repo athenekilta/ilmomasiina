@@ -19,12 +19,8 @@ export default function reducer(
     case LOGIN_SUCCEEDED:
       return {
         ...state,
-        accessToken: action.payload,
-        // TODO: use actual expiration
-        accessTokenExpires: moment(new Date())
-          .add(60, 'm')
-          .toDate()
-          .toISOString(),
+        accessToken: action.payload.accessToken,
+        accessTokenExpires: moment.unix(action.payload.authentication.payload.exp).toISOString(),
         loggingIn: false,
         loggedIn: true,
       };

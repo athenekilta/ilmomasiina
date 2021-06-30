@@ -20,7 +20,7 @@ export default function configureStore(initialState = {}) {
   const persistConfig = {
     key: DEV ? 'ilmomasiina-dev' : 'ilmomasiina',
     storage,
-    blacklist: ['location', 'router'],
+    whitelist: ['auth'],
   };
 
   const persistedReducer = persistReducer(

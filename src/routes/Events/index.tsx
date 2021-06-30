@@ -54,7 +54,7 @@ const EventList = () => {
         date={moment(event.date).format('DD.MM.YYYY')}
         signupStatus={eventState.label}
         signupCount={
-          (event.quota.length < 2 && _.sumBy(event.quota, 'signupCount')) || 0
+          (event.quota.length < 2 ? _.sumBy(event.quota, 'signupCount') : undefined)
         }
         quotaSize={event.quota.length === 1 ? event.quota[0].size : undefined}
         key={event.id}
@@ -66,7 +66,7 @@ const EventList = () => {
         <TableRow
           className="child"
           title={quota.title}
-          signupCount={Math.min(quota.signupCount, quota.size)}
+          signupCount={quota.size ? Math.min(quota.signupCount, quota.size) : quota.signupCount}
           quotaSize={quota.size}
           key={`${event.id}-${quota.id}`}
         />,
@@ -79,7 +79,7 @@ const EventList = () => {
           className="child"
           title="Avoin"
           signupCount={Math.min(
-            _.sum(event.quota.map((quota) => Math.max(0, quota.signupCount - quota.size))),
+            _.sum(event.quota.map((quota) => (quota.size ? Math.max(0, quota.signupCount - quota.size) : 0))),
             event.openQuotaSize,
           )}
           quotaSize={event.openQuotaSize}

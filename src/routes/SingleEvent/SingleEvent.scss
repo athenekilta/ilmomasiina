@@ -1,8 +1,10 @@
 @import "../../styles/base";
 
 .sidebar-widget {
+  display: flex;
+  flex-direction: column;
   background-color: $secondary-background;
-  padding: 0.5em 2em;
+  padding: 2em 2em 1em;
   margin-bottom: 2em;
 
   h3 {

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { ProgressBar } from 'react-bootstrap';
+
 import Separator from '../../../../components/Separator';
 
 import './ViewProgress.scss';
@@ -13,19 +15,18 @@ type Props = {
 const ViewProgress = ({ max, title, value }: Props) => (
   <div>
     {title}
-    <div className="progress">
-      <div
-        className="progress-bar"
-        style={{
-          minWidth: '5em',
-          width: `${(value / max) * 100}%`,
-        }}
-      >
-        {value}
-        <Separator />
-        {max || <span title="Unlimited">&infin;</span>}
-      </div>
-    </div>
+    <ProgressBar
+      now={Math.min(value, max)}
+      max={max}
+      className="signup-progress mb-3"
+      label={(
+        <>
+          {value}
+          <Separator />
+          {max !== Infinity ? max : <span title="Unlimited">&infin;</span>}
+        </>
+      )}
+    />
   </div>
 );
 

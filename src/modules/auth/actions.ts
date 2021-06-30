@@ -14,9 +14,9 @@ export const loggingIn = () => <const>{
   type: LOGGING_IN,
 };
 
-export const loginSucceeded = (token: string) => <const>{
+export const loginSucceeded = (payload: Auth.Response) => <const>{
   type: LOGIN_SUCCEEDED,
-  payload: token,
+  payload,
 };
 
 export const loginFailed = () => <const>{
@@ -39,7 +39,7 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
         password,
       },
     }) as Auth.Response;
-    dispatch(loginSucceeded(response.accessToken));
+    dispatch(loginSucceeded(response));
     dispatch(push(`${PREFIX_URL}/admin`));
     return true;
   } catch (e) {

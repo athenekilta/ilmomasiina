@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import apiFetch from '../../api';
 import { AdminEvent } from '../../api/adminEvents';
 import { Event } from '../../api/events';
@@ -38,16 +40,26 @@ export const saveFailed = () => <const>{
 
 const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
   ...event,
-  quotas: event.quota,
+  date: moment(event.date),
+  registrationStartDate: moment(event.registrationStartDate),
+  registrationEndDate: moment(event.registrationEndDate),
+  quotas: event.quota.map((quota) => ({
+    ...quota,
+    key: quota.id,
+  })),
   useOpenQuota: event.openQuotaSize > 0,
   questions: event.questions.map((question) => ({
     ...question,
+    key: question.id,
     options: question.options || [''],
   })),
 });
 
 const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   ...form,
+  date: form.date?.toISOString() || '',
+  registrationStartDate: form.registrationStartDate?.toISOString() || '',
+  registrationEndDate: form.registrationEndDate?.toISOString() || '',
   quota: form.quotas,
   openQuotaSize: form.useOpenQuota ? form.openQuotaSize : 0,
   questions: form.questions.map((question) => ({
@@ -84,7 +96,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
     return response;
   } catch (e) {
     dispatch(saveFailed());
-    throw new Error(e);
+    throw e;
   }
 };
 
@@ -107,7 +119,7 @@ export const publishEventUpdate = (
     return response;
   } catch (e) {
     dispatch(saveFailed());
-    throw new Error(e);
+    throw e;
   }
 };
 

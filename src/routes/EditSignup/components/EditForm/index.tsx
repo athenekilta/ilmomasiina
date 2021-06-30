@@ -1,15 +1,16 @@
 import React from 'react';
 
-import { Field, Formik, FormikHelpers } from 'formik';
-import { Form, Row } from 'react-bootstrap';
+import { Formik, FormikHelpers } from 'formik';
+import {
+  Button, Col, Container, Form, Row,
+} from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { Signup } from '../../../../api/signups';
+import FieldRow from '../../../../components/FieldRow';
 import QuestionFields from '../../../../components/QuestionFields';
 import { useTypedSelector } from '../../../../store/reducers';
-
-import './EditForm.scss';
 
 interface Props {
   submitForm: (answers: Signup.Update.Body) => Promise<void>;
@@ -28,67 +29,50 @@ const EditForm = ({ submitForm }: Props) => {
       initialValues={signup! as Signup.Update.Body}
       onSubmit={onSubmit}
     >
-      {({ handleSubmit }) => (
-        <div className="form-wrapper">
-          <div className="container">
-            <div className="col-xs-12 col-md-8 col-md-offset-2">
+      {({ handleSubmit, isSubmitting }) => (
+        <Container>
+          <Row className="justify-content-md-center">
+            <Col xs="12" md="10" lg="8">
               {submitError && (
-                <p style={{ color: '#a94442' }}>
-                  Ilmoittautumisessasi on virheitä.
-                </p>
+                <p className="text-invalid">Ilmoittautumisessasi on virheitä.</p>
               )}
               <h2>Muokkaa ilmoittautumista</h2>
-              <form onSubmit={handleSubmit}>
-                <Form.Group as={Row} controlId="firstName">
-                  <Form.Label column sm="3">Etunimi</Form.Label>
-                  <Field
-                    as={Form.Control}
-                    name="firstName"
-                    type="text"
-                    placeholder="Etunimi"
-                    disabled
-                  />
-                </Form.Group>
-                <Form.Group as={Row} controlId="lastName">
-                  <Form.Label column sm="3">Sukunimi</Form.Label>
-                  <Field
-                    as={Form.Control}
-                    name="lastName"
-                    type="text"
-                    placeholder="Sukunimi"
-                    disabled
-                  />
-                </Form.Group>
-                <Form.Group as={Row} controlId="email">
-                  <Form.Label column sm="3">Sähköposti</Form.Label>
-                  <Field
-                    as={Form.Control}
-                    name="email"
-                    type="text"
-                    placeholder="Sähköpostisi"
-                    disabled
-                  />
-                </Form.Group>
+              <Form onSubmit={handleSubmit}>
+                <FieldRow
+                  name="firstName"
+                  label="Etunimi / First name"
+                  placeholder="Etunimi"
+                  required
+                  disabled
+                />
+                <FieldRow
+                  name="lastName"
+                  label="Sukunimi / Last name"
+                  placeholder="Sukunimi"
+                  required
+                  disabled
+                />
+                <FieldRow
+                  name="email"
+                  label="Sähköposti / Email"
+                  placeholder="Sähköpostisi"
+                  required
+                  disabled
+                />
 
                 <QuestionFields name="answers" questions={event!.questions} />
 
-                <div className="input-wrapper pull-right">
-                  <button
-                    type="submit"
-                    className="btn btn-primary pull-right"
-                    formNoValidate
-                  >
-                    Päivitä
-                  </button>
-                </div>
-                <Link className="btn btn-link pull-right" to={`${PREFIX_URL}/`}>
+                <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={isSubmitting}>
+                  Päivitä
+                </Button>
+                <Button as={Link} variant="link" className="float-right" to={`${PREFIX_URL}/`}>
                   Peruuta
-                </Link>
-              </form>
-            </div>
-            <div className="cf" />
-          </div>
-        </div>
+                </Button>
+                <div className="clearfix" />
+              </Form>
+            </Col>
+          </Row>
+        </Container>
       )}
     </Formik>
   );

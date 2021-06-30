@@ -1,35 +1,56 @@
 import React from 'react';
 
-import { Field, useFormikContext } from 'formik';
-import { Form, Row } from 'react-bootstrap';
+import { Field } from 'formik';
+import { Col, Form, Row } from 'react-bootstrap';
 
-import { EditorEvent } from '../../../modules/editor/types';
+import FieldRow from '../../../components/FieldRow';
 import DateTimePicker from './DateTimePicker';
+import Textarea from './Textarea';
 
-const BasicDetailsTab = () => {
-  const { errors } = useFormikContext<EditorEvent>();
-  return (
-    <div>
-      <Form.Group as={Row} controlId="title">
-        <Form.Label column sm="9" htmlFor="title">Tapahtuman nimi</Form.Label>
-        <Field as={Form.Control} column sm="3" name="title" id="title" type="text" required />
-      </Form.Group>
-      <Form.Control.Feedback type="invalid">
-        {errors.title && '* Otsikko vaaditaan.'}
-      </Form.Control.Feedback>
-      <Form.Label htmlFor="date">Ajankohta</Form.Label>
-      <Field as={DateTimePicker} name="date" />
-      <Form.Label htmlFor="webpageUrl">Kotisivujen osoite</Form.Label>
-      <Field as={Form.Control} name="webpageUrl" id="webpageUrl" type="text" />
-      <Form.Label htmlFor="facebookUrl">Facebook-tapahtuma</Form.Label>
-      <Field as={Form.Control} name="facebookUrl" id="facebookUrl" type="text" />
-      <Form.Label htmlFor="location">Paikka</Form.Label>
-      <Field as={Form.Control} name="location" id="location" type="text" />
-      <Form.Label htmlFor="description">Kuvaus</Form.Label>
-      <Field as={(props: any) => <Form.Control as="textarea" {...props} />} name="description" id="description" />
-      <Field as={Form.Check} name="signupsPublic" label="Ilmoittautumiset ovat julkisia" />
-    </div>
-  );
-};
+const BasicDetailsTab = () => (
+  <div>
+    <FieldRow
+      name="title"
+      label="Tapahtuman nimi"
+      required
+      alternateError="* Otsikko vaaditaan."
+    />
+    <FieldRow
+      name="date"
+      label="Ajankohta"
+      as={DateTimePicker}
+      required
+      alternateError="* Ajankohta vaaditaan."
+    />
+    <FieldRow
+      name="webpageUrl"
+      label="Kotisivujen osoite"
+    />
+    <FieldRow
+      name="facebookUrl"
+      label="Facebook-tapahtuma"
+    />
+    <FieldRow
+      name="location"
+      label="Paikka"
+    />
+    <FieldRow
+      name="description"
+      label="Kuvaus"
+      as={Textarea}
+    />
+    <Form.Group as={Row}>
+      <Col sm="3" />
+      <Col sm="9">
+        <Field
+          as={Form.Check}
+          name="signupsPublic"
+          id="signupsPublic"
+          label="Ilmoittautumiset ovat julkisia"
+        />
+      </Col>
+    </Form.Group>
+  </div>
+);
 
 export default BasicDetailsTab;

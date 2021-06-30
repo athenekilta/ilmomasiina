@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 
 import _ from 'lodash';
 import moment from 'moment-timezone';
@@ -17,7 +17,8 @@ type Props = {
 const AdminEventListItem = ({ event }: Props) => {
   const dispatch = useTypedDispatch();
 
-  async function onDelete() {
+  async function onDelete(e: MouseEvent) {
+    e.preventDefault();
     const confirmed = window.confirm(
       'Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.',
     );
@@ -45,9 +46,10 @@ const AdminEventListItem = ({ event }: Props) => {
 
         <Separator />
 
-        <button type="button" className="btn btn-link" onClick={onDelete}>
+        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+        <a href="#" onClick={onDelete} role="button">
           Poista tapahtuma
-        </button>
+        </a>
       </td>
     </tr>
   );

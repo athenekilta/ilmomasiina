@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Formik, FormikHelpers } from 'formik';
-import { Spinner } from 'react-bootstrap';
+import { Container, Form, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -31,7 +31,7 @@ type Props = EditSignupProps & RouteComponentProps<MatchParams>;
 
 const defaultEvent = (): EditorEvent => ({
   title: '',
-  date: '',
+  date: undefined,
   webpageUrl: '',
   facebookUrl: '',
   location: '',
@@ -39,14 +39,14 @@ const defaultEvent = (): EditorEvent => ({
   price: '',
   signupsPublic: false,
 
-  registrationStartDate: '',
-  verificationEmail: '',
+  registrationStartDate: undefined,
+  registrationEndDate: undefined,
 
   openQuotaSize: 0,
   useOpenQuota: false,
   quotas: [
     {
-      id: 0,
+      key: 'new',
       title: 'Kiintiö',
       size: 20,
     },
@@ -54,7 +54,7 @@ const defaultEvent = (): EditorEvent => ({
 
   questions: [],
 
-  registrationEndDate: '',
+  verificationEmail: '',
 
   draft: true,
 });
@@ -73,9 +73,9 @@ const Editor = ({ history, match }: Props) => {
   useEffect(() => {
     const eventId = match.params.id;
     if (eventId !== 'new') {
-      dispatch(loaded(null, defaultEvent()));
-    } else {
       dispatch(getEvent(eventId));
+    } else {
+      dispatch(loaded(null, defaultEvent()));
     }
     return () => {
       dispatch(resetState());
@@ -93,6 +93,9 @@ const Editor = ({ history, match }: Props) => {
       if (match.params.id === 'new') {
         const newEvent = await dispatch(publishNewEvent(modifiedEvent));
         history.push(`${PREFIX_URL}/admin/edit/${newEvent.id}`);
+        toast.success('Tapahtuma luotiin onnistuneesti!', {
+          autoClose: 2000,
+        });
       } else {
         await dispatch(publishEventUpdate(event!.id, modifiedEvent));
         toast.success('Muutoksesi tallennettiin onnistuneesti!', {
@@ -110,37 +113,34 @@ const Editor = ({ history, match }: Props) => {
 
   if (loadError) {
     return (
-      <div className="event-editor">
+      <Container className="event-editor">
         <div className="event-editor--loading-container">
           <h1>Hups, jotain meni pieleen</h1>
           <p>{`Tapahtumaa id:llä "${match.params.id}" ei löytynyt`}</p>
           <Link to={`${PREFIX_URL}/admin/`}>Palaa tapahtumalistaukseen</Link>
         </div>
-      </div>
+      </Container>
     );
   }
 
-  if (!event) {
+  if (!formData) {
     return (
-      <div className="event-editor">
+      <Container className="event-editor">
         <div className="event-editor--loading-container">
           <Spinner animation="border" />
         </div>
-      </div>
+      </Container>
     );
   }
 
   return (
-    <div className="event-editor" role="tablist">
+    <Container className="event-editor" role="tablist">
       <Formik
         initialValues={formData!}
         onSubmit={onSubmit}
       >
         {({ handleSubmit }) => (
-          <form
-            onSubmit={handleSubmit}
-            className="form-horizontal col-xs-12 col-md-10 col-md-offset-1"
-          >
+          <Form onSubmit={handleSubmit}>
             <EditorToolbar isNew={match.params.id === 'new'} />
             <EditorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
@@ -167,10 +167,10 @@ const Editor = ({ history, match }: Props) => {
                 <SignupsTab />
               </div>
             </div>
-          </form>
+          </Form>
         )}
       </Formik>
-    </div>
+    </Container>
   );
 };
 

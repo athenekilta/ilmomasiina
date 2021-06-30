@@ -22,6 +22,14 @@ class CustomLocalStrategy extends LocalStrategy {
 export interface AuthResponse {
   accessToken: string;
   user: UserDetails;
+  authentication: {
+    strategy: string;
+    accessToken: string;
+    payload: {
+      iat: number;
+      exp: number;
+    };
+  };
 }
 
 export default function setupAuthentication(this: IlmoApplication) {

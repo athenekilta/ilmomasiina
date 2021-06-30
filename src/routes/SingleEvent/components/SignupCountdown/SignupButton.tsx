@@ -1,10 +1,10 @@
 import React from 'react';
 
+import { Button } from 'react-bootstrap';
+
 import { Quota } from '../../../../api/events';
 import { useTypedSelector } from '../../../../store/reducers';
 import signupState from '../../../../utils/signupStateText';
-
-import './SignupButton.scss';
 
 type SignupButtonProps = {
   isOpen: boolean;
@@ -19,6 +19,7 @@ const SignupButton = (props: SignupButtonProps) => {
   } = props;
 
   const event = useTypedSelector((state) => state.singleEvent.event)!;
+  const submitting = useTypedSelector((state) => state.singleEvent.signupSubmitting);
   const isOnly = event.quota.length === 1;
 
   return (
@@ -39,16 +40,16 @@ const SignupButton = (props: SignupButtonProps) => {
         ) : null}
       </p>
       {event.quota.map((quota) => (
-        <p key={quota.id}>
-          <button
-            type="button"
-            disabled={!isOpen}
-            className="btn btn-default btn-block btn-whitespace-normal"
-            onClick={() => isOpen && beginSignup(quota.id)}
-          >
-            {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
-          </button>
-        </p>
+        <Button
+          key={quota.id}
+          type="button"
+          variant="secondary"
+          disabled={!isOpen || submitting}
+          className="mb-3"
+          onClick={() => isOpen && beginSignup(quota.id)}
+        >
+          {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
+        </Button>
       ))}
     </div>
   );

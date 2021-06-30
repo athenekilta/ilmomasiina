@@ -8,7 +8,7 @@ type Props = {
   date?: string;
   signupStatus?: string;
   signupCount?: number;
-  quotaSize?: number;
+  quotaSize?: number | null;
 };
 
 const TableRow = ({

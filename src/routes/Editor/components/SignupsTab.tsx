@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Button } from 'react-bootstrap';
 import { CSVLink } from 'react-csv';
 
 import { deleteSignup, getEvent } from '../../../modules/editor/actions';
@@ -11,9 +12,15 @@ import '../Editor.scss';
 
 const SignupsTab = () => {
   const dispatch = useTypedDispatch();
-  const event = useTypedSelector((state) => state.editor.event)!;
+  const event = useTypedSelector((state) => state.editor.event);
 
-  const signups = getSignupsForAdminList(event);
+  const signups = event && getSignupsForAdminList(event);
+
+  if (!event || !signups?.length) {
+    return (
+      <p>Tapahtumaan ei vielä ole yhtään ilmoittautumista. Kun tapahtumaan tulee ilmoittautumisia, näet ne tästä.</p>
+    );
+  }
 
   return (
     <div>
@@ -45,18 +52,20 @@ const SignupsTab = () => {
           {signups.map((signup, index) => (
             <tr key={signup.id}>
               <td key="position">{`${index + 1}.`}</td>
-              <td key="firstName">{signup.firstName}</td>
+              <td key="firstName" className={signup.firstName === null ? 'text-muted' : ''}>
+                {signup.firstName || 'Vahvistamatta'}
+              </td>
               <td key="lastName">{signup.lastName}</td>
-              <td key="email">{signup.lastName}</td>
+              <td key="email">{signup.email}</td>
               <td key="quota">{signup.quota}</td>
               {event.questions.map((question) => (
                 <td key={question.id}>{signup.answers[question.id]}</td>
               ))}
               <td key="timestamp">{signup.createdAt}</td>
               <td key="delete">
-                <button
+                <Button
                   type="button"
-                  className="btn btn-danger"
+                  variant="danger"
                   onClick={async () => {
                     const confirmation = window.confirm(
                       'Oletko varma? Poistamista ei voi perua.',
@@ -68,7 +77,7 @@ const SignupsTab = () => {
                   }}
                 >
                   Poista
-                </button>
+                </Button>
               </td>
             </tr>
           ))}

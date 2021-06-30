@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Nav } from 'react-bootstrap';
+
 export type EditorTabId = 1 | 2 | 3 | 4 | 5;
 
 type Props = {
@@ -16,21 +18,21 @@ const TABS: [EditorTabId, string][] = [
 ];
 
 const EditorTabs = ({ activeTab, setActiveTab }: Props) => (
-  <ul className="event-editor--nav nav nav-tabs">
+  <Nav variant="tabs" activeKey={activeTab} className="event-editor--nav">
     {TABS.map(([id, label]) => (
-      <li className={activeTab === id ? 'active' : undefined}>
-        <button
-          type="button"
-          onClick={() => setActiveTab(1)}
+      <Nav.Item key={id}>
+        <Nav.Link
+          eventKey={id}
+          onClick={() => setActiveTab(id)}
           role="tab"
           aria-selected={activeTab === id}
           aria-controls={`editor-tab-${id}`}
         >
           {label}
-        </button>
-      </li>
+        </Nav.Link>
+      </Nav.Item>
     ))}
-  </ul>
+  </Nav>
 );
 
 export default EditorTabs;

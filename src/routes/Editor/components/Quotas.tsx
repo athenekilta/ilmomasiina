@@ -1,22 +1,25 @@
 import React from 'react';
 
 import { useField } from 'formik';
-import _ from 'lodash';
-import { Form } from 'react-bootstrap';
+import {
+  Button, Col, Form, Row,
+} from 'react-bootstrap';
 import { SortEnd } from 'react-sortable-hoc';
 
+import FieldRow from '../../../components/FieldRow';
 import { EditorQuota } from '../../../modules/editor/types';
 import Sortable from './Sortable';
 
 const Quotas = () => {
-  const [{ value: quotas }, , { setValue }] = useField<EditorQuota[]>('quota');
+  const [{ value: quotas }, , { setValue }] = useField<EditorQuota[]>('quotas');
 
   function addQuota() {
     setValue([
       ...quotas,
       {
+        key: `new-${Math.random()}`,
         title: '',
-        size: 0,
+        size: null,
       },
     ]);
   }
@@ -29,11 +32,11 @@ const Quotas = () => {
   }
 
   const quotaItems = quotas.map((quota, index) => {
-    const thisQuota = quota.id;
+    const thisQuota = quota.key;
 
     function updateField<F extends keyof EditorQuota>(field: F, value: EditorQuota[F]) {
       setValue(quotas.map((item) => {
-        if (item.id === thisQuota) {
+        if (item.key === thisQuota) {
           if (field === 'size' && !value) {
             return {
               ...item,
@@ -50,47 +53,52 @@ const Quotas = () => {
     }
 
     function removeQuota() {
-      setValue(_.reject(quotas, { id: thisQuota }));
+      setValue(quotas.filter((_quota, i) => i !== index));
     }
 
     return (
-      <div className="panel-body" key={quota.id}>
-        <div className="col-xs-12 col-sm-10">
-          <Form.Label htmlFor={`quota-${quota.id}-title`}>
-            Kiintiön nimi
-          </Form.Label>
-          <Form.Control
-            id={`quota-${quota.id}-title`}
-            type="text"
-            value={quota.title}
-            onChange={(e) => updateField('title', e.target.value)}
-          />
-          <div className="form-text">
-            {quotas.length === 1 && 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen.'}
-            Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.
-          </div>
-          <Form.Label htmlFor={`quota-${quota.id}-max-attendees`}>
-            Kiintiön koko
-          </Form.Label>
-          <Form.Control
-            id={`quota-${quota.id}-max-attendees`}
-            type="number"
-            min={1}
-            value={quota.size || ''}
-            onChange={(e) => updateField('size', Number(e.target.value))}
-          />
-          <div className="form-text">
-            Jos kiintiön kokoa ole rajoitettu, jätä kenttä tyhjäksi.
-          </div>
-        </div>
+      <Row key={quota.key} className="quota-body">
+        <Col xs="12" sm="10">
+          <FieldRow
+            name={`quota-${quota.key}-title`}
+            label="Kiintiön nimi"
+            help={
+              (quotas.length === 1
+                ? 'Jos kiintiöitä on vain yksi, voit antaa sen nimeksi esim. tapahtuman nimen. '
+                : '')
+                + (index === 0 ? 'Voit järjestellä kiintiöitä raahaamalla niitä vasemmalta.' : '')
+            }
+            required
+          >
+            <Form.Control
+              type="text"
+              required
+              value={quota.title}
+              onChange={(e) => updateField('title', e.target.value)}
+            />
+          </FieldRow>
+          <FieldRow
+            name={`quota-${quota.key}-max-attendees`}
+            label="Kiintiön koko"
+            help="Jos kiintiön kokoa ei ole rajoitettu, jätä kenttä tyhjäksi."
+          >
+            <Form.Control
+              type="number"
+              min={1}
+              required
+              value={quota.size || ''}
+              onChange={(e) => updateField('size', Number(e.target.value))}
+            />
+          </FieldRow>
+        </Col>
         {index > 0 && (
-          <div className="col-xs-12 col-sm-2 no-focus">
-            <button type="button" className="btn btn-link" onClick={() => removeQuota()}>
+          <Col xs="12" sm="2" className="no-focus">
+            <Button type="button" variant="danger" onClick={removeQuota}>
               Poista kiintiö
-            </button>
-          </div>
+            </Button>
+          </Col>
         )}
-      </div>
+      </Row>
     );
   });
 
@@ -103,9 +111,9 @@ const Quotas = () => {
         useDragHandle
       />
       <div className="text-center">
-        <button type="button" className="btn btn-primary" onClick={addQuota}>
+        <Button type="button" variant="primary" onClick={addQuota}>
           Lisää kiintiö
-        </button>
+        </Button>
       </div>
     </>
   );

@@ -18,7 +18,7 @@ import SingleEvent from '../routes/SingleEvent';
 import configureStore, { history } from '../store/configureStore';
 import requireAuth from './requireAuth';
 
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/scss/main.scss';
 
 const { store, persistor } = configureStore();
 

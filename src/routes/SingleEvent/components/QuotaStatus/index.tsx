@@ -39,8 +39,8 @@ const QuotaStatus = ({ signups }: Props) => {
           <ViewProgress
             key={quota.id}
             title={quota.title!}
-            value={Math.min(quota.signups.length, quota.size)}
-            max={quota.size}
+            value={quota.signups.length}
+            max={quota.size || Infinity}
           />
         );
       })}

@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { Field, useFormikContext } from 'formik';
-import { Form } from 'react-bootstrap';
+import { Col, Form, Row } from 'react-bootstrap';
 
+import FieldRow from '../../../components/FieldRow';
 import { EditorEvent } from '../../../modules/editor/types';
 import DateTimePicker from './DateTimePicker';
 import Quotas from './Quotas';
@@ -11,37 +12,40 @@ const QuotasTab = () => {
   const { values: { useOpenQuota } } = useFormikContext<EditorEvent>();
   return (
     <div>
-      <Field
-        as={DateTimePicker}
+      <FieldRow
         name="registrationStartDate"
-        label="Ilmo alkaa"
-      />
-      <Field
         as={DateTimePicker}
+        label="Ilmo alkaa"
+        required
+      />
+      <FieldRow
         name="registrationEndDate"
+        as={DateTimePicker}
         label="Ilmo päättyy"
+        required
       />
       <hr />
-      <div>
-        <Quotas />
-        <div className="clearfix" />
-        <Field
-          as={Form.Check}
-          name="useOpenQuota"
-          label="Käytä lisäksi yhteistä kiintiötä"
+      <Quotas />
+      <Form.Group as={Row}>
+        <Col sm="3" />
+        <Col sm="9">
+          <Field
+            as={Form.Check}
+            id="useOpenQuota"
+            name="useOpenQuota"
+            label="Käytä lisäksi yhteistä kiintiötä"
+          />
+        </Col>
+      </Form.Group>
+      {useOpenQuota && (
+        <FieldRow
+          name="openQuotaSize"
+          label="Avoimen kiintiön koko"
+          type="number"
+          min="0"
+          required
         />
-        {useOpenQuota && (
-          <Form.Group controlId="openQuotaSize">
-            <Form.Label>Avoimen kiintiön koko</Form.Label>
-            <Field
-              as={Form.Control}
-              name="openQuotaSize"
-              min="0"
-              type="number"
-            />
-          </Form.Group>
-        )}
-      </div>
+      )}
     </div>
   );
 };

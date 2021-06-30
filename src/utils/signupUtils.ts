@@ -22,7 +22,7 @@ export type SignupWithQuotaName = AnySignupDetails & {
 export type QuotaSignups = {
   id: EffectiveQuota;
   title?: string,
-  size: number;
+  size: number | null;
   signups: SignupWithQuotaName[];
 };
 

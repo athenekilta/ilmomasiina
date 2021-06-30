@@ -5,6 +5,7 @@ import { Spinner } from 'react-bootstrap';
 import nl2br from 'react-nl2br';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { Quota } from '../../api/events';
 import { createPendingSignup, getEvent, resetState } from '../../modules/singleEvent/actions';
@@ -62,10 +63,16 @@ const SingleEvent = ({ match }: Props) => {
     );
   }
 
-  function beginSignup(quotaId: Quota.Id) {
+  async function beginSignup(quotaId: Quota.Id) {
     if (formOpen) return;
-    dispatch(createPendingSignup(quotaId));
-    setFormOpen(true);
+    const success = await dispatch(createPendingSignup(quotaId));
+    if (success) {
+      setFormOpen(true);
+    } else {
+      toast.error('Ilmoittautuminen epäonnistui.', {
+        autoClose: 5000,
+      });
+    }
   }
 
   if (formOpen) {

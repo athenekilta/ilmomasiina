@@ -1,10 +1,11 @@
 .DS_STORE
 *.log
 
-node_modules
+node_modules/
 
-dist
-coverage
+dist/
+build/
+coverage/
 
 .idea/
 .vscode/

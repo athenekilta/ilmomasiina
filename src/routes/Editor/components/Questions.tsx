@@ -3,10 +3,11 @@ import React from 'react';
 import { useField } from 'formik';
 import _ from 'lodash';
 import {
-  Button, Card, Col, Form,
+  Button, Col, Form, InputGroup, Row,
 } from 'react-bootstrap';
 import { SortEnd } from 'react-sortable-hoc';
 
+import FieldRow from '../../../components/FieldRow';
 import { EditorQuestion } from '../../../modules/editor/types';
 import Sortable from './Sortable';
 
@@ -25,6 +26,7 @@ const Questions = () => {
     setValue([
       ...questions,
       {
+        key: `new-${Math.random()}`,
         required: false,
         public: false,
         question: '',
@@ -42,11 +44,11 @@ const Questions = () => {
   }
 
   const questionItems = questions.map((question) => {
-    const thisQuestion = question.id;
+    const thisQuestion = question.key;
 
     function updateField<F extends keyof EditorQuestion>(field: F, value: EditorQuestion[F]) {
       setValue(questions.map((item) => {
-        if (item.id === thisQuestion) {
+        if (item.key === thisQuestion) {
           return {
             ...item,
             [field]: value,
@@ -57,24 +59,36 @@ const Questions = () => {
     }
 
     function removeQuestion() {
-      setValue(_.reject(questions, { id: thisQuestion }));
+      setValue(_.reject(questions, { key: thisQuestion }));
     }
 
-    function updateOption(index: number, value: string) {
+    function updateOption(optIndex: number, value: string) {
       setValue(questions.map((item) => {
-        if (item.id === thisQuestion) {
+        if (item.key === thisQuestion) {
           return {
             ...item,
-            options: item.options?.map((prev, i) => (i === index ? value : prev)) ?? null,
+            options: item.options?.map((prev, i) => (i === optIndex ? value : prev)) ?? null,
           };
         }
-        return question;
+        return item;
+      }));
+    }
+
+    function removeOption(optIndex: number) {
+      setValue(questions.map((item) => {
+        if (item.key === thisQuestion) {
+          return {
+            ...item,
+            options: item.options?.filter((_prev, i) => i !== optIndex) ?? null,
+          };
+        }
+        return item;
       }));
     }
 
     function addOption() {
       setValue(questions.map((item) => {
-        if (item.id === thisQuestion) {
+        if (item.key === thisQuestion) {
           return {
             ...item,
             options: [...item.options, ''],
@@ -85,75 +99,98 @@ const Questions = () => {
     }
 
     return (
-      <Card.Body key={question.id}>
+      <Row key={question.key} className="question-body">
         <Col xs="12" sm="10">
-          <Form.Label htmlFor={`question-${question.id}-question`}>
-            Kysymys
-          </Form.Label>
-          <Form.Control
-            id={`question-${question.id}-question`}
-            type="text"
-            required
-            value={question.question}
-            onChange={(e) => updateField('question', e.target.value)}
-          />
-          <Form.Label htmlFor={`question-${question.id}-type`}>
-            Tyyppi
-          </Form.Label>
-          <Form.Control
-            as="select"
-            id={`question-${question.id}-type`}
-            value={question.type}
-            onChange={(e) => updateField('type', e.target.value as EditorQuestion['type'])}
+          <FieldRow
+            name={`question-${question.key}-question`}
+            label="Kysymys"
             required
           >
-            {QUESTION_TYPES.map((type) => (
-              <option key={type.label} value={type.value}>
-                {type.label}
-              </option>
-            ))}
-          </Form.Control>
-          {(question.type === 'select' || question.type === 'checkbox') && (
-            <div>
-              {question.options.map((option, optIndex) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <div className="form-row" key={optIndex}>
-                  <Form.Label htmlFor={`question-${question.id}-options-${optIndex}`}>
-                    Vastausvaihtoehto
-                  </Form.Label>
-                  <Form.Control
-                    name={`question-${question.id}-option-${optIndex}`}
-                    type="text"
-                    required
-                    value={option}
-                    onChange={(e) => updateOption(optIndex, e.target.value)}
-                  />
-                </div>
+            <Form.Control
+              type="text"
+              required
+              value={question.question}
+              onChange={(e) => updateField('question', e.target.value)}
+            />
+          </FieldRow>
+          <FieldRow
+            name={`question-${question.key}-type`}
+            label="Tyyppi"
+            required
+          >
+            <Form.Control
+              as="select"
+              value={question.type}
+              onChange={(e) => updateField('type', e.target.value as EditorQuestion['type'])}
+              required
+            >
+              {QUESTION_TYPES.map((type) => (
+                <option key={type.label} value={type.value}>
+                  {type.label}
+                </option>
               ))}
-              <Button variant="link" type="button" onClick={addOption}>
-                Lisää vastausvaihtoehto
-              </Button>
-            </div>
+            </Form.Control>
+          </FieldRow>
+          {(question.type === 'select' || question.type === 'checkbox') && (
+            <>
+              {question.options.map((option, optIndex) => (
+                <FieldRow
+                  name={`question-${question.key}-options-${optIndex}`}
+                  label="Vastausvaihtoehto"
+                  required
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={optIndex}
+                >
+                  <InputGroup>
+                    <Form.Control
+                      type="text"
+                      required
+                      value={option}
+                      onChange={(e) => updateOption(optIndex, e.target.value)}
+                    />
+                    <InputGroup.Append>
+                      <Button
+                        variant="outline-danger"
+                        aria-label="Poista vastausvaihtoehto"
+                        onClick={() => removeOption(optIndex)}
+                      >
+                        Poista
+                      </Button>
+                    </InputGroup.Append>
+                  </InputGroup>
+                </FieldRow>
+              ))}
+              <Row>
+                <Col sm="3" />
+                <Col sm="9">
+                  <Button variant="secondary" type="button" onClick={addOption}>
+                    Lisää vastausvaihtoehto
+                  </Button>
+                </Col>
+              </Row>
+            </>
           )}
         </Col>
         <Col xs="12" sm="2">
           <Form.Check
-            id={`question-${question.id}-required`}
+            id={`question-${question.key}-required`}
             label="Pakollinen"
             checked={question.required}
             onChange={(e) => updateField('required', e.target.checked)}
+            className="mb-3"
           />
           <Form.Check
-            id={`question-${question.id}-public`}
+            id={`question-${question.key}-public`}
             label="Julkinen"
             checked={question.public}
             onChange={(e) => updateField('public', e.target.checked)}
+            className="mb-3"
           />
-          <Button variant="link" type="button" onClick={removeQuestion}>
+          <Button variant="danger" type="button" onClick={removeQuestion}>
             Poista kysymys
           </Button>
         </Col>
-      </Card.Body>
+      </Row>
     );
   });
 
@@ -165,9 +202,11 @@ const Questions = () => {
         onSortEnd={updateOrder}
         useDragHandle
       />
-      <button type="button" className="btn btn-primary pull-right" onClick={addQuestion}>
-        Lisää kysymys
-      </button>
+      <div className="text-center">
+        <Button type="button" variant="primary" onClick={addQuestion}>
+          Lisää kysymys
+        </Button>
+      </div>
     </>
   );
 };

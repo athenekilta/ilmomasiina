@@ -6,6 +6,8 @@ import { Button, Container, Form } from 'react-bootstrap';
 import { login } from '../../modules/auth/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
+import './Login.scss';
+
 type FormData = {
   email: string;
   password: string;
@@ -35,35 +37,39 @@ const Login = () => {
         onSubmit={onSubmit}
       >
         {({ handleSubmit, isSubmitting, errors }) => (
-          <form onSubmit={handleSubmit} noValidate>
-            <Form.Label htmlFor="email"/* THEMEUI sx={{ variant: 'forms.label.login' }} */>
-              Sähköposti
-            </Form.Label>
-            <Field
-              as={Form.Control}
-              name="email"
-              id="email"
-              type="email"
-              placeholder="admin@athene.fi"
-              isInvalid={errors.email}
-            />
-            {errors.email && <p>Tämä kenttä vaaditaan</p>}
-            <Form.Label htmlFor="password"/* THEMEUI sx={{ variant: 'forms.label.login' }} */>
-              Salasana
-            </Form.Label>
-            <Field
-              as={Form.Control}
-              name="password"
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              isInvalid={errors.password}
-            />
-            {errors.password && <p>Tämä kenttä vaaditaan</p>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="email">
+              <Form.Label data-required>Sähköposti</Form.Label>
+              <Field
+                name="email"
+                as={Form.Control}
+                type="email"
+                required
+                placeholder="admin@athene.fi"
+                isInvalid={errors.email}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.email && 'Tämä kenttä vaaditaan'}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="password">
+              <Form.Label data-required>Salasana</Form.Label>
+              <Field
+                name="password"
+                as={Form.Control}
+                type="password"
+                required
+                placeholder="••••••••"
+                isInvalid={errors.password}
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.password && 'Tämä kenttä vaaditaan'}
+              </Form.Control.Feedback>
+            </Form.Group>
             <Button type="submit" variant="secondary" disabled={isSubmitting}>
               Kirjaudu
             </Button>
-          </form>
+          </Form>
         )}
       </Formik>
     </Container>

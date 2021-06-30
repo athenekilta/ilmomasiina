@@ -9,72 +9,81 @@ html {
 .btn[disabled] {
   opacity: 0.35;
 }
-#root {
-  h1 {
-    font-weight: 800;
-    font-size: 32px;
-    text-transform: uppercase;
-    margin: 1em 0;
-  }
 
-  h2 {
-    font-weight: 600;
-    font-size: 20px;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: $alt-text;
-  }
+h1 {
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 1em 0;
+}
 
-  h3 {
-    font-weight: 600;
-    font-size: 16px;
-  }
+h2 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: $alt-text;
+}
 
-  p {
-    margin-bottom: 1.5em;
-  }
+h3 {
+  font-weight: 600;
+  font-size: 16px;
+}
 
-  strong {
-    font-weight: 600;
-  }
+p {
+  margin-bottom: 1.5em;
+}
 
-  .checkbox label {
-    font-weight: 400;
-  }
+label, strong {
+  font-weight: 600;
+}
 
-  table.table {
-    thead {
-      th {
-        border-bottom-width: 1px;
-        font-weight: 600;
-      }
+label[data-required]:not([data-required=false])::after {
+  content: '\00A0*';
+  color: $red;
+  font-weight: 600;
+}
+
+label.form-check-label {
+  font-weight: 400;
+}
+
+.col-form-label.col-sm-3 {
+  @include media-breakpoint-up(sm) {
+    text-align: right;
+  }
+}
+
+table.table {
+  thead {
+    th {
+      border-bottom-width: 1px;
+      font-weight: 600;
     }
   }
+}
 
-  .required-symbol {
-    color: $red;
-    font-weight: 600;
+.required-symbol {
+  color: $red;
+  font-weight: 600;
+}
+
+.progress,
+.progress-bar {
+  box-shadow: none;
+}
+
+textarea {
+  max-width: 100%;
+}
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .page-wrapper {
+    flex: 1 0 auto;
   }
 
-  .progress,
-  .progress-bar {
-    box-shadow: none;
-  }
-
-  textarea {
-    max-width: 100%;
-  }
-
-  .layout-wrapper {
-    display: flex;
-    flex-direction: column;
-
-    .page-wrapper {
-      flex: 1 0 auto;
-    }
-
-    .page-footer {
-      flex-shrink: 0;
-    }
+  .page-footer {
+    flex-shrink: 0;
   }
 }

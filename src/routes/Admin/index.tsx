@@ -62,15 +62,8 @@ const AdminEventList = () => {
           ))}
         </tbody>
       </table>
-      <Button variant="secondary">
-        <Link
-          to={`${PREFIX_URL}/admin/edit/new`}
-          /* THEMEUI sx={{
-            color: 'inherit',
-          }} */
-        >
-          + Uusi tapahtuma
-        </Link>
+      <Button as={Link} variant="secondary" to={`${PREFIX_URL}/admin/edit/new`}>
+        + Uusi tapahtuma
       </Button>
 
       <h1>Luo uusi käyttäjä</h1>

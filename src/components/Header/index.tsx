@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from 'react-bootstrap';
+import { Button, Container, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { redirectToLogin } from '../../modules/auth/actions';
@@ -13,8 +13,8 @@ const Header = () => {
   const loggedIn = useTypedSelector((state) => state.auth.loggedIn);
 
   return (
-    <div className="navbar navbar-default">
-      <div className="container">
+    <Navbar>
+      <Container>
         <Link
           to={`${PREFIX_URL}/`}
           className="navbar-brand"
@@ -28,8 +28,8 @@ const Header = () => {
             Logout
           </Button>
         )}
-      </div>
-    </div>
+      </Container>
+    </Navbar>
   );
 };
 

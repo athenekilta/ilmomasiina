@@ -2,10 +2,11 @@ import React, { ReactNode } from 'react';
 
 import { useField } from 'formik';
 import _ from 'lodash';
-import { Form, Row } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 import { Event } from '../../api/events';
 import { Signup } from '../../api/signups';
+import FieldRow from '../FieldRow';
 
 type Props = {
   name: string;
@@ -28,16 +29,15 @@ const QuestionFields = ({ name, questions }: Props) => {
         }
 
         function toggleChecked(option: string, checked: boolean) {
-          const currentAnswers = currentAnswer.split(';');
+          const currentAnswers = _.filter(currentAnswer.split(';'));
           const newAnswers = checked ? _.concat(currentAnswers, option) : _.without(currentAnswers, option);
           updateAnswer(newAnswers.join(';'));
         }
 
-        const help = question.public ? (
-          <Form.Text muted>Tämän kentän vastaukset ovat julkisia.</Form.Text>
-        ) : null;
+        const help = question.public ? 'Tämän kentän vastaukset ovat julkisia.' : null;
 
         let input: ReactNode;
+        let isCheckboxes = false;
         switch (question.type) {
           case 'text':
             input = (
@@ -68,6 +68,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                     // eslint-disable-next-line react/no-array-index-key
                     key={optIndex}
                     type="checkbox"
+                    id={`question-${question.id}-option-${optIndex}`}
                     value={option}
                     label={option}
                     required={question.required && !currentAnswers.some((answer) => answer !== option)}
@@ -77,6 +78,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                 ))}
               </>
             );
+            isCheckboxes = true;
             break;
           }
           case 'textarea':
@@ -117,6 +119,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                   // eslint-disable-next-line react/no-array-index-key
                   key={optIndex}
                   type="radio"
+                  id={`question-${question.id}-option-${optIndex}`}
                   inline
                   value={option}
                   label={option}
@@ -125,6 +128,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                   onChange={(e) => updateAnswer(e.target.value)}
                 />
               ));
+              isCheckboxes = true;
             }
             break;
           default:
@@ -132,11 +136,16 @@ const QuestionFields = ({ name, questions }: Props) => {
         }
 
         return (
-          <Form.Group as={Row} key={question.id} controlId={`question-${question.id}`}>
-            <Form.Label>{question.question}</Form.Label>
+          <FieldRow
+            key={question.id}
+            name={`question-${question.id}`}
+            label={question.question}
+            required={question.required}
+            help={help}
+            checkAlign={isCheckboxes}
+          >
             {input}
-            {help}
-          </Form.Group>
+          </FieldRow>
         );
       })}
     </>

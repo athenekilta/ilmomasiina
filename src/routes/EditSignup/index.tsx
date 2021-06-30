@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 
-import { Spinner } from 'react-bootstrap';
+import {
+  Button, Col, Container, Row, Spinner,
+} from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -38,20 +40,20 @@ const EditSignup = ({ match }: RouteComponentProps<MatchParams>) => {
 
   if (deleted) {
     return (
-      <div className="container align-items-center">
+      <Container className="align-items-center">
         <div className="EditSignup--wrapper">
           <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-          <Link to={`${PREFIX_URL}/`} className="btn btn-default">
+          <Button as={Link} to={`${PREFIX_URL}/`} variant="secondary">
             Takaisin etusivulle
-          </Link>
+          </Button>
         </div>
-      </div>
+      </Container>
     );
   }
 
   if (loadError) {
     return (
-      <div className="container align-items-center">
+      <Container className="align-items-center">
         <div className="EditSignup--wrapper">
           <h1>Hups, jotain meni pieleen</h1>
           <p>
@@ -60,34 +62,34 @@ const EditSignup = ({ match }: RouteComponentProps<MatchParams>) => {
             ole vielä poistunut, yritä kohta uudestaan.
           </p>
         </div>
-      </div>
+      </Container>
     );
   }
 
   if (!event || !signup) {
     return (
-      <div className="container align-items-center">
+      <Container className="align-items-center">
         <div className="EditSignup--wrapper">
           <Spinner animation="border" />
         </div>
-      </div>
+      </Container>
     );
   }
 
   if (new Date(event.registrationEndDate) < new Date()) {
     return (
-      <div className="container align-items-center">
+      <Container className="align-items-center">
         <div className="EditSignup--wrapper">
           <h1>Hups, jotain meni pieleen</h1>
           <p>
             Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
             ilmoittautuminen on sulkeutunut.
           </p>
-          <Link to={`${PREFIX_URL}/`} className="btn btn-default">
+          <Button as={Link} to={`${PREFIX_URL}/`} variant="secondary">
             Takaisin etusivulle
-          </Link>
+          </Button>
         </div>
-      </div>
+      </Container>
     );
   }
 
@@ -116,30 +118,32 @@ const EditSignup = ({ match }: RouteComponentProps<MatchParams>) => {
   }
 
   return (
-    <div className="container align-items-center">
+    <Container>
       <EditForm submitForm={onSubmit} />
-      <div className="EditSignup--wrapper">
-        <h2>Poista ilmoittautuminen</h2>
-        <p>
-          Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan
-          {' '}
-          <strong>
-            {event.title}
-          </strong>
-          ?
-        </p>
-        <p>
-          Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos
-          muutat mielesi, voit aina ilmoittautua tapahtumaan uudelleen
-          myöhemmin, mutta siirryt silloin jonon hännille.
-          {' '}
-          <strong>Tätä toimintoa ei voi perua.</strong>
-        </p>
-        <button type="button" onClick={onDelete} className="btn btn-danger">
-          Poista ilmoittautuminen
-        </button>
-      </div>
-    </div>
+      <Row className="justify-content-md-center text-center my-5">
+        <Col xs="12" md="10" lg="8">
+          <h2>Poista ilmoittautuminen</h2>
+          <p>
+            Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan
+            {' '}
+            <strong>
+              {event.title}
+            </strong>
+            ?
+          </p>
+          <p>
+            Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos
+            muutat mielesi, voit aina ilmoittautua tapahtumaan uudelleen
+            myöhemmin, mutta siirryt silloin jonon hännille.
+            {' '}
+            <strong>Tätä toimintoa ei voi perua.</strong>
+          </p>
+          <button type="button" onClick={onDelete} className="btn btn-danger">
+            Poista ilmoittautuminen
+          </button>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
