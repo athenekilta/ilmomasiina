@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { ConnectedRouter } from 'connected-react-router';
-import { hot } from 'react-hot-loader/root';
 import { Provider } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Flip, ToastContainer } from 'react-toastify';
@@ -72,4 +71,4 @@ const AppContainer = () => (
   </Provider>
 );
 
-export default hot(AppContainer);
+export default AppContainer;

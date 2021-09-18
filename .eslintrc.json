@@ -8,16 +8,15 @@
     "version": "detect"
   },
   "extends": [
-    "standard",
-    "standard-react",
+    "airbnb",
+    "airbnb/hooks",
     "airbnb-typescript"
   ],
   "plugins": [
-    "babel",
-    "react",
-    "promise",
     "@typescript-eslint",
-    "simple-import-sort"
+    "promise",
+    "simple-import-sort",
+    "jest"
   ],
   "env": {
     "browser": true

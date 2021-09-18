@@ -7,7 +7,6 @@ import { deleteSignup, getEvent } from '../../../modules/editor/actions';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
 import { getSignupsForAdminList } from '../../../utils/signupUtils';
 
-import 'react-table/react-table.css';
 import '../Editor.scss';
 
 const SignupsTab = () => {
