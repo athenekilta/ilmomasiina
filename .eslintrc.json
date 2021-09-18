@@ -35,6 +35,11 @@
     "react/jsx-props-no-spreading": "off",
     // TypeScript validates prop types, no need for this.
     "react/require-default-props": "off",
+    // Definitely a valid performance concern, but implementing this correctly is
+    // a giant PITA - the default config ignores arrow functions but they don't solve
+    // the problem at all, and useCallback is just plain ugly.
+    "react/jsx-no-bind": "off",
+    // Sort imports: React first, then npm packages, then local files, then CSS.
     "simple-import-sort/sort": [
       "error",
       {

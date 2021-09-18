@@ -37,7 +37,7 @@ const SingleEvent = ({ match }: Props) => {
     return () => {
       dispatch(resetState());
     };
-  }, [match.params.id]);
+  }, [dispatch, match.params.id]);
 
   if (eventLoadError) {
     return (

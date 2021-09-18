@@ -80,7 +80,7 @@ const Editor = ({ history, match }: Props) => {
     return () => {
       dispatch(resetState());
     };
-  }, []);
+  }, [dispatch, match.params.id]);
 
   async function onSubmit(data: EditorEvent, { setSubmitting }: FormikHelpers<EditorEvent>) {
     const modifiedEvent = {

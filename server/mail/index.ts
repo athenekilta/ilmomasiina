@@ -38,7 +38,7 @@ if (config.mailgunApiKey) {
       });
       input.on('end', () => {
         console.log(data);
-        callback(null, { envelope, messageId });
+        callback(null, { envelope, messageId } as any);
       });
     },
   });

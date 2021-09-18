@@ -22,7 +22,7 @@ const EventList = () => {
     return () => {
       dispatch(resetState());
     };
-  }, []);
+  }, [dispatch]);
 
   if (eventsLoadError) {
     return (

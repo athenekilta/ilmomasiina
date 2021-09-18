@@ -24,19 +24,20 @@ interface MatchParams {
   editToken: string;
 }
 
-const EditSignup = ({ match }: RouteComponentProps<MatchParams>) => {
+type Props = RouteComponentProps<MatchParams>;
+
+const EditSignup = ({ match }: Props) => {
   const dispatch = useTypedDispatch();
   const {
     event, loadError, deleted, signup,
   } = useTypedSelector((state) => state.editSignup, shallowEqual);
 
   useEffect(() => {
-    const { id, editToken } = match.params;
-    dispatch(getSignupAndEvent(id, editToken));
+    dispatch(getSignupAndEvent(match.params.id, match.params.editToken));
     return () => {
       dispatch(resetState());
     };
-  }, []);
+  }, [dispatch, match.params.id, match.params.editToken]);
 
   if (deleted) {
     return (

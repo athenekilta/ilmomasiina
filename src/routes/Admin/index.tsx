@@ -20,7 +20,7 @@ const AdminEventList = () => {
     return () => {
       resetState();
     };
-  }, []);
+  }, [dispatch]);
 
   if (eventsLoadError) {
     return (
