@@ -38,7 +38,7 @@ export class SignupsService extends AdapterService<SignupsServiceResponses> {
   }
 }
 
-export default function (this: IlmoApplication) {
+export default function setupSignupsService(this: IlmoApplication) {
   const app = this;
 
   app.use('/api/signups', new SignupsService({}));

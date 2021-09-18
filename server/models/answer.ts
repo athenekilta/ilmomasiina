@@ -35,7 +35,7 @@ export class Answer extends Model<AnswerAttributes, AnswerCreationAttributes> im
   public readonly updatedAt!: Date;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupAnswerModel(this: IlmoApplication) {
   const sequelize = this.get('sequelize');
 
   Answer.init({

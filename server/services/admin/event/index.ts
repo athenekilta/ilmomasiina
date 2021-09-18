@@ -40,7 +40,7 @@ export class AdminEventsService extends AdapterService<AdminEventsServiceRespons
   }
 }
 
-export default function (this: IlmoApplication) {
+export default function setupAdminEventsService(this: IlmoApplication) {
   const app = this;
 
   app.use('/api/admin/events', new AdminEventsService({}));

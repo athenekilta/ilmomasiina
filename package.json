@@ -83,7 +83,7 @@
       }
     },
     "lint": {
-      "command": "eslint config server src tests"
+      "command": "eslint server src tests"
     },
     "lint:fix": {
       "command": "npm run lint -- --fix"

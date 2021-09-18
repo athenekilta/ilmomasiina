@@ -49,7 +49,7 @@ export class Quota extends Model<QuotaAttributes, QuotaCreationAttributes> imple
   public readonly signupCount?: number;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupQuotaModel(this: IlmoApplication) {
   const sequelize = this.get('sequelize');
 
   Quota.init({

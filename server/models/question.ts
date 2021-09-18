@@ -54,7 +54,7 @@ export class Question extends Model<QuestionAttributes, QuestionCreationAttribut
   public readonly updatedAt!: Date;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupQuestionModel(this: IlmoApplication) {
   const sequelize: Sequelize = this.get('sequelize');
 
   Question.init({

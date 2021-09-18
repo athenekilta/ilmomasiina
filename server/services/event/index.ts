@@ -37,7 +37,7 @@ export class EventsService extends AdapterService<EventsServiceResponses> {
   }
 }
 
-export default function (this: IlmoApplication) {
+export default function setupEventsService(this: IlmoApplication) {
   const app = this;
 
   // Initialize our service with any options it requires

@@ -40,7 +40,7 @@
     // the problem at all, and useCallback is just plain ugly.
     "react/jsx-no-bind": "off",
     // Sort imports: React first, then npm packages, then local files, then CSS.
-    "simple-import-sort/sort": [
+    "simple-import-sort/imports": [
       "error",
       {
         "groups": [

@@ -74,7 +74,7 @@ export class Event extends Model<EventAttributes, EventCreationAttributes> imple
   public readonly updatedAt!: Date;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupEventModel(this: IlmoApplication) {
   const sequelize = this.get('sequelize');
 
   Event.init(

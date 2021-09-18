@@ -7,7 +7,7 @@ import { Signup } from '../models/signup';
 const redactedName = 'Deleted';
 const redactedEmail = 'deleted@gdpr';
 
-export default async function () {
+export default async function anonymizeOldSignups() {
   const signups = await Signup.findAll({
     where: {
       [Op.and]: {

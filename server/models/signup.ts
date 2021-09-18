@@ -53,7 +53,7 @@ export class Signup extends Model<SignupAttributes, SignupCreationAttributes> im
   public readonly updatedAt!: Date;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupSignupModel(this: IlmoApplication) {
   const sequelize = this.get('sequelize');
 
   Signup.init(

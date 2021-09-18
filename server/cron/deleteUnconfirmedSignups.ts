@@ -4,7 +4,7 @@ import { Op } from 'sequelize';
 
 import { Signup } from '../models/signup';
 
-export default async function () {
+export default async function deleteUnconfirmedSignups() {
   const signups = await Signup.unscoped().findAll({
     where: {
       [Op.and]: {

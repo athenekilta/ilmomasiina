@@ -1,7 +1,7 @@
 import { HookContext } from '@feathersjs/feathers';
 
-import { NewUserData } from '..';
 import EmailService from '../../../mail';
+import { NewUserData } from '..';
 
 export default () => (hook: HookContext<NewUserData>) => {
   const fields = [

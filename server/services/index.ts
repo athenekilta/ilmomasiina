@@ -3,8 +3,8 @@ import { AuthenticationService } from '@feathersjs/authentication';
 import { Service } from '@feathersjs/feathers';
 
 import { IlmoApplication } from '../defs';
-import adminevents, { AdminEventsService } from './admin/event';
-import adminsignups, { AdminSignupsService } from './admin/signup';
+import adminEvents, { AdminEventsService } from './admin/event';
+import adminSignups, { AdminSignupsService } from './admin/signup';
 import authentication from './authentication';
 import event, { EventsService } from './event';
 import signup, { SignupsService } from './signup';
@@ -22,12 +22,12 @@ export interface IlmoServices {
   '/api/users': UsersService;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupServices(this: IlmoApplication) {
   const app = this;
 
   app.configure(authentication);
-  app.configure(adminevents);
-  app.configure(adminsignups);
+  app.configure(adminEvents);
+  app.configure(adminSignups);
   app.configure(event);
   app.configure(signup);
   app.configure(user);

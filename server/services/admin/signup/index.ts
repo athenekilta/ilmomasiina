@@ -37,7 +37,7 @@ export class AdminSignupsService extends AdapterService<AdminSignupsServiceRespo
   }
 }
 
-export default function (this: IlmoApplication) {
+export default function setupAdminSignupsService(this: IlmoApplication) {
   const app = this;
 
   app.use('/api/admin/signups', new AdminSignupsService({}));

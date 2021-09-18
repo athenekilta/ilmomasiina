@@ -1,8 +1,8 @@
 import { HookContext } from '@feathersjs/feathers';
 import _ from 'lodash';
 
-import { NewUserData } from '..';
 import config from '../../../config';
+import { NewUserData } from '..';
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzåäö0123456789';
 const LENGTH = 24;

@@ -1,7 +1,7 @@
 import Email from 'email-templates';
 import nodemailer, { Transporter } from 'nodemailer';
-import mailgun from 'nodemailer-mailgun-transport';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import mailgun from 'nodemailer-mailgun-transport';
 import path from 'path';
 
 import config from '../config';
