@@ -8,7 +8,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import CoreLayout from '../layouts/CoreLayout';
 import PageNotFound from '../routes/404/PageNotFound';
-import Admin from '../routes/Admin';
+import AdminEventsList from '../routes/Admin/AdminEventsList';
+import AdminUsersList from '../routes/Admin/AdminUsersList';
 import Editor from '../routes/Editor';
 import EditSignup from '../routes/EditSignup';
 import Events from '../routes/Events';
@@ -28,7 +29,11 @@ const AppContainer = () => (
         <ConnectedRouter history={history}>
           <CoreLayout>
             <Switch>
-              <Route exact path={`${PREFIX_URL}/`} component={Events} />
+              <Route
+                exact
+                path={`${PREFIX_URL}/`}
+                component={Events}
+              />
               <Route
                 exact
                 path={`${PREFIX_URL}/event/:id`}
@@ -39,18 +44,30 @@ const AppContainer = () => (
                 path={`${PREFIX_URL}/signup/:id/:editToken`}
                 component={EditSignup}
               />
-              <Route exact path={`${PREFIX_URL}/login`} component={Login} />
+              <Route
+                exact
+                path={`${PREFIX_URL}/login`}
+                component={Login}
+              />
               <Route
                 exact
                 path={`${PREFIX_URL}/admin`}
-                component={requireAuth(Admin)}
+                component={requireAuth(AdminEventsList)}
+              />
+              <Route
+                exact
+                path={`${PREFIX_URL}/admin/users`}
+                component={requireAuth(AdminUsersList)}
               />
               <Route
                 exact
                 path={`${PREFIX_URL}/admin/edit/:id`}
                 component={requireAuth(Editor)}
               />
-              <Route path="*" component={PageNotFound} />
+              <Route
+                path="*"
+                component={PageNotFound}
+              />
             </Switch>
           </CoreLayout>
         </ConnectedRouter>

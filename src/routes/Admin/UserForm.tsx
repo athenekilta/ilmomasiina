@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { createUser } from '../../modules/admin/actions';
+import { createUser, getUsers } from '../../modules/admin/actions';
 import { useTypedDispatch } from '../../store/reducers';
 
 type FormData = {
@@ -16,10 +16,12 @@ type FormData = {
 const UserForm = () => {
   const dispatch = useTypedDispatch();
 
-  const onSubmit = async (data: FormData, { setSubmitting }: FormikHelpers<FormData>) => {
+  const onSubmit = async (data: FormData, { setSubmitting, resetForm }: FormikHelpers<FormData>) => {
     // TODO: better error handling
     const success = await dispatch(createUser(data));
     if (success) {
+      dispatch(getUsers());
+      resetForm();
       toast.success('Käyttäjän luominen onnistui,', { autoClose: 2000 });
     } else {
       toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });

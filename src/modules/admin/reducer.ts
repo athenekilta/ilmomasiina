@@ -5,12 +5,16 @@ import {
   USER_CREATE_FAILED,
   USER_CREATED,
   USER_CREATING,
+  USERS_LOAD_FAILED,
+  USERS_LOADED,
 } from './actionTypes';
 import { AdminActions, AdminState } from './types';
 
 const initialState: AdminState = {
   events: null,
   eventsLoadError: false,
+  users: null,
+  usersLoadError: false,
   userCreating: false,
 };
 
@@ -29,6 +33,17 @@ export default function reducer(
       return {
         ...state,
         eventsLoadError: true,
+      };
+    case USERS_LOADED:
+      return {
+        ...state,
+        users: action.payload,
+        usersLoadError: false,
+      };
+    case USERS_LOAD_FAILED:
+      return {
+        ...state,
+        usersLoadError: true,
       };
     case USER_CREATING:
       return {

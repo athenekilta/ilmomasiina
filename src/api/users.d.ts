@@ -6,6 +6,8 @@ import {
 import { StringifyApi } from './utils';
 
 export namespace User {
+  export type Id = List.User['id'];
+
   export type List = StringifyApi<_UserListResponse>;
   export namespace List {
     export type User = StringifyApi<_UserListItem>;

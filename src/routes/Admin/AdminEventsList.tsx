@@ -7,11 +7,10 @@ import { Link } from 'react-router-dom';
 import { getAdminEvents, resetState } from '../../modules/admin/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminEventListItem from './AdminEventListItem';
-import UserForm from './UserForm';
 
 import './AdminEventsList.scss';
 
-const AdminEventList = () => {
+const AdminEventsList = () => {
   const dispatch = useTypedDispatch();
   const { events, eventsLoadError } = useTypedSelector((state) => state.admin, shallowEqual);
 
@@ -65,11 +64,13 @@ const AdminEventList = () => {
       <Button as={Link} variant="secondary" to={`${PREFIX_URL}/admin/edit/new`}>
         + Uusi tapahtuma
       </Button>
-
-      <h1>Luo uusi käyttäjä</h1>
-      <UserForm />
+      <nav className="mt-3">
+        <Button as={Link} to={`${PREFIX_URL}/admin/users`}>
+          Käyttäjien hallintapaneeli
+        </Button>
+      </nav>
     </div>
   );
 };
 
-export default AdminEventList;
+export default AdminEventsList;

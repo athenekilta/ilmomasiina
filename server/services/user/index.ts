@@ -54,6 +54,7 @@ export default function configureUserService(this: IlmoApplication) {
       create: config.adminRegistrationAllowed ? [
         // Email and password can be provided for initial user creation.
         keep('email', 'password'),
+        generatePassword(),
         localHooks.hashPassword('password'),
       ] : [
         authHooks.authenticate('jwt'),
