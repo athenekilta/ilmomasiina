@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
 
@@ -33,7 +31,7 @@ const config = {
   adminRegistrationAllowed: process.env.ADMIN_REGISTRATION_ALLOWED === 'true',
 };
 
-_.forOwn(config, (value, key) => {
+Object.entries(config).forEach(([key, value]) => {
   if (value === undefined) {
     throw new Error(`Missing .env variable: ${key}, please check server/config.ts`);
   }

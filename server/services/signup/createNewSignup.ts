@@ -64,11 +64,16 @@ export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateRespon
   const newSignup = await Signup.create({ quotaId });
 
   // Add returned information.
+  const { id, createdAt } = newSignup;
+  const { position, status } = await computeSignupPosition(newSignup);
+  const editToken = generateToken(newSignup);
+
   return {
-    id: newSignup.id,
+    id,
     quotaId,
-    createdAt: newSignup.createdAt,
-    ...await computeSignupPosition(newSignup),
-    editToken: generateToken(newSignup),
+    createdAt,
+    position,
+    status,
+    editToken,
   };
 };

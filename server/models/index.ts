@@ -20,19 +20,25 @@ export interface IlmoModels {
 export default function setupDatabase(this: IlmoApplication) {
   const app = this;
 
+  const {
+    clearDbUrl,
+    dbDialect, dbHost, dbDatabase, dbUser, dbPassword,
+    dockerCompose,
+  } = config;
+
   let sequelize: Sequelize;
-  if (config.clearDbUrl) {
-    sequelize = new Sequelize(config.clearDbUrl, {
+  if (clearDbUrl) {
+    sequelize = new Sequelize(clearDbUrl, {
       logging: false,
     });
   } else {
     sequelize = new Sequelize(
-      config.dbDatabase!,
-      config.dbUser!,
-      config.dbPassword,
+      dbDatabase!,
+      dbUser!,
+      dbPassword,
       {
-        host: config.dockerCompose ? 'db' : config.dbHost!,
-        dialect: config.dbDialect as Dialect,
+        host: dockerCompose ? 'db' : dbHost!,
+        dialect: dbDialect as Dialect,
         logging: false,
       },
     );

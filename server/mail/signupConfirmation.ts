@@ -13,31 +13,36 @@ export default async (signup: Signup) => {
   const event = await quota.getEvent();
   const questions = await event.getQuestions();
 
+  const questionFields = questions
+    .map((question) => <const>[
+      question,
+      answers.find((answer) => answer.questionId === question.id),
+    ])
+    .filter(([, answer]) => answer)
+    .map(([question, answer]) => ({
+      label: question.question,
+      answer: answer!.answer,
+    }));
+
   const fields = [
     { label: 'Nimi', answer: `${signup.firstName} ${signup.lastName}` },
     { label: 'Sähköposti', answer: `${signup.email}` },
     { label: 'Kiintiö', answer: quota.title },
+    ...questionFields,
   ];
 
-  questions.forEach((question) => {
-    const answer = _.find(answers, { questionId: question.id });
-
-    if (answer) {
-      fields.push({
-        label: question.question,
-        answer: answer.answer,
-      });
-    }
-  });
+  const edited = answers.some((answer) => answer.createdAt.getTime() !== answer.updatedAt.getTime());
+  const date = moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm');
 
   const editToken = generateToken(signup);
+  const cancelLink = `${config.mailUrlBase}${config.pathPrefix}/signup/${signup.id}/${editToken}`;
 
   const params = {
     answers: fields,
-    edited: answers.some((answer) => answer.createdAt.getTime() !== answer.updatedAt.getTime()),
-    date: moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm'),
+    edited,
+    date,
     event,
-    cancelLink: `${config.mailUrlBase}${config.pathPrefix}/signup/${signup.id}/${editToken}`,
+    cancelLink,
   };
 
   EmailService.sendConfirmationMail(signup.email!, params);

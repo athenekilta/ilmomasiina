@@ -6,6 +6,9 @@ import { Quota } from '../../../../api/events';
 import { useTypedSelector } from '../../../../store/reducers';
 import signupState from '../../../../utils/signupStateText';
 
+// Show the countdown one minute before opening the signup.
+const COUNTDOWN_DURATION = 60 * 1000;
+
 type SignupButtonProps = {
   isOpen: boolean;
   beginSignup: (quotaId: Quota.Id) => void;
@@ -33,7 +36,7 @@ const SignupButton = (props: SignupButtonProps) => {
             event.registrationEndDate,
           ).label
         }
-        {total < 60000 && !isOpen ? (
+        {total < COUNTDOWN_DURATION && !isOpen ? (
           <span style={{ color: 'green' }}>
             {` (${seconds}  s)`}
           </span>

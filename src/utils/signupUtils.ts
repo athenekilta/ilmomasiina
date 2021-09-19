@@ -112,12 +112,20 @@ export function getSignupsForAdminList(event: AdminEvent.Details, includeWaitlis
 
   const sorted = _.orderBy(signupsArray, ['isWaitlist', 'isOpenQuota', 'createdAt']);
 
-  return sorted.map((signup) => ({
-    ...signup,
-    createdAt: moment(signup.createdAt)
-      .tz('Europe/Helsinki')
-      .format('DD.MM.YYYY HH:mm:ss'),
-    quota: `${signup.quotaName}${signup.isOpenQuota ? ' (Avoin)' : ''}${signup.isWaitlist ? ' (Jonossa)' : ''}`,
-    answers: getAnswersFromSignup(event, signup),
-  }));
+  return sorted.map((signup) => {
+    let quotaType = '';
+    if (signup.isOpenQuota) {
+      quotaType = ' (Avoin)';
+    } else if (signup.isWaitlist) {
+      quotaType = ' (Jonossa)';
+    }
+    return {
+      ...signup,
+      createdAt: moment(signup.createdAt)
+        .tz('Europe/Helsinki')
+        .format('DD.MM.YYYY HH:mm:ss'),
+      quota: `${signup.quotaName}${quotaType}`,
+      answers: getAnswersFromSignup(event, signup),
+    };
+  });
 }

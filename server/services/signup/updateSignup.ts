@@ -30,6 +30,9 @@ export interface SignupUpdateResponse {
   confirmedAt: Date;
 }
 
+// Fields that are present and required in every signup.
+const alwaysRequiredFields = ['firstName', 'lastName', 'email'] as const;
+
 export default async (id: number, data: SignupUpdateBody, params?: Params): Promise<SignupUpdateResponse> => {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
@@ -65,9 +68,8 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
     const questions = quota.event!.questions!;
 
     // Check that all common fields are present (if first time confirming)
-    const commonFields = ['firstName', 'lastName', 'email'] as const;
     if (!signup.confirmedAt) {
-      commonFields.forEach((fieldName) => {
+      alwaysRequiredFields.forEach((fieldName) => {
         if (!data[fieldName]) {
           throw new BadRequest(`Missing ${fieldName}`);
         }
@@ -129,7 +131,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
     // Update the fields for the signup if this is the first confirmation
     if (!signup.confirmedAt) {
       const updatedFields = {
-        ..._.pick(data, commonFields),
+        ..._.pick(data, alwaysRequiredFields),
         confirmedAt: new Date(),
       };
       await signup.update(updatedFields, { transaction });

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import moment from 'moment';
 import Countdown from 'react-countdown-now';
 
 import { Quota } from '../../../../api/events';
@@ -13,11 +14,12 @@ type CountDownProps = {
 const CountDown = (props: CountDownProps) => {
   const { beginSignup } = props;
   const event = useTypedSelector((state) => state.singleEvent.event)!;
+  const openingTime = moment().add(event.millisTillOpening || 0, 'ms').toDate();
 
   return (
     <Countdown
       daysInHours
-      date={new Date(new Date().getTime() + (event.millisTillOpening || 0))}
+      date={openingTime}
       renderer={({ completed, seconds, total }) => (
         <SignupButton
           isOpen={completed && !event.registrationClosed}

@@ -29,9 +29,10 @@ if (config.mailgunApiKey) {
     name: 'debug mail service',
     version: '0',
     send(mail, callback?) {
-      const envelope = mail.message.getEnvelope();
-      const messageId = mail.message.messageId();
-      const input = mail.message.createReadStream();
+      const { message } = mail;
+      const envelope = message.getEnvelope();
+      const messageId = message.messageId();
+      const input = message.createReadStream();
       let data = '';
       input.on('data', (chunk) => {
         data += chunk;
