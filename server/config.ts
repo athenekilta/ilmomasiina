@@ -12,7 +12,8 @@ const config = {
   dbPassword: process.env.DB_PASSWORD,
   dbDatabase: process.env.DB_DATABASE,
 
-  editTokenSalt: process.env.EDIT_TOKEN_SALT,
+  oldEditTokenSalt: process.env.EDIT_TOKEN_SALT || null,
+  newEditTokenSecret: process.env.NEW_EDIT_TOKEN_SECRET,
   feathersAuthSecret: process.env.FEATHERS_AUTH_SECRET,
 
   mailFrom: process.env.MAIL_FROM,
@@ -43,6 +44,14 @@ if (!['development', 'test', 'production'].includes(config.nodeEnv)) {
 
 if (!config.port && config.nodeEnv === 'production') {
   throw new Error('Missing .env variable: PORT');
+}
+
+if (config.oldEditTokenSalt === config.newEditTokenSecret) {
+  throw new Error(
+    'Don\'t use the same secret for EDIT_TOKEN_SALT and NEW_EDIT_TOKEN_SECRET. '
+    + 'If this is a new installation, leave EDIT_TOKEN_SALT empty. If this is an old installation, '
+    + 'leave EDIT_TOKEN_SALT as is and generate a new secret for NEW_EDIT_TOKEN_SECRET.',
+  );
 }
 
 if (config.adminRegistrationAllowed) {
