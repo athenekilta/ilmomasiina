@@ -10,14 +10,14 @@ import './Editor.scss';
 
 interface EditorToolbarProps {
   isNew: boolean;
+  isDraft: boolean;
+  onSubmitClick: (asDraft: boolean) => void;
 }
 
 type Props = EditorToolbarProps & RouteComponentProps<{ id: string }>;
 
-const EditorToolbar = ({ isNew }: Props) => {
-  const { isSubmitting, values: { draft } } = useFormikContext<EditorEvent>();
-
-  // TODO: fix submit buttons
+const EditorToolbar = ({ isNew, isDraft, onSubmitClick }: Props) => {
+  const { isSubmitting } = useFormikContext<EditorEvent>();
 
   return (
     <>
@@ -32,25 +32,27 @@ const EditorToolbar = ({ isNew }: Props) => {
       <div className="event-editor--buttons-wrapper">
         {isSubmitting && <Spinner animation="border" />}
         <div className="event-editor--public-status">
-          <div className={`event-editor--bubble ${draft ? 'draft' : 'public'} event-editor--animated`} />
-          <span>{draft ? 'Luonnos' : 'Julkaistu'}</span>
+          <div className={`event-editor--bubble ${isDraft ? 'draft' : 'public'} event-editor--animated`} />
+          <span>{isDraft ? 'Luonnos' : 'Julkaistu'}</span>
         </div>
         <ButtonGroup>
           {!isNew && (
             <Button
-              type="submit"
+              type="button"
               disabled={isSubmitting}
-              variant={draft ? 'success' : 'warning'}
+              variant={isDraft ? 'success' : 'warning'}
               formNoValidate
+              onClick={() => onSubmitClick(!isDraft)}
             >
-              {draft ? 'Julkaise' : 'Muuta luonnokseksi'}
+              {isDraft ? 'Julkaise' : 'Muuta luonnokseksi'}
             </Button>
           )}
           <Button
-            type="submit"
+            type="button"
             disabled={isSubmitting}
             variant="secondary"
             formNoValidate
+            onClick={() => onSubmitClick(isDraft)}
           >
             {isNew ? 'Tallenna luonnoksena' : 'Tallenna muutokset'}
           </Button>
