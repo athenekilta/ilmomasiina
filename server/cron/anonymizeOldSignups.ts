@@ -1,40 +1,72 @@
-import _ from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
 
+import config from '../config';
+import { Answer } from '../models/answer';
+import { Event } from '../models/event';
+import { Quota } from '../models/quota';
 import { Signup } from '../models/signup';
 
 const redactedName = 'Deleted';
-const redactedEmail = 'deleted@gdpr';
+const redactedEmail = 'deleted@gdpr.invalid';
+const redactedAnswer = 'Deleted';
 
 export default async function anonymizeOldSignups() {
-  // TODO: make the time configurable, or maybe dependent on event date
-  const redactOlderThan = moment().subtract(6, 'months').toDate();
+  const redactOlderThan = moment().subtract(config.anonymizeAfterDays, 'days').toDate();
 
   const signups = await Signup.findAll({
-    where: {
-      [Op.and]: {
-        // Only anonymize if name and email aren't anonymized already
-        [Op.or]: {
-          firstName: {
-            [Op.ne]: redactedName,
+    include: [
+      {
+        model: Quota,
+        attributes: [],
+        include: [
+          {
+            model: Event.unscoped(),
+            attributes: [],
           },
-          lastName: {
-            [Op.ne]: redactedName,
-          },
-          email: {
-            [Op.ne]: redactedEmail,
-          },
-        },
-        // Only anonymize old enough signups
-        createdAt: {
-          [Op.lt]: redactOlderThan,
-        },
-        // Don't touch unconfirmed signups
-        confirmedAt: {
-          [Op.not]: null,
-        },
+        ],
       },
+    ],
+    where: {
+      [Op.and]: [
+        {
+          // Only anonymize if name and email aren't anonymized already
+          [Op.or]: {
+            firstName: {
+              [Op.ne]: redactedName,
+            },
+            lastName: {
+              [Op.ne]: redactedName,
+            },
+            email: {
+              [Op.ne]: redactedEmail,
+            },
+          },
+        },
+        {
+          [Op.or]: {
+            // Only anonymize if the event was long enough ago
+            '$quota.event.date$': {
+              [Op.lt]: redactOlderThan,
+            },
+            // Or the event has no date and the signup closed long enough ago
+            [Op.and]: {
+              '$quota.event.date$': {
+                [Op.eq]: null,
+              },
+              '$quota.event.registrationEndDate$': {
+                [Op.lt]: redactOlderThan,
+              },
+            },
+          },
+        },
+        {
+          // Don't touch unconfirmed signups
+          confirmedAt: {
+            [Op.not]: null,
+          },
+        },
+      ],
     },
   });
   if (signups.length === 0) {
@@ -53,6 +85,11 @@ export default async function anonymizeOldSignups() {
       email: redactedEmail,
     }, {
       where: { id: ids },
+    });
+    await Answer.unscoped().update({
+      answer: redactedAnswer,
+    }, {
+      where: { signupId: ids },
     });
     console.log('Signups anonymized');
   } catch (error) {
