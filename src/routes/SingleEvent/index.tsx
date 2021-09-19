@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import moment from 'moment';
 import { Spinner } from 'react-bootstrap';
-import nl2br from 'react-nl2br';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Quota } from '../../api/events';
+import Autolink from '../../components/Autolink';
 import { createPendingSignup, getEvent, resetState } from '../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import { getSignupsByQuota } from '../../utils/signupUtils';
@@ -135,7 +135,9 @@ const SingleEvent = ({ match }: Props) => {
               </p>
             )}
           </div>
-          <p>{nl2br(event.description)}</p>
+          <p className="event-description">
+            <Autolink>{event.description}</Autolink>
+          </p>
         </div>
         <div className="col-xs-12 col-sm-4 pull-right">
           <SignupCountdown beginSignup={beginSignup} />

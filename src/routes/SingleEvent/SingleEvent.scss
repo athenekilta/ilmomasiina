@@ -23,9 +23,8 @@
   }
 }
 
-.singleEventContainer {
-  overflow: hidden;
-  word-break: break-word;
+.event-description {
+  white-space: pre-wrap;
 }
 
 .single-event--loading-container {
