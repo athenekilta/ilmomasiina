@@ -1,4 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
+
 import { IlmoApplication } from '../defs';
 
 export interface UserAttributes {
@@ -20,7 +21,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
 // User for local auth admin signup
 
-export default function (this: IlmoApplication) {
+export default function setupUserModel(this: IlmoApplication) {
   const sequelize = this.get('sequelize');
 
   User.init({

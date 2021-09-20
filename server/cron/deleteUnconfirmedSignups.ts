@@ -1,9 +1,9 @@
-import _ from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
+
 import { Signup } from '../models/signup';
 
-export default async function () {
+export default async function deleteUnconfirmedSignups() {
   const signups = await Signup.unscoped().findAll({
     where: {
       [Op.and]: {
@@ -24,7 +24,7 @@ export default async function () {
     return;
   }
 
-  const ids = _.map(signups, 'id');
+  const ids = signups.map((signup) => signup.id);
 
   console.log('Deleting unconfirmed signups:');
   console.log(ids);

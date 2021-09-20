@@ -1,6 +1,7 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import moment from 'moment';
+
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Signup } from '../../models/signup';
@@ -17,6 +18,9 @@ async function advanceQueueAfterDeletion(deletedSignup: Signup) {
     ],
   })!;
   const event = currentQuota.event!;
+
+  // No need to check if the quota is infinite
+  if (!currentQuota.size) return;
 
   // TODO: fix this, currently doesn't handle open quota correctly
   const { count, rows } = await Signup.findAndCountAll({

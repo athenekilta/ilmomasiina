@@ -1,4 +1,5 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
+
 import { Event } from '../../../models/event';
 
 export default async (id: number): Promise<null> => {

@@ -1,12 +1,16 @@
 import _ from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
+
 import { Signup } from '../models/signup';
 
 const redactedName = 'Deleted';
 const redactedEmail = 'deleted@gdpr';
 
-export default async function () {
+export default async function anonymizeOldSignups() {
+  // TODO: make the time configurable, or maybe dependent on event date
+  const redactOlderThan = moment().subtract(6, 'months').toDate();
+
   const signups = await Signup.findAll({
     where: {
       [Op.and]: {
@@ -22,10 +26,9 @@ export default async function () {
             [Op.ne]: redactedEmail,
           },
         },
-        // Only anonymize 6 months old signups
-        // TODO: make the time configurable, or maybe dependent on event date
+        // Only anonymize old enough signups
         createdAt: {
-          [Op.lt]: moment().subtract(6, 'months').toDate(),
+          [Op.lt]: redactOlderThan,
         },
         // Don't touch unconfirmed signups
         confirmedAt: {
@@ -38,7 +41,7 @@ export default async function () {
     return;
   }
 
-  const ids = _.map(signups, 'id');
+  const ids = signups.map((signup) => signup.id);
 
   console.log('Redacting older signups:');
   console.log(ids);

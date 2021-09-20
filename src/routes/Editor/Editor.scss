@@ -1,48 +1,59 @@
-.event-editor {
-  .panel-default {
-    position: relative;
+@import "../../styles/base";
 
-    .panel-body {
-      background: $secondary-background;
-      padding-left: 50px;
-    }
+.tab {
+  border-left: 1px solid grey;
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+}
 
-    .handler {
-      display: block;
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 40px;
-      background: #fff;
-      border-right: 1px solid #ddd;
-      cursor: move;
+.sortable-item {
+  flex-direction: row !important;
+  margin-bottom: 1rem;
 
-      &:after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 5px;
-        right: 5px;
-        top: 50%;
-        height: 1px;
-        background: #ddd;
-      }
+  .quota-body, .question-body {
+    margin: 0;
+    padding: 1.25rem;
+    flex-grow: 1;
+    background: $secondary-background;
 
-      &:before {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 5px;
-        right: 5px;
-        top: 46.4%;
-        height: 8%;
-        border-top: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-      }
+    .no-focus {
+      user-select: none;
     }
   }
 
+  .handler {
+    position: relative;
+    width: 40px;
+    background: #fff;
+    border-right: 1px solid #ddd;
+    cursor: move;
+
+    &:after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      top: 50%;
+      height: 1px;
+      background: #ddd;
+    }
+
+    &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 5px;
+      right: 5px;
+      top: calc(50% - 10px);
+      height: 21px;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+  }
+}
+
+.event-editor {
   .tab-content {
     margin-top: 20px;
   }
@@ -80,18 +91,21 @@
 
 .event-editor--buttons-wrapper {
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: baseline;
+
+  .spinner-border {
+    align-self: center;
+  }
 
   .event-editor--public-status {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     padding: 0 20px;
 
     .event-editor--bubble {
-      width: 14px;
-      height: 14px;
+      display: inline-block;
+      vertical-align: -0.15em;
+      width: 1em;
+      height: 1em;
       border-radius: 50%;
       margin-right: 10px;
 
@@ -121,4 +135,8 @@
 .event-editor--nav {
   clear: both;
   padding-top: 1em;
+}
+
+.event-editor--signup-table {
+  overflow-y: scroll;
 }

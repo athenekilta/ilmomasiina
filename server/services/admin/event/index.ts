@@ -4,12 +4,13 @@ import { AdapterService } from '@feathersjs/adapter-commons';
 import { hooks as authHooks } from '@feathersjs/authentication';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
+
 import { IlmoApplication } from '../../../defs';
 import getEventDetails, { EventGetResponse } from '../../event/getEventDetails';
 import getEventsList, { EventListResponse } from '../../event/getEventsList';
 import createEvent, { AdminEventCreateBody } from './createEvent';
-import updateEvent, { AdminEventUpdateBody } from './updateEvent';
 import deleteEvent from './deleteEvent';
+import updateEvent, { AdminEventUpdateBody } from './updateEvent';
 
 type AdminEventsServiceResponses = EventListResponse | EventGetResponse;
 
@@ -39,7 +40,7 @@ export class AdminEventsService extends AdapterService<AdminEventsServiceRespons
   }
 }
 
-export default function (this: IlmoApplication) {
+export default function setupAdminEventsService(this: IlmoApplication) {
   const app = this;
 
   app.use('/api/admin/events', new AdminEventsService({}));

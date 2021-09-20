@@ -1,3 +1,10 @@
-.progress {
-  padding: 0;
+.signup-progress {
+  height: 1.8rem;
+  font-size: .9rem;
+
+  .progress-bar {
+    min-width: 5em;
+    flex-direction: row;
+    align-items: center;
+  }
 }

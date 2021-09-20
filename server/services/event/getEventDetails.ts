@@ -1,5 +1,6 @@
 import { BadRequest, NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
+
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
@@ -73,10 +74,10 @@ export interface EventGetQuestionItem
   options: string[] | null;
 }
 
-export interface EventGetAnswersItem extends Pick<Answer, typeof eventGetAnswerAttrs[number]> {}
+export interface EventGetAnswerItem extends Pick<Answer, typeof eventGetAnswerAttrs[number]> {}
 
 export interface EventGetSignupItem extends Pick<Signup, typeof eventGetSignupAttrs[number]> {
-  answers: EventGetAnswersItem[];
+  answers: EventGetAnswerItem[];
 }
 
 export interface EventGetQuotaItem extends Pick<Quota, typeof eventGetQuotaAttrs[number]> {
@@ -92,7 +93,34 @@ export interface EventGetResponse extends Pick<Event, typeof eventGetEventAttrs[
   registrationClosed?: boolean;
 }
 
-export default async (id: number, admin = false): Promise<EventGetResponse> => {
+// Type definitions for the admin variant of the endpoint.
+
+export type AdminEventGetQuestionItem = EventGetQuestionItem;
+
+export type AdminEventGetAnswerItem = EventGetAnswerItem;
+
+export interface AdminEventGetSignupItem extends Pick<Signup, typeof adminEventGetSignupAttrs[number]> {
+  answers: AdminEventGetAnswerItem[];
+}
+
+export interface AdminEventGetQuotaItem extends Pick<Quota, typeof eventGetQuotaAttrs[number]> {
+  signups?: AdminEventGetSignupItem[] | null;
+  signupCount?: number;
+}
+
+export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetEventAttrs[number]> {
+  questions: AdminEventGetQuestionItem[];
+  // intentionally misnamed to match old API
+  quota: AdminEventGetQuotaItem[];
+  millisTillOpening?: number;
+  registrationClosed?: boolean;
+}
+
+export type EventGetResponseType<A extends boolean> = true extends A ? AdminEventGetResponse : EventGetResponse;
+
+export default async function getEventDetails<A extends boolean>(
+  id: number, admin: A,
+): Promise<EventGetResponseType<A>> {
   if (!Number.isSafeInteger(id)) {
     throw new BadRequest('Invalid id');
   }
@@ -141,7 +169,7 @@ export default async (id: number, admin = false): Promise<EventGetResponse> => {
   }
 
   // Convert event to response
-  const result: EventGetResponse = {
+  const result: EventGetResponseType<A> = {
     ..._.pick(event, eventAttrs),
     questions: event.questions!.map((question) => ({
       ..._.pick(question, eventGetQuestionAttrs),
@@ -161,34 +189,36 @@ export default async (id: number, admin = false): Promise<EventGetResponse> => {
   if (!admin) {
     // Hide all signups if answers are not public
     if (!event.signupsPublic) {
-      result.quota.forEach((quota) => {
-        quota.signups = null;
-      });
+      result.quota.forEach((quota) => ({
+        ...quota,
+        signups: null,
+      }));
     } else {
       // Find IDs of public questions
       const publicQuestions = _.map(_.filter(event.questions!, 'public'), 'id');
 
       // Hide answers of non-public questions
       result.quota.forEach((quota) => {
-        quota.signups!.forEach((signup) => {
-          signup.answers = signup.answers.filter((answer) => publicQuestions.includes(answer.questionId));
-        });
+        quota.signups!.forEach((signup) => ({
+          ...signup,
+          answers: signup.answers.filter((answer) => publicQuestions.includes(answer.questionId)),
+        }));
       });
-    }
-
-    // Add millisTillOpening or registrationClosed if necessary
-    const startDate = new Date(result.registrationStartDate);
-    const now = new Date();
-    const endDate = new Date(result.registrationEndDate);
-    if (now > startDate) {
-      result.millisTillOpening = 0;
-    } else {
-      result.millisTillOpening = startDate.getTime() - now.getTime();
-    }
-    if (now > endDate) {
-      result.registrationClosed = true;
     }
   }
 
+  // Add millisTillOpening or registrationClosed if necessary
+  const startDate = new Date(result.registrationStartDate);
+  const now = new Date();
+  const endDate = new Date(result.registrationEndDate);
+  if (now > startDate) {
+    result.millisTillOpening = 0;
+  } else {
+    result.millisTillOpening = startDate.getTime() - now.getTime();
+  }
+  if (now > endDate) {
+    result.registrationClosed = true;
+  }
+
   return result;
-};
+}

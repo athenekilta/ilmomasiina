@@ -1,12 +1,13 @@
+import moment from 'moment-timezone';
 import {
   DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
   HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, Model, Op, Optional,
 } from 'sequelize';
-import moment from 'moment-timezone';
+
 import { IlmoApplication } from '../defs';
-import { Quota } from './quota';
 import { Question } from './question';
+import { Quota } from './quota';
 
 export interface EventAttributes {
   id: number;
@@ -73,7 +74,7 @@ export class Event extends Model<EventAttributes, EventCreationAttributes> imple
   public readonly updatedAt!: Date;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupEventModel(this: IlmoApplication) {
   const sequelize = this.get('sequelize');
 
   Event.init(
@@ -86,6 +87,9 @@ export default function (this: IlmoApplication) {
       title: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: true,
+        },
       },
       date: {
         type: DataTypes.DATE,

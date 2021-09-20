@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable class-methods-use-this */
 import { AdapterService } from '@feathersjs/adapter-commons';
-import { MethodNotAllowed } from '@feathersjs/errors';
 import { hooks as authHooks } from '@feathersjs/authentication';
+import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
+
 import { IlmoApplication } from '../../../defs';
 import deleteSignup from '../../signup/deleteSignup';
 
@@ -36,7 +37,7 @@ export class AdminSignupsService extends AdapterService<AdminSignupsServiceRespo
   }
 }
 
-export default function (this: IlmoApplication) {
+export default function setupAdminSignupsService(this: IlmoApplication) {
   const app = this;
 
   app.use('/api/admin/signups', new AdminSignupsService({}));

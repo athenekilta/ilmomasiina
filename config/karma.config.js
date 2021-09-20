@@ -1,4 +1,4 @@
-const argv = require('yargs').argv;
+const { argv } = require('yargs');
 const project = require('./project.config');
 const webpackConfig = require('./webpack.config');
 const debug = require('debug')('app:config:karma');
@@ -23,16 +23,13 @@ const karmaConfig = {
   browsers: ['PhantomJS'],
   webpack: {
     devtool: 'cheap-module-source-map',
-    resolve: Object.assign({}, webpackConfig.resolve, {
-      alias: Object.assign({}, webpackConfig.resolve.alias, {
-        sinon: 'sinon/pkg/sinon.js',
-      }),
-    }),
+    resolve: {
+      ...webpackConfig.resolve,
+      alias: { ...webpackConfig.resolve.alias, sinon: 'sinon/pkg/sinon.js' },
+    },
     plugins: webpackConfig.plugins,
     module: {
-      noParse: [
-        /\/sinon\.js/,
-      ],
+      noParse: [/\/sinon\.js/],
       loaders: webpackConfig.module.loaders.concat([
         {
           test: /sinon(\\|\/)pkg(\\|\/)sinon\.js/,
@@ -42,11 +39,12 @@ const karmaConfig = {
     },
     // Enzyme fix, see:
     // https://github.com/airbnb/enzyme/issues/47
-    externals: Object.assign({}, webpackConfig.externals, {
+    externals: {
+      ...webpackConfig.externals,
       'react/addons': true,
       'react/lib/ExecutionEnvironment': true,
       'react/lib/ReactContext': 'window',
-    }),
+    },
     sassLoader: webpackConfig.sassLoader,
   },
   webpackMiddleware: {
@@ -59,15 +57,18 @@ const karmaConfig = {
 
 if (project.globals.COVERAGE) {
   karmaConfig.reporters.push('coverage');
-  karmaConfig.webpack.module.preLoaders = [{
-    test: /\.(js|jsx)$/,
-    include: new RegExp(project.dir_client),
-    exclude: /node_modules/,
-    loader: 'babel',
-    query: Object.assign({}, project.compiler_babel, {
-      plugins: (project.compiler_babel.plugins || []).concat('istanbul'),
-    }),
-  }];
+  karmaConfig.webpack.module.preLoaders = [
+    {
+      test: /\.(js|jsx)$/,
+      include: new RegExp(project.dir_client),
+      exclude: /node_modules/,
+      loader: 'babel',
+      query: {
+        ...project.compiler_babel,
+        plugins: (project.compiler_babel.plugins || []).concat('istanbul'),
+      },
+    },
+  ];
 }
 
-module.exports = cfg => cfg.set(karmaConfig);
+module.exports = (cfg) => cfg.set(karmaConfig);

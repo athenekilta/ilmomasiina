@@ -3,45 +3,57 @@
   "parserOptions": {
     "project": ["tsconfig.json", "server/tsconfig.json"]
   },
+  "settings": {
+    "pragma": "React",
+    "version": "detect"
+  },
   "extends": [
-    "standard",
-    "standard-react",
+    "airbnb",
+    "airbnb/hooks",
     "airbnb-typescript"
   ],
   "plugins": [
-    "babel",
-    "react",
+    "@typescript-eslint",
     "promise",
-    "@typescript-eslint"
+    "simple-import-sort",
+    "jest"
   ],
   "env": {
     "browser": true
   },
-  "globals": {
-    "DEV": false,
-    "TEST": false,
-    "PROD": false,
-    "COVERAGE": false
-  },
   "rules": {
-    "max-len": [2, 120, 2],
-    "no-param-reassign": 0,
-    "func-names": 0,
-    "array-callback-return": 0,
-    "comma-dangle": ["error", {
-      "arrays": "always-multiline",
-      "objects": "always-multiline",
-      "imports": "always-multiline",
-      "exports": "always-multiline",
-      "functions": "always-multiline"
-    }],
-    "semi": ["error", "always"],
-    "quotes": ["error", "single"],
+    "max-len": ["error", 120, 2],
+    "@typescript-eslint/semi": ["error", "always"],
+    "@typescript-eslint/quotes": ["error", "single"],
     // To allow grouping of class members - especially for Models.
     "@typescript-eslint/lines-between-class-members": "off",
     // TypeScript causes lots of circular imports for types, which the plugin
     // does not currently handle properly.
     // see https://github.com/benmosher/eslint-plugin-import/issues/1453
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    // Not usable with formik.
+    "react/jsx-props-no-spreading": "off",
+    // TypeScript validates prop types, no need for this.
+    "react/require-default-props": "off",
+    // Definitely a valid performance concern, but implementing this correctly is
+    // a giant PITA - the default config ignores arrow functions but they don't solve
+    // the problem at all, and useCallback is just plain ugly.
+    "react/jsx-no-bind": "off",
+    // Sort imports: React first, then npm packages, then local files, then CSS.
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          ["^react$"],
+          ["^@?\\w"],
+          // Anything that does not start with a dot.
+          ["^[^.]"],
+          // Anything that starts with a dot.
+          ["^."],
+          // Css
+          ["css$"]
+        ]
+      }
+    ]
   }
 }

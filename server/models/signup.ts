@@ -1,13 +1,15 @@
-import {
-  DataTypes, Model, Optional, Op, HasOneGetAssociationMixin, HasOneCreateAssociationMixin, HasOneSetAssociationMixin,
-  HasManyRemoveAssociationsMixin, HasManyCreateAssociationMixin, HasManyRemoveAssociationMixin,
-  HasManyGetAssociationsMixin, HasManyCountAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
-  HasManySetAssociationsMixin, HasManyAddAssociationMixin, HasManyAddAssociationsMixin,
-} from 'sequelize';
 import moment from 'moment';
+import {
+  DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
+  HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin,
+  HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin,
+  Model, Op, Optional,
+} from 'sequelize';
+
 import { IlmoApplication } from '../defs';
-import { Quota } from './quota';
 import { Answer } from './answer';
+import { Quota } from './quota';
 
 export interface SignupAttributes {
   id: number;
@@ -51,7 +53,7 @@ export class Signup extends Model<SignupAttributes, SignupCreationAttributes> im
   public readonly updatedAt!: Date;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupSignupModel(this: IlmoApplication) {
   const sequelize = this.get('sequelize');
 
   Signup.init(

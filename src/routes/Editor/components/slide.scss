@@ -1,0 +1,57 @@
+/*!
+ * This shitty file is from Ant Design.
+ *
+ * Because for whatever retarded reason they can't support date pickers without THEIR ENTIRE F'ING GLOBAL STYLE FILE.
+ * https://github.com/ant-design/ant-design/issues/4331
+ * https://github.com/ant-design/ant-design/issues/4546
+ * https://github.com/ant-design/ant-design/issues/9363
+ */
+
+@keyframes antSlideUpIn {
+  0% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleY(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleY(1);
+  }
+}
+@keyframes antSlideUpOut {
+  0% {
+    opacity: 1;
+    transform-origin: 0% 0%;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 0% 0%;
+    transform: scaleY(0.8);
+  }
+}
+@keyframes antSlideDownIn {
+  0% {
+    opacity: 0;
+    transform-origin: 100% 100%;
+    transform: scaleY(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 100% 100%;
+    transform: scaleY(1);
+  }
+}
+@keyframes antSlideDownOut {
+  0% {
+    opacity: 1;
+    transform-origin: 100% 100%;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 100% 100%;
+    transform: scaleY(0.8);
+  }
+}

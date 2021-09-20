@@ -1,5 +1,6 @@
 import { Forbidden } from '@feathersjs/errors';
 import md5 from 'md5';
+
 import config from '../../config';
 import { Signup } from '../../models/signup';
 

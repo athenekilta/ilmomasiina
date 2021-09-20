@@ -1,13 +1,15 @@
+import express, { json, rest, urlencoded } from '@feathersjs/express';
 import feathers from '@feathersjs/feathers';
-import express, { rest, json, urlencoded } from '@feathersjs/express';
 import compress from 'compression';
-import cron from 'node-cron';
-import enforce from 'express-sslify';
 import { NextFunction } from 'express';
+import enforce from 'express-sslify';
+import cron from 'node-cron';
+
+import config from './config';
+import anonymizeOldSignups from './cron/anonymizeOldSignups';
+import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
 import models from './models';
 import services from './services';
-import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
-import anonymizeOldSignups from './cron/anonymizeOldSignups';
 
 const app = express(feathers());
 
@@ -31,8 +33,8 @@ cron.schedule('0 8 * * *', anonymizeOldSignups);
 // Serve compiled frontend (TODO: implement Webpack dev server)
 app.use(express.static('../../dist'));
 
-if (process.env.NODE_ENV === 'development') {
-  // Development: enable error messages
+if (config.nodeEnv === 'development') {
+  // Development: log error messages
   app.use((error: any, req: any, res: any, next: NextFunction) => {
     console.error(error);
     next(error);

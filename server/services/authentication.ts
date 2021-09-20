@@ -2,8 +2,10 @@ import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication';
 import { LocalStrategy } from '@feathersjs/authentication-local';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
+
 import config from '../config';
 import { IlmoApplication } from '../defs';
+import { UserDetails } from './user';
 
 // By default, LocalStrategy calls GET /api/users with provider=rest to get the subject.
 // As we disallow that API externally, we need to drop the provider param from the call.
@@ -16,11 +18,25 @@ class CustomLocalStrategy extends LocalStrategy {
   }
 }
 
-export default function (this: IlmoApplication) {
+// Response schema.
+export interface AuthResponse {
+  accessToken: string;
+  user: UserDetails;
+  authentication: {
+    strategy: string;
+    accessToken: string;
+    payload: {
+      iat: number;
+      exp: number;
+    };
+  };
+}
+
+export default function setupAuthentication(this: IlmoApplication) {
   const app = this;
 
   // Generate super-long-lived JWTs in development mode
-  const expiresIn = process.env.NODE_ENV === 'development' ? '365d' : '1h';
+  const expiresIn = config.nodeEnv === 'development' ? '365d' : '1h';
 
   // Set up authentication with the secret
   app.set('authentication', {

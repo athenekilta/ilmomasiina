@@ -4,6 +4,7 @@ import {
   HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin,
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
+
 import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
 
@@ -53,7 +54,7 @@ export class Question extends Model<QuestionAttributes, QuestionCreationAttribut
   public readonly updatedAt!: Date;
 }
 
-export default function (this: IlmoApplication) {
+export default function setupQuestionModel(this: IlmoApplication) {
   const sequelize: Sequelize = this.get('sequelize');
 
   Question.init({
@@ -69,6 +70,9 @@ export default function (this: IlmoApplication) {
     question: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     type: {
       type: DataTypes.ENUM(...questionTypes),
