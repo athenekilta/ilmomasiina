@@ -30,6 +30,8 @@ const config = {
   mailgunDomain: process.env.MAILGUN_DOMAIN,
 
   adminRegistrationAllowed: process.env.ADMIN_REGISTRATION_ALLOWED === 'true',
+
+  anonymizeAfterDays: process.env.ANONYMIZE_AFTER_DAYS || 180,
 };
 
 Object.entries(config).forEach(([key, value]) => {
