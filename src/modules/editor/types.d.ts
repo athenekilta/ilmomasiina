@@ -5,6 +5,7 @@ import { Question, Quota } from '../../api/events';
 import {
   loaded,
   loadFailed,
+  newEvent,
   resetState,
   saveFailed,
   saving,
@@ -13,6 +14,7 @@ import {
 interface EditorState {
   event: AdminEvent.Details | null;
   formData: EditorEvent | null;
+  isNew: boolean;
   loadError: boolean;
   saving: boolean;
   saveError: boolean;
@@ -21,6 +23,7 @@ interface EditorState {
 type EditorActions =
   | ReturnType<typeof resetState>
   | ReturnType<typeof loaded>
+  | ReturnType<typeof newEvent>
   | ReturnType<typeof loadFailed>
   | ReturnType<typeof saving>
   | ReturnType<typeof saveFailed>;

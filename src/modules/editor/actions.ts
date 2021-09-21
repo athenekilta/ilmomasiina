@@ -13,15 +13,56 @@ import {
 } from './actionTypes';
 import { EditorEvent } from './types';
 
+const defaultEvent = (): EditorEvent => ({
+  title: '',
+  slug: '',
+  date: undefined,
+  webpageUrl: '',
+  facebookUrl: '',
+  location: '',
+  description: '',
+  price: '',
+  signupsPublic: false,
+
+  registrationStartDate: undefined,
+  registrationEndDate: undefined,
+
+  openQuotaSize: 0,
+  useOpenQuota: false,
+  quotas: [
+    {
+      key: 'new',
+      title: 'Kiintiö',
+      size: 20,
+    },
+  ],
+
+  questions: [],
+
+  verificationEmail: '',
+
+  draft: true,
+});
+
 export const resetState = () => <const>{
   type: RESET,
 };
 
-export const loaded = (event: AdminEvent.Details | null, formData: EditorEvent | null) => <const>{
+export const loaded = (event: AdminEvent.Details, formData: EditorEvent | null) => <const>{
   type: EVENT_LOADED,
   payload: {
     event,
     formData,
+    isNew: false,
+  },
+};
+
+export const newEvent = () => <const>{
+  type: EVENT_LOADED,
+  payload: {
+    event: null,
+    formData: defaultEvent(),
+    isNew: true,
   },
 };
 
