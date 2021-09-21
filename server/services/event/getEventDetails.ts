@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 
 import { Answer } from '../../models/answer';
@@ -119,8 +119,12 @@ export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetE
 
 export type EventGetResponseType<A extends boolean> = true extends A ? AdminEventGetResponse : EventGetResponse;
 
+/**
+ * @param slugOrId Event id if admin === true, slug if admin === false.
+ * @param admin Whether or not to return results for the admin view.
+ */
 export default async function getEventDetails<A extends boolean>(
-  slug: string, admin: A,
+  slugOrId: string | number, admin: A,
 ): Promise<EventGetResponseType<A>> {
   // Admin queries include internal data such as confirmation email contents
   const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;
@@ -128,11 +132,11 @@ export default async function getEventDetails<A extends boolean>(
   const signupAttrs = admin ? adminEventGetSignupAttrs : eventGetSignupAttrs;
   // Admin queries also show past and draft events.
   const scope = admin ? Event.unscoped() : Event;
+  // Admin queries use ids (so that the slug can be safely edited), user queries use slugs.
+  const where = admin ? { id: slugOrId } : { slug: slugOrId };
 
   const event = await scope.findOne({
-    where: {
-      slug,
-    },
+    where,
     attributes: [...eventAttrs],
     include: [
       // First include all questions (also non-public for the form)
