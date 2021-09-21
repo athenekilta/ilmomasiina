@@ -77,6 +77,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>): Promise<
       const newIds = _.filter(_.map(data.questions, 'id')) as number[];
       await Question.destroy({
         where: {
+          eventId: event.id,
           id: {
             [Op.notIn]: newIds,
           },
@@ -109,6 +110,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>): Promise<
       const newIds = _.filter(_.map(data.quota, 'id')) as number[];
       await Quota.destroy({
         where: {
+          eventId: event.id,
           id: {
             [Op.notIn]: newIds,
           },
