@@ -120,12 +120,8 @@ export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetE
 export type EventGetResponseType<A extends boolean> = true extends A ? AdminEventGetResponse : EventGetResponse;
 
 export default async function getEventDetails<A extends boolean>(
-  id: number, admin: A,
+  slug: string, admin: A,
 ): Promise<EventGetResponseType<A>> {
-  if (!Number.isSafeInteger(id)) {
-    throw new BadRequest('Invalid id');
-  }
-
   // Admin queries include internal data such as confirmation email contents
   const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;
   // Admin queries include emails and signup IDs
@@ -133,7 +129,10 @@ export default async function getEventDetails<A extends boolean>(
   // Admin queries also show past and draft events.
   const scope = admin ? Event.unscoped() : Event;
 
-  const event = await scope.findByPk(id, {
+  const event = await scope.findOne({
+    where: {
+      slug,
+    },
     attributes: [...eventAttrs],
     include: [
       // First include all questions (also non-public for the form)
