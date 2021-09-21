@@ -23,6 +23,8 @@ import {
 import { StringifyApi } from './utils';
 
 export namespace AdminEvent {
+  export type Id = Details['id'];
+
   export type List = StringifyApi<_AdminEventListResponse>;
   export namespace List {
     export type Event = StringifyApi<_AdminEventListItem>;

@@ -50,14 +50,14 @@ const EventList = () => {
     const rows = [
       <TableRow
         className={eventState.class}
-        title={<Link to={`${PREFIX_URL}/event/${event.id}`}>{event.title}</Link>}
+        title={<Link to={`${PREFIX_URL}/event/${event.slug}`}>{event.title}</Link>}
         date={moment(event.date).format('DD.MM.YYYY')}
         signupStatus={eventState.label}
         signupCount={
           (event.quota.length < 2 ? _.sumBy(event.quota, 'signupCount') : undefined)
         }
         quotaSize={event.quota.length === 1 ? event.quota[0].size : undefined}
-        key={event.id}
+        key={event.slug}
       />,
     ];
 
@@ -68,7 +68,7 @@ const EventList = () => {
           title={quota.title}
           signupCount={quota.size ? Math.min(quota.signupCount, quota.size) : quota.signupCount}
           quotaSize={quota.size}
-          key={`${event.id}-${quota.id}`}
+          key={`${event.slug}-${quota.id}`}
         />,
       ));
     }
@@ -83,7 +83,7 @@ const EventList = () => {
             event.openQuotaSize,
           )}
           quotaSize={event.openQuotaSize}
-          key={`${event.id}-open`}
+          key={`${event.slug}-open`}
         />,
       );
     }

@@ -13,7 +13,7 @@ import {
 import { StringifyApi } from './utils';
 
 export namespace Event {
-  export type Id = Details['id'];
+  export type Slug = Details['slug'];
 
   export type Details = StringifyApi<_EventGetResponse>;
   export namespace Details {

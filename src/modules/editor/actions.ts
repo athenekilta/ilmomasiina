@@ -2,7 +2,6 @@ import moment from 'moment';
 
 import apiFetch from '../../api';
 import { AdminEvent } from '../../api/adminEvents';
-import { Event } from '../../api/events';
 import { Signup } from '../../api/signups';
 import { DispatchAction, GetState } from '../../store/types';
 import {
@@ -68,7 +67,8 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   })),
 });
 
-export const getEvent = (id: Event.Id | string) => async (dispatch: DispatchAction, getState: GetState) => {
+// TODO remove | string when ids are all strings
+export const getEvent = (id: AdminEvent.Id | string) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
   try {
     const response = await apiFetch(`admin/events/${id}`, { accessToken }) as AdminEvent.Details;
@@ -101,7 +101,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
 };
 
 export const publishEventUpdate = (
-  id: Event.Id | string, data: EditorEvent,
+  id: AdminEvent.Id, data: EditorEvent,
 ) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 

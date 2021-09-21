@@ -8,6 +8,7 @@ import getEventDetails, { AdminEventGetResponse } from '../../event/getEventDeta
 // Attributes included in POST /api/events for Event instances.
 export const adminEventCreateEventAttrs = [
   'title',
+  'slug',
   'date',
   'registrationStartDate',
   'registrationEndDate',

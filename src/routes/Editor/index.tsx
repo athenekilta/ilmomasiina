@@ -31,6 +31,7 @@ type Props = EditSignupProps & RouteComponentProps<MatchParams>;
 
 const defaultEvent = (): EditorEvent => ({
   title: '',
+  slug: '',
   date: undefined,
   webpageUrl: '',
   facebookUrl: '',
