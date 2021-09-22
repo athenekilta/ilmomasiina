@@ -99,6 +99,7 @@ export default function setupEventModel(this: IlmoApplication) {
         unique: true,
         validate: {
           notEmpty: true,
+          is: /^[A-Za-z0-9_-]+$/,
         },
       },
       date: {
