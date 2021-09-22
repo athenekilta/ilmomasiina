@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import apiFetch from '../../api';
-import { AdminEvent } from '../../api/adminEvents';
+import { AdminEvent, AdminSlug } from '../../api/adminEvents';
 import { Signup } from '../../api/signups';
 import { DispatchAction, GetState } from '../../store/types';
 import {
@@ -9,6 +9,8 @@ import {
   EVENT_LOADED,
   EVENT_SAVE_FAILED,
   EVENT_SAVING,
+  EVENT_SLUG_CHECKED,
+  EVENT_SLUG_CHECKING,
   RESET,
 } from './actionTypes';
 import { EditorEvent } from './types';
@@ -70,6 +72,17 @@ export const loadFailed = () => <const>{
   type: EVENT_LOAD_FAILED,
 };
 
+export const checkingSlugAvailability = () => <const>{
+  type: EVENT_SLUG_CHECKING,
+};
+
+export const slugAvailabilityChecked = (
+  result: AdminSlug.Check | null,
+) => <const>{
+  type: EVENT_SLUG_CHECKED,
+  payload: result,
+};
+
 export const saving = () => <const>{
   type: EVENT_SAVING,
 };
@@ -117,6 +130,18 @@ export const getEvent = (id: AdminEvent.Id | string) => async (dispatch: Dispatc
     dispatch(loaded(response, formData));
   } catch (e) {
     dispatch(loadFailed());
+  }
+};
+
+export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+  try {
+    const response = await apiFetch(`admin/slug/${slug}`, {
+      accessToken,
+    }) as AdminSlug.Check;
+    dispatch(slugAvailabilityChecked(response));
+  } catch (e) {
+    dispatch(slugAvailabilityChecked(null));
   }
 };
 

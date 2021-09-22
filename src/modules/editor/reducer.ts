@@ -3,6 +3,8 @@ import {
   EVENT_LOADED,
   EVENT_SAVE_FAILED,
   EVENT_SAVING,
+  EVENT_SLUG_CHECKED,
+  EVENT_SLUG_CHECKING,
   RESET,
 } from './actionTypes';
 import { EditorActions, EditorState } from './types';
@@ -12,6 +14,7 @@ const initialState: EditorState = {
   formData: null,
   isNew: true,
   loadError: false,
+  slugAvailability: null,
   saving: false,
   saveError: false,
 };
@@ -37,6 +40,16 @@ export default function reducer(
       return {
         ...state,
         loadError: true,
+      };
+    case EVENT_SLUG_CHECKING:
+      return {
+        ...state,
+        slugAvailability: 'checking',
+      };
+    case EVENT_SLUG_CHECKED:
+      return {
+        ...state,
+        slugAvailability: action.payload,
       };
     case EVENT_SAVING:
       return {

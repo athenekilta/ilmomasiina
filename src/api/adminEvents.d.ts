@@ -9,6 +9,9 @@ import {
   AdminEventUpdateQuota as _AdminEventUpdateQuota,
 } from '../../server/services/admin/event/updateEvent';
 import {
+  AdminCheckSlugResponse as _AdminCheckSlugResponse,
+} from '../../server/services/admin/slug/checkSlugAvailability';
+import {
   AdminEventGetAnswerItem as _AdminEventGetAnswerItem,
   AdminEventGetQuestionItem as _AdminEventGetQuestionItem,
   AdminEventGetQuotaItem as _AdminEventGetQuotaItem,
@@ -50,4 +53,8 @@ export namespace AdminEvent {
     export type Question = StringifyApi<_AdminEventUpdateQuestion>;
     export type Quota = StringifyApi<_AdminEventUpdateQuota>;
   }
+}
+
+export namespace AdminSlug {
+  export type Check = StringifyApi<_AdminCheckSlugResponse>;
 }

@@ -1,14 +1,16 @@
 import { Moment } from 'moment';
 
-import { AdminEvent } from '../../api/adminEvents';
+import { AdminEvent, AdminSlug } from '../../api/adminEvents';
 import { Question, Quota } from '../../api/events';
 import {
+  checkingSlugAvailability,
   loaded,
   loadFailed,
   newEvent,
   resetState,
   saveFailed,
   saving,
+  slugAvailabilityChecked,
 } from './actions';
 
 interface EditorState {
@@ -16,6 +18,7 @@ interface EditorState {
   formData: EditorEvent | null;
   isNew: boolean;
   loadError: boolean;
+  slugAvailability: null | 'checking' | AdminSlug.Check;
   saving: boolean;
   saveError: boolean;
 }
@@ -25,6 +28,8 @@ type EditorActions =
   | ReturnType<typeof loaded>
   | ReturnType<typeof newEvent>
   | ReturnType<typeof loadFailed>
+  | ReturnType<typeof checkingSlugAvailability>
+  | ReturnType<typeof slugAvailabilityChecked>
   | ReturnType<typeof saving>
   | ReturnType<typeof saveFailed>;
 
