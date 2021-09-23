@@ -33,6 +33,7 @@ const config = {
   adminRegistrationAllowed: process.env.ADMIN_REGISTRATION_ALLOWED === 'true',
 
   anonymizeAfterDays: process.env.ANONYMIZE_AFTER_DAYS || 180,
+  deletionGracePeriod: process.env.DELETION_GRACE_PERIOD_DAYS || 14,
 };
 
 Object.entries(config).forEach(([key, value]) => {
