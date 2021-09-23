@@ -29,7 +29,7 @@ export default function setupDatabase(this: IlmoApplication) {
   let sequelize: Sequelize;
   if (clearDbUrl) {
     sequelize = new Sequelize(clearDbUrl, {
-      logging: false,
+      logging: config.debugDbLogging,
     });
   } else {
     sequelize = new Sequelize(
@@ -39,7 +39,7 @@ export default function setupDatabase(this: IlmoApplication) {
       {
         host: dockerCompose ? 'db' : dbHost!,
         dialect: dbDialect as Dialect,
-        logging: false,
+        logging: config.debugDbLogging,
       },
     );
   }

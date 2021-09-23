@@ -1,5 +1,6 @@
 const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
+  debugDbLogging: process.env.DEBUG_DB_LOGGING === 'true',
 
   port: process.env.PORT || 3000,
 
