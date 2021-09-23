@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import moment from 'moment';
 
@@ -46,14 +46,10 @@ async function advanceQueueAfterDeletion(deletedSignup: Signup) {
   }
 }
 
-export default async (id: number, params?: Params | AdminParams): Promise<null> => {
-  if (!Number.isSafeInteger(id)) {
-    throw new BadRequest('Invalid id');
-  }
-
+export default async (id: string, params?: Params | AdminParams): Promise<null> => {
   if (!params?.adminAuthenticated) {
     const editToken = (params as Params)?.query?.editToken;
-    verifyToken(Number(id), editToken);
+    verifyToken(id, editToken);
   }
 
   const signup = await Signup.findByPk(id);

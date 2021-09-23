@@ -10,11 +10,11 @@ import { adminEventCreateEventAttrs, adminEventCreateQuestionAttrs, adminEventCr
 
 // Data type definitions for the request body, using attribute lists from createEvent.
 export interface AdminEventUpdateQuestion extends Pick<Question, typeof adminEventCreateQuestionAttrs[number]> {
-  id?: number;
+  id?: Question['id'];
 }
 
 export interface AdminEventUpdateQuota extends Pick<Quota, typeof adminEventCreateQuotaAttrs[number]> {
-  id?: number;
+  id?: Quota['id'];
 }
 
 export interface AdminEventUpdateBody extends Pick<Event, typeof adminEventCreateEventAttrs[number]> {
@@ -74,7 +74,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>): Promise<
         attributes: ['id'],
         transaction,
       });
-      const newIds = _.filter(_.map(data.questions, 'id')) as number[];
+      const newIds = _.filter(_.map(data.questions, 'id')) as Question['id'][];
       await Question.destroy({
         where: {
           eventId: event.id,
@@ -107,7 +107,7 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>): Promise<
         attributes: ['id'],
         transaction,
       });
-      const newIds = _.filter(_.map(data.quota, 'id')) as number[];
+      const newIds = _.filter(_.map(data.quota, 'id')) as Quota['id'][];
       await Quota.destroy({
         where: {
           eventId: event.id,

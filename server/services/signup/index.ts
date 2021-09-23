@@ -18,7 +18,7 @@ export class SignupsService extends AdapterService<SignupsServiceResponses> {
   }
 
   _get(id: Id, params?: Params) {
-    return getSignupForEdit(Number(id), params);
+    return getSignupForEdit(String(id), params);
   }
 
   _create(data: SignupCreateBody) {
@@ -30,11 +30,11 @@ export class SignupsService extends AdapterService<SignupsServiceResponses> {
   }
 
   _patch(id: Id, data: SignupUpdateBody, params?: Params) {
-    return updateSignup(Number(id), data, params);
+    return updateSignup(String(id), data, params);
   }
 
   _remove(id: Id, params?: Params) {
-    return deleteSignup(Number(id), params);
+    return deleteSignup(String(id), params);
   }
 }
 

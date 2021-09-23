@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 
@@ -48,13 +48,9 @@ export interface SignupGetResponse {
   event: SignupGetEventItem | null;
 }
 
-export default async (id: number, params?: Params): Promise<SignupGetResponse> => {
-  if (!Number.isSafeInteger(id)) {
-    throw new BadRequest('Invalid id');
-  }
-
+export default async (id: string, params?: Params): Promise<SignupGetResponse> => {
   const editToken = params?.query?.editToken;
-  verifyToken(Number(id), editToken);
+  verifyToken(id, editToken);
 
   const signup = await Signup.findByPk(id, {
     include: [

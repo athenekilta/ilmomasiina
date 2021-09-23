@@ -7,39 +7,40 @@ import {
 
 import { IlmoApplication } from '../defs';
 import { Event } from './event';
+import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';
 
 export interface QuotaAttributes {
-  id: number;
+  id: string;
   title: string;
   size: number | null;
-  eventId: number;
+  eventId: Event['id'];
   signupCount?: number;
 }
 
 export interface QuotaCreationAttributes extends Optional<QuotaAttributes, 'id'> {}
 
 export class Quota extends Model<QuotaAttributes, QuotaCreationAttributes> implements QuotaAttributes {
-  public id!: number;
+  public id!: string;
   public title!: string;
   public size!: number | null;
 
-  public eventId!: number;
+  public eventId!: Event['id'];
   public event?: Event;
   public getEvent!: HasOneGetAssociationMixin<Event>;
-  public setEvent!: HasOneSetAssociationMixin<Event, number>;
+  public setEvent!: HasOneSetAssociationMixin<Event, Event['id']>;
   public createEvent!: HasOneCreateAssociationMixin<Event>;
 
   public signups?: Signup[];
   public getSignups!: HasManyGetAssociationsMixin<Signup>;
   public countSignups!: HasManyCountAssociationsMixin;
-  public hasSignup!: HasManyHasAssociationMixin<Signup, number>;
-  public hasSignups!: HasManyHasAssociationsMixin<Signup, number>;
-  public setSignups!: HasManySetAssociationsMixin<Signup, number>;
-  public addSignup!: HasManyAddAssociationMixin<Signup, number>;
-  public addSignups!: HasManyAddAssociationsMixin<Signup, number>;
-  public removeSignup!: HasManyRemoveAssociationMixin<Signup, number>;
-  public removeSignups!: HasManyRemoveAssociationsMixin<Signup, number>;
+  public hasSignup!: HasManyHasAssociationMixin<Signup, Signup['id']>;
+  public hasSignups!: HasManyHasAssociationsMixin<Signup, Signup['id']>;
+  public setSignups!: HasManySetAssociationsMixin<Signup, Signup['id']>;
+  public addSignup!: HasManyAddAssociationMixin<Signup, Signup['id']>;
+  public addSignups!: HasManyAddAssociationsMixin<Signup, Signup['id']>;
+  public removeSignup!: HasManyRemoveAssociationMixin<Signup, Signup['id']>;
+  public removeSignups!: HasManyRemoveAssociationsMixin<Signup, Signup['id']>;
   public createSignup!: HasManyCreateAssociationMixin<Signup>;
 
   public readonly createdAt!: Date;
@@ -54,9 +55,9 @@ export default function setupQuotaModel(this: IlmoApplication) {
 
   Quota.init({
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
+      type: DataTypes.CHAR(RANDOM_ID_LENGTH),
       primaryKey: true,
+      defaultValue: generateRandomId,
     },
     eventId: {
       type: DataTypes.INTEGER.UNSIGNED,
