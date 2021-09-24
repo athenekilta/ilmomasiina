@@ -66,7 +66,7 @@ export default function setupQuestionModel(this: IlmoApplication) {
       defaultValue: generateRandomId,
     },
     eventId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.CHAR(RANDOM_ID_LENGTH),
       allowNull: false,
     },
     question: {

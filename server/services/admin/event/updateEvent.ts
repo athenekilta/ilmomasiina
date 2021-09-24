@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 import { Op, Transaction } from 'sequelize';
 
@@ -23,11 +23,7 @@ export interface AdminEventUpdateBody extends Pick<Event, typeof adminEventCreat
   quota: AdminEventUpdateQuota[];
 }
 
-export default async (id: number, data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
-  if (!Number.isSafeInteger(id)) {
-    throw new BadRequest('Invalid id');
-  }
-
+export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
   await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update
     const event = await Event.unscoped().findByPk(id, {

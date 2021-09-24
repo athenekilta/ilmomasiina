@@ -20,7 +20,7 @@ export class AdminEventsService extends AdapterService<AdminEventsServiceRespons
   }
 
   _get(id: Id) {
-    return getEventDetailsForAdmin(Number(id));
+    return getEventDetailsForAdmin(String(id));
   }
 
   _create(data: AdminEventCreateBody) {
@@ -32,11 +32,11 @@ export class AdminEventsService extends AdapterService<AdminEventsServiceRespons
   }
 
   _patch(id: Id, data: Partial<AdminEventUpdateBody>) {
-    return updateEvent(Number(id), data);
+    return updateEvent(String(id), data);
   }
 
   _remove(id: Id) {
-    return deleteEvent(Number(id));
+    return deleteEvent(String(id));
   }
 }
 

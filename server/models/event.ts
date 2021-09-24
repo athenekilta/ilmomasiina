@@ -8,9 +8,10 @@ import {
 import { IlmoApplication } from '../defs';
 import { Question } from './question';
 import { Quota } from './quota';
+import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
 export interface EventAttributes {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   date: Date;
@@ -32,7 +33,7 @@ export interface EventCreationAttributes
   | 'facebookUrl' | 'webpageUrl' | 'draft' | 'signupsPublic' | 'verificationEmail'> {}
 
 export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
-  public id!: number;
+  public id!: string;
   public title!: string;
   public slug!: string;
   public date!: Date;
@@ -82,9 +83,9 @@ export default function setupEventModel(this: IlmoApplication) {
   Event.init(
     {
       id: {
-        type: DataTypes.INTEGER.UNSIGNED,
-        autoIncrement: true,
+        type: DataTypes.CHAR(RANDOM_ID_LENGTH),
         primaryKey: true,
+        defaultValue: generateRandomId,
       },
       title: {
         type: DataTypes.STRING,

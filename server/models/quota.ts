@@ -60,7 +60,7 @@ export default function setupQuotaModel(this: IlmoApplication) {
       defaultValue: generateRandomId,
     },
     eventId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.CHAR(RANDOM_ID_LENGTH),
       allowNull: false,
     },
     title: {
