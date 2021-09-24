@@ -31,6 +31,7 @@ const QuotasTab = () => {
         <Col sm="9">
           <Field
             as={Form.Check}
+            type="checkbox"
             id="useOpenQuota"
             name="useOpenQuota"
             label="Käytä lisäksi yhteistä kiintiötä"

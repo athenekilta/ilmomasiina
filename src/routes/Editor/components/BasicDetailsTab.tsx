@@ -82,6 +82,7 @@ const BasicDetailsTab = () => {
         <Col sm="9">
           <Field
             as={Form.Check}
+            type="checkbox"
             name="listed"
             id="listed"
             label="Näytä tapahtumalistassa"
@@ -121,6 +122,7 @@ const BasicDetailsTab = () => {
         <Col sm="9">
           <Field
             as={Form.Check}
+            type="checkbox"
             name="signupsPublic"
             id="signupsPublic"
             label="Ilmoittautumiset ovat julkisia"
