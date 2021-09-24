@@ -28,6 +28,7 @@ export const adminEventGetEventAttrs = [
   ...eventGetEventAttrs,
   'id',
   'draft',
+  'listed',
   'verificationEmail',
 ] as const;
 

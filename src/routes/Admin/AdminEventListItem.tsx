@@ -31,13 +31,22 @@ const AdminEventListItem = ({ event }: Props) => {
     }
   }
 
+  let status;
+  if (event.draft) {
+    status = 'Luonnos';
+  } else if (!event.listed) {
+    status = 'Piilotettu';
+  } else {
+    status = 'Julkaistu';
+  }
+
   return (
     <tr>
       <td>
         <Link to={`${PREFIX_URL}/event/${event.id}`}>{event.title}</Link>
       </td>
       <td>{event.date ? moment(event.date).format('DD.MM.YYYY') : ''}</td>
-      <td>{event.draft ? 'Luonnos' : 'Julkaistu'}</td>
+      <td>{status}</td>
       <td>{_.sum(_.map(event.quota, 'signupCount'))}</td>
       <td>
         <Link to={`${PREFIX_URL}/admin/edit/${event.id}`}>

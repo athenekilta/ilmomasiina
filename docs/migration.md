@@ -51,4 +51,11 @@ ADD FOREIGN KEY `signup_ibfk_1` (`quotaId`) REFERENCES `quota` (`id`) ON DELETE 
 ALTER TABLE `answer`
 ADD FOREIGN KEY `answer_ibfk_1` (`signupId`) REFERENCES `signup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD FOREIGN KEY `answer_ibfk_2` (`questionId`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- add listed attribute
+
+ALTER TABLE `event`
+ADD `listed` BOOLEAN NOT NULL DEFAULT 0 AFTER `draft`;
+UPDATE `event`
+SET `listed` = 1;
 ```

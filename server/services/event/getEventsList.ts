@@ -21,6 +21,7 @@ const adminEventListEventAttrs = [
   ...eventListEventAttrs,
   'id',
   'draft',
+  'listed',
 ] as const;
 
 export const eventListQuotaAttrs = [
@@ -56,13 +57,16 @@ export type AdminEventListResponse = AdminEventListItem[];
 export type EventListResponseType<A extends boolean> = true extends A ? AdminEventListResponse : EventListResponse;
 
 async function getEventsList<A extends boolean>(admin: A): Promise<EventListResponseType<A>> {
-  // Admin view also shows draft field.
+  // Admin view also shows id, draft and listed fields.
   const eventAttrs = admin ? adminEventListEventAttrs : eventListEventAttrs;
-  // Admin view shows all events, user view only shows future events.
+  // Admin view shows all events, user view only shows future/recent events.
   const scope = admin ? Event.unscoped() : Event;
+  // Admin view also shows unlisted events.
+  const where = admin ? {} : { listed: true };
 
   const events = await scope.findAll({
     attributes: [...eventAttrs],
+    where,
     // Include quotas of event and count of signups
     include: [
       {

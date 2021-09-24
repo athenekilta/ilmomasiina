@@ -44,6 +44,7 @@ const defaultEvent = (): EditorEvent => ({
   verificationEmail: '',
 
   draft: true,
+  listed: false,
 });
 
 export const resetState = () => <const>{
