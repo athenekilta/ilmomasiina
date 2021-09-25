@@ -50,7 +50,7 @@ Ilmomasiina is Athene's event registration system.
 **Optional**: You can create mockup data for development by running `npm run create-fake-data`. During development, database can be resetted with `npm run reset-db`.
 
 ### Troubleshooting (Ubuntu)
-If `npm start` gives error `Error: You must provide a 'secret' in your authentication configuration`, it probably means that the `.env` file is not loaded correctly. A quick fix for this is to either use `export VARIABLE=value` for all the variables.
+If `npm start` gives error `Error: You must provide a 'secret' in your authentication configuration`, it probably means that the `.env` file is not loaded correctly. A quick fix for this is to run `export $(cat .env)` in project root directory.
 
 ## Mailgun setup
 
