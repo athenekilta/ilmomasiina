@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
-import getEventDetails, { AdminEventGetResponse } from '../../event/getEventDetails';
+import { AdminEventGetResponse, getEventDetailsForAdmin } from '../../event/getEventDetails';
 
 // Attributes included in POST /api/events for Event instances.
 export const adminEventCreateEventAttrs = [
@@ -74,5 +74,5 @@ export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse
     })
   ));
 
-  return getEventDetails(event.id, true);
+  return getEventDetailsForAdmin(event.id);
 };

@@ -117,14 +117,14 @@ export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetE
   registrationClosed?: boolean;
 }
 
+// Admin queries use ids (so that the slug can be safely edited), user queries use slugs.
+export type EventGetIdentifier<A extends boolean> = true extends A ? { id: Event['id'] } : { slug: string };
+
 export type EventGetResponseType<A extends boolean> = true extends A ? AdminEventGetResponse : EventGetResponse;
 
-/**
- * @param slugOrId Event id if admin === true, slug if admin === false.
- * @param admin Whether or not to return results for the admin view.
- */
-export default async function getEventDetails<A extends boolean>(
-  slugOrId: string | number, admin: A,
+async function getEventDetails<A extends boolean>(
+  where: EventGetIdentifier<A>,
+  admin: A,
 ): Promise<EventGetResponseType<A>> {
   // Admin queries include internal data such as confirmation email contents
   const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;
@@ -132,8 +132,6 @@ export default async function getEventDetails<A extends boolean>(
   const signupAttrs = admin ? adminEventGetSignupAttrs : eventGetSignupAttrs;
   // Admin queries also show past and draft events.
   const scope = admin ? Event.unscoped() : Event;
-  // Admin queries use ids (so that the slug can be safely edited), user queries use slugs.
-  const where = admin ? { id: slugOrId } : { slug: slugOrId };
 
   const event = await scope.findOne({
     where,
@@ -225,4 +223,12 @@ export default async function getEventDetails<A extends boolean>(
   }
 
   return result;
+}
+
+export default function getEventDetailsForUser(slug: string): Promise<EventGetResponse> {
+  return getEventDetails({ slug }, false);
+}
+
+export function getEventDetailsForAdmin(id: Event['id']): Promise<AdminEventGetResponse> {
+  return getEventDetails({ id }, true);
 }

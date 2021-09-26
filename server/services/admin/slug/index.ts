@@ -6,9 +6,9 @@ import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
 
 import { IlmoApplication } from '../../../defs';
-import checkSlugAvailability from './checkSlugAvailability';
+import checkSlugAvailability, { AdminCheckSlugResponse } from './checkSlugAvailability';
 
-type AdminSlugServiceResponses = never;
+type AdminSlugServiceResponses = AdminCheckSlugResponse;
 
 export class AdminSlugService extends AdapterService<AdminSlugServiceResponses> {
   _find(): never {
