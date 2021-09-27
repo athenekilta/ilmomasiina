@@ -47,11 +47,11 @@ export const signupCancelled = () => <const>{
   type: SIGNUP_CANCELLED,
 };
 
-export const getEvent = (eventId: Event.Id | string) => async (
+export const getEvent = (slug: Event.Slug | string) => async (
   dispatch: DispatchAction,
 ) => {
   try {
-    const response = await apiFetch(`events/${eventId}`) as Event.Details;
+    const response = await apiFetch(`events/${slug}`) as Event.Details;
     dispatch(eventLoaded(response));
   } catch (e) {
     dispatch(eventLoadFailed());

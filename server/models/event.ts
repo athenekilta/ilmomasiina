@@ -12,6 +12,7 @@ import { Quota } from './quota';
 export interface EventAttributes {
   id: number;
   title: string;
+  slug: string;
   date: Date;
   registrationStartDate: Date;
   registrationEndDate: Date;
@@ -33,6 +34,7 @@ export interface EventCreationAttributes
 export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: number;
   public title!: string;
+  public slug!: string;
   public date!: Date;
   public registrationStartDate!: Date;
   public registrationEndDate!: Date;
@@ -89,6 +91,15 @@ export default function setupEventModel(this: IlmoApplication) {
         allowNull: false,
         validate: {
           notEmpty: true,
+        },
+      },
+      slug: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: {
+          notEmpty: true,
+          is: /^[A-Za-z0-9_-]+$/,
         },
       },
       date: {

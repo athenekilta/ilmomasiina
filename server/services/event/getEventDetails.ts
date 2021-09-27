@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 
 import { Answer } from '../../models/answer';
@@ -9,8 +9,8 @@ import { Signup } from '../../models/signup';
 
 // Attributes included in GET /api/events/ID for Event instances.
 export const eventGetEventAttrs = [
-  'id',
   'title',
+  'slug',
   'date',
   'registrationStartDate',
   'registrationEndDate',
@@ -26,6 +26,7 @@ export const eventGetEventAttrs = [
 // Attributes included in GET /api/admin/events/ID for Event instances.
 export const adminEventGetEventAttrs = [
   ...eventGetEventAttrs,
+  'id',
   'draft',
   'verificationEmail',
 ] as const;
@@ -116,15 +117,15 @@ export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetE
   registrationClosed?: boolean;
 }
 
+// Admin queries use ids (so that the slug can be safely edited), user queries use slugs.
+export type EventGetIdentifier<A extends boolean> = true extends A ? { id: Event['id'] } : { slug: string };
+
 export type EventGetResponseType<A extends boolean> = true extends A ? AdminEventGetResponse : EventGetResponse;
 
-export default async function getEventDetails<A extends boolean>(
-  id: number, admin: A,
+async function getEventDetails<A extends boolean>(
+  where: EventGetIdentifier<A>,
+  admin: A,
 ): Promise<EventGetResponseType<A>> {
-  if (!Number.isSafeInteger(id)) {
-    throw new BadRequest('Invalid id');
-  }
-
   // Admin queries include internal data such as confirmation email contents
   const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;
   // Admin queries include emails and signup IDs
@@ -132,7 +133,8 @@ export default async function getEventDetails<A extends boolean>(
   // Admin queries also show past and draft events.
   const scope = admin ? Event.unscoped() : Event;
 
-  const event = await scope.findByPk(id, {
+  const event = await scope.findOne({
+    where,
     attributes: [...eventAttrs],
     include: [
       // First include all questions (also non-public for the form)
@@ -221,4 +223,12 @@ export default async function getEventDetails<A extends boolean>(
   }
 
   return result;
+}
+
+export default function getEventDetailsForUser(slug: string): Promise<EventGetResponse> {
+  return getEventDetails({ slug }, false);
+}
+
+export function getEventDetailsForAdmin(id: Event['id']): Promise<AdminEventGetResponse> {
+  return getEventDetails({ id }, true);
 }

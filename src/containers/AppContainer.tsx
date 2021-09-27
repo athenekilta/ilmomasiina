@@ -36,7 +36,7 @@ const AppContainer = () => (
               />
               <Route
                 exact
-                path={`${PREFIX_URL}/event/:id`}
+                path={`${PREFIX_URL}/event/:slug`}
                 component={SingleEvent}
               />
               <Route

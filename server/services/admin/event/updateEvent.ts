@@ -5,7 +5,7 @@ import { Op, Transaction } from 'sequelize';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
-import getEventDetails, { AdminEventGetResponse } from '../../event/getEventDetails';
+import { AdminEventGetResponse, getEventDetailsForAdmin } from '../../event/getEventDetails';
 import { adminEventCreateEventAttrs, adminEventCreateQuestionAttrs, adminEventCreateQuotaAttrs } from './createEvent';
 
 // Data type definitions for the request body, using attribute lists from createEvent.
@@ -134,5 +134,5 @@ export default async (id: number, data: Partial<AdminEventUpdateBody>): Promise<
     }
   });
 
-  return getEventDetails(id, true);
+  return getEventDetailsForAdmin(id);
 };
