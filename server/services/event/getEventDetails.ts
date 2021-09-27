@@ -170,44 +170,37 @@ async function getEventDetails<A extends boolean>(
     throw new NotFound('No event found with id');
   }
 
+  // Find IDs of public questions
+  const publicQuestions = _.map(_.filter(event.questions!, 'public'), 'id');
+
   // Convert event to response
   const result: EventGetResponseType<A> = {
     ..._.pick(event, eventAttrs),
+
     questions: event.questions!.map((question) => ({
       ..._.pick(question, eventGetQuestionAttrs),
       // Split answer options into array
       options: question.options ? question.options.split(';') : null,
     })),
-    quota: event.quotas!.map((quota) => ({
-      ..._.pick(quota, eventGetQuotaAttrs),
-      signups: quota.signups!.map((signup) => ({
-        ..._.pick(signup, signupAttrs),
-        answers: signup.answers!,
-      })),
-    })),
-  };
 
-  // Admins get to see all signup data
-  if (!admin) {
-    // Hide all signups if answers are not public
-    if (!event.signupsPublic) {
-      result.quota.forEach((quota) => ({
-        ...quota,
-        signups: null,
-      }));
-    } else {
-      // Find IDs of public questions
-      const publicQuestions = _.map(_.filter(event.questions!, 'public'), 'id');
+    quota: event.quotas!.map((quota) => {
+      // Hide all signups from non-admins if answers are not public
+      let signups = null;
 
-      // Hide answers of non-public questions
-      result.quota.forEach((quota) => {
-        quota.signups!.forEach((signup) => ({
-          ...signup,
-          answers: signup.answers.filter((answer) => publicQuestions.includes(answer.questionId)),
+      if (admin || event.signupsPublic) {
+        signups = quota.signups!.map((signup) => ({
+          ..._.pick(signup, signupAttrs),
+          // Hide answers of non-public questions
+          answers: signup.answers!.filter((answer) => admin || publicQuestions.includes(answer.questionId)),
         }));
-      });
-    }
-  }
+      }
+
+      return {
+        ..._.pick(quota, eventGetQuotaAttrs),
+        signups,
+      };
+    }),
+  };
 
   // Add millisTillOpening or registrationClosed if necessary
   const startDate = new Date(result.registrationStartDate);
