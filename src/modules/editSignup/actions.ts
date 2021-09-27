@@ -34,7 +34,7 @@ export const signupDeleted = () => <const>{ type: SIGNUP_DELETED };
 
 export const resetState = () => <const>{ type: RESET };
 
-export const getSignupAndEvent = (id: Signup.Id | string, editToken: string) => async (dispatch: DispatchAction) => {
+export const getSignupAndEvent = (id: Signup.Id, editToken: string) => async (dispatch: DispatchAction) => {
   try {
     const response = await apiFetch(`signups/${id}?editToken=${editToken}`);
     dispatch(signupLoaded(response as Signup.Details));

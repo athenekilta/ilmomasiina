@@ -4,31 +4,32 @@ import {
 
 import { IlmoApplication } from '../defs';
 import { Question } from './question';
+import { RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';
 
 export interface AnswerAttributes {
-  id: number;
+  id: string;
   answer: string;
-  questionId: number;
-  signupId: number;
+  questionId: Question['id'];
+  signupId: Signup['id'];
 }
 
 export interface AnswerCreationAttributes extends Optional<AnswerAttributes, 'id'> {}
 
 export class Answer extends Model<AnswerAttributes, AnswerCreationAttributes> implements AnswerAttributes {
-  public id!: number;
+  public id!: string;
   public answer!: string;
 
-  public questionId!: number;
+  public questionId!: Question['id'];
   public question?: Question;
   public getQuestion!: HasOneGetAssociationMixin<Question>;
-  public setQuestion!: HasOneSetAssociationMixin<Question, number>;
+  public setQuestion!: HasOneSetAssociationMixin<Question, Question['id']>;
   public createQuestion!: HasOneCreateAssociationMixin<Question>;
 
-  public signupId!: number;
+  public signupId!: Signup['id'];
   public signup?: Signup;
   public getSignup!: HasOneGetAssociationMixin<Signup>;
-  public setSignup!: HasOneSetAssociationMixin<Signup, number>;
+  public setSignup!: HasOneSetAssociationMixin<Signup, Signup['id']>;
   public createSignup!: HasOneCreateAssociationMixin<Signup>;
 
   public readonly createdAt!: Date;
@@ -45,11 +46,11 @@ export default function setupAnswerModel(this: IlmoApplication) {
       primaryKey: true,
     },
     questionId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.CHAR(RANDOM_ID_LENGTH),
       allowNull: false,
     },
     signupId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.CHAR(RANDOM_ID_LENGTH),
       allowNull: false,
     },
     answer: {

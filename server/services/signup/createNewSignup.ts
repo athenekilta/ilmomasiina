@@ -1,4 +1,4 @@
-import { BadRequest, Forbidden, NotFound } from '@feathersjs/errors';
+import { Forbidden, NotFound } from '@feathersjs/errors';
 import moment from 'moment';
 
 import { Event } from '../../models/event';
@@ -9,17 +9,17 @@ import { generateToken } from './editTokens';
 
 // Expected request schema.
 export interface SignupCreateBody {
-  quotaId: number;
+  quotaId: Quota['id'];
 }
 
 export type SignupState = 'in-quota' | 'in-open' | 'in-queue';
 
 // Response schema.
 export interface SignupCreateResponse {
-  id: number;
+  id: Signup['id'];
   position: number | null;
   status: SignupState | null;
-  quotaId: number;
+  quotaId: Quota['id'];
   createdAt: Date;
   editToken: string,
 }
@@ -38,10 +38,6 @@ const signupsAllowed = (event: Event) => {
 };
 
 export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateResponse> => {
-  if (!Number.isSafeInteger(quotaId)) {
-    throw new BadRequest('Missing quota id.');
-  }
-
   // Find the given quota and event.
   const quota = await Quota.findByPk(quotaId, {
     include: [

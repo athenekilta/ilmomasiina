@@ -7,12 +7,13 @@ import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
+import { generateRandomId } from '../../models/randomId';
 import { Signup } from '../../models/signup';
 import { verifyToken } from './editTokens';
 
 // Expected request schema.
 export interface SignupUpdateBodyAnswer {
-  questionId: number;
+  questionId: Question['id'];
   answer: string;
 }
 
@@ -26,20 +27,16 @@ export interface SignupUpdateBody {
 
 // Response schema.
 export interface SignupUpdateResponse {
-  id: number;
+  id: Signup['id'];
   confirmedAt: Date;
 }
 
 // Fields that are present and required in every signup.
 const alwaysRequiredFields = ['firstName', 'lastName', 'email'] as const;
 
-export default async (id: number, data: SignupUpdateBody, params?: Params): Promise<SignupUpdateResponse> => {
-  if (!Number.isSafeInteger(id)) {
-    throw new BadRequest('Invalid id');
-  }
-
+export default async (id: string, data: SignupUpdateBody, params?: Params): Promise<SignupUpdateResponse> => {
   const editToken = params?.query?.editToken || data.editToken;
-  verifyToken(Number(id), editToken);
+  verifyToken(id, editToken);
 
   const updatedSignup = await Signup.sequelize!.transaction(async (transaction) => {
     // Retrieve event data and lock the row for editing
@@ -122,6 +119,7 @@ export default async (id: number, data: SignupUpdateBody, params?: Params): Prom
       }
 
       return {
+        id: generateRandomId(), // https://github.com/sequelize/sequelize/issues/2140
         questionId: question.id,
         answer,
         signupId: signup.id,
