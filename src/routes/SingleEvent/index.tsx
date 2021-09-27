@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 
 import moment from 'moment';
 import { Spinner } from 'react-bootstrap';
+import ReactMarkdown from 'react-markdown';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import remarkGfm from 'remark-gfm';
 
 import { Quota } from '../../api/events';
-import Autolink from '../../components/Autolink';
 import { createPendingSignup, getEvent, resetState } from '../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import { getSignupsByQuota } from '../../utils/signupUtils';
@@ -135,9 +136,11 @@ const SingleEvent = ({ match }: Props) => {
               </p>
             )}
           </div>
-          <p className="event-description">
-            <Autolink>{event.description}</Autolink>
-          </p>
+          <div className="event-description">
+            <ReactMarkdown plugins={[remarkGfm]}>
+              {event.description || ''}
+            </ReactMarkdown>
+          </div>
         </div>
         <div className="col-xs-12 col-sm-4 pull-right">
           <SignupCountdown beginSignup={beginSignup} />
