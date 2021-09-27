@@ -17,6 +17,8 @@ export default async function deleteUnconfirmedSignups() {
         },
       },
     },
+    // Also already-deleted signups
+    paranoid: false,
   });
 
   if (signups.length === 0) {
@@ -30,7 +32,11 @@ export default async function deleteUnconfirmedSignups() {
   console.log(ids);
   try {
     // TODO: send emails to signups accepted from queue
-    await Signup.unscoped().destroy({ where: { id: ids } });
+    await Signup.unscoped().destroy({
+      where: { id: ids },
+      // skip deletion grace period
+      force: true,
+    });
     console.log('Unconfirmed signups deleted');
   } catch (error) {
     console.error(error);
