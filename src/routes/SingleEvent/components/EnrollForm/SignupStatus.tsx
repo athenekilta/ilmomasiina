@@ -6,7 +6,7 @@ import { useTypedSelector } from '../../../../store/reducers';
 
 const SignupStatus = () => {
   const { status, position, quotaId } = useTypedSelector((state) => state.singleEvent.signup)!;
-  const { quota: quotas, openQuotaSize } = useTypedSelector((state) => state.singleEvent.event)!;
+  const { quotas, openQuotaSize } = useTypedSelector((state) => state.singleEvent.event)!;
 
   if (!status) return null;
 

@@ -21,28 +21,24 @@ const SignupButton = (props: SignupButtonProps) => {
     isOpen, beginSignup, seconds, total,
   } = props;
 
-  const event = useTypedSelector((state) => state.singleEvent.event)!;
+  const {
+    date, registrationStartDate, registrationEndDate, quotas,
+  } = useTypedSelector((state) => state.singleEvent.event)!;
   const submitting = useTypedSelector((state) => state.singleEvent.signupSubmitting);
-  const isOnly = event.quota.length === 1;
+  const isOnly = quotas.length === 1;
 
   return (
     <div className="sidebar-widget">
       <h3>Ilmoittautuminen</h3>
       <p>
-        {
-          signupState(
-            event.date,
-            event.registrationStartDate,
-            event.registrationEndDate,
-          ).label
-        }
+        {signupState(date, registrationStartDate, registrationEndDate).label}
         {total < COUNTDOWN_DURATION && !isOpen ? (
           <span style={{ color: 'green' }}>
             {` (${seconds}  s)`}
           </span>
         ) : null}
       </p>
-      {event.quota.map((quota) => (
+      {quotas.map((quota) => (
         <Button
           key={quota.id}
           type="button"

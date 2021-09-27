@@ -45,8 +45,7 @@ export interface AdminEventCreateQuota extends Pick<Quota, typeof adminEventCrea
 
 export interface AdminEventCreateBody extends Pick<Event, typeof adminEventCreateEventAttrs[number]> {
   questions: AdminEventCreateQuestion[];
-  // intentionally misnamed to match old API
-  quota: AdminEventCreateQuota[];
+  quotas: AdminEventCreateQuota[];
 }
 
 export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse> => {
@@ -54,7 +53,7 @@ export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse
   const attribs = {
     ..._.pick(data, adminEventCreateEventAttrs),
     questions: data.questions?.map((question) => _.pick(question, adminEventCreateQuestionAttrs)),
-    quotas: data.quota?.map((quota) => _.pick(quota, adminEventCreateQuotaAttrs)),
+    quotas: data.quotas?.map((quota) => _.pick(quota, adminEventCreateQuotaAttrs)),
   };
 
   // Create the event with relations - Sequelize will handle validation
