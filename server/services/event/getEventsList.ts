@@ -7,7 +7,7 @@ import { Signup } from '../../models/signup';
 
 // Attributes included in GET /api/events for Event instances.
 export const eventListEventAttrs = [
-  'id',
+  'slug',
   'title',
   'date',
   'registrationStartDate',
@@ -19,6 +19,7 @@ export const eventListEventAttrs = [
 // Attributes included in GET /api/admin/events for Event instances.
 const adminEventListEventAttrs = [
   ...eventListEventAttrs,
+  'id',
   'draft',
 ] as const;
 
@@ -52,7 +53,9 @@ export interface AdminEventListItem extends Pick<Event, typeof adminEventListEve
 
 export type AdminEventListResponse = AdminEventListItem[];
 
-export default async (admin = false): Promise<EventListResponse> => {
+export type EventListResponseType<A extends boolean> = true extends A ? AdminEventListResponse : EventListResponse;
+
+async function getEventsList<A extends boolean>(admin: A): Promise<EventListResponseType<A>> {
   // Admin view also shows draft field.
   const eventAttrs = admin ? adminEventListEventAttrs : eventListEventAttrs;
   // Admin view shows all events, user view only shows future events.
@@ -83,7 +86,7 @@ export default async (admin = false): Promise<EventListResponse> => {
   });
 
   // Convert event list to response
-  const result: EventListResponse = events.map((event) => ({
+  const result: EventListResponseType<A> = events.map((event) => ({
     ..._.pick(event, eventAttrs),
     quota: event.quotas!.map((quota) => ({
       ..._.pick(quota, eventListQuotaAttrs),
@@ -92,4 +95,12 @@ export default async (admin = false): Promise<EventListResponse> => {
   }));
 
   return result;
-};
+}
+
+export default function getEventsListForUser() {
+  return getEventsList(false);
+}
+
+export function getEventsListForAdmin() {
+  return getEventsList(true);
+}

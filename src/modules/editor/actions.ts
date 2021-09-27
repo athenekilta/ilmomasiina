@@ -1,8 +1,7 @@
 import moment from 'moment';
 
 import apiFetch from '../../api';
-import { AdminEvent } from '../../api/adminEvents';
-import { Event } from '../../api/events';
+import { AdminEvent, AdminSlug } from '../../api/adminEvents';
 import { Signup } from '../../api/signups';
 import { DispatchAction, GetState } from '../../store/types';
 import {
@@ -10,24 +9,78 @@ import {
   EVENT_LOADED,
   EVENT_SAVE_FAILED,
   EVENT_SAVING,
+  EVENT_SLUG_CHECKED,
+  EVENT_SLUG_CHECKING,
   RESET,
 } from './actionTypes';
 import { EditorEvent } from './types';
+
+const defaultEvent = (): EditorEvent => ({
+  title: '',
+  slug: '',
+  date: undefined,
+  webpageUrl: '',
+  facebookUrl: '',
+  location: '',
+  description: '',
+  price: '',
+  signupsPublic: false,
+
+  registrationStartDate: undefined,
+  registrationEndDate: undefined,
+
+  openQuotaSize: 0,
+  useOpenQuota: false,
+  quotas: [
+    {
+      key: 'new',
+      title: 'Kiintiö',
+      size: 20,
+    },
+  ],
+
+  questions: [],
+
+  verificationEmail: '',
+
+  draft: true,
+});
 
 export const resetState = () => <const>{
   type: RESET,
 };
 
-export const loaded = (event: AdminEvent.Details | null, formData: EditorEvent | null) => <const>{
+export const loaded = (event: AdminEvent.Details, formData: EditorEvent | null) => <const>{
   type: EVENT_LOADED,
   payload: {
     event,
     formData,
+    isNew: false,
+  },
+};
+
+export const newEvent = () => <const>{
+  type: EVENT_LOADED,
+  payload: {
+    event: null,
+    formData: defaultEvent(),
+    isNew: true,
   },
 };
 
 export const loadFailed = () => <const>{
   type: EVENT_LOAD_FAILED,
+};
+
+export const checkingSlugAvailability = () => <const>{
+  type: EVENT_SLUG_CHECKING,
+};
+
+export const slugAvailabilityChecked = (
+  result: AdminSlug.Check | null,
+) => <const>{
+  type: EVENT_SLUG_CHECKED,
+  payload: result,
 };
 
 export const saving = () => <const>{
@@ -68,7 +121,8 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   })),
 });
 
-export const getEvent = (id: Event.Id | string) => async (dispatch: DispatchAction, getState: GetState) => {
+// TODO remove | string when ids are all strings
+export const getEvent = (id: AdminEvent.Id | string) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
   try {
     const response = await apiFetch(`admin/events/${id}`, { accessToken }) as AdminEvent.Details;
@@ -76,6 +130,18 @@ export const getEvent = (id: Event.Id | string) => async (dispatch: DispatchActi
     dispatch(loaded(response, formData));
   } catch (e) {
     dispatch(loadFailed());
+  }
+};
+
+export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+  try {
+    const response = await apiFetch(`admin/slug/${slug}`, {
+      accessToken,
+    }) as AdminSlug.Check;
+    dispatch(slugAvailabilityChecked(response));
+  } catch (e) {
+    dispatch(slugAvailabilityChecked(null));
   }
 };
 
@@ -101,7 +167,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
 };
 
 export const publishEventUpdate = (
-  id: Event.Id | string, data: EditorEvent,
+  id: AdminEvent.Id, data: EditorEvent,
 ) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 

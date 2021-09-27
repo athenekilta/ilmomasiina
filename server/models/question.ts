@@ -7,47 +7,49 @@ import {
 
 import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
+import { Event } from './event';
+import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
 export const questionTypes = ['text', 'textarea', 'number', 'select', 'checkbox'] as const;
 export type QuestionType = typeof questionTypes[number];
 
 export interface QuestionAttributes {
-  id: number;
+  id: string;
   question: string;
   type: QuestionType;
   options: string | null;
   required: boolean;
   public: boolean;
-  eventId: number;
+  eventId: Event['id'];
 }
 
 export interface QuestionCreationAttributes
   extends Optional<QuestionAttributes, 'id' | 'options' | 'required' | 'public'> {}
 
 export class Question extends Model<QuestionAttributes, QuestionCreationAttributes> implements QuestionAttributes {
-  public id!: number;
+  public id!: string;
   public question!: string;
   public type!: QuestionType;
   public options!: string | null;
   public required!: boolean;
   public public!: boolean;
 
-  public eventId!: number;
+  public eventId!: Event['id'];
   public event?: Event;
   public getEvent!: HasOneGetAssociationMixin<Event>;
-  public setEvent!: HasOneSetAssociationMixin<Event, number>;
+  public setEvent!: HasOneSetAssociationMixin<Event, Event['id']>;
   public createEvent!: HasOneCreateAssociationMixin<Event>;
 
   public answers?: Answer[];
   public getAnswers!: HasManyGetAssociationsMixin<Answer>;
   public countAnswers!: HasManyCountAssociationsMixin;
-  public hasAnswer!: HasManyHasAssociationMixin<Answer, number>;
-  public hasAnswers!: HasManyHasAssociationsMixin<Answer, number>;
-  public setAnswers!: HasManySetAssociationsMixin<Answer, number>;
-  public addAnswer!: HasManyAddAssociationMixin<Answer, number>;
-  public addAnswers!: HasManyAddAssociationsMixin<Answer, number>;
-  public removeAnswer!: HasManyRemoveAssociationMixin<Answer, number>;
-  public removeAnswers!: HasManyRemoveAssociationsMixin<Answer, number>;
+  public hasAnswer!: HasManyHasAssociationMixin<Answer, Answer['id']>;
+  public hasAnswers!: HasManyHasAssociationsMixin<Answer, Answer['id']>;
+  public setAnswers!: HasManySetAssociationsMixin<Answer, Answer['id']>;
+  public addAnswer!: HasManyAddAssociationMixin<Answer, Answer['id']>;
+  public addAnswers!: HasManyAddAssociationsMixin<Answer, Answer['id']>;
+  public removeAnswer!: HasManyRemoveAssociationMixin<Answer, Answer['id']>;
+  public removeAnswers!: HasManyRemoveAssociationsMixin<Answer, Answer['id']>;
   public createAnswer!: HasManyCreateAssociationMixin<Answer>;
 
   public readonly createdAt!: Date;
@@ -59,12 +61,12 @@ export default function setupQuestionModel(this: IlmoApplication) {
 
   Question.init({
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
+      type: DataTypes.CHAR(RANDOM_ID_LENGTH),
       primaryKey: true,
+      defaultValue: generateRandomId,
     },
     eventId: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.CHAR(RANDOM_ID_LENGTH),
       allowNull: false,
     },
     question: {

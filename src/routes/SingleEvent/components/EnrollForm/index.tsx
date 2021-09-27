@@ -37,7 +37,7 @@ const EnrollForm = ({ closeForm }: Props) => {
         type: toast.TYPE.SUCCESS,
         autoClose: 5000,
       });
-      dispatch(getEvent(event!.id));
+      dispatch(getEvent(event!.slug));
       closeForm();
     } else {
       toast.update(progressToast, {
@@ -57,7 +57,7 @@ const EnrollForm = ({ closeForm }: Props) => {
     if (!close) return;
 
     dispatch(cancelPendingSignup(signup!.id, signup!.editToken));
-    dispatch(getEvent(event!.id));
+    dispatch(getEvent(event!.slug));
     closeForm();
   }
 

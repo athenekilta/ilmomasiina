@@ -20,7 +20,7 @@ import SignupList from './components/SignupList';
 import './SingleEvent.scss';
 
 interface MatchParams {
-  id: string;
+  slug: string;
 }
 
 type Props = RouteComponentProps<MatchParams>;
@@ -34,11 +34,11 @@ const SingleEvent = ({ match }: Props) => {
   const [formOpen, setFormOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(getEvent(match.params.id));
+    dispatch(getEvent(match.params.slug));
     return () => {
       dispatch(resetState());
     };
-  }, [dispatch, match.params.id]);
+  }, [dispatch, match.params.slug]);
 
   if (eventLoadError) {
     return (
@@ -80,7 +80,7 @@ const SingleEvent = ({ match }: Props) => {
     return (
       <EnrollForm
         closeForm={() => setFormOpen(false)}
-        key={event.id}
+        key={event.slug}
       />
     );
   }

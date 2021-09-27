@@ -6,21 +6,21 @@ import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
 
 import { IlmoApplication } from '../../../defs';
-import getEventDetails, { EventGetResponse } from '../../event/getEventDetails';
-import getEventsList, { EventListResponse } from '../../event/getEventsList';
+import { AdminEventGetResponse, getEventDetailsForAdmin } from '../../event/getEventDetails';
+import { AdminEventListResponse, getEventsListForAdmin } from '../../event/getEventsList';
 import createEvent, { AdminEventCreateBody } from './createEvent';
 import deleteEvent from './deleteEvent';
 import updateEvent, { AdminEventUpdateBody } from './updateEvent';
 
-type AdminEventsServiceResponses = EventListResponse | EventGetResponse;
+type AdminEventsServiceResponses = AdminEventListResponse | AdminEventGetResponse;
 
 export class AdminEventsService extends AdapterService<AdminEventsServiceResponses> {
   _find() {
-    return getEventsList(true);
+    return getEventsListForAdmin();
   }
 
   _get(id: Id) {
-    return getEventDetails(Number(id), true);
+    return getEventDetailsForAdmin(String(id));
   }
 
   _create(data: AdminEventCreateBody) {
@@ -32,11 +32,11 @@ export class AdminEventsService extends AdapterService<AdminEventsServiceRespons
   }
 
   _patch(id: Id, data: Partial<AdminEventUpdateBody>) {
-    return updateEvent(Number(id), data);
+    return updateEvent(String(id), data);
   }
 
   _remove(id: Id) {
-    return deleteEvent(Number(id));
+    return deleteEvent(String(id));
   }
 }
 

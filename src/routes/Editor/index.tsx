@@ -7,7 +7,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import {
-  getEvent, loaded, publishEventUpdate, publishNewEvent, resetState,
+  getEvent, newEvent, publishEventUpdate, publishNewEvent, resetState,
 } from '../../modules/editor/actions';
 import { EditorEvent } from '../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
@@ -29,60 +29,29 @@ interface EditSignupProps {}
 
 type Props = EditSignupProps & RouteComponentProps<MatchParams>;
 
-const defaultEvent = (): EditorEvent => ({
-  title: '',
-  date: undefined,
-  webpageUrl: '',
-  facebookUrl: '',
-  location: '',
-  description: '',
-  price: '',
-  signupsPublic: false,
-
-  registrationStartDate: undefined,
-  registrationEndDate: undefined,
-
-  openQuotaSize: 0,
-  useOpenQuota: false,
-  quotas: [
-    {
-      key: 'new',
-      title: 'Kiintiö',
-      size: 20,
-    },
-  ],
-
-  questions: [],
-
-  verificationEmail: '',
-
-  draft: true,
-});
-
 const Editor = ({ history, match }: Props) => {
   const dispatch = useTypedDispatch();
   const {
-    event, formData, loadError,
+    event, formData, isNew, loadError,
   } = useTypedSelector(
     (state) => state.editor,
     shallowEqual,
   );
 
   const eventId = match.params.id;
-  const isNew = eventId === 'new';
 
   const [activeTab, setActiveTab] = useState<EditorTabId>(1);
 
   useEffect(() => {
-    if (!isNew) {
-      dispatch(getEvent(eventId));
+    if (eventId === 'new') {
+      dispatch(newEvent());
     } else {
-      dispatch(loaded(null, defaultEvent()));
+      dispatch(getEvent(eventId));
     }
     return () => {
       dispatch(resetState());
     };
-  }, [dispatch, eventId, isNew]);
+  }, [dispatch, eventId]);
 
   // Ugly hack, but Formik doesn't really give us a clean way to
   // call setFieldValue("draft", ...) and then submit once that has propagated.
@@ -90,7 +59,7 @@ const Editor = ({ history, match }: Props) => {
 
   async function onSubmit(data: EditorEvent, { setSubmitting }: FormikHelpers<EditorEvent>) {
     // Set draft state from last submit button pressed if any, otherwise keep it as-is.
-    const draft = isNew || (saveAsDraft.current ?? event?.draft ?? true);
+    const draft = saveAsDraft.current ?? (event?.draft || isNew);
     const modifiedEvent = {
       ...data,
       quota: data.quotas,
@@ -99,8 +68,8 @@ const Editor = ({ history, match }: Props) => {
 
     try {
       if (isNew) {
-        const newEvent = await dispatch(publishNewEvent(modifiedEvent));
-        history.push(`${PREFIX_URL}/admin/edit/${newEvent.id}`);
+        const created = await dispatch(publishNewEvent(modifiedEvent));
+        history.push(`${PREFIX_URL}/admin/edit/${created.id}`);
         toast.success('Tapahtuma luotiin onnistuneesti!', {
           autoClose: 2000,
         });
@@ -155,7 +124,7 @@ const Editor = ({ history, match }: Props) => {
 
           return (
             <Form onSubmit={handleSubmit}>
-              <EditorToolbar isNew={isNew} isDraft={event!.draft} onSubmitClick={onSubmitClick} />
+              <EditorToolbar onSubmitClick={onSubmitClick} />
               <EditorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
               <div className="event-editor--valid-notice collapsed">

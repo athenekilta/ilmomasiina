@@ -1,6 +1,5 @@
 import apiFetch from '../../api';
 import { AdminEvent } from '../../api/adminEvents';
-import { Event } from '../../api/events';
 import { User } from '../../api/users';
 import { DispatchAction, GetState } from '../../store/types';
 import {
@@ -59,7 +58,7 @@ export const getAdminEvents = () => async (dispatch: DispatchAction, getState: G
   }
 };
 
-export const deleteEvent = (id: Event.Id) => async (_dispatch: DispatchAction, getState: GetState) => {
+export const deleteEvent = (id: AdminEvent.Id) => async (_dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
 
   try {

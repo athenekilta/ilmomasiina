@@ -9,13 +9,23 @@ type Props = {
   help?: ReactNode;
   required?: boolean;
   alternateError?: string;
+  extraFeedback?: ReactNode;
   checkAlign?: boolean;
   as?: ComponentType<any> | string;
   children?: ReactNode;
 };
 
 export default function FieldRow<P = unknown>({
-  name, label, help, required = false, alternateError, checkAlign, as = Form.Control, children, ...props
+  name,
+  label,
+  help,
+  required = false,
+  alternateError,
+  extraFeedback,
+  checkAlign,
+  as = Form.Control,
+  children,
+  ...props
 }: Props & P) {
   const { errors } = useFormikContext<any>();
 
@@ -34,6 +44,7 @@ export default function FieldRow<P = unknown>({
         <Form.Control.Feedback type="invalid">
           {errors[name] && (alternateError || errors[name])}
         </Form.Control.Feedback>
+        {extraFeedback}
         {help && <Form.Text muted>{help}</Form.Text>}
       </Col>
     </Form.Group>

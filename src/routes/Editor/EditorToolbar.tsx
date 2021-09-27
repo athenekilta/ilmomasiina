@@ -2,22 +2,25 @@ import React from 'react';
 
 import { useFormikContext } from 'formik';
 import { Button, ButtonGroup, Spinner } from 'react-bootstrap';
+import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { EditorEvent } from '../../modules/editor/types';
+import { useTypedSelector } from '../../store/reducers';
 
 import './Editor.scss';
 
 interface EditorToolbarProps {
-  isNew: boolean;
-  isDraft: boolean;
   onSubmitClick: (asDraft: boolean) => void;
 }
 
 type Props = EditorToolbarProps & RouteComponentProps<{ id: string }>;
 
-const EditorToolbar = ({ isNew, isDraft, onSubmitClick }: Props) => {
+const EditorToolbar = ({ onSubmitClick }: Props) => {
   const { isSubmitting } = useFormikContext<EditorEvent>();
+  const { event, isNew } = useTypedSelector((state) => state.editor, shallowEqual);
+
+  const isDraft = event?.draft || isNew;
 
   return (
     <>

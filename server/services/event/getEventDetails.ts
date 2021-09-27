@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 
 import { Answer } from '../../models/answer';
@@ -9,8 +9,8 @@ import { Signup } from '../../models/signup';
 
 // Attributes included in GET /api/events/ID for Event instances.
 export const eventGetEventAttrs = [
-  'id',
   'title',
+  'slug',
   'date',
   'registrationStartDate',
   'registrationEndDate',
@@ -26,6 +26,7 @@ export const eventGetEventAttrs = [
 // Attributes included in GET /api/admin/events/ID for Event instances.
 export const adminEventGetEventAttrs = [
   ...eventGetEventAttrs,
+  'id',
   'draft',
   'verificationEmail',
 ] as const;
@@ -116,15 +117,15 @@ export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetE
   registrationClosed?: boolean;
 }
 
+// Admin queries use ids (so that the slug can be safely edited), user queries use slugs.
+export type EventGetIdentifier<A extends boolean> = true extends A ? { id: Event['id'] } : { slug: string };
+
 export type EventGetResponseType<A extends boolean> = true extends A ? AdminEventGetResponse : EventGetResponse;
 
-export default async function getEventDetails<A extends boolean>(
-  id: number, admin: A,
+async function getEventDetails<A extends boolean>(
+  where: EventGetIdentifier<A>,
+  admin: A,
 ): Promise<EventGetResponseType<A>> {
-  if (!Number.isSafeInteger(id)) {
-    throw new BadRequest('Invalid id');
-  }
-
   // Admin queries include internal data such as confirmation email contents
   const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;
   // Admin queries include emails and signup IDs
@@ -132,7 +133,8 @@ export default async function getEventDetails<A extends boolean>(
   // Admin queries also show past and draft events.
   const scope = admin ? Event.unscoped() : Event;
 
-  const event = await scope.findByPk(id, {
+  const event = await scope.findOne({
+    where,
     attributes: [...eventAttrs],
     include: [
       // First include all questions (also non-public for the form)
@@ -168,44 +170,37 @@ export default async function getEventDetails<A extends boolean>(
     throw new NotFound('No event found with id');
   }
 
+  // Find IDs of public questions
+  const publicQuestions = _.map(_.filter(event.questions!, 'public'), 'id');
+
   // Convert event to response
   const result: EventGetResponseType<A> = {
     ..._.pick(event, eventAttrs),
+
     questions: event.questions!.map((question) => ({
       ..._.pick(question, eventGetQuestionAttrs),
       // Split answer options into array
       options: question.options ? question.options.split(';') : null,
     })),
-    quota: event.quotas!.map((quota) => ({
-      ..._.pick(quota, eventGetQuotaAttrs),
-      signups: quota.signups!.map((signup) => ({
-        ..._.pick(signup, signupAttrs),
-        answers: signup.answers!,
-      })),
-    })),
-  };
 
-  // Admins get to see all signup data
-  if (!admin) {
-    // Hide all signups if answers are not public
-    if (!event.signupsPublic) {
-      result.quota.forEach((quota) => ({
-        ...quota,
-        signups: null,
-      }));
-    } else {
-      // Find IDs of public questions
-      const publicQuestions = _.map(_.filter(event.questions!, 'public'), 'id');
+    quota: event.quotas!.map((quota) => {
+      // Hide all signups from non-admins if answers are not public
+      let signups = null;
 
-      // Hide answers of non-public questions
-      result.quota.forEach((quota) => {
-        quota.signups!.forEach((signup) => ({
-          ...signup,
-          answers: signup.answers.filter((answer) => publicQuestions.includes(answer.questionId)),
+      if (admin || event.signupsPublic) {
+        signups = quota.signups!.map((signup) => ({
+          ..._.pick(signup, signupAttrs),
+          // Hide answers of non-public questions
+          answers: signup.answers!.filter((answer) => admin || publicQuestions.includes(answer.questionId)),
         }));
-      });
-    }
-  }
+      }
+
+      return {
+        ..._.pick(quota, eventGetQuotaAttrs),
+        signups,
+      };
+    }),
+  };
 
   // Add millisTillOpening or registrationClosed if necessary
   const startDate = new Date(result.registrationStartDate);
@@ -221,4 +216,12 @@ export default async function getEventDetails<A extends boolean>(
   }
 
   return result;
+}
+
+export default function getEventDetailsForUser(slug: string): Promise<EventGetResponse> {
+  return getEventDetails({ slug }, false);
+}
+
+export function getEventDetailsForAdmin(id: Event['id']): Promise<AdminEventGetResponse> {
+  return getEventDetails({ id }, true);
 }
