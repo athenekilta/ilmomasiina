@@ -3,8 +3,8 @@ import moment from 'moment';
 
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
-import { Signup } from '../../models/signup';
-import computeSignupPosition from './computeSignupPosition';
+import { Signup, SignupStatus } from '../../models/signup';
+import { refreshSignupPositionsAndGet } from './computeSignupPosition';
 import { generateToken } from './editTokens';
 
 // Expected request schema.
@@ -12,13 +12,11 @@ export interface SignupCreateBody {
   quotaId: Quota['id'];
 }
 
-export type SignupState = 'in-quota' | 'in-open' | 'in-queue';
-
 // Response schema.
 export interface SignupCreateResponse {
   id: Signup['id'];
   position: number | null;
-  status: SignupState | null;
+  status: SignupStatus | null;
   quotaId: Quota['id'];
   createdAt: Date;
   editToken: string,
@@ -40,10 +38,11 @@ const signupsAllowed = (event: Event) => {
 export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateResponse> => {
   // Find the given quota and event.
   const quota = await Quota.findByPk(quotaId, {
+    attributes: [],
     include: [
       {
         model: Event,
-        attributes: ['registrationStartDate', 'registrationEndDate'],
+        attributes: ['id', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
       },
     ],
   });
@@ -61,7 +60,8 @@ export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateRespon
 
   // Add returned information.
   const { id, createdAt } = newSignup;
-  const { position, status } = await computeSignupPosition(newSignup);
+  const { status, position } = await refreshSignupPositionsAndGet(quota.event!, id);
+
   const editToken = generateToken(newSignup);
 
   return {

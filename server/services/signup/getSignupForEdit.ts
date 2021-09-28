@@ -27,6 +27,8 @@ const signupGetSignupAttrs = [
   'firstName',
   'lastName',
   'email',
+  'status',
+  'position',
 ] as const;
 
 // Data type definitions for this endpoint - pick columns and add included relations

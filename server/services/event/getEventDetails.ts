@@ -53,6 +53,8 @@ export const eventGetQuotaAttrs = [
 export const eventGetSignupAttrs = [
   'firstName',
   'lastName',
+  'status',
+  'position',
   'createdAt',
 ] as const;
 

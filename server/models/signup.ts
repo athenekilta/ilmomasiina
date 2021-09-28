@@ -12,18 +12,24 @@ import { Answer } from './answer';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
+export const signupStatuses = ['in-quota', 'in-open', 'in-queue'] as const;
+export type SignupStatus = typeof signupStatuses[number];
+
 export interface SignupAttributes {
   id: string;
   firstName: string | null;
   lastName: string | null;
   email: string | null;
   confirmedAt: Date | null;
+  status: SignupStatus | null;
+  position: number | null;
   createdAt: Date;
   quotaId: Quota['id'];
 }
 
 export interface SignupCreationAttributes
-  extends Optional<SignupAttributes, 'id' | 'firstName' | 'lastName' | 'email' | 'confirmedAt' | 'createdAt'> {}
+  extends Optional<SignupAttributes, 'id' | 'firstName' | 'lastName' | 'email' | 'confirmedAt'
+  | 'status' | 'position' | 'createdAt'> {}
 
 export class Signup extends Model<SignupAttributes, SignupCreationAttributes> implements SignupAttributes {
   public id!: string;
@@ -31,6 +37,8 @@ export class Signup extends Model<SignupAttributes, SignupCreationAttributes> im
   public lastName!: string | null;
   public email!: string | null;
   public confirmedAt!: Date | null;
+  public status!: SignupStatus | null;
+  public position!: number | null;
 
   public quotaId!: Quota['id'];
   public quota?: Quota;
@@ -89,10 +97,17 @@ export default function setupSignupModel(this: IlmoApplication) {
       confirmedAt: {
         type: DataTypes.DATE(3),
       },
+      status: {
+        type: DataTypes.ENUM(...signupStatuses),
+      },
+      position: {
+        type: DataTypes.INTEGER,
+      },
       // Add createdAt manually to support milliseconds
       createdAt: {
         type: DataTypes.DATE(3),
         defaultValue: () => new Date(),
+        allowNull: false,
       },
     },
     {
