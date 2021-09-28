@@ -22,40 +22,42 @@ const SignupList = ({ quota }: Props) => {
       {!signups?.length ? (
         <p>Ei ilmoittautumisia.</p>
       ) : (
-        <table className="table table-condensed table-responsive">
-          <thead>
-            <tr className="active">
-              <th key="position">Sija</th>
-              <th key="attendee" style={{ minWidth: 90 }}>
-                Nimi
-              </th>
-              {_.filter(questions, 'public').map((question) => (
-                <th key={question.id}>
-                  {question.question}
+        <div className="table-responsive">
+          <table className="table table-sm">
+            <thead className="thead-light">
+              <tr>
+                <th key="position">Sija</th>
+                <th key="attendee" style={{ minWidth: 90 }}>
+                  Nimi
                 </th>
+                {_.filter(questions, 'public').map((question) => (
+                  <th key={question.id}>
+                    {question.question}
+                  </th>
+                ))}
+                {showQuotas && (
+                  <th key="quota">
+                    Kiintiö
+                  </th>
+                )}
+                <th key="datetime" style={{ minWidth: 130 }}>
+                  Ilmoittautumisaika
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {signups.map((signup, i) => (
+                <TableRow
+                  index={i + 1}
+                  signup={signup}
+                  showQuota={showQuotas}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={i}
+                />
               ))}
-              {showQuotas && (
-                <th key="quota">
-                  Kiintiö
-                </th>
-              )}
-              <th key="datetime" style={{ minWidth: 130 }}>
-                Ilmoittautumisaika
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {signups.map((signup, i) => (
-              <TableRow
-                index={i + 1}
-                signup={signup}
-                showQuota={showQuotas}
-                // eslint-disable-next-line react/no-array-index-key
-                key={i}
-              />
-            ))}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
