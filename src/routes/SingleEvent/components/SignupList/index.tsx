@@ -26,7 +26,7 @@ function getTitle(quota: QuotaSignups) {
 const SignupList = ({ quota }: Props) => {
   const { signups } = quota;
   const { questions } = useTypedSelector((state) => state.singleEvent.event)!;
-  const showQuotas = quota.id !== OPENQUOTA && quota.id !== WAITLIST;
+  const showQuotas = quota.id === OPENQUOTA || quota.id === WAITLIST;
   return (
     <div className="quota">
       <h3>{getTitle(quota)}</h3>

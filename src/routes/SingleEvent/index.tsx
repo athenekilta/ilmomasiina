@@ -146,15 +146,17 @@ const SingleEvent = ({ match }: Props) => {
           <SignupCountdown beginSignup={beginSignup} />
           <QuotaStatus signups={signupsByQuota} />
         </div>
-        <div className="col-xs-12">
-          <h2>Ilmoittautuneet</h2>
-          {signupsByQuota.map((quota) => (
-            <SignupList
-              key={quota.id}
-              quota={quota}
-            />
-          ))}
-        </div>
+        {event.signupsPublic && (
+          <div className="col-xs-12">
+            <h2>Ilmoittautuneet</h2>
+            {signupsByQuota.map((quota) => (
+              <SignupList
+                key={quota.id}
+                quota={quota}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
