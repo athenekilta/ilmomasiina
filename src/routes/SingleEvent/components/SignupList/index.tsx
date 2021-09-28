@@ -12,24 +12,13 @@ type Props = {
   quota: QuotaSignups;
 };
 
-function getTitle(quota: QuotaSignups) {
-  switch (quota.id) {
-    case WAITLIST:
-      return 'Jonossa';
-    case OPENQUOTA:
-      return 'Avoin kiintiö';
-    default:
-      return quota.title!;
-  }
-}
-
 const SignupList = ({ quota }: Props) => {
   const { signups } = quota;
   const { questions } = useTypedSelector((state) => state.singleEvent.event)!;
   const showQuotas = quota.id === OPENQUOTA || quota.id === WAITLIST;
   return (
     <div className="quota">
-      <h3>{getTitle(quota)}</h3>
+      <h3>{quota.title}</h3>
       {!signups?.length ? (
         <p>Ei ilmoittautumisia.</p>
       ) : (
