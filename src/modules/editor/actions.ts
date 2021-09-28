@@ -121,8 +121,7 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   })),
 });
 
-// TODO remove | string when ids are all strings
-export const getEvent = (id: AdminEvent.Id | string) => async (dispatch: DispatchAction, getState: GetState) => {
+export const getEvent = (id: AdminEvent.Id) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
   try {
     const response = await apiFetch(`admin/events/${id}`, { accessToken }) as AdminEvent.Details;
