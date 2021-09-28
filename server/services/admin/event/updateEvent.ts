@@ -1,4 +1,4 @@
-import { NotFound } from '@feathersjs/errors';
+import { Conflict, NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 import { Op, Transaction } from 'sequelize';
 
@@ -6,6 +6,7 @@ import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 import { AdminEventGetResponse, getEventDetailsForAdmin } from '../../event/getEventDetails';
+import { refreshSignupPositions } from '../../signup/computeSignupPosition';
 import { adminEventCreateEventAttrs, adminEventCreateQuestionAttrs, adminEventCreateQuotaAttrs } from './createEvent';
 
 // Data type definitions for the request body, using attribute lists from createEvent.
@@ -26,7 +27,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
   await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update
     const event = await Event.unscoped().findByPk(id, {
-      attributes: ['id'],
+      attributes: ['id', 'openQuotaSize'],
       include: [
         // Get existing quota and question IDs to reuse them wherever possible
         {
@@ -34,6 +35,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
           required: false,
           attributes: [
             'id',
+            'size',
             /* // TODO: count signups to see if we're deleting any, possibly with explicit synced confirmation
             [fn('COUNT', col('quotas->signups.id')), 'signupCount'], */
           ],
@@ -52,42 +54,45 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         },
       ],
       transaction,
-      lock: Transaction.LOCK.SHARE,
+      lock: Transaction.LOCK.UPDATE,
     });
     if (event === null) {
       throw new NotFound('No event found with id');
     }
 
+    let recomputeQuotas = false;
+
     // Update the Event
     const eventAttribs = _.pick(data, adminEventCreateEventAttrs);
+    recomputeQuotas ||= eventAttribs.openQuotaSize !== undefined && event.openQuotaSize !== eventAttribs.openQuotaSize;
     await event.update(eventAttribs, { transaction });
 
     if (data.questions !== undefined) {
       // Remove previous Questions not present in request
       // (TODO: require confirmation if there are signups)
-      const oldQuestions = await event.getQuestions({
-        attributes: ['id'],
-        transaction,
-      });
-      const newIds = _.filter(_.map(data.questions, 'id')) as Question['id'][];
+      const reuseQuestionIds = data.questions
+        .map((question) => question.id)
+        .filter((questionId) => questionId) as Question['id'][];
       await Question.destroy({
         where: {
           eventId: event.id,
           id: {
-            [Op.notIn]: newIds,
+            [Op.notIn]: reuseQuestionIds,
           },
         },
         transaction,
       });
-      // Update the Questions
+
+      // Update or create the new Questions
       await Promise.all(data.questions.map(async (question, order) => {
         const questionAttribs = {
           ..._.pick(question, adminEventCreateQuestionAttrs),
           order,
         };
-        // See if the question already exists
-        const existing = question.id && _.find(oldQuestions, { id: question.id });
-        if (existing) {
+        // Update if an id was provided
+        if (question.id) {
+          const existing = event.questions!.find((old) => question.id === old.id);
+          if (!existing) throw new Conflict(`question ${question.id} was deleted`);
           await existing.update(questionAttribs, { transaction });
         } else {
           await Question.create({
@@ -99,31 +104,37 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
     }
 
     if (data.quotas !== undefined) {
+      const reuseQuotaIds = data.quotas
+        .map((quota) => quota.id)
+        .filter((quotaId) => quotaId) as Quota['id'][];
+
       // Remove previous Quotas not present in request
       // (TODO: require confirmation if there are signups)
-      const oldQuotas = await event.getQuotas({
-        attributes: ['id'],
-        transaction,
-      });
-      const newIds = _.filter(_.map(data.quotas, 'id')) as Quota['id'][];
+      const deletedQuotas = event.quotas!.filter((quota) => !reuseQuotaIds.includes(quota.id));
+      // Deleting a quota forces recomputation
+      recomputeQuotas ||= deletedQuotas.length > 0;
       await Quota.destroy({
         where: {
           eventId: event.id,
           id: {
-            [Op.notIn]: newIds,
+            [Op.notIn]: reuseQuotaIds,
           },
         },
         transaction,
       });
-      // Update the Quotas
+
+      // Update or create the new Quotas
       await Promise.all(data.quotas.map(async (quota, order) => {
         const quotaAttribs = {
           ..._.pick(quota, adminEventCreateQuotaAttrs),
           order,
         };
-        // See if the quota already exists
-        const existing = quota.id && _.find(oldQuotas, { id: quota.id });
-        if (existing) {
+        // Update if an id was provided
+        if (quota.id) {
+          const existing = event.quotas!.find((old) => quota.id === old.id);
+          if (!existing) throw new Conflict(`quota ${quota.id} was deleted`);
+          // Changing a quota size forces recomputation
+          recomputeQuotas ||= quota.size !== undefined && quota.size !== existing.size;
           await existing.update(quotaAttribs, { transaction });
         } else {
           await Quota.create({
@@ -132,6 +143,10 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
           }, { transaction });
         }
       }));
+    }
+
+    if (recomputeQuotas) {
+      await refreshSignupPositions(event, transaction);
     }
   });
 
