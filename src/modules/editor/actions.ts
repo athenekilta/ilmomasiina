@@ -96,7 +96,7 @@ const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
   date: moment(event.date),
   registrationStartDate: moment(event.registrationStartDate),
   registrationEndDate: moment(event.registrationEndDate),
-  quotas: event.quota.map((quota) => ({
+  quotas: event.quotas.map((quota) => ({
     ...quota,
     key: quota.id,
   })),
@@ -113,7 +113,7 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   date: form.date?.toISOString() || '',
   registrationStartDate: form.registrationStartDate?.toISOString() || '',
   registrationEndDate: form.registrationEndDate?.toISOString() || '',
-  quota: form.quotas,
+  quotas: form.quotas,
   openQuotaSize: form.useOpenQuota ? form.openQuotaSize : 0,
   questions: form.questions.map((question) => ({
     ...question,

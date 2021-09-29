@@ -38,7 +38,7 @@ const AdminEventListItem = ({ event }: Props) => {
       </td>
       <td>{event.date ? moment(event.date).format('DD.MM.YYYY') : ''}</td>
       <td>{event.draft ? 'Luonnos' : 'Julkaistu'}</td>
-      <td>{_.sum(_.map(event.quota, 'signupCount'))}</td>
+      <td>{_.sum(_.map(event.quotas, 'signupCount'))}</td>
       <td>
         <Link to={`${PREFIX_URL}/admin/edit/${event.id}`}>
           Muokkaa tapahtumaa
