@@ -36,8 +36,7 @@ export interface EventListQuotaItem extends Pick<Quota, typeof eventListQuotaAtt
 }
 
 export interface EventListItem extends Pick<Event, typeof eventListEventAttrs[number]> {
-  // intentionally misnamed to match old API
-  quota: EventListQuotaItem[];
+  quotas: EventListQuotaItem[];
 }
 
 export type EventListResponse = EventListItem[];
@@ -47,8 +46,7 @@ export type EventListResponse = EventListItem[];
 export type AdminEventListQuotaItem = EventListQuotaItem;
 
 export interface AdminEventListItem extends Pick<Event, typeof adminEventListEventAttrs[number]> {
-  // intentionally misnamed to match old API
-  quota: AdminEventListQuotaItem[];
+  quotas: AdminEventListQuotaItem[];
 }
 
 export type AdminEventListResponse = AdminEventListItem[];
@@ -89,7 +87,7 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
   // Convert event list to response
   const result: EventListResponseType<A> = events.map((event) => ({
     ..._.pick(event, eventAttrs),
-    quota: event.quotas!.map((quota) => ({
+    quotas: event.quotas!.map((quota) => ({
       ..._.pick(quota, eventListQuotaAttrs),
       signupCount: quota.signupCount!,
     })),

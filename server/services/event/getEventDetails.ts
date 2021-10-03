@@ -88,8 +88,7 @@ export interface EventGetQuotaItem extends Pick<Quota, typeof eventGetQuotaAttrs
 
 export interface EventGetResponse extends Pick<Event, typeof eventGetEventAttrs[number]> {
   questions: EventGetQuestionItem[];
-  // intentionally misnamed to match old API
-  quota: EventGetQuotaItem[];
+  quotas: EventGetQuotaItem[];
   millisTillOpening?: number;
   registrationClosed?: boolean;
 }
@@ -111,8 +110,7 @@ export interface AdminEventGetQuotaItem extends Pick<Quota, typeof eventGetQuota
 
 export interface AdminEventGetResponse extends Pick<Event, typeof adminEventGetEventAttrs[number]> {
   questions: AdminEventGetQuestionItem[];
-  // intentionally misnamed to match old API
-  quota: AdminEventGetQuotaItem[];
+  quotas: AdminEventGetQuotaItem[];
   millisTillOpening?: number;
   registrationClosed?: boolean;
 }
@@ -187,7 +185,7 @@ async function getEventDetails<A extends boolean>(
       options: question.options ? question.options.split(';') : null,
     })),
 
-    quota: event.quotas!.map((quota) => {
+    quotas: event.quotas!.map((quota) => {
       // Hide all signups from non-admins if answers are not public
       let signups = null;
 

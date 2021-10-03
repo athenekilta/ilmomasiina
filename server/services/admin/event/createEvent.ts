@@ -45,8 +45,7 @@ export interface AdminEventCreateQuota extends Pick<Quota, typeof adminEventCrea
 
 export interface AdminEventCreateBody extends Pick<Event, typeof adminEventCreateEventAttrs[number]> {
   questions: AdminEventCreateQuestion[];
-  // intentionally misnamed to match old API
-  quota: AdminEventCreateQuota[];
+  quotas: AdminEventCreateQuota[];
 }
 
 export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse> => {
@@ -57,7 +56,7 @@ export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse
       ..._.pick(question, adminEventCreateQuestionAttrs),
       order,
     })),
-    quotas: data.quota?.map((quota, order) => ({
+    quotas: data.quotas?.map((quota, order) => ({
       ..._.pick(quota, adminEventCreateQuotaAttrs),
       order,
     })),

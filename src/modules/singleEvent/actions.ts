@@ -47,7 +47,7 @@ export const signupCancelled = () => <const>{
   type: SIGNUP_CANCELLED,
 };
 
-export const getEvent = (slug: Event.Slug | string) => async (
+export const getEvent = (slug: Event.Slug) => async (
   dispatch: DispatchAction,
 ) => {
   try {
