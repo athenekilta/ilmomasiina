@@ -80,8 +80,11 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         transaction,
       });
       // Update the Questions
-      await Promise.all(data.questions.map(async (question) => {
-        const questionAttribs = _.pick(question, adminEventCreateQuestionAttrs);
+      await Promise.all(data.questions.map(async (question, order) => {
+        const questionAttribs = {
+          ..._.pick(question, adminEventCreateQuestionAttrs),
+          order,
+        };
         // See if the question already exists
         const existing = question.id && _.find(oldQuestions, { id: question.id });
         if (existing) {
@@ -113,8 +116,11 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         transaction,
       });
       // Update the Quotas
-      await Promise.all(data.quotas.map(async (quota) => {
-        const quotaAttribs = _.pick(quota, adminEventCreateQuotaAttrs);
+      await Promise.all(data.quotas.map(async (quota, order) => {
+        const quotaAttribs = {
+          ..._.pick(quota, adminEventCreateQuotaAttrs),
+          order,
+        };
         // See if the quota already exists
         const existing = quota.id && _.find(oldQuotas, { id: quota.id });
         if (existing) {

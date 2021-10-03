@@ -73,6 +73,7 @@ export default async (id: string, params?: Params): Promise<SignupGetResponse> =
         ],
       },
     ],
+    order: [[Question, 'order', 'ASC']],
   });
   if (signup === null) {
     // Event not found with id, probably deleted

@@ -162,6 +162,10 @@ async function getEventDetails<A extends boolean>(
         ],
       },
     ],
+    order: [
+      [Question, 'order', 'ASC'],
+      [Quota, 'order', 'ASC'],
+    ],
   });
   if (event === null) {
     // Event not found with id, probably deleted

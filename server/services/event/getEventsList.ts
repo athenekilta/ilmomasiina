@@ -81,6 +81,7 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
       },
     ],
     group: [col('event.id'), col('quotas.id')],
+    order: [[Quota, 'order', 'ASC']],
   });
 
   // Convert event list to response
