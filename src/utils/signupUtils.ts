@@ -39,7 +39,7 @@ export type QuotaSignups = {
 export function getSignupsByQuota(event: AnyEventDetails): QuotaSignups[] {
   const signups = getSignupsAsList(event);
   const quotas = [
-    ...event.quota.map(
+    ...event.quotas.map(
       (quota) => ({
         ...quota,
         signups: signups.filter((signup) => signup.quotaId === quota.id && signup.status === 'in-quota'),
@@ -95,7 +95,10 @@ type FormattedSignup = {
 
 export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSignup[] {
   const signupsArray = getSignupsAsList(event);
-  const sorted = _.orderBy(signupsArray, ['isWaitlist', 'isOpenQuota', 'createdAt']);
+  const sorted = _.orderBy(signupsArray, [
+    (signup) => ['in-quota', 'in-open', 'in-queue', null].indexOf(signup.status),
+    'createdAt',
+  ]);
 
   return sorted.map((signup) => {
     let quotaType = '';
