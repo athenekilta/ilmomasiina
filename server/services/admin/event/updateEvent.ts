@@ -60,11 +60,8 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
       throw new NotFound('No event found with id');
     }
 
-    let recomputeQuotas = false;
-
     // Update the Event
     const eventAttribs = _.pick(data, adminEventCreateEventAttrs);
-    recomputeQuotas ||= eventAttribs.openQuotaSize !== undefined && event.openQuotaSize !== eventAttribs.openQuotaSize;
     await event.update(eventAttribs, { transaction });
 
     if (data.questions !== undefined) {
@@ -110,9 +107,6 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
 
       // Remove previous Quotas not present in request
       // (TODO: require confirmation if there are signups)
-      const deletedQuotas = event.quotas!.filter((quota) => !reuseQuotaIds.includes(quota.id));
-      // Deleting a quota forces recomputation
-      recomputeQuotas ||= deletedQuotas.length > 0;
       await Quota.destroy({
         where: {
           eventId: event.id,
@@ -133,8 +127,6 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         if (quota.id) {
           const existing = event.quotas!.find((old) => quota.id === old.id);
           if (!existing) throw new Conflict(`quota ${quota.id} was deleted`);
-          // Changing a quota size forces recomputation
-          recomputeQuotas ||= quota.size !== undefined && quota.size !== existing.size;
           await existing.update(quotaAttribs, { transaction });
         } else {
           await Quota.create({
@@ -145,9 +137,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
       }));
     }
 
-    if (recomputeQuotas) {
-      await refreshSignupPositions(event, transaction);
-    }
+    await refreshSignupPositions(event, transaction);
   });
 
   return getEventDetailsForAdmin(id);
