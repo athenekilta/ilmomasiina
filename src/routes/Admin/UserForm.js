@@ -1,36 +1,43 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Formsy from 'formsy-react';
-import { Input } from 'formsy-react-components';
-import Spinner from 'react-spinkit';
-import Promise from 'bluebird';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Formsy from 'formsy-react'
+import { Input } from 'formsy-react-components'
+import Spinner from 'react-spinkit'
+import Promise from 'bluebird'
 
 async function minDelay(func, ms = 1000) {
-  const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
-  return res[0];
+  const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))])
+  return res[0]
 }
 
 class UserForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired
+    loading: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       email: '',
-    };
-
-    this.updateInputValue = this.updateInputValue.bind(this);
+      password: '',
+    }
+    this.updatEmailValue = this.updatEmailValue.bind(this)
+    this.updatePasswordValue = this.updatePasswordValue.bind(this)
   }
 
 
-  updateInputValue(field, value) {
+  updatEmailValue(field, value) {
     this.setState({
       email: value,
-    });
+    })
   }
+  updatePasswordValue(field, value) {
+    this.setState({
+      password: value,
+    })
+  }
+
 
   render() {
     return (
@@ -42,19 +49,29 @@ class UserForm extends React.Component {
           title="Sähköposti"
           layout="elementOnly"
           value={this.state.email}
-          onChange={this.updateInputValue}
+          onChange={this.updatEmailValue}
+          required
+        />
+        <Input
+          id="password"
+          placeholder="salasana"
+          name="password"
+          title="Salasana"
+          layout="elementOnly"
+          value={this.state.password}
+          onChange={this.updatePasswordValue}
           required
         />
         <button
           className="btn btn-default"
           style={{ marginTop: '1em' }}
-          onClick={() => this.props.onSubmit(this.state.email)}
+          onClick={() => this.props.onSubmit(this.state)}
         >
           {this.props.loading ? <Spinner /> : 'Luo uusi käyttäjä'}
         </button>
       </Formsy.Form>
-    );
+    )
   }
 }
 
-export default UserForm;
+export default UserForm
