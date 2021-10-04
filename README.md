@@ -1,28 +1,28 @@
-# Current status
-
-```diff
-- Hello you random bypasser!
-
-- Ilmomasiina is currently at alpha testing phase. You use it. Something breaks? You fix it.
-
-- In case you're interested in development. We heavily recommend you to contact @peksi
-
-```
-
-Current defelopment is being held on `otax/production` branch.
-
 # Ilmomasiina
 
-Ilmomasiina is Athene's event registration system.
+Ilmomasiina is the event registration system originally created by Athene, forked by Tietokilta and currently under heavy development for our new site. Once finished, it will be available for all organizations to use, along with migration tools from the Athene-made version.
+
+The latest development version is in the `dev` branch. **Please note that the code is currently in alpha phase.** It likely has major bugs, and easy migrations will not be provided between versions until we reach beta.
+
+## Contributing
+
+Progress and planning is tracked in GitHub issues. Please see and update the [project board](https://github.com/Tietokilta/ilmomasiina/projects/1) for ongoing work.
+
+All help is appreciated. Please contact @PurkkaKoodari or another member of Tietokilta's Digitoimikunta if you wish to actively help with development &ndash; there are still major changes to be done that may conflict with yours.
+
+## Documentation
+
+See docs folder. Very incomplete, contributions welcome.
 
 ## Requirements
 
-- Node.js `^8.9.4`
-- npm `^5.6.0`
-- MySQL `^8.0`
+- Node.js 14
+- npm 6
+- MySQL or MariaDB (latest, older supported versions unknown)
 
-These are automatically installed when you use the Docker container.
+Containerization for these is in progress.
 
+<!--
 ## Using Docker container
 In project root directory
 ```bash
@@ -32,9 +32,9 @@ This should build and run the environment so that it is accesible at [localhost:
 
 ### Create fake data
 Use `docker exec ilmomasiina_backend_1 npm run create-fake-data` to create some data to dockerized Ilmomasiina. The server does not like an empty database, so this is a really good idea to do when first starting the server.
-
+-->
 ## MySQL Setup
-Only follow this if you don't use the Docker container.
+<!--Only follow this if you don't use the Docker container.-->
 
 ### Mac
 1. Install `mysql` (8.x) with Homebrew (https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e)
@@ -119,18 +119,10 @@ PORT=2011
 With some hosting providers (such as Otax) you might need to request the access to the port.
 Running production version within pm2 is recommended
 
-## Updating production
+### Updating production
 
 ```
 git pull otax/master
 npm run compile
 pm2 restart prod-server
 ```
-
-## Documentation
-
-See docs folder.
-
-## Contributing
-
-All help is appreciated. Please contact a fellow committer first.
