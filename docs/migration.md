@@ -55,7 +55,5 @@ ADD FOREIGN KEY `answer_ibfk_2` (`questionId`) REFERENCES `question` (`id`) ON D
 -- add listed attribute
 
 ALTER TABLE `event`
-ADD `listed` BOOLEAN NOT NULL DEFAULT 0 AFTER `draft`;
-UPDATE `event`
-SET `listed` = 1;
+ADD `listed` BOOLEAN NOT NULL DEFAULT 1 AFTER `draft`;
 ```

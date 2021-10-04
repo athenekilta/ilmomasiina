@@ -147,7 +147,7 @@ export default function setupEventModel(this: IlmoApplication) {
       listed: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: true,
       },
       signupsPublic: {
         type: DataTypes.BOOLEAN,
