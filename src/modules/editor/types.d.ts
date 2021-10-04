@@ -35,13 +35,13 @@ type EditorActions =
 
 /** Question type for event editor */
 export interface EditorQuestion extends AdminEvent.Update.Question {
-  key: Question.Id | string;
+  key: Question.Id;
   options: string[];
 }
 
 /** Quota type for event editor */
 export interface EditorQuota extends AdminEvent.Update.Quota {
-  key: Quota.Id | string;
+  key: Quota.Id;
 }
 
 /** Root form data type for event editor */

@@ -15,6 +15,7 @@ export type QuestionType = typeof questionTypes[number];
 
 export interface QuestionAttributes {
   id: string;
+  order: number;
   question: string;
   type: QuestionType;
   options: string | null;
@@ -28,6 +29,7 @@ export interface QuestionCreationAttributes
 
 export class Question extends Model<QuestionAttributes, QuestionCreationAttributes> implements QuestionAttributes {
   public id!: string;
+  public order!: number;
   public question!: string;
   public type!: QuestionType;
   public options!: string | null;
@@ -67,6 +69,10 @@ export default function setupQuestionModel(this: IlmoApplication) {
     },
     eventId: {
       type: DataTypes.CHAR(RANDOM_ID_LENGTH),
+      allowNull: false,
+    },
+    order: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     question: {

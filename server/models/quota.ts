@@ -12,6 +12,7 @@ import { Signup } from './signup';
 
 export interface QuotaAttributes {
   id: string;
+  order: number;
   title: string;
   size: number | null;
   eventId: Event['id'];
@@ -22,6 +23,7 @@ export interface QuotaCreationAttributes extends Optional<QuotaAttributes, 'id'>
 
 export class Quota extends Model<QuotaAttributes, QuotaCreationAttributes> implements QuotaAttributes {
   public id!: string;
+  public order!: number;
   public title!: string;
   public size!: number | null;
 
@@ -61,6 +63,10 @@ export default function setupQuotaModel(this: IlmoApplication) {
     },
     eventId: {
       type: DataTypes.CHAR(RANDOM_ID_LENGTH),
+      allowNull: false,
+    },
+    order: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     title: {

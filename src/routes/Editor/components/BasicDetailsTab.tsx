@@ -115,7 +115,9 @@ const BasicDetailsTab = () => {
       <FieldRow
         name="description"
         label="Kuvaus"
+        help="Kuvauksessa voi käyttää Markdownia."
         as={Textarea}
+        rows={8}
       />
       <Form.Group as={Row}>
         <Col sm="3" />

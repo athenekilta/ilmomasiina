@@ -52,6 +52,13 @@ ALTER TABLE `answer`
 ADD FOREIGN KEY `answer_ibfk_1` (`signupId`) REFERENCES `signup` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 ADD FOREIGN KEY `answer_ibfk_2` (`questionId`) REFERENCES `question` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- add reordering support to questions and quotas
+
+ALTER TABLE `question`
+ADD `order` INTEGER NOT NULL AFTER `eventId`;
+ALTER TABLE `quota`
+ADD `order` INTEGER NOT NULL AFTER `eventId`;
+
 -- add listed attribute
 
 ALTER TABLE `event`

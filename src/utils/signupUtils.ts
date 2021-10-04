@@ -30,7 +30,7 @@ export function getSignupsByQuota(event: AnyEventDetails) {
   let overflow: SignupWithQuotaName[] = [];
   const quotas: QuotaSignups[] = [];
 
-  event.quota.forEach((quota) => {
+  event.quotas.forEach((quota) => {
     if (!quota.signups) return;
 
     const sorted = _.sortBy(quota.signups, 'createdAt').map((signup) => ({

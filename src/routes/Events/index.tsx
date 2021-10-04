@@ -45,45 +45,48 @@ const EventList = () => {
   const eventsSorted = _.sortBy(events, ['date', 'title']);
 
   const tableRows = eventsSorted.flatMap((event) => {
-    const eventState = signupState(event.date, event.registrationStartDate, event.registrationEndDate);
+    const {
+      slug, title, date, registrationStartDate, registrationEndDate, quotas, openQuotaSize,
+    } = event;
+    const eventState = signupState(date, registrationStartDate, registrationEndDate);
 
     const rows = [
       <TableRow
         className={eventState.class}
-        title={<Link to={`${PREFIX_URL}/event/${event.slug}`}>{event.title}</Link>}
-        date={moment(event.date).format('DD.MM.YYYY')}
+        title={<Link to={`${PREFIX_URL}/event/${slug}`}>{title}</Link>}
+        date={moment(date).format('DD.MM.YYYY')}
         signupStatus={eventState.label}
         signupCount={
-          (event.quota.length < 2 ? _.sumBy(event.quota, 'signupCount') : undefined)
+          (quotas.length < 2 ? _.sumBy(quotas, 'signupCount') : undefined)
         }
-        quotaSize={event.quota.length === 1 ? event.quota[0].size : undefined}
-        key={event.slug}
+        quotaSize={quotas.length === 1 ? quotas[0].size : undefined}
+        key={slug}
       />,
     ];
 
-    if (event.quota.length > 1) {
-      event.quota.map((quota) => rows.push(
+    if (quotas.length > 1) {
+      quotas.map((quota) => rows.push(
         <TableRow
           className="child"
           title={quota.title}
           signupCount={quota.size ? Math.min(quota.signupCount, quota.size) : quota.signupCount}
           quotaSize={quota.size}
-          key={`${event.slug}-${quota.id}`}
+          key={`${slug}-${quota.id}`}
         />,
       ));
     }
 
-    if (event.openQuotaSize > 0) {
+    if (openQuotaSize > 0) {
       rows.push(
         <TableRow
           className="child"
           title="Avoin"
           signupCount={Math.min(
-            _.sum(event.quota.map((quota) => (quota.size ? Math.max(0, quota.signupCount - quota.size) : 0))),
-            event.openQuotaSize,
+            _.sum(quotas.map((quota) => (quota.size ? Math.max(0, quota.signupCount - quota.size) : 0))),
+            openQuotaSize,
           )}
-          quotaSize={event.openQuotaSize}
-          key={`${event.slug}-open`}
+          quotaSize={openQuotaSize}
+          key={`${slug}-open`}
         />,
       );
     }

@@ -8,6 +8,7 @@ import cron from 'node-cron';
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
 import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
+import removeDeletedData from './cron/removeDeletedData';
 import models from './models';
 import services from './services';
 
@@ -29,6 +30,9 @@ cron.schedule('* * * * *', deleteUnconfirmedSignups);
 
 // Daily at 8am, anonymize old signups
 cron.schedule('0 8 * * *', anonymizeOldSignups);
+
+// Daily at 8am, delete deleted items from the database
+cron.schedule('0 8 * * *', removeDeletedData);
 
 // Serve compiled frontend (TODO: implement Webpack dev server)
 app.use(express.static('../../dist'));
