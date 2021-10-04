@@ -77,6 +77,22 @@ const BasicDetailsTab = () => {
         extraFeedback={slugFeedback}
         as={SlugField}
       />
+      <Form.Group as={Row}>
+        <Col sm="3" />
+        <Col sm="9">
+          <Field
+            as={Form.Check}
+            type="checkbox"
+            name="listed"
+            id="listed"
+            label="Näytä tapahtumalistassa"
+          />
+          <Form.Text muted>
+            Piilotettuihin tapahtumiin pääsee vain URL-osoitteella. Luonnoksena tallennettuja tapahtumia ei voi
+            katsella käyttäjänä riippumatta tästä asetuksesta.
+          </Form.Text>
+        </Col>
+      </Form.Group>
       <FieldRow
         name="date"
         label="Ajankohta"
@@ -108,6 +124,7 @@ const BasicDetailsTab = () => {
         <Col sm="9">
           <Field
             as={Form.Check}
+            type="checkbox"
             name="signupsPublic"
             id="signupsPublic"
             label="Ilmoittautumiset ovat julkisia"

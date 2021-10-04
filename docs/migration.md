@@ -58,4 +58,9 @@ ALTER TABLE `question`
 ADD `order` INTEGER NOT NULL AFTER `eventId`;
 ALTER TABLE `quota`
 ADD `order` INTEGER NOT NULL AFTER `eventId`;
+
+-- add listed attribute
+
+ALTER TABLE `event`
+ADD `listed` BOOLEAN NOT NULL DEFAULT 1 AFTER `draft`;
 ```

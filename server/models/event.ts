@@ -24,13 +24,14 @@ export interface EventAttributes {
   facebookUrl: string | null;
   webpageUrl: string | null;
   draft: boolean;
+  listed: boolean;
   signupsPublic: boolean;
   verificationEmail: string | null;
 }
 
 export interface EventCreationAttributes
   extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'description' | 'price' | 'location'
-  | 'facebookUrl' | 'webpageUrl' | 'draft' | 'signupsPublic' | 'verificationEmail'> {}
+  | 'facebookUrl' | 'webpageUrl' | 'draft' | 'listed' | 'signupsPublic' | 'verificationEmail'> {}
 
 export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: string;
@@ -46,6 +47,7 @@ export class Event extends Model<EventAttributes, EventCreationAttributes> imple
   public facebookUrl!: string | null;
   public webpageUrl!: string | null;
   public draft!: boolean;
+  public listed!: boolean;
   public signupsPublic!: boolean;
   public verificationEmail!: string | null;
 
@@ -138,6 +140,11 @@ export default function setupEventModel(this: IlmoApplication) {
         type: DataTypes.STRING,
       },
       draft: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      listed: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true,

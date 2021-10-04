@@ -19,6 +19,7 @@ export const adminEventCreateEventAttrs = [
   'webpageUrl',
   'facebookUrl',
   'draft',
+  'listed',
   'signupsPublic',
   'verificationEmail',
 ] as const;
