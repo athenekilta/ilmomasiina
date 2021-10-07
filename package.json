@@ -164,7 +164,7 @@
     "md5": "^2.2.1",
     "moment": "^2.17.1",
     "moment-timezone": "^0.5.21",
-    "mysql2": "^1.6.1",
+    "mysql2": "^2.2.5",
     "node-cron": "^2.0.3",
     "node-sass": "^4.9.3",
     "nodemailer": "^6.6.5",
