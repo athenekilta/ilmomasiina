@@ -3,6 +3,6 @@ extends ../layout.pug
 block mainContent
 	div.content-block
 		p.bodyText Olet päässyt mukaan tapahtumaan #{event.title} varasijalta.
-		p.bodyText You now have a spot at #{event.title} because the queue moved.
+		p.bodyText You now have a spot at #{event.title} because someone cancelled.
 	include ../event_information.pug
 	include ../edit_or_cancel.pug
