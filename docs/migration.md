@@ -1,4 +1,5 @@
 This file contains SQL scripts for migrating data from the Athene-created version of Ilmomasiina.
+There will be more automatic migration tools when we reach production.
 
 **Please make full backups of your data before proceeding with this migration.**
 
