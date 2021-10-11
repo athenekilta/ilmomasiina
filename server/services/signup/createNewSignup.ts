@@ -1,5 +1,4 @@
 import { Forbidden, NotFound } from '@feathersjs/errors';
-import moment from 'moment';
 
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
