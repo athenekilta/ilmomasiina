@@ -8,7 +8,7 @@ import { Signup } from '../models/signup';
 import { refreshSignupPositions } from '../services/signup/computeSignupPosition';
 
 export default async function deleteUnconfirmedSignups() {
-  const signups = await Signup.unscoped().findAll({
+  const signups = await Signup.findAll({
     where: {
       [Op.and]: {
         // Is not confirmed
@@ -48,7 +48,7 @@ export default async function deleteUnconfirmedSignups() {
   console.log('Deleting unconfirmed signups:');
   console.log(signupIds);
   try {
-    await Signup.unscoped().destroy({
+    await Signup.destroy({
       where: { id: signupIds },
       // skip deletion grace period
       force: true,

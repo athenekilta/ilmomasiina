@@ -15,7 +15,7 @@ export default async (id: string, params?: Params | AdminParams): Promise<null> 
     verifyToken(id, editToken);
   }
 
-  const signup = await Signup.findByPk(id, {
+  const signup = await Signup.scope('active').findByPk(id, {
     include: [
       {
         model: Quota,

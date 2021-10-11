@@ -34,7 +34,7 @@ export async function refreshSignupPositions(event: Event, transaction?: Transac
     );
   }
 
-  const signups = await Signup.findAll({
+  const signups = await Signup.scope('active').findAll({
     attributes: ['id', 'quotaId', 'email', 'status', 'position'],
     include: [
       {

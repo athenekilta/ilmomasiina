@@ -79,14 +79,14 @@ export default async function anonymizeOldSignups() {
   console.log(ids);
 
   try {
-    await Signup.unscoped().update({
+    await Signup.update({
       firstName: redactedName,
       lastName: redactedName,
       email: redactedEmail,
     }, {
       where: { id: ids },
     });
-    await Answer.unscoped().update({
+    await Answer.update({
       answer: redactedAnswer,
     }, {
       where: { signupId: ids },

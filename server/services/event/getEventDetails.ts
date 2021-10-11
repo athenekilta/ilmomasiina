@@ -145,7 +145,7 @@ async function getEventDetails(
         // ... and signups of quotas
         include: [
           {
-            model: Signup,
+            model: Signup.scope('active'),
             attributes: [...signupAttrs],
             required: false,
             // ... and answers of signups

@@ -54,7 +54,7 @@ export default async (id: string, params?: Params): Promise<SignupGetResponse> =
   const editToken = params?.query?.editToken;
   verifyToken(id, editToken);
 
-  const signup = await Signup.findByPk(id, {
+  const signup = await Signup.scope('active').findByPk(id, {
     include: [
       {
         model: Answer,

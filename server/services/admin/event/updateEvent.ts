@@ -41,7 +41,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
           ],
           /* include: [
             {
-              model: Signup,
+              model: Signup.scope('active'),
               required: false,
               attributes: [],
             },

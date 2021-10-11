@@ -115,21 +115,23 @@ export default function setupSignupModel(this: IlmoApplication) {
       modelName: 'signup',
       freezeTableName: true,
       paranoid: true,
-      defaultScope: {
-        where: {
-          [Op.or]: {
-            // Is confirmed
-            confirmedAt: {
-              [Op.ne]: null, // $means !=
-            },
-            // Under 30 minutes old
-            createdAt: {
-              [Op.gt]: moment()
-                .subtract(30, 'minutes')
-                .toDate(),
+      scopes: {
+        active: () => ({
+          where: {
+            [Op.or]: {
+              // Is confirmed
+              confirmedAt: {
+                [Op.ne]: null, // $means !=
+              },
+              // Under 30 minutes old
+              createdAt: {
+                [Op.gt]: moment()
+                  .subtract(30, 'minutes')
+                  .toDate(),
+              },
             },
           },
-        },
+        }),
       },
     },
   );

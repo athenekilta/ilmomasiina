@@ -77,7 +77,7 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
         ],
         include: [
           {
-            model: Signup,
+            model: Signup.scope('active'),
             required: false,
             attributes: [],
           },

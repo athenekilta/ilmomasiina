@@ -40,7 +40,7 @@ export default async (id: string, data: SignupUpdateBody, params?: Params): Prom
 
   const updatedSignup = await Signup.sequelize!.transaction(async (transaction) => {
     // Retrieve event data and lock the row for editing
-    const signup = await Signup.findByPk(id, {
+    const signup = await Signup.scope('active').findByPk(id, {
       attributes: ['id', 'quotaId', 'confirmedAt', 'firstName', 'lastName', 'email'],
       transaction,
       lock: Transaction.LOCK.UPDATE,
