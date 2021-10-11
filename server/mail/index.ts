@@ -5,7 +5,7 @@ import mailgun from 'nodemailer-mailgun-transport';
 import path from 'path';
 
 import config from '../config';
-import { Event } from '../models/event.js';
+import { Event } from '../models/event';
 
 let transporter: Transporter;
 if (config.mailgunApiKey) {
