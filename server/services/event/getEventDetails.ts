@@ -163,6 +163,7 @@ async function getEventDetails(
     order: [
       [Question, 'order', 'ASC'],
       [Quota, 'order', 'ASC'],
+      [Quota, Signup, 'createdAt', 'ASC'],
     ],
   });
   if (event === null) {
