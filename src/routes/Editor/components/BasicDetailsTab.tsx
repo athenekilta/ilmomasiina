@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
-import { Field, useFormikContext } from 'formik';
-import { Col, Form, Row } from 'react-bootstrap';
+import { useFormikContext } from 'formik';
+import { Form } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 
 import FieldRow from '../../../components/FieldRow';
@@ -77,22 +77,18 @@ const BasicDetailsTab = () => {
         extraFeedback={slugFeedback}
         as={SlugField}
       />
-      <Form.Group as={Row}>
-        <Col sm="3" />
-        <Col sm="9">
-          <Field
-            as={Form.Check}
-            type="checkbox"
-            name="listed"
-            id="listed"
-            label="Näytä tapahtumalistassa"
-          />
-          <Form.Text muted>
-            Piilotettuihin tapahtumiin pääsee vain URL-osoitteella. Luonnoksena tallennettuja tapahtumia ei voi
-            katsella käyttäjänä riippumatta tästä asetuksesta.
-          </Form.Text>
-        </Col>
-      </Form.Group>
+      <FieldRow
+        name="listed"
+        label="Julkisuus"
+        as={Form.Check}
+        type="checkbox"
+        checkAlign
+        checkLabel="Näytä tapahtumalistassa"
+        help={
+          'Piilotettuihin tapahtumiin pääsee vain URL-osoitteella. Luonnoksena tallennettuja tapahtumia ei voi '
+          + 'katsella käyttäjänä riippumatta tästä asetuksesta.'
+        }
+      />
       <FieldRow
         name="date"
         label="Ajankohta"
@@ -119,18 +115,14 @@ const BasicDetailsTab = () => {
         as={Textarea}
         rows={8}
       />
-      <Form.Group as={Row}>
-        <Col sm="3" />
-        <Col sm="9">
-          <Field
-            as={Form.Check}
-            type="checkbox"
-            name="signupsPublic"
-            id="signupsPublic"
-            label="Ilmoittautumiset ovat julkisia"
-          />
-        </Col>
-      </Form.Group>
+      <FieldRow
+        name="signupsPublic"
+        label="Julkisuus"
+        as={Form.Check}
+        type="checkbox"
+        checkAlign
+        checkLabel="Ilmoittautumiset ovat julkisia"
+      />
     </div>
   );
 };

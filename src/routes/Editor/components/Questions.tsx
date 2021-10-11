@@ -202,7 +202,7 @@ const Questions = () => {
         onSortEnd={updateOrder}
         useDragHandle
       />
-      <div className="text-center">
+      <div className="text-center mb-3">
         <Button type="button" variant="primary" onClick={addQuestion}>
           Lisää kysymys
         </Button>

@@ -5,24 +5,26 @@ import { Col, Form, Row } from 'react-bootstrap';
 
 type Props = {
   name: string;
-  label: string;
+  label?: string;
   help?: ReactNode;
   required?: boolean;
   alternateError?: string;
   extraFeedback?: ReactNode;
   checkAlign?: boolean;
+  checkLabel?: string;
   as?: ComponentType<any> | string;
   children?: ReactNode;
 };
 
 export default function FieldRow<P = unknown>({
   name,
-  label,
+  label = '',
   help,
   required = false,
   alternateError,
   extraFeedback,
   checkAlign,
+  checkLabel,
   as = Form.Control,
   children,
   ...props
@@ -33,7 +35,11 @@ export default function FieldRow<P = unknown>({
   if (children) {
     field = children;
   } else {
-    field = <Field as={as} name={name} required={required} {...props} />;
+    let fieldProps = props;
+    if (checkLabel !== undefined) {
+      fieldProps = { ...props, label: checkLabel };
+    }
+    field = <Field as={as} name={name} required={required} {...fieldProps} />;
   }
 
   return (

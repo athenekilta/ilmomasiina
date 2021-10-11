@@ -110,7 +110,7 @@ const Quotas = () => {
         onSortEnd={updateOrder}
         useDragHandle
       />
-      <div className="text-center">
+      <div className="text-center mb-3">
         <Button type="button" variant="primary" onClick={addQuota}>
           Lisää kiintiö
         </Button>
