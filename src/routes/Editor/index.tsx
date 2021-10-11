@@ -62,7 +62,6 @@ const Editor = ({ history, match }: Props) => {
     const draft = saveAsDraft.current ?? (event?.draft || isNew);
     const modifiedEvent = {
       ...data,
-      quota: data.quotas,
       draft,
     };
 
