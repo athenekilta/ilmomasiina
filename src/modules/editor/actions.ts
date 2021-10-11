@@ -13,9 +13,10 @@ import {
   EVENT_SLUG_CHECKING,
   RESET,
 } from './actionTypes';
-import { EditorEvent } from './types';
+import { EditorEvent, EditorEventType } from './types';
 
 const defaultEvent = (): EditorEvent => ({
+  eventType: 'event+signup',
   title: '',
   slug: '',
   date: undefined,
@@ -92,8 +93,19 @@ export const saveFailed = () => <const>{
   type: EVENT_SAVE_FAILED,
 };
 
+function eventType(event: AdminEvent.Details): EditorEventType {
+  if (event.date === null) {
+    return 'signup';
+  }
+  if (event.registrationStartDate === null) {
+    return 'event';
+  }
+  return 'event+signup';
+}
+
 const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
   ...event,
+  eventType: eventType(event),
   date: event.date ? moment(event.date) : undefined,
   registrationStartDate: event.registrationStartDate ? moment(event.registrationStartDate) : undefined,
   registrationEndDate: event.registrationEndDate ? moment(event.registrationEndDate) : undefined,

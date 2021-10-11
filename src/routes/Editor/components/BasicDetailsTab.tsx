@@ -9,6 +9,7 @@ import { checkingSlugAvailability, checkSlugAvailability } from '../../../module
 import { EditorEvent } from '../../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
 import DateTimePicker from './DateTimePicker';
+import SelectBox from './SelectBox';
 import SlugField from './SlugField';
 import Textarea from './Textarea';
 
@@ -20,7 +21,7 @@ const BasicDetailsTab = () => {
   const { isNew, slugAvailability, event } = useTypedSelector((state) => state.editor, shallowEqual);
 
   const {
-    values: { title, slug },
+    values: { title, slug, eventType },
     touched: { slug: slugTouched },
     setFieldValue,
   } = useFormikContext<EditorEvent>();
@@ -90,12 +91,24 @@ const BasicDetailsTab = () => {
         }
       />
       <FieldRow
-        name="date"
-        label="Ajankohta"
-        as={DateTimePicker}
-        required
-        alternateError="* Ajankohta vaaditaan."
+        name="eventType"
+        label="Tapahtuman tyyppi"
+        as={SelectBox}
+        options={[
+          ['event', 'Tapahtuma ilman ilmoittautumista'],
+          ['event+signup', 'Tapahtuma ja ilmoittautuminen'],
+          ['signup', 'Ilmoittautuminen ilman tapahtumaa'],
+        ]}
       />
+      {eventType !== 'signup' && (
+        <FieldRow
+          name="date"
+          label="Ajankohta"
+          as={DateTimePicker}
+          required
+          alternateError="* Ajankohta vaaditaan."
+        />
+      )}
       <FieldRow
         name="webpageUrl"
         label="Kotisivujen osoite"
