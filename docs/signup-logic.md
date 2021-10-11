@@ -17,22 +17,30 @@ When a user signs up, their **Signup** is attached to a single **Quota** instanc
 
 ## Position computation
 
-When a signup is created, `computeSignupPosition.ts` computes the user's position on the *server side*.
+The quota assignment and position of signups is stored in the database.
 
-When users or admins list all signups for an Event, the positions are computed on the *client side*.
-**(This will change in the future.)**
+`computeSignupPosition.ts` can be called to refresh the assignments and positions of all signups in an event.
+This code is idempotent and:
+- Computes new statuses based on the above rules
+- Stores changed statuses in the database
+- Sends notifications to signups that moved out of the queue
 
-Both computations are performed dynamically based on the information in the database.
-**(This will change in the future.)**
+This computation locks the Event in the database to ensure no changes are made during it, including overlapping
+refreshes. This may be a performance bottleneck - in the future, these updates may be batched to avoid waiting on
+locks, but such a change is not trivial due to transactions.
+
+The following actions currently trigger a refresh:
+- Creation of new signup (`POST /api/signups`)
+- Expiration of signups (`deleteUnconfirmedSignups.ts`)
+- Deletion of signups by user or admin (`DELETE /api/signups/<id>`)
+- Any modifications on the event (`UPDATE /api/admin/events/<id>`)
 
 ## Expired signups
 
 Signups expire after not being confirmed for 30 minutes. They immediately stop matching Signup's `defaultScope`
 and stop being visible to users.
 
-Following this, the `deleteUnconfirmedSignups.ts` cron job will delete them.
-
-Currently, expiration does not cause queue notifications to be sent. **(This will change in the future.)**
+Following this, the `deleteUnconfirmedSignups.ts` cron job will delete them and trigger a state refresh.
 
 ## Signup flow
 
@@ -45,43 +53,43 @@ Currently, expiration does not cause queue notifications to be sent. **(This wil
                                 │ User clicks quota button │
                                 └─────────────┬────────────┘
                                               │
-                               ╔══════════════╧══════════════╗
-                               ║ POST /api/signups/<quotaId> ║
-                               ╚══════════════╤══════════════╝
+                                    ╔═════════╧═════════╗
+                                    ║ POST /api/signups ║
+                                    ╚═════════╤═════════╝
                                               │
                               ┌───────────────┴────────────────┐
                               │    User receives edit token    │
                               │ and quota position information │
                               └───────────────┬────────────────┘
                                               │
-                ┌─────────────────────────────┼──────────────────────────────┐
-                │                             │                              │
-    ┌───────────┴──────────┐       ┌──────────┴─────────┐          ┌─────────┴─────────┐
-    │ User submits answers │       │ User clicks cancel │          │ User does nothing │
-    └───────────┬──────────┘       └──────────┬─────────┘          └─────────┬─────────┘
-                │                             │                              │
-   ╔════════════╧════════════╗   ╔════════════╧═════════════╗   ┌────────────┴────────────┐
-   ║ PATCH /api/signups/<id> ║   ║ DELETE /api/signups/<id> ║   │ Unconfirmed signup goes │
-   ╚════════════╤════════════╝   ╚════════════╤═════════════╝   │   out of defaultScope   │
-                │                             │                 └────────────┬────────────┘
-   ┌────────────┴────────────┐                │                              │
-   │ Confirmation email sent │                │                 ┌────────────┴─────────────┐
-   └────────────┬────────────┘                │                 │ deleteUnconfirmedSignups │
-                │                             │                 │      cron job fires      │
-   ┌────────────┴───────────┐                 │                 └────────────┬─────────────┘
-   │ (Admin deletes signup) │                 │                              │
-   └────────────┬───────────┘                 │                              │
-                │                             │                              │
-╔═══════════════╧════════════════╗            │                              │
-║ DELETE /api/admin/signups/<id> ║            │                              │
-╚═══════════════╤════════════════╝            │                              │
-                │                             │                              │
-                └─────────────────────────────┼─ ─ ─ ─ ─ ─ ─ (*) ─ ─ ─ ─ ─ ─ ┘
+                ┌─────────────────────────────┴──────┬───────────────────────┐
+                │                                    │                       │
+    ┌───────────┴──────────┐                         │             ┌─────────┴─────────┐
+    │ User submits answers │                         │             │ User does nothing │
+    └───────────┬──────────┘                         │             └─────────┬─────────┘
+                │                                    │                       │
+   ╔════════════╧════════════╗                       │          ┌────────────┴────────────┐
+   ║ PATCH /api/signups/<id> ║                       │          │ Unconfirmed signup goes │
+   ╚════════════╤════════════╝                       │          │   out of defaultScope   │
+                │                                    │          └────────────┬────────────┘
+   ┌────────────┴────────────┐                       │                       │
+   │ Confirmation email sent │                       │          ┌────────────┴─────────────┐
+   └────────────┬────────────┘                       │          │ deleteUnconfirmedSignups │
+                │                                    │          │      cron job fires      │
+                ├────────────────────────────┐       │          └────────────┬─────────────┘
+                │                            │       │                       │
+   ┌────────────┴───────────┐         ┌──────┴───────┴──────┐                │
+   │  Admin deletes signup  │         │ User cancels signup │                │
+   └────────────┬───────────┘         └──────────┬──────────┘                │
+                │                                │                           │
+╔═══════════════╧════════════════╗  ╔════════════╧═════════════╗             │
+║ DELETE /api/admin/signups/<id> ║  ║ DELETE /api/signups/<id> ║             │
+╚═══════════════╤════════════════╝  ╚════════════╤═════════════╝             │
+                │                                │                           │
+                └─────────────────────────────┬──┴───────────────────────────┘
                                               │
                                  ┌────────────┴────────────┐
                                  │ Notification email sent │
                                  │ to next signup in queue │
                                  └─────────────────────────┘
 ```
-
-(*) The notification emails are currently not sent here. **(This will change in the future.)**

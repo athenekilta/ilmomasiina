@@ -64,4 +64,10 @@ ADD `order` INTEGER NOT NULL AFTER `eventId`;
 
 ALTER TABLE `event`
 ADD `listed` BOOLEAN NOT NULL DEFAULT 1 AFTER `draft`;
+
+-- store status and position in signups
+
+ALTER TABLE `signup`
+ADD `status` ENUM('in-quota', 'in-open', 'in-queue') DEFAULT NULL AFTER `confirmedAt`,
+ADD `position` INTEGER DEFAULT NULL AFTER `status`;
 ```

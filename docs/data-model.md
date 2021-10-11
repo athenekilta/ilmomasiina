@@ -51,7 +51,8 @@ Each Question has one **Event** and zero or more **Answers**.
 
 ### Signup
 
-**Signup** instances are assigned to a **Quota**. Signup instances only hold their basic fields (name/email).
+**Signup** instances are assigned to a **Quota**. Signup instances hold their basic fields (name/email) and their
+cached quota assignment.
 
 Signups can be enumerated and deleted per-event by admins, and in a limited fashion by users.
 They can also be viewed, modified and deleted using their edit token, which is computed statelessly.

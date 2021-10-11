@@ -4,12 +4,12 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 
 import { useTypedSelector } from '../../../../store/reducers';
-import { SignupWithQuotaName } from '../../../../utils/signupUtils';
+import { SignupWithQuota } from '../../../../utils/signupUtils';
 
 type Props = {
   index: number;
   showQuota: boolean;
-  signup: SignupWithQuotaName;
+  signup: SignupWithQuota;
 };
 
 const TableRow = ({ showQuota, signup, index }: Props) => {

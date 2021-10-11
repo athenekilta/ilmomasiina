@@ -1,7 +1,11 @@
+import _ from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
 
+import { Event } from '../models/event';
+import { Quota } from '../models/quota';
 import { Signup } from '../models/signup';
+import { refreshSignupPositions } from '../services/signup/computeSignupPosition';
 
 export default async function deleteUnconfirmedSignups() {
   const signups = await Signup.unscoped().findAll({
@@ -17,6 +21,18 @@ export default async function deleteUnconfirmedSignups() {
         },
       },
     },
+    include: [
+      {
+        model: Quota,
+        attributes: [],
+        include: [
+          {
+            model: Event,
+            attributes: ['id', 'openQuotaSize'],
+          },
+        ],
+      },
+    ],
     // Also already-deleted signups
     paranoid: false,
   });
@@ -26,17 +42,22 @@ export default async function deleteUnconfirmedSignups() {
     return;
   }
 
-  const ids = signups.map((signup) => signup.id);
+  const signupIds = signups.map((signup) => signup.id);
+  const uniqueEvents = _.uniqBy(signups.map((signup) => signup.quota!.event!), 'id');
 
   console.log('Deleting unconfirmed signups:');
-  console.log(ids);
+  console.log(signupIds);
   try {
-    // TODO: send emails to signups accepted from queue
     await Signup.unscoped().destroy({
-      where: { id: ids },
+      where: { id: signupIds },
       // skip deletion grace period
       force: true,
     });
+    for (const event of uniqueEvents) {
+      // Avoid doing many simultaneous transactions with this loop.
+      // eslint-disable-next-line no-await-in-loop
+      await refreshSignupPositions(event);
+    }
     console.log('Unconfirmed signups deleted');
   } catch (error) {
     console.error(error);
