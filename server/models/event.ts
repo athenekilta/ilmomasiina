@@ -177,11 +177,19 @@ export default function setupEventModel(this: IlmoApplication) {
             // are not drafts,
             draft: false,
             // and either:
-            date: {
-              [Op.or]: {
-                // have no date or
-                [Op.eq]: null,
-                // happen later than a week ago
+            [Op.or]: {
+              // have no date and closed less than a week ago
+              [Op.and]: {
+                date: null,
+                registrationEndDate: {
+                  [Op.gt]: moment()
+                    .tz('Europe/Helsinki')
+                    .subtract(7, 'days')
+                    .format(),
+                },
+              },
+              // or happen later than a week ago
+              date: {
                 [Op.gt]: moment()
                   .tz('Europe/Helsinki')
                   .subtract(7, 'days')
