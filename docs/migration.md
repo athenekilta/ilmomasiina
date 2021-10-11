@@ -70,4 +70,11 @@ ADD `listed` BOOLEAN NOT NULL DEFAULT 1 AFTER `draft`;
 ALTER TABLE `signup`
 ADD `status` ENUM('in-quota', 'in-open', 'in-queue') DEFAULT NULL AFTER `confirmedAt`,
 ADD `position` INTEGER DEFAULT NULL AFTER `status`;
+
+-- allow events without signup and vice versa
+
+ALTER TABLE `event`
+MODIFY `date` DATETIME DEFAULT NULL,
+MODIFY `registrationStartDate` DATETIME DEFAULT NULL,
+MODIFY `registrationEndDate` DATETIME DEFAULT NULL;
 ```

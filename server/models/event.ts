@@ -14,9 +14,9 @@ export interface EventAttributes {
   id: string;
   title: string;
   slug: string;
-  date: Date;
-  registrationStartDate: Date;
-  registrationEndDate: Date;
+  date: Date | null;
+  registrationStartDate: Date | null;
+  registrationEndDate: Date | null;
   openQuotaSize: number;
   description: string | null;
   price: string | null;
@@ -37,9 +37,9 @@ export class Event extends Model<EventAttributes, EventCreationAttributes> imple
   public id!: string;
   public title!: string;
   public slug!: string;
-  public date!: Date;
-  public registrationStartDate!: Date;
-  public registrationEndDate!: Date;
+  public date!: Date | null;
+  public registrationStartDate!: Date | null;
+  public registrationEndDate!: Date | null;
   public openQuotaSize!: number;
   public description!: string | null;
   public price!: string | null;
@@ -107,15 +107,12 @@ export default function setupEventModel(this: IlmoApplication) {
       },
       date: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       registrationStartDate: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       registrationEndDate: {
         type: DataTypes.DATE,
-        allowNull: false,
       },
       openQuotaSize: {
         type: DataTypes.INTEGER,
@@ -163,6 +160,16 @@ export default function setupEventModel(this: IlmoApplication) {
       modelName: 'event',
       freezeTableName: true,
       paranoid: true,
+      validate: {
+        hasDateOrRegistration() {
+          if (this.date === null && this.registrationStartDate === null) {
+            throw new Error('either date or registrationStartDate/registrationEndDate must be set');
+          }
+          if ((this.registrationStartDate === null) !== (this.registrationEndDate === null)) {
+            throw new Error('only neither or both of registrationStartDate and registrationEndDate may be set');
+          }
+        },
+      },
       // by default, show events that:
       defaultScope: {
         where: {

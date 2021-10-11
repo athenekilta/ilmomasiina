@@ -23,16 +23,12 @@ export interface SignupCreateResponse {
 }
 
 const signupsAllowed = (event: Event) => {
-  if (event.registrationStartDate === null && event.registrationEndDate === null) {
-    return true;
+  if (event.registrationStartDate === null || event.registrationEndDate === null) {
+    return false;
   }
 
-  const now = moment();
-
-  const isOpened = now.isSameOrAfter(moment(event.registrationStartDate));
-  const isClosed = now.isAfter(moment(event.registrationEndDate));
-
-  return isOpened && !isClosed;
+  const now = new Date();
+  return now >= event.registrationStartDate && now <= event.registrationEndDate;
 };
 
 export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateResponse> => {

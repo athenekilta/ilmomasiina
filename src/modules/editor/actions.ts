@@ -94,9 +94,9 @@ export const saveFailed = () => <const>{
 
 const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
   ...event,
-  date: moment(event.date),
-  registrationStartDate: moment(event.registrationStartDate),
-  registrationEndDate: moment(event.registrationEndDate),
+  date: event.date ? moment(event.date) : undefined,
+  registrationStartDate: event.registrationStartDate ? moment(event.registrationStartDate) : undefined,
+  registrationEndDate: event.registrationEndDate ? moment(event.registrationEndDate) : undefined,
   quotas: event.quotas.map((quota) => ({
     ...quota,
     key: quota.id,
@@ -111,9 +111,9 @@ const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
 
 const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   ...form,
-  date: form.date?.toISOString() || '',
-  registrationStartDate: form.registrationStartDate?.toISOString() || '',
-  registrationEndDate: form.registrationEndDate?.toISOString() || '',
+  date: form.date?.toISOString() ?? null,
+  registrationStartDate: form.registrationStartDate?.toISOString() ?? null,
+  registrationEndDate: form.registrationEndDate?.toISOString() ?? null,
   quotas: form.quotas,
   openQuotaSize: form.useOpenQuota ? form.openQuotaSize : 0,
   questions: form.questions.map((question) => ({

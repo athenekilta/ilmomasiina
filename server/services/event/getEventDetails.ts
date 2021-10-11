@@ -92,7 +92,7 @@ export interface EventGetQuotaItem extends Pick<Quota, typeof eventGetQuotaAttrs
 export interface EventGetResponse extends Pick<Event, typeof eventGetEventAttrs[number]> {
   questions: EventGetQuestionItem[];
   quotas: EventGetQuotaItem[];
-  millisTillOpening: number;
+  millisTillOpening: number | null;
   registrationClosed: boolean;
 }
 
@@ -203,12 +203,17 @@ async function getEventDetails(
   );
 
   // Dynamic extra fields
-  const startDate = new Date(event.registrationStartDate);
-  const now = new Date();
-  const millisTillOpening = Math.max(0, startDate.getTime() - now.getTime());
+  let registrationClosed = true;
+  let millisTillOpening = null;
 
-  const endDate = new Date(event.registrationEndDate);
-  const registrationClosed = now > endDate;
+  if (event.registrationStartDate !== null && event.registrationEndDate !== null) {
+    const startDate = new Date(event.registrationStartDate);
+    const now = new Date();
+    millisTillOpening = Math.max(0, startDate.getTime() - now.getTime());
+
+    const endDate = new Date(event.registrationEndDate);
+    registrationClosed = now > endDate;
+  }
 
   return {
     ..._.pick(event, eventGetEventAttrs),
