@@ -12,8 +12,9 @@ block mainContent
 			li 
 				strong Sijainti: 
 				| #{event.location}
-			li 
-				strong Aika: 
-				| #{date}
+			if date
+				li 
+					strong Aika: 
+					| #{date}
 	div.content-block
 		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].

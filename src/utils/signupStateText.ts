@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const signupState = (eventTime: string | null, starts: string | null, closes: string | null) => {
+const signupState = (starts: string | null, closes: string | null) => {
   if (starts === null || closes === null) {
     return {
       label: 'Tapahtumaan ei voi ilmoittautua.',

@@ -48,13 +48,13 @@ const EventList = () => {
     const {
       slug, title, date, registrationStartDate, registrationEndDate, quotas, openQuotaSize,
     } = event;
-    const eventState = signupState(date, registrationStartDate, registrationEndDate);
+    const eventState = signupState(registrationStartDate, registrationEndDate);
 
     const rows = [
       <TableRow
         className={eventState.class}
         title={<Link to={`${PREFIX_URL}/event/${slug}`}>{title}</Link>}
-        date={moment(date).format('DD.MM.YYYY')}
+        date={date ? moment(date).format('DD.MM.YYYY') : ''}
         signupStatus={eventState.label}
         signupCount={
           (quotas.length < 2 ? _.sumBy(quotas, 'signupCount') : undefined)

@@ -15,7 +15,7 @@ async function sendPromotedFromQueueEmail(signup: Signup, eventId: Event['id']) 
 
   const params = {
     event,
-    date: moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm'),
+    date: event.date && moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm'),
   };
   EmailService.sendPromotedFromQueueEmail(signup.email, params);
 }

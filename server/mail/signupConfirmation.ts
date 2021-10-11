@@ -31,7 +31,7 @@ export default async (signup: Signup) => {
   ];
 
   const edited = answers.some((answer) => answer.createdAt.getTime() !== answer.updatedAt.getTime());
-  const date = moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm');
+  const date = event.date && moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm');
 
   const editToken = generateToken(signup);
   const cancelLink = `${config.mailUrlBase}${config.pathPrefix}/signup/${signup.id}/${editToken}`;

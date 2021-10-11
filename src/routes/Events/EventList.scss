@@ -16,9 +16,8 @@ table.eventlist {
   tr.signup-closed {
     td.signup { color: $red; }
   }
-  tr.event-ended {
-    td.signup { color: $red; }
-    opacity: 0.45;
+  tr.signup-disabled {
+    td.signup { opacity: 0.45; }
   }
 }
 

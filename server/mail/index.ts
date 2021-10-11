@@ -51,7 +51,7 @@ export interface ConfirmationMailParams {
     answer: string;
   }[];
   edited: boolean;
-  date: string;
+  date: string | null;
   event: Event;
   cancelLink: string;
 }
@@ -65,7 +65,7 @@ export interface NewUserMailParams {
 
 export interface PromotedFromQueueMailParams {
   event: Event;
-  date: string;
+  date: string | null;
 }
 
 export default class EmailService {
