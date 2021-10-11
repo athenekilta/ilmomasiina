@@ -24,6 +24,14 @@ const QuotasTab = () => {
         label="Ilmo päättyy"
         required
       />
+      <FieldRow
+        name="signupsPublic"
+        label="Julkisuus"
+        as={Form.Check}
+        type="checkbox"
+        checkAlign
+        checkLabel="Ilmoittautumiset ovat julkisia"
+      />
       <hr />
       <Quotas />
       <FieldRow

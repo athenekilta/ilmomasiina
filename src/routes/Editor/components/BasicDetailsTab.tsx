@@ -115,14 +115,6 @@ const BasicDetailsTab = () => {
         as={Textarea}
         rows={8}
       />
-      <FieldRow
-        name="signupsPublic"
-        label="Julkisuus"
-        as={Form.Check}
-        type="checkbox"
-        checkAlign
-        checkLabel="Ilmoittautumiset ovat julkisia"
-      />
     </div>
   );
 };
