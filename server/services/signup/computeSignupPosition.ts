@@ -10,7 +10,7 @@ async function sendPromotedFromQueueEmail(signup: Signup, eventId: Event['id']) 
   if (signup.email === null) return;
 
   // Re-fetch event for all attributes
-  const event = await Event.findByPk(eventId);
+  const event = await Event.unscoped().findByPk(eventId);
   if (event === null) throw new Error('event missing when sending queue email');
 
   const params = {

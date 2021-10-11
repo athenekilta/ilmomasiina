@@ -19,10 +19,10 @@ export default async (id: string, params?: Params | AdminParams): Promise<null> 
     include: [
       {
         model: Quota,
-        attributes: [],
+        attributes: ['id'],
         include: [
           {
-            model: Event,
+            model: Event.unscoped(),
             attributes: ['id', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
           },
         ],

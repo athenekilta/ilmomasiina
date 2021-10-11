@@ -24,10 +24,10 @@ export default async function deleteUnconfirmedSignups() {
     include: [
       {
         model: Quota,
-        attributes: [],
+        attributes: ['id'],
         include: [
           {
-            model: Event,
+            model: Event.unscoped(),
             attributes: ['id', 'openQuotaSize'],
           },
         ],
