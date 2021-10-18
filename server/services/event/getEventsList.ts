@@ -4,6 +4,7 @@ import { col, fn } from 'sequelize';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
+import { ascNullsFirst } from '../../models/util';
 
 // Attributes included in GET /api/events for Event instances.
 export const eventListEventAttrs = [
@@ -86,9 +87,9 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
     ],
     group: [col('event.id'), col('quotas.id')],
     order: [
-      // events without signup (date=NULL) come first for MySQL
-      // TODO: Postgres sorts them last - use ASC NULLS FIRST for Postgres
-      ['date', 'ASC'],
+      // events without signup (date=NULL) come first
+      ['date', ascNullsFirst()],
+      ['registrationEndDate', 'ASC'],
       ['title', 'ASC'],
       [Quota, 'order', 'ASC'],
     ],
