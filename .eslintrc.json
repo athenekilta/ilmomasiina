@@ -1,7 +1,11 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": ["tsconfig.json", "server/tsconfig.json"]
+    "project": [
+      "packages/ilmomasiina-api/tsconfig.json",
+      "packages/ilmomasiina-frontend/tsconfig.json",
+      "packages/ilmomasiina-server/tsconfig.json"
+    ]
   },
   "settings": {
     "pragma": "React",
