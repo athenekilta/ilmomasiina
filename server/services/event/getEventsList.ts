@@ -85,7 +85,13 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
       },
     ],
     group: [col('event.id'), col('quotas.id')],
-    order: [[Quota, 'order', 'ASC']],
+    order: [
+      // events without signup (date=NULL) come first for MySQL
+      // TODO: Postgres sorts them last - use ASC NULLS FIRST for Postgres
+      ['date', 'ASC'],
+      ['title', 'ASC'],
+      [Quota, 'order', 'ASC'],
+    ],
   });
 
   // Convert event list to response

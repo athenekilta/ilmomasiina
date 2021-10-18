@@ -42,9 +42,7 @@ const EventList = () => {
     );
   }
 
-  const eventsSorted = _.sortBy(events, ['date', 'title']);
-
-  const tableRows = eventsSorted.flatMap((event) => {
+  const tableRows = events.flatMap((event) => {
     const {
       slug, title, date, registrationStartDate, registrationEndDate, quotas, openQuotaSize,
     } = event;
