@@ -7,25 +7,11 @@ import {
   Model, Op, Optional,
 } from 'sequelize';
 
+import SignupAttributes, { SignupStatus, signupStatuses } from '@tietokilta/ilmomasiina-api/src/models/signup';
 import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
-
-export const signupStatuses = ['in-quota', 'in-open', 'in-queue'] as const;
-export type SignupStatus = typeof signupStatuses[number];
-
-export interface SignupAttributes {
-  id: string;
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  confirmedAt: Date | null;
-  status: SignupStatus | null;
-  position: number | null;
-  createdAt: Date;
-  quotaId: Quota['id'];
-}
 
 export interface SignupCreationAttributes
   extends Optional<SignupAttributes, 'id' | 'firstName' | 'lastName' | 'email' | 'confirmedAt'

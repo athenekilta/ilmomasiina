@@ -5,14 +5,15 @@ import { hooks as authHooks } from '@feathersjs/authentication';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
 
+import { AdminEventsServiceResponses } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
+import { AdminEventCreateBody } from '@tietokilta/ilmomasiina-api/src/services/admin/events/create';
+import { AdminEventUpdateBody } from '@tietokilta/ilmomasiina-api/src/services/admin/events/update';
 import { IlmoApplication } from '../../../defs';
-import { AdminEventGetResponse, getEventDetailsForAdmin } from '../../event/getEventDetails';
-import { AdminEventListResponse, getEventsListForAdmin } from '../../event/getEventsList';
-import createEvent, { AdminEventCreateBody } from './createEvent';
+import { getEventDetailsForAdmin } from '../../event/getEventDetails';
+import { getEventsListForAdmin } from '../../event/getEventsList';
+import createEvent from './createEvent';
 import deleteEvent from './deleteEvent';
-import updateEvent, { AdminEventUpdateBody } from './updateEvent';
-
-type AdminEventsServiceResponses = AdminEventListResponse | AdminEventGetResponse;
+import updateEvent from './updateEvent';
 
 export class AdminEventsService extends AdapterService<AdminEventsServiceResponses> {
   _find() {

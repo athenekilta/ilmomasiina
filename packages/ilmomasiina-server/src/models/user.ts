@@ -1,12 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 
+import UserAttributes from '@tietokilta/ilmomasiina-api/src/models/user';
 import { IlmoApplication } from '../defs';
-
-export interface UserAttributes {
-  id: number;
-  email: string;
-  password: string;
-}
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 

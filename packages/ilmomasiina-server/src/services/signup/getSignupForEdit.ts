@@ -2,53 +2,19 @@ import { NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 
+import {
+  signupGetAnswerAttrs,
+  signupGetEventAttrs,
+  signupGetQuestionAttrs,
+  SignupGetResponse,
+  signupGetSignupAttrs,
+} from '@tietokilta/ilmomasiina-api/src/services/signups/getForEdit';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { eventGetEventAttrs, eventGetQuestionAttrs, EventGetQuestionItem } from '../event/getEventDetails';
 import { verifyToken } from './editTokens';
-
-// Include the same attributes from Event as /api/events.
-const signupGetEventAttrs = eventGetEventAttrs;
-
-const signupGetQuestionAttrs = eventGetQuestionAttrs;
-
-// Attributes included from Answer.
-const signupGetAnswerAttrs = [
-  'questionId',
-  'answer',
-] as const;
-
-// Attributes included from Signup.
-const signupGetSignupAttrs = [
-  'id',
-  'firstName',
-  'lastName',
-  'email',
-  'status',
-  'position',
-] as const;
-
-// Data type definitions for this endpoint - pick columns and add included relations
-
-export interface SignupGetAnswerItem extends Pick<Answer, typeof signupGetAnswerAttrs[number]> {}
-
-export interface SignupGetSignupItem extends Pick<Signup, typeof signupGetSignupAttrs[number]> {
-  answers: SignupGetAnswerItem[];
-}
-
-export type SignupGetQuestionItem = EventGetQuestionItem;
-
-export interface SignupGetEventItem extends Pick<Event, typeof signupGetEventAttrs[number]> {
-  questions: SignupGetQuestionItem[];
-}
-
-export interface SignupGetResponse {
-  signup: SignupGetSignupItem | null;
-  event: SignupGetEventItem | null;
-}
 
 export default async (id: string, params?: Params): Promise<SignupGetResponse> => {
   const editToken = params?.query?.editToken;

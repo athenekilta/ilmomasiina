@@ -1,10 +1,11 @@
 import moment from 'moment';
 import { Transaction, WhereOptions } from 'sequelize';
 
+import { SignupStatus } from '@tietokilta/ilmomasiina-api/src/models/signup';
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
-import { Signup, SignupStatus } from '../../models/signup';
+import { Signup } from '../../models/signup';
 
 async function sendPromotedFromQueueEmail(signup: Signup, eventId: Event['id']) {
   if (signup.email === null) return;

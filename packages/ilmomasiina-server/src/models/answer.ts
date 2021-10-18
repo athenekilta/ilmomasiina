@@ -2,17 +2,11 @@ import {
   DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional,
 } from 'sequelize';
 
+import AnswerAttributes from '@tietokilta/ilmomasiina-api/src/models/answer';
 import { IlmoApplication } from '../defs';
 import { Question } from './question';
 import { RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';
-
-export interface AnswerAttributes {
-  id: string;
-  answer: string;
-  questionId: Question['id'];
-  signupId: Signup['id'];
-}
 
 export interface AnswerCreationAttributes extends Optional<AnswerAttributes, 'id'> {}
 

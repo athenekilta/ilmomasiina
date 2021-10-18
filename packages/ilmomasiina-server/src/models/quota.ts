@@ -5,19 +5,11 @@ import {
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional,
 } from 'sequelize';
 
+import QuotaAttributes from '@tietokilta/ilmomasiina-api/src/models/quota';
 import { IlmoApplication } from '../defs';
 import { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';
-
-export interface QuotaAttributes {
-  id: string;
-  order: number;
-  title: string;
-  size: number | null;
-  eventId: Event['id'];
-  signupCount?: number;
-}
 
 export interface QuotaCreationAttributes extends Optional<QuotaAttributes, 'id'> {}
 

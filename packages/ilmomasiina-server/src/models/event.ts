@@ -5,29 +5,11 @@ import {
   HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, Model, Op, Optional,
 } from 'sequelize';
 
+import EventAttributes from '@tietokilta/ilmomasiina-api/src/models/event';
 import { IlmoApplication } from '../defs';
 import { Question } from './question';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
-
-export interface EventAttributes {
-  id: string;
-  title: string;
-  slug: string;
-  date: Date | null;
-  registrationStartDate: Date | null;
-  registrationEndDate: Date | null;
-  openQuotaSize: number;
-  description: string | null;
-  price: string | null;
-  location: string | null;
-  facebookUrl: string | null;
-  webpageUrl: string | null;
-  draft: boolean;
-  listed: boolean;
-  signupsPublic: boolean;
-  verificationEmail: string | null;
-}
 
 export interface EventCreationAttributes
   extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'description' | 'price' | 'location'

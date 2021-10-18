@@ -3,6 +3,7 @@ import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Transaction } from 'sequelize';
 
+import { SignupUpdateBody, SignupUpdateResponse } from '@tietokilta/ilmomasiina-api/src/services/signups/update';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
@@ -10,26 +11,6 @@ import { Question } from '../../models/question';
 import { generateRandomId } from '../../models/randomId';
 import { Signup } from '../../models/signup';
 import { verifyToken } from './editTokens';
-
-// Expected request schema.
-export interface SignupUpdateBodyAnswer {
-  questionId: Question['id'];
-  answer: string;
-}
-
-export interface SignupUpdateBody {
-  firstName: string;
-  lastName: string;
-  email: string;
-  answers: SignupUpdateBodyAnswer[];
-  editToken?: string;
-}
-
-// Response schema.
-export interface SignupUpdateResponse {
-  id: Signup['id'];
-  confirmedAt: Date;
-}
 
 // Fields that are present and required in every signup.
 const alwaysRequiredFields = ['firstName', 'lastName', 'email'] as const;

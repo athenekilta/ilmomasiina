@@ -5,24 +5,11 @@ import {
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 
+import QuestionAttributes, { QuestionType, questionTypes } from '@tietokilta/ilmomasiina-api/src/models/question';
 import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
 import { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
-
-export const questionTypes = ['text', 'textarea', 'number', 'select', 'checkbox'] as const;
-export type QuestionType = typeof questionTypes[number];
-
-export interface QuestionAttributes {
-  id: string;
-  order: number;
-  question: string;
-  type: QuestionType;
-  options: string | null;
-  required: boolean;
-  public: boolean;
-  eventId: Event['id'];
-}
 
 export interface QuestionCreationAttributes
   extends Optional<QuestionAttributes, 'id' | 'options' | 'required' | 'public'> {}

@@ -1,25 +1,11 @@
 import { Forbidden, NotFound } from '@feathersjs/errors';
 
+import { SignupCreateBody, SignupCreateResponse } from '@tietokilta/ilmomasiina-api/src/services/signups/create';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
-import { Signup, SignupStatus } from '../../models/signup';
+import { Signup } from '../../models/signup';
 import { refreshSignupPositionsAndGet } from './computeSignupPosition';
 import { generateToken } from './editTokens';
-
-// Expected request schema.
-export interface SignupCreateBody {
-  quotaId: Quota['id'];
-}
-
-// Response schema.
-export interface SignupCreateResponse {
-  id: Signup['id'];
-  position: number | null;
-  status: SignupStatus | null;
-  quotaId: Quota['id'];
-  createdAt: Date;
-  editToken: string,
-}
 
 const signupsAllowed = (event: Event) => {
   if (event.registrationStartDate === null || event.registrationEndDate === null) {

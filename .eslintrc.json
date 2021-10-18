@@ -52,8 +52,8 @@
           ["^@?\\w"],
           // Anything that does not start with a dot.
           ["^[^.]"],
-          // Anything that starts with a dot.
-          ["^."],
+          // Anything that starts with a dot, or is from one of our packages.
+          ["^@tietokilta/", "^"],
           // Css
           ["css$"]
         ]

@@ -1,9 +1,5 @@
+import { AdminCheckSlugResponse } from '@tietokilta/ilmomasiina-api/src/services/admin/slug/get';
 import { Event } from '../../../models/event';
-
-export interface AdminCheckSlugResponse {
-  id: Event['id'] | null;
-  title: string | null;
-}
 
 export default async function checkSlugAvailability(slug: string): Promise<AdminCheckSlugResponse> {
   const event = await Event.unscoped().findOne({

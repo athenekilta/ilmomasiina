@@ -2,26 +2,18 @@ import { Conflict, NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 import { Op, Transaction } from 'sequelize';
 
+import {
+  adminEventCreateEventAttrs,
+  adminEventCreateQuestionAttrs,
+  adminEventCreateQuotaAttrs,
+} from '@tietokilta/ilmomasiina-api/src/services/admin/events/create';
+import { AdminEventUpdateBody } from '@tietokilta/ilmomasiina-api/src/services/admin/events/update';
+import { AdminEventGetResponse } from '@tietokilta/ilmomasiina-api/src/services/events/details';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
-import { AdminEventGetResponse, getEventDetailsForAdmin } from '../../event/getEventDetails';
+import { getEventDetailsForAdmin } from '../../event/getEventDetails';
 import { refreshSignupPositions } from '../../signup/computeSignupPosition';
-import { adminEventCreateEventAttrs, adminEventCreateQuestionAttrs, adminEventCreateQuotaAttrs } from './createEvent';
-
-// Data type definitions for the request body, using attribute lists from createEvent.
-export interface AdminEventUpdateQuestion extends Pick<Question, typeof adminEventCreateQuestionAttrs[number]> {
-  id?: Question['id'];
-}
-
-export interface AdminEventUpdateQuota extends Pick<Quota, typeof adminEventCreateQuotaAttrs[number]> {
-  id?: Quota['id'];
-}
-
-export interface AdminEventUpdateBody extends Pick<Event, typeof adminEventCreateEventAttrs[number]> {
-  questions: AdminEventUpdateQuestion[];
-  quotas: AdminEventUpdateQuota[];
-}
 
 export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
   await Event.sequelize!.transaction(async (transaction) => {

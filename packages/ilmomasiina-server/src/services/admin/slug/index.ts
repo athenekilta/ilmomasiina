@@ -5,10 +5,9 @@ import { hooks as authHooks } from '@feathersjs/authentication';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
 
+import { AdminSlugServiceResponses } from '@tietokilta/ilmomasiina-api/src/services/admin/slug';
 import { IlmoApplication } from '../../../defs';
-import checkSlugAvailability, { AdminCheckSlugResponse } from './checkSlugAvailability';
-
-type AdminSlugServiceResponses = AdminCheckSlugResponse;
+import checkSlugAvailability from './checkSlugAvailability';
 
 export class AdminSlugService extends AdapterService<AdminSlugServiceResponses> {
   _find(): never {

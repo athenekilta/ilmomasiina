@@ -1,57 +1,17 @@
 import _ from 'lodash';
 import { col, fn } from 'sequelize';
 
+import {
+  adminEventListEventAttrs,
+  AdminEventListResponse,
+  eventListEventAttrs,
+  eventListQuotaAttrs,
+  EventListResponse,
+} from '@tietokilta/ilmomasiina-api/src/services/events/list';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
 import { ascNullsFirst } from '../../models/util';
-
-// Attributes included in GET /api/events for Event instances.
-export const eventListEventAttrs = [
-  'slug',
-  'title',
-  'date',
-  'registrationStartDate',
-  'registrationEndDate',
-  'openQuotaSize',
-  'signupsPublic',
-] as const;
-
-// Attributes included in GET /api/admin/events for Event instances.
-const adminEventListEventAttrs = [
-  ...eventListEventAttrs,
-  'id',
-  'draft',
-  'listed',
-] as const;
-
-export const eventListQuotaAttrs = [
-  'id',
-  'title',
-  'size',
-] as const;
-
-// Type definitions for the endpoint: pick the columns above and add relations.
-
-export interface EventListQuotaItem extends Pick<Quota, typeof eventListQuotaAttrs[number]> {
-  signupCount: number;
-}
-
-export interface EventListItem extends Pick<Event, typeof eventListEventAttrs[number]> {
-  quotas: EventListQuotaItem[];
-}
-
-export type EventListResponse = EventListItem[];
-
-// Type definitions for the admin variant of the endpoint.
-
-export type AdminEventListQuotaItem = EventListQuotaItem;
-
-export interface AdminEventListItem extends Pick<Event, typeof adminEventListEventAttrs[number]> {
-  quotas: AdminEventListQuotaItem[];
-}
-
-export type AdminEventListResponse = AdminEventListItem[];
 
 export type EventListResponseType<A extends boolean> = true extends A ? AdminEventListResponse : EventListResponse;
 

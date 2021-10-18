@@ -6,23 +6,12 @@ import {
 } from 'feathers-hooks-common';
 import sequelizeService from 'feathers-sequelize';
 
+import { userGetAttributes } from '@tietokilta/ilmomasiina-api/src/services/users/details';
 import config from '../../config';
 import { IlmoApplication } from '../../defs';
 import { User } from '../../models/user';
 import generatePassword from './hooks/generatePassword';
 import sendEmail from './hooks/sendEmail';
-
-// Request schema for user creation.
-export interface UserCreateBody {
-  email: string;
-}
-
-// Response schema for user requests.
-export interface UserDetails extends Pick<User, 'id' | 'email'> {}
-
-export type UserListItem = UserDetails;
-
-export type UserListResponse = UserListItem[];
 
 // Hook context data type, used to pass generated password to sendEmail().
 export interface NewUserData extends User {
@@ -76,9 +65,9 @@ export default function configureUserService(this: IlmoApplication) {
     after: {
       all: [localHooks.protect('password')],
       // Return only id and email for API responses.
-      find: [iff(isProvider('external'), keep('id', 'email'))],
+      find: [iff(isProvider('external'), keep(...userGetAttributes))],
       // Send welcome email to new users.
-      create: [sendEmail(), keep('id', 'email')],
+      create: [sendEmail(), keep(...userGetAttributes)],
       // Return only id for delete responses.
       remove: [keep('id')],
     },

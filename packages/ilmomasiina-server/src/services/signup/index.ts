@@ -4,13 +4,14 @@ import { AdapterService } from '@feathersjs/adapter-commons';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id, Params } from '@feathersjs/feathers';
 
+import { SignupsServiceResponses } from '@tietokilta/ilmomasiina-api/src/services/signups';
+import { SignupCreateBody } from '@tietokilta/ilmomasiina-api/src/services/signups/create';
+import { SignupUpdateBody } from '@tietokilta/ilmomasiina-api/src/services/signups/update';
 import { IlmoApplication } from '../../defs';
-import createNewSignup, { SignupCreateBody, SignupCreateResponse } from './createNewSignup';
+import createNewSignup from './createNewSignup';
 import deleteSignup from './deleteSignup';
-import getSignupForEdit, { SignupGetResponse } from './getSignupForEdit';
-import updateSignup, { SignupUpdateBody, SignupUpdateResponse } from './updateSignup';
-
-type SignupsServiceResponses = SignupGetResponse | SignupCreateResponse | SignupUpdateResponse | null;
+import getSignupForEdit from './getSignupForEdit';
+import updateSignup from './updateSignup';
 
 export class SignupsService extends AdapterService<SignupsServiceResponses> {
   _find(): never {

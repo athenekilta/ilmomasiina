@@ -1,8 +1,7 @@
 {
   "name": "@tietokilta/ilmomasiina-api",
   "version": "2.0.0-alpha1",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Tietokilta/ilmomasiina.git"

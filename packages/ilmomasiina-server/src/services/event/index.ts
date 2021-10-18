@@ -4,11 +4,10 @@ import { AdapterService } from '@feathersjs/adapter-commons';
 import { MethodNotAllowed } from '@feathersjs/errors';
 import { Id } from '@feathersjs/feathers';
 
+import { EventsServiceResponses } from '@tietokilta/ilmomasiina-api/src/services/events';
 import { IlmoApplication } from '../../defs';
-import getEventDetails, { EventGetResponse } from './getEventDetails';
-import getEventsList, { EventListResponse } from './getEventsList';
-
-type EventsServiceResponses = EventListResponse | EventGetResponse;
+import getEventDetails from './getEventDetails';
+import getEventsList from './getEventsList';
 
 // Service implementation.
 export class EventsService extends AdapterService<EventsServiceResponses> {
