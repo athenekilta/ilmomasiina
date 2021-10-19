@@ -6,13 +6,37 @@
     "type": "git",
     "url": "git+https://github.com/Tietokilta/ilmomasiina.git"
   },
-  "bugs": {
-    "url": "https://github.com/Tietokilta/ilmomasiina/issues"
-  },
-  "homepage": "https://github.com/Tietokilta/ilmomasiina#readme",
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "start": "bnr start:dev",
+    "start:dev": "bnr start:dev",
+    "start:prod": "bnr start:prod",
+    "stop:prod": "bnr stop:prod",
+    "monit:prod": "bnr monit:prod"
+  },
+  "betterScripts": {
+    "start:dev": {
+      "command": "ts-node-dev --respawn --project tsconfig.json src/bin/server.ts",
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "app:*",
+        "PORT": "3001"
+      }
+    },
+    "start:prod": {
+      "command": "npm run build && pm2 start ./dist/bin/server.js",
+      "env": {
+        "NODE_ENV": "production",
+        "DEBUG": "app:*"
+      }
+    },
+    "stop:prod": {
+      "command": "pm2 stop 0"
+    },
+    "monit:prod": {
+      "command": "pm2 monit"
+    }
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^4.5.11",
@@ -31,7 +55,7 @@
     "@types/node-cron": "^2.0.4",
     "@types/nodemailer": "^6.4.4",
     "@types/nodemailer-mailgun-transport": "^1.4.3",
-    "base32-encode": "^2.0.0",
+    "base32-encode": "^1.2.0",
     "better-npm-run": "^0.1.1",
     "compression": "^1.7.4",
     "connect-history-api-fallback": "^1.6.0",
@@ -50,6 +74,7 @@
     "nodemailer-mailgun-transport": "^2.1.3",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.3",
+    "pm2": "^5.1.1",
     "sequelize": "^6.7.0",
     "typescript": "~4.3.5"
   },

@@ -1,15 +1,18 @@
-{
+module.exports = {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": [
       "packages/ilmomasiina-api/tsconfig.json",
       "packages/ilmomasiina-frontend/tsconfig.json",
       "packages/ilmomasiina-server/tsconfig.json"
-    ]
+    ],
+    "tsconfigRootDir": __dirname
   },
   "settings": {
-    "pragma": "React",
-    "version": "detect"
+    "react": {
+      "pragma": "React",
+      "version": "16.12"
+    },
   },
   "extends": [
     "airbnb",
@@ -60,4 +63,4 @@
       }
     ]
   }
-}
+};
