@@ -1,5 +1,5 @@
+import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
 import apiFetch from '../../api';
-import { Signup } from '../../api/signups';
 import { DispatchAction } from '../../store/types';
 import {
   RESET,

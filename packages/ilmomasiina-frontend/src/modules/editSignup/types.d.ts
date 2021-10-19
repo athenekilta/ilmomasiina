@@ -1,4 +1,4 @@
-import { Signup } from '../../api/signups';
+import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
 import {
   resetState,
   signupDeleted,

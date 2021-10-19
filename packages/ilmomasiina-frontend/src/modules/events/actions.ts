@@ -1,5 +1,5 @@
+import { Event } from '@tietokilta/ilmomasiina-api/src/services/events';
 import apiFetch from '../../api';
-import { Event } from '../../api/events';
 import { DispatchAction } from '../../store/types';
 import {
   EVENTS_LOAD_FAILED,

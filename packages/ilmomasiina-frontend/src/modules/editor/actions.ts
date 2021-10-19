@@ -1,8 +1,9 @@
 import moment from 'moment';
 
+import { AdminEvent } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
+import { AdminSlug } from '@tietokilta/ilmomasiina-api/src/services/admin/slug';
+import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
 import apiFetch from '../../api';
-import { AdminEvent, AdminSlug } from '../../api/adminEvents';
-import { Signup } from '../../api/signups';
 import { DispatchAction, GetState } from '../../store/types';
 import {
   EVENT_LOAD_FAILED,

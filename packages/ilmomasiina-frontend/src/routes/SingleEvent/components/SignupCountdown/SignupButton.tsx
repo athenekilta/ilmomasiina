@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button } from 'react-bootstrap';
 
-import { Quota } from '../../../../api/events';
+import { Quota } from '@tietokilta/ilmomasiina-api/src/services/events';
 import { useTypedSelector } from '../../../../store/reducers';
 import signupState from '../../../../utils/signupStateText';
 

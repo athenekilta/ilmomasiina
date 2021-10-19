@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import Countdown from 'react-countdown-now';
 
-import { Quota } from '../../../../api/events';
+import { Quota } from '@tietokilta/ilmomasiina-api/src/services/events';
 import { useTypedSelector } from '../../../../store/reducers';
 import SignupButton from './SignupButton';
 

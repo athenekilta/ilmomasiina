@@ -1,7 +1,8 @@
 import { Moment } from 'moment';
 
-import { AdminEvent, AdminSlug } from '../../api/adminEvents';
-import { Question, Quota } from '../../api/events';
+import { AdminEvent } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
+import { AdminSlug } from '@tietokilta/ilmomasiina-api/src/services/admin/slug';
+import { Question, Quota } from '@tietokilta/ilmomasiina-api/src/services/events';
 import {
   checkingSlugAvailability,
   loaded,

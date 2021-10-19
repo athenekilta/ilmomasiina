@@ -5,7 +5,7 @@ import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { AdminEvent } from '../../api/adminEvents';
+import { AdminEvent } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
 import Separator from '../../components/Separator';
 import { deleteEvent, getAdminEvents } from '../../modules/admin/actions';
 import { useTypedDispatch } from '../../store/reducers';

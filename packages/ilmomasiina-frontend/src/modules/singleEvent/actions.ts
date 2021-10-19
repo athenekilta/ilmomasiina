@@ -1,6 +1,6 @@
+import { Event, Quota } from '@tietokilta/ilmomasiina-api/src/services/events';
+import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
 import apiFetch from '../../api';
-import { Event, Quota } from '../../api/events';
-import { Signup } from '../../api/signups';
 import { DispatchAction } from '../../store/types';
 import {
   EVENT_LOAD_FAILED,

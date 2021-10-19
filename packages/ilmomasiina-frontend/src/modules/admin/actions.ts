@@ -1,6 +1,6 @@
+import { AdminEvent } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
+import { User } from '@tietokilta/ilmomasiina-api/src/services/users';
 import apiFetch from '../../api';
-import { AdminEvent } from '../../api/adminEvents';
-import { User } from '../../api/users';
 import { DispatchAction, GetState } from '../../store/types';
 import {
   EVENTS_LOAD_FAILED,

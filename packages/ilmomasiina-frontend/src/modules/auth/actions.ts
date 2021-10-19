@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router';
 
+import { Auth } from '@tietokilta/ilmomasiina-api/src/services/auth';
 import apiFetch from '../../api';
-import { Auth } from '../../api/auth';
 import { DispatchAction } from '../../store/types';
 import {
   LOGGING_IN,

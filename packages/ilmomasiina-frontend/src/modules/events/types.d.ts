@@ -1,4 +1,4 @@
-import { Event } from '../../api/events';
+import { Event } from '@tietokilta/ilmomasiina-api/src/services/events';
 import { eventsLoaded, eventsLoadFailed, resetState } from './actions';
 
 interface EventsState {

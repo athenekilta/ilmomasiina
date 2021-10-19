@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import moment from 'moment-timezone';
 
-import { AdminEvent } from '../api/adminEvents';
-import { Event, Quota } from '../api/events';
-import { Signup } from '../api/signups';
+import { AdminEvent } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
+import { Event, Quota } from '@tietokilta/ilmomasiina-api/src/services/events';
+import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
 
 export const WAITLIST = '\x00waitlist';
 export const OPENQUOTA = '\x00open';

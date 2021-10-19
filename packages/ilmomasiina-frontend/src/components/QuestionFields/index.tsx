@@ -4,8 +4,8 @@ import { useField } from 'formik';
 import _ from 'lodash';
 import { Form } from 'react-bootstrap';
 
-import { Event } from '../../api/events';
-import { Signup } from '../../api/signups';
+import { Event } from '@tietokilta/ilmomasiina-api/src/services/events';
+import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
 import FieldRow from '../FieldRow';
 
 type Props = {
