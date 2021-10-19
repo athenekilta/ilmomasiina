@@ -59,7 +59,8 @@ If you are using the Docker container, only follow step 1 as rest are automatica
 
 1. Create an `.env` file at the root of the project. For the contents of the .env file, check [ENV.MD](./ENV.MD)
 2. `npm install`
-3. `npm start`
+3. **(IMPORTANT)** `npx lerna bootstrap`
+4. `npm start`
 
 **Optional**: You can create mockup data for development by running `npm run create-fake-data`. During development, database can be resetted with `npm run reset-db`.
 
