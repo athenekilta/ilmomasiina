@@ -34,8 +34,13 @@ class EditSignup extends React.Component {
   }
 
   deleteSignup() {
-    const { id, editToken } = this.props.params;
-    this.props.deleteSignupAsync(id, editToken);
+    const confirmation = window.confirm(
+      'Viimeinen varoitus! Haluatko todella poistaa ilmoittautumisesi?'
+    );
+    if (confirmation) {
+      const { id, editToken } = this.props.params;
+      this.props.deleteSignupAsync(id, editToken);
+    }
   }
 
   async updateSignup(answers) {
