@@ -12,12 +12,13 @@ import {
 import { EditorEvent } from '../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import BasicDetailsTab from './components/BasicDetailsTab';
+import EditorTabBody from './components/EditorTabBody';
+import EditorTabHeader, { EditorTab } from './components/EditorTabHeader';
+import EditorToolbar from './components/EditorToolbar';
 import EmailsTab from './components/EmailsTab';
 import QuestionsTab from './components/QuestionsTab';
 import QuotasTab from './components/QuotasTab';
 import SignupsTab from './components/SignupsTab';
-import EditorTabs, { EditorTabId } from './EditorTabs';
-import EditorToolbar from './EditorToolbar';
 
 import './Editor.scss';
 
@@ -40,7 +41,7 @@ const Editor = ({ history, match }: Props) => {
 
   const eventId = match.params.id;
 
-  const [activeTab, setActiveTab] = useState<EditorTabId>(1);
+  const [activeTab, setActiveTab] = useState<EditorTab>(EditorTab.BASIC_DETAILS);
 
   useEffect(() => {
     if (eventId === 'new') {
@@ -124,7 +125,7 @@ const Editor = ({ history, match }: Props) => {
           return (
             <Form onSubmit={handleSubmit}>
               <EditorToolbar onSubmitClick={onSubmitClick} />
-              <EditorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+              <EditorTabHeader activeTab={activeTab} setActiveTab={setActiveTab} />
 
               <div className="event-editor--valid-notice collapsed">
                 <span>
@@ -133,21 +134,11 @@ const Editor = ({ history, match }: Props) => {
                 </span>
               </div>
               <div className="tab-content">
-                <div className={`tab-pane ${activeTab === 1 ? 'active' : ''}`} role="tabpanel" id="editor-tab-1">
-                  <BasicDetailsTab />
-                </div>
-                <div className={`tab-pane ${activeTab === 2 ? 'active' : ''}`} role="tabpanel" id="editor-tab-2">
-                  <QuotasTab />
-                </div>
-                <div className={`tab-pane ${activeTab === 3 ? 'active' : ''}`} role="tabpanel" id="editor-tab-3">
-                  <QuestionsTab />
-                </div>
-                <div className={`tab-pane ${activeTab === 4 ? 'active' : ''}`} role="tabpanel" id="editor-tab-4">
-                  <EmailsTab />
-                </div>
-                <div className={`tab-pane ${activeTab === 5 ? 'active' : ''}`} role="tabpanel" id="editor-tab-5">
-                  <SignupsTab />
-                </div>
+                <EditorTabBody id={EditorTab.BASIC_DETAILS} activeTab={activeTab} component={BasicDetailsTab} />
+                <EditorTabBody id={EditorTab.QUOTAS} activeTab={activeTab} component={QuotasTab} />
+                <EditorTabBody id={EditorTab.QUESTIONS} activeTab={activeTab} component={QuestionsTab} />
+                <EditorTabBody id={EditorTab.EMAILS} activeTab={activeTab} component={EmailsTab} />
+                <EditorTabBody id={EditorTab.SIGNUPS} activeTab={activeTab} component={SignupsTab} />
               </div>
             </Form>
           );

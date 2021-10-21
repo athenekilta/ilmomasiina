@@ -44,8 +44,12 @@ export interface EditorQuota extends AdminEvent.Update.Quota {
   key: Quota.Id;
 }
 
+type EditorEventType = 'event' | 'event+signup' | 'signup';
+
 /** Root form data type for event editor */
 export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
+  eventType: EditorEventType;
+
   date: Moment | undefined;
 
   questions: EditorQuestion[];

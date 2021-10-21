@@ -17,13 +17,17 @@ type Props = {
 const AdminEventListItem = ({ event }: Props) => {
   const dispatch = useTypedDispatch();
 
+  const {
+    id, title, date, draft, listed, quotas,
+  } = event;
+
   async function onDelete(e: MouseEvent) {
     e.preventDefault();
     const confirmed = window.confirm(
       'Haluatko varmasti poistaa tämän tapahtuman? Tätä toimintoa ei voi perua.',
     );
     if (confirmed) {
-      const success = await dispatch(deleteEvent(event.id));
+      const success = await dispatch(deleteEvent(id));
       if (!success) {
         toast.error('Poisto epäonnistui :(', { autoClose: 2000 });
       }
@@ -32,9 +36,9 @@ const AdminEventListItem = ({ event }: Props) => {
   }
 
   let status;
-  if (event.draft) {
+  if (draft) {
     status = 'Luonnos';
-  } else if (!event.listed) {
+  } else if (!listed) {
     status = 'Piilotettu';
   } else {
     status = 'Julkaistu';
@@ -43,13 +47,13 @@ const AdminEventListItem = ({ event }: Props) => {
   return (
     <tr>
       <td>
-        <Link to={`${PREFIX_URL}/event/${event.id}`}>{event.title}</Link>
+        <Link to={`${PREFIX_URL}/event/${id}`}>{title}</Link>
       </td>
-      <td>{event.date ? moment(event.date).format('DD.MM.YYYY') : ''}</td>
+      <td>{date ? moment(date).format('DD.MM.YYYY') : ''}</td>
       <td>{status}</td>
-      <td>{_.sum(_.map(event.quotas, 'signupCount'))}</td>
+      <td>{_.sumBy(quotas, 'signupCount')}</td>
       <td>
-        <Link to={`${PREFIX_URL}/admin/edit/${event.id}`}>
+        <Link to={`${PREFIX_URL}/admin/edit/${id}`}>
           Muokkaa tapahtumaa
         </Link>
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
-import { Field, useFormikContext } from 'formik';
-import { Col, Form, Row } from 'react-bootstrap';
+import { useFormikContext } from 'formik';
+import { Form } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 
 import FieldRow from '../../../components/FieldRow';
@@ -9,6 +9,7 @@ import { checkingSlugAvailability, checkSlugAvailability } from '../../../module
 import { EditorEvent } from '../../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
 import DateTimePicker from './DateTimePicker';
+import SelectBox from './SelectBox';
 import SlugField from './SlugField';
 import Textarea from './Textarea';
 
@@ -20,7 +21,7 @@ const BasicDetailsTab = () => {
   const { isNew, slugAvailability, event } = useTypedSelector((state) => state.editor, shallowEqual);
 
   const {
-    values: { title, slug },
+    values: { title, slug, eventType },
     touched: { slug: slugTouched },
     setFieldValue,
   } = useFormikContext<EditorEvent>();
@@ -77,29 +78,37 @@ const BasicDetailsTab = () => {
         extraFeedback={slugFeedback}
         as={SlugField}
       />
-      <Form.Group as={Row}>
-        <Col sm="3" />
-        <Col sm="9">
-          <Field
-            as={Form.Check}
-            type="checkbox"
-            name="listed"
-            id="listed"
-            label="Näytä tapahtumalistassa"
-          />
-          <Form.Text muted>
-            Piilotettuihin tapahtumiin pääsee vain URL-osoitteella. Luonnoksena tallennettuja tapahtumia ei voi
-            katsella käyttäjänä riippumatta tästä asetuksesta.
-          </Form.Text>
-        </Col>
-      </Form.Group>
       <FieldRow
-        name="date"
-        label="Ajankohta"
-        as={DateTimePicker}
-        required
-        alternateError="* Ajankohta vaaditaan."
+        name="listed"
+        label="Julkisuus"
+        as={Form.Check}
+        type="checkbox"
+        checkAlign
+        checkLabel="Näytä tapahtumalistassa"
+        help={
+          'Piilotettuihin tapahtumiin pääsee vain URL-osoitteella. Luonnoksena tallennettuja tapahtumia ei voi '
+          + 'katsella käyttäjänä riippumatta tästä asetuksesta.'
+        }
       />
+      <FieldRow
+        name="eventType"
+        label="Tapahtuman tyyppi"
+        as={SelectBox}
+        options={[
+          ['event', 'Tapahtuma ilman ilmoittautumista'],
+          ['event+signup', 'Tapahtuma ja ilmoittautuminen'],
+          ['signup', 'Ilmoittautuminen ilman tapahtumaa'],
+        ]}
+      />
+      {eventType !== 'signup' && (
+        <FieldRow
+          name="date"
+          label="Ajankohta"
+          as={DateTimePicker}
+          required
+          alternateError="* Ajankohta vaaditaan."
+        />
+      )}
       <FieldRow
         name="webpageUrl"
         label="Kotisivujen osoite"
@@ -119,18 +128,6 @@ const BasicDetailsTab = () => {
         as={Textarea}
         rows={8}
       />
-      <Form.Group as={Row}>
-        <Col sm="3" />
-        <Col sm="9">
-          <Field
-            as={Form.Check}
-            type="checkbox"
-            name="signupsPublic"
-            id="signupsPublic"
-            label="Ilmoittautumiset ovat julkisia"
-          />
-        </Col>
-      </Form.Group>
     </div>
   );
 };

@@ -77,7 +77,7 @@ const EditSignup = ({ match }: Props) => {
     );
   }
 
-  if (new Date(event.registrationEndDate) < new Date()) {
+  if (event.registrationEndDate === null || new Date(event.registrationEndDate) < new Date()) {
     return (
       <Container className="align-items-center">
         <div className="EditSignup--wrapper">

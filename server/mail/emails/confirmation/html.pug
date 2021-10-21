@@ -9,12 +9,13 @@ block mainContent
 			li
 				strong Tapahtuma: 
 				| #{event.title}
-			li 
+			li
 				strong Sijainti: 
 				| #{event.location}
-			li 
-				strong Aika: 
-				| #{date}
+			if date
+				li
+					strong Aika: 
+					| #{date}
 	div.content-block
 		p.bodyText Ilmoittautumisesi tiedot:
 		ul
@@ -24,4 +25,3 @@ block mainContent
 					| #{val.answer}
 	div.content-block
 		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].
-	

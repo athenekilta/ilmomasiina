@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Field, useFormikContext } from 'formik';
-import { Col, Form, Row } from 'react-bootstrap';
+import { useFormikContext } from 'formik';
+import { Form } from 'react-bootstrap';
 
 import FieldRow from '../../../components/FieldRow';
 import { EditorEvent } from '../../../modules/editor/types';
@@ -24,20 +24,28 @@ const QuotasTab = () => {
         label="Ilmo päättyy"
         required
       />
+      <FieldRow
+        name="signupsPublic"
+        label="Julkisuus"
+        as={Form.Check}
+        type="checkbox"
+        checkAlign
+        checkLabel="Ilmoittautumiset ovat julkisia"
+      />
       <hr />
       <Quotas />
-      <Form.Group as={Row}>
-        <Col sm="3" />
-        <Col sm="9">
-          <Field
-            as={Form.Check}
-            type="checkbox"
-            id="useOpenQuota"
-            name="useOpenQuota"
-            label="Käytä lisäksi yhteistä kiintiötä"
-          />
-        </Col>
-      </Form.Group>
+      <FieldRow
+        name="useOpenQuota"
+        label="Avoin kiintiö"
+        as={Form.Check}
+        type="checkbox"
+        checkAlign
+        checkLabel="Käytä lisäksi yhteistä kiintiötä"
+        help={
+          'Avoimeen kiintiöön sijoitetaan automaattisesti ilmoittautumisjärjestyksessä ensimmäiset ilmoittautujat, '
+          + 'jotka eivät mahdu valitsemaansa kiintiöön.'
+        }
+      />
       {useOpenQuota && (
         <FieldRow
           name="openQuotaSize"

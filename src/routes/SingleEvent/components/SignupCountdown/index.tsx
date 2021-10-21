@@ -7,11 +7,11 @@ import { Quota } from '../../../../api/events';
 import { useTypedSelector } from '../../../../store/reducers';
 import SignupButton from './SignupButton';
 
-type CountDownProps = {
+type Props = {
   beginSignup: (quotaId: Quota.Id) => void;
 };
 
-const CountDown = (props: CountDownProps) => {
+const SignupCountdown = (props: Props) => {
   const { beginSignup } = props;
   const event = useTypedSelector((state) => state.singleEvent.event)!;
   const openingTime = moment().add(event.millisTillOpening || 0, 'ms').toDate();
@@ -32,4 +32,4 @@ const CountDown = (props: CountDownProps) => {
   );
 };
 
-export default CountDown;
+export default SignupCountdown;

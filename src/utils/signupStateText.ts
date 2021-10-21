@@ -1,17 +1,15 @@
-import _ from 'lodash';
 import moment from 'moment';
 
-const signupState = (eventTime: string, starts: string, closes: string) => {
-  if (_.isEmpty(starts) || _.isEmpty(closes)) {
+const signupState = (starts: string | null, closes: string | null) => {
+  if (starts === null || closes === null) {
     return {
-      label: 'Auki toistaiseksi.',
-      class: 'signup-opened',
+      label: 'Tapahtumaan ei voi ilmoittautua.',
+      class: 'signup-disabled',
     };
   }
 
   const signupOpens = moment(starts);
   const signupCloses = moment(closes);
-  const eventOpens = moment(eventTime);
   const now = moment();
 
   const timeFormat = 'D.M.Y [klo] HH:mm';
@@ -30,11 +28,7 @@ const signupState = (eventTime: string, starts: string, closes: string) => {
     };
   }
 
-  if (eventOpens.isSameOrAfter(now)) {
-    return { label: 'Ilmoittautuminen on päättynyt.', class: 'signup-closed' };
-  }
-
-  return { label: 'Tapahtuma on päättynyt.', class: 'event-ended' };
+  return { label: 'Ilmoittautuminen on päättynyt.', class: 'signup-closed' };
 };
 
 export default signupState;

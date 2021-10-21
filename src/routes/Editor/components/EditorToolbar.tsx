@@ -5,10 +5,8 @@ import { Button, ButtonGroup, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { EditorEvent } from '../../modules/editor/types';
-import { useTypedSelector } from '../../store/reducers';
-
-import './Editor.scss';
+import { EditorEvent } from '../../../modules/editor/types';
+import { useTypedSelector } from '../../../store/reducers';
 
 interface EditorToolbarProps {
   onSubmitClick: (asDraft: boolean) => void;

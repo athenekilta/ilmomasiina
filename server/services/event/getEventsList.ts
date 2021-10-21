@@ -4,6 +4,7 @@ import { col, fn } from 'sequelize';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
+import { ascNullsFirst } from '../../models/util';
 
 // Attributes included in GET /api/events for Event instances.
 export const eventListEventAttrs = [
@@ -85,7 +86,13 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
       },
     ],
     group: [col('event.id'), col('quotas.id')],
-    order: [[Quota, 'order', 'ASC']],
+    order: [
+      // events without signup (date=NULL) come first
+      ['date', ascNullsFirst()],
+      ['registrationEndDate', 'ASC'],
+      ['title', 'ASC'],
+      [Quota, 'order', 'ASC'],
+    ],
   });
 
   // Convert event list to response
