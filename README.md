@@ -106,12 +106,22 @@ With some hosting providers (such as Otax) you might need to request the access 
 Running production version within pm2 is recommended
 
 ## Updating production
+On ilmomasiina directory:
 
 ```
-git pull otax/master
+git pull
 npm run compile
 pm2 restart prod-server
 ```
+
+There's a script that runs the above on the home directory of `athene` at otax, so you can just
+
+```zsh
+ssh otax
+./update_ilmomasiina_production.sh
+```
+
+when updating Athene's instance.
 
 ## Documentation
 
