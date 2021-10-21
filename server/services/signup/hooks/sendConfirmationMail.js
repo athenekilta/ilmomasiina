@@ -6,8 +6,8 @@ module.exports = () => (hook) => {
   const models = hook.app.get('models');
 
   const fields = [
-    { label: 'Nimi', answer: `${hook.result.firstName} ${hook.result.lastName}` },
-    { label: 'Sähköposti', answer: `${hook.result.email}` },
+    { label: 'Nimi // Name', answer: `${hook.result.firstName} ${hook.result.lastName}` },
+    { label: 'Sähköposti // Email', answer: `${hook.result.email}` },
   ];
 
   const userAnswers = [];
@@ -19,7 +19,7 @@ module.exports = () => (hook) => {
     .then(() => models.signup.findById(hook.result.id))
     .then(signup => models.quota.findById(signup.quotaId))
     .then((quota) => {
-      fields.push({ label: 'Kiintiö', answer: quota.title });
+      fields.push({ label: 'Kiintiö // Quota', answer: quota.title });
 
       return models.event
         .findById(quota.dataValues.eventId)
