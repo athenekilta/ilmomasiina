@@ -17,6 +17,8 @@ The project is divided into three packages:
 - `ilmomasiina-server` contains the backend code and depends on `ilmomasiina-api`.
 - `ilmomasiina-frontend` contains the frontend code, along with scripts and dependencies inherited from `npm eject`.
   It also depends on `ilmomasiina-api` but not `ilmomasiina-server`.
+- In addition, the root folder has a `package.json`, which is used for ESLint and other development dependencies
+  that are shared between the packages. That package contains no code.
 
 ## Usage
 
