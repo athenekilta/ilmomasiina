@@ -10,7 +10,7 @@ The project is configured to run development servers for the frontend and backen
 
 The project is divided into three packages:
 
-- `ilmomasiina-api` contains the single root of truth for the data model and API:
+- `ilmomasiina-api` contains the single source of truth for the data model and API:
     - The JS column types for DB models. These are implemented by the concrete Sequelize models.
     - The API models, derived by picking columns from the DB models.
     - Utility interfaces that convert Dates in the API models to strings, for frontend typings.
