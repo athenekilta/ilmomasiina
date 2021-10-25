@@ -1,9 +1,11 @@
 import express, { json, rest, urlencoded } from '@feathersjs/express';
 import feathers from '@feathersjs/feathers';
 import compress from 'compression';
+import historyApiFallback from 'connect-history-api-fallback';
 import { NextFunction } from 'express';
 import enforce from 'express-sslify';
 import cron from 'node-cron';
+import path from 'path';
 
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
@@ -34,9 +36,6 @@ cron.schedule('0 8 * * *', anonymizeOldSignups);
 // Daily at 8am, delete deleted items from the database
 cron.schedule('0 8 * * *', removeDeletedData);
 
-// Serve compiled frontend (TODO: implement Webpack dev server)
-app.use(express.static('../../dist'));
-
 if (config.nodeEnv === 'development') {
   // Development: log error messages
   app.use((error: any, req: any, res: any, next: NextFunction) => {
@@ -49,11 +48,12 @@ if (config.nodeEnv === 'development') {
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
-app.use(require('connect-history-api-fallback')());
+app.use(historyApiFallback());
 
 // Serving ~/dist by default. Ideally these files should be served by
 // the web server and not the app server, but this helps to demo the
 // server in production.
-app.use(express.static('dist'));
+const frontendPath = path.dirname(require.resolve('@tietokilta/ilmomasiina-frontend/build/index.html'));
+app.use(express.static(frontendPath));
 
 export = app;
