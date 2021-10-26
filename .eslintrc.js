@@ -2,9 +2,9 @@ module.exports = {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": [
-      "packages/ilmomasiina-api/tsconfig.json",
+      "packages/ilmomasiina-models/tsconfig.json",
       "packages/ilmomasiina-frontend/tsconfig.json",
-      "packages/ilmomasiina-server/tsconfig.json"
+      "packages/ilmomasiina-backend/tsconfig.json"
     ],
     "tsconfigRootDir": __dirname
   },

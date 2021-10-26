@@ -1,8 +1,8 @@
 import moment from 'moment';
 
-import { AdminEvent } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
-import { AdminSlug } from '@tietokilta/ilmomasiina-api/src/services/admin/slug';
-import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
+import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
+import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
+import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {

@@ -1,5 +1,5 @@
-import { Event } from '@tietokilta/ilmomasiina-api/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
+import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
+import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import {
   eventLoaded,
   eventLoadFailed,

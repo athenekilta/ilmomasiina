@@ -1,5 +1,5 @@
-import { AdminEvent } from '@tietokilta/ilmomasiina-api/src/services/admin/events';
-import { User } from '@tietokilta/ilmomasiina-api/src/services/users';
+import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
+import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
 import {
   eventsLoaded,
   eventsLoadFailed,

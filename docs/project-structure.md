@@ -10,23 +10,23 @@ The project is configured to run development servers for the frontend and backen
 
 The project is divided into three packages:
 
-- `ilmomasiina-api` contains the single source of truth for the data model and API:
+- `ilmomasiina-models` contains the single source of truth for the data model and API:
     - The JS column types for DB models. These are implemented by the concrete Sequelize models.
-    - The API models, derived by picking columns from the DB models.
+    - The API models, derived mostly by picking columns from the DB models.
     - Utility interfaces that convert Dates in the API models to strings, for frontend typings.
-- `ilmomasiina-server` contains the backend code and depends on `ilmomasiina-api`.
+- `ilmomasiina-backend` contains the backend code and depends on `ilmomasiina-models`.
   It currently also depends on `ilmomasiina-frontend` in order to serve its static files.
 - `ilmomasiina-frontend` contains the frontend code, along with scripts and dependencies inherited from `npm eject`.
-  It also depends on `ilmomasiina-api` but not `ilmomasiina-server`.
+  It also depends on `ilmomasiina-models` but not `ilmomasiina-backend`.
 - In addition, the root folder has a `package.json`, which is used for ESLint and other development dependencies
   that are shared between the packages. That package contains no code.
 
 ## Usage
 
-To modify the app, fork the repository and modify the code to your needs. If you don't modify `ilmomasiina-api`,
+To modify the app, fork the repository and modify the code to your needs. If you don't modify `ilmomasiina-models`,
 your modified backend or frontend should be compatible with unmodified versions.
 Don't forget to submit a PR if your code might be useful to others!
 
-To build a new API client, import `ilmomasiina-api`.
+To build a new API client, import `ilmomasiina-models`.
 
-To build a new web UI, either just import `ilmomasiina-api`, or import components from `ilmomasiina-frontend`.
+To build a new web UI, either just import `ilmomasiina-models`, or import components from `ilmomasiina-frontend`.

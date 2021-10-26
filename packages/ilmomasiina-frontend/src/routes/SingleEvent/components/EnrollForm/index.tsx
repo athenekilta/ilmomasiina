@@ -7,7 +7,7 @@ import {
 import { shallowEqual } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
+import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import FieldRow from '../../../../components/FieldRow';
 import QuestionFields from '../../../../components/QuestionFields';
 import { cancelPendingSignup, completeSignup, getEvent } from '../../../../modules/singleEvent/actions';

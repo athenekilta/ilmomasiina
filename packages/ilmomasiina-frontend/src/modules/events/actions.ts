@@ -1,4 +1,4 @@
-import { Event } from '@tietokilta/ilmomasiina-api/src/services/events';
+import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
 import apiFetch from '../../api';
 import { DispatchAction } from '../../store/types';
 import {

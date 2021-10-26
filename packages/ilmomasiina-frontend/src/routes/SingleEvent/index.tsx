@@ -8,7 +8,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import remarkGfm from 'remark-gfm';
 
-import { Quota } from '@tietokilta/ilmomasiina-api/src/services/events';
+import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { createPendingSignup, getEvent, resetState } from '../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import { getSignupsByQuota } from '../../utils/signupUtils';

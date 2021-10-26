@@ -7,7 +7,7 @@ import {
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
+import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import FieldRow from '../../../../components/FieldRow';
 import QuestionFields from '../../../../components/QuestionFields';
 import { useTypedSelector } from '../../../../store/reducers';

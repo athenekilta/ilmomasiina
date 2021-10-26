@@ -7,7 +7,7 @@ import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { Signup } from '@tietokilta/ilmomasiina-api/src/services/signups';
+import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import {
   deleteSignup,
   getSignupAndEvent,
