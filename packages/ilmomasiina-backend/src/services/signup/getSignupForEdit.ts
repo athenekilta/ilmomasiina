@@ -6,6 +6,7 @@ import {
   signupGetAnswerAttrs,
   signupGetEventAttrs,
   signupGetQuestionAttrs,
+  signupGetQuotaAttrs,
   SignupGetResponse,
   signupGetSignupAttrs,
 } from '@tietokilta/ilmomasiina-models/src/services/signups/getForEdit';
@@ -41,7 +42,7 @@ export default async (id: string, params?: Params): Promise<SignupGetResponse> =
         ],
       },
     ],
-    order: [[Question, 'order', 'ASC']],
+    order: [[Quota, Event, Question, 'order', 'ASC']],
   });
   if (signup === null) {
     // Event not found with id, probably deleted
@@ -53,6 +54,7 @@ export default async (id: string, params?: Params): Promise<SignupGetResponse> =
   return {
     signup: {
       ..._.pick(signup, signupGetSignupAttrs),
+      quota: _.pick(signup.quota!, signupGetQuotaAttrs),
       answers: signup.answers!.map((answer) => _.pick(answer, signupGetAnswerAttrs)),
     },
     event: {
