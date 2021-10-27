@@ -1,9 +1,16 @@
-This file contains SQL scripts for migrating data from the Athene-created version of Ilmomasiina.
-There will be more automatic migration tools when we reach production.
+# Migration 
+
+This file documents the migration process from the Athene-created version of Ilmomasiina to the new one.
+
+## Migration script
+
+The below SQL script migrates the database schema. It is written for MySQL/MariaDB.
+Scripts for other databases will be created later.
+
+There will be more automatic migration tools when we reach production, but the initial migration will likely stay
+as a script.
 
 **Please make full backups of your data before proceeding with this migration.**
-
-## MariaDB/MySQL
 
 ```sql
 -- add slug support
