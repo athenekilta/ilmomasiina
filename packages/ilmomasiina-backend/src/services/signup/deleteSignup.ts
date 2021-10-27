@@ -1,10 +1,11 @@
-import { NotFound } from '@feathersjs/errors';
+import { Forbidden, NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
 import { refreshSignupPositions } from './computeSignupPosition';
+import { signupsAllowed } from './createNewSignup';
 import { verifyToken } from './editTokens';
 
 type AdminParams = { adminAuthenticated: true };
@@ -31,6 +32,9 @@ export default async (id: string, params?: Params | AdminParams): Promise<null> 
   });
   if (signup === null) {
     throw new NotFound('No signup found with id');
+  }
+  if (!params?.adminAuthenticated && !signupsAllowed(signup.quota!.event!)) {
+    throw new Forbidden('Signups closed for this event.');
   }
 
   // Delete the DB object

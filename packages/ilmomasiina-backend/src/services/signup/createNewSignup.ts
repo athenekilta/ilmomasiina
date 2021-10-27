@@ -7,7 +7,7 @@ import { Signup } from '../../models/signup';
 import { refreshSignupPositionsAndGet } from './computeSignupPosition';
 import { generateToken } from './editTokens';
 
-const signupsAllowed = (event: Event) => {
+export const signupsAllowed = (event: Event) => {
   if (event.registrationStartDate === null || event.registrationEndDate === null) {
     return false;
   }

@@ -1,4 +1,4 @@
-import { BadRequest, NotFound } from '@feathersjs/errors';
+import { BadRequest, Forbidden, NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Transaction } from 'sequelize';
@@ -10,6 +10,7 @@ import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { generateRandomId } from '../../models/randomId';
 import { Signup } from '../../models/signup';
+import { signupsAllowed } from './createNewSignup';
 import { verifyToken } from './editTokens';
 
 // Fields that are present and required in every signup.
@@ -43,6 +44,10 @@ export default async (id: string, data: SignupUpdateBody, params?: Params): Prom
       ],
       transaction,
     });
+    if (!signupsAllowed(quota.event!)) {
+      throw new Forbidden('Signups closed for this event.');
+    }
+
     const questions = quota.event!.questions!;
 
     // Check that all common fields are present (if first time confirming)
