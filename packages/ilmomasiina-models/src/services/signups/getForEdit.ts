@@ -55,6 +55,6 @@ export interface SignupGetEventItem extends Pick<EventAttributes, typeof signupG
 }
 
 export interface SignupGetResponse {
-  signup: SignupGetSignupItem | null;
-  event: SignupGetEventItem | null;
+  signup: SignupGetSignupItem;
+  event: SignupGetEventItem;
 }
