@@ -18,7 +18,7 @@ import { refreshSignupPositions } from '../../signup/computeSignupPosition';
 export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
   await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update
-    const event = await Event.unscoped().findByPk(id, {
+    const event = await Event.findByPk(id, {
       attributes: ['id', 'openQuotaSize'],
       include: [
         // Get existing quota and question IDs to reuse them wherever possible

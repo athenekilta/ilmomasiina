@@ -22,7 +22,7 @@ export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateRespon
     attributes: [],
     include: [
       {
-        model: Event,
+        model: Event.scope('user'),
         attributes: ['id', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
       },
     ],

@@ -29,7 +29,7 @@ async function getEventDetails(
   // Admin queries include emails and signup IDs
   const signupAttrs = admin ? adminEventGetSignupAttrs : eventGetSignupAttrs;
   // Admin queries also show past and draft events.
-  const scope = admin ? Event.unscoped() : Event;
+  const scope = admin ? Event : Event.scope('user');
 
   const event = await scope.findOne({
     where,

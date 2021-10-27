@@ -19,7 +19,7 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
   // Admin view also shows id, draft and listed fields.
   const eventAttrs = admin ? adminEventListEventAttrs : eventListEventAttrs;
   // Admin view shows all events, user view only shows future/recent events.
-  const scope = admin ? Event.unscoped() : Event;
+  const scope = admin ? Event : Event.scope('user');
   // Admin view also shows unlisted events.
   const where = admin ? {} : { listed: true };
 

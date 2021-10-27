@@ -2,7 +2,7 @@ import { AdminCheckSlugResponse } from '@tietokilta/ilmomasiina-models/src/servi
 import { Event } from '../../../models/event';
 
 export default async function checkSlugAvailability(slug: string): Promise<AdminCheckSlugResponse> {
-  const event = await Event.unscoped().findOne({
+  const event = await Event.findOne({
     where: {
       slug,
     },

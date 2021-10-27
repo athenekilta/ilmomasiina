@@ -21,7 +21,7 @@ export default async function anonymizeOldSignups() {
         attributes: [],
         include: [
           {
-            model: Event.unscoped(),
+            model: Event,
             attributes: [],
           },
         ],

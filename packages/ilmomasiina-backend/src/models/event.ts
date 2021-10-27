@@ -152,30 +152,32 @@ export default function setupEventModel(this: IlmoApplication) {
           }
         },
       },
-      // by default, show events that:
-      defaultScope: {
-        where: {
-          [Op.and]: {
-            // are not drafts,
-            draft: false,
-            // and either:
-            [Op.or]: {
-              // have no date and closed less than a week ago
-              [Op.and]: {
-                date: null,
-                registrationEndDate: {
+      scopes: {
+        // users can see events that:
+        user: {
+          where: {
+            [Op.and]: {
+              // are not drafts,
+              draft: false,
+              // and either:
+              [Op.or]: {
+                // have no date and closed less than a week ago
+                [Op.and]: {
+                  date: null,
+                  registrationEndDate: {
+                    [Op.gt]: moment()
+                      .tz('Europe/Helsinki')
+                      .subtract(7, 'days')
+                      .format(),
+                  },
+                },
+                // or happen later than a week ago
+                date: {
                   [Op.gt]: moment()
                     .tz('Europe/Helsinki')
                     .subtract(7, 'days')
                     .format(),
                 },
-              },
-              // or happen later than a week ago
-              date: {
-                [Op.gt]: moment()
-                  .tz('Europe/Helsinki')
-                  .subtract(7, 'days')
-                  .format(),
               },
             },
           },

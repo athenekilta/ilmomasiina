@@ -22,7 +22,7 @@ export default async (id: string, params?: Params | AdminParams): Promise<null> 
         attributes: ['id'],
         include: [
           {
-            model: Event.unscoped(),
+            model: Event,
             attributes: ['id', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
           },
         ],

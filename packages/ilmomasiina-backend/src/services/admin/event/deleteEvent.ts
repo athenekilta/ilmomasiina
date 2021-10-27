@@ -3,7 +3,7 @@ import { NotFound } from '@feathersjs/errors';
 import { Event } from '../../../models/event';
 
 export default async (id: Event['id']): Promise<null> => {
-  const event = await Event.unscoped().findByPk(id);
+  const event = await Event.findByPk(id);
   if (event === null) {
     throw new NotFound('No event found with id');
   }
