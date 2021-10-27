@@ -36,8 +36,16 @@ export const resetState = () => <const>{ type: RESET };
 
 export const getSignupAndEvent = (id: Signup.Id, editToken: string) => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch(`signups/${id}?editToken=${editToken}`);
-    dispatch(signupLoaded(response as Signup.Details));
+    const response = await apiFetch(`signups/${id}?editToken=${editToken}`) as Signup.Details;
+    dispatch(signupLoaded({
+      ...response,
+      signup: {
+        ...response.signup,
+        firstName: response.signup.firstName || '',
+        lastName: response.signup.lastName || '',
+        email: response.signup.email || '',
+      },
+    }));
     return true;
   } catch (e) {
     dispatch(signupLoadFailed());

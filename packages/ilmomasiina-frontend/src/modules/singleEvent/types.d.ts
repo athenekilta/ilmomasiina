@@ -1,22 +1,17 @@
 import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import {
+  creatingSignup,
   eventLoaded,
   eventLoadFailed,
   pendingSignupCreated,
   resetState,
-  signupCancelled,
-  signupComplete,
-  signupSubmitFailed,
-  signupSubmitting,
+  signupCreationFailed,
 } from './actions';
 
 interface SingleEventState {
   event: Event.Details | null;
   eventLoadError: boolean;
-  signup: Signup.Create.Response | null;
-  signupSubmitting: boolean;
-  signupSubmitError: boolean;
+  creatingSignup: boolean;
 }
 
 type SingleEventActions =
@@ -24,7 +19,5 @@ type SingleEventActions =
   | ReturnType<typeof eventLoaded>
   | ReturnType<typeof eventLoadFailed>
   | ReturnType<typeof pendingSignupCreated>
-  | ReturnType<typeof signupSubmitting>
-  | ReturnType<typeof signupSubmitFailed>
-  | ReturnType<typeof signupComplete>
-  | ReturnType<typeof signupCancelled>;
+  | ReturnType<typeof creatingSignup>
+  | ReturnType<typeof signupCreationFailed>;

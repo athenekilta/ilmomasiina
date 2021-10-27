@@ -6,7 +6,7 @@ import { Form } from 'react-bootstrap';
 
 import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import FieldRow from '../FieldRow';
+import FieldRow from '../../../../components/FieldRow';
 
 type Props = {
   name: string;

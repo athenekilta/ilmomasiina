@@ -1,20 +1,12 @@
 import React, { useEffect } from 'react';
 
-import {
-  Button, Col, Container, Row, Spinner,
-} from 'react-bootstrap';
+import { Button, Container, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import {
-  deleteSignup,
-  getSignupAndEvent,
-  resetState,
-  updateSignup,
-} from '../../modules/editSignup/actions';
+import { getSignupAndEvent, resetState } from '../../modules/editSignup/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
+import DeleteSignup from './components/DeleteSignup';
 import EditForm from './components/EditForm';
 
 import './EditSignup.scss';
@@ -44,8 +36,8 @@ const EditSignup = ({ match }: Props) => {
       <Container className="align-items-center">
         <div className="EditSignup--wrapper">
           <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-          <Button as={Link} to={`${PREFIX_URL}/`} variant="secondary">
-            Takaisin etusivulle
+          <Button as={Link} to={`${PREFIX_URL}/event/${event!.slug}`} variant="secondary">
+            Takaisin
           </Button>
         </div>
       </Container>
@@ -94,56 +86,10 @@ const EditSignup = ({ match }: Props) => {
     );
   }
 
-  async function onSubmit(answers: Signup.Update.Body) {
-    const progressToast = toast.info('Ilmoittautuminen käynnissä', {});
-
-    const success = await dispatch(updateSignup(signup!.id, answers, match.params.editToken));
-
-    if (success) {
-      toast.update(progressToast, {
-        render: 'Muokkaus onnistui!',
-        type: toast.TYPE.SUCCESS,
-        autoClose: 5000,
-      });
-    } else {
-      toast.update(progressToast, {
-        render: 'Muokkaus ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.',
-        type: toast.TYPE.ERROR,
-        autoClose: 5000,
-      });
-    }
-  }
-
-  function onDelete() {
-    dispatch(deleteSignup(signup!.id, match.params.editToken));
-  }
-
   return (
     <Container>
-      <EditForm submitForm={onSubmit} />
-      <Row className="justify-content-md-center text-center my-5">
-        <Col xs="12" md="10" lg="8">
-          <h2>Poista ilmoittautuminen</h2>
-          <p>
-            Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan
-            {' '}
-            <strong>
-              {event.title}
-            </strong>
-            ?
-          </p>
-          <p>
-            Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos
-            muutat mielesi, voit aina ilmoittautua tapahtumaan uudelleen
-            myöhemmin, mutta siirryt silloin jonon hännille.
-            {' '}
-            <strong>Tätä toimintoa ei voi perua.</strong>
-          </p>
-          <button type="button" onClick={onDelete} className="btn btn-danger">
-            Poista ilmoittautuminen
-          </button>
-        </Col>
-      </Row>
+      <EditForm editToken={match.params.editToken} />
+      <DeleteSignup editToken={match.params.editToken} />
     </Container>
   );
 };

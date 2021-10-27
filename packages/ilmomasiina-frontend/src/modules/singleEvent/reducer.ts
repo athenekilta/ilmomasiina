@@ -2,20 +2,16 @@ import {
   EVENT_LOAD_FAILED,
   EVENT_LOADED,
   RESET,
-  SIGNUP_CANCELLED,
-  SIGNUP_COMPLETE,
+  SIGNUP_CREATE_FAILED,
   SIGNUP_CREATED,
-  SIGNUP_SUBMIT_FAILED,
-  SIGNUP_SUBMITTING,
+  SIGNUP_CREATING,
 } from './actionTypes';
 import { SingleEventActions, SingleEventState } from './types';
 
 const initialState: SingleEventState = {
   event: null,
   eventLoadError: false,
-  signup: null,
-  signupSubmitting: false,
-  signupSubmitError: false,
+  creatingSignup: false,
 };
 
 export default function reducer(
@@ -39,32 +35,17 @@ export default function reducer(
     case SIGNUP_CREATED:
       return {
         ...state,
-        signup: action.payload,
-        signupSubmitting: false,
+        creatingSignup: false,
       };
-    case SIGNUP_SUBMITTING:
+    case SIGNUP_CREATING:
       return {
         ...state,
-        signupSubmitting: true,
+        creatingSignup: true,
       };
-    case SIGNUP_SUBMIT_FAILED:
+    case SIGNUP_CREATE_FAILED:
       return {
         ...state,
-        signupSubmitting: false,
-        signupSubmitError: true,
-      };
-    case SIGNUP_COMPLETE:
-      return {
-        ...state,
-        signupSubmitting: false,
-        signupSubmitError: false,
-      };
-    case SIGNUP_CANCELLED:
-      return {
-        ...state,
-        signup: null,
-        signupSubmitting: false,
-        signupSubmitError: false,
+        creatingSignup: false,
       };
     default:
       return state;
