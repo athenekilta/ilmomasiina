@@ -11,16 +11,15 @@ const COUNTDOWN_DURATION = 60 * 1000;
 
 type SignupButtonProps = {
   isOpen: boolean;
+  isClosed: boolean;
   beginSignup: (quotaId: Quota.Id) => void;
   seconds: number;
   total: number;
 };
 
-const SignupButton = (props: SignupButtonProps) => {
-  const {
-    isOpen, beginSignup, seconds, total,
-  } = props;
-
+const SignupButton = ({
+  isOpen, isClosed, beginSignup, seconds, total,
+}: SignupButtonProps) => {
   const { registrationStartDate, registrationEndDate, quotas } = useTypedSelector((state) => state.singleEvent.event)!;
   const submitting = useTypedSelector((state) => state.singleEvent.signupSubmitting);
   const isOnly = quotas.length === 1;
@@ -30,11 +29,11 @@ const SignupButton = (props: SignupButtonProps) => {
       <h3>Ilmoittautuminen</h3>
       <p>
         {signupState(registrationStartDate, registrationEndDate).label}
-        {total < COUNTDOWN_DURATION && !isOpen ? (
+        {total < COUNTDOWN_DURATION && !isOpen && !isClosed && (
           <span style={{ color: 'green' }}>
             {` (${seconds}  s)`}
           </span>
-        ) : null}
+        )}
       </p>
       {quotas.map((quota) => (
         <Button

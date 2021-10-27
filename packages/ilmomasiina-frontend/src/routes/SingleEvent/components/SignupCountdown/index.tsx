@@ -23,6 +23,7 @@ const SignupCountdown = (props: Props) => {
       renderer={({ completed, seconds, total }) => (
         <SignupButton
           isOpen={completed && !event.registrationClosed}
+          isClosed={event.registrationClosed}
           beginSignup={beginSignup}
           seconds={seconds}
           total={total}
