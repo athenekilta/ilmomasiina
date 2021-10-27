@@ -154,7 +154,7 @@ export default function setupEventModel(this: IlmoApplication) {
       },
       scopes: {
         // users can see events that:
-        user: {
+        user: () => ({
           where: {
             [Op.and]: {
               // are not drafts,
@@ -181,7 +181,7 @@ export default function setupEventModel(this: IlmoApplication) {
               },
             },
           },
-        },
+        }),
       },
     },
   );
