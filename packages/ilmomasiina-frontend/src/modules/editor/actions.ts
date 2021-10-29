@@ -3,7 +3,7 @@ import moment from 'moment';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import apiFetch from '../../api';
+import apiFetch, { ApiError } from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
   EVENT_LOAD_FAILED,
@@ -12,6 +12,8 @@ import {
   EVENT_SAVING,
   EVENT_SLUG_CHECKED,
   EVENT_SLUG_CHECKING,
+  MOVE_TO_QUEUE_CANCELED,
+  MOVE_TO_QUEUE_WARNING,
   RESET,
 } from './actionTypes';
 import { EditorEvent, EditorEventType } from './types';
@@ -92,6 +94,15 @@ export const saving = () => <const>{
 
 export const saveFailed = () => <const>{
   type: EVENT_SAVE_FAILED,
+};
+
+export const moveToQueueWarning = (count: number) => <const>{
+  type: MOVE_TO_QUEUE_WARNING,
+  payload: { count },
+};
+
+export const moveToQueueCanceled = () => <const>{
+  type: MOVE_TO_QUEUE_CANCELED,
 };
 
 function eventType(event: AdminEvent.Details): EditorEventType {
@@ -180,7 +191,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
 };
 
 export const publishEventUpdate = (
-  id: AdminEvent.Id, data: EditorEvent, moveUsersToQueue: boolean = false,
+  id: AdminEvent.Id, data: EditorEvent, moveSignupsToQueue: boolean = false,
 ) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 
@@ -193,13 +204,17 @@ export const publishEventUpdate = (
       method: 'PATCH',
       body: {
         ...cleaned,
-        moveUsersToQueue,
+        moveSignupsToQueue,
       },
     }) as AdminEvent.Details;
     const newFormData = serverEventToEditor(response);
     dispatch(loaded(response, newFormData));
-    return response;
+    return true;
   } catch (e) {
+    if (e instanceof ApiError && e.className === 'would-move-signups-to-queue') {
+      dispatch(moveToQueueWarning(e.data!.count));
+      return false;
+    }
     dispatch(saveFailed());
     throw e;
   }

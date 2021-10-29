@@ -5,6 +5,8 @@ import {
   EVENT_SAVING,
   EVENT_SLUG_CHECKED,
   EVENT_SLUG_CHECKING,
+  MOVE_TO_QUEUE_CANCELED,
+  MOVE_TO_QUEUE_WARNING,
   RESET,
 } from './actionTypes';
 import { EditorActions, EditorState } from './types';
@@ -17,6 +19,7 @@ const initialState: EditorState = {
   slugAvailability: null,
   saving: false,
   saveError: false,
+  moveToQueueModal: null,
 };
 
 export default function reducer(
@@ -55,12 +58,24 @@ export default function reducer(
       return {
         ...state,
         saving: true,
+        moveToQueueModal: null,
       };
     case EVENT_SAVE_FAILED:
       return {
         ...state,
         saving: false,
         saveError: true,
+      };
+    case MOVE_TO_QUEUE_WARNING:
+      return {
+        ...state,
+        saving: false,
+        moveToQueueModal: action.payload,
+      };
+    case MOVE_TO_QUEUE_CANCELED:
+      return {
+        ...state,
+        moveToQueueModal: null,
       };
     default:
       return state;
