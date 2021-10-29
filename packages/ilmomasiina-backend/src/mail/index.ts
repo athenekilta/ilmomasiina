@@ -97,7 +97,7 @@ export default class EmailService {
         footerLink: config.brandingMailFooterLink,
       },
     };
-    const html = await email.render('../server/mail/emails/confirmation/html', brandedParams);
+    const html = await email.render(path.join(__dirname, 'emails/confirmation/html'), brandedParams);
     const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
     return EmailService.send(to, subject, html);
   }
@@ -120,7 +120,7 @@ export default class EmailService {
         siteUrl: `${config.mailUrlBase}${config.pathPrefix}`,
       },
     };
-    const html = await email.render('../server/mail/emails/newUser/html', brandedParams);
+    const html = await email.render(path.join(__dirname, 'emails/newUser/html'), brandedParams);
     const subject = 'Käyttäjätunnukset Ilmomasiinaan';
     return EmailService.send(to, subject, html);
   }
@@ -142,7 +142,7 @@ export default class EmailService {
         footerLink: config.brandingMailFooterLink,
       },
     };
-    const html = await email.render('../server/mail/emails/queueMail/html', brandedParams);
+    const html = await email.render(path.join(__dirname, 'emails/queueMail/html'), brandedParams);
     const subject = `Pääsit varasijalta tapahtumaan ${params.event.title}`;
     return EmailService.send(to, subject, html);
   }
