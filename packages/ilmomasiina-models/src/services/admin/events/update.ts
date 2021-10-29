@@ -20,4 +20,5 @@ export interface AdminEventUpdateQuota extends Pick<QuotaAttributes, typeof admi
 export interface AdminEventUpdateBody extends Pick<EventAttributes, typeof adminEventCreateEventAttrs[number]> {
   questions: AdminEventUpdateQuestion[];
   quotas: AdminEventUpdateQuota[];
+  moveSignupsToQueue?: boolean;
 }

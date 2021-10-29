@@ -1,4 +1,4 @@
-import { Conflict, NotFound } from '@feathersjs/errors';
+import { NotFound } from '@feathersjs/errors';
 import _ from 'lodash';
 import { Op, Transaction } from 'sequelize';
 
@@ -14,6 +14,7 @@ import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 import { getEventDetailsForAdmin } from '../../event/getEventDetails';
 import { refreshSignupPositions } from '../../signup/computeSignupPosition';
+import { QuestionDeleted, QuotaDeleted } from './errors';
 
 export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
   await Event.sequelize!.transaction(async (transaction) => {
@@ -25,19 +26,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         {
           model: Quota,
           required: false,
-          attributes: [
-            'id',
-            'size',
-            /* // TODO: count signups to see if we're deleting any, possibly with explicit synced confirmation
-            [fn('COUNT', col('quotas->signups.id')), 'signupCount'], */
-          ],
-          /* include: [
-            {
-              model: Signup.scope('active'),
-              required: false,
-              attributes: [],
-            },
-          ], */
+          attributes: ['id'],
         },
         {
           model: Question,
@@ -57,11 +46,11 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
     await event.update(eventAttribs, { transaction });
 
     if (data.questions !== undefined) {
-      // Remove previous Questions not present in request
-      // (TODO: require confirmation if there are signups)
       const reuseQuestionIds = data.questions
         .map((question) => question.id)
         .filter((questionId) => questionId) as Question['id'][];
+
+      // Remove previous Questions not present in request
       await Question.destroy({
         where: {
           eventId: event.id,
@@ -81,7 +70,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         // Update if an id was provided
         if (question.id) {
           const existing = event.questions!.find((old) => question.id === old.id);
-          if (!existing) throw new Conflict(`question ${question.id} was deleted`);
+          if (!existing) throw new QuestionDeleted(question.id);
           await existing.update(questionAttribs, { transaction });
         } else {
           await Question.create({
@@ -98,7 +87,6 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         .filter((quotaId) => quotaId) as Quota['id'][];
 
       // Remove previous Quotas not present in request
-      // (TODO: require confirmation if there are signups)
       await Quota.destroy({
         where: {
           eventId: event.id,
@@ -118,7 +106,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         // Update if an id was provided
         if (quota.id) {
           const existing = event.quotas!.find((old) => quota.id === old.id);
-          if (!existing) throw new Conflict(`quota ${quota.id} was deleted`);
+          if (!existing) throw new QuotaDeleted(quota.id);
           await existing.update(quotaAttribs, { transaction });
         } else {
           await Quota.create({
@@ -129,7 +117,8 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
       }));
     }
 
-    await refreshSignupPositions(event, transaction);
+    // Refresh positions, but don't move signups to queue unless explicitly allowed
+    await refreshSignupPositions(event, transaction, Boolean(data.moveSignupsToQueue));
   });
 
   return getEventDetailsForAdmin(id);

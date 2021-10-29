@@ -180,7 +180,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
 };
 
 export const publishEventUpdate = (
-  id: AdminEvent.Id, data: EditorEvent,
+  id: AdminEvent.Id, data: EditorEvent, moveUsersToQueue: boolean = false,
 ) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 
@@ -191,7 +191,10 @@ export const publishEventUpdate = (
     const response = await apiFetch(`admin/events/${id}`, {
       accessToken,
       method: 'PATCH',
-      body: cleaned,
+      body: {
+        ...cleaned,
+        moveUsersToQueue,
+      },
     }) as AdminEvent.Details;
     const newFormData = serverEventToEditor(response);
     dispatch(loaded(response, newFormData));
