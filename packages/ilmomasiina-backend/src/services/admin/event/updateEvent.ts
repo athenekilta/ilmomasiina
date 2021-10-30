@@ -14,7 +14,7 @@ import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 import { getEventDetailsForAdmin } from '../../event/getEventDetails';
 import { refreshSignupPositions } from '../../signup/computeSignupPosition';
-import { QuestionDeleted, QuotaDeleted } from './errors';
+import { EditConflict } from './errors';
 
 export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
   await Event.sequelize!.transaction(async (transaction) => {
@@ -40,6 +40,12 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
     if (event === null) {
       throw new NotFound('No event found with id');
     }
+
+    // Track already-deleted questions and quotas
+    // This could be checked beforehand to avoid extra DB access,
+    // but it's a rare edge case so the performance is not an issue
+    const deletedQuestions: Question['id'][] = [];
+    const deletedQuotas: Quota['id'][] = [];
 
     // Update the Event
     const eventAttribs = _.pick(data, adminEventCreateEventAttrs);
@@ -70,7 +76,10 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         // Update if an id was provided
         if (question.id) {
           const existing = event.questions!.find((old) => question.id === old.id);
-          if (!existing) throw new QuestionDeleted(question.id);
+          if (!existing) {
+            deletedQuestions.push(question.id);
+            return;
+          }
           await existing.update(questionAttribs, { transaction });
         } else {
           await Question.create({
@@ -106,7 +115,10 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
         // Update if an id was provided
         if (quota.id) {
           const existing = event.quotas!.find((old) => quota.id === old.id);
-          if (!existing) throw new QuotaDeleted(quota.id);
+          if (!existing) {
+            deletedQuotas.push(quota.id);
+            return;
+          }
           await existing.update(quotaAttribs, { transaction });
         } else {
           await Quota.create({
@@ -115,6 +127,10 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
           }, { transaction });
         }
       }));
+    }
+
+    if (deletedQuestions.length || deletedQuotas.length) {
+      throw new EditConflict(deletedQuotas, deletedQuestions);
     }
 
     // Refresh positions, but don't move signups to queue unless explicitly allowed
