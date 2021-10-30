@@ -16,7 +16,7 @@ import {
 } from './actionTypes';
 import { EditorEvent, EditorEventType } from './types';
 
-const defaultEvent = (): EditorEvent => ({
+export const defaultEvent = (): EditorEvent => ({
   eventType: 'event+signup',
   title: '',
   slug: '',
@@ -53,11 +53,10 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const loaded = (event: AdminEvent.Details, formData: EditorEvent | null) => <const>{
+export const loaded = (event: AdminEvent.Details) => <const>{
   type: EVENT_LOADED,
   payload: {
     event,
-    formData,
     isNew: false,
   },
 };
@@ -66,7 +65,6 @@ export const newEvent = () => <const>{
   type: EVENT_LOADED,
   payload: {
     event: null,
-    formData: defaultEvent(),
     isNew: true,
   },
 };
@@ -113,7 +111,7 @@ function eventType(event: AdminEvent.Details): EditorEventType {
   return 'event+signup';
 }
 
-const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
+export const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
   ...event,
   eventType: eventType(event),
   date: event.date ? new Date(event.date) : undefined,
@@ -148,8 +146,7 @@ export const getEvent = (id: AdminEvent.Id) => async (dispatch: DispatchAction, 
   const { accessToken } = getState().auth;
   try {
     const response = await apiFetch(`admin/events/${id}`, { accessToken }) as AdminEvent.Details;
-    const formData = serverEventToEditor(response);
-    dispatch(loaded(response, formData));
+    dispatch(loaded(response));
   } catch (e) {
     dispatch(loadFailed());
   }
@@ -179,8 +176,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
       method: 'POST',
       body: cleaned,
     }) as AdminEvent.Details;
-    const newFormData = serverEventToEditor(response);
-    dispatch(loaded(response, newFormData));
+    dispatch(loaded(response));
     return response;
   } catch (e) {
     dispatch(saveFailed());
@@ -205,13 +201,12 @@ export const publishEventUpdate = (
         moveSignupsToQueue,
       },
     }) as AdminEvent.Details;
-    const newFormData = serverEventToEditor(response);
-    dispatch(loaded(response, newFormData));
-    return true;
+    dispatch(loaded(response));
+    return response;
   } catch (e) {
     if (e instanceof ApiError && e.className === 'would-move-signups-to-queue') {
       dispatch(moveToQueueWarning(e.data!.count));
-      return false;
+      return null;
     }
     dispatch(saveFailed());
     throw e;

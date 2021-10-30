@@ -13,7 +13,6 @@ import { EditorActions, EditorState } from './types';
 
 const initialState: EditorState = {
   event: null,
-  formData: null,
   isNew: true,
   loadError: false,
   slugAvailability: null,
@@ -33,7 +32,6 @@ export default function reducer(
       return {
         ...state,
         event: action.payload.event,
-        formData: action.payload.formData,
         isNew: action.payload.isNew,
         loadError: false,
         saving: false,

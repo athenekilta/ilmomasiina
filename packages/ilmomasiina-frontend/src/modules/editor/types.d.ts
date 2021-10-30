@@ -16,7 +16,6 @@ import {
 
 interface EditorState {
   event: AdminEvent.Details | null;
-  formData: EditorEvent | null;
   isNew: boolean;
   loadError: boolean;
   slugAvailability: null | 'checking' | AdminSlug.Check;
