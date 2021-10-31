@@ -228,6 +228,7 @@ class SingleEvent extends React.Component {
       <Countdown
         daysInHours={true}
         date={new Date(new Date().getTime() + event.millisTillOpening)}
+        precision={3}
         renderer={props => this.signupButtonRenderer(event, props.completed, props.total, props.seconds)}>
       </Countdown>
 
