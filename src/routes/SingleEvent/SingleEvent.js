@@ -27,7 +27,6 @@ class SingleEvent extends React.Component {
     attachPositionAsync: PropTypes.func.isRequired,
     completeSignupAsync: PropTypes.func.isRequired,
     cancelSignupAsync: PropTypes.func.isRequired,
-    clearSignupError: PropTypes.func.isRequired,
     params: PropTypes.object,
     event: PropTypes.object,
     eventLoading: PropTypes.bool,
@@ -41,7 +40,6 @@ class SingleEvent extends React.Component {
     super(props);
     this.state = {
       formOpened: false,
-      openingDate: new Date(new Date().getTime() + props.event.millisTillOpening),
     };
 
     this.openForm = this.openForm.bind(this);
@@ -52,20 +50,6 @@ class SingleEvent extends React.Component {
   componentDidMount() {
     this.props.updateEventAsync(this.props.params.id);
   }
-
-  componentDidUpdate(prevProps) {
-    const { signupError, clearSignupError, event } = this.props;
-    const { formOpened } = this.state;
-    if (signupError && formOpened) {
-      clearSignupError();
-      this.setState({ formOpened: false });
-      toast.error('Ilmoittautuminen epäonnistui, yritä uudelleen.');
-    }
-    if (event.millisTillOpening !== _.get(prevProps, 'event.millisTillOpening')) {
-      this.setState({ openingDate: new Date(new Date().getTime() + event.millisTillOpening) });
-    }
-  }
-
   openForm(quota) {
     this.props.attachPositionAsync(quota.id);
     this.setState({ formOpened: true });
@@ -240,11 +224,10 @@ class SingleEvent extends React.Component {
   }
   renderSignupButtons() {
     const { event } = this.props;
-    const { openingDate } = this.state;
     return (
       <Countdown
         daysInHours={true}
-        date={openingDate}
+        date={new Date(new Date().getTime() + event.millisTillOpening)}
         precision={3}
         intervalDelay={1}
         renderer={props => this.signupButtonRenderer(event, props.completed, props.total, props.seconds)}>
@@ -334,7 +317,6 @@ const mapDispatchToProps = {
   attachPositionAsync: SingleEventActions.attachPositionAsync,
   completeSignupAsync: SingleEventActions.completeSignupAsync,
   cancelSignupAsync: SingleEventActions.cancelSignupAsync,
-  clearSignupError: SingleEventActions.clearSignupError,
 };
 
 const mapStateToProps = state => ({
