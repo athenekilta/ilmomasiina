@@ -25,6 +25,10 @@ export const setSignupError = () => (dispatch) => {
   dispatch({ type: ActionTypes.SET_SIGNUP_ERROR });
 };
 
+export const clearSignupError = () => (dispatch) => {
+  dispatch({ type: ActionTypes.CLEAR_SIGNUP_ERROR });
+};
+
 export const updateEventAsync = eventId => (dispatch) => {
   dispatch(setEventLoading());
   return request('GET', `${PREFIX_URL}/api/events/${eventId}`)
@@ -43,7 +47,11 @@ export const attachPositionAsync = quotaId => (dispatch) => {
   return request('POST', `${PREFIX_URL}/api/signups`, { json: { quotaId } })
     .then(res => JSON.parse(res.body))
     .then((res) => {
-      dispatch(setSignup(res));
+      if (res.code === 500) {
+        dispatch(setSignupError());
+      } else {
+        dispatch(setSignup(res));
+      }
     })
     .catch((error) => {
       console.error('Error in attachPositionAsync', error);

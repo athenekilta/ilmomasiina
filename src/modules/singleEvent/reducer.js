@@ -47,6 +47,12 @@ export default function reducer(state = initialState, action = {}) {
         signupLoading: false,
         signupError: true,
       };
+    case ActionTypes.CLEAR_SIGNUP_ERROR:
+      return {
+        ...state,
+        signupLoading: false,
+        signupError: false,
+      };
     default:
       return state;
   }
