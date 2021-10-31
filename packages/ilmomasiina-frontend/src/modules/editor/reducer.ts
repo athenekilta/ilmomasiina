@@ -1,4 +1,6 @@
 import {
+  EDIT_CONFLICT,
+  EDIT_CONFLICT_DISMISSED,
   EVENT_LOAD_FAILED,
   EVENT_LOADED,
   EVENT_SAVE_FAILED,
@@ -19,6 +21,7 @@ const initialState: EditorState = {
   saving: false,
   saveError: false,
   moveToQueueModal: null,
+  editConflictModal: null,
 };
 
 export default function reducer(
@@ -74,6 +77,16 @@ export default function reducer(
       return {
         ...state,
         moveToQueueModal: null,
+      };
+    case EDIT_CONFLICT:
+      return {
+        ...state,
+        editConflictModal: action.payload,
+      };
+    case EDIT_CONFLICT_DISMISSED:
+      return {
+        ...state,
+        editConflictModal: null,
       };
     default:
       return state;

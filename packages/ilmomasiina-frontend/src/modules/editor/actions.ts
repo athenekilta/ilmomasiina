@@ -4,6 +4,8 @@ import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch, { ApiError } from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
+  EDIT_CONFLICT,
+  EDIT_CONFLICT_DISMISSED,
   EVENT_LOAD_FAILED,
   EVENT_LOADED,
   EVENT_SAVE_FAILED,
@@ -14,7 +16,7 @@ import {
   MOVE_TO_QUEUE_WARNING,
   RESET,
 } from './actionTypes';
-import { EditorEvent, EditorEventType } from './types';
+import { EditConflictData, EditorEvent, EditorEventType } from './types';
 
 export const defaultEvent = (): EditorEvent => ({
   eventType: 'event+signup',
@@ -101,6 +103,15 @@ export const moveToQueueCanceled = () => <const>{
   type: MOVE_TO_QUEUE_CANCELED,
 };
 
+export const editConflictDetected = (data: EditConflictData) => <const>{
+  type: EDIT_CONFLICT,
+  payload: data,
+};
+
+export const editConflictDismissed = () => <const>{
+  type: EDIT_CONFLICT_DISMISSED,
+};
+
 function eventType(event: AdminEvent.Details): EditorEventType {
   if (event.date === null) {
     return 'signup';
@@ -150,6 +161,13 @@ export const getEvent = (id: AdminEvent.Id) => async (dispatch: DispatchAction, 
   } catch (e) {
     dispatch(loadFailed());
   }
+};
+
+export const reloadEvent = () => (dispatch: DispatchAction, getState: GetState) => {
+  const { event } = getState().editor;
+  if (!event) return;
+  dispatch(resetState());
+  dispatch(getEvent(event.id));
 };
 
 export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction, getState: GetState) => {
@@ -206,6 +224,10 @@ export const publishEventUpdate = (
   } catch (e) {
     if (e instanceof ApiError && e.className === 'would-move-signups-to-queue') {
       dispatch(moveToQueueWarning(e.data!.count));
+      return null;
+    }
+    if (e instanceof ApiError && e.className === 'edit-conflict') {
+      dispatch(editConflictDetected(e.data!));
       return null;
     }
     dispatch(saveFailed());

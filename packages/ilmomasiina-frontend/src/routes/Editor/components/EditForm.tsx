@@ -6,6 +6,7 @@ import { Form } from 'react-bootstrap';
 import { EditorEvent } from '../../../modules/editor/types';
 import { EditorSubmitOptions } from '..';
 import BasicDetailsTab from './BasicDetailsTab';
+import EditConflictModal from './EditConflictModal';
 import EditorTabBody from './EditorTabBody';
 import EditorTabHeader, { EditorTab } from './EditorTabHeader';
 import EditorToolbar from './EditorToolbar';
@@ -55,6 +56,7 @@ const EditForm = ({ handleSubmit, submitForm, submitOptions }: Props) => {
         </div>
       </Form>
       <MoveToQueueWarning onProceed={onMoveToQueueProceed} />
+      <EditConflictModal />
     </>
   );
 };

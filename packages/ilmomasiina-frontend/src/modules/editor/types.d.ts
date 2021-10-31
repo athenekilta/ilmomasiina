@@ -3,6 +3,8 @@ import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slu
 import { Question, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import {
   checkingSlugAvailability,
+  editConflictDetected,
+  editConflictDismissed,
   loaded,
   loadFailed,
   moveToQueueCanceled,
@@ -22,6 +24,7 @@ interface EditorState {
   saving: boolean;
   saveError: boolean;
   moveToQueueModal: { count: number } | null;
+  editConflictModal: EditConflictData | null;
 }
 
 type EditorActions =
@@ -34,7 +37,9 @@ type EditorActions =
   | ReturnType<typeof saving>
   | ReturnType<typeof saveFailed>
   | ReturnType<typeof moveToQueueWarning>
-  | ReturnType<typeof moveToQueueCanceled>;
+  | ReturnType<typeof moveToQueueCanceled>
+  | ReturnType<typeof editConflictDetected>
+  | ReturnType<typeof editConflictDismissed>;
 
 /** Question type for event editor */
 export interface EditorQuestion extends AdminEvent.Update.Question {
@@ -61,4 +66,9 @@ export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
   registrationEndDate: Date | undefined;
   quotas: EditorQuota[];
   useOpenQuota: boolean;
+}
+
+export interface EditConflictData {
+  deletedQuotas: Quota.Id[];
+  deletedQuestions: Quota.Id[];
 }
