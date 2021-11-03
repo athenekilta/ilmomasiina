@@ -1,6 +1,7 @@
 import AnswerAttributes from '../../models/answer';
 import EventAttributes from '../../models/event';
 import QuestionAttributes from '../../models/question';
+import QuotaAttributes from '../../models/quota';
 import SignupAttributes from '../../models/signup';
 import { eventGetEventAttrs, eventGetQuestionAttrs } from '../events/details';
 
@@ -15,12 +16,20 @@ export const signupGetAnswerAttrs = [
   'answer',
 ] as const;
 
+// Attributes included from Quota.
+export const signupGetQuotaAttrs = [
+  'id',
+  'title',
+  'size',
+] as const;
+
 // Attributes included from Signup.
 export const signupGetSignupAttrs = [
   'id',
   'firstName',
   'lastName',
   'email',
+  'confirmedAt',
   'status',
   'position',
 ] as const;
@@ -29,7 +38,10 @@ export const signupGetSignupAttrs = [
 
 export interface SignupGetAnswerItem extends Pick<AnswerAttributes, typeof signupGetAnswerAttrs[number]> {}
 
+export interface SignupGetQuotaItem extends Pick<QuotaAttributes, typeof signupGetQuotaAttrs[number]> {}
+
 export interface SignupGetSignupItem extends Pick<SignupAttributes, typeof signupGetSignupAttrs[number]> {
+  quota: SignupGetQuotaItem;
   answers: SignupGetAnswerItem[];
 }
 
@@ -43,6 +55,6 @@ export interface SignupGetEventItem extends Pick<EventAttributes, typeof signupG
 }
 
 export interface SignupGetResponse {
-  signup: SignupGetSignupItem | null;
-  event: SignupGetEventItem | null;
+  signup: SignupGetSignupItem;
+  event: SignupGetEventItem;
 }

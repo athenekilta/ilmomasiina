@@ -4,6 +4,7 @@ import {
   SignupGetAnswerItem,
   SignupGetEventItem,
   SignupGetQuestionItem,
+  SignupGetQuotaItem,
   SignupGetResponse,
   SignupGetSignupItem,
 } from './getForEdit';
@@ -23,6 +24,7 @@ export namespace Signup {
     export type Event = StringifyApi<SignupGetEventItem>;
     export type Question = StringifyApi<SignupGetQuestionItem>;
     export type Signup = StringifyApi<SignupGetSignupItem>;
+    export type Quota = StringifyApi<SignupGetQuotaItem>;
     export type Answer = StringifyApi<SignupGetAnswerItem>;
   }
 

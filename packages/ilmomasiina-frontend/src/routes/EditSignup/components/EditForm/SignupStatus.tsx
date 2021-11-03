@@ -1,17 +1,14 @@
 import React from 'react';
 
-import _ from 'lodash';
-
 import { useTypedSelector } from '../../../../store/reducers';
 
 const SignupStatus = () => {
-  const { status, position, quotaId } = useTypedSelector((state) => state.singleEvent.signup)!;
-  const { quotas, openQuotaSize } = useTypedSelector((state) => state.singleEvent.event)!;
+  const { status, position, quota } = useTypedSelector((state) => state.editSignup.signup)!;
+  const { openQuotaSize } = useTypedSelector((state) => state.editSignup.event)!;
 
   if (!status) return null;
 
   if (status === 'in-quota') {
-    const quota = _.find(quotas, { id: quotaId })!;
     return (
       <p>
         {`Olet kiintiössä ${quota.title} sijalla ${position}${quota.size ? ` / ${quota.size}` : ''}.`}

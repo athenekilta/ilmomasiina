@@ -21,7 +21,7 @@ const SignupButton = ({
   isOpen, isClosed, beginSignup, seconds, total,
 }: SignupButtonProps) => {
   const { registrationStartDate, registrationEndDate, quotas } = useTypedSelector((state) => state.singleEvent.event)!;
-  const submitting = useTypedSelector((state) => state.singleEvent.signupSubmitting);
+  const submitting = useTypedSelector((state) => state.singleEvent.creatingSignup);
   const isOnly = quotas.length === 1;
 
   return (

@@ -4,7 +4,7 @@ import { SignupCreateBody, SignupCreateResponse } from '@tietokilta/ilmomasiina-
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { refreshSignupPositionsAndGet } from './computeSignupPosition';
+import { refreshSignupPositions } from './computeSignupPosition';
 import { generateToken } from './editTokens';
 
 export const signupsAllowed = (event: Event) => {
@@ -38,19 +38,12 @@ export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateRespon
 
   // Create the signup.
   const newSignup = await Signup.create({ quotaId });
-
-  // Add returned information.
-  const { id, createdAt } = newSignup;
-  const { status, position } = await refreshSignupPositionsAndGet(quota.event!, id);
+  await refreshSignupPositions(quota.event!);
 
   const editToken = generateToken(newSignup);
 
   return {
-    id,
-    quotaId,
-    createdAt,
-    position,
-    status,
+    id: newSignup.id,
     editToken,
   };
 };

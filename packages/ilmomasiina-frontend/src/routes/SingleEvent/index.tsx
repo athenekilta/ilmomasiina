@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import moment from 'moment';
 import { Spinner } from 'react-bootstrap';
@@ -12,7 +12,6 @@ import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { createPendingSignup, getEvent, resetState } from '../../modules/singleEvent/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import { getSignupsByQuota } from '../../utils/signupUtils';
-import EnrollForm from './components/EnrollForm';
 import QuotaStatus from './components/QuotaStatus';
 import SignupCountdown from './components/SignupCountdown';
 import SignupList from './components/SignupList';
@@ -30,8 +29,6 @@ const SingleEvent = ({ match }: Props) => {
   const {
     event, eventLoadError,
   } = useTypedSelector((state) => state.singleEvent, shallowEqual);
-
-  const [formOpen, setFormOpen] = useState(false);
 
   useEffect(() => {
     dispatch(getEvent(match.params.slug));
@@ -65,24 +62,12 @@ const SingleEvent = ({ match }: Props) => {
   }
 
   async function beginSignup(quotaId: Quota.Id) {
-    if (formOpen) return;
     const success = await dispatch(createPendingSignup(quotaId));
-    if (success) {
-      setFormOpen(true);
-    } else {
+    if (!success) {
       toast.error('Ilmoittautuminen epäonnistui.', {
         autoClose: 5000,
       });
     }
-  }
-
-  if (formOpen) {
-    return (
-      <EnrollForm
-        closeForm={() => setFormOpen(false)}
-        key={event.slug}
-      />
-    );
   }
 
   const signupsByQuota = getSignupsByQuota(event);

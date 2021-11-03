@@ -32,5 +32,5 @@ export default async function apiFetch(uri: string, {
       throw new Error(response.statusText);
     }
   }
-  return response.json();
+  return response.status === 204 ? null : response.json();
 }

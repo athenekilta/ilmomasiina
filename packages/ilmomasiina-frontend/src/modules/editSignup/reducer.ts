@@ -1,5 +1,6 @@
 import {
   RESET,
+  SIGNUP_DELETE_FAILED,
   SIGNUP_DELETED,
   SIGNUP_LOAD_FAILED,
   SIGNUP_LOADED,
@@ -52,6 +53,11 @@ export default function reducer(
         ...state,
         submitting: false,
         submitError: false,
+      };
+    case SIGNUP_DELETE_FAILED:
+      return {
+        ...state,
+        submitting: false,
       };
     case SIGNUP_DELETED:
       return {
