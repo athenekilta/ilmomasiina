@@ -5,6 +5,31 @@ interface FetchOptions {
   accessToken?: string;
 }
 
+export class ApiError extends Error {
+  className?: string;
+  data?: any;
+
+  constructor(data: any) {
+    super(data.message);
+    this.name = 'ApiError';
+    this.className = data.className;
+    this.data = data.data;
+  }
+
+  static async fromResponse(response: Response) {
+    let error = new Error(response.statusText);
+    try {
+      const data = await response.json();
+      if (data.message) {
+        error = new ApiError(data);
+      }
+    } catch (e) {
+      /* fall through */
+    }
+    return error;
+  }
+}
+
 export default async function apiFetch(uri: string, {
   method = 'GET', body, headers, accessToken,
 }: FetchOptions = {}) {
@@ -25,12 +50,7 @@ export default async function apiFetch(uri: string, {
   });
 
   if (response.status > 299) {
-    try {
-      const data = await response.json();
-      throw new Error(data.message || response.statusText);
-    } catch (e) {
-      throw new Error(response.statusText);
-    }
+    throw await ApiError.fromResponse(response);
   }
   return response.status === 204 ? null : response.json();
 }

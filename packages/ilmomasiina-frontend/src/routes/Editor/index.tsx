@@ -16,6 +16,7 @@ import EditorTabBody from './components/EditorTabBody';
 import EditorTabHeader, { EditorTab } from './components/EditorTabHeader';
 import EditorToolbar from './components/EditorToolbar';
 import EmailsTab from './components/EmailsTab';
+import MoveToQueueWarning from './components/MoveToQueueWarning';
 import QuestionsTab from './components/QuestionsTab';
 import QuotasTab from './components/QuotasTab';
 import SignupsTab from './components/SignupsTab';
@@ -57,8 +58,13 @@ const Editor = ({ history, match }: Props) => {
   // Ugly hack, but Formik doesn't really give us a clean way to
   // call setFieldValue("draft", ...) and then submit once that has propagated.
   const saveAsDraft = useRef<boolean | undefined>();
+  const allowMoveToQueue = useRef<boolean>(false);
 
   async function onSubmit(data: EditorEvent, { setSubmitting }: FormikHelpers<EditorEvent>) {
+    // Consume the "Proceed, move signups to queue" button click, if any.
+    const moveToQueue = allowMoveToQueue.current;
+    allowMoveToQueue.current = false;
+
     // Set draft state from last submit button pressed if any, otherwise keep it as-is.
     const draft = saveAsDraft.current ?? (event?.draft || isNew);
     const modifiedEvent = {
@@ -74,10 +80,12 @@ const Editor = ({ history, match }: Props) => {
           autoClose: 2000,
         });
       } else {
-        await dispatch(publishEventUpdate(event!.id, modifiedEvent));
-        toast.success('Muutoksesi tallennettiin onnistuneesti!', {
-          autoClose: 2000,
-        });
+        const saved = await dispatch(publishEventUpdate(event!.id, modifiedEvent, moveToQueue));
+        if (saved) {
+          toast.success('Muutoksesi tallennettiin onnistuneesti!', {
+            autoClose: 2000,
+          });
+        }
       }
     } catch (error) {
       toast.error(
@@ -121,26 +129,33 @@ const Editor = ({ history, match }: Props) => {
             saveAsDraft.current = asDraft;
             submitForm();
           }
+          function onMoveToQueueProceed() {
+            allowMoveToQueue.current = true;
+            submitForm();
+          }
 
           return (
-            <Form onSubmit={handleSubmit}>
-              <EditorToolbar onSubmitClick={onSubmitClick} />
-              <EditorTabHeader activeTab={activeTab} setActiveTab={setActiveTab} />
+            <>
+              <Form onSubmit={handleSubmit}>
+                <EditorToolbar onSubmitClick={onSubmitClick} />
+                <EditorTabHeader activeTab={activeTab} setActiveTab={setActiveTab} />
 
-              <div className="event-editor--valid-notice collapsed">
-                <span>
-                  <b>*</b>
-                  Tähdellä merkityt kentät ovat pakollisia
-                </span>
-              </div>
-              <div className="tab-content">
-                <EditorTabBody id={EditorTab.BASIC_DETAILS} activeTab={activeTab} component={BasicDetailsTab} />
-                <EditorTabBody id={EditorTab.QUOTAS} activeTab={activeTab} component={QuotasTab} />
-                <EditorTabBody id={EditorTab.QUESTIONS} activeTab={activeTab} component={QuestionsTab} />
-                <EditorTabBody id={EditorTab.EMAILS} activeTab={activeTab} component={EmailsTab} />
-                <EditorTabBody id={EditorTab.SIGNUPS} activeTab={activeTab} component={SignupsTab} />
-              </div>
-            </Form>
+                <div className="event-editor--valid-notice collapsed">
+                  <span>
+                    <b>*</b>
+                    Tähdellä merkityt kentät ovat pakollisia
+                  </span>
+                </div>
+                <div className="tab-content">
+                  <EditorTabBody id={EditorTab.BASIC_DETAILS} activeTab={activeTab} component={BasicDetailsTab} />
+                  <EditorTabBody id={EditorTab.QUOTAS} activeTab={activeTab} component={QuotasTab} />
+                  <EditorTabBody id={EditorTab.QUESTIONS} activeTab={activeTab} component={QuestionsTab} />
+                  <EditorTabBody id={EditorTab.EMAILS} activeTab={activeTab} component={EmailsTab} />
+                  <EditorTabBody id={EditorTab.SIGNUPS} activeTab={activeTab} component={SignupsTab} />
+                </div>
+              </Form>
+              <MoveToQueueWarning onProceed={onMoveToQueueProceed} />
+            </>
           );
         }}
       </Formik>

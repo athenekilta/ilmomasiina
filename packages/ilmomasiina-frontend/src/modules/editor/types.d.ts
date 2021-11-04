@@ -7,6 +7,8 @@ import {
   checkingSlugAvailability,
   loaded,
   loadFailed,
+  moveToQueueCanceled,
+  moveToQueueWarning,
   newEvent,
   resetState,
   saveFailed,
@@ -22,6 +24,7 @@ interface EditorState {
   slugAvailability: null | 'checking' | AdminSlug.Check;
   saving: boolean;
   saveError: boolean;
+  moveToQueueModal: { count: number } | null;
 }
 
 type EditorActions =
@@ -32,7 +35,9 @@ type EditorActions =
   | ReturnType<typeof checkingSlugAvailability>
   | ReturnType<typeof slugAvailabilityChecked>
   | ReturnType<typeof saving>
-  | ReturnType<typeof saveFailed>;
+  | ReturnType<typeof saveFailed>
+  | ReturnType<typeof moveToQueueWarning>
+  | ReturnType<typeof moveToQueueCanceled>;
 
 /** Question type for event editor */
 export interface EditorQuestion extends AdminEvent.Update.Question {
