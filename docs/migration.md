@@ -84,4 +84,9 @@ ALTER TABLE `event`
 MODIFY `date` DATETIME DEFAULT NULL,
 MODIFY `registrationStartDate` DATETIME DEFAULT NULL,
 MODIFY `registrationEndDate` DATETIME DEFAULT NULL;
+
+-- add event categories
+
+ALTER TABLE `event`
+ADD `category` VARCHAR(255) NOT NULL DEFAULT '' AFTER `webpageUrl`;
 ```

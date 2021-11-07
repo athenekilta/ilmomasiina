@@ -2,6 +2,7 @@ import { AuthenticationService } from '@feathersjs/authentication';
 import { Service, ServiceMethods } from '@feathersjs/feathers';
 
 import { IlmoApplication } from '../defs';
+import adminCategories, { adminCategoryService } from './admin/category';
 import adminEvents, { adminEventService } from './admin/event';
 import adminSignups, { adminSignupService } from './admin/signup';
 import adminSlug, { adminSlugService } from './admin/slug';
@@ -14,6 +15,7 @@ import user, { UsersService } from './user';
 type WrapService<S> = S extends Partial<ServiceMethods<infer T>> ? Service<T> : never;
 
 export interface IlmoServices {
+  '/api/admin/categories': WrapService<typeof adminCategoryService>;
   '/api/admin/events': WrapService<typeof adminEventService>;
   '/api/admin/signups': WrapService<typeof adminSignupService>;
   '/api/admin/slug': WrapService<typeof adminSlugService>;
@@ -27,6 +29,7 @@ export default function setupServices(this: IlmoApplication) {
   const app = this;
 
   app.configure(authentication);
+  app.configure(adminCategories);
   app.configure(adminEvents);
   app.configure(adminSignups);
   app.configure(adminSlug);

@@ -11,6 +11,7 @@ export default interface EventAttributes {
   location: string | null;
   facebookUrl: string | null;
   webpageUrl: string | null;
+  category: string;
   draft: boolean;
   listed: boolean;
   signupsPublic: boolean;
