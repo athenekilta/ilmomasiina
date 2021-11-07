@@ -14,7 +14,11 @@ import {
   SignupUpdateResponse,
 } from './update';
 
-export type SignupsServiceResponses = SignupGetResponse | SignupCreateResponse | SignupUpdateResponse | null;
+export type SignupServiceTypes =
+  SignupGetResponse
+  | SignupCreateBody | SignupCreateResponse
+  | SignupUpdateBody | SignupUpdateResponse
+  | null;
 
 export namespace Signup {
   export type Id = Details.Signup['id'];

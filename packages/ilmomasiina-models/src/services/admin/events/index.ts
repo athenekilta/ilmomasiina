@@ -22,7 +22,12 @@ import {
   AdminEventUpdateQuota,
 } from './update';
 
-export type AdminEventsServiceResponses = AdminEventListResponse | AdminEventGetResponse;
+export type AdminEventsServiceTypes =
+  AdminEventListResponse
+  | AdminEventGetResponse
+  | AdminEventCreateBody | AdminEventGetResponse
+  | AdminEventUpdateBody | AdminEventGetResponse
+  | null;
 
 export namespace AdminEvent {
   export type Id = Details['id'];

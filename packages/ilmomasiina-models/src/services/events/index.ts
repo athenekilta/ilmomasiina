@@ -8,7 +8,7 @@ import {
 } from './details';
 import { EventListItem, EventListQuotaItem, EventListResponse } from './list';
 
-export type EventsServiceResponses = EventListResponse | EventGetResponse;
+export type EventsServiceTypes = EventListResponse | EventGetResponse;
 
 export namespace Event {
   export type Slug = Details['slug'];

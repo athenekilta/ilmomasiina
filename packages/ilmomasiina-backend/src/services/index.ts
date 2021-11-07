@@ -1,26 +1,25 @@
-import { AdapterService } from '@feathersjs/adapter-commons';
 import { AuthenticationService } from '@feathersjs/authentication';
-import { Service } from '@feathersjs/feathers';
+import { Service, ServiceMethods } from '@feathersjs/feathers';
 
 import { IlmoApplication } from '../defs';
-import adminEvents, { AdminEventsService } from './admin/event';
-import adminSignups, { AdminSignupsService } from './admin/signup';
-import adminSlug, { AdminSlugService } from './admin/slug';
+import adminEvents, { adminEventService } from './admin/event';
+import adminSignups, { adminSignupService } from './admin/signup';
+import adminSlug, { adminSlugService } from './admin/slug';
 import authentication from './authentication';
-import event, { EventsService } from './event';
-import signup, { SignupsService } from './signup';
+import event, { eventService } from './event';
+import signup, { signupService } from './signup';
 import user, { UsersService } from './user';
 
-// Wraps AdapterService into feathers Service for hooks() etc.
-type WrapAdapter<S> = S extends AdapterService<infer T> ? S & Service<T> : never;
+// Wraps ServiceMethods into feathers Service for hooks() etc.
+type WrapService<S> = S extends Partial<ServiceMethods<infer T>> ? Service<T> : never;
 
 export interface IlmoServices {
-  '/api/admin/events': WrapAdapter<AdminEventsService>;
-  '/api/admin/signups': WrapAdapter<AdminSignupsService>;
-  '/api/admin/slug': WrapAdapter<AdminSlugService>;
+  '/api/admin/events': WrapService<typeof adminEventService>;
+  '/api/admin/signups': WrapService<typeof adminSignupService>;
+  '/api/admin/slug': WrapService<typeof adminSlugService>;
   '/api/authentication': AuthenticationService;
-  '/api/events': WrapAdapter<EventsService>;
-  '/api/signups': WrapAdapter<SignupsService>;
+  '/api/events': WrapService<typeof eventService>;
+  '/api/signups': WrapService<typeof signupService>;
   '/api/users': UsersService;
 }
 

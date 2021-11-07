@@ -1,11 +1,7 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable class-methods-use-this */
-import { AdapterService } from '@feathersjs/adapter-commons';
 import { hooks as authHooks } from '@feathersjs/authentication';
-import { MethodNotAllowed } from '@feathersjs/errors';
-import { Id } from '@feathersjs/feathers';
+import { ServiceMethods } from '@feathersjs/feathers';
 
-import { AdminEventsServiceResponses } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
+import { AdminEventsServiceTypes } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AdminEventCreateBody } from '@tietokilta/ilmomasiina-models/src/services/admin/events/create';
 import { AdminEventUpdateBody } from '@tietokilta/ilmomasiina-models/src/services/admin/events/update';
 import { IlmoApplication } from '../../../defs';
@@ -15,36 +11,32 @@ import createEvent from './createEvent';
 import deleteEvent from './deleteEvent';
 import updateEvent from './updateEvent';
 
-export class AdminEventsService extends AdapterService<AdminEventsServiceResponses> {
-  _find() {
+export const adminEventService: Partial<ServiceMethods<AdminEventsServiceTypes>> = {
+  find() {
     return getEventsListForAdmin();
-  }
+  },
 
-  _get(id: Id) {
+  get(id) {
     return getEventDetailsForAdmin(String(id));
-  }
+  },
 
-  _create(data: AdminEventCreateBody) {
+  create(data: AdminEventCreateBody) {
     return createEvent(data);
-  }
+  },
 
-  _update(): never {
-    throw new MethodNotAllowed('Cannot PUT /api/admin/events/ID');
-  }
-
-  _patch(id: Id, data: Partial<AdminEventUpdateBody>) {
+  patch(id, data: Partial<AdminEventUpdateBody>) {
     return updateEvent(String(id), data);
-  }
+  },
 
-  _remove(id: Id) {
+  remove(id) {
     return deleteEvent(String(id));
-  }
-}
+  },
+};
 
 export default function setupAdminEventsService(this: IlmoApplication) {
   const app = this;
 
-  app.use('/api/admin/events', new AdminEventsService({}));
+  app.use('/api/admin/events', adminEventService);
 
   app.service('/api/admin/events').hooks({
     before: {
