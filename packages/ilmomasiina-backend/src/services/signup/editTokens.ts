@@ -21,7 +21,7 @@ export function generateToken(signup: Signup | string) {
 
 export function verifyToken(signup: Signup | string, token: string): void {
   let expectedToken;
-  if (config.oldEditTokenSalt && token.length === 32) {
+  if (token && config.oldEditTokenSalt && token.length === 32) {
     expectedToken = generateLegacyToken(signup);
   } else {
     expectedToken = generateToken(signup);
