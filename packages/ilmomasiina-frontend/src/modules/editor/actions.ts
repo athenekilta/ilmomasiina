@@ -19,7 +19,7 @@ import {
 import { EditConflictData, EditorEvent, EditorEventType } from './types';
 
 export const defaultEvent = (): EditorEvent => ({
-  eventType: 'event+signup',
+  eventType: EditorEventType.EVENT_WITH_SIGNUP,
   title: '',
   slug: '',
   date: undefined,
@@ -116,12 +116,12 @@ export const editConflictDismissed = () => <const>{
 
 function eventType(event: AdminEvent.Details): EditorEventType {
   if (event.date === null) {
-    return 'signup';
+    return EditorEventType.ONLY_SIGNUP;
   }
   if (event.registrationStartDate === null) {
-    return 'event';
+    return EditorEventType.ONLY_EVENT;
   }
-  return 'event+signup';
+  return EditorEventType.EVENT_WITH_SIGNUP;
 }
 
 export const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
@@ -144,9 +144,11 @@ export const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => (
 
 const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   ...form,
-  date: form.eventType === 'signup' ? null : form.date?.toISOString() ?? null,
-  registrationStartDate: form.eventType === 'event' ? null : form.registrationStartDate?.toISOString() ?? null,
-  registrationEndDate: form.eventType === 'event' ? null : form.registrationEndDate?.toISOString() ?? null,
+  date: form.eventType === EditorEventType.ONLY_SIGNUP ? null : form.date?.toISOString() ?? null,
+  registrationStartDate:
+    form.eventType === EditorEventType.ONLY_EVENT ? null : form.registrationStartDate?.toISOString() ?? null,
+  registrationEndDate:
+    form.eventType === EditorEventType.ONLY_EVENT ? null : form.registrationEndDate?.toISOString() ?? null,
   quotas: form.quotas,
   openQuotaSize: form.useOpenQuota ? form.openQuotaSize : 0,
   questions: form.questions.map((question) => ({

@@ -52,7 +52,11 @@ export interface EditorQuota extends AdminEvent.Update.Quota {
   key: Quota.Id;
 }
 
-export type EditorEventType = 'event' | 'event+signup' | 'signup';
+export enum EditorEventType {
+  ONLY_EVENT = 'event',
+  EVENT_WITH_SIGNUP = 'event+signup',
+  ONLY_SIGNUP = 'signup',
+}
 
 /** Root form data type for event editor */
 export interface EditorEvent extends Omit<

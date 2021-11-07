@@ -6,7 +6,7 @@ import { shallowEqual } from 'react-redux';
 
 import FieldRow from '../../../components/FieldRow';
 import { checkingSlugAvailability, checkSlugAvailability } from '../../../modules/editor/actions';
-import { EditorEvent } from '../../../modules/editor/types';
+import { EditorEvent, EditorEventType } from '../../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
 import DateTimePicker from './DateTimePicker';
 import SelectBox from './SelectBox';
@@ -95,12 +95,12 @@ const BasicDetailsTab = () => {
         label="Tapahtuman tyyppi"
         as={SelectBox}
         options={[
-          ['event', 'Tapahtuma ilman ilmoittautumista'],
-          ['event+signup', 'Tapahtuma ja ilmoittautuminen'],
-          ['signup', 'Ilmoittautuminen ilman tapahtumaa'],
+          [EditorEventType.ONLY_EVENT, 'Tapahtuma ilman ilmoittautumista'],
+          [EditorEventType.EVENT_WITH_SIGNUP, 'Tapahtuma ja ilmoittautuminen'],
+          [EditorEventType.ONLY_SIGNUP, 'Ilmoittautuminen ilman tapahtumaa'],
         ]}
       />
-      {eventType !== 'signup' && (
+      {eventType !== EditorEventType.ONLY_SIGNUP && (
         <FieldRow
           name="date"
           label="Ajankohta"

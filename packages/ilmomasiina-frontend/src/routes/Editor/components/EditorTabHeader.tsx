@@ -3,7 +3,7 @@ import React from 'react';
 import { useFormikContext } from 'formik';
 import { Nav } from 'react-bootstrap';
 
-import { EditorEvent } from '../../../modules/editor/types';
+import { EditorEvent, EditorEventType } from '../../../modules/editor/types';
 
 export enum EditorTab {
   BASIC_DETAILS = 1,
@@ -32,7 +32,7 @@ const EditorTabHeader = ({ activeTab, setActiveTab }: Props) => {
   return (
     <Nav variant="tabs" activeKey={activeTab} className="event-editor--nav">
       {TABS.flatMap(([id, label]) => {
-        if (id !== EditorTab.BASIC_DETAILS && eventType === 'event') {
+        if (id !== EditorTab.BASIC_DETAILS && eventType === EditorEventType.ONLY_EVENT) {
           return [];
         }
 
