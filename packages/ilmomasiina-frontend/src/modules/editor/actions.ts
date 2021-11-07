@@ -49,6 +49,8 @@ export const defaultEvent = (): EditorEvent => ({
 
   draft: true,
   listed: true,
+
+  updatedAt: '',
 });
 
 export const resetState = () => <const>{

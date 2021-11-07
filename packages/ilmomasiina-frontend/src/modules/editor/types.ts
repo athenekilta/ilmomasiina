@@ -16,7 +16,7 @@ import {
   slugAvailabilityChecked,
 } from './actions';
 
-interface EditorState {
+export interface EditorState {
   event: AdminEvent.Details | null;
   isNew: boolean;
   loadError: boolean;
@@ -27,7 +27,7 @@ interface EditorState {
   editConflictModal: EditConflictData | null;
 }
 
-type EditorActions =
+export type EditorActions =
   | ReturnType<typeof resetState>
   | ReturnType<typeof loaded>
   | ReturnType<typeof newEvent>
@@ -42,7 +42,7 @@ type EditorActions =
   | ReturnType<typeof editConflictDismissed>;
 
 /** Question type for event editor */
-export interface EditorQuestion extends AdminEvent.Update.Question {
+export interface EditorQuestion extends Omit<AdminEvent.Update.Question, 'options'> {
   key: Question.Id;
   options: string[];
 }
@@ -52,10 +52,12 @@ export interface EditorQuota extends AdminEvent.Update.Quota {
   key: Quota.Id;
 }
 
-type EditorEventType = 'event' | 'event+signup' | 'signup';
+export type EditorEventType = 'event' | 'event+signup' | 'signup';
 
 /** Root form data type for event editor */
-export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
+export interface EditorEvent extends Omit<
+AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'registrationStartDate' | 'registrationEndDate'
+> {
   eventType: EditorEventType;
 
   date: Date | undefined;
@@ -69,6 +71,7 @@ export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
 }
 
 export interface EditConflictData {
+  updatedAt: string;
   deletedQuotas: Quota.Id[];
   deletedQuestions: Quota.Id[];
 }

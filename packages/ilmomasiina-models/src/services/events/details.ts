@@ -27,6 +27,7 @@ export const adminEventGetEventAttrs = [
   'draft',
   'listed',
   'verificationEmail',
+  'updatedAt',
 ] as const;
 
 // Attributes included in results for Question instances.

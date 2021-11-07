@@ -86,6 +86,7 @@ const Editor = ({ history, match }: Props) => {
       // Update questions/quotas to get IDs from the server
       if (saved) {
         const newFormData = serverEventToEditor(saved);
+        setFieldValue('updatedAt', saved.updatedAt);
         setFieldValue('quotas', newFormData.quotas);
         setFieldValue('questions', newFormData.questions);
       }

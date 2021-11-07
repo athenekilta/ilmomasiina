@@ -5,13 +5,13 @@ import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 
 export class EditConflict extends FeathersError {
-  constructor(deletedQuotas: Quota['id'][], deletedQuestions: Question['id'][]) {
+  constructor(updatedAt: Date, deletedQuotas: Quota['id'][], deletedQuestions: Question['id'][]) {
     super(
-      `${deletedQuestions.length} question IDs and ${deletedQuotas.length} quota IDs don't exist`,
+      `the event was updated separately at ${updatedAt.toISOString()}`,
       'EditConflict',
       409,
       'edit-conflict',
-      { deletedQuotas, deletedQuestions },
+      { updatedAt, deletedQuotas, deletedQuestions },
     );
   }
 }

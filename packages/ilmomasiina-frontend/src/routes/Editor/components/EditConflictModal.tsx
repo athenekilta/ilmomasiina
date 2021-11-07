@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { useFormikContext } from 'formik';
+import moment from 'moment-timezone';
 import { Button, Modal } from 'react-bootstrap';
 
 import { editConflictDismissed, reloadEvent } from '../../../modules/editor/actions';
@@ -29,6 +30,9 @@ const EditConflictModal = () => {
   }, [submitOverwrite, submitForm]);
 
   function overwrite() {
+    // Tell the backend we want to overwrite the latest change.
+    setFieldValue('updatedAt', modal!.updatedAt);
+    // We still need to re-create the questions and quotas that were deleted, by removing their old IDs.
     setFieldValue(
       'questions',
       questions.map((question) => {
@@ -71,7 +75,14 @@ const EditConflictModal = () => {
       </Modal.Header>
       <Modal.Body>
         <p>
-          Toinen käyttäjä tai välilehti on poistanut seuraavat kiintiöt ja/tai kysymykset:
+          Toinen käyttäjä tai välilehti on muokannut tätä tapahtumaa
+          {' '}
+          <strong>
+            {modal && moment(modal.updatedAt)
+              .tz('Europe/Helsinki')
+              .format('DD.MM.YYYY HH:mm:ss')}
+          </strong>
+          {deletedQuotas.length || deletedQuestions.length ? ' ja poistanut seuraavat kiintiöt tai kysymykset:' : '.'}
         </p>
         <ul>
           {questions

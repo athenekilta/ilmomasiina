@@ -15,4 +15,5 @@ export default interface EventAttributes {
   listed: boolean;
   signupsPublic: boolean;
   verificationEmail: string | null;
+  updatedAt: Date;
 }
