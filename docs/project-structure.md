@@ -21,6 +21,35 @@ The project is divided into three packages:
 - In addition, the root folder has a `package.json`, which is used for ESLint and other development dependencies
   that are shared between the packages. That package contains no code.
 
+## Technologies and design choices
+
+Many of the libraries listed below were inherited from the Athene version of the code and might be subject to change,
+if it benefits the project.
+
+- [TypeScript](https://www.typescriptlang.org/) everywhere
+- [Lerna](https://lerna.js.org/) to manage the multiple packages
+- [Lodash](https://lodash.com/) used where necessary, but preferring native methods
+
+### Backend
+
+- [Sequelize](https://sequelize.org/master/) as ORM
+- [Feathers](https://docs.feathersjs.com/)-based API
+    - Explicitly *not* using `feathers-sequelize`, as it permits everything by default and its hooks are impossible
+      to type properly
+- [Express](https://expressjs.com/) as REST backend
+- [Nodemailer](https://nodemailer.com/about/) to send emails
+
+### Frontend
+
+- [React](https://reactjs.org/) with mostly functional components
+- `react-scripts` for building (unfortunately, ejected with slight customizations)
+- [SCSS](https://sass-lang.com/)
+- [Redux](https://redux.js.org/) and [React Redux](https://react-redux.js.org/)
+    - Some state is handled locally, if there's no need to share it between components
+- [React Router](https://reactrouter.com/)
+- [Formik](https://formik.org/)
+- [MomentJS](https://momentjs.com/) - will transition to something else in the future
+
 ## Usage
 
 To modify the app, fork the repository and modify the code to your needs. If you don't modify `ilmomasiina-models`,
