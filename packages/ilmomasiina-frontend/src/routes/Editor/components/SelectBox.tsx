@@ -11,7 +11,7 @@ type Props = FormControlProps & {
 const SelectBox = ({ options, ...props }: Props) => (
   <Form.Control as="select" {...props}>
     {options.map(([value, label]) => (
-      <option value={value}>{label}</option>
+      <option key={value} value={value}>{label}</option>
     ))}
   </Form.Control>
 );
