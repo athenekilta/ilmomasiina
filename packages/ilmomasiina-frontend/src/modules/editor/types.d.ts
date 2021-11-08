@@ -1,5 +1,3 @@
-import { Moment } from 'moment';
-
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
 import { Question, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
@@ -56,12 +54,12 @@ type EditorEventType = 'event' | 'event+signup' | 'signup';
 export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
   eventType: EditorEventType;
 
-  date: Moment | undefined;
+  date: Date | undefined;
 
   questions: EditorQuestion[];
 
-  registrationStartDate: Moment | undefined;
-  registrationEndDate: Moment | undefined;
+  registrationStartDate: Date | undefined;
+  registrationEndDate: Date | undefined;
   quotas: EditorQuota[];
   useOpenQuota: boolean;
 }

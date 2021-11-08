@@ -1,5 +1,3 @@
-import moment from 'moment';
-
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
@@ -118,9 +116,9 @@ function eventType(event: AdminEvent.Details): EditorEventType {
 const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
   ...event,
   eventType: eventType(event),
-  date: event.date ? moment(event.date) : undefined,
-  registrationStartDate: event.registrationStartDate ? moment(event.registrationStartDate) : undefined,
-  registrationEndDate: event.registrationEndDate ? moment(event.registrationEndDate) : undefined,
+  date: event.date ? new Date(event.date) : undefined,
+  registrationStartDate: event.registrationStartDate ? new Date(event.registrationStartDate) : undefined,
+  registrationEndDate: event.registrationEndDate ? new Date(event.registrationEndDate) : undefined,
   quotas: event.quotas.map((quota) => ({
     ...quota,
     key: quota.id,
