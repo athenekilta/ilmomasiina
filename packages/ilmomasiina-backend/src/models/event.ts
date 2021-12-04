@@ -11,11 +11,14 @@ import { Question } from './question';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
+// Drop updatedAt so we don't need to define it manually in Event.init()
+interface EventManualAttributes extends Omit<EventAttributes, 'updatedAt'> {}
+
 export interface EventCreationAttributes
-  extends Optional<EventAttributes, 'id' | 'openQuotaSize' | 'description' | 'price' | 'location'
+  extends Optional<EventManualAttributes, 'id' | 'openQuotaSize' | 'description' | 'price' | 'location'
   | 'facebookUrl' | 'webpageUrl' | 'draft' | 'listed' | 'signupsPublic' | 'verificationEmail'> {}
 
-export class Event extends Model<EventAttributes, EventCreationAttributes> implements EventAttributes {
+export class Event extends Model<EventManualAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: string;
   public title!: string;
   public slug!: string;

@@ -82,6 +82,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.0",
     "remark-gfm": "^3.0.1",
+    "reselect": "^4.1.2",
     "resolve": "^1.20.0",
     "resolve-url-loader": "^3.1.2",
     "sass-loader": "^10.0.5",

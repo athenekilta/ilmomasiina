@@ -14,13 +14,13 @@ import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 import { getEventDetailsForAdmin } from '../../event/getEventDetails';
 import { refreshSignupPositions } from '../../signup/computeSignupPosition';
-import { QuestionDeleted, QuotaDeleted } from './errors';
+import { EditConflict } from './errors';
 
 export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
   await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update
     const event = await Event.findByPk(id, {
-      attributes: ['id', 'openQuotaSize'],
+      attributes: ['id', 'openQuotaSize', 'updatedAt'],
       include: [
         // Get existing quota and question IDs to reuse them wherever possible
         {
@@ -41,12 +41,42 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
       throw new NotFound('No event found with id');
     }
 
+    // Find existing questions and quotas for requested IDs
+    const updatedQuestions = data.questions?.map((question) => ({
+      ...question,
+      existing: question.id ? event.questions!.find((old) => question.id === old.id) : undefined,
+    }));
+    const updatedQuotas = data.quotas?.map((quota) => ({
+      ...quota,
+      existing: quota.id ? event.quotas!.find((old) => quota.id === old.id) : undefined,
+    }));
+
+    // Find questions and quotas that were requested by ID but don't exist
+    const deletedQuestions = updatedQuestions
+      ?.filter((question) => !question.existing && question.id)
+      .map((question) => question.id as Question['id'])
+      ?? [];
+    const deletedQuotas = updatedQuotas
+      ?.filter((quota) => !quota.existing && quota.id)
+      .map((quota) => quota.id as Quota['id'])
+      ?? [];
+
+    // Check for edit conflicts
+    const expectedUpdatedAt = new Date(data.updatedAt ?? '');
+    if (
+      event.updatedAt.getTime() !== expectedUpdatedAt.getTime()
+      || deletedQuestions.length
+      || deletedQuotas.length
+    ) {
+      throw new EditConflict(event.updatedAt, deletedQuotas, deletedQuestions);
+    }
+
     // Update the Event
     const eventAttribs = _.pick(data, adminEventCreateEventAttrs);
     await event.update(eventAttribs, { transaction });
 
-    if (data.questions !== undefined) {
-      const reuseQuestionIds = data.questions
+    if (updatedQuestions !== undefined) {
+      const reuseQuestionIds = updatedQuestions
         .map((question) => question.id)
         .filter((questionId) => questionId) as Question['id'][];
 
@@ -62,16 +92,14 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
       });
 
       // Update or create the new Questions
-      await Promise.all(data.questions.map(async (question, order) => {
+      await Promise.all(updatedQuestions.map(async (question, order) => {
         const questionAttribs = {
           ..._.pick(question, adminEventCreateQuestionAttrs),
           order,
         };
         // Update if an id was provided
-        if (question.id) {
-          const existing = event.questions!.find((old) => question.id === old.id);
-          if (!existing) throw new QuestionDeleted(question.id);
-          await existing.update(questionAttribs, { transaction });
+        if (question.existing) {
+          await question.existing.update(questionAttribs, { transaction });
         } else {
           await Question.create({
             ...questionAttribs,
@@ -81,8 +109,8 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
       }));
     }
 
-    if (data.quotas !== undefined) {
-      const reuseQuotaIds = data.quotas
+    if (updatedQuotas !== undefined) {
+      const reuseQuotaIds = updatedQuotas
         .map((quota) => quota.id)
         .filter((quotaId) => quotaId) as Quota['id'][];
 
@@ -98,16 +126,14 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
       });
 
       // Update or create the new Quotas
-      await Promise.all(data.quotas.map(async (quota, order) => {
+      await Promise.all(updatedQuotas.map(async (quota, order) => {
         const quotaAttribs = {
           ..._.pick(quota, adminEventCreateQuotaAttrs),
           order,
         };
         // Update if an id was provided
-        if (quota.id) {
-          const existing = event.quotas!.find((old) => quota.id === old.id);
-          if (!existing) throw new QuotaDeleted(quota.id);
-          await existing.update(quotaAttribs, { transaction });
+        if (quota.existing) {
+          await quota.existing.update(quotaAttribs, { transaction });
         } else {
           await Quota.create({
             ...quotaAttribs,

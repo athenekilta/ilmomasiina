@@ -3,6 +3,8 @@ import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slu
 import { Question, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import {
   checkingSlugAvailability,
+  editConflictDetected,
+  editConflictDismissed,
   loaded,
   loadFailed,
   moveToQueueCanceled,
@@ -14,18 +16,18 @@ import {
   slugAvailabilityChecked,
 } from './actions';
 
-interface EditorState {
+export interface EditorState {
   event: AdminEvent.Details | null;
-  formData: EditorEvent | null;
   isNew: boolean;
   loadError: boolean;
   slugAvailability: null | 'checking' | AdminSlug.Check;
   saving: boolean;
   saveError: boolean;
   moveToQueueModal: { count: number } | null;
+  editConflictModal: EditConflictData | null;
 }
 
-type EditorActions =
+export type EditorActions =
   | ReturnType<typeof resetState>
   | ReturnType<typeof loaded>
   | ReturnType<typeof newEvent>
@@ -35,10 +37,12 @@ type EditorActions =
   | ReturnType<typeof saving>
   | ReturnType<typeof saveFailed>
   | ReturnType<typeof moveToQueueWarning>
-  | ReturnType<typeof moveToQueueCanceled>;
+  | ReturnType<typeof moveToQueueCanceled>
+  | ReturnType<typeof editConflictDetected>
+  | ReturnType<typeof editConflictDismissed>;
 
 /** Question type for event editor */
-export interface EditorQuestion extends AdminEvent.Update.Question {
+export interface EditorQuestion extends Omit<AdminEvent.Update.Question, 'options'> {
   key: Question.Id;
   options: string[];
 }
@@ -48,10 +52,12 @@ export interface EditorQuota extends AdminEvent.Update.Quota {
   key: Quota.Id;
 }
 
-type EditorEventType = 'event' | 'event+signup' | 'signup';
+export type EditorEventType = 'event' | 'event+signup' | 'signup';
 
 /** Root form data type for event editor */
-export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
+export interface EditorEvent extends Omit<
+AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'registrationStartDate' | 'registrationEndDate'
+> {
   eventType: EditorEventType;
 
   date: Date | undefined;
@@ -62,4 +68,10 @@ export interface EditorEvent extends Omit<AdminEvent.Update.Body, 'quota'> {
   registrationEndDate: Date | undefined;
   quotas: EditorQuota[];
   useOpenQuota: boolean;
+}
+
+export interface EditConflictData {
+  updatedAt: string;
+  deletedQuotas: Quota.Id[];
+  deletedQuestions: Quota.Id[];
 }

@@ -4,26 +4,14 @@ import { FeathersError } from '@feathersjs/errors';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
 
-export class QuotaDeleted extends FeathersError {
-  constructor(quotaId: Quota['id']) {
+export class EditConflict extends FeathersError {
+  constructor(updatedAt: Date, deletedQuotas: Quota['id'][], deletedQuestions: Question['id'][]) {
     super(
-      `quota ${quotaId} was deleted`,
-      'QuotaDeleted',
+      `the event was updated separately at ${updatedAt.toISOString()}`,
+      'EditConflict',
       409,
-      'quota-deleted',
-      {},
-    );
-  }
-}
-
-export class QuestionDeleted extends FeathersError {
-  constructor(questionId: Question['id']) {
-    super(
-      `question ${questionId} was deleted`,
-      'QuestionDeleted',
-      409,
-      'question-deleted',
-      {},
+      'edit-conflict',
+      { updatedAt, deletedQuotas, deletedQuestions },
     );
   }
 }

@@ -21,4 +21,5 @@ export interface AdminEventUpdateBody extends Pick<EventAttributes, typeof admin
   questions: AdminEventUpdateQuestion[];
   quotas: AdminEventUpdateQuota[];
   moveSignupsToQueue?: boolean;
+  updatedAt: string;
 }

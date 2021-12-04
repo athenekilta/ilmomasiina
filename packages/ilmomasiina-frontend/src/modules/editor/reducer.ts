@@ -1,4 +1,6 @@
 import {
+  EDIT_CONFLICT,
+  EDIT_CONFLICT_DISMISSED,
   EVENT_LOAD_FAILED,
   EVENT_LOADED,
   EVENT_SAVE_FAILED,
@@ -13,13 +15,13 @@ import { EditorActions, EditorState } from './types';
 
 const initialState: EditorState = {
   event: null,
-  formData: null,
   isNew: true,
   loadError: false,
   slugAvailability: null,
   saving: false,
   saveError: false,
   moveToQueueModal: null,
+  editConflictModal: null,
 };
 
 export default function reducer(
@@ -33,7 +35,6 @@ export default function reducer(
       return {
         ...state,
         event: action.payload.event,
-        formData: action.payload.formData,
         isNew: action.payload.isNew,
         loadError: false,
         saving: false,
@@ -76,6 +77,16 @@ export default function reducer(
       return {
         ...state,
         moveToQueueModal: null,
+      };
+    case EDIT_CONFLICT:
+      return {
+        ...state,
+        editConflictModal: action.payload,
+      };
+    case EDIT_CONFLICT_DISMISSED:
+      return {
+        ...state,
+        editConflictModal: null,
       };
     default:
       return state;
