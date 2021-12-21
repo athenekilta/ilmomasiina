@@ -88,7 +88,7 @@ class AdminEventList extends React.Component {
           onDelete={this.onDeleteEvent}
         />
       );
-    });
+    }).reverse();
   }
 
   render() {
