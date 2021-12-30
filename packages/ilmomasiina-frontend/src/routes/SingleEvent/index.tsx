@@ -81,6 +81,13 @@ const SingleEvent = ({ match }: Props) => {
         <div className="col-xs-12 col-sm-8">
           <h1>{event.title}</h1>
           <div className="event-heading">
+            {event.category && (
+              <p>
+                <strong>Kategoria:</strong>
+                {' '}
+                {event.category}
+              </p>
+            )}
             {event.date && (
               <p>
                 <strong>Ajankohta:</strong>
