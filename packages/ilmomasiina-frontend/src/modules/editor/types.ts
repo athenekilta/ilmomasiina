@@ -2,6 +2,7 @@ import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/ev
 import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
 import { Question, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import {
+  categoriesLoaded,
   checkingSlugAvailability,
   editConflictDetected,
   editConflictDismissed,
@@ -21,6 +22,7 @@ export interface EditorState {
   isNew: boolean;
   loadError: boolean;
   slugAvailability: null | 'checking' | AdminSlug.Check;
+  allCategories: null | string[];
   saving: boolean;
   saveError: boolean;
   moveToQueueModal: { count: number } | null;
@@ -39,7 +41,8 @@ export type EditorActions =
   | ReturnType<typeof moveToQueueWarning>
   | ReturnType<typeof moveToQueueCanceled>
   | ReturnType<typeof editConflictDetected>
-  | ReturnType<typeof editConflictDismissed>;
+  | ReturnType<typeof editConflictDismissed>
+  | ReturnType<typeof categoriesLoaded>;
 
 /** Question type for event editor */
 export interface EditorQuestion extends Omit<AdminEvent.Update.Question, 'options'> {

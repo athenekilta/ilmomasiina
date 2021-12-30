@@ -1,9 +1,11 @@
+import { AdminCategory } from '@tietokilta/ilmomasiina-models/src/services/admin/categories';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch, { ApiError } from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
+  CATEGORIES_LOADED,
   EDIT_CONFLICT,
   EDIT_CONFLICT_DISMISSED,
   EVENT_LOAD_FAILED,
@@ -25,6 +27,7 @@ export const defaultEvent = (): EditorEvent => ({
   date: undefined,
   webpageUrl: '',
   facebookUrl: '',
+  category: '',
   location: '',
   description: '',
   price: '',
@@ -114,6 +117,11 @@ export const editConflictDismissed = () => <const>{
   type: EDIT_CONFLICT_DISMISSED,
 };
 
+export const categoriesLoaded = (categories: string[]) => <const>{
+  type: CATEGORIES_LOADED,
+  payload: categories,
+};
+
 function eventType(event: AdminEvent.Details): EditorEventType {
   if (event.date === null) {
     return EditorEventType.ONLY_SIGNUP;
@@ -183,6 +191,19 @@ export const checkSlugAvailability = (slug: string) => async (dispatch: Dispatch
     dispatch(slugAvailabilityChecked(response));
   } catch (e) {
     dispatch(slugAvailabilityChecked(null));
+  }
+};
+
+export const loadCategories = () => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+  try {
+    const response = await apiFetch('admin/categories', {
+      accessToken,
+    }) as AdminCategory.List;
+    dispatch(categoriesLoaded(response));
+  } catch (e) {
+    dispatch(categoriesLoaded([]));
+    throw e;
   }
 };
 
