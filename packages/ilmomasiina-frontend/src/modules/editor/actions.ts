@@ -46,6 +46,8 @@ export const defaultEvent = (): EditorEvent => ({
     },
   ],
 
+  nameQuestion: true,
+  emailQuestion: true,
   questions: [],
 
   verificationEmail: '',

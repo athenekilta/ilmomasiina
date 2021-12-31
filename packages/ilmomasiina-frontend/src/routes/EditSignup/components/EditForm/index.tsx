@@ -64,28 +64,46 @@ const EditForm = ({ editToken }: Props) => {
               <p className="text-danger">Ilmoittautumisessasi on virheitä.</p>
             )}
             <Form onSubmit={handleSubmit}>
-              <FieldRow
-                name="firstName"
-                label="Etunimi / First name"
-                placeholder="Etunimi"
-                required
-                disabled={!isNew}
-              />
-              <FieldRow
-                name="lastName"
-                label="Sukunimi / Last name"
-                placeholder="Sukunimi"
-                help="Nimi on julkinen tieto. Voit halutessasi ilmoittautua tapahtumaan salanimellä."
-                required
-                disabled={!isNew}
-              />
-              <FieldRow
-                name="email"
-                label="Sähköposti / Email"
-                placeholder="Sähköpostisi"
-                required
-                disabled={!isNew}
-              />
+              {event!.nameQuestion && (
+                <>
+                  <FieldRow
+                    name="firstName"
+                    label="Etunimi / First name"
+                    placeholder="Etunimi"
+                    required
+                    disabled={!isNew}
+                  />
+                  <FieldRow
+                    name="lastName"
+                    label="Sukunimi / Last name"
+                    placeholder="Sukunimi"
+                    required
+                    disabled={!isNew}
+                  />
+                  <FieldRow
+                    name="namePublic"
+                    as={Form.Check}
+                    type="checkbox"
+                    checkAlign
+                    checkLabel={(
+                      <>
+                        Näytä nimi julkisessa osallistujalistassa
+                        <br />
+                        Show name in public participant list
+                      </>
+                    )}
+                  />
+                </>
+              )}
+              {event!.emailQuestion && (
+                <FieldRow
+                  name="email"
+                  label="Sähköposti / Email"
+                  placeholder="Sähköpostisi"
+                  required
+                  disabled={!isNew}
+                />
+              )}
 
               <QuestionFields name="answers" questions={event!.questions} />
 

@@ -28,7 +28,7 @@ async function getEventDetails(
   // Admin queries include internal data such as confirmation email contents
   const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;
   // Admin queries include emails and signup IDs
-  const signupAttrs = admin ? adminEventGetSignupAttrs : eventGetSignupAttrs;
+  const signupAttrs = admin ? adminEventGetSignupAttrs : [...eventGetSignupAttrs, 'confirmedAt'];
   // Admin queries also show past and draft events.
   const scope = admin ? Event : Event.scope('user');
 
@@ -130,10 +130,12 @@ async function getEventDetails(
         signups = quota.signups!.map((signup) => ({
           ..._.pick(signup, eventGetSignupAttrs),
           // Hide name if necessary
-          firstName: signup.namePublic ? signup.firstName : null,
-          lastName: signup.namePublic ? signup.lastName : null,
+          firstName: event.nameQuestion && signup.namePublic ? signup.firstName : null,
+          lastName: event.nameQuestion && signup.namePublic ? signup.lastName : null,
           // Hide answers of non-public questions
           answers: signup.answers!.filter((answer) => publicQuestions.has(answer.questionId)),
+
+          confirmed: signup.confirmedAt !== null,
         }));
       }
 

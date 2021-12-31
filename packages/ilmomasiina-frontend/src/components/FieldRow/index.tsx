@@ -19,7 +19,7 @@ type Props = {
   /** `true` to adjust the vertical alignment of the left column label for checkboxes/radios. */
   checkAlign?: boolean;
   /** Passed as `label` to the field component. Intended for checkboxes. */
-  checkLabel?: string;
+  checkLabel?: ReactNode;
   /** The component or element to use as the field. Passed to Formik's `Field`. */
   as?: ComponentType<any> | string;
   /** If given, this is used as the field. */

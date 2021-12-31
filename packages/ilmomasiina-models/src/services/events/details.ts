@@ -65,6 +65,7 @@ export const adminEventGetSignupAttrs = [
   ...eventGetSignupAttrs,
   'id',
   'email',
+  'confirmedAt',
 ] as const;
 
 // Attributes included in results for Answer instances.
@@ -84,6 +85,7 @@ export interface EventGetAnswerItem extends Pick<AnswerAttributes, typeof eventG
 
 export interface EventGetSignupItem extends Pick<SignupAttributes, typeof eventGetSignupAttrs[number]> {
   answers: EventGetAnswerItem[];
+  confirmed: boolean;
 }
 
 export interface EventGetQuotaItem extends Pick<QuotaAttributes, typeof eventGetQuotaAttrs[number]> {

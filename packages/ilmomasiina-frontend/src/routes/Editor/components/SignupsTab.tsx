@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { Button } from 'react-bootstrap';
 import { CSVLink } from 'react-csv';
 
 import { deleteSignup, getEvent } from '../../../modules/editor/actions';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
-import { getSignupsForAdminList } from '../../../utils/signupUtils';
+import { convertSignupsToCSV, getSignupsForAdminList } from '../../../utils/signupUtils';
 
 import '../Editor.scss';
 
@@ -13,7 +13,9 @@ const SignupsTab = () => {
   const dispatch = useTypedDispatch();
   const event = useTypedSelector((state) => state.editor.event);
 
-  const signups = event && getSignupsForAdminList(event);
+  const signups = useMemo(() => event && getSignupsForAdminList(event), [event]);
+
+  const csvSignups = useMemo(() => event && convertSignupsToCSV(event, signups!), [event, signups]);
 
   if (!event || !signups?.length) {
     return (
@@ -24,9 +26,9 @@ const SignupsTab = () => {
   return (
     <div>
       <CSVLink
-        data={signups} // TODO implement translated headers
+        data={csvSignups!}
         separator={'\t'}
-        filename={`${event.title} osallistujalista`}
+        filename={`${event.title} osallistujalista.csv`}
       >
         Lataa osallistujalista
       </CSVLink>
@@ -36,9 +38,9 @@ const SignupsTab = () => {
         <thead>
           <tr className="active">
             <th key="position">#</th>
-            <th key="firstName">Etunimi</th>
-            <th key="lastName">Sukunimi</th>
-            <th key="email">Sähköposti</th>
+            {event.nameQuestion && <th key="firstName">Etunimi</th>}
+            {event.nameQuestion && <th key="lastName">Sukunimi</th>}
+            {event.emailQuestion && <th key="email">Sähköposti</th>}
             <th key="quota">Kiintiö</th>
             {event.questions.map((q) => (
               <th key={q.id}>{q.question}</th>
@@ -49,13 +51,11 @@ const SignupsTab = () => {
         </thead>
         <tbody>
           {signups.map((signup, index) => (
-            <tr key={signup.id}>
+            <tr key={signup.id} className={!signup.confirmed ? 'text-muted' : ''}>
               <td key="position">{`${index + 1}.`}</td>
-              <td key="firstName" className={signup.firstName === null ? 'text-muted' : ''}>
-                {signup.firstName || 'Vahvistamatta'}
-              </td>
-              <td key="lastName">{signup.lastName}</td>
-              <td key="email">{signup.email}</td>
+              {event.nameQuestion && <td key="firstName">{signup.firstName}</td>}
+              {event.nameQuestion && <td key="lastName">{signup.lastName}</td>}
+              {event.emailQuestion && <td key="email">{signup.email}</td>}
               <td key="quota">{signup.quota}</td>
               {event.questions.map((question) => (
                 <td key={question.id}>{signup.answers[question.id]}</td>
