@@ -129,6 +129,9 @@ async function getEventDetails(
       if (event.signupsPublic) {
         signups = quota.signups!.map((signup) => ({
           ..._.pick(signup, eventGetSignupAttrs),
+          // Hide name if necessary
+          firstName: signup.namePublic ? signup.firstName : null,
+          lastName: signup.namePublic ? signup.lastName : null,
           // Hide answers of non-public questions
           answers: signup.answers!.filter((answer) => publicQuestions.has(answer.questionId)),
         }));

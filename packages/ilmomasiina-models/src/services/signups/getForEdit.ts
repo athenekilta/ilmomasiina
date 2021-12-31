@@ -28,6 +28,7 @@ export const signupGetSignupAttrs = [
   'id',
   'firstName',
   'lastName',
+  'namePublic',
   'email',
   'confirmedAt',
   'status',

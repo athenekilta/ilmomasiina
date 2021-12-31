@@ -16,7 +16,8 @@ interface EventManualAttributes extends Omit<EventAttributes, 'updatedAt'> {}
 
 export interface EventCreationAttributes
   extends Optional<EventManualAttributes, 'id' | 'openQuotaSize' | 'description' | 'price' | 'location'
-  | 'facebookUrl' | 'webpageUrl' | 'category' | 'draft' | 'listed' | 'signupsPublic' | 'verificationEmail'> {}
+  | 'facebookUrl' | 'webpageUrl' | 'category' | 'draft' | 'listed' | 'signupsPublic' | 'nameQuestion'
+  | 'emailQuestion' | 'verificationEmail'> {}
 
 export class Event extends Model<EventManualAttributes, EventCreationAttributes> implements EventAttributes {
   public id!: string;
@@ -35,6 +36,8 @@ export class Event extends Model<EventManualAttributes, EventCreationAttributes>
   public draft!: boolean;
   public listed!: boolean;
   public signupsPublic!: boolean;
+  public nameQuestion!: boolean;
+  public emailQuestion!: boolean;
   public verificationEmail!: string | null;
 
   public questions?: Question[];
@@ -141,6 +144,16 @@ export default function setupEventModel(this: IlmoApplication) {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      nameQuestion: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+      },
+      emailQuestion: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
       },
       verificationEmail: {
         type: DataTypes.TEXT,

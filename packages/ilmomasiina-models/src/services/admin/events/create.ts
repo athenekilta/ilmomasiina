@@ -19,6 +19,8 @@ export const adminEventCreateEventAttrs = [
   'draft',
   'listed',
   'signupsPublic',
+  'nameQuestion',
+  'emailQuestion',
   'verificationEmail',
 ] as const;
 

@@ -10,6 +10,7 @@ export interface SignupUpdateBodyAnswer {
 export interface SignupUpdateBody {
   firstName: string;
   lastName: string;
+  namePublic: boolean;
   email: string;
   answers: SignupUpdateBodyAnswer[];
   editToken?: string;

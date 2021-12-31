@@ -19,6 +19,8 @@ export const eventGetEventAttrs = [
   'facebookUrl',
   'category',
   'signupsPublic',
+  'nameQuestion',
+  'emailQuestion',
 ] as const;
 
 // Attributes included in GET /api/admin/events/ID for Event instances.
@@ -52,6 +54,7 @@ export const eventGetQuotaAttrs = [
 export const eventGetSignupAttrs = [
   'firstName',
   'lastName',
+  'namePublic',
   'status',
   'position',
   'createdAt',
