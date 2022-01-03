@@ -5,7 +5,6 @@ import historyApiFallback from 'connect-history-api-fallback';
 import { NextFunction } from 'express';
 import enforce from 'express-sslify';
 import cron from 'node-cron';
-import path from 'path';
 
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
@@ -50,10 +49,10 @@ if (config.nodeEnv === 'development') {
 
 app.use(historyApiFallback());
 
-// Serving ~/dist by default. Ideally these files should be served by
+// Serving frontend files by default. Ideally these files should be served by
 // the web server and not the app server, but this helps to demo the
 // server in production.
-const frontendPath = path.dirname(require.resolve('@tietokilta/ilmomasiina-frontend/build/index.html'));
-app.use(express.static(frontendPath));
+console.log(`PATH: ${config.frontedFilesPath}`);
+app.use(express.static(config.frontedFilesPath));
 
 export = app;

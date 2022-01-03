@@ -1,8 +1,13 @@
+import path from 'path';
+
 const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
   debugDbLogging: process.env.DEBUG_DB_LOGGING === 'true',
 
   port: process.env.PORT || 3000,
+
+  frontedFilesPath: process.env.FRONTEND_FILES_PATH
+    || path.dirname(require.resolve('@tietokilta/ilmomasiina-frontend/build/index.html')),
 
   dockerCompose: process.env.DOCKER_COMPOSE === 'true',
 
