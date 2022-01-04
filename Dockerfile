@@ -27,9 +27,6 @@ FROM node:12.20.1-alpine
 # Default to production
 ENV NODE_ENV=production
 
-# Move frontend files to a more accessible location
-ENV FRONTEND_FILES_PATH=/opt/ilmomasiina/frontend
-
 WORKDIR /opt/ilmomasiina
 RUN adduser -D masiina
 USER masiina

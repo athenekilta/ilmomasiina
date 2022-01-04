@@ -1,0 +1,33 @@
+# This Dockerfile is intended for development use only.
+
+# Only the files required to bootstrap the project will be copied to the container
+# Also the node modules will be installed at build phase and included to the container image.
+# All sources and other files are intended to be provided using bind mounts.
+
+FROM node:12.20.1-alpine
+
+WORKDIR /opt/ilmomasiina
+
+# Copy static resources from the repository root
+COPY .eslint* .postcssrc lerna.json package*.json ./
+
+# Copy static resources from each package
+COPY packages/ilmomasiina-frontend/package*.json \
+     packages/ilmomasiina-frontend/tsconfig.json \
+     packages/ilmomasiina-frontend/eslint* \
+     packages/ilmomasiina-frontend/
+
+COPY packages/ilmomasiina-backend/package*.json \
+     packages/ilmomasiina-backend/tsconfig.json \
+     packages/ilmomasiina-backend/eslint* \
+     packages/ilmomasiina-backend/
+
+COPY packages/ilmomasiina-models/package*.json \
+     packages/ilmomasiina-models/tsconfig.json \
+     packages/ilmomasiina-models/
+
+ENV NODE_ENV=development
+
+# Install dependencies & bootstrap lerna
+RUN npm install
+RUN npx lerna bootstrap

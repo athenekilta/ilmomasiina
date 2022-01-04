@@ -1,4 +1,29 @@
+import fs from 'fs';
 import path from 'path';
+
+/** Parses a valid path from env or uses default location 'frontend'.
+ * In either case, returns null if path does not exist or it is not a directory.
+ * If env variable contains an empty string, this function returns null.
+ */
+const parseFrontendFilesPath = (): string | null => {
+  const envValue = process.env.FRONTEND_FILES_PATH;
+
+  // Empty value disables frontend serving
+  if (envValue === '') {
+    return null;
+  }
+
+  const parsedPath = path.resolve(envValue || 'frontend');
+  if (fs.existsSync(parsedPath) && fs.statSync(parsedPath).isDirectory()) {
+    return parsedPath;
+  }
+
+  try { // Try to import ilmomasiina-frontend as a package
+    return path.dirname(require.resolve('@tietokilta/ilmomasiina-frontend/build/index.html'));
+  } catch (e) {
+    return null;
+  }
+};
 
 const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -6,8 +31,7 @@ const config = {
 
   port: process.env.PORT || 3000,
 
-  frontedFilesPath: process.env.FRONTEND_FILES_PATH
-    || path.dirname(require.resolve('@tietokilta/ilmomasiina-frontend/build/index.html')),
+  frontedFilesPath: parseFrontendFilesPath(),
 
   dockerCompose: process.env.DOCKER_COMPOSE === 'true',
 
@@ -53,6 +77,19 @@ if (!['development', 'test', 'production'].includes(config.nodeEnv)) {
 
 if (!config.port && config.nodeEnv === 'production') {
   throw new Error('Missing .env variable: PORT');
+}
+
+if (config.frontedFilesPath === null) {
+  if (process.env.FRONTEND_FILES_PATH === '') {
+    console.info('Frontend serving disabled in backend.');
+  } else if (process.env.FRONTEND_FILES_PATH) {
+    throw new Error(
+      'Env variable FRONTEND_FILES_PATH contains an invalid path:'
+      + `${process.env.FRONTEND_FILES_PATH} does not exist or is not a directory`,
+    );
+  } else if (config.nodeEnv !== 'production') {
+    console.warn('Compiled frontend not found. Frontend will not be served by backend.');
+  }
 }
 
 if (config.oldEditTokenSalt === config.newEditTokenSecret) {

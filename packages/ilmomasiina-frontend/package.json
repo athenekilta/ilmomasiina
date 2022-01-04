@@ -4,7 +4,7 @@
   "scripts": {
     "build": "node scripts/build.js",
     "clean": "rimraf build",
-    "start": "node scripts/start.js",
+    "start:dev": "node scripts/start.js",
     "test": "node scripts/test.js --watchAll=false",
     "test:dev": "node scripts/test.js"
   },

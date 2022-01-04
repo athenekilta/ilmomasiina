@@ -49,10 +49,12 @@ if (config.nodeEnv === 'development') {
 
 app.use(historyApiFallback());
 
-// Serving frontend files by default. Ideally these files should be served by
-// the web server and not the app server, but this helps to demo the
-// server in production.
-console.log(`PATH: ${config.frontedFilesPath}`);
-app.use(express.static(config.frontedFilesPath));
+// Serving frontend files if frontedFilesPath is defined (not null).
+// Ideally these files should be served by a web server and not the app server,
+// but this helps to demo the server in production.
+if (config.frontedFilesPath) {
+  console.info(`Serving frontend files from '${config.frontedFilesPath}'`);
+  app.use(express.static(config.frontedFilesPath));
+}
 
 export = app;
