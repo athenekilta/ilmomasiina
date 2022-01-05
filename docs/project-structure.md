@@ -3,7 +3,10 @@
 The project uses [Lerna](https://lerna.js.org/) to manage the code in separate packages. This allows for cleaner code
 and package files.
 
-To prepare for development, run `npx lerna bootstrap`.
+To prepare for development, lerna must be bootstrapped. In this project, lerna bootstrapping is implemented using npm
+*postinstall* script. Running `npm install` or `npm ci` will automatically bootstrap lerna once packages are installed.
+To bootstrap lerna manually, run `npx lerna bootstrap`.
+
 The project is configured to run development servers for the frontend and backend with `npm start`.
 
 ## Packages

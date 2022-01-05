@@ -4,8 +4,8 @@ FROM node:12.20.1-alpine as builder
 COPY . /opt/ilmomasiina
 WORKDIR /opt/ilmomasiina
 
+# Install dependencies (bootstraps lerna via postinstall script)
 RUN npm ci
-RUN npx lerna bootstrap
 
 # Build all packages
 RUN npm run build

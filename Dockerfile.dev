@@ -28,6 +28,5 @@ COPY packages/ilmomasiina-models/package*.json \
 
 ENV NODE_ENV=development
 
-# Install dependencies & bootstrap lerna
+# Install dependencies (bootstraps lerna via postinstall script)
 RUN npm install
-RUN npx lerna bootstrap
