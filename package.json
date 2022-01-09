@@ -189,7 +189,7 @@
     "reselect": "^4.0.0",
     "rimraf": "^2.5.4",
     "sass-loader": "^4.0.0",
-    "sequelize": "^4.22.12",
+    "sequelize": "^5.15.1",
     "stackframe": "^1.0.4",
     "style-loader": "^0.13.1",
     "then-request": "^2.2.0",
