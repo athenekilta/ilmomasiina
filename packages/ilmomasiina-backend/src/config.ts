@@ -35,6 +35,8 @@ const config = {
 
   dockerCompose: process.env.DOCKER_COMPOSE === 'true',
 
+  enforceHTTPS: !(process.env.ENFORCE_HTTPS === 'false'),
+
   clearDbUrl: process.env.CLEARDB_DATABASE_URL || null,
   dbDialect: process.env.DB_DIALECT,
   dbUser: process.env.DB_USER,
@@ -106,6 +108,16 @@ if (config.adminRegistrationAllowed) {
     + 'WARNING!\nAdmin registration is enabled, meaning anyone can register an administrator account.\n'
     + 'After creating your initial administrator account, make sure to set ADMIN_REGISTRATION_ALLOWED=false.\n'
     + '----------------------------------------------------',
+  );
+}
+
+if (config.enforceHTTPS) {
+  console.info('Enforcing HTTPS connections');
+} else if (config.nodeEnv === 'production') {
+  console.warn(
+    'HTTPS connections are not enforced by Ilmomasiina.\n'
+    + 'For security reasons, please set ENFORCE_HTTPS true or configure your load balancer or reverse proxy to'
+    + 'forward only HTTPS connections to Ilmomasiina.',
   );
 }
 

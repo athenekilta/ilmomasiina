@@ -42,8 +42,8 @@ if (config.nodeEnv === 'development') {
     next(error);
   });
   app.use(express.errorHandler());
-} else {
-  // Production: enforce HTTPS
+} else if (config.nodeEnv === 'production' && config.enforceHTTPS) {
+  // Enforce HTTPS connections
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 

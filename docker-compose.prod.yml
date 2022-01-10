@@ -24,7 +24,10 @@ services:
       - database
     environment:
       - DB_HOST=database
-      - NODE_ENV=development  # TODO: Change to 'production'
+      - NODE_ENV=production
+      - ENFORCE_HTTPS=false
+      # When deploying to production, either set ENFORCE_HTTPS true (default) or
+      # configure the reverse proxy to enforce HTTPS communication with the clients.
     env_file:
       - .env
     ports:
