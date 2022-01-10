@@ -41,6 +41,20 @@ Ilmomasiina is Athene's event registration system.
 6. Exit with `exit` and sign in with your new user e. g. `mysql -u juuso -p` (don't use `mysql -u juuso -p password`)
 7. Follow Mac instructions step 6 
 
+### Debian GNU/Linux (9 and above)
+Debian includes [MariaDB instead of MySQL](https://wiki.debian.org/MySql) in Debian Stretch and above.
+Below instructions are written using `mariadb  Ver 15.1 Distrib 10.5.12-MariaDB`.
+
+1. Install MariaDB with `sudo apt install mariadb-server mariadb-client`
+2. Service should start automatically
+3. Open the MariaDB terminal with `sudo mysql -u root`
+4. In the MariaDB terminal, create a new user e.g. `CREATE USER 'sampo'@'localhost' IDENTIFIED BY 'paste_your_random_password_here';`
+5. Create the `ilmomasiina` database with `CREATE DATABASE 'ilmomasiina';`
+6. Grant permission for your new user: `GRANT ALL PRIVILEGES ON ilmomasiina.* TO 'sampo'@'localhost';`
+7. Exit with `exit`
+
+If needed (during development), you can sign in with your user using command like `mysql -u sampo -p`
+
 ## Getting started
 
 1. Create an `.env` file at the root of the project. For the contents of the .env file, check [ENV.MD](./ENV.MD)
