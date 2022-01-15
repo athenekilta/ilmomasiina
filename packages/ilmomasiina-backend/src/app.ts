@@ -35,16 +35,40 @@ cron.schedule('0 8 * * *', anonymizeOldSignups);
 // Daily at 8am, delete deleted items from the database
 cron.schedule('0 8 * * *', removeDeletedData);
 
-if (config.nodeEnv === 'development') {
+if (config.nodeEnv !== 'production') {
   // Development: log error messages
   app.use((error: any, req: any, res: any, next: NextFunction) => {
     console.error(error);
     next(error);
   });
-  app.use(express.errorHandler());
-} else if (config.nodeEnv === 'production' && config.enforceHttps) {
-  // Enforce HTTPS connections
-  app.use(enforce.HTTPS({ trustProtoHeader: true }));
+}
+
+// Always convert errors to JSON
+app.use(express.errorHandler());
+
+// Enforce HTTPS connections in production
+if (config.nodeEnv === 'production') {
+  if (config.enforceHttps !== 'false') {
+    app.use(enforce.HTTPS({
+      trustProtoHeader: config.enforceHttps === 'proxy',
+      trustAzureHeader: config.enforceHttps === 'azure',
+    }));
+    if (config.enforceHttps === 'azure') {
+      console.info(
+        'Enforcing HTTPS connections.\nEnsure your Azure app is set to redirect HTTP to HTTPS.',
+      );
+    } else {
+      console.info(
+        'Enforcing HTTPS connections.\nEnsure your load balancer or reverse proxy sets X-Forwarded-Proto.',
+      );
+    }
+  } else {
+    console.warn(
+      'HTTPS connections are not enforced by Ilmomasiina.\n'
+      + 'For security reasons, please set ENFORCE_HTTPS=proxy and configure your load balancer or reverse proxy to '
+      + 'forward only HTTPS connections to Ilmomasiina. In Azure, set ENFORCE_HTTPS=azure instead.',
+    );
+  }
 }
 
 app.use(historyApiFallback());

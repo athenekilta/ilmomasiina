@@ -40,6 +40,8 @@ module.exports = {
     // does not currently handle properly.
     // see https://github.com/benmosher/eslint-plugin-import/issues/1453
     "import/no-cycle": "off",
+    // We are targeting ES5 or higher.
+    "radix": ["error", "as-needed"],
     // Not usable with formik.
     "react/jsx-props-no-spreading": "off",
     // TypeScript validates prop types, no need for this.

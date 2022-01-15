@@ -1,49 +1,9 @@
 import Email from 'email-templates';
-import nodemailer, { Transporter } from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import mailgun from 'nodemailer-mailgun-transport';
 import path from 'path';
 
 import config from '../config';
 import { Event } from '../models/event';
-
-let transporter: Transporter;
-if (config.mailgunApiKey) {
-  transporter = nodemailer.createTransport(mailgun({
-    auth: {
-      api_key: config.mailgunApiKey,
-      domain: config.mailgunDomain!,
-    },
-  }));
-} else if (config.smtpHost) {
-  transporter = nodemailer.createTransport({
-    host: config.smtpHost,
-    port: config.smtpPort,
-    auth: {
-      user: config.smtpUser,
-    },
-  } as SMTPTransport.Options);
-} else {
-  console.warn('Neither Mailgun nor SMTP is configured. Falling back to debug mail service.');
-  transporter = nodemailer.createTransport({
-    name: 'debug mail service',
-    version: '0',
-    send(mail, callback?) {
-      const { message } = mail;
-      const envelope = message.getEnvelope();
-      const messageId = message.messageId();
-      const input = message.createReadStream();
-      let data = '';
-      input.on('data', (chunk) => {
-        data += chunk;
-      });
-      input.on('end', () => {
-        console.log(data);
-        callback(null, { envelope, messageId } as any);
-      });
-    },
-  });
-}
+import mailTransporter from './config';
 
 export interface ConfirmationMailParams {
   answers: {
@@ -77,7 +37,7 @@ export default class EmailService {
       html,
     };
 
-    return transporter.sendMail(msg);
+    return mailTransporter.sendMail(msg);
   }
 
   static async sendConfirmationMail(to: string, params: ConfirmationMailParams) {
