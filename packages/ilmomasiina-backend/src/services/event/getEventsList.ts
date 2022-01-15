@@ -1,3 +1,4 @@
+import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { col, fn } from 'sequelize';
 
@@ -15,17 +16,19 @@ import { ascNullsFirst } from '../../models/util';
 
 export type EventListResponseType<A extends boolean> = true extends A ? AdminEventListResponse : EventListResponse;
 
-async function getEventsList<A extends boolean>(admin: A): Promise<EventListResponseType<A>> {
+async function getEventsList<A extends boolean>(admin: A, params?: Params): Promise<EventListResponseType<A>> {
   // Admin view also shows id, draft and listed fields.
   const eventAttrs = admin ? adminEventListEventAttrs : eventListEventAttrs;
   // Admin view shows all events, user view only shows future/recent events.
   const scope = admin ? Event : Event.scope('user');
   // Admin view also shows unlisted events.
-  const where = admin ? {} : { listed: true };
+  const listed = admin ? {} : { listed: true };
+
+  const filter = _.pick(params?.query ?? {}, 'category');
 
   const events = await scope.findAll({
     attributes: [...eventAttrs],
-    where,
+    where: { ...listed, ...filter },
     // Include quotas of event and count of signups
     include: [
       {
@@ -67,10 +70,10 @@ async function getEventsList<A extends boolean>(admin: A): Promise<EventListResp
   return result;
 }
 
-export default function getEventsListForUser() {
-  return getEventsList(false);
+export default function getEventsListForUser(params?: Params) {
+  return getEventsList(false, params);
 }
 
-export function getEventsListForAdmin() {
-  return getEventsList(true);
+export function getEventsListForAdmin(params?: Params) {
+  return getEventsList(true, params);
 }

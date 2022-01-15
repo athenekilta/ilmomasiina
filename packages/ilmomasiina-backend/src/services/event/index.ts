@@ -6,8 +6,8 @@ import getEventDetails from './getEventDetails';
 import getEventsList from './getEventsList';
 
 export const eventService: Partial<ServiceMethods<EventsServiceTypes>> = {
-  find() {
-    return getEventsList();
+  find(params) {
+    return getEventsList(params);
   },
 
   get(id) {

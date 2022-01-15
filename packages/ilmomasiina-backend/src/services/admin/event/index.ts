@@ -12,8 +12,8 @@ import deleteEvent from './deleteEvent';
 import updateEvent from './updateEvent';
 
 export const adminEventService: Partial<ServiceMethods<AdminEventsServiceTypes>> = {
-  find() {
-    return getEventsListForAdmin();
+  find(params) {
+    return getEventsListForAdmin(params);
   },
 
   get(id) {

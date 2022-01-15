@@ -15,6 +15,7 @@ export const adminEventCreateEventAttrs = [
   'location',
   'webpageUrl',
   'facebookUrl',
+  'category',
   'draft',
   'listed',
   'signupsPublic',

@@ -5,9 +5,10 @@ import { Form } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 
 import FieldRow from '../../../components/FieldRow';
-import { checkingSlugAvailability, checkSlugAvailability } from '../../../modules/editor/actions';
+import { checkingSlugAvailability, checkSlugAvailability, loadCategories } from '../../../modules/editor/actions';
 import { EditorEvent, EditorEventType } from '../../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
+import Autocomplete from './Autocomplete';
 import DateTimePicker from './DateTimePicker';
 import SelectBox from './SelectBox';
 import SlugField from './SlugField';
@@ -18,7 +19,9 @@ const SLUG_CHECK_DELAY = 250;
 
 const BasicDetailsTab = () => {
   const dispatch = useTypedDispatch();
-  const { isNew, slugAvailability, event } = useTypedSelector((state) => state.editor, shallowEqual);
+  const {
+    isNew, slugAvailability, event, allCategories,
+  } = useTypedSelector((state) => state.editor, shallowEqual);
 
   const {
     values: { title, slug, eventType },
@@ -45,6 +48,10 @@ const BasicDetailsTab = () => {
       dispatch(checkSlugAvailability(slug));
     }, SLUG_CHECK_DELAY);
   }, [dispatch, slug]);
+
+  useEffect(() => {
+    dispatch(loadCategories());
+  }, [dispatch]);
 
   let slugFeedback = null;
   if (slugAvailability === 'checking') {
@@ -109,6 +116,13 @@ const BasicDetailsTab = () => {
           alternateError="* Ajankohta vaaditaan."
         />
       )}
+      <FieldRow
+        name="category"
+        label="Kategoria"
+        as={Autocomplete}
+        options={allCategories || []}
+        busy={allCategories === null}
+      />
       <FieldRow
         name="webpageUrl"
         label="Kotisivujen osoite"

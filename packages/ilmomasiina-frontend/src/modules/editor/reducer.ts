@@ -1,4 +1,5 @@
 import {
+  CATEGORIES_LOADED,
   EDIT_CONFLICT,
   EDIT_CONFLICT_DISMISSED,
   EVENT_LOAD_FAILED,
@@ -18,6 +19,7 @@ const initialState: EditorState = {
   isNew: true,
   loadError: false,
   slugAvailability: null,
+  allCategories: null,
   saving: false,
   saveError: false,
   moveToQueueModal: null,
@@ -87,6 +89,11 @@ export default function reducer(
       return {
         ...state,
         editConflictModal: null,
+      };
+    case CATEGORIES_LOADED:
+      return {
+        ...state,
+        allCategories: action.payload,
       };
     default:
       return state;

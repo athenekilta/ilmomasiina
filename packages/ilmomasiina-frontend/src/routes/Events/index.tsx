@@ -13,16 +13,20 @@ import TableRow from './TableRow';
 
 import './EventList.scss';
 
-const EventList = () => {
+type Props = {
+  category?: string;
+};
+
+const EventList = ({ category }: Props) => {
   const dispatch = useTypedDispatch();
   const { events, eventsLoadError } = useTypedSelector((state) => state.events, shallowEqual);
 
   useEffect(() => {
-    dispatch(getEvents());
+    dispatch(getEvents(category));
     return () => {
       dispatch(resetState());
     };
-  }, [dispatch]);
+  }, [dispatch, category]);
 
   if (eventsLoadError) {
     return (

@@ -20,9 +20,10 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const getEvents = () => async (dispatch: DispatchAction) => {
+export const getEvents = (category?: string) => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch('events') as Event.List;
+    const query = category === undefined ? '' : `?${new URLSearchParams({ category })}`;
+    const response = await apiFetch(`events${query}`) as Event.List;
     dispatch(eventsLoaded(response));
   } catch (e) {
     dispatch(eventsLoadFailed());

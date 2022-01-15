@@ -17,6 +17,7 @@ export const eventGetEventAttrs = [
   'location',
   'webpageUrl',
   'facebookUrl',
+  'category',
   'signupsPublic',
 ] as const;
 

@@ -10,3 +10,4 @@ export const EDIT_CONFLICT = 'editor/EDIT_CONFLICT';
 export const EDIT_CONFLICT_DISMISSED = 'editor/EDIT_CONFLICT_DISMISSED';
 export const EVENT_SLUG_CHECKING = 'editor/EVENT_CHECKING';
 export const EVENT_SLUG_CHECKED = 'editor/EVENT_SLUG_CHECKED';
+export const CATEGORIES_LOADED = 'editor/CATEGORIES_LOADED';
