@@ -7,7 +7,7 @@ services:
             - .env
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:3306"]
-            interval: 10s
+            interval: 2s
             timeout: 5s
             retries: 5
         ports:
