@@ -3,6 +3,7 @@
 ```bash
 MYSQL_USER=your-mysql-user
 MYSQL_PASSWORD=your-mysql-password
+MYSQL_ROOT_PASSWORD=your-mysql-password
 MYSQL_DATABASE=ilmomasiina
 ADMIN_REGISTRATION_ALLOWED=true
 
