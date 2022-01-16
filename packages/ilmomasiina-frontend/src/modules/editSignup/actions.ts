@@ -54,7 +54,9 @@ export const getSignupAndEvent = (id: Signup.Id, editToken: string) => async (di
 };
 
 export const updateSignup = (
-  signupId: Signup.Id, data: Signup.Update.Body, editToken: string,
+  signupId: Signup.Id,
+  data: Signup.Update.Body,
+  editToken: string,
 ) => async (dispatch: DispatchAction) => {
   dispatch(signupSubmitting());
   try {

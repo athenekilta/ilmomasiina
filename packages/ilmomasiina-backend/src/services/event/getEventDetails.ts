@@ -22,7 +22,8 @@ import { Signup } from '../../models/signup';
 type EventGetIdentifier = { id: Event['id'] } | { slug: string };
 
 async function getEventDetails(
-  where: EventGetIdentifier, admin: boolean,
+  where: EventGetIdentifier,
+  admin: boolean,
 ): Promise<EventGetResponse | AdminEventGetResponse> {
   // Admin queries include internal data such as confirmation email contents
   const eventAttrs = admin ? adminEventGetEventAttrs : eventGetEventAttrs;

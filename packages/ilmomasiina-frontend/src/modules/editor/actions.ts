@@ -228,7 +228,9 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
 };
 
 export const publishEventUpdate = (
-  id: AdminEvent.Id, data: EditorEvent, moveSignupsToQueue: boolean = false,
+  id: AdminEvent.Id,
+  data: EditorEvent,
+  moveSignupsToQueue: boolean = false,
 ) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 

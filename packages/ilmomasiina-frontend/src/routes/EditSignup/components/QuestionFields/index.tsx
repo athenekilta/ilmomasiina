@@ -61,23 +61,19 @@ const QuestionFields = ({ name, questions }: Props) => {
             break;
           case 'checkbox': {
             const currentAnswers = currentAnswer.split(';');
-            input = (
-              <>
-                {question.options?.map((option, optIndex) => (
-                  <Form.Check
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={optIndex}
-                    type="checkbox"
-                    id={`question-${question.id}-option-${optIndex}`}
-                    value={option}
-                    label={option}
-                    required={question.required && !currentAnswers.some((answer) => answer !== option)}
-                    checked={currentAnswers.includes(option)}
-                    onChange={(e) => toggleChecked(option, e.target.checked)}
-                  />
-                ))}
-              </>
-            );
+            input = question.options?.map((option, optIndex) => (
+              <Form.Check
+                // eslint-disable-next-line react/no-array-index-key
+                key={optIndex}
+                type="checkbox"
+                id={`question-${question.id}-option-${optIndex}`}
+                value={option}
+                label={option}
+                required={question.required && !currentAnswers.some((answer) => answer !== option)}
+                checked={currentAnswers.includes(option)}
+                onChange={(e) => toggleChecked(option, e.target.checked)}
+              />
+            ));
             isCheckboxes = true;
             break;
           }

@@ -34,6 +34,8 @@ module.exports = {
     "@typescript-eslint/quotes": ["error", "single"],
     // To allow grouping of class members - especially for Models.
     "@typescript-eslint/lines-between-class-members": "off",
+    // Doesn't increase code quality with redux.
+    "@typescript-eslint/default-param-last": "off",
     // TypeScript causes lots of circular imports for types, which the plugin
     // does not currently handle properly.
     // see https://github.com/benmosher/eslint-plugin-import/issues/1453
@@ -46,6 +48,12 @@ module.exports = {
     // a giant PITA - the default config ignores arrow functions but they don't solve
     // the problem at all, and useCallback is just plain ugly.
     "react/jsx-no-bind": "off",
+    // Prefer arrow functions to functions expressions, as that's what was done
+    // when this rule was introduced.
+    "react/function-component-definition": ["error", {
+      namedComponents: ["function-declaration", "arrow-function"],
+      unnamedComponents: "arrow-function",
+    }],
     // Sort imports: React first, then npm packages, then local files, then CSS.
     "simple-import-sort/imports": [
       "error",
