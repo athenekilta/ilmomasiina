@@ -33,7 +33,11 @@ Fastest way to get started, which involves the less requirements and setup. If y
 From the root folder, run `docker-compose up` and you should be able to reach the app at `localhost:3000`.
 When you change the source code and would like to update the changes to the container, run `docker-compose build` followed by `docker-compose-up`.
 
-To generate random fake data to the database, run `docker exec -it ilmomasiina_backend_1 npm run create-fake-data`
+To generate random fake data to the database, run `docker exec -it ilmomasiina_backend_1 npm run create-fake-data`.
+
+It is not required to build the docker image once changes are made: `./bin`, `./src`, `./servcer`, `./public` and `./config` are automatically synced to the container. If you do modify files in these paths, reload the web page and changes should be seen.
+
+When changes are made to other directories, run `docker-compose build` followed by `docker-compose up`. Though these paths do not contain components that are directly used by the web app at runtime.
 
 ## Option 2: install locally all dependencies
 The following sections help you setup locally dependencies to run the app.
