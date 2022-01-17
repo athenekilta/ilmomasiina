@@ -9,7 +9,7 @@
 
 ```
 
-Current defelopment is being held on `otax/production` branch.
+Current development is being held on `otax/production` branch.
 
 
 # Ilmomasiina
@@ -21,9 +21,29 @@ Ilmomasiina is Athene's event registration system.
 - Node.js `^8.9.4`
 - npm `^5.6.0`
 - MySQL `^8.0`
+- (optional) Docker and Docker-compose
 
-## MYSQL Setup
-### Mac
+## Setup the development environment 
+
+Create an `.env` file at the root of the project. For the contents of the .env file, check [ENV.MD](./ENV.MD)
+
+## Option 1: Docker-compose
+Fastest way to get started, which involves the less requirements and setup. If you do not have docker and docker-compose, follow this [link to get started](https://docs.docker.com/compose/install/)
+
+From the root folder, run `docker-compose up` and you should be able to reach the app at `localhost:3000`.
+When you change the source code and would like to update the changes to the container, run `docker-compose build` followed by `docker-compose-up`.
+
+To generate random fake data to the database, run `docker exec -it ilmomasiina_backend_1 npm run create-fake-data`.
+
+It is not required to build the docker image once changes are made: `./bin`, `./src`, `./servcer`, `./public` and `./config` are automatically synced to the container. If you do modify files in these paths, reload the web page and changes should be seen.
+
+When changes are made to other directories, run `docker-compose build` followed by `docker-compose up`. Though these paths do not contain components that are directly used by the web app at runtime.
+
+## Option 2: install locally all dependencies
+The following sections help you setup locally dependencies to run the app.
+
+### MYSQL Setup
+#### Mac
 1. Install `mysql` (8.x) with Homebrew (https://gist.github.com/nrollr/3f57fc15ded7dddddcc4e82fe137b58e)
 2. Start the mysql service with `brew services start mysql`
 3. Open the mysql terminal with `mysql -u root`
@@ -32,7 +52,7 @@ Ilmomasiina is Athene's event registration system.
 6. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
 7. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
 
-### Ubuntu
+#### Ubuntu
 1. Install mysql with `sudo apt install mysql-server`
 2. Service should start automatically
 3. Same as with Mac, but use `sudo mysql -u root`
@@ -41,7 +61,7 @@ Ilmomasiina is Athene's event registration system.
 6. Exit with `exit` and sign in with your new user e. g. `mysql -u juuso -p` (don't use `mysql -u juuso -p password`)
 7. Follow Mac instructions step 6 
 
-### Debian GNU/Linux (9 and above)
+#### Debian GNU/Linux (9 and above)
 Debian includes [MariaDB instead of MySQL](https://wiki.debian.org/MySql) in Debian Stretch and above.
 Below instructions are written using `mariadb  Ver 15.1 Distrib 10.5.12-MariaDB`.
 
@@ -55,11 +75,10 @@ Below instructions are written using `mariadb  Ver 15.1 Distrib 10.5.12-MariaDB`
 
 If needed (during development), you can sign in with your user using command like `mysql -u sampo -p`
 
-## Getting started
+### Getting started
 
-1. Create an `.env` file at the root of the project. For the contents of the .env file, check [ENV.MD](./ENV.MD)
-2. `npm install`
-3. `npm start`
+1. `npm install`
+2. `npm start`
 
 **Optional**: You can create mockup data for development by running `npm run create-fake-data`. During development, database can be resetted with `npm run reset-db`.
 
