@@ -105,6 +105,11 @@ const EditForm = ({ editToken }: Props) => {
 
             <QuestionFields name="answers" questions={event!.questions} />
 
+            <p>
+              Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin tallentamalla tämän sivun URL-osoitteen.
+              {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä.'}
+            </p>
+
             <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={submitting}>
               {isNew ? 'Lähetä' : 'Päivitä'}
             </Button>

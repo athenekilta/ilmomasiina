@@ -33,9 +33,10 @@ const QuestionsTab = () => {
         checkLabel="Kerää sähköpostiosoitteet"
         help={
           emailQuestion
-            ? 'Sähköpostiosoite on pakollinen kysymys.'
-            : 'Jos sähköpostiosoitetta ei ole kysytä, osallistujat eivät saa vahvistussähköpostia, eivät voi muokata '
-              + 'ilmoittautumistaan, eivätkä saa sähköposti-ilmoitusta jonosijalta pääsemisestä.'
+            ? 'Sähköpostiosoite on pakollinen kysymys. Osallistujille lähetetään vahvistussähköposti ja '
+              + 'sähköposti-ilmoitus jonosijalta pääsemisestä.'
+            : 'Jos sähköpostiosoitetta ei kysytä, osallistujat eivät saa vahvistussähköpostia tai '
+              + 'sähköposti-ilmoitusta jonosijalta pääsemisestä.'
         }
       />
       <Questions />
