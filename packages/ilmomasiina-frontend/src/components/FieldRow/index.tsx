@@ -3,6 +3,8 @@ import React, { ComponentType, ReactNode } from 'react';
 import { Field, useFormikContext } from 'formik';
 import { Col, Form, Row } from 'react-bootstrap';
 
+import './FieldRow.scss';
+
 type Props = {
   /** The name of the field in the Formik data. */
   name: string;

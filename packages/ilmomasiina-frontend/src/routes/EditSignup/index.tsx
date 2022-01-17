@@ -8,8 +8,7 @@ import { getSignupAndEvent, resetState } from '../../modules/editSignup/actions'
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import DeleteSignup from './components/DeleteSignup';
 import EditForm from './components/EditForm';
-
-import './EditSignup.scss';
+import NarrowContainer from './components/NarrowContainer';
 
 interface MatchParams {
   id: string;
@@ -33,46 +32,42 @@ const EditSignup = ({ match }: Props) => {
 
   if (deleted) {
     return (
-      <Container className="align-items-center">
-        <div className="EditSignup--wrapper">
-          <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-          <Button as={Link} to={`${PREFIX_URL}/event/${event!.slug}`} variant="secondary">
-            Takaisin
-          </Button>
-        </div>
+      <Container className="text-center">
+        <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
+        <Button as={Link} to={`${PREFIX_URL}/event/${event!.slug}`} variant="secondary">
+          Takaisin
+        </Button>
       </Container>
     );
   }
 
   if (loadError) {
     return (
-      <Container className="align-items-center">
-        <div className="EditSignup--wrapper">
+      <Container className="text-center">
+        <NarrowContainer>
           <h1>Hups, jotain meni pieleen</h1>
           <p>
             Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
             sitten jotain muuta kummallista tapahtui. Jos ilmoittautumisesi ei
             ole vielä poistunut, yritä kohta uudestaan.
           </p>
-        </div>
+        </NarrowContainer>
       </Container>
     );
   }
 
   if (!event || !signup) {
     return (
-      <Container className="align-items-center">
-        <div className="EditSignup--wrapper">
-          <Spinner animation="border" />
-        </div>
+      <Container className="text-center">
+        <Spinner animation="border" />
       </Container>
     );
   }
 
   if (event.registrationEndDate === null || new Date(event.registrationEndDate) < new Date()) {
     return (
-      <Container className="align-items-center">
-        <div className="EditSignup--wrapper">
+      <Container className="text-center">
+        <NarrowContainer>
           <h1>Hups, jotain meni pieleen</h1>
           <p>
             Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
@@ -81,7 +76,7 @@ const EditSignup = ({ match }: Props) => {
           <Button as={Link} to={`${PREFIX_URL}/`} variant="secondary">
             Takaisin etusivulle
           </Button>
-        </div>
+        </NarrowContainer>
       </Container>
     );
   }

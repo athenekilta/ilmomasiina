@@ -2,9 +2,7 @@ import React from 'react';
 
 import { push } from 'connected-react-router';
 import { Formik, FormikHelpers } from 'formik';
-import {
-  Button, Col, Form, Row,
-} from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -13,7 +11,8 @@ import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import FieldRow from '../../../../components/FieldRow';
 import { updateSignup } from '../../../../modules/editSignup/actions';
 import { useTypedDispatch, useTypedSelector } from '../../../../store/reducers';
-import QuestionFields from '../QuestionFields';
+import NarrowContainer from '../NarrowContainer';
+import QuestionFields from './QuestionFields';
 import SignupStatus from './SignupStatus';
 
 type Props = {
@@ -56,69 +55,67 @@ const EditForm = ({ editToken }: Props) => {
       onSubmit={onSubmit}
     >
       {({ handleSubmit }) => (
-        <Row className="justify-content-md-center">
-          <Col xs="12" md="10" lg="8">
-            <h2>{isNew ? 'Ilmoittaudu' : 'Muokkaa ilmoittautumista'}</h2>
-            <SignupStatus />
-            {submitError && (
-              <p className="text-danger">Ilmoittautumisessasi on virheitä.</p>
-            )}
-            <Form onSubmit={handleSubmit}>
-              {event!.nameQuestion && (
-                <>
-                  <FieldRow
-                    name="firstName"
-                    label="Etunimi / First name"
-                    placeholder="Etunimi"
-                    required
-                    disabled={!isNew}
-                  />
-                  <FieldRow
-                    name="lastName"
-                    label="Sukunimi / Last name"
-                    placeholder="Sukunimi"
-                    required
-                    disabled={!isNew}
-                  />
-                  <FieldRow
-                    name="namePublic"
-                    as={Form.Check}
-                    type="checkbox"
-                    checkAlign
-                    checkLabel={(
-                      <>
-                        Näytä nimi julkisessa osallistujalistassa
-                        <br />
-                        Show name in public participant list
-                      </>
-                    )}
-                  />
-                </>
-              )}
-              {event!.emailQuestion && (
+        <NarrowContainer>
+          <h2>{isNew ? 'Ilmoittaudu' : 'Muokkaa ilmoittautumista'}</h2>
+          <SignupStatus />
+          {submitError && (
+            <p className="text-danger">Ilmoittautumisessasi on virheitä.</p>
+          )}
+          <Form onSubmit={handleSubmit}>
+            {event!.nameQuestion && (
+              <>
                 <FieldRow
-                  name="email"
-                  label="Sähköposti / Email"
-                  placeholder="Sähköpostisi"
+                  name="firstName"
+                  label="Etunimi / First name"
+                  placeholder="Etunimi"
                   required
                   disabled={!isNew}
                 />
-              )}
+                <FieldRow
+                  name="lastName"
+                  label="Sukunimi / Last name"
+                  placeholder="Sukunimi"
+                  required
+                  disabled={!isNew}
+                />
+                <FieldRow
+                  name="namePublic"
+                  as={Form.Check}
+                  type="checkbox"
+                  checkAlign
+                  checkLabel={(
+                    <>
+                      Näytä nimi julkisessa osallistujalistassa
+                      <br />
+                      Show name in public participant list
+                    </>
+                  )}
+                />
+              </>
+            )}
+            {event!.emailQuestion && (
+              <FieldRow
+                name="email"
+                label="Sähköposti / Email"
+                placeholder="Sähköpostisi"
+                required
+                disabled={!isNew}
+              />
+            )}
 
-              <QuestionFields name="answers" questions={event!.questions} />
+            <QuestionFields name="answers" questions={event!.questions} />
 
-              <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={submitting}>
-                {isNew ? 'Lähetä' : 'Päivitä'}
+            <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={submitting}>
+              {isNew ? 'Lähetä' : 'Päivitä'}
+            </Button>
+            {!isNew && (
+              <Button as={Link} variant="link" className="float-right" to={`${PREFIX_URL}/event/${event!.slug}`}>
+                Peruuta
               </Button>
-              {!isNew && (
-                <Button as={Link} variant="link" className="float-right" to={`${PREFIX_URL}/event/${event!.slug}`}>
-                  Peruuta
-                </Button>
-              )}
-              <div className="clearfix" />
-            </Form>
-          </Col>
-        </Row>
+            )}
+            <div className="clearfix" />
+          </Form>
+        </NarrowContainer>
       )}
     </Formik>
   );
