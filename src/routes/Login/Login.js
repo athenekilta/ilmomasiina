@@ -50,6 +50,7 @@ class Login extends React.Component {
             required
           />
           <button
+            id="login-button"
             className="btn btn-default"
             onClick={(e) => {
               e.preventDefault();
