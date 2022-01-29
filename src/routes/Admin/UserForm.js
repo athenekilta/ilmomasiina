@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import { Input } from 'formsy-react-components';
 import Spinner from 'react-spinkit';
-import Promise from 'bluebird';
 
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);

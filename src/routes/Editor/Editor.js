@@ -4,7 +4,6 @@ import Formsy from 'formsy-react';
 import Spinner from 'react-spinkit';
 import { browserHistory, Link } from 'react-router';
 import { toast } from 'react-toastify';
-import Promise from 'bluebird';
 import { connect } from 'react-redux';
 
 import './Editor.scss';
