@@ -167,6 +167,7 @@
     "node-cron": "^2.0.3",
     "node-sass": "^4.14.1",
     "nodemailer": "^6.7.2",
+    "npm": "^8.4.0",
     "postcss-loader": "^1.1.0",
     "prop-types": "^15.8.1",
     "react": "^15.7.0",
