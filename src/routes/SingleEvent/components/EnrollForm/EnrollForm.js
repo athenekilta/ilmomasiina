@@ -22,8 +22,8 @@ export class EnrollForm extends React.Component {
       email: data.email,
       answers: [],
     };
-
     if (this.props.questions) {
+      
       answers.answers = this.props.questions
         .map((question) => {
           const questionId = question.id;
@@ -36,11 +36,9 @@ export class EnrollForm extends React.Component {
             return { questionId, answer };
           }
 
-          return null;
+          return { questionId,  answer: "" };
         })
-        .filter(x => x);
     }
-
     return this.props.submitForm(answers);
   }
 
