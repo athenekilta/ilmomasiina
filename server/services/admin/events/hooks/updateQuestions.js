@@ -25,7 +25,7 @@ module.exports = () => (hook) => {
       hook.result.dataValues.questions = questions;
       return hook;
     }).catch((error => {
-      throw new Error('Question update failed');
+      throw new Error('Question update failed:', error);
     }));
 
 };

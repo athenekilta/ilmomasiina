@@ -28,9 +28,10 @@ module.exports = () => (hook) => {
     });
   }).then((quota) => {
     hook.result.dataValues.quota = quota;
+    console.log(quota)
     return hook;
   }).catch((error => {
-    throw new Error('Quota update failed');
+    throw new Error('Quota update failed:', error);
   }));
 
 

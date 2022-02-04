@@ -42,8 +42,29 @@ module.exports = () => (hook) => {
           if (question.required) {
             throw new Error(`Missing answer for question ${question.question}`);
           }
-        }
+        } else {
+          if (!answer.answer) {
+            return null
+          }
+          // Check that the select answer is valid
+          if (question.type === 'select') {
+            const options = question.options.split(';');
 
+            if (options.indexOf(answer.answer) === -1) {
+              throw new Error(`Invalid answer to question ${question.question}`);
+            }
+          }
+          // Check that all checkbox answers are valid
+          if (question.type === 'checkbox') {
+            const options = question.options.split(';');
+            const answers = answer.answer.split(';');
+            _.each(answers, (ans) => {
+              if (options.indexOf(ans) === -1) {
+                throw new Error(`Invalid answer to question ${question.question}`);
+              }
+            });
+          }
+        }
         return true;
       });
       return hook;
