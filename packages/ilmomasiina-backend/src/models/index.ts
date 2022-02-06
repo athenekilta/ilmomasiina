@@ -23,7 +23,6 @@ export default function setupDatabase(this: IlmoApplication) {
   const {
     clearDbUrl,
     dbDialect, dbHost, dbDatabase, dbUser, dbPassword,
-    dockerCompose,
   } = config;
 
   let sequelize: Sequelize;
@@ -37,7 +36,7 @@ export default function setupDatabase(this: IlmoApplication) {
       dbUser!,
       dbPassword,
       {
-        host: dockerCompose ? 'db' : dbHost!,
+        host: dbHost!,
         dialect: dbDialect as Dialect,
         logging: config.debugDbLogging,
       },
