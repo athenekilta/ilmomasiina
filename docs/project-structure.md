@@ -3,11 +3,15 @@
 The project uses [Lerna](https://lerna.js.org/) to manage the code in separate packages. This allows for cleaner code
 and package files.
 
-To prepare for development, lerna must be bootstrapped. In this project, lerna bootstrapping is implemented using npm
-*postinstall* script. Running `npm install` or `npm ci` will automatically bootstrap lerna once packages are installed.
-To bootstrap lerna manually, run `npx lerna bootstrap`.
+To prepare for development, Lerna must bootstrap the cross-dependencies between projects. This is done automatically
+using a npm *postinstall* script. Running `npm install` or `npm ci` will automatically run `lerna bootstrap` once
+packages are installed. To re-run bootstrapping manually, run `npm run bootstrap`.
 
-The project is configured to run development servers for the frontend and backend with `npm start`.
+The project is configured to run development servers for the frontend and backend with `npm start`. In development, the
+Webpack development server serves the frontend and proxies API calls to the backend server.
+
+In production, the backend server can optionally serve the compiled frontend bundle, but ideally a separate reverse
+proxy such as Nginx is used for this purpose.
 
 ## Packages
 
