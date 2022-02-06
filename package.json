@@ -8,6 +8,7 @@
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap",
     "clean": "lerna run clean",
     "build": "lerna run build",
     "start": "lerna run --parallel start",

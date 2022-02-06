@@ -2,11 +2,13 @@ version: '3.2'
 
 # This compose file is for development use only – Do not use this in production!
 
-# This compose file builds ilmomasiina and serves it at http://localhost:3000.
+# This compose file builds Ilmomasiina and serves it at http://localhost:3000.
 # For easier development, it provides hot reloading by utilizing bind mounts.
+# You will still need to rebuild if you update the project's dependencies.
 
-# The env vars from .env file (in repository root) will be used by docker compose and passed to the containers.
+# Env vars from the .env file (in repository root) will be used by docker-compose and passed to the containers.
 # Remember to create your own .env file (see .env.example)!
+# The database will use the DB_USER, DB_PASSWORD and DB_DATABASE provided by you.
 
 services:
   database:
@@ -21,11 +23,12 @@ services:
     build:
       context: .
       dockerfile: "Dockerfile.dev"
-    command: "npx lerna run --parallel start:dev"
+    command: "npm start"
     restart: always
     depends_on:
       - database
     environment:
+      - DB_DIALECT=postgres
       - DB_HOST=database
       - NODE_ENV=development
     env_file:
