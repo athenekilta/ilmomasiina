@@ -13,9 +13,6 @@ import { Signup } from '../../models/signup';
 import { signupsAllowed } from './createNewSignup';
 import { verifyToken } from './editTokens';
 
-// Fields that are present and required in every signup.
-const alwaysRequiredFields = ['firstName', 'lastName', 'email'] as const;
-
 export default async (id: string, data: SignupUpdateBody, params?: Params): Promise<SignupUpdateResponse> => {
   const editToken = params?.query?.editToken || data.editToken;
   verifyToken(id, editToken);
@@ -44,19 +41,26 @@ export default async (id: string, data: SignupUpdateBody, params?: Params): Prom
       ],
       transaction,
     });
-    if (!signupsAllowed(quota.event!)) {
+    const event = quota.event!;
+    if (!signupsAllowed(event)) {
       throw new Forbidden('Signups closed for this event.');
     }
 
-    const questions = quota.event!.questions!;
+    const questions = event.questions!;
 
-    // Check that all common fields are present (if first time confirming)
+    // Check that required common fields are present (if first time confirming)
     if (!signup.confirmedAt) {
-      alwaysRequiredFields.forEach((fieldName) => {
-        if (!data[fieldName]) {
-          throw new BadRequest(`Missing ${fieldName}`);
+      if (event.nameQuestion) {
+        if (!data.firstName) {
+          throw new BadRequest('Missing first name');
         }
-      });
+        if (!data.lastName) {
+          throw new BadRequest('Missing last name');
+        }
+      }
+      if (event.emailQuestion && !data.email) {
+        throw new BadRequest('Missing email');
+      }
     }
 
     // Check that all questions are answered with a valid answer
@@ -112,14 +116,18 @@ export default async (id: string, data: SignupUpdateBody, params?: Params): Prom
       };
     });
 
-    // Update the fields for the signup if this is the first confirmation
-    if (!signup.confirmedAt) {
-      const updatedFields = {
-        ..._.pick(data, alwaysRequiredFields),
-        confirmedAt: new Date(),
-      };
-      await signup.update(updatedFields, { transaction });
-    }
+    // Update fields for the signup (name and email only editable on first confirmation)
+    const firstUpdate = !signup.confirmedAt;
+    const nameFields = firstUpdate && event.nameQuestion ? _.pick(data, 'firstName', 'lastName') : {};
+    const emailField = firstUpdate && event.emailQuestion ? _.pick(data, 'email') : {};
+
+    const updatedFields = {
+      ...nameFields,
+      ...emailField,
+      ..._.pick(data, 'namePublic'),
+      confirmedAt: new Date(),
+    };
+    await signup.update(updatedFields, { transaction });
 
     // Update the Answers for the Signup
     await Answer.destroy({

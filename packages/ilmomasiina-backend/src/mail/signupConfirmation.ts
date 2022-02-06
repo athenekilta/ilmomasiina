@@ -6,11 +6,17 @@ import { generateToken } from '../services/signup/editTokens';
 import EmailService from '.';
 
 export default async (signup: Signup) => {
+  if (signup.email === null) return;
+
   // TODO: convert to include
   const answers = await signup.getAnswers();
   const quota = await signup.getQuota();
   const event = await quota.getEvent();
   const questions = await event.getQuestions();
+
+  // Show name only if filled
+  const fullName = `${signup.firstName} ${signup.lastName}`.trim();
+  const nameField = fullName ? [{ label: 'Nimi', answer: fullName }] : [];
 
   const questionFields = questions
     .map((question) => <const>[
@@ -24,8 +30,8 @@ export default async (signup: Signup) => {
     }));
 
   const fields = [
-    { label: 'Nimi', answer: `${signup.firstName} ${signup.lastName}` },
-    { label: 'Sähköposti', answer: `${signup.email}` },
+    ...nameField,
+    { label: 'Sähköposti', answer: String(signup.email) },
     { label: 'Kiintiö', answer: quota.title },
     ...questionFields,
   ];
@@ -44,5 +50,5 @@ export default async (signup: Signup) => {
     cancelLink,
   };
 
-  EmailService.sendConfirmationMail(signup.email!, params);
+  EmailService.sendConfirmationMail(signup.email, params);
 };

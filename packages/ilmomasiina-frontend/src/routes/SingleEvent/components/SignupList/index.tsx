@@ -14,7 +14,7 @@ type Props = {
 
 const SignupList = ({ quota }: Props) => {
   const { signups } = quota;
-  const { questions } = useTypedSelector((state) => state.singleEvent.event)!;
+  const { questions, nameQuestion } = useTypedSelector((state) => state.singleEvent.event)!;
   const showQuotas = quota.id === OPENQUOTA || quota.id === WAITLIST;
   return (
     <div className="quota">
@@ -27,9 +27,11 @@ const SignupList = ({ quota }: Props) => {
             <thead className="thead-light">
               <tr>
                 <th key="position">Sija</th>
-                <th key="attendee" style={{ minWidth: 90 }}>
-                  Nimi
-                </th>
+                {nameQuestion && (
+                  <th key="attendee" style={{ minWidth: 90 }}>
+                    Nimi
+                  </th>
+                )}
                 {_.filter(questions, 'public').map((question) => (
                   <th key={question.id}>
                     {question.question}

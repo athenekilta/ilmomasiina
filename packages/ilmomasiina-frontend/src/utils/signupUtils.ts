@@ -15,6 +15,7 @@ type AnyQuestionDetails = AdminEvent.Details.Question | Event.Details.Question;
 export type SignupWithQuota = AnySignupDetails & {
   quotaId: Quota.Id;
   quotaName: string;
+  confirmed: boolean;
 };
 
 function getSignupsAsList(event: AnyEventDetails): SignupWithQuota[] {
@@ -24,6 +25,8 @@ function getSignupsAsList(event: AnyEventDetails): SignupWithQuota[] {
         ...signup,
         quotaId: quota.id,
         quotaName: quota.title,
+        confirmed:
+          (signup as Event.Details.Signup).confirmed || (signup as AdminEvent.Details.Signup).confirmedAt !== null,
       }),
     ) ?? [],
   );
@@ -91,6 +94,7 @@ type FormattedSignup = {
   answers: Record<AnyQuestionDetails['id'], string>;
   quota: string;
   createdAt: string;
+  confirmed: boolean;
 };
 
 export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSignup[] {
@@ -116,4 +120,25 @@ export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSign
       answers: getAnswersFromSignup(event, signup),
     };
   });
+}
+
+export function convertSignupsToCSV(event: AdminEvent.Details, signups: FormattedSignup[]): string[][] {
+  return [
+    // Headers
+    [
+      ...(event.nameQuestion ? ['Etunimi', 'Sukunimi'] : []),
+      ...(event.emailQuestion ? ['Sähköpostiosoite'] : []),
+      'Kiintiö',
+      ...event.questions.map(({ question }) => question),
+      'Ilmoittautumisaika',
+    ],
+    // Data rows
+    ...signups.map((signup) => [
+      ...(event.nameQuestion ? [signup.firstName || '', signup.lastName || ''] : []),
+      ...(event.emailQuestion ? [signup.email || ''] : []),
+      signup.quota,
+      ...event.questions.map((question) => signup.answers[question.id] || ''),
+      signup.createdAt,
+    ]),
+  ];
 }

@@ -14,13 +14,14 @@ import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
 export interface SignupCreationAttributes
-  extends Optional<SignupAttributes, 'id' | 'firstName' | 'lastName' | 'email' | 'confirmedAt'
+  extends Optional<SignupAttributes, 'id' | 'firstName' | 'lastName' | 'namePublic' | 'email' | 'confirmedAt'
   | 'status' | 'position' | 'createdAt'> {}
 
 export class Signup extends Model<SignupAttributes, SignupCreationAttributes> implements SignupAttributes {
   public id!: string;
   public firstName!: string | null;
   public lastName!: string | null;
+  public namePublic!: boolean;
   public email!: string | null;
   public confirmedAt!: Date | null;
   public status!: SignupStatus | null;
@@ -73,6 +74,10 @@ export default function setupSignupModel(this: IlmoApplication) {
         validate: {
           notEmpty: true,
         },
+      },
+      namePublic: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       email: {
         type: DataTypes.STRING,

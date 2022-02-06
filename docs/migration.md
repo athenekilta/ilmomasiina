@@ -89,4 +89,18 @@ MODIFY `registrationEndDate` DATETIME DEFAULT NULL;
 
 ALTER TABLE `event`
 ADD `category` VARCHAR(255) NOT NULL DEFAULT '' AFTER `webpageUrl`;
+
+-- make names optional in signups
+
+ALTER TABLE `event`
+ADD `nameQuestion` BOOLEAN NOT NULL DEFAULT 1 AFTER `signupsPublic`,
+ADD `emailQuestion` BOOLEAN NOT NULL DEFAULT 1 AFTER `signupsPublic`;
+
+-- allow hiding names in signups
+
+ALTER TABLE `signup`
+ADD `namePublic` BOOLEAN NOT NULL DEFAULT 0 AFTER `lastName`;
+-- keep names public in previously existing signups
+UPDATE `signup`
+SET `namePublic` = 1;
 ```

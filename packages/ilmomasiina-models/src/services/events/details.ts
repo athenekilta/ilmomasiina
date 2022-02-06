@@ -19,6 +19,8 @@ export const eventGetEventAttrs = [
   'facebookUrl',
   'category',
   'signupsPublic',
+  'nameQuestion',
+  'emailQuestion',
 ] as const;
 
 // Attributes included in GET /api/admin/events/ID for Event instances.
@@ -52,6 +54,7 @@ export const eventGetQuotaAttrs = [
 export const eventGetSignupAttrs = [
   'firstName',
   'lastName',
+  'namePublic',
   'status',
   'position',
   'createdAt',
@@ -62,6 +65,7 @@ export const adminEventGetSignupAttrs = [
   ...eventGetSignupAttrs,
   'id',
   'email',
+  'confirmedAt',
 ] as const;
 
 // Attributes included in results for Answer instances.
@@ -81,6 +85,7 @@ export interface EventGetAnswerItem extends Pick<AnswerAttributes, typeof eventG
 
 export interface EventGetSignupItem extends Pick<SignupAttributes, typeof eventGetSignupAttrs[number]> {
   answers: EventGetAnswerItem[];
+  confirmed: boolean;
 }
 
 export interface EventGetQuotaItem extends Pick<QuotaAttributes, typeof eventGetQuotaAttrs[number]> {

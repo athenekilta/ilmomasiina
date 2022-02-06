@@ -15,6 +15,8 @@ export default interface EventAttributes {
   draft: boolean;
   listed: boolean;
   signupsPublic: boolean;
+  nameQuestion: boolean;
+  emailQuestion: boolean;
   verificationEmail: string | null;
   updatedAt: Date;
 }
