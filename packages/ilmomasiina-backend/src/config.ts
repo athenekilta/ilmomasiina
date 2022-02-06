@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 
-/** Parses a valid path from env or uses default location 'frontend'.
- * In either case, returns null if path does not exist or it is not a directory.
- * If env variable contains an empty string, this function returns null.
+/**
+ * Gets the location of the compiled frontend files from the environment or the default of 'frontend'.
+ * Returns null if the environment variable is set but empty, or if the variable is unset and the default
+ * directory does not exist.
  */
-const parseFrontendFilesPath = (): string | null => {
+const getFrontendFilesPath = (): string | null => {
   const envValue = process.env.FRONTEND_FILES_PATH;
 
   // Empty value disables frontend serving
@@ -13,16 +14,13 @@ const parseFrontendFilesPath = (): string | null => {
     return null;
   }
 
-  const parsedPath = path.resolve(envValue || 'frontend');
-  if (fs.existsSync(parsedPath) && fs.statSync(parsedPath).isDirectory()) {
-    return parsedPath;
+  // See if the given or default paths exist
+  const frontendPath = path.resolve(envValue || 'frontend');
+  if (fs.existsSync(frontendPath) && fs.statSync(frontendPath).isDirectory()) {
+    return frontendPath;
   }
 
-  try { // Try to import ilmomasiina-frontend as a package
-    return path.dirname(require.resolve('@tietokilta/ilmomasiina-frontend/build/index.html'));
-  } catch (e) {
-    return null;
-  }
+  return null;
 };
 
 const config = {
@@ -31,11 +29,8 @@ const config = {
 
   port: process.env.PORT || 3000,
 
-  frontedFilesPath: parseFrontendFilesPath(),
-
-  dockerCompose: process.env.DOCKER_COMPOSE === 'true',
-
-  enforceHTTPS: !(process.env.ENFORCE_HTTPS === 'false'),
+  enforceHttps: process.env.ENFORCE_HTTPS !== 'false',
+  frontendFilesPath: getFrontendFilesPath(),
 
   clearDbUrl: process.env.CLEARDB_DATABASE_URL || null,
   dbDialect: process.env.DB_DIALECT,
@@ -81,15 +76,14 @@ if (!config.port && config.nodeEnv === 'production') {
   throw new Error('Missing .env variable: PORT');
 }
 
-if (config.frontedFilesPath === null) {
+if (config.frontendFilesPath === null) {
   if (process.env.FRONTEND_FILES_PATH === '') {
     console.info('Frontend serving disabled in backend.');
   } else if (process.env.FRONTEND_FILES_PATH) {
     throw new Error(
-      'Env variable FRONTEND_FILES_PATH contains an invalid path:'
-      + `${process.env.FRONTEND_FILES_PATH} does not exist or is not a directory`,
+      `FRONTEND_FILES_PATH is invalid: ${process.env.FRONTEND_FILES_PATH} does not exist or is not a directory`,
     );
-  } else if (config.nodeEnv !== 'production') {
+  } else if (config.nodeEnv === 'production') {
     console.warn('Compiled frontend not found. Frontend will not be served by backend.');
   }
 }
@@ -111,14 +105,16 @@ if (config.adminRegistrationAllowed) {
   );
 }
 
-if (config.enforceHTTPS) {
-  console.info('Enforcing HTTPS connections');
-} else if (config.nodeEnv === 'production') {
-  console.warn(
-    'HTTPS connections are not enforced by Ilmomasiina.\n'
-    + 'For security reasons, please set ENFORCE_HTTPS true or configure your load balancer or reverse proxy to'
-    + 'forward only HTTPS connections to Ilmomasiina.',
-  );
+if (config.nodeEnv === 'production') {
+  if (config.enforceHttps) {
+    console.info('Enforcing HTTPS connections');
+  } else {
+    console.warn(
+      'HTTPS connections are not enforced by Ilmomasiina.\n'
+      + 'For security reasons, please set ENFORCE_HTTPS=true or configure your load balancer or reverse proxy to'
+      + 'forward only HTTPS connections to Ilmomasiina.',
+    );
+  }
 }
 
 export default config;

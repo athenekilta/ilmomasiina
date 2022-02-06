@@ -42,19 +42,19 @@ if (config.nodeEnv === 'development') {
     next(error);
   });
   app.use(express.errorHandler());
-} else if (config.nodeEnv === 'production' && config.enforceHTTPS) {
+} else if (config.nodeEnv === 'production' && config.enforceHttps) {
   // Enforce HTTPS connections
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 app.use(historyApiFallback());
 
-// Serving frontend files if frontedFilesPath is defined (not null).
+// Serving frontend files if frontendFilesPath is not null.
 // Ideally these files should be served by a web server and not the app server,
-// but this helps to demo the server in production.
-if (config.frontedFilesPath) {
-  console.info(`Serving frontend files from '${config.frontedFilesPath}'`);
-  app.use(express.static(config.frontedFilesPath));
+// but this helps run a low-effort server.
+if (config.frontendFilesPath) {
+  console.info(`Serving frontend files from '${config.frontendFilesPath}'`);
+  app.use(express.static(config.frontendFilesPath));
 }
 
 export = app;
