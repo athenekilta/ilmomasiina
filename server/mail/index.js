@@ -44,7 +44,6 @@ const EmailService = {
         const subjectFi = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
         const subjectEn = `${params.edited ? 'Signup edit' : 'Signup'} confirmation: ${params.event.title}`;
         const subject = subjectFi + ' // ' + subjectEn;
-        console.log(html)
         return EmailService.send(to, subject, html);
       });
   },

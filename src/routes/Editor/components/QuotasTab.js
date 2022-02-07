@@ -42,7 +42,6 @@ class QuotasTab extends React.Component {
       id: (_.max(quotas.map(n => n.id)) || 0) + 1,
       title: '',
       existsInDb: false,
-      sortId: (_.max(quotas.map(n => n.sortId)) || 0) + 1,
     });
 
     this.props.onDataChange('quota', newQuotas);
@@ -50,8 +49,6 @@ class QuotasTab extends React.Component {
 
   updateOrder(args) {
     let newQuotas = this.props.event.quota;
-    console.log(args)
-    console.log(newQuotas)
     const elementToMove = newQuotas[args.oldIndex];
     newQuotas.splice(args.oldIndex, 1);
     newQuotas.splice(args.newIndex, 0, elementToMove);
