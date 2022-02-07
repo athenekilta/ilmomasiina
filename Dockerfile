@@ -1,38 +1,39 @@
 # Build stage:
-FROM node:12.20.1-alpine as builder
+FROM node:12-alpine as builder
 
+# Copy source files
 COPY . /opt/ilmomasiina
 WORKDIR /opt/ilmomasiina
 
-# Install dependencies (bootstraps lerna via postinstall script)
-RUN npm ci
+# Install dependencies (we're running as root, so the postinstall script doesn't run automatically)
+RUN npm ci && npm run bootstrap
 
 # Build all packages
 RUN npm run build
 
-# Replace ilmomasiina-models src with compiled js files
-RUN rm -r /opt/ilmomasiina/packages/ilmomasiina-models/src
-RUN mv /opt/ilmomasiina/packages/ilmomasiina-models/dist /opt/ilmomasiina/packages/ilmomasiina-models/src
-
-# Bundle frontend build to backend
-RUN mv /opt/ilmomasiina/packages/ilmomasiina-frontend/build /opt/ilmomasiina/packages/ilmomasiina-backend/dist/frontend
-
-# Bundle node_modules to dist
-RUN cp -rL /opt/ilmomasiina/packages/ilmomasiina-backend/node_modules \
-    /opt/ilmomasiina/packages/ilmomasiina-backend/dist/node_modules
-
 # Main stage:
-FROM node:12.20.1-alpine
+FROM node:12-alpine
 
 # Default to production
 ENV NODE_ENV=production
 
+# Create user for running
+RUN adduser -D -h /opt/ilmomasiina ilmomasiina
+USER ilmomasiina
+
 WORKDIR /opt/ilmomasiina
-RUN adduser -D masiina
-USER masiina
+
+# Copy backend dependencies from build stage
+COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-backend/node_modules /opt/ilmomasiina/node_modules
+
+# Copy compiled ilmomasiina-models as "src" into backend dependencies (TODO: implement a better build for this)
+COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-models/dist /opt/ilmomasiina/node_modules/@tietokilta/ilmomasiina-models/src
 
 # Copy built backend from build stage
-COPY --from=builder --chown=masiina:masiina /opt/ilmomasiina/packages/ilmomasiina-backend/dist /opt/ilmomasiina
+COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-backend/dist /opt/ilmomasiina/dist
+
+# Copy built frontend from build stage
+COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-frontend/build /opt/ilmomasiina/frontend
 
 # Start server
-CMD node bin/server.js
+CMD ["node", "dist/bin/server.js"]
