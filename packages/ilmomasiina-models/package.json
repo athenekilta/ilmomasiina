@@ -6,7 +6,8 @@
     "url": "git+https://github.com/Tietokilta/ilmomasiina.git"
   },
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "typecheck": "tsc --noEmit"
   },
   "license": "MIT"
 }

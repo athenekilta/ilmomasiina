@@ -12,7 +12,8 @@
     "start:prod": "bnr start:prod",
     "stop:prod": "bnr stop:prod",
     "monit:prod": "bnr monit:prod",
-    "build": "bnr build"
+    "build": "bnr build",
+    "typecheck": "bnr typecheck"
   },
   "betterScripts": {
     "start:dev": {
@@ -38,6 +39,9 @@
     },
     "build": {
       "command": "tsc --build"
+    },
+    "typecheck": {
+      "command": "tsc --noEmit"
     }
   },
   "dependencies": {
