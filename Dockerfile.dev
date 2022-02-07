@@ -4,7 +4,7 @@
 # Node modules will be installed at the build phase and included in the container image.
 # Sources and other files are intended to be provided using bind mounts.
 
-FROM node:12-alpine
+FROM node:14-alpine
 
 WORKDIR /opt/ilmomasiina
 

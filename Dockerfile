@@ -1,5 +1,5 @@
 # Build stage:
-FROM node:12-alpine as builder
+FROM node:14-alpine as builder
 
 # Copy source files
 COPY . /opt/ilmomasiina
@@ -12,7 +12,7 @@ RUN npm ci && npm run bootstrap
 RUN npm run build
 
 # Main stage:
-FROM node:12-alpine
+FROM node:14-alpine
 
 # Default to production
 ENV NODE_ENV=production
