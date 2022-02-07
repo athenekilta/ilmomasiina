@@ -22,13 +22,15 @@ See the [docs](docs/README.md) folder.
 
 ## Requirements
 
-- Docker: 17.04.0+
-- docker-compose or Compose V2 (included in the latest releases of docker-cli)
-- Node.js: 14+
-- npm: 6+
+- If using Docker:
+   - Docker: 17.04.0+
+   - docker-compose or Compose V2 (included in the latest releases of docker-cli)
+- For development, or if running without Docker:
+   - Node.js: 14+
+   - npm: 6+
 
-> To run the project (dev or production), only Docker and Docker Compose are required.
-> Having also Node.js and npm installed locally makes the development easier.
+To run the project (dev or production), only Docker and Docker Compose are required.
+For actual development, you'll want to have Node.js and npm installed locally in order to manage dependencies.
 
 <!--
 ### Create fake data
@@ -61,24 +63,43 @@ Only follow this if you don't use the Docker container.
 7. Follow Mac instructions step 6
 -->
 
-## Getting started
+## Production setup
 
-### For developers
-1. Create a `.env` file at the root of this repository.
-   For the contents of the .env file, take a look at [.env.example](./.env.example).
-2. Run `npm install` to install packages (this also triggers lerna bootstrap via postinstall script).
+TODO. (This file has lots of outdated information as comments.)
 
-The more detailed introduction can be read from [documentation](docs/README.md).
+## For developers
 
-### Running the development version
-> Development setup is built using docker and docker compose. The [compose file for dev setup](./docker-compose.yml) is
-> located at the root of this repository, and it contains a pre-configured postgres server so external database server
-> is not required.
+See the [documentation](docs/README.md) for more information.
 
-1. Create a `.env` file (*see instructions from the For developers section*).
-2. Go to the repository root and run `docker-compose up`.
-   This builds the dev container and starts ilmomasiina to listen at [http://localhost:3000](http://localhost:3000).
+### Development setup using Docker Compose
 
+The entire development setup can be run within Docker using Docker Compose. The
+[docker-compose dev setup](./docker-compose.yml) is located at the root of this repository, and contains a
+pre-configured Postgres server, so an external database server is not required.
+
+1. Create a `.env` file at the root of this repository. You can copy [.env.example](./.env.example) to begin.
+2. Go to the repository root and run `docker-compose up`. This builds the dev container and starts the frontend and
+   backend servers in parallel.
+3. Access the app at <http://localhost:3000>.
+
+Due to how the dev Docker is set up, you will need to rebuild the development image if you change the dependencies,
+package.json or ESLint configs.
+
+### Non-containerized development setup
+
+You can also run the development server outside Docker.
+
+1. Install Postgres or MySQL. You can use Docker for this. SQLite may also work. but is not currently tested.
+2. Create a `.env` file at the root of this repository. You can copy [.env.example](./.env.example) to begin.
+3. Run `npm install` to install Lerna and other global dependencies. The postinstall script should automatically run
+   `lerna bootstrap` to setup cross-dependencies between packages and install package dependencies.
+4. Run `npm start`. This will start the frontend and backend dev servers in parallel.
+   - If you want cleaner output, you can run `npm start` separately in `packages/ilmomasiina-frontend` and
+     `packages/ilmomasiina-backend`.
+   - Currently, there is no way to run the Webpack development server directly within the backend process.
+5. Access the app at <http://localhost:3000>.
+
+<!-- TODO
 ### Creating first admin user
 > By default, only logged-in admin users can create new admin users using the `/admin` endpoint.
 > To create the first one, admin registration needs to be allowed.
@@ -143,3 +164,4 @@ git pull otax/master
 npm run compile
 pm2 restart prod-server
 ```
+-->
