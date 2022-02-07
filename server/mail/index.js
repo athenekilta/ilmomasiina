@@ -66,7 +66,7 @@ const EmailService = {
         siteUrl: ilmoconfig.baseUrl,
       },
     };
-
+    
     return email
       .render('../server/mail/emails/newUser/html', brandedParams)
       .then(html => {

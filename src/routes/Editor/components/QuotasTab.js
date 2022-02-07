@@ -49,7 +49,6 @@ class QuotasTab extends React.Component {
 
   updateOrder(args) {
     let newQuotas = this.props.event.quota;
-
     const elementToMove = newQuotas[args.oldIndex];
     newQuotas.splice(args.oldIndex, 1);
     newQuotas.splice(args.newIndex, 0, elementToMove);
