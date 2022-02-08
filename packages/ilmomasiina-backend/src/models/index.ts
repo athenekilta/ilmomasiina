@@ -1,3 +1,4 @@
+import debug from 'debug';
 import { Sequelize } from 'sequelize';
 
 import { IlmoApplication } from '../defs';
@@ -17,6 +18,8 @@ export interface IlmoModels {
   answer: typeof Answer;
 }
 
+const debugLog = debug('app:db');
+
 export default function setupDatabase(this: IlmoApplication) {
   const app = this;
 
@@ -25,11 +28,11 @@ export default function setupDatabase(this: IlmoApplication) {
     .authenticate()
     .then(() => {
       const cfg = (sequelize.connectionManager as any).config;
-      console.log(`Sequelize: Connected to ${cfg.host} as ${cfg.username}.`);
+      debugLog(`Connected to ${cfg.host} as ${cfg.username}.`);
     })
     .catch((err) => {
       const cfg = (sequelize.connectionManager as any).config;
-      console.error(`Sequelize: Error connecting ${cfg.host} as ${cfg.username}: ${err}`);
+      console.error(`Error connecting ${cfg.host} as ${cfg.username}: ${err}`);
     });
 
   app.set('sequelize', sequelize);

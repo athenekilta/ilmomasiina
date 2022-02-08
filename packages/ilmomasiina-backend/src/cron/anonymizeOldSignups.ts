@@ -1,3 +1,4 @@
+import debug from 'debug';
 import moment from 'moment';
 import { Op } from 'sequelize';
 
@@ -10,6 +11,8 @@ import { Signup } from '../models/signup';
 const redactedName = 'Deleted';
 const redactedEmail = 'deleted@gdpr.invalid';
 const redactedAnswer = 'Deleted';
+
+const debugLog = debug('app:cron:anonymize');
 
 export default async function anonymizeOldSignups() {
   const redactOlderThan = moment().subtract(config.anonymizeAfterDays, 'days').toDate();
@@ -70,14 +73,13 @@ export default async function anonymizeOldSignups() {
     },
   });
   if (signups.length === 0) {
+    debugLog('No old signups to redact');
     return;
   }
 
   const ids = signups.map((signup) => signup.id);
 
-  console.log('Redacting older signups:');
-  console.log(ids);
-
+  console.info(`Redacting older signups: ${ids.join(', ')}`);
   try {
     await Signup.update({
       firstName: redactedName,
@@ -91,7 +93,7 @@ export default async function anonymizeOldSignups() {
     }, {
       where: { signupId: ids },
     });
-    console.log('Signups anonymized');
+    debugLog('Signups anonymized');
   } catch (error) {
     console.error(error);
   }
