@@ -78,7 +78,7 @@ export default async (id: string, data: SignupUpdateBody, params?: Params): Prom
             break;
           case 'number':
             // Check that a numeric answer is valid
-            if (!Number.isFinite(answer)) {
+            if (!Number.isFinite(parseFloat(answer))) {
               throw new BadRequest(`Invalid answer to question ${question.question}`);
             }
             break;
