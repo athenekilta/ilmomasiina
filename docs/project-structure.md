@@ -22,7 +22,6 @@ The project is divided into three packages:
     - The API models, derived mostly by picking columns from the DB models.
     - Utility interfaces that convert Dates in the API models to strings, for frontend typings.
 - `ilmomasiina-backend` contains the backend code and depends on `ilmomasiina-models`.
-  It currently also depends on `ilmomasiina-frontend` in order to serve its static files.
 - `ilmomasiina-frontend` contains the frontend code, along with scripts and dependencies inherited from `npm eject`.
   It also depends on `ilmomasiina-models` but not `ilmomasiina-backend`.
 - In addition, the root folder has a `package.json`, which is used for ESLint and other development dependencies
