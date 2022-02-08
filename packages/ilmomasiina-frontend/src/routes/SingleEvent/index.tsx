@@ -129,7 +129,7 @@ const SingleEvent = ({ match }: Props) => {
             )}
           </div>
           <div className="event-description">
-            <ReactMarkdown plugins={[remarkGfm]}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {event.description || ''}
             </ReactMarkdown>
           </div>
