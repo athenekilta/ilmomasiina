@@ -5,7 +5,6 @@ import historyApiFallback from 'connect-history-api-fallback';
 import { NextFunction } from 'express';
 import enforce from 'express-sslify';
 import cron from 'node-cron';
-import path from 'path';
 
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
@@ -43,17 +42,19 @@ if (config.nodeEnv === 'development') {
     next(error);
   });
   app.use(express.errorHandler());
-} else {
-  // Production: enforce HTTPS
+} else if (config.nodeEnv === 'production' && config.enforceHttps) {
+  // Enforce HTTPS connections
   app.use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 app.use(historyApiFallback());
 
-// Serving ~/dist by default. Ideally these files should be served by
-// the web server and not the app server, but this helps to demo the
-// server in production.
-const frontendPath = path.dirname(require.resolve('@tietokilta/ilmomasiina-frontend/build/index.html'));
-app.use(express.static(frontendPath));
+// Serving frontend files if frontendFilesPath is not null.
+// Ideally these files should be served by a web server and not the app server,
+// but this helps run a low-effort server.
+if (config.frontendFilesPath) {
+  console.info(`Serving frontend files from '${config.frontendFilesPath}'`);
+  app.use(express.static(config.frontendFilesPath));
+}
 
 export = app;

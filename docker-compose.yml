@@ -1,17 +1,56 @@
-version: '3'
+version: '3.2'
+
+# This compose file is for development use only – Do not use this in production!
+
+# This compose file builds Ilmomasiina and serves it at http://localhost:3000.
+# For easier development, it provides hot reloading by utilizing bind mounts.
+# You will still need to rebuild if you update the project's dependencies.
+
+# Env vars from the .env file (in repository root) will be used by docker-compose and passed to the containers.
+# Remember to create your own .env file (see .env.example)!
+# The database will use the DB_USER, DB_PASSWORD and DB_DATABASE provided by you.
 
 services:
-    database:
-        image: mysql:8
-        command: --default-authentication-plugin=mysql_native_password
-        env_file:
-            - .env
-    backend:
-        # Use Dockerfile from root directory
-        build: .
-        environment: 
-            - MYSQL_HOST=database
-        env_file:
-            - .env
-        ports:
-            - "3000:3000"
+  database:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_DB=$DB_DATABASE
+
+  ilmomasiina-dev:
+    build:
+      context: .
+      dockerfile: "Dockerfile.dev"
+    command: "npm start"
+    restart: always
+    depends_on:
+      - database
+    environment:
+      - DB_DIALECT=postgres
+      - DB_HOST=database
+      - NODE_ENV=development
+    env_file:
+      - .env
+    volumes:
+      - type: bind
+        source: ./packages/ilmomasiina-models/src
+        target: /opt/ilmomasiina/packages/ilmomasiina-models/src
+      - type: bind
+        source: ./packages/ilmomasiina-frontend/config
+        target: /opt/ilmomasiina/packages/ilmomasiina-frontend/config
+      - type: bind
+        source: ./packages/ilmomasiina-frontend/public
+        target: /opt/ilmomasiina/packages/ilmomasiina-frontend/public
+      - type: bind
+        source: ./packages/ilmomasiina-frontend/scripts
+        target: /opt/ilmomasiina/packages/ilmomasiina-frontend/scripts
+      - type: bind
+        source: ./packages/ilmomasiina-frontend/src
+        target: /opt/ilmomasiina/packages/ilmomasiina-frontend/src
+      - type: bind
+        source: ./packages/ilmomasiina-backend/src
+        target: /opt/ilmomasiina/packages/ilmomasiina-backend/src
+    ports:
+      - "3000:3000"

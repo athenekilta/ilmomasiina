@@ -1,10 +1,36 @@
+import fs from 'fs';
+import path from 'path';
+
+/**
+ * Gets the location of the compiled frontend files from the environment or the default of 'frontend'.
+ * Returns null if the environment variable is set but empty, or if the variable is unset and the default
+ * directory does not exist.
+ */
+const getFrontendFilesPath = (): string | null => {
+  const envValue = process.env.FRONTEND_FILES_PATH;
+
+  // Empty value disables frontend serving
+  if (envValue === '') {
+    return null;
+  }
+
+  // See if the given or default paths exist
+  const frontendPath = path.resolve(envValue || 'frontend');
+  if (fs.existsSync(frontendPath) && fs.statSync(frontendPath).isDirectory()) {
+    return frontendPath;
+  }
+
+  return null;
+};
+
 const config = {
   nodeEnv: process.env.NODE_ENV || 'development',
   debugDbLogging: process.env.DEBUG_DB_LOGGING === 'true',
 
   port: process.env.PORT || 3000,
 
-  dockerCompose: process.env.DOCKER_COMPOSE === 'true',
+  enforceHttps: process.env.ENFORCE_HTTPS !== 'false',
+  frontendFilesPath: getFrontendFilesPath(),
 
   clearDbUrl: process.env.CLEARDB_DATABASE_URL || null,
   dbDialect: process.env.DB_DIALECT,
@@ -50,6 +76,18 @@ if (!config.port && config.nodeEnv === 'production') {
   throw new Error('Missing .env variable: PORT');
 }
 
+if (config.frontendFilesPath === null) {
+  if (process.env.FRONTEND_FILES_PATH === '') {
+    console.info('Frontend serving disabled in backend.');
+  } else if (process.env.FRONTEND_FILES_PATH) {
+    throw new Error(
+      `FRONTEND_FILES_PATH is invalid: ${process.env.FRONTEND_FILES_PATH} does not exist or is not a directory`,
+    );
+  } else if (config.nodeEnv === 'production') {
+    console.warn('Compiled frontend not found. Frontend will not be served by backend.');
+  }
+}
+
 if (config.oldEditTokenSalt === config.newEditTokenSecret) {
   throw new Error(
     'Don\'t use the same secret for EDIT_TOKEN_SALT and NEW_EDIT_TOKEN_SECRET. '
@@ -65,6 +103,18 @@ if (config.adminRegistrationAllowed) {
     + 'After creating your initial administrator account, make sure to set ADMIN_REGISTRATION_ALLOWED=false.\n'
     + '----------------------------------------------------',
   );
+}
+
+if (config.nodeEnv === 'production') {
+  if (config.enforceHttps) {
+    console.info('Enforcing HTTPS connections');
+  } else {
+    console.warn(
+      'HTTPS connections are not enforced by Ilmomasiina.\n'
+      + 'For security reasons, please set ENFORCE_HTTPS=true or configure your load balancer or reverse proxy to'
+      + 'forward only HTTPS connections to Ilmomasiina.',
+    );
+  }
 }
 
 export default config;

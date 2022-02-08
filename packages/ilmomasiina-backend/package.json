@@ -11,7 +11,8 @@
     "start:dev": "bnr start:dev",
     "start:prod": "bnr start:prod",
     "stop:prod": "bnr stop:prod",
-    "monit:prod": "bnr monit:prod"
+    "monit:prod": "bnr monit:prod",
+    "build": "bnr build"
   },
   "betterScripts": {
     "start:dev": {
@@ -34,6 +35,9 @@
     },
     "monit:prod": {
       "command": "pm2 monit"
+    },
+    "build": {
+      "command": "tsc --build"
     }
   },
   "dependencies": {
