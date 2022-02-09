@@ -49,3 +49,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            BRANDING_HEADER_TITLE_TEXT=Tietokillan ilmomasiina
+            BRANDING_FOOTER_GDPR_TEXT=Tietosuoja
+            BRANDING_FOOTER_GDPR_LINK=https://tietokilta.fi/kilta/hallinto/viralliset-asiat/rekisteriselosteet/
+            BRANDING_FOOTER_HOME_TEXT=Tietokilta.fi
+            BRANDING_FOOTER_HOME_LINK=https://tietokilta.fi
