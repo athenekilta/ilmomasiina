@@ -6,7 +6,6 @@ import {
 } from 'sequelize';
 
 import QuestionAttributes, { QuestionType, questionTypes } from '@tietokilta/ilmomasiina-models/src/models/question';
-import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
 import { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
@@ -45,9 +44,7 @@ export class Question extends Model<QuestionAttributes, QuestionCreationAttribut
   public readonly updatedAt!: Date;
 }
 
-export default function setupQuestionModel(this: IlmoApplication) {
-  const sequelize: Sequelize = this.get('sequelize');
-
+export default function setupQuestionModel(sequelize: Sequelize) {
   Question.init({
     id: {
       type: DataTypes.CHAR(RANDOM_ID_LENGTH),

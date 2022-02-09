@@ -1,7 +1,8 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import {
+  DataTypes, Model, Optional, Sequelize,
+} from 'sequelize';
 
 import UserAttributes from '@tietokilta/ilmomasiina-models/src/models/user';
-import { IlmoApplication } from '../defs';
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
@@ -16,9 +17,7 @@ export class User extends Model<UserAttributes, UserCreationAttributes> implemen
 
 // User for local auth admin signup
 
-export default function setupUserModel(this: IlmoApplication) {
-  const sequelize = this.get('sequelize');
-
+export default function setupUserModel(sequelize: Sequelize) {
   User.init({
     id: {
       type: DataTypes.INTEGER.UNSIGNED,

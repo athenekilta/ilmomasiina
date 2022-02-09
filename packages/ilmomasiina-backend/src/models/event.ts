@@ -3,10 +3,10 @@ import {
   DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
   HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin, Model, Op, Optional,
+  Sequelize,
 } from 'sequelize';
 
 import EventAttributes from '@tietokilta/ilmomasiina-models/src/models/event';
-import { IlmoApplication } from '../defs';
 import { Question } from './question';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
@@ -68,9 +68,7 @@ export class Event extends Model<EventManualAttributes, EventCreationAttributes>
   public readonly updatedAt!: Date;
 }
 
-export default function setupEventModel(this: IlmoApplication) {
-  const sequelize = this.get('sequelize');
-
+export default function setupEventModel(sequelize: Sequelize) {
   Event.init(
     {
       id: {
