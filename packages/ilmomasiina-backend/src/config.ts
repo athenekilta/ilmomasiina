@@ -42,7 +42,7 @@ const config = <const>{
   deletionGracePeriod: envInteger('DELETION_GRACE_PERIOD_DAYS', 14),
 };
 
-if (!config.port && config.nodeEnv === 'production') {
+if (!process.env.PORT && config.nodeEnv === 'production') {
   throw new Error('Env variable PORT must be set in production');
 }
 
