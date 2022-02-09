@@ -17,6 +17,8 @@ const config = <const>{
   dbDialect: envString('DB_DIALECT', null),
   dbUser: envString('DB_USER', null),
   dbHost: envString('DB_HOST', null),
+  dbPort: envInteger('DB_PORT', null),
+  dbSsl: envBoolean('DB_SSL', false),
   dbPassword: envString('DB_PASSWORD', null),
   dbDatabase: envString('DB_DATABASE', null),
 

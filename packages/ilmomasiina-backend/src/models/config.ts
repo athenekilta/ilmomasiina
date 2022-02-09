@@ -4,7 +4,7 @@ import appConfig from '../config';
 
 const {
   clearDbUrl,
-  dbDialect, dbHost, dbDatabase, dbUser, dbPassword,
+  dbDialect, dbHost, dbPort, dbSsl, dbDatabase, dbUser, dbPassword,
   debugDbLogging,
 } = appConfig;
 
@@ -29,9 +29,11 @@ if (clearDbUrl) {
   auth = {
     dialect: dbDialect as Dialect,
     host: dbHost!,
+    port: dbPort ?? undefined,
     database: dbDatabase!,
     username: dbUser!,
     password: dbPassword ?? undefined,
+    dialectOptions: dbSsl ? { ssl: true } : {},
   };
   if (!dbDatabase || !dbUser) {
     throw new Error('Invalid database config: DB_HOST, DB_DATABASE and DB_USER must be set with DB_DIALECT.');
