@@ -59,6 +59,22 @@
   }
 }
 
+
+@include media-breakpoint-down(xs) {
+  .event-editor--question-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    > *:not(:last-child) {
+      margin-right: $spacer * 0.5;
+    }
+    > button:first-of-type {
+      margin-left: auto;
+    }
+  }
+}
+
 .event-editor--valid-notice {
   display: flex;
   position: absolute;

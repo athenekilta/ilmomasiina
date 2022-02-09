@@ -99,8 +99,8 @@ const Questions = () => {
     }
 
     return (
-      <Row key={question.key} className="question-body">
-        <Col xs="12" sm="10">
+      <Row key={question.key} className="question-body px-0">
+        <Col xs="12" sm="9" xl="10">
           <FieldRow
             name={`question-${question.key}-question`}
             label="Kysymys"
@@ -171,7 +171,7 @@ const Questions = () => {
             </>
           )}
         </Col>
-        <Col xs="12" sm="2">
+        <Col xs="12" sm="3" xl="2" className="event-editor--question-buttons">
           <Form.Check
             id={`question-${question.key}-required`}
             label="Pakollinen"
