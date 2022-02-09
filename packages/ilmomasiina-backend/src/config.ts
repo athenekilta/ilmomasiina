@@ -8,7 +8,9 @@ const config = <const>{
 
   port: envInteger('PORT', 3000),
 
-  enforceHttps: envEnum('ENFORCE_HTTPS', ['false', 'proxy', 'azure'], 'false'),
+  isAzure: process.env.WEBSITE_SITE_NAME !== undefined,
+
+  enforceHttps: envBoolean('ENFORCE_HTTPS', false),
   frontendFilesPath: frontendFilesPath(),
 
   clearDbUrl: envString('CLEARDB_DATABASE_URL', null),
