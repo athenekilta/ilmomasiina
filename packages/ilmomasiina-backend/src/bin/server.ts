@@ -1,14 +1,21 @@
 import debug from 'debug';
+import { exit } from 'process';
 
-import app from '../app';
+import initApp from '../app';
 import config from '../config';
 
-const port = config.port || 3000;
-const server = app.listen(port);
-
-const url = config.nodeEnv === 'development'
-  ? `http://localhost:${port}`
-  : `${config.mailUrlBase}${config.pathPrefix}`;
-
 const debugLog = debug('app:bin:server');
-server.on('listening', () => debugLog(`Server is now running at ${url}.`));
+
+initApp().then((app) => {
+  const port = config.port || 3000;
+  const server = app.listen(port);
+
+  const url = config.nodeEnv === 'development'
+    ? `http://localhost:${port}`
+    : `${config.mailUrlBase}${config.pathPrefix}`;
+
+  server.on('listening', () => debugLog(`Server is now running at ${url}.`));
+}).catch((err) => {
+  console.error('Failed to initialize app', err);
+  exit(1);
+});

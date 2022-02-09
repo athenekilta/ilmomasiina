@@ -1,48 +1,50 @@
 import debug from 'debug';
 import { Sequelize } from 'sequelize';
+import { SequelizeStorage, Umzug } from 'umzug';
 
-import { IlmoApplication } from '../defs';
-import answer, { Answer } from './answer';
+import setupAnswerModel, { Answer } from './answer';
 import sequelizeConfig from './config';
-import event, { Event } from './event';
-import question, { Question } from './question';
-import quota, { Quota } from './quota';
-import signup, { Signup } from './signup';
-import user, { User } from './user';
-
-export interface IlmoModels {
-  user: typeof User;
-  event: typeof Event;
-  question: typeof Question;
-  signup: typeof Signup;
-  answer: typeof Answer;
-}
+import setupEventModel, { Event } from './event';
+import migrations from './migrations';
+import setupQuestionModel, { Question } from './question';
+import setupQuotaModel, { Quota } from './quota';
+import setupSignupModel, { Signup } from './signup';
+import setupUserModel from './user';
 
 const debugLog = debug('app:db');
 
-export default function setupDatabase(this: IlmoApplication) {
-  const app = this;
+async function runMigration(sequelize: Sequelize) {
+  const storage = new SequelizeStorage({ sequelize });
 
+  debugLog('Running database migrations');
+  const umzug = new Umzug({
+    migrations,
+    storage,
+    logger: console,
+    context: sequelize,
+  });
+  await umzug.up();
+}
+
+export default async function setupDatabase() {
+  debugLog('Connecting to database');
   const sequelize = new Sequelize(sequelizeConfig.default);
-  sequelize
-    .authenticate()
-    .then(() => {
-      const cfg = (sequelize.connectionManager as any).config;
-      debugLog(`Connected to ${cfg.host} as ${cfg.username}.`);
-    })
-    .catch((err) => {
-      const cfg = (sequelize.connectionManager as any).config;
-      console.error(`Error connecting ${cfg.host} as ${cfg.username}: ${err}`);
-    });
+  try {
+    await sequelize.authenticate();
+    const cfg = (sequelize.connectionManager as any).config;
+    debugLog(`Connected to ${cfg.host} as ${cfg.username}.`);
+  } catch (err) {
+    const cfg = (sequelize.connectionManager as any).config;
+    console.error(`Error connecting to ${cfg.host} as ${cfg.username}: ${err}`);
+    throw err;
+  }
 
-  app.set('sequelize', sequelize);
-
-  app.configure(event);
-  app.configure(quota);
-  app.configure(signup);
-  app.configure(question);
-  app.configure(answer);
-  app.configure(user);
+  setupEventModel(sequelize);
+  setupQuotaModel(sequelize);
+  setupSignupModel(sequelize);
+  setupQuestionModel(sequelize);
+  setupAnswerModel(sequelize);
+  setupUserModel(sequelize);
 
   Event.hasMany(Question, {
     foreignKey: {
@@ -83,4 +85,6 @@ export default function setupDatabase(this: IlmoApplication) {
     onDelete: 'CASCADE',
   });
   Answer.belongsTo(Question);
+
+  await runMigration(sequelize);
 }

@@ -2,11 +2,10 @@ import {
   DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
   HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin,
-  HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional,
+  HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 
 import QuotaAttributes from '@tietokilta/ilmomasiina-models/src/models/quota';
-import { IlmoApplication } from '../defs';
 import { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';
@@ -44,9 +43,7 @@ export class Quota extends Model<QuotaAttributes, QuotaCreationAttributes> imple
   public readonly signupCount?: number;
 }
 
-export default function setupQuotaModel(this: IlmoApplication) {
-  const sequelize = this.get('sequelize');
-
+export default function setupQuotaModel(sequelize: Sequelize) {
   Quota.init({
     id: {
       type: DataTypes.CHAR(RANDOM_ID_LENGTH),

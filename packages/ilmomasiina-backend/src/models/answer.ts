@@ -1,9 +1,9 @@
 import {
   DataTypes, HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional,
+  Sequelize,
 } from 'sequelize';
 
 import AnswerAttributes from '@tietokilta/ilmomasiina-models/src/models/answer';
-import { IlmoApplication } from '../defs';
 import { Question } from './question';
 import { RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';
@@ -30,9 +30,7 @@ export class Answer extends Model<AnswerAttributes, AnswerCreationAttributes> im
   public readonly updatedAt!: Date;
 }
 
-export default function setupAnswerModel(this: IlmoApplication) {
-  const sequelize = this.get('sequelize');
-
+export default function setupAnswerModel(sequelize: Sequelize) {
   Answer.init({
     id: {
       type: DataTypes.INTEGER.UNSIGNED,

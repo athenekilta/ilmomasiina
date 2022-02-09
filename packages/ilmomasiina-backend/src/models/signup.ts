@@ -4,11 +4,10 @@ import {
   HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
   HasManyRemoveAssociationMixin, HasManyRemoveAssociationsMixin, HasManySetAssociationsMixin,
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin,
-  Model, Op, Optional,
+  Model, Op, Optional, Sequelize,
 } from 'sequelize';
 
 import SignupAttributes, { SignupStatus, signupStatuses } from '@tietokilta/ilmomasiina-models/src/models/signup';
-import { IlmoApplication } from '../defs';
 import { Answer } from './answer';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
@@ -49,9 +48,7 @@ export class Signup extends Model<SignupAttributes, SignupCreationAttributes> im
   public readonly updatedAt!: Date;
 }
 
-export default function setupSignupModel(this: IlmoApplication) {
-  const sequelize = this.get('sequelize');
-
+export default function setupSignupModel(sequelize: Sequelize) {
   Signup.init(
     {
       id: {
