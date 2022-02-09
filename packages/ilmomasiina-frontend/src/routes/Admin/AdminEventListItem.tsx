@@ -9,6 +9,7 @@ import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/ev
 import Separator from '../../components/Separator';
 import { deleteEvent, getAdminEvents } from '../../modules/admin/actions';
 import { useTypedDispatch } from '../../store/reducers';
+import { isEventInPast } from '../../utils/eventState';
 
 type Props = {
   event: AdminEvent.List.Event;
@@ -38,6 +39,8 @@ const AdminEventListItem = ({ event }: Props) => {
   let status;
   if (draft) {
     status = 'Luonnos';
+  } else if (isEventInPast(event)) {
+    status = event.date === null ? 'Sulkeutunut' : 'Mennyt';
   } else if (!listed) {
     status = 'Piilotettu';
   } else {
