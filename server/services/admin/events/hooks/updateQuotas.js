@@ -30,7 +30,7 @@ module.exports = () => (hook) => {
     hook.result.dataValues.quota = quota;
     return hook;
   }).catch((error => {
-    throw new Error('Quota update failed');
+    throw new Error('Quota update failed:', error);
   }));
 
 
