@@ -42,6 +42,7 @@ class QuotasTab extends React.Component {
       id: (_.max(quotas.map(n => n.id)) || 0) + 1,
       title: '',
       existsInDb: false,
+      sortId: (_.max(quotas.map(n => n.sortId)) || -1) + 1,
     });
 
     this.props.onDataChange('quota', newQuotas);
@@ -96,7 +97,6 @@ class QuotasTab extends React.Component {
   }
 
   renderQuotas() {
-
     const q = _.map(this.props.event.quota, (item, index) => (
       <div className="panel-body">
         <div className="col-xs-12 col-sm-10">

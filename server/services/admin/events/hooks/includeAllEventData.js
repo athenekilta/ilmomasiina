@@ -21,11 +21,12 @@ module.exports = () => hook => {
     ],
     order: [
       [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+      [{ model: sequelize.models.question }, 'sortId', 'ASC'],
     ],
     include: [
       // First include all questions
       {
-        attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
+        attributes: ['id', 'question', 'type', 'options', 'required', 'public', 'sortId'],
         model: sequelize.models.question,
       },
       // Include quotas..

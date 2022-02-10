@@ -23,7 +23,7 @@ module.exports = () => hook => {
     include: [
       // First include all questions (also non-public for the form)
       {
-        attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
+        attributes: ['id', 'question', 'type', 'options', 'required', 'public', 'sortId'],
         model: sequelize.models.question,
       },
       // Include quotas..
