@@ -30,7 +30,7 @@ class QuotasTab extends React.Component {
 
   constructor(props) {
     super(props);
-
+    
     this.addQuota = this.addQuota.bind(this);
     this.updateQuota = this.updateQuota.bind(this);
     this.updateOrder = this.updateOrder.bind(this);
@@ -52,7 +52,9 @@ class QuotasTab extends React.Component {
     const elementToMove = newQuotas[args.oldIndex];
     newQuotas.splice(args.oldIndex, 1);
     newQuotas.splice(args.newIndex, 0, elementToMove);
-
+    for (let index = 0; index < newQuotas.length; index++) {
+      newQuotas[index].sortId = index
+    } 
     this.props.onDataChange('quota', newQuotas);
   }
 
@@ -73,9 +75,7 @@ class QuotasTab extends React.Component {
             [field]: value,
           };
         }
-
       }
-
       return quota;
     });
 
@@ -96,6 +96,7 @@ class QuotasTab extends React.Component {
   }
 
   renderQuotas() {
+
     const q = _.map(this.props.event.quota, (item, index) => (
       <div className="panel-body">
         <div className="col-xs-12 col-sm-10">
