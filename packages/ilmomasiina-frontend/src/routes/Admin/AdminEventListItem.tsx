@@ -20,7 +20,7 @@ const AdminEventListItem = ({ event }: Props) => {
   const dispatch = useTypedDispatch();
 
   const {
-    id, title, date, draft, listed, quotas,
+    id, title, slug, date, draft, listed, quotas,
   } = event;
 
   async function onDelete(e: MouseEvent) {
@@ -45,7 +45,7 @@ const AdminEventListItem = ({ event }: Props) => {
   } else if (!listed) {
     status = 'Piilotettu';
   } else {
-    status = 'Julkaistu';
+    status = <Link to={paths.eventDetails(slug)}>Julkaistu</Link>;
   }
 
   return (
