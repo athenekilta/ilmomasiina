@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import FieldRow from '../../../../components/FieldRow';
 import { updateSignup } from '../../../../modules/editSignup/actions';
+import paths from '../../../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../../../store/reducers';
 import NarrowContainer from '../NarrowContainer';
 import QuestionFields from './QuestionFields';
@@ -38,7 +39,7 @@ const EditForm = ({ editToken }: Props) => {
         type: toast.TYPE.SUCCESS,
         autoClose: 5000,
       });
-      if (isNew) dispatch(push(`${PREFIX_URL}/event/${event!.slug}`));
+      if (isNew) dispatch(push(paths.eventDetails(event!.slug)));
     } else {
       toast.update(progressToast, {
         render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.`,
@@ -114,7 +115,7 @@ const EditForm = ({ editToken }: Props) => {
               {isNew ? 'Lähetä' : 'Päivitä'}
             </Button>
             {!isNew && (
-              <Button as={Link} variant="link" className="float-right" to={`${PREFIX_URL}/event/${event!.slug}`}>
+              <Button as={Link} variant="link" className="float-right" to={paths.eventDetails(event!.slug)}>
                 Peruuta
               </Button>
             )}

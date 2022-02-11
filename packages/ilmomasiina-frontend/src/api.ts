@@ -1,3 +1,5 @@
+const apiUrl = API_URL || `${PREFIX_URL}/api`;
+
 interface FetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: any;
@@ -43,7 +45,7 @@ export default async function apiFetch(uri: string, {
     allHeaders['Content-Type'] = 'application/json; charset=utf-8';
   }
 
-  const response = await fetch(`${PREFIX_URL}/api/${uri}`, {
+  const response = await fetch(`${apiUrl}/${uri}`, {
     method,
     body: body === undefined ? undefined : JSON.stringify(body),
     headers: allHeaders,

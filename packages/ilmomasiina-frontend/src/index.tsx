@@ -15,4 +15,12 @@ if (PROD && SENTRY_DSN) {
   Sentry.init({ dsn: SENTRY_DSN });
 }
 
-ReactDOM.render(<AppContainer />, document.getElementById('root'));
+const branding = {
+  headerTitle: BRANDING_HEADER_TITLE_TEXT,
+  footerGdprText: BRANDING_FOOTER_GDPR_TEXT,
+  footerGdprLink: BRANDING_FOOTER_GDPR_LINK,
+  footerHomeText: BRANDING_FOOTER_HOME_TEXT,
+  footerHomeLink: BRANDING_FOOTER_HOME_LINK,
+};
+
+ReactDOM.render(<AppContainer branding={branding} />, document.getElementById('root'));

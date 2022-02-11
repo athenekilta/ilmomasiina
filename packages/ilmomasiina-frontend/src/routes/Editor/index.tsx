@@ -11,6 +11,7 @@ import {
 } from '../../modules/editor/actions';
 import { selectFormData as selectInitialFormData } from '../../modules/editor/selectors';
 import { EditorEvent } from '../../modules/editor/types';
+import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import EditForm from './components/EditForm';
 
@@ -71,7 +72,7 @@ const Editor = ({ history, match }: Props) => {
       let saved;
       if (isNew) {
         saved = await dispatch(publishNewEvent(modifiedEvent));
-        history.push(`${PREFIX_URL}/admin/edit/${saved.id}`);
+        history.push(paths.adminEditEvent(saved.id));
         toast.success('Tapahtuma luotiin onnistuneesti!', {
           autoClose: 2000,
         });
@@ -105,7 +106,7 @@ const Editor = ({ history, match }: Props) => {
         <div className="event-editor--loading-container">
           <h1>Hups, jotain meni pieleen</h1>
           <p>{`Tapahtumaa id:llä "${urlEventId}" ei löytynyt`}</p>
-          <Link to={`${PREFIX_URL}/admin/`}>Palaa tapahtumalistaukseen</Link>
+          <Link to={paths.adminEventsList}>Palaa tapahtumalistaukseen</Link>
         </div>
       </Container>
     );

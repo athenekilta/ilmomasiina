@@ -3,6 +3,7 @@ import { push } from 'connected-react-router';
 import { Event, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch from '../../api';
+import paths from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {
   EVENT_LOAD_FAILED,
@@ -58,7 +59,7 @@ export const createPendingSignup = (quotaId: Quota.Id) => async (dispatch: Dispa
       body: { quotaId },
     }) as Signup.Create.Response;
     dispatch(pendingSignupCreated(response));
-    dispatch(push(`${PREFIX_URL}/signup/${response.id}/${response.editToken}`));
+    dispatch(push(paths.editSignup(response.id, response.editToken)));
     return true;
   } catch (e) {
     dispatch(signupCreationFailed());

@@ -2,8 +2,10 @@ import React from 'react';
 
 import { Form, InputGroup } from 'react-bootstrap';
 
+import { urlPrefix } from '../../../paths';
+
 export default (props: any) => {
-  const domain = /^https?:\/\//.test(PREFIX_URL) ? PREFIX_URL.replace(/^https?:\/\//, '') : window.location.host;
+  const domain = /^https?:\/\//.test(urlPrefix) ? urlPrefix.replace(/^https?:\/\//, '') : window.location.host;
   const prefix = `${domain}/event/`;
   return (
     <InputGroup>

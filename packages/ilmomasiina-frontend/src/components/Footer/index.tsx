@@ -2,19 +2,26 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
+import { Branding } from '../../branding';
+import paths from '../../paths';
+
 import './Footer.scss';
 
-const Footer = () => (
+type Props = {
+  branding: Branding;
+};
+
+const Footer = ({ branding }: Props) => (
   <footer className="page-footer">
     <div className="container">
-      <Link to={`${PREFIX_URL}/admin`}>
+      <Link to={paths.adminEventsList}>
         Hallinta
       </Link>
-      <a href={BRANDING_FOOTER_GDPR_LINK} className="navbar-link">
-        {BRANDING_FOOTER_GDPR_TEXT}
+      <a href={branding.footerGdprLink} className="navbar-link">
+        {branding.footerGdprText}
       </a>
-      <a href={BRANDING_FOOTER_HOME_LINK} className="navbar-link">
-        {BRANDING_FOOTER_HOME_TEXT}
+      <a href={branding.footerHomeLink} className="navbar-link">
+        {branding.footerHomeText}
       </a>
     </div>
   </footer>
