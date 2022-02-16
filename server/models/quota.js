@@ -12,6 +12,10 @@ module.exports = function () {
     size: {
       type: Sequelize.INTEGER,
     },
+    sortId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    }
   }, {
     freezeTableName: true,
     paranoid: true,

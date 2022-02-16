@@ -49,6 +49,7 @@ class QuestionsTab extends React.Component {
 
     const newQuestions = _.concat(questions, {
       id: (_.max(questions.map(n => n.id)) || 0) + 1,
+      sortId: (_.max(questions.map(n => n.sortId)) || -1) + 1,
       existsInDb: false,
       required: false,
       public: false,
@@ -65,7 +66,9 @@ class QuestionsTab extends React.Component {
     const elementToMove = newQuestions[args.oldIndex];
     newQuestions.splice(args.oldIndex, 1);
     newQuestions.splice(args.newIndex, 0, elementToMove);
-
+    for (let index = 0; index < newQuestions.length; index++) {
+      newQuestions[index].sortId = index
+    } 
     this.props.onDataChange('questions', newQuestions);
   }
 
