@@ -13,6 +13,9 @@ module.exports = () => hook => {
       'openQuotaSize',
       'signupsPublic',
     ],
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+    ],
     distinct: true,
     raw: false,
     // Filter out events that are saved as draft

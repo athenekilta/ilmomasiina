@@ -18,6 +18,9 @@ module.exports = () => (hook) => {
               eventId,
               deletedAt: null
             },
+            order: [
+              ['sortId', 'ASC'],
+            ],
             include: [{
               attributes: ['firstName', 'lastName', 'email', 'createdAt'],
               model: sequelize.models.signup,

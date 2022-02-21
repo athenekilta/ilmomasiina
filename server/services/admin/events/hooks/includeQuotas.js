@@ -12,6 +12,9 @@ module.exports = () => hook => {
       'openQuotaSize',
       'signupsPublic',
     ],
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+    ],
     distinct: true,
     raw: false,
     // Include quotas of event and count of signups
