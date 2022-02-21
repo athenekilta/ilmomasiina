@@ -20,6 +20,9 @@ module.exports = () => hook => {
       'verificationEmail',
     ],
     raw: false,
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+    ],
     include: [
       // First include all questions (also non-public for the form)
       {

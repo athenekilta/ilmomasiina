@@ -1,12 +1,11 @@
 const _ = require('lodash');
 
 module.exports = () => (hook) => {
+  
   const sequelize = hook.app.get('sequelize');
-
   const eventId = hook.result.id;
   const quotasToAdd = hook.data.quota.map(quota => _.merge(quota, { eventId }));
   const quotaModel = hook.app.get('models').quota;
-
   return sequelize.transaction(t => {
     return quotaModel.destroy({
       where: { eventId }
@@ -18,6 +17,9 @@ module.exports = () => (hook) => {
               eventId,
               deletedAt: null
             },
+            order: [
+              ['sortId', 'ASC'],
+            ],
             include: [{
               attributes: ['firstName', 'lastName', 'email', 'createdAt'],
               model: sequelize.models.signup,

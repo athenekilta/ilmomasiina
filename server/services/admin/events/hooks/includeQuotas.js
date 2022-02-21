@@ -14,6 +14,9 @@ module.exports = () => hook => {
     ],
     distinct: true,
     raw: false,
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+    ],
     // Include quotas of event and count of signups
     include: [
       {

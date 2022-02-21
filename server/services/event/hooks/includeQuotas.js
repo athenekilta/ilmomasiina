@@ -22,6 +22,9 @@ module.exports = () => hook => {
         [Op.gt]: moment().subtract(1, 'days').toDate()
       }
     },
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+    ],
     // Include quotas of event and count of signups
     include: [
       {
