@@ -78,7 +78,7 @@ class AdminEventList extends React.Component {
 
   renderEventRows() {
     const { events } = this.props;
-    return _.map(events, e => (
+    return _.map(events.slice().reverse(), e => (
       <AdminEventListItem
         key={e.id}
         signups={_.sum(_.map(e.quota, q => q.signupCount))}
