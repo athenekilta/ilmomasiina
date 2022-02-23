@@ -8,25 +8,27 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [8.x, 16.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm install --include=dev --unsafe-perm
+    - run: npm i better-npm-run && npx better-npm-run test
+
+  lint:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
       with:
+        node-version: 8.x
         cache: 'npm'
-    - run: npm install --include=dev
-    - run: better-npm-run test
-
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install --include=dev
+    - run: npm install --include=dev --unsafe-perm
     - run: npm run lint
