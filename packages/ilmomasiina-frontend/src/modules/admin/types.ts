@@ -1,17 +1,7 @@
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
-import {
-  eventsLoaded,
-  eventsLoadFailed,
-  resetState,
-  userCreated,
-  userCreateFailed,
-  userCreating,
-  usersLoaded,
-  usersLoadFailed,
-} from './actions';
 
-interface AdminState {
+export interface AdminState {
   events: AdminEvent.List | null;
   eventsLoadError: boolean;
   users: User.List | null;
@@ -19,12 +9,4 @@ interface AdminState {
   userCreating: boolean;
 }
 
-type AdminActions =
-  | ReturnType<typeof eventsLoaded>
-  | ReturnType<typeof eventsLoadFailed>
-  | ReturnType<typeof usersLoaded>
-  | ReturnType<typeof usersLoadFailed>
-  | ReturnType<typeof userCreateFailed>
-  | ReturnType<typeof userCreating>
-  | ReturnType<typeof userCreated>
-  | ReturnType<typeof resetState>;
+export type { AdminActions } from './actions';

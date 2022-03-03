@@ -40,6 +40,14 @@ export const signupCreationFailed = () => <const>{
   type: SIGNUP_CREATE_FAILED,
 };
 
+export type SingleEventActions =
+  | ReturnType<typeof resetState>
+  | ReturnType<typeof eventLoaded>
+  | ReturnType<typeof eventLoadFailed>
+  | ReturnType<typeof pendingSignupCreated>
+  | ReturnType<typeof creatingSignup>
+  | ReturnType<typeof signupCreationFailed>;
+
 export const getEvent = (slug: Event.Slug) => async (
   dispatch: DispatchAction,
 ) => {

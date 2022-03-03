@@ -47,6 +47,16 @@ export const userCreated = () => <const>{
   type: USER_CREATED,
 };
 
+export type AdminActions =
+  | ReturnType<typeof eventsLoaded>
+  | ReturnType<typeof eventsLoadFailed>
+  | ReturnType<typeof usersLoaded>
+  | ReturnType<typeof usersLoadFailed>
+  | ReturnType<typeof userCreateFailed>
+  | ReturnType<typeof userCreating>
+  | ReturnType<typeof userCreated>
+  | ReturnType<typeof resetState>;
+
 export const getAdminEvents = () => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
 

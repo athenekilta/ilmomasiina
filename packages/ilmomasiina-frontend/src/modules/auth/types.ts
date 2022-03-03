@@ -1,6 +1,4 @@
-import { loggingIn, loginFailed, loginSucceeded } from './actions';
-
-interface AuthState {
+export interface AuthState {
   accessToken?: string;
   accessTokenExpires?: string;
   loggedIn: boolean;
@@ -8,7 +6,4 @@ interface AuthState {
   loginError: boolean;
 }
 
-type AuthActions =
-  | ReturnType<typeof loggingIn>
-  | ReturnType<typeof loginSucceeded>
-  | ReturnType<typeof loginFailed>;
+export type { AuthActions } from './actions';

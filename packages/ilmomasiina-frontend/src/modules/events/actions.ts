@@ -20,6 +20,11 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
+export type EventsActions =
+  | ReturnType<typeof eventsLoaded>
+  | ReturnType<typeof eventsLoadFailed>
+  | ReturnType<typeof resetState>;
+
 export const getEvents = (category?: string) => async (dispatch: DispatchAction) => {
   try {
     const query = category === undefined ? '' : `?${new URLSearchParams({ category })}`;

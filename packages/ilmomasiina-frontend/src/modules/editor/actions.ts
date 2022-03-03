@@ -124,6 +124,21 @@ export const categoriesLoaded = (categories: string[]) => <const>{
   payload: categories,
 };
 
+export type EditorActions =
+  | ReturnType<typeof resetState>
+  | ReturnType<typeof loaded>
+  | ReturnType<typeof newEvent>
+  | ReturnType<typeof loadFailed>
+  | ReturnType<typeof checkingSlugAvailability>
+  | ReturnType<typeof slugAvailabilityChecked>
+  | ReturnType<typeof saving>
+  | ReturnType<typeof saveFailed>
+  | ReturnType<typeof moveToQueueWarning>
+  | ReturnType<typeof moveToQueueCanceled>
+  | ReturnType<typeof editConflictDetected>
+  | ReturnType<typeof editConflictDismissed>
+  | ReturnType<typeof categoriesLoaded>;
+
 function eventType(event: AdminEvent.Details): EditorEventType {
   if (event.date === null) {
     return EditorEventType.ONLY_SIGNUP;
