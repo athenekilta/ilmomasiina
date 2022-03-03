@@ -5,6 +5,7 @@ import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getAdminEvents, resetState } from '../../modules/admin/actions';
+import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminEventListItem from './AdminEventListItem';
 
@@ -61,11 +62,11 @@ const AdminEventsList = () => {
           ))}
         </tbody>
       </table>
-      <Button as={Link} variant="secondary" to={`${PREFIX_URL}/admin/edit/new`}>
+      <Button as={Link} variant="secondary" to={paths.adminEditEvent('new')}>
         + Uusi tapahtuma
       </Button>
       <nav className="mt-3">
-        <Button as={Link} to={`${PREFIX_URL}/admin/users`}>
+        <Button as={Link} to={paths.adminUsersList}>
           Käyttäjien hallintapaneeli
         </Button>
       </nav>

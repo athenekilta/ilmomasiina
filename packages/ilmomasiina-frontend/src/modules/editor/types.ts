@@ -1,21 +1,6 @@
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
 import { Question, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
-import {
-  categoriesLoaded,
-  checkingSlugAvailability,
-  editConflictDetected,
-  editConflictDismissed,
-  loaded,
-  loadFailed,
-  moveToQueueCanceled,
-  moveToQueueWarning,
-  newEvent,
-  resetState,
-  saveFailed,
-  saving,
-  slugAvailabilityChecked,
-} from './actions';
 
 export interface EditorState {
   event: AdminEvent.Details | null;
@@ -28,21 +13,6 @@ export interface EditorState {
   moveToQueueModal: { count: number } | null;
   editConflictModal: EditConflictData | null;
 }
-
-export type EditorActions =
-  | ReturnType<typeof resetState>
-  | ReturnType<typeof loaded>
-  | ReturnType<typeof newEvent>
-  | ReturnType<typeof loadFailed>
-  | ReturnType<typeof checkingSlugAvailability>
-  | ReturnType<typeof slugAvailabilityChecked>
-  | ReturnType<typeof saving>
-  | ReturnType<typeof saveFailed>
-  | ReturnType<typeof moveToQueueWarning>
-  | ReturnType<typeof moveToQueueCanceled>
-  | ReturnType<typeof editConflictDetected>
-  | ReturnType<typeof editConflictDismissed>
-  | ReturnType<typeof categoriesLoaded>;
 
 /** Question type for event editor */
 export interface EditorQuestion extends Omit<AdminEvent.Update.Question, 'options'> {
@@ -82,3 +52,5 @@ export interface EditConflictData {
   deletedQuotas: Quota.Id[];
   deletedQuestions: Quota.Id[];
 }
+
+export type { EditorActions } from './actions';

@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import Separator from '../../components/Separator';
 import { deleteEvent, getAdminEvents } from '../../modules/admin/actions';
+import paths from '../../paths';
 import { useTypedDispatch } from '../../store/reducers';
 import { isEventInPast } from '../../utils/eventState';
 
@@ -19,7 +20,7 @@ const AdminEventListItem = ({ event }: Props) => {
   const dispatch = useTypedDispatch();
 
   const {
-    id, title, date, draft, listed, quotas,
+    id, title, slug, date, draft, listed, quotas,
   } = event;
 
   async function onDelete(e: MouseEvent) {
@@ -40,23 +41,23 @@ const AdminEventListItem = ({ event }: Props) => {
   if (draft) {
     status = 'Luonnos';
   } else if (isEventInPast(event)) {
-    status = event.date === null ? 'Sulkeutunut' : 'Mennyt';
+    status = date === null ? 'Sulkeutunut' : 'Mennyt';
   } else if (!listed) {
     status = 'Piilotettu';
   } else {
-    status = 'Julkaistu';
+    status = <Link to={paths.eventDetails(slug)}>Julkaistu</Link>;
   }
 
   return (
     <tr>
       <td>
-        <Link to={`${PREFIX_URL}/event/${id}`}>{title}</Link>
+        <Link to={paths.adminEditEvent(id)}>{title}</Link>
       </td>
       <td>{date ? moment(date).format('DD.MM.YYYY') : ''}</td>
       <td>{status}</td>
       <td>{_.sumBy(quotas, 'signupCount')}</td>
       <td>
-        <Link to={`${PREFIX_URL}/admin/edit/${id}`}>
+        <Link to={paths.adminEditEvent(id)}>
           Muokkaa tapahtumaa
         </Link>
 

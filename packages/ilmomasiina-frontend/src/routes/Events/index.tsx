@@ -7,6 +7,7 @@ import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getEvents, resetState } from '../../modules/events/actions';
+import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import signupState from '../../utils/signupStateText';
 import TableRow from './TableRow';
@@ -55,7 +56,7 @@ const EventList = ({ category }: Props) => {
     const rows = [
       <TableRow
         className={eventState.class}
-        title={<Link to={`${PREFIX_URL}/event/${slug}`}>{title}</Link>}
+        title={<Link to={paths.eventDetails(slug)}>{title}</Link>}
         date={date ? moment(date).format('DD.MM.YYYY') : ''}
         signupStatus={eventState.label}
         signupCount={

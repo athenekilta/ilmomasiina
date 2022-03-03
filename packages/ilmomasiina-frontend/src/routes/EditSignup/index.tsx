@@ -5,6 +5,7 @@ import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 import { getSignupAndEvent, resetState } from '../../modules/editSignup/actions';
+import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import DeleteSignup from './components/DeleteSignup';
 import EditForm from './components/EditForm';
@@ -34,7 +35,7 @@ const EditSignup = ({ match }: Props) => {
     return (
       <Container className="text-center">
         <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-        <Button as={Link} to={`${PREFIX_URL}/event/${event!.slug}`} variant="secondary">
+        <Button as={Link} to={paths.eventDetails(event!.slug)} variant="secondary">
           Takaisin
         </Button>
       </Container>
@@ -73,7 +74,7 @@ const EditSignup = ({ match }: Props) => {
             Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
             ilmoittautuminen on sulkeutunut.
           </p>
-          <Button as={Link} to={`${PREFIX_URL}/`} variant="secondary">
+          <Button as={Link} to={paths.eventsList} variant="secondary">
             Takaisin etusivulle
           </Button>
         </NarrowContainer>

@@ -2,6 +2,7 @@ import { push } from 'connected-react-router';
 
 import { Auth } from '@tietokilta/ilmomasiina-models/src/services/auth';
 import apiFetch from '../../api';
+import paths from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {
   LOGGING_IN,
@@ -27,6 +28,11 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
+export type AuthActions =
+  | ReturnType<typeof loggingIn>
+  | ReturnType<typeof loginSucceeded>
+  | ReturnType<typeof loginFailed>;
+
 export const login = (email: string, password: string) => async (dispatch: DispatchAction) => {
   dispatch(loggingIn());
 
@@ -40,7 +46,7 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
       },
     }) as Auth.Response;
     dispatch(loginSucceeded(response));
-    dispatch(push(`${PREFIX_URL}/admin`));
+    dispatch(push(paths.adminEventsList));
     return true;
   } catch (e) {
     dispatch(loginFailed());
@@ -50,5 +56,5 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
 
 export const redirectToLogin = () => (dispatch: DispatchAction) => {
   dispatch(resetState());
-  dispatch(push(`${PREFIX_URL}/login`));
+  dispatch(push(paths.adminLogin));
 };

@@ -6,6 +6,7 @@ import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
 import { EditorEvent } from '../../../modules/editor/types';
+import paths from '../../../paths';
 import { useTypedSelector } from '../../../store/reducers';
 
 interface EditorToolbarProps {
@@ -23,7 +24,7 @@ const EditorToolbar = ({ onSubmitClick }: Props) => {
   return (
     <>
       <nav className="d-flex justify-content-end">
-        <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
+        <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
       </nav>
       <h1>
         {isNew

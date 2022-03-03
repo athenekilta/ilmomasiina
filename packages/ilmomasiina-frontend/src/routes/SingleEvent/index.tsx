@@ -10,6 +10,7 @@ import remarkGfm from 'remark-gfm';
 
 import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { createPendingSignup, getEvent, resetState } from '../../modules/singleEvent/actions';
+import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import { getSignupsByQuota } from '../../utils/signupUtils';
 import QuotaStatus from './components/QuotaStatus';
@@ -45,7 +46,7 @@ const SingleEvent = ({ match }: Props) => {
           <p>
             Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
           </p>
-          <Link to={`${PREFIX_URL}/`}>Palaa tapahtumalistaukseen</Link>
+          <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
         </div>
       </div>
     );
@@ -74,7 +75,7 @@ const SingleEvent = ({ match }: Props) => {
 
   return (
     <div className="container single-event">
-      <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
+      <Link to={paths.eventsList} style={{ margin: 0 }}>
         &#8592; Takaisin
       </Link>
       <div className="row">

@@ -6,7 +6,10 @@ import { Route, Switch } from 'react-router-dom';
 import { Flip, ToastContainer } from 'react-toastify';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import CoreLayout from '../layouts/CoreLayout';
+import { Branding } from '../branding';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import paths from '../paths';
 import PageNotFound from '../routes/404/PageNotFound';
 import AdminEventsList from '../routes/Admin/AdminEventsList';
 import AdminUsersList from '../routes/Admin/AdminUsersList';
@@ -19,49 +22,55 @@ import configureStore, { history } from '../store/configureStore';
 import requireAuth from './requireAuth';
 
 import 'react-toastify/scss/main.scss';
+import '../styles/core.scss';
 
 const { store, persistor } = configureStore();
 
-const AppContainer = () => (
-  <Provider store={store}>
-    <PersistGate persistor={persistor}>
-      <div style={{ height: '100%' }}>
+type Props = {
+  branding: Branding;
+};
+
+const AppContainer = ({ branding }: Props) => (
+  <div className="layout-wrapper">
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
         <ConnectedRouter history={history}>
-          <CoreLayout>
+          <Header branding={branding} />
+          <div className="page-wrapper">
             <Switch>
               <Route
                 exact
-                path={`${PREFIX_URL}/`}
+                path={paths.eventsList}
                 component={Events}
               />
               <Route
                 exact
-                path={`${PREFIX_URL}/event/:slug`}
+                path={paths.eventDetails(':slug')}
                 component={SingleEvent}
               />
               <Route
                 exact
-                path={`${PREFIX_URL}/signup/:id/:editToken`}
+                path={paths.editSignup(':id', ':editToken')}
                 component={EditSignup}
               />
               <Route
                 exact
-                path={`${PREFIX_URL}/login`}
+                path={paths.adminLogin}
                 component={Login}
               />
               <Route
                 exact
-                path={`${PREFIX_URL}/admin`}
+                path={paths.adminEventsList}
                 component={requireAuth(AdminEventsList)}
               />
               <Route
                 exact
-                path={`${PREFIX_URL}/admin/users`}
+                path={paths.adminUsersList}
                 component={requireAuth(AdminUsersList)}
               />
               <Route
                 exact
-                path={`${PREFIX_URL}/admin/edit/:id`}
+                path={paths.adminEditEvent(':id')}
                 component={requireAuth(Editor)}
               />
               <Route
@@ -69,7 +78,8 @@ const AppContainer = () => (
                 component={PageNotFound}
               />
             </Switch>
-          </CoreLayout>
+          </div>
+          <Footer branding={branding} />
         </ConnectedRouter>
         <ToastContainer
           position="top-right"
@@ -83,9 +93,9 @@ const AppContainer = () => (
           pauseOnHover
           transition={Flip}
         />
-      </div>
-    </PersistGate>
-  </Provider>
+      </PersistGate>
+    </Provider>
+  </div>
 );
 
 export default AppContainer;
