@@ -17,7 +17,13 @@ module.exports = () => (hook) => {
       .then(() => {
         return questionModel.bulkCreate(questionsToAdd, { updateOnDuplicate: true }, { transaction: t })
           .then(() => {
-            return questionModel.findAll({ where: { eventId, deletedAt: null } }, { transaction: t })
+            return questionModel.findAll({ 
+              where: { eventId, deletedAt: null }, 
+              order: [
+                ['sortId', 'ASC'],
+              ], 
+            }, 
+            { transaction: t })
           });
       });
   })
