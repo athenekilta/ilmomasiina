@@ -24,6 +24,7 @@ services:
             - ./public:/opt/ilmomasiina/public
             - ./config:/opt/ilmomasiina/config
             - ./bin:/opt/ilmomasiina/bin
+            - ./scripts:/opt/ilmomasiina/scripts
         env_file:
             - .env
         ports:
