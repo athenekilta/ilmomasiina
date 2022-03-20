@@ -5,7 +5,7 @@ import moment from 'moment';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import ReactAutolinker from 'react-autolinker';
-
+import ReactHtmlParser from 'react-html-parser';
 import * as SingleEventActions from '../../modules/singleEvent/actions';
 import SignupButton from './components/SignupButton';
 import SignupList from './components/SignupList';
@@ -238,11 +238,12 @@ class SingleEvent extends React.Component {
 
   render() {
     const { event, signup } = this.props;
-    //The ReactAutoLinker library does not support telegram by default, so we need to create our own link.
-    const renderLink = (tag) => { 
-      tag.attrs.href = tag.attrs.href.replace('twitter.com', 't.me')
-      tag.attrs.key = tag.attrs.key.replace('twitter.com', 't.me')
-      return React.createElement(tag.tagName, tag.attrs, tag.innerHtml) }
+    // The ReactAutoLinker library does not support telegram by default, so we need to create our own link.
+    const renderLink = (tag) => {
+      tag.attrs.href = tag.attrs.href.replace('twitter.com', 't.me');
+      tag.attrs.key = tag.attrs.key.replace('twitter.com', 't.me');
+      return React.createElement(tag.tagName, tag.attrs, tag.innerHtml);
+    };
 
     return (
       <div>
@@ -299,9 +300,8 @@ class SingleEvent extends React.Component {
                       </p>
                     ) : null}
                   </div>
-                  <p className="description">
-                    <ReactAutolinker text={event.description} options={{ newWindow: true, phone: false, mention: false, hashtag: false }} renderLink={renderLink}  />
-                  </p>
+                  {ReactHtmlParser(event.description)}
+                 
                 </div>
                 <div className="col-xs-12 col-sm-4 pull-right">
                   {this.renderSignupButtons()}
