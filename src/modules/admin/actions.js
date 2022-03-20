@@ -188,7 +188,24 @@ export const deleteUserAsync = id => (dispatch, getState) => {
 
 export const deleteSignupAsync = (id, eventId) => (dispatch, getState) => {
   const accessToken = getState().admin.accessToken;
-  return request('DELETE', `${PREFIX_URL}/api/admin/signups/${id}`, {
+  return request('DELETE', `${PREFIX_URL}/api/admin/signups/${eventId}/${id}`, {
+    headers: { Authorization: accessToken },
+  })
+    .then(res => JSON.parse(res.body))
+    .then((res) => {
+      dispatch(EditorActions.getEventAsync(eventId, accessToken)) // TODO UPDATE THE ROWS, THIS DOESNT WORK
+      return true;
+    })
+    .catch((error) => {
+      console.error('Error in deleteSignupAsync', error);
+      dispatch(setError());
+      return false;
+    });
+};
+
+export const deleteEventSignupsAsync = (eventId) => (dispatch, getState) => {
+  const accessToken = getState().admin.accessToken;
+  return request('DELETE', `${PREFIX_URL}/api/admin/signups/${eventId}/0`, {
     headers: { Authorization: accessToken },
   })
     .then(res => JSON.parse(res.body))

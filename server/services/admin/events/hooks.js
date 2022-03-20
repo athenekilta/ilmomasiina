@@ -3,6 +3,7 @@ const authentication = require('feathers-authentication');
 
 const includeQuotas = require('./hooks/includeQuotas');
 const includeAllEventData = require('./hooks/includeAllEventData');
+const removeSignups = require('./hooks/removeSignups')
 const formatOptionsAsArray = require('./hooks/formatOptionsAsArray');
 // const createEvent = require('./hooks/createEvent');
 const updateQuotas = require('./hooks/updateQuotas');
@@ -15,7 +16,7 @@ exports.before = {
   create: [includeAllEventData()],
   update: [includeAllEventData()],
   patch: [includeAllEventData()],
-  remove: [],
+  remove: [removeSignups()],
 };
 
 exports.after = {

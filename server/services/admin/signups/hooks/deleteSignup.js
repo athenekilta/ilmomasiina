@@ -1,8 +1,9 @@
 module.exports = () => (hook) => {
     const models = hook.app.get('models');
-    const id = hook.id;
-    console.log(id)
-    return models.signup
+    console.log(hook)
+    const id = hook.id 
+    if (id != 0) {
+        return models.signup
         .findOne({
             where: {
                 id
@@ -21,4 +22,17 @@ module.exports = () => (hook) => {
                 });
         })
         .catch(error => hook);
-};
+    } else {
+        const eventId = hook.params.eventId
+        console.log(eventId)
+        return models.quota
+        .findAll()
+        .then((res) => {
+            hook.result = res;
+            return hook;
+        })
+        .catch(error => hook);
+        
+    }
+}
+    

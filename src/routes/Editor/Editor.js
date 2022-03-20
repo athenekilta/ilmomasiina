@@ -279,7 +279,7 @@ class Editor extends React.Component {
               <EmailsTab event={this.props.event} onDataChange={this.onDataChange} />
             </div>
             <div className={`tab-pane ${this.state.activeTab === 5 ? 'active' : ''}`}>
-              <SignupsTab event={this.props.event} deleteSignup={this.props.deleteSignup} />
+              <SignupsTab event={this.props.event} deleteSignup={this.props.deleteSignup} deleteEventSignups={this.props.deleteEventSignups} />
             </div>
           </div>
         </Formsy.Form>
@@ -295,6 +295,7 @@ const mapDispatchToProps = {
   setEvent: EditorActions.setEvent,
   updateEventField: EditorActions.updateEventField,
   deleteSignup: AdminSignupActions.deleteSignupAsync,
+  deleteEventSignups: AdminSignupActions.deleteEventSignupsAsync
 };
 
 const mapStateToProps = state => ({

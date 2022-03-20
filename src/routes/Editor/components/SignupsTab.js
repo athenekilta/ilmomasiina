@@ -74,7 +74,7 @@ class SignupsTab extends React.Component {
     }
 
     return (
-      <div>
+      <div> 
         <CSVLink
           data={signups}
           separator={"\t"}
@@ -84,6 +84,11 @@ class SignupsTab extends React.Component {
         </CSVLink>
         <br />
         <br />
+        <button className="btn btn-danger" onClick={() => {
+                  var confirmation = window.confirm("Oletko varma? Poistamista ei voi perua.")
+                  if (confirmation) {
+                    this.props.deleteSignup(0, event.id)
+        }}}> Remove all signups </button>
         {this.renderTable(signups)}
 
         {/* {this.renderSignupLists(this.props.event)}

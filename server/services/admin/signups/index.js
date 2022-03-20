@@ -9,10 +9,10 @@ module.exports = function () {
     };
 
     // Initialize our service with any options it requires
-    app.use('/api/admin/signups', service(options));
+    app.use('/api/admin/signups/:eventId', service(options));
 
     // Get our initialize service to that we can bind hooks
-    const signupService = app.service('/api/admin/signups');
+    const signupService = app.service('/api/admin/signups/:eventId');
 
     // Set up our before hooks
     signupService.before(hooks.before);
