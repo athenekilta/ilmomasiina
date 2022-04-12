@@ -26,7 +26,7 @@ export class ViewProgress extends React.Component {
 ViewProgress.propTypes = {
   title: React.PropTypes.string.isRequired,
   value: React.PropTypes.number.isRequired,
-  max: React.PropTypes.number.isRequired,
+  max: React.PropTypes.number,
 };
 
 export default ViewProgress;

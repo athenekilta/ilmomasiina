@@ -7,6 +7,9 @@ html {
   height: 100%;
 }
 
+.btn[disabled]{
+  opacity: 0.35;
+}
 #root {
   h1 {
     font-weight: 800;

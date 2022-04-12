@@ -10,6 +10,8 @@ const initialState = {
 
 export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
+    case ActionTypes.RESET:
+      return initialState;
     case ActionTypes.SET_SIGNUP_AND_EVENT:
       return {
         ...state,
@@ -45,6 +47,7 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         deleted: true,
+        loading: false,
       };
     }
 

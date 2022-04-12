@@ -23,7 +23,15 @@ class TableRow extends React.Component {
   };
 
   render() {
-    const { title, link, date, signupLabel, signups, size, className } = this.props;
+    const {
+      title,
+      link,
+      date,
+      signupLabel,
+      signups,
+      size,
+      className,
+    } = this.props;
 
     return (
       <tr className={className}>
@@ -33,10 +41,17 @@ class TableRow extends React.Component {
         <td key="date" className="date">
           {date ? moment(date).format('DD.MM.YYYY') : ''}
         </td>
-        <td key="signup" className="signup" data-xs-prefix={signupLabel ? 'Ilmoittautuminen ' : ''}>
+        <td
+          key="signup"
+          className="signup"
+        >
           {signupLabel}
         </td>
-        <td key="signups" className="signups" data-xs-prefix={signups || size ? 'Ilmoittautuneita: ' : ''}>
+        <td
+          key="signups"
+          className="signups"
+          data-xs-prefix={signups || size ? 'Ilmoittautuneita: ' : ''}
+        >
           {signups}
           {size ? <Separator /> : ''}
           {size || ''}
@@ -47,7 +62,7 @@ class TableRow extends React.Component {
 }
 
 /* Render the list container
-*/
+ */
 
 class EventList extends React.Component {
   static propTypes = {
@@ -62,7 +77,7 @@ class EventList extends React.Component {
   }
 
   render() {
-    const sortFunction = (event) => {
+    const sortFunction = event => {
       const now = moment();
 
       // First upcoming events
@@ -75,18 +90,30 @@ class EventList extends React.Component {
       return 0;
     };
 
-    const eventsSorted = _.sortBy(this.props.events, [sortFunction, 'date', 'title']);
+    const eventsSorted = _.sortBy(this.props.events, [
+      sortFunction,
+      'date',
+      'title',
+    ]);
 
-    const tableRows = eventsSorted.map((event) => {
-      const eventState = signupState(event.date, event.registrationStartDate, event.registrationEndDate);
+    const tableRows = eventsSorted.map(event => {
+      const eventState = signupState(
+        event.date,
+        event.registrationStartDate,
+        event.registrationEndDate,
+      );
 
       const rows = [
         <TableRow
           title={event.title}
-          link={`/event/${event.id}`}
+          link={`${PREFIX_URL}/event/${event.id}`}
           date={event.date}
           signupLabel={eventState.label}
-          signups={event.quota.length < 2 && event.signupsPublic ? _.sumBy(event.quota, 'signups') || 0 : null}
+          signups={
+            event.quota.length < 2
+              ? _.sumBy(event.quota, 'signupCount') || 0
+              : null
+          }
           size={event.quota.length < 2 ? _.sumBy(event.quota, 'size') : null}
           className={eventState.class}
           key={`e${event.id}`}
@@ -98,7 +125,9 @@ class EventList extends React.Component {
           rows.push(
             <TableRow
               title={quota.title}
-              signups={event.signupsPublic ? Math.min(quota.signupCount, quota.size) : null}
+              signups={
+                Math.min(quota.signupCount, quota.size)
+              }
               size={quota.size}
               className="child"
               key={`q${i}`}
@@ -112,7 +141,10 @@ class EventList extends React.Component {
           <TableRow
             title="Avoin"
             signupLabel=""
-            signups={Math.min(_.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size))), event.openQuotaSize)}
+            signups={Math.min(
+              _.sum(event.quota.map(q => Math.max(0, q.signupCount - q.size))),
+              event.openQuotaSize,
+            )}
             size={event.openQuotaSize}
             className="child"
             key={`open${event.id}`}
@@ -150,6 +182,7 @@ const mapStateToProps = state => ({
   events: state.events.events,
   eventsLoading: state.events.eventsLoading,
   eventsError: state.events.eventsError,
+  admin: state.admin,
 });
 
 export default connect(

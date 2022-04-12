@@ -14,7 +14,7 @@ const signupState = (eventTime, starts, closes) => {
   const eventOpens = moment(eventTime);
   const now = moment();
 
-  const timeFormat = 'D.M.Y [klo] hh:mm';
+  const timeFormat = 'D.M.Y [klo] HH:mm';
 
   if (signupOpens.isSameOrAfter(now)) {
     return {

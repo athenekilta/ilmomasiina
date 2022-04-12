@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Formsy from 'formsy-react';
 import { Input } from 'formsy-react-components';
 import Spinner from 'react-spinkit';
-import { toast } from 'react-toastify';
 import Promise from 'bluebird';
 
 async function minDelay(func, ms = 1000) {
@@ -13,33 +12,19 @@ async function minDelay(func, ms = 1000) {
 
 class UserForm extends React.Component {
   static propTypes = {
-    createUserAsync: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    loading: PropTypes.bool.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-      loading: false,
     };
 
-    this.createUser = this.createUser.bind(this);
     this.updateInputValue = this.updateInputValue.bind(this);
   }
 
-  async createUser() {
-    const { email } = this.state;
-
-    this.setState({ loading: true });
-
-    try {
-      const res = await minDelay(this.props.createUserAsync({ email }), 1000);
-    } catch (error) {
-      toast.error('Käyttäjän luominen epäonnistui.', { autoClose: 2000 });
-    }
-
-    this.setState({ loading: false });
-  }
 
   updateInputValue(field, value) {
     this.setState({
@@ -63,9 +48,9 @@ class UserForm extends React.Component {
         <button
           className="btn btn-default"
           style={{ marginTop: '1em' }}
-          onClick={ () => this.createUser() }
+          onClick={() => this.props.onSubmit(this.state.email)}
         >
-          {this.state.loading ? <Spinner /> : 'Luo uusi käyttäjä'}
+          {this.props.loading ? <Spinner /> : 'Luo uusi käyttäjä'}
         </button>
       </Formsy.Form>
     );

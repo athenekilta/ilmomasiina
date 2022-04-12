@@ -9,7 +9,7 @@ module.exports = () => (hook) => {
   return models.quota.findById(quotaId)
     .then((quota) => {
       const query = {
-        attributes: ['id', 'openQuotaSize'],
+        attributes: ['id', 'openQuotaSize', 'signupsPublic'],
         distinct: true,
         where: {
           id: quota.eventId,
@@ -38,20 +38,20 @@ module.exports = () => (hook) => {
       return models.event.findOne(query)
         .then((event) => {
           const currentQuota = _.find(event.quota, { dataValues: { id: quotaId } }).dataValues;
-          const positionInQuota = currentQuota.signupsBefore + 1;
+          const positionInQuota = currentQuota.signupsBefore;
 
           let position = null;
           let status = null;
 
           if (event.signupsPublic) {
-            if (positionInQuota <= currentQuota.size) {
+            if (positionInQuota <= currentQuota.size || currentQuota.size === null) {
               position = positionInQuota;
               status = 'in-quota';
             } else {
               const quotaOverflows = event.quota.map(q => Math.min(0, q.dataValues.size - q.dataValues.signupsBefore));
               const positionInOpen = Math.max(0, Number(event.openQuotaSize) - _.sum(quotaOverflows) - currentQuota.size);
 
-              if (positionInOpen <= event.openQuotaSize) {
+              if (positionInOpen <= event.openQuotaSize && event.openQuotaSize > 0) {
                 position = positionInOpen;
                 status = 'in-open';
               } else {

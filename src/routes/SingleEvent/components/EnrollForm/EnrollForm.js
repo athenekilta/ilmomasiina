@@ -2,15 +2,19 @@ import React from 'react';
 import Formsy from 'formsy-react';
 import _ from 'lodash';
 
-import { CheckboxGroup, Select, Input, Textarea } from 'formsy-react-components';
+import { CheckboxGroup, Select, Input, Textarea, RadioGroup } from 'formsy-react-components';
 import './EnrollForm.scss';
 
 export class EnrollForm extends React.Component {
   constructor(props) {
     super(props);
     this.parseSubmit = this.parseSubmit.bind(this);
+    this.setError = this.setError.bind(this)
+    this.state = { inputError: false }
   }
-
+  setError() {
+    this.setState({ inputError: true })
+  }
   parseSubmit(data) {
     const answers = {
       firstName: data.firstName,
@@ -18,8 +22,8 @@ export class EnrollForm extends React.Component {
       email: data.email,
       answers: [],
     };
-
     if (this.props.questions) {
+      
       answers.answers = this.props.questions
         .map((question) => {
           const questionId = question.id;
@@ -32,16 +36,16 @@ export class EnrollForm extends React.Component {
             return { questionId, answer };
           }
 
-          return null;
+          return { questionId,  answer: "" };
         })
-        .filter(x => x);
     }
-
     return this.props.submitForm(answers);
   }
 
   renderQuestionFields() {
     return _.map(this.props.questions, (question) => {
+      const help = question.public ? 'Tämän kentän vastaukset ovat julkisia.' : null;
+
       if (question.type === 'text') {
         return (
           <Input
@@ -50,6 +54,19 @@ export class EnrollForm extends React.Component {
             type="text"
             required={question.required}
             key={question.id}
+            help={help}
+          />
+        );
+      }
+      if (question.type === 'number') {
+        return (
+          <Input
+            name={String(question.id)}
+            label={question.question}
+            type="number"
+            required={question.required}
+            key={question.id}
+            help={help}
           />
         );
       }
@@ -64,22 +81,37 @@ export class EnrollForm extends React.Component {
             label={question.question}
             required={question.required}
             key={question.id}
+            help={help}
           />
         );
       }
 
       if (question.type === 'select') {
-        const optionsArray = [];
+        if (question.options.length > 3) { // render select if more than 3 options
+          let optionsArray = [{ label: "Valitse...", value: null }];
 
-        question.options.map(option => optionsArray.push({ label: option }));
+          question.options.map(option => optionsArray.push({ label: option }));
 
+          return (
+            <Select
+              name={String(question.id)}
+              label={question.question}
+              options={optionsArray}
+              required={question.required}
+              key={question.id}
+              help={help}
+            />
+          );
+        }
         return (
-          <Select
+          <RadioGroup
             name={String(question.id)}
+            type="inline"
             label={question.question}
-            options={optionsArray}
+            options={question.options.map(option => ({ label: option, value: option }))}
             required={question.required}
             key={question.id}
+            help={help}
           />
         );
       }
@@ -88,11 +120,13 @@ export class EnrollForm extends React.Component {
         return (
           <CheckboxGroup
             value={[]}
+            type="inline"
             name={String(question.id)}
             label={question.question}
             required={question.required}
             options={question.options.map(option => ({ label: option, value: option }))}
             key={question.id}
+            help={help}
           />
         );
       }
@@ -109,7 +143,7 @@ export class EnrollForm extends React.Component {
 
       if (status == 'in-quota') {
         const quota = _.find(quotas, { id: quotaId });
-        return `Olet kiintiössä ${quota.title} sijalla ${position} / ${quota.size}.`;
+        return `Olet kiintiössä ${quota.title} sijalla ${position + (quota.size ? " / " + quota.size : "")}.`;
       }
 
       if (status == 'in-open') {
@@ -118,21 +152,24 @@ export class EnrollForm extends React.Component {
 
       return `Olet jonossa sijalla ${position}.`;
     };
-
     return (
+
       <div className="form-wrapper">
         <div className="container">
           <a className="close" onClick={() => this.props.closeForm()} />
           <div className="col-xs-12 col-md-8 col-md-offset-2">
+            {this.state.inputError ? <p style={{ color: "#a94442" }}>Ilmoittautumisessasi on virheitä.</p> : null}
             <h2>Ilmoittaudu</h2>
             {this.props.signup.status != null ? <p>{signupStatus()}</p> : null}
-            <Formsy.Form onValidSubmit={this.parseSubmit}>
-              <Input name="firstName" value="" label="Etunimi" type="text" placeholder="Etunimi" required />
-              <Input name="lastName" value="" label="Sukunimi" type="text" placeholder="Sukunimi" required />
+
+            <Formsy.Form onValidSubmit={this.parseSubmit} onInvalidSubmit={this.setError}>
+              <Input name="firstName" value="" label="Etunimi / First name" type="text" placeholder="Etunimi" required />
+              <Input name="lastName" value="" label="Sukunimi / Last name" type="text" placeholder="Sukunimi" required help="Nimi on julkinen tieto. Voit halutessasi ilmoittautua tapahtumaan salanimellä." />
+
               <Input
                 name="email"
                 value=""
-                label="Sähköposti"
+                label="Sähköposti / Email"
                 type="email"
                 placeholder="Sähköpostisi"
                 validations="isEmail"
@@ -157,7 +194,7 @@ export class EnrollForm extends React.Component {
           </div>
           <div className="cf" />
         </div>
-      </div>
+      </div >
     );
   }
 }
@@ -167,7 +204,7 @@ EnrollForm.propTypes = {
   questions: React.PropTypes.array,
   signup: React.PropTypes.object,
   loading: React.PropTypes.bool,
-  error: React.PropTypes.string,
+  error: React.PropTypes.bool,
 };
 
 export default EnrollForm;

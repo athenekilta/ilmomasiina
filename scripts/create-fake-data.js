@@ -21,11 +21,10 @@ const events = [
     description: 'Legendaarinen wappufiiliksen pikakohottaja, Minuuttikalja',
     price: '',
     location: 'Smökki (Jämeräntaival 4, Espoo)',
-    homepage: '',
     facebooklink: 'https://www.facebook.com/events/1715883881987829/',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Columbia Road -excu',
@@ -36,11 +35,11 @@ const events = [
       'Columbia Road toivottaa athenelaiset ja tikkiläiset\n\nMonen rivin kuvaus\n\nlorem dorem', // eslint-disable-line
     price: '0 €',
     location: 'Eerikinkatu 5, Helsinki',
-    homepage: 'http://crexcu2017.wordpress.com/',
+    webpageUrl: 'http://crexcu2017.wordpress.com/',
     facebooklink: '',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Ystävänpäiväsitsit',
@@ -51,11 +50,11 @@ const events = [
     openQuotaSize: 20,
     price: '14 € (12 € alkoholiton)',
     location: 'Smökki',
-    homepage: 'http://crexcu2017.wordpress.com/',
+    webpageUrl: 'http://crexcu2017.wordpress.com/',
     facebooklink: '',
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
-    signupsPublic: 1
+    signupsPublic: 1,
   },
   {
     title: 'Athene Alumni',
@@ -64,11 +63,23 @@ const events = [
     draft: 0,
     confirmationMessage: faker.lorem.paragraphs(),
   },
+  {
+    title: 'Vanha tapahtuma',
+    date: moment(now).add(15, 'days'),
+    registrationStartDate: moment(now).subtract(1, 'days'),
+    registrationEndDate: moment(now).add(10, 'days'),
+    description: 'Tällä voi testata vanhojen tapahtumien automaattista sensurointia. Tämän tapahtuman ilmoittautuneiden nimet ja sähköpostit pitäisi sensuroitua minuutin kuluttua skriptin ajamisesta.',
+    facebooklink: 'https://www.facebook.com/events/1715883881987829/',
+    draft: 0,
+    confirmationMessage: faker.lorem.paragraphs(),
+    signupsPublic: 1,
+  },
 ];
 
 const quotas = [
   {
     eventId: 1,
+    sortId: 1,
     title: 'Minuuttikalja 2016',
     // going fields doesn't exist in db, but it's used to create right amount of signups
     going: 18,
@@ -76,44 +87,58 @@ const quotas = [
   },
   {
     eventId: 2,
+    sortId: 1,
     title: 'Athene',
     going: 0,
     size: 20,
   },
   {
     eventId: 2,
+    sortId: 2,
     title: 'Tietokilta',
     going: 29,
     size: 20,
   },
   {
     eventId: 3,
+    sortId: 1,
     title: 'Athene',
     going: 29,
     size: 20,
   },
   {
     eventId: 3,
+    sortId: 2,
     title: 'Prodeko',
     going: 27,
     size: 20,
   },
   {
     eventId: 3,
+    sortId: 3,
     title: 'Tietokilta',
     going: 29,
     size: 20,
   },
   {
     eventId: 4,
+    sortId: 1,
     title: 'Athene Alumni',
     going: 5,
+  },
+  {
+    eventId: 5,
+    sortId: 1,
+    title: 'Vanha tapahtuma',
+    going: 5,
+    old: true,
   },
 ];
 
 const questions = [
   {
     id: 1,
+    sortId: 1,
     eventId: 3,
     type: 'text',
     question: 'Pöytätoive',
@@ -122,6 +147,7 @@ const questions = [
   },
   {
     id: 2,
+    sortId: 2,
     eventId: 3,
     type: 'text',
     question: 'Valmistumisvuosi',
@@ -130,6 +156,7 @@ const questions = [
   },
   {
     id: 3,
+    sortId: 3,
     eventId: 3,
     type: 'textarea',
     question: 'Terveiset',
@@ -138,6 +165,7 @@ const questions = [
   },
   {
     id: 4,
+    sortId: 4,
     eventId: 3,
     type: 'checkbox',
     question: 'Monivalinta',
@@ -147,6 +175,7 @@ const questions = [
   },
   {
     id: 5,
+    sortId: 5,
     eventId: 3,
     type: 'select',
     question: 'Valintaruudut',
@@ -156,6 +185,7 @@ const questions = [
   },
   {
     id: 6,
+    sortId: 6,
     eventId: 3,
     type: 'checkbox',
     question: 'Osallistun',
@@ -171,7 +201,7 @@ const answers = [];
 
 let signupIndex = 0;
 
-faker.locale = 'pl';
+faker.locale = 'en';
 
 const createAnswers = (eventId, signupId) => {
   const questionsToAnswer = _.filter(questions, ['eventId', eventId]) || [];
@@ -189,15 +219,15 @@ const createAnswers = (eventId, signupId) => {
 };
 
 quotas.map((quota, quotaIndex) => {
+  const createdAt = quota.old ? moment().subtract('6', 'months').add('1', 'minutes') : moment().subtract('5', 'minutes');
   for (let i = 0; i < quota.going; i += 1) {
     signups.push({
       quotaId: quotaIndex + 1,
-      createdAt: moment()
-        .subtract('5', 'minutes'),
+      createdAt,
       confirmedAt: moment()
         .subtract('1', 'minutes'),
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
+      firstName: i === 0 ? 'Deleted' : faker.name.firstName(),
+      lastName: i === 0 ? 'Deleted' : faker.name.lastName(),
       email: faker.internet.email(),
     });
 

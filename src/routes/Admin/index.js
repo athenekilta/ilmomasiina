@@ -2,7 +2,7 @@ import { injectReducer } from '../../store/reducers';
 import adminWrapper from '../authWrapper';
 
 export default store => ({
-  path: 'admin',
+  path: `${PREFIX_URL}/admin`,
   /*  Async getComponent is only invoked when route matches   */
   getComponent(nextState, cb) {
     /*  Webpack - use 'require.ensure' to create a split point

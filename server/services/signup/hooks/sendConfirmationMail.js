@@ -1,12 +1,13 @@
 const _ = require('lodash');
 const EmailService = require('../../../mail/');
-
+const moment = require('moment');
+const config = require('../../../../config/ilmomasiina.config.js');
 module.exports = () => (hook) => {
   const models = hook.app.get('models');
 
   const fields = [
-    { label: 'Nimi', answer: `${hook.result.firstName} ${hook.result.lastName}` },
-    { label: 'Sähköposti', answer: `${hook.result.email}` },
+    { label: 'Nimi // Name', answer: `${hook.result.firstName} ${hook.result.lastName}` },
+    { label: 'Sähköposti // Email', answer: `${hook.result.email}` },
   ];
 
   const userAnswers = [];
@@ -18,7 +19,7 @@ module.exports = () => (hook) => {
     .then(() => models.signup.findById(hook.result.id))
     .then(signup => models.quota.findById(signup.quotaId))
     .then((quota) => {
-      fields.push({ label: 'Kiintiö', answer: quota.title });
+      fields.push({ label: 'Kiintiö // Quota', answer: quota.title });
 
       return models.event
         .findById(quota.dataValues.eventId)
@@ -40,8 +41,10 @@ module.exports = () => (hook) => {
         .then((event) => {
           const params = {
             answers: fields,
+            edited: userAnswers.some(a => a.createdAt.getTime() !== a.updatedAt.getTime()),
+            date: moment(event.dataValues.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm'),
             event: event.dataValues,
-            cancelLink: `http://localhost:3000/signup/${hook.result.id}/${hook.data.editToken}`,
+            cancelLink: `${config.baseUrl}${config.prefixUrl}/signup/${hook.result.id}/${hook.data.editToken}`,
           };
           // console.log(hook.data);
           // console.log('=====CONFIRMATION MAIL DISABLED!=====');

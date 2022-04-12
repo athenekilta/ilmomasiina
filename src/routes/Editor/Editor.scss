@@ -50,6 +50,9 @@
 
 .event-editor--valid-notice {
   display: flex;
+  position: absolute;
+  right: 20px;
+  top: 170px;
   justify-content: flex-end;
   align-items: center;
   height: 40px;

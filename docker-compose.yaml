@@ -1,0 +1,33 @@
+version: '3'
+services:
+    database:
+        image: mysql:8
+        command: --default-authentication-plugin=mysql_native_password
+        env_file:
+            - .env
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:3306"]
+            interval: 2s
+            timeout: 5s
+            retries: 5
+        ports:
+          - "3306:3306"
+    backend:
+        # Use Dockerfile from root directory
+        build: .
+        environment: 
+            - MYSQL_HOST=database   #See ./server/models/index.js:26
+            - DOCKER_ENV=localhost  #See ./config/project.config.js:28
+        volumes:
+            - ./src:/opt/ilmomasiina/src
+            - ./server:/opt/ilmomasiina/server
+            - ./public:/opt/ilmomasiina/public
+            - ./config:/opt/ilmomasiina/config
+            - ./bin:/opt/ilmomasiina/bin
+            - ./scripts:/opt/ilmomasiina/scripts
+        env_file:
+            - .env
+        ports:
+            - "3000:3000"
+        depends_on: 
+            - database

@@ -2,10 +2,10 @@ extends ../layout.pug
 
 block mainContent
 	div.content-block
-		p.bodyText Sinulle on luotu admin-tunnukset Ilmomasiinaan.:
+		p.bodyText Sinulle on luotu admin-tunnukset Ilmomasiinaan // Ilmomasiina admin credentials have been created for you:
 		ul
 			each val in fields
 				li
 					strong #{val.label}:
 					| #{val.answer}
-	p.bodyText Voit kirjautua sisään osoitteessa xxx.:
+	p.bodyText Voit kirjautua sisään osoitteessa // You may log in at #{branding.siteUrl}

@@ -28,6 +28,10 @@ module.exports = function () {
     before: {
       create: [
         authentication.hooks.authenticate(['local', 'jwt']),
+        context => {
+          context.params.jwt = { expiresIn: 3600 }; // 1 hour
+        }
+
       ],
       remove: [
         authentication.hooks.authenticate('jwt'),
