@@ -75,36 +75,41 @@ class BasicDetailsTab extends React.Component {
           type="text"
           onChange={this.props.onDataChange}
         />
-        <Editor
-          wrapperClassName="wrapper-class"
-          editorClassName="editor-class"
-          toolbarClassName="toolbar-class"
-          editorState={this.state.editorState}
-          onEditorStateChange={this.onEditorStateChange}
-          toolbar={{
-            options: ['inline', 'emoji', 'image'],
-            inline: {
-              inDropdown: false,
-              className: undefined,
-              component: undefined,
-              dropdownClassName: undefined,
-              options: ['bold', 'italic', 'underline', 'strikethrough'],
-            },
-            image: {
-              urlEnabled: true,
-              uploadEnabled: false,
-              alignmentEnabled: true,
-              uploadCallback: undefined,
-              previewImage: true,
-              inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-              alt: { present: false, mandatory: false },
-              defaultSize: {
-                height: 'auto',
-                width: '600',
+        <div className="parent">
+          <div className="title">
+            <p><strong>Kuvaus</strong></p>
+          </div>
+          <Editor
+            wrapperClassName="wrapper-class"
+            editorClassName="editor-class"
+            toolbarClassName="toolbar-class"
+            editorState={this.state.editorState}
+            onEditorStateChange={this.onEditorStateChange}
+            toolbar={{
+              options: ['inline', 'emoji', 'image'],
+              inline: {
+                inDropdown: false,
+                className: undefined,
+                component: undefined,
+                dropdownClassName: undefined,
+                options: ['bold', 'italic', 'underline', 'strikethrough'],
               },
-            },
-          }}
-          />
+              image: {
+                urlEnabled: true,
+                uploadEnabled: false,
+                alignmentEnabled: true,
+                uploadCallback: undefined,
+                previewImage: true,
+                inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+                alt: { present: false, mandatory: false },
+                defaultSize: {
+                  height: '400',
+                  width: '600',
+                },
+              },
+            }}
+            />
+        </div>
         <Checkbox
           name="signupsPublic"
           value={event.signupsPublic ? event.signupsPublic : false}

@@ -69,7 +69,6 @@ class Editor extends React.Component {
           this.props.setEvent({});
 
           // Set base quota field
-          this.props.updateEventField('description', 'desciption');
           this.props.updateEventField('quota', [{ id: 0, title: 'Kiintiö', size: 20, existsInDb: false, sortId: 1 }]);
           this.props.updateEventField('questions', []);
         } else {
