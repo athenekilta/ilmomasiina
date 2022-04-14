@@ -24,7 +24,7 @@ module.exports = function() {
       config.mysqlPassword,
       {
         host: process.env.MYSQL_HOST || 'localhost', // If ran in Docker, uses db from compose. Else, uses localhost db.
-        dialect: 'mysql',
+        dialect: 'postgres',
         logging: false,
       },
     );

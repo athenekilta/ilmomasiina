@@ -29,5 +29,5 @@ services:
             - .env
         ports:
             - "3000:3000"
-        depends_on: 
-            - database
+        # depends_on: 
+        #     - database
