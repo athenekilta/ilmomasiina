@@ -85,13 +85,21 @@ class AdminEventList extends React.Component {
         data={e}
         onDelete={this.onDeleteEvent}
         />
-      ));
+      )
+    ).reverse();
   }
 
   render() {
     return (
       <div className="container">
         <h1>Hallinta / Management</h1>
+        <Link to={`${PREFIX_URL}/admin/edit/new`} className="btn btn-default">
+          + Uusi tapahtuma
+        </Link>
+        <div>
+          <Link to={`${PREFIX_URL}/admin/users`} className="btn btn-default">
+            Käyttäjien hallintapaneeli
+        </Link>
         <table className="table">
           <thead>
             <tr>
@@ -106,16 +114,7 @@ class AdminEventList extends React.Component {
             {this.renderEventRows()}
           </tbody>
         </table>
-        <Link to={`${PREFIX_URL}/admin/edit/new`} className="btn btn-default">
-          + Uusi tapahtuma / New event
-        </Link>
-        <div>
-          <Link to={`${PREFIX_URL}/admin/users`} className="btn btn-default">
-            Käyttäjien hallintapaneeli / Account control panel
-        </Link>
         </div>
-
-
       </div>
     );
   }

@@ -44,7 +44,9 @@ const EmailService = {
     return email
       .render('../server/mail/emails/confirmation/html', brandedParams)
       .then(html => {
-        const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
+        const subjectFi = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
+        const subjectEn = `${params.edited ? 'Signup edit' : 'Signup'} confirmation: ${params.event.title}`;
+        const subject = subjectFi + ' // ' + subjectEn;
         return EmailService.send(to, subject, html);
       });
   },
@@ -67,11 +69,11 @@ const EmailService = {
         siteUrl: ilmoconfig.baseUrl,
       },
     };
-
+    
     return email
       .render('../server/mail/emails/newUser/html', brandedParams)
       .then(html => {
-        const subject = 'Käyttäjätunnukset Ilmomasiinaan';
+        const subject = 'Käyttäjätunnukset Ilmomasiinaan // Ilmomasiina login credentials';
         return EmailService.send(to, subject, html);
       });
   },
@@ -98,7 +100,9 @@ const EmailService = {
     return email
       .render('../server/mail/emails/queueMail/html', brandedParams)
       .then(html => {
-        const subject = 'Pääsit varasijalta tapahtumaan ' + params.event.title;
+        const subjectFi = 'Pääsit varasijalta tapahtumaan ' + params.event.title;
+        const subjectEn = 'You now have a spot at event ' + params.event.title;
+        const subject = subjectFi + ' // ' + subjectEn;
         return EmailService.send(to, subject, html);
       });
   },

@@ -21,16 +21,20 @@ module.exports = () => (hook) => {
       'signupsPublic',
       'verificationEmail',
     ],
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+      [{ model: sequelize.models.question }, 'sortId', 'ASC'],
+    ],
     raw: false,
     include: [
       // First include all questions (also non-public for the form)
       {
-        attributes: ['id', 'question', 'type', 'options', 'required', 'public'],
+        attributes: ['id', 'question', 'type', 'options', 'required', 'public', 'sortId'],
         model: sequelize.models.question,
       },
       // Include quotas..
       {
-        attributes: ['title', 'size', 'id'],
+        attributes: ['title', 'size', 'id', 'sortId'],
         model: sequelize.models.quota,
         // ... and signups of quotas
         include: [

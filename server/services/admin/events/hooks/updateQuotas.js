@@ -18,6 +18,9 @@ module.exports = () => (hook) => {
               eventId,
               deletedAt: null
             },
+            order: [
+              ['sortId', 'ASC'],
+            ],
             include: [{
               attributes: ['firstName', 'lastName', 'email', 'createdAt'],
               model: sequelize.models.signup,
@@ -30,7 +33,7 @@ module.exports = () => (hook) => {
     hook.result.dataValues.quota = quota;
     return hook;
   }).catch((error => {
-    throw new Error('Quota update failed');
+    throw new Error('Quota update failed:', error);
   }));
 
 

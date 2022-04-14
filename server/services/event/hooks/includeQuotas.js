@@ -15,6 +15,9 @@ module.exports = () => (hook) => {
       'openQuotaSize',
       'signupsPublic',
     ],
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+    ],
     distinct: true,
     raw: false,
     // Filter out events that are saved as draft
@@ -31,6 +34,7 @@ module.exports = () => (hook) => {
         attributes: [
           'title',
           'size',
+          'sortId',
           [
             sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
             'signupCount',

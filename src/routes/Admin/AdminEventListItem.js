@@ -20,13 +20,14 @@ class AdminEventListItem extends React.Component {
     return (
       <tr>
         <td>
-          <Link to={`${PREFIX_URL}/event/${data.id}`}>{data.title}</Link>
+          <Link to={`${PREFIX_URL}/admin/edit/${data.id}`}>{data.title}</Link>
         </td>
         <td>{data.date ? moment(data.date).format('DD.MM.YYYY') : ''}</td>
         <td>{data.draft ? 'Luonnos / Draft' : 'Julkaistu / Published'}</td>
         <td>{signups}</td>
         <td>
           <Link to={`${PREFIX_URL}/admin/edit/${data.id}`}>Muokkaa / Edit</Link>
+          <Link to={`${PREFIX_URL}/event/${data.id}`}>Linkki ilmoittautumiseen</Link>
 
           <Separator />
 

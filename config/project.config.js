@@ -24,7 +24,8 @@ const config = {
   // ----------------------------------
   // Server Configuration
   // ----------------------------------
-  server_host : ip.address(), // use string 'localhost' to prevent exposure on local network
+  // Prevents the use of ip address if ran in container, as the ip address is unreachable.
+  server_host : process.env.DOCKER_ENV || ip.address(), // use string 'localhost' to prevent exposure on local network
   server_port : process.env.PORT || 3000,
 
   // ----------------------------------

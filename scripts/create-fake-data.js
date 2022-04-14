@@ -85,6 +85,7 @@ const events = [
 const quotas = [
   {
     eventId: 1,
+    sortId: 1,
     title: 'Minuuttikalja 2016',
     // going fields doesn't exist in db, but it's used to create right amount of signups
     going: 18,
@@ -92,41 +93,48 @@ const quotas = [
   },
   {
     eventId: 2,
+    sortId: 1,
     title: 'Athene',
     going: 0,
     size: 20,
   },
   {
     eventId: 2,
+    sortId: 2,
     title: 'Tietokilta',
     going: 29,
     size: 20,
   },
   {
     eventId: 3,
+    sortId: 1,
     title: 'Athene',
     going: 29,
     size: 20,
   },
   {
     eventId: 3,
+    sortId: 2,
     title: 'Prodeko',
     going: 27,
     size: 20,
   },
   {
     eventId: 3,
+    sortId: 3,
     title: 'Tietokilta',
     going: 29,
     size: 20,
   },
   {
     eventId: 4,
+    sortId: 1,
     title: 'Athene Alumni',
     going: 5,
   },
   {
     eventId: 5,
+    sortId: 1,
     title: 'Vanha tapahtuma',
     going: 5,
     old: true,
@@ -136,6 +144,7 @@ const quotas = [
 const questions = [
   {
     id: 1,
+    sortId: 1,
     eventId: 3,
     type: 'text',
     question: 'Pöytätoive',
@@ -144,6 +153,7 @@ const questions = [
   },
   {
     id: 2,
+    sortId: 2,
     eventId: 3,
     type: 'text',
     question: 'Valmistumisvuosi',
@@ -152,6 +162,7 @@ const questions = [
   },
   {
     id: 3,
+    sortId: 3,
     eventId: 3,
     type: 'textarea',
     question: 'Terveiset',
@@ -160,6 +171,7 @@ const questions = [
   },
   {
     id: 4,
+    sortId: 4,
     eventId: 3,
     type: 'checkbox',
     question: 'Monivalinta',
@@ -169,6 +181,7 @@ const questions = [
   },
   {
     id: 5,
+    sortId: 5,
     eventId: 3,
     type: 'select',
     question: 'Valintaruudut',
@@ -178,6 +191,7 @@ const questions = [
   },
   {
     id: 6,
+    sortId: 6,
     eventId: 3,
     type: 'checkbox',
     question: 'Osallistun',

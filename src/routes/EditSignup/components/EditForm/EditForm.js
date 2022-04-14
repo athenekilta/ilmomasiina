@@ -23,25 +23,19 @@ export class EditForm extends React.Component {
       email: this.props.signup.email,
       answers: [],
     };
-
-    if (this.props.questions) {
       answers.answers = this.props.questions
         .map((question) => {
           const questionId = question.id;
           const answer = data[question.id];
-
           if (answer && answer.length > 0) {
             if (question.type === 'checkbox') {
               return { id: question.answerId, questionId, answer: answer.join(';') };
             }
             return { id: question.answerId, questionId, answer };
           }
-
-          return null;
+          return {id: question.answerId, questionId, answer: ""};
         })
         .filter(x => x);
-    }
-
     return this.props.submitForm(answers);
   }
 
@@ -100,7 +94,6 @@ export class EditForm extends React.Component {
 
         return (
           <Select
-            validations="isExisty"
             name={String(question.id)}
             label={question.question}
             options={optionsArray}

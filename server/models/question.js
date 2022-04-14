@@ -13,6 +13,10 @@ module.exports = function () {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    sortId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
     options: {
       type: Sequelize.STRING,
     },

@@ -223,8 +223,8 @@ class SingleEvent extends React.Component {
       <Countdown
         daysInHours
         date={new Date(new Date().getTime() + event.millisTillOpening)}
-        renderer={props => this.signupButtonRenderer(event, props.completed, props.total, props.seconds)} />
-
+        renderer={props => this.signupButtonRenderer(event, props.completed, props.total, props.seconds)}
+      />
     );
   }
 
@@ -243,6 +243,11 @@ class SingleEvent extends React.Component {
 
   render() {
     const { event, signup } = this.props;
+    //The ReactAutoLinker library does not support telegram by default, so we need to create our own link.
+    const renderLink = (tag) => { 
+      tag.attrs.href = tag.attrs.href.replace('twitter.com', 't.me')
+      tag.attrs.key = tag.attrs.key.replace('twitter.com', 't.me')
+      return React.createElement(tag.tagName, tag.attrs, tag.innerHtml) }
 
     return (
       <div>
@@ -300,6 +305,9 @@ class SingleEvent extends React.Component {
                     </p>
                     ) : null}
                 </div>
+                <p className="description">
+                  <ReactAutolinker text={event.description} options={{ newWindow: true, phone: false, mention: false, hashtag: false }} renderLink={renderLink}  />
+                </p>
                 <p className="description">
                   <ReactAutolinker text={event.description}
                     options={{ newWindow: true, phone: false, mention: false, hashtag: false }} />

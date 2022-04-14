@@ -43,6 +43,9 @@ module.exports = () => (hook) => {
             throw new Error(`Missing answer for question ${question.question}`);
           }
         } else {
+          if (!answer.answer) {
+            return null
+          }
           // Check that the select answer is valid
           if (question.type === 'select') {
             const options = question.options.split(';');
@@ -62,7 +65,6 @@ module.exports = () => (hook) => {
             });
           }
         }
-
         return true;
       });
       return hook;

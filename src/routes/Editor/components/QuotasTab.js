@@ -30,7 +30,7 @@ class QuotasTab extends React.Component {
 
   constructor(props) {
     super(props);
-
+    
     this.addQuota = this.addQuota.bind(this);
     this.updateQuota = this.updateQuota.bind(this);
     this.updateOrder = this.updateOrder.bind(this);
@@ -42,6 +42,7 @@ class QuotasTab extends React.Component {
       id: (_.max(quotas.map(n => n.id)) || 0) + 1,
       title: '',
       existsInDb: false,
+      sortId: (_.max(quotas.map(n => n.sortId)) || -1) + 1,
     });
 
     this.props.onDataChange('quota', newQuotas);
@@ -53,7 +54,9 @@ class QuotasTab extends React.Component {
     const elementToMove = newQuotas[args.oldIndex];
     newQuotas.splice(args.oldIndex, 1);
     newQuotas.splice(args.newIndex, 0, elementToMove);
-
+    for (let index = 0; index < newQuotas.length; index++) {
+      newQuotas[index].sortId = index
+    } 
     this.props.onDataChange('quota', newQuotas);
   }
 
@@ -68,12 +71,13 @@ class QuotasTab extends React.Component {
             [field]: null,
           };
         }
-        return {
-          ...quota,
-          [field]: value,
-        };
+        else {
+          return {
+            ...quota,
+            [field]: value,
+          };
+        }
       }
-
       return quota;
     });
 
