@@ -22,7 +22,7 @@ module.exports = () => (hook) => {
     raw: false,
     // Filter out events that are saved as draft
     where: {
-      draft: 0,
+      draft: false,
       date: {
         [Op.gt]: moment().subtract(1, 'days').toDate(),
       },
