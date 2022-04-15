@@ -18,13 +18,13 @@ services:
         environment: 
             - MYSQL_HOST=${DB_HOST}   #See ./server/models/index.js:26
             - DOCKER_ENV=localhost  #See ./config/project.config.js:28
-        volumes:
-            - ./src:/opt/ilmomasiina/src
-            - ./server:/opt/ilmomasiina/server
-            - ./public:/opt/ilmomasiina/public
-            - ./config:/opt/ilmomasiina/config
-            - ./bin:/opt/ilmomasiina/bin
-            - ./scripts:/opt/ilmomasiina/scripts
+        # volumes:
+        #     - ./src:/opt/ilmomasiina/src
+        #     - ./server:/opt/ilmomasiina/server
+        #     - ./public:/opt/ilmomasiina/public
+        #     - ./config:/opt/ilmomasiina/config
+        #     - ./bin:/opt/ilmomasiina/bin
+        #     - ./scripts:/opt/ilmomasiina/scripts
         env_file:
             - .env
         ports:

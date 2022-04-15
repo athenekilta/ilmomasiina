@@ -26,6 +26,7 @@ module.exports = function() {
         host: process.env.MYSQL_HOST || 'localhost', // If ran in Docker, uses db from compose. Else, uses localhost db.
         dialect: 'postgres',
         logging: false,
+        native: true,
       },
     );
   }

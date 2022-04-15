@@ -102,7 +102,7 @@
       }
     },
     "start:prod": {
-      "command": "pm2 start ./bin/prod-server.js",
+      "command": "node bin/prod-server",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
@@ -176,6 +176,8 @@
     "node-cron": "^2.0.3",
     "node-sass": "^4.9.3",
     "nodemailer": "^6.6.5",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.0.0",
     "postcss-loader": "^1.1.0",
     "prop-types": "^15.6.2",
     "react": "^15.6.2",
@@ -203,6 +205,7 @@
     "then-request": "^2.2.0",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.14",
+    "pg-native": "^3.0.0",
     "yargs": "^6.3.0"
   },
   "devDependencies": {

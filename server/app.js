@@ -86,8 +86,8 @@ if (project.env === 'development') {
   // the web server and not the app server, but this helps to demo the
   // server in production.
 
-  app.use(express.static(project.paths.dist()))
-    .use(enforce.HTTPS({ trustProtoHeader: true }));
+  app.use(express.static(project.paths.dist()));
+    // .use(enforce.HTTPS({ trustProtoHeader: true }));
 }
 
 module.exports = app;
