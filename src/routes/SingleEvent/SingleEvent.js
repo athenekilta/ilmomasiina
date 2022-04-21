@@ -311,8 +311,7 @@ class SingleEvent extends React.Component {
                     ) : null}
                   </div>
                   <p className="description">
-                    {description}
-}                 </p>
+                    {description}</p>
                  
                 </div>
                 <div className="col-xs-12 col-sm-4 pull-right">

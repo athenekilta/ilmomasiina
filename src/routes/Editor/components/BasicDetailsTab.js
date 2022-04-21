@@ -27,11 +27,11 @@ class BasicDetailsTab extends React.Component {
     this.state = {
       date: null,
       dateFocused: false,
-      editorState: EditorState.createWithContent(
+      editorState: this.props.event.description ? EditorState.createWithContent(
         ContentState.createFromBlockArray(
           convertFromHTML(this.props.event.description),
         ),
-      ),
+      ) : '',
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.onEditorStateChange = this.onEditorStateChange.bind(this);
