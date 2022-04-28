@@ -103,7 +103,16 @@ class Editor extends React.Component {
     };
 
     const { adminToken } = this.props;
-
+    if (event.description.includes('<img')) {
+      const height = event.description.split('height: ').pop().split('px').shift();
+      const width = event.description.split('width: ').pop().split('px').shift();
+      if (height >= 800) {
+        event.description = event.description.replace('height: ' + height, 'height: 800');
+      }
+      if (width >= 1000) {
+        event.description = event.description.replace('width: ' + width, 'width: 1000');
+      }
+    }
     if (this.props.params.id === 'new') {
       try {
         const res = await minDelay(this.props.publishEventAsync(event, adminToken), 1000);
