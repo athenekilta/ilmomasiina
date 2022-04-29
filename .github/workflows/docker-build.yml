@@ -55,3 +55,21 @@ jobs:
             BRANDING_FOOTER_GDPR_LINK=https://tietokilta.fi/kilta/hallinto/viralliset-asiat/rekisteriselosteet/
             BRANDING_FOOTER_HOME_TEXT=Tietokilta.fi
             BRANDING_FOOTER_HOME_LINK=https://tietokilta.fi
+
+  deploy:
+    name: Push update to App Service
+    needs: build
+    if: github.ref_type == 'branch'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    -
+      name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    -
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: tik-ilmo-${{ github.ref_name }}-app
+        images: 'ghcr.io/tietokilta/ilmomasiina:${{ github.ref_name }}'
