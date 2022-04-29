@@ -1,6 +1,18 @@
 # Build stage:
 FROM node:14-alpine as builder
 
+# Build-time env variables
+ARG SENTRY_DSN
+ARG PREFIX_URL
+ARG BRANDING_HEADER_TITLE_TEXT
+ARG BRANDING_FOOTER_GDPR_TEXT
+ARG BRANDING_FOOTER_GDPR_LINK
+ARG BRANDING_FOOTER_HOME_TEXT
+ARG BRANDING_FOOTER_HOME_LINK
+
+# Default to production
+ENV NODE_ENV=production
+
 # Copy source files
 COPY . /opt/ilmomasiina
 WORKDIR /opt/ilmomasiina

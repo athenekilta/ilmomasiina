@@ -37,25 +37,16 @@ export default async function initApp() {
 
   // Enforce HTTPS connections in production
   if (config.nodeEnv === 'production') {
-    if (config.enforceHttps !== 'false') {
-      app.use(enforce.HTTPS({
-        trustProtoHeader: config.enforceHttps === 'proxy',
-        trustAzureHeader: config.enforceHttps === 'azure',
-      }));
-      if (config.enforceHttps === 'azure') {
-        console.info(
-          'Enforcing HTTPS connections.\nEnsure your Azure app is set to redirect HTTP to HTTPS.',
-        );
-      } else {
-        console.info(
-          'Enforcing HTTPS connections.\nEnsure your load balancer or reverse proxy sets X-Forwarded-Proto.',
-        );
-      }
-    } else {
+    if (config.enforceHttps) {
+      app.use(enforce.HTTPS({ trustProtoHeader: true }));
+      console.info(
+        'Enforcing HTTPS connections.\nEnsure your load balancer or reverse proxy sets X-Forwarded-Proto.',
+      );
+    } else if (!config.isAzure) {
       console.warn(
         'HTTPS connections are not enforced by Ilmomasiina.\n'
         + 'For security reasons, please set ENFORCE_HTTPS=proxy and configure your load balancer or reverse proxy to '
-        + 'forward only HTTPS connections to Ilmomasiina. In Azure, set ENFORCE_HTTPS=azure instead.',
+        + 'forward only HTTPS connections to Ilmomasiina.',
       );
     }
   }
