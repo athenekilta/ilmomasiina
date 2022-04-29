@@ -43,6 +43,11 @@ export async function refreshSignupPositions(
     );
   }
 
+  // Lock event to prevent simultaneous changes
+  await Event.findByPk(event.id, {
+    transaction,
+    lock: Transaction.LOCK.UPDATE,
+  });
   const signups = await Signup.scope('active').findAll({
     attributes: ['id', 'quotaId', 'email', 'status', 'position'],
     include: [
@@ -59,7 +64,6 @@ export async function refreshSignupPositions(
       ['createdAt', 'ASC'],
       ['id', 'ASC'],
     ],
-    // Prevent simultaneous changes
     lock: Transaction.LOCK.UPDATE,
     transaction,
   });

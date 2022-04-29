@@ -21,25 +21,25 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
     // Get the event with all relevant information for the update
     const event = await Event.findByPk(id, {
       attributes: ['id', 'openQuotaSize', 'updatedAt'],
-      include: [
-        // Get existing quota and question IDs to reuse them wherever possible
-        {
-          model: Quota,
-          required: false,
-          attributes: ['id'],
-        },
-        {
-          model: Question,
-          required: false,
-          attributes: ['id'],
-        },
-      ],
       transaction,
       lock: Transaction.LOCK.UPDATE,
     });
     if (event === null) {
       throw new NotFound('No event found with id');
     }
+    // Postgres doesn't support FOR UPDATE with LEFT JOIN
+    event.quotas = await Quota.findAll({
+      where: { eventId: event.id },
+      attributes: ['id'],
+      transaction,
+      lock: Transaction.LOCK.UPDATE,
+    });
+    event.questions = await Question.findAll({
+      where: { eventId: event.id },
+      attributes: ['id'],
+      transaction,
+      lock: Transaction.LOCK.UPDATE,
+    });
 
     // Find existing questions and quotas for requested IDs
     const updatedQuestions = data.questions?.map((question) => ({
