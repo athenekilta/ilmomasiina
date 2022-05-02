@@ -28,7 +28,7 @@ const EditForm = ({ editToken }: Props) => {
   const isNew = signup!.confirmedAt === null;
 
   async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
-    const progressToast = toast.info('Ilmoittautuminen käynnissä', {});
+    const progressToast = toast.loading('Ilmoittautuminen käynnissä');
 
     const success = await dispatch(updateSignup(signup!.id, answers, editToken));
 
@@ -38,6 +38,9 @@ const EditForm = ({ editToken }: Props) => {
         render: `${action} onnistui!`,
         type: toast.TYPE.SUCCESS,
         autoClose: 5000,
+        closeButton: true,
+        closeOnClick: true,
+        isLoading: false,
       });
       if (isNew) dispatch(push(paths.eventDetails(event!.slug)));
     } else {
@@ -45,6 +48,9 @@ const EditForm = ({ editToken }: Props) => {
         render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.`,
         type: toast.TYPE.ERROR,
         autoClose: 5000,
+        closeButton: true,
+        closeOnClick: true,
+        isLoading: false,
       });
       setSubmitting(false);
     }
