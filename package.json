@@ -8,13 +8,13 @@
   },
   "scripts": {
     "bootstrap": "pnpm install",
-    "clean": "pnpm run clean",
-    "build": "pnpm run build",
-    "start": "pnpm run --parallel start",
+    "clean": "pnpm run -r clean",
+    "build": "pnpm run -r build",
+    "start": "pnpm run -r --parallel start",
     "lint": "eslint packages",
     "lint:fix": "npm run lint -- --fix",
-    "typecheck": "pnpm run typecheck",
-    "test": "pnpm run test"
+    "typecheck": "pnpm run -r typecheck",
+    "test": "pnpm run -r test"
   },
   "repository": {
     "type": "git",
