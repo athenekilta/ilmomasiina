@@ -18,7 +18,7 @@ COPY . /opt/ilmomasiina
 WORKDIR /opt/ilmomasiina
 
 # Install dependencies (we're running as root, so the postinstall script doesn't run automatically)
-RUN npm ci && npm run bootstrap
+RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile
 
 # Build all packages
 RUN npm run build

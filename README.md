@@ -91,8 +91,8 @@ You can also run the development server outside Docker.
 
 1. Install Postgres or MySQL. You can use Docker for this. SQLite may also work. but is not currently tested.
 2. Create a `.env` file at the root of this repository. You can copy [.env.example](./.env.example) to begin.
-3. Run `npm install` to install Lerna and other global dependencies. The postinstall script should automatically run
-   `lerna bootstrap` to setup cross-dependencies between packages and install package dependencies.
+3. Run `npm install -g pnpm@7` to install pnpm. Then run `pnpm install` to setup cross-dependencies between packages
+   and install other dependencies.
 4. Run `npm start`. This will start the frontend and backend dev servers in parallel.
    - If you want cleaner output, you can run `npm start` separately in `packages/ilmomasiina-frontend` and
      `packages/ilmomasiina-backend`.

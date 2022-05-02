@@ -1,11 +1,10 @@
 # Project structure
 
-The project uses [Lerna](https://lerna.js.org/) to manage the code in separate packages. This allows for cleaner code
+The project uses [pnpm](https://pnpm.io/) to manage the code in separate packages. This allows for cleaner code
 and package files.
 
-To prepare for development, Lerna must bootstrap the cross-dependencies between projects. This is done automatically
-using a npm *postinstall* script. Running `npm install` or `npm ci` will automatically run `lerna bootstrap` once
-packages are installed. To re-run bootstrapping manually, run `npm run bootstrap`.
+To prepare for development, pnpm must bootstrap the cross-dependencies between projects. To do this, install pnpm and
+then simply run `pnpm install` or `npm run bootstrap`.
 
 The project is configured to run development servers for the frontend and backend with `npm start`. In development, the
 Webpack development server serves the frontend and proxies API calls to the backend server.
@@ -33,7 +32,7 @@ Many of the libraries listed below were inherited from the Athene version of the
 if it benefits the project.
 
 - [TypeScript](https://www.typescriptlang.org/) everywhere
-- [Lerna](https://lerna.js.org/) to manage the multiple packages
+- [pnpm](https://pnpm.io/) to manage the multiple packages
 - [Lodash](https://lodash.com/) used where necessary, but preferring native methods
 
 ### Backend
