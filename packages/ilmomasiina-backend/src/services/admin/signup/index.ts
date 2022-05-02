@@ -7,9 +7,9 @@ import deleteSignup from '../../signup/deleteSignup';
 type AdminSignupsServiceTypes = null;
 
 export const adminSignupService: Partial<ServiceMethods<AdminSignupsServiceTypes>> = {
-  async remove(id) {
+  async remove(id, params) {
     // Invoke regular signup deletion with admin override
-    return deleteSignup(String(id), { adminAuthenticated: true });
+    return deleteSignup(String(id), { ...params, adminAuthenticated: true });
   },
 };
 

@@ -4,13 +4,14 @@ import { Params } from '@feathersjs/feathers';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
+import { logEvent } from '../../util/auditLog';
 import { refreshSignupPositions } from './computeSignupPosition';
 import { signupsAllowed } from './createNewSignup';
 import { verifyToken } from './editTokens';
 
-type AdminParams = { adminAuthenticated: true };
+type AdminParams = { adminAuthenticated?: boolean };
 
-export default async (id: string, params?: Params | AdminParams): Promise<null> => {
+export default async (id: string, params?: Params & AdminParams): Promise<null> => {
   if (!params?.adminAuthenticated) {
     const editToken = (params as Params)?.query?.editToken;
     verifyToken(id, editToken);
@@ -24,7 +25,7 @@ export default async (id: string, params?: Params | AdminParams): Promise<null> 
         include: [
           {
             model: Event,
-            attributes: ['id', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
+            attributes: ['id', 'title', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
           },
         ],
       },
@@ -42,6 +43,8 @@ export default async (id: string, params?: Params | AdminParams): Promise<null> 
 
   // Advance the queue and send emails to people that were accepted
   await refreshSignupPositions(signup.quota!.event!);
+
+  await logEvent('signup.delete', { signup, params });
 
   return null;
 };

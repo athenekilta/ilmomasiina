@@ -6,6 +6,7 @@ import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
+import { logEvent } from '../../util/auditLog';
 import { WouldMoveSignupsToQueue } from '../admin/event/errors';
 
 async function sendPromotedFromQueueEmail(signup: Signup, eventId: Event['id']) {
@@ -26,28 +27,30 @@ async function sendPromotedFromQueueEmail(signup: Signup, eventId: Event['id']) 
  * Updates the status and position attributes on all signups in the given event. Also sends "promoted from queue"
  * emails to affected users. Returns the new statuses for all signups.
  *
- * Make sure that the event passed contains `id`, `openQuotaSize`.
- *
  * By default, recomputations can move signups into the queue. This ensures that we don't cause random errors for
  * ordinary users. `moveSignupsToQueue = false` is passed if a warning can be shown (i.e. in admin-side editors).
  */
 export async function refreshSignupPositions(
-  event: Event,
+  eventRef: Event,
   transaction?: Transaction,
   moveSignupsToQueue: boolean = true,
 ): Promise<Signup[]> {
   // Wrap in transaction if not given
   if (!transaction) {
     return Event.sequelize!.transaction(
-      async (trans) => refreshSignupPositions(event, trans),
+      async (trans) => refreshSignupPositions(eventRef, trans),
     );
   }
 
   // Lock event to prevent simultaneous changes
-  await Event.findByPk(event.id, {
+  const event = await Event.findByPk(eventRef.id, {
+    attributes: ['id', 'title', 'openQuotaSize'],
     transaction,
     lock: Transaction.LOCK.UPDATE,
   });
+  if (!event) {
+    throw new Error('event missing from DB');
+  }
   const signups = await Signup.scope('active').findAll({
     attributes: ['id', 'quotaId', 'email', 'status', 'position'],
     include: [
@@ -87,7 +90,7 @@ export async function refreshSignupPositions(
       quotaSignups.set(signup.quotaId, inChosenQuota);
       status = 'in-quota';
       position = inChosenQuota;
-    } else if (inOpenQuota < event.openQuotaSize) {
+    } else if (inOpenQuota < eventRef.openQuotaSize) {
       inOpenQuota += 1;
       status = 'in-open';
       position = inOpenQuota;
@@ -108,11 +111,18 @@ export async function refreshSignupPositions(
   }
 
   // If a signup was just promoted from the queue, send an email about it asynchronously.
-  result.forEach(({ signup, status }) => {
+  await Promise.all(result.map(async ({ signup, status }) => {
     if (signup.status === 'in-queue' && status !== 'in-queue') {
-      sendPromotedFromQueueEmail(signup, event.id);
+      sendPromotedFromQueueEmail(signup, eventRef.id);
+
+      await logEvent('signup.queuePromote', {
+        signup,
+        event,
+        params: undefined, // let's not require params to be passed here
+        transaction,
+      });
     }
-  });
+  }));
 
   // Store changes in database, if any.
   await Promise.all(result.map(async ({ signup, status, position }) => {

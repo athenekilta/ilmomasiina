@@ -1,4 +1,5 @@
 import { NotFound } from '@feathersjs/errors';
+import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Op, Transaction } from 'sequelize';
 
@@ -12,15 +13,20 @@ import { AdminEventGetResponse } from '@tietokilta/ilmomasiina-models/src/servic
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
+import { logEvent } from '../../../util/auditLog';
 import { getEventDetailsForAdmin } from '../../event/getEventDetails';
 import { refreshSignupPositions } from '../../signup/computeSignupPosition';
 import { EditConflict } from './errors';
 
-export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Promise<AdminEventGetResponse> => {
+export default async (
+  id: Event['id'],
+  data: Partial<AdminEventUpdateBody>,
+  params: Params | undefined,
+): Promise<AdminEventGetResponse> => {
   await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update
     const event = await Event.findByPk(id, {
-      attributes: ['id', 'openQuotaSize', 'updatedAt'],
+      attributes: ['id', 'openQuotaSize', 'draft', 'updatedAt'],
       transaction,
       lock: Transaction.LOCK.UPDATE,
     });
@@ -72,6 +78,7 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
     }
 
     // Update the Event
+    const wasPublic = !event.draft;
     const eventAttribs = _.pick(data, adminEventCreateEventAttrs);
     await event.update(eventAttribs, { transaction });
 
@@ -145,6 +152,13 @@ export default async (id: Event['id'], data: Partial<AdminEventUpdateBody>): Pro
 
     // Refresh positions, but don't move signups to queue unless explicitly allowed
     await refreshSignupPositions(event, transaction, Boolean(data.moveSignupsToQueue));
+
+    const isPublic = !event.draft;
+    let action;
+    if (isPublic === wasPublic) action = 'event.edit';
+    else action = isPublic ? 'event.publish' : 'event.unpublish';
+
+    await logEvent(action, { event, params, transaction });
   });
 
   return getEventDetailsForAdmin(id);

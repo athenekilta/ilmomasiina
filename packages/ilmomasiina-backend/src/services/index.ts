@@ -6,6 +6,7 @@ import adminCategories, { adminCategoryService } from './admin/category';
 import adminEvents, { adminEventService } from './admin/event';
 import adminSignups, { adminSignupService } from './admin/signup';
 import adminSlug, { adminSlugService } from './admin/slug';
+import auditLog, { AuditLogService } from './auditlog';
 import authentication from './authentication';
 import event, { eventService } from './event';
 import signup, { signupService } from './signup';
@@ -19,6 +20,7 @@ export interface IlmoServices {
   '/api/admin/events': WrapService<typeof adminEventService>;
   '/api/admin/signups': WrapService<typeof adminSignupService>;
   '/api/admin/slug': WrapService<typeof adminSlugService>;
+  '/api/auditlog': AuditLogService;
   '/api/authentication': AuthenticationService;
   '/api/events': WrapService<typeof eventService>;
   '/api/signups': WrapService<typeof signupService>;
@@ -33,6 +35,7 @@ export default function setupServices(this: IlmoApplication) {
   app.configure(adminEvents);
   app.configure(adminSignups);
   app.configure(adminSlug);
+  app.configure(auditLog);
   app.configure(event);
   app.configure(signup);
   app.configure(user);

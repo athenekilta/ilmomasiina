@@ -12,15 +12,23 @@ import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
 import removeDeletedData from './cron/removeDeletedData';
 import setupDatabase from './models';
 import services from './services';
+import { remoteIp } from './util/auditLog';
 
 export default async function initApp() {
   await setupDatabase();
 
   const app = express(feathers());
+
+  // Get IPs from X-Forwarded-For
+  if (config.isAzure || config.trustProxy) {
+    app.set('trust proxy', true);
+  }
+
   app
     .use(compress())
     .use(json())
     .use(urlencoded({ extended: true }))
+    .use(remoteIp)
     .configure(rest())
     .configure(services);
 
