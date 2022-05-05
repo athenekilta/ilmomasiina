@@ -4,14 +4,14 @@ import _ from 'lodash';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
-import ReactHtmlParser from 'react-html-parser';
+import ReactAutolinker from 'react-autolinker';
+
 import * as SingleEventActions from '../../modules/singleEvent/actions';
 import SignupButton from './components/SignupButton';
 import SignupList from './components/SignupList';
 import ViewProgress from './components/ViewProgress';
 import EnrollForm from './components/EnrollForm';
 import signupState from '../../utils/signupStateText';
-import Autolinker from 'autolinker';
 import './SingleEvent.scss';
 import {
   getQuotaData,
@@ -238,22 +238,11 @@ class SingleEvent extends React.Component {
 
   render() {
     const { event, signup } = this.props;
-
-    // Autolinker, by default, does not support telegram, so we need to modify @ to redirect to telegram instead of twitter.
-    const linkedText = Autolinker.link(event.description, {
-      replaceFn: (autolinker, match) => {
-        if (match.getType() === 'twitter') {
-          const tag = autolinker.getTagBuilder().build(match);
-          const mention = tag.innerHtml.substring(1);
-          return '<a href="https://t.me/' + mention + '">' + mention + '</a>';
-        } else {
-          return true;
-        }
-      },
-    },
-    );
-
-    const description = ReactHtmlParser(linkedText);
+    //The ReactAutoLinker library does not support telegram by default, so we need to create our own link.
+    const renderLink = (tag) => { 
+      tag.attrs.href = tag.attrs.href.replace('twitter.com', 't.me')
+      tag.attrs.key = tag.attrs.key.replace('twitter.com', 't.me')
+      return React.createElement(tag.tagName, tag.attrs, tag.innerHtml) }
 
     return (
       <div>
@@ -311,8 +300,8 @@ class SingleEvent extends React.Component {
                     ) : null}
                   </div>
                   <p className="description">
-                    {description}</p>
-                 
+                    <ReactAutolinker text={event.description} options={{ newWindow: true, phone: false, mention: false, hashtag: false }} renderLink={renderLink}  />
+                  </p>
                 </div>
                 <div className="col-xs-12 col-sm-4 pull-right">
                   {this.renderSignupButtons()}
