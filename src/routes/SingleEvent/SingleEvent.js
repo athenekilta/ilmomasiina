@@ -244,7 +244,7 @@ class SingleEvent extends React.Component {
         replaceFn: (match) => {
           if (match.getType() === 'mention') {
             const mention = match.getMention();
-            return '<a href="https://t.me/' + mention + '">' + mention + '</a>';
+            return '<a href="https://t.me/' + mention + '"> @' + mention + '</a>';
           } else {
             return false;
           }
