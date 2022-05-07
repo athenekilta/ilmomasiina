@@ -238,19 +238,18 @@ class SingleEvent extends React.Component {
 
   render() {
     const { event, signup } = this.props;
-
     // Autolinker, by default, does not support telegram, so we need to modify @ to redirect to telegram instead of twitter.
     const linkedText = Autolinker.link(event.description, {
-      replaceFn: (autolinker, match) => {
-        if (match.getType() === 'twitter') {
-          const tag = autolinker.getTagBuilder().build(match);
-          const mention = tag.innerHtml.substring(1);
-          return '<a href="https://t.me/' + mention + '">' + mention + '</a>';
-        } else {
-          return true;
-        }
+        mention: 'twitter',
+        replaceFn: (match) => {
+          if (match.getType() === 'mention') {
+            const mention = match.getMention();
+            return '<a href="https://t.me/' + mention + '">' + mention + '</a>';
+          } else {
+            return false;
+          }
+        },
       },
-    },
     );
 
     const description = ReactHtmlParser(linkedText);
@@ -269,59 +268,59 @@ class SingleEvent extends React.Component {
             key={event.id}
           />
         ) : (
-            <div className="container singleEventContainer">
-              <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
-                &#8592; Takaisin
+          <div className="container singleEventContainer">
+            <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
+              &#8592; Takaisin
             </Link>
-              <div className="row">
-                <div className="col-xs-12 col-sm-8">
-                  <h1>{event.title}</h1>
-                  <div className="event-heading">
-                    {event.date ? (
-                      <p>
-                        <strong>Ajankohta:</strong>{' '}
-                        {moment(event.date).format('D.M.Y [klo] HH:mm')}
-                      </p>
-                    ) : null}
-                    {event.location ? (
-                      <p>
-                        <strong>Sijainti:</strong> {event.location}
-                      </p>
-                    ) : null}
-                    {event.price ? (
-                      <p>
-                        <strong>Hinta:</strong> {event.price}
-                      </p>
-                    ) : null}
-                    {event.webpageUrl ? (
-                      <p>
-                        <strong>Kotisivut:</strong>{' '}
-                        <a href={event.webpageUrl} title="Kotisivut">
-                          {event.webpageUrl}
-                        </a>
-                      </p>
-                    ) : null}
-                    {event.facebook ? (
-                      <p>
-                        <strong>Facebook-tapahtuma:</strong>{' '}
-                        <a href={event.facebook} title="Facebook-tapahtuma">
-                          {event.facebook}
-                        </a>
-                      </p>
-                    ) : null}
-                  </div>
-                  <p className="description">
-                    {description}</p>
-                 
+            <div className="row">
+              <div className="col-xs-12 col-sm-8">
+                <h1>{event.title}</h1>
+                <div className="event-heading">
+                  {event.date ? (
+                    <p>
+                      <strong>Ajankohta:</strong>{' '}
+                      {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                    </p>
+                  ) : null}
+                  {event.location ? (
+                    <p>
+                      <strong>Sijainti:</strong> {event.location}
+                    </p>
+                  ) : null}
+                  {event.price ? (
+                    <p>
+                      <strong>Hinta:</strong> {event.price}
+                    </p>
+                  ) : null}
+                  {event.webpageUrl ? (
+                    <p>
+                      <strong>Kotisivut:</strong>{' '}
+                      <a href={event.webpageUrl} title="Kotisivut">
+                        {event.webpageUrl}
+                      </a>
+                    </p>
+                  ) : null}
+                  {event.facebook ? (
+                    <p>
+                      <strong>Facebook-tapahtuma:</strong>{' '}
+                      <a href={event.facebook} title="Facebook-tapahtuma">
+                        {event.facebook}
+                      </a>
+                    </p>
+                  ) : null}
                 </div>
-                <div className="col-xs-12 col-sm-4 pull-right">
-                  {this.renderSignupButtons()}
-                  {this.renderQuotaStatus()}
-                </div>
-                <div className="col-xs-12">{this.renderSignupLists()}</div>
+                <p className="description">
+                  {description}</p>
+
               </div>
+              <div className="col-xs-12 col-sm-4 pull-right">
+                {this.renderSignupButtons()}
+                {this.renderQuotaStatus()}
+              </div>
+              <div className="col-xs-12">{this.renderSignupLists()}</div>
             </div>
-          )
+          </div>
+        )
         }
       </div>
     );
