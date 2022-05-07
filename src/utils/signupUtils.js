@@ -79,19 +79,15 @@ export const getSignupsArray = (event, includeWaitlist = true) => {
 
 export const getSignupsArrayFormatted = (event, includeWaitlist = true) => {
 	const signupsArray = getSignupsArray(event, includeWaitlist);
-
 	const sorted = _.sortBy(signupsArray, (s) => {
-
-		if (s.isOpenQuota) {
-			return new Date(s.createdAt) + 315360000000
-		}
-
-		if (s.isWaitlist) {
-			return new Date(s.createdAt) + 315360000000 * 2;
-		}
-
-		return new Date(s.createdAt);
-	});
+  if (s.isOpenQuota) {
+    return new moment(s.createdAt).add(10, 'y').toDate();
+  }
+  if (s.isWaitlist) {
+    return new moment(s.createdAt).add(20, 'y').toDate();
+  }
+  return new Date(s.createdAt);
+});
 
 	return _.map(sorted, (signup) => {
 
