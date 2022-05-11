@@ -8,6 +8,7 @@ import cron from 'node-cron';
 
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
+import deleteOldAuditLogs from './cron/deleteOldAuditLogs';
 import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
 import removeDeletedData from './cron/removeDeletedData';
 import setupDatabase from './models';
@@ -77,6 +78,9 @@ export default async function initApp() {
 
   // Daily at 8am, delete deleted items from the database
   cron.schedule('0 8 * * *', removeDeletedData);
+
+  // Daily at 8am, delete old audit logs
+  cron.schedule('0 8 * * *', deleteOldAuditLogs);
 
   return app;
 }
