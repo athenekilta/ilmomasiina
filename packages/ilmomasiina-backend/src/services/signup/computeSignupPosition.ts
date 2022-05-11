@@ -90,7 +90,7 @@ export async function refreshSignupPositions(
       quotaSignups.set(signup.quotaId, inChosenQuota);
       status = 'in-quota';
       position = inChosenQuota;
-    } else if (inOpenQuota < eventRef.openQuotaSize) {
+    } else if (inOpenQuota < event.openQuotaSize) {
       inOpenQuota += 1;
       status = 'in-open';
       position = inOpenQuota;
@@ -113,7 +113,7 @@ export async function refreshSignupPositions(
   // If a signup was just promoted from the queue, send an email about it asynchronously.
   await Promise.all(result.map(async ({ signup, status }) => {
     if (signup.status === 'in-queue' && status !== 'in-queue') {
-      sendPromotedFromQueueEmail(signup, eventRef.id);
+      sendPromotedFromQueueEmail(signup, event.id);
 
       await logEvent('signup.queuePromote', {
         signup,

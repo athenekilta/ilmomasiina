@@ -17,7 +17,6 @@ export const auditLogService: Partial<ServiceMethods<AuditLogResponse>> = {
 export default function configureAuditLogService(this: IlmoApplication) {
   const app = this;
 
-  // Initialize our service with any options it requires
   app.use('/api/auditlog', auditLogService);
 
   app.service('/api/auditlog').hooks({
