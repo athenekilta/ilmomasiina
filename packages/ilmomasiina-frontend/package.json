@@ -3,7 +3,7 @@
   "version": "2.0.0-alpha1",
   "scripts": {
     "build": "node scripts/build.js",
-    "clean": "rimraf build",
+    "clean": "rimraf build dist",
     "start": "node scripts/start.js",
     "start:dev": "node scripts/start.js",
     "test": "node scripts/test.js --watchAll=false",

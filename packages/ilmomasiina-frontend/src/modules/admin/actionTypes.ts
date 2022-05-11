@@ -5,4 +5,7 @@ export const USERS_LOAD_FAILED = 'admin/USERS_LOAD_FAILED';
 export const USER_CREATING = 'admin/USER_CREATING';
 export const USER_CREATE_FAILED = 'admin/USER_CREATE_FAILED';
 export const USER_CREATED = 'admin/USER_CREATED';
+export const AUDIT_LOG_QUERY = 'admin/AUDIT_LOG_QUERY';
+export const AUDIT_LOG_LOADED = 'admin/AUDIT_LOG_LOADED';
+export const AUDIT_LOG_LOAD_FAILED = 'admin/AUDIT_LOG_LOAD_FAILED';
 export const RESET = 'admin/RESET';
