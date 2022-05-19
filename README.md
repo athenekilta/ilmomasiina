@@ -162,4 +162,4 @@ See docs folder.
 
 ## Contributing
 
-All help is appreciated. Please contact a fellow committer first.
+All help is appreciated. Please contact a fellow committer first and see [CONTRIBUTING.md](CONTRIBUTING.md).
