@@ -9,7 +9,7 @@ FROM node:14-alpine
 WORKDIR /opt/ilmomasiina
 
 # Copy static resources from the repository root
-COPY .eslint* .postcssrc package*.json pnpm-*.yaml ./
+COPY .eslint* .postcssrc package.json pnpm-*.yaml ./
 
 # Copy static resources from each package
 COPY packages/ilmomasiina-frontend/package*.json \

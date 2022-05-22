@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "typescript": "~4.3.5"
   }
 }

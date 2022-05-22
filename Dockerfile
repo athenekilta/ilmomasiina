@@ -10,15 +10,16 @@ ARG BRANDING_FOOTER_GDPR_LINK
 ARG BRANDING_FOOTER_HOME_TEXT
 ARG BRANDING_FOOTER_HOME_LINK
 
-# Default to production
-ENV NODE_ENV=production
-
 # Copy source files
-COPY . /opt/ilmomasiina
+COPY .eslint* .postcssrc package.json pnpm-*.yaml /opt/ilmomasiina/
+COPY packages /opt/ilmomasiina/packages
 WORKDIR /opt/ilmomasiina
 
 # Install dependencies (we're running as root, so the postinstall script doesn't run automatically)
 RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile
+
+# Default to production (after pnpm install, so we get our types etc.)
+ENV NODE_ENV=production
 
 # Build all packages
 RUN npm run build
@@ -29,23 +30,26 @@ FROM node:14-alpine
 # Default to production
 ENV NODE_ENV=production
 
-# Create user for running
-RUN adduser -D -h /opt/ilmomasiina ilmomasiina
-USER ilmomasiina
-
+# Copy files needed for pnpm
+COPY package.json pnpm-*.yaml /opt/ilmomasiina/
+COPY packages /opt/ilmomasiina/packages
 WORKDIR /opt/ilmomasiina
 
-# Copy backend dependencies from build stage
-COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-backend/node_modules /opt/ilmomasiina/node_modules
+# Install dependencies for backend only
+RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile --prod --filter @tietokilta/ilmomasiina-backend
 
-# Copy compiled ilmomasiina-models as "src" into backend dependencies (TODO: implement a better build for this)
-COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-models/dist /opt/ilmomasiina/node_modules/@tietokilta/ilmomasiina-models/src
+# Copy compiled ilmomasiina-models into src (TODO: figure out a better solution)
+COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-models/dist /opt/ilmomasiina/packages/ilmomasiina-models/src
 
 # Copy built backend from build stage
-COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-backend/dist /opt/ilmomasiina/dist
+COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-backend/dist /opt/ilmomasiina/packages/ilmomasiina-backend/dist
 
 # Copy built frontend from build stage
 COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-frontend/build /opt/ilmomasiina/frontend
 
+# Create user for running
+RUN adduser -D -h /opt/ilmomasiina ilmomasiina
+USER ilmomasiina
+
 # Start server
-CMD ["node", "dist/bin/server.js"]
+CMD ["node", "packages/ilmomasiina-backend/dist/bin/server.js"]
