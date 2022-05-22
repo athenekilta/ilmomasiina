@@ -28,6 +28,18 @@ export interface PromotedFromQueueMailParams {
   date: string | null;
 }
 
+const TEMPLATE_DIR = path.join(__dirname, '../../emails');
+
+const TEMPLATE_OPTIONS = {
+  juice: true,
+  juiceResources: {
+    preserveImportant: true,
+    webResources: {
+      relativeTo: path.join(TEMPLATE_DIR, 'css'),
+    },
+  },
+};
+
 export default class EmailService {
   static send(to: string, subject: string, html: string) {
     const msg = {
@@ -41,15 +53,7 @@ export default class EmailService {
   }
 
   static async sendConfirmationMail(to: string, params: ConfirmationMailParams) {
-    const email = new Email({
-      juice: true,
-      juiceResources: {
-        preserveImportant: true,
-        webResources: {
-          relativeTo: path.join(__dirname, 'css'),
-        },
-      },
-    });
+    const email = new Email(TEMPLATE_OPTIONS);
     const brandedParams = {
       ...params,
       branding: {
@@ -57,21 +61,13 @@ export default class EmailService {
         footerLink: config.brandingMailFooterLink,
       },
     };
-    const html = await email.render(path.join(__dirname, 'emails/confirmation/html'), brandedParams);
+    const html = await email.render(path.join(TEMPLATE_DIR, 'confirmation/html'), brandedParams);
     const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
     return EmailService.send(to, subject, html);
   }
 
   static async sendNewUserMail(to: string, params: NewUserMailParams) {
-    const email = new Email({
-      juice: true,
-      juiceResources: {
-        preserveImportant: true,
-        webResources: {
-          relativeTo: path.join(__dirname, 'css'),
-        },
-      },
-    });
+    const email = new Email(TEMPLATE_OPTIONS);
     const brandedParams = {
       ...params,
       branding: {
@@ -80,21 +76,13 @@ export default class EmailService {
         siteUrl: `${config.mailUrlBase}${config.pathPrefix}`,
       },
     };
-    const html = await email.render(path.join(__dirname, 'emails/newUser/html'), brandedParams);
+    const html = await email.render(path.join(TEMPLATE_DIR, 'newUser/html'), brandedParams);
     const subject = 'Käyttäjätunnukset Ilmomasiinaan';
     return EmailService.send(to, subject, html);
   }
 
   static async sendPromotedFromQueueEmail(to: string, params: PromotedFromQueueMailParams) {
-    const email = new Email({
-      juice: true,
-      juiceResources: {
-        preserveImportant: true,
-        webResources: {
-          relativeTo: path.join(__dirname, 'css'),
-        },
-      },
-    });
+    const email = new Email(TEMPLATE_OPTIONS);
     const brandedParams = {
       ...params,
       branding: {
@@ -102,7 +90,7 @@ export default class EmailService {
         footerLink: config.brandingMailFooterLink,
       },
     };
-    const html = await email.render(path.join(__dirname, 'emails/queueMail/html'), brandedParams);
+    const html = await email.render(path.join(TEMPLATE_DIR, 'queueMail/html'), brandedParams);
     const subject = `Pääsit varasijalta tapahtumaan ${params.event.title}`;
     return EmailService.send(to, subject, html);
   }
