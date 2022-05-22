@@ -39,6 +39,7 @@ jobs:
             latest=${{ github.ref == 'refs/heads/prod' }}
           tags: |
             type=semver,pattern={{version}},enable=${{ github.ref_type == 'tag' }}
+            type=semver,pattern={{major}}.{{minor}},enable=${{ github.ref_type == 'tag' }}
             type=ref,event=branch,enable=${{ github.ref_type == 'branch' }}
             type=sha
       -
