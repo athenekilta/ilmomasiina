@@ -63,7 +63,7 @@ async function getEventsList<A extends boolean>(admin: A, params?: Params): Prom
     ..._.pick(event, eventAttrs),
     quotas: event.quotas!.map((quota) => ({
       ..._.pick(quota, eventListQuotaAttrs),
-      signupCount: quota.signupCount!,
+      signupCount: Number(quota.signupCount!),
     })),
   }));
 
