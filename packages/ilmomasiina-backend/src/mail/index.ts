@@ -53,45 +53,57 @@ export default class EmailService {
   }
 
   static async sendConfirmationMail(to: string, params: ConfirmationMailParams) {
-    const email = new Email(TEMPLATE_OPTIONS);
-    const brandedParams = {
-      ...params,
-      branding: {
-        footerText: config.brandingMailFooterText,
-        footerLink: config.brandingMailFooterLink,
-      },
-    };
-    const html = await email.render(path.join(TEMPLATE_DIR, 'confirmation/html'), brandedParams);
-    const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
-    return EmailService.send(to, subject, html);
+    try {
+      const email = new Email(TEMPLATE_OPTIONS);
+      const brandedParams = {
+        ...params,
+        branding: {
+          footerText: config.brandingMailFooterText,
+          footerLink: config.brandingMailFooterLink,
+        },
+      };
+      const html = await email.render(path.join(TEMPLATE_DIR, 'confirmation/html'), brandedParams);
+      const subject = `${params.edited ? 'Muokkaus' : 'Ilmoittautumis'}vahvistus: ${params.event.title}`;
+      await EmailService.send(to, subject, html);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   static async sendNewUserMail(to: string, params: NewUserMailParams) {
-    const email = new Email(TEMPLATE_OPTIONS);
-    const brandedParams = {
-      ...params,
-      branding: {
-        footerText: config.brandingMailFooterText,
-        footerLink: config.brandingMailFooterLink,
-        siteUrl: `${config.mailUrlBase}${config.pathPrefix}`,
-      },
-    };
-    const html = await email.render(path.join(TEMPLATE_DIR, 'newUser/html'), brandedParams);
-    const subject = 'Käyttäjätunnukset Ilmomasiinaan';
-    return EmailService.send(to, subject, html);
+    try {
+      const email = new Email(TEMPLATE_OPTIONS);
+      const brandedParams = {
+        ...params,
+        branding: {
+          footerText: config.brandingMailFooterText,
+          footerLink: config.brandingMailFooterLink,
+          siteUrl: `${config.mailUrlBase}${config.pathPrefix}`,
+        },
+      };
+      const html = await email.render(path.join(TEMPLATE_DIR, 'newUser/html'), brandedParams);
+      const subject = 'Käyttäjätunnukset Ilmomasiinaan';
+      await EmailService.send(to, subject, html);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   static async sendPromotedFromQueueEmail(to: string, params: PromotedFromQueueMailParams) {
-    const email = new Email(TEMPLATE_OPTIONS);
-    const brandedParams = {
-      ...params,
-      branding: {
-        footerText: config.brandingMailFooterText,
-        footerLink: config.brandingMailFooterLink,
-      },
-    };
-    const html = await email.render(path.join(TEMPLATE_DIR, 'queueMail/html'), brandedParams);
-    const subject = `Pääsit varasijalta tapahtumaan ${params.event.title}`;
-    return EmailService.send(to, subject, html);
+    try {
+      const email = new Email(TEMPLATE_OPTIONS);
+      const brandedParams = {
+        ...params,
+        branding: {
+          footerText: config.brandingMailFooterText,
+          footerLink: config.brandingMailFooterLink,
+        },
+      };
+      const html = await email.render(path.join(TEMPLATE_DIR, 'queueMail/html'), brandedParams);
+      const subject = `Pääsit varasijalta tapahtumaan ${params.event.title}`;
+      await EmailService.send(to, subject, html);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
