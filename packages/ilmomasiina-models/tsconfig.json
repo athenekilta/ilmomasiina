@@ -18,6 +18,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
+    "declaration": true,
     "outDir": "dist"
   },
   "exclude": [

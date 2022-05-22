@@ -298,8 +298,10 @@ importers:
 
   packages/ilmomasiina-models:
     specifiers:
+      rimraf: ^3.0.2
       typescript: ~4.3.5
     devDependencies:
+      rimraf: 3.0.2
       typescript: 4.3.5
 
 packages:

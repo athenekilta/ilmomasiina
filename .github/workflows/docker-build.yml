@@ -9,7 +9,7 @@ on:
       - 'v*'
 
 jobs:
-  build:
+  docker:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
     permissions:
@@ -56,9 +56,37 @@ jobs:
             BRANDING_FOOTER_HOME_TEXT=Tietokilta.fi
             BRANDING_FOOTER_HOME_LINK=https://tietokilta.fi
 
+  npm:
+    name: Publish JS packages
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      -
+        name: Check out the repo
+        uses: actions/checkout@v2
+      -
+        name: Install dependencies
+        run: |
+          npm install -g pnpm@7
+          pnpm install --frozen-lockfile
+      -
+        name: Build packages
+        run: pnpm run --filter @tietokilta/ilmomasiina-models build
+      -
+        name: Publish to NPM
+        run: pnpm publish --filter @tietokilta/ilmomasiina-models --no-git-checks
+      -
+        name: Publish to GitHub Packages
+        run: |
+          npm set @tietokilta:registry https://npm.pkg.github.com/
+          pnpm publish --filter @tietokilta/ilmomasiina-models --no-git-checks
+
   deploy:
     name: Push update to App Service
-    needs: build
+    needs: docker
     if: github.ref_type == 'branch'
     runs-on: ubuntu-latest
     environment: production
