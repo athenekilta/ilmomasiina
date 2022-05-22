@@ -6,6 +6,7 @@ export const eventListEventAttrs = [
   'slug',
   'title',
   'date',
+  'endDate',
   'registrationStartDate',
   'registrationEndDate',
   'openQuotaSize',

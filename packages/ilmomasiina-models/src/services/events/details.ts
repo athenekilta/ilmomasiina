@@ -9,6 +9,7 @@ export const eventGetEventAttrs = [
   'title',
   'slug',
   'date',
+  'endDate',
   'registrationStartDate',
   'registrationEndDate',
   'openQuotaSize',

@@ -3,6 +3,7 @@ export default interface EventAttributes {
   title: string;
   slug: string;
   date: Date | null;
+  endDate: Date | null;
   registrationStartDate: Date | null;
   registrationEndDate: Date | null;
   openQuotaSize: number;
