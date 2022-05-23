@@ -71,9 +71,6 @@ const BasicDetailsTab = () => {
     }
   }
 
-  // require endDate with date, but only if it's not an old event that doesn't have endDate set
-  const endDateRequired = !event || event.endDate !== null;
-
   return (
     <div>
       <FieldRow
@@ -130,11 +127,7 @@ const BasicDetailsTab = () => {
           as={DateTimePicker}
           selectsEnd
           startDate={date}
-          required={endDateRequired}
-          alternateError="* Loppuaika vaaditaan."
-          help={
-            endDateRequired ? undefined : 'Tapahtuma näkyy kalenteriviennissä vain, jos sille on asetettu loppuaika.'
-          }
+          help="Tapahtuma näkyy kalenteriviennissä vain, jos sille on asetettu loppuaika."
         />
       )}
       <FieldRow
