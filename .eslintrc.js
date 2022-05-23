@@ -40,6 +40,8 @@ module.exports = {
     // does not currently handle properly.
     // see https://github.com/benmosher/eslint-plugin-import/issues/1453
     "import/no-cycle": "off",
+    // Allow i++ in for loops.
+    "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     // We are targeting ES5 or higher.
     "radix": ["error", "as-needed"],
     // ...I know what I'm doing.
