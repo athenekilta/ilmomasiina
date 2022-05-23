@@ -6,6 +6,7 @@ import SignupAttributes from '../../models/signup';
 
 // Attributes included in GET /api/events/ID for Event instances.
 export const eventGetEventAttrs = [
+  'id',
   'title',
   'slug',
   'date',
@@ -27,7 +28,6 @@ export const eventGetEventAttrs = [
 // Attributes included in GET /api/admin/events/ID for Event instances.
 export const adminEventGetEventAttrs = [
   ...eventGetEventAttrs,
-  'id',
   'draft',
   'listed',
   'verificationEmail',

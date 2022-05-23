@@ -3,6 +3,7 @@ import QuotaAttributes from '../../models/quota';
 
 // Attributes included in GET /api/events for Event instances.
 export const eventListEventAttrs = [
+  'id',
   'slug',
   'title',
   'date',
@@ -16,7 +17,6 @@ export const eventListEventAttrs = [
 // Attributes included in GET /api/admin/events for Event instances.
 export const adminEventListEventAttrs = [
   ...eventListEventAttrs,
-  'id',
   'draft',
   'listed',
 ] as const;

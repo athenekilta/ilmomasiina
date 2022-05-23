@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import moment from 'moment';
-import { Spinner } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
@@ -30,6 +30,7 @@ const SingleEvent = ({ match }: Props) => {
   const {
     event, eventLoadError,
   } = useTypedSelector((state) => state.singleEvent, shallowEqual);
+  const loggedIn = useTypedSelector((state) => state.auth.loggedIn);
 
   useEffect(() => {
     dispatch(getEvent(match.params.slug));
@@ -80,7 +81,14 @@ const SingleEvent = ({ match }: Props) => {
       </Link>
       <div className="row">
         <div className="col-xs-12 col-sm-8">
-          <h1>{event.title}</h1>
+          <nav className="title-nav">
+            <h1>{event.title}</h1>
+            {loggedIn && (
+              <Button as={Link} variant="primary" to={paths.adminEditEvent(event.id)} className="ml-2">
+                Muokkaa
+              </Button>
+            )}
+          </nav>
           <div className="event-heading">
             {event.category && (
               <p>
