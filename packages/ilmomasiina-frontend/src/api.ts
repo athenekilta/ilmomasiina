@@ -5,6 +5,7 @@ interface FetchOptions {
   body?: any;
   headers?: Record<string, string>;
   accessToken?: string;
+  signal?: AbortSignal;
 }
 
 export class ApiError extends Error {
@@ -33,7 +34,7 @@ export class ApiError extends Error {
 }
 
 export default async function apiFetch(uri: string, {
-  method = 'GET', body, headers, accessToken,
+  method = 'GET', body, headers, accessToken, signal,
 }: FetchOptions = {}) {
   const allHeaders = {
     ...headers || {},
@@ -49,6 +50,7 @@ export default async function apiFetch(uri: string, {
     method,
     body: body === undefined ? undefined : JSON.stringify(body),
     headers: allHeaders,
+    signal,
   });
 
   if (response.status > 299) {

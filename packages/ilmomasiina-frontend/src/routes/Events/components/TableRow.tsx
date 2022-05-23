@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import Separator from '../../components/Separator';
+import Separator from '../../../components/Separator';
 
 type Props = {
   className: string;

@@ -1,36 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import sum from 'lodash/sum';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment';
 import { Spinner } from 'react-bootstrap';
-import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getEvents, resetState } from '../../modules/events/actions';
 import paths from '../../paths';
-import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import signupState from '../../utils/signupStateText';
-import TableRow from './TableRow';
+import TableRow from './components/TableRow';
+import { EventListProvider, useEventListContext, useEventListState } from './state';
 
 import './EventList.scss';
 
-type Props = {
-  category?: string;
-};
+const EventListView = () => {
+  const { events, error, pending } = useEventListContext();
 
-const EventList = ({ category }: Props) => {
-  const dispatch = useTypedDispatch();
-  const { events, eventsLoadError } = useTypedSelector((state) => state.events, shallowEqual);
-
-  useEffect(() => {
-    dispatch(getEvents(category));
-    return () => {
-      dispatch(resetState());
-    };
-  }, [dispatch, category]);
-
-  if (eventsLoadError) {
+  if (error) {
     return (
       <div className="container">
         <h1>Hups, jotain meni pieleen</h1>
@@ -39,7 +25,7 @@ const EventList = ({ category }: Props) => {
     );
   }
 
-  if (!events) {
+  if (pending) {
     return (
       <div className="container">
         <h1>Tapahtumat</h1>
@@ -48,9 +34,9 @@ const EventList = ({ category }: Props) => {
     );
   }
 
-  const tableRows = events.flatMap((event) => {
+  const tableRows = events!.flatMap((event) => {
     const {
-      slug, title, date, registrationStartDate, registrationEndDate, quotas, openQuotaSize,
+      id, slug, title, date, registrationStartDate, registrationEndDate, quotas, openQuotaSize,
     } = event;
     const eventState = signupState(registrationStartDate, registrationEndDate);
 
@@ -64,7 +50,7 @@ const EventList = ({ category }: Props) => {
           (quotas.length < 2 ? sumBy(quotas, 'signupCount') : undefined)
         }
         quotaSize={quotas.length === 1 ? quotas[0].size : undefined}
-        key={slug}
+        key={id}
       />,
     ];
 
@@ -75,7 +61,7 @@ const EventList = ({ category }: Props) => {
           title={quota.title}
           signupCount={quota.size ? Math.min(quota.signupCount, quota.size) : quota.signupCount}
           quotaSize={quota.size}
-          key={`${slug}-${quota.id}`}
+          key={`${id}-${quota.id}`}
         />,
       ));
     }
@@ -90,7 +76,7 @@ const EventList = ({ category }: Props) => {
             openQuotaSize,
           )}
           quotaSize={openQuotaSize}
-          key={`${slug}-open`}
+          key={`${id}-open`}
         />,
       );
     }
@@ -113,6 +99,19 @@ const EventList = ({ category }: Props) => {
         <tbody>{tableRows}</tbody>
       </table>
     </div>
+  );
+};
+
+export type EventListProps = {
+  category?: string;
+};
+
+const EventList = ({ category }: EventListProps) => {
+  const state = useEventListState({ category });
+  return (
+    <EventListProvider value={state}>
+      <EventListView />
+    </EventListProvider>
   );
 };
 

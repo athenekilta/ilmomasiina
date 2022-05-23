@@ -54,6 +54,10 @@ module.exports = {
     // a giant PITA - the default config ignores arrow functions but they don't solve
     // the problem at all, and useCallback is just plain ugly.
     "react/jsx-no-bind": "off",
+    // Add any custom hooks here
+    "react-hooks/exhaustive-deps": ["error", {
+      additionalHooks: "useAbortableEffect|useAbortablePromise",
+    }],
     // Prefer arrow functions to functions expressions, as that's what was done
     // when this rule was introduced.
     "react/function-component-definition": ["error", {
