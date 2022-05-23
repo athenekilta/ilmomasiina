@@ -3,6 +3,7 @@ import { Sequelize } from 'sequelize';
 import { SequelizeStorage, Umzug } from 'umzug';
 
 import setupAnswerModel, { Answer } from './answer';
+import setupAuditLogModel from './auditlog';
 import sequelizeConfig from './config';
 import setupEventModel, { Event } from './event';
 import migrations from './migrations';
@@ -45,6 +46,7 @@ export default async function setupDatabase() {
   setupQuestionModel(sequelize);
   setupAnswerModel(sequelize);
   setupUserModel(sequelize);
+  setupAuditLogModel(sequelize);
 
   Event.hasMany(Question, {
     foreignKey: {

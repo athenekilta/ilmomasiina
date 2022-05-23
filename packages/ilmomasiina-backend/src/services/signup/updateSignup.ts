@@ -10,10 +10,15 @@ import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { generateRandomId } from '../../models/randomId';
 import { Signup } from '../../models/signup';
+import { logEvent } from '../../util/auditLog';
 import { signupsAllowed } from './createNewSignup';
 import { verifyToken } from './editTokens';
 
-export default async (id: string, data: SignupUpdateBody, params?: Params): Promise<SignupUpdateResponse> => {
+export default async (
+  id: string,
+  data: SignupUpdateBody,
+  params: Params | undefined,
+): Promise<SignupUpdateResponse> => {
   const editToken = params?.query?.editToken || data.editToken;
   verifyToken(id, editToken);
 
@@ -137,6 +142,13 @@ export default async (id: string, data: SignupUpdateBody, params?: Params): Prom
       transaction,
     });
     await Answer.bulkCreate(newAnswers, { transaction });
+
+    await logEvent('signup.edit', {
+      signup,
+      event: quota.event,
+      params,
+      transaction,
+    });
 
     return signup;
   });

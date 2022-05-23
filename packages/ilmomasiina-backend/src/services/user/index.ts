@@ -10,6 +10,7 @@ import { userGetAttributes } from '@tietokilta/ilmomasiina-models/src/services/u
 import config from '../../config';
 import { IlmoApplication } from '../../defs';
 import { User } from '../../models/user';
+import auditLog from './hooks/auditLog';
 import generatePassword from './hooks/generatePassword';
 import sendEmail from './hooks/sendEmail';
 
@@ -63,13 +64,12 @@ export default function configureUserService(this: IlmoApplication) {
       ],
     },
     after: {
-      all: [localHooks.protect('password')],
       // Return only id and email for API responses.
       find: [iff(isProvider('external'), keep(...userGetAttributes))],
       // Send welcome email to new users.
-      create: [sendEmail(), keep(...userGetAttributes)],
+      create: [auditLog('user.create'), sendEmail(), keep(...userGetAttributes)],
       // Return only id for delete responses.
-      remove: [keep('id')],
+      remove: [auditLog('user.delete'), keep('id')],
     },
   });
 }

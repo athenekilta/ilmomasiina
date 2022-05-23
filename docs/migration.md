@@ -1,4 +1,4 @@
-# Migration 
+# Migration
 
 This file documents the migration process from the Athene-created version of Ilmomasiina to the new one.
 
@@ -103,4 +103,16 @@ ADD `namePublic` BOOLEAN NOT NULL DEFAULT 0 AFTER `lastName`;
 -- keep names public in previously existing signups
 UPDATE `signup`
 SET `namePublic` = 1;
+
+-- add audit log
+CREATE TABLE `auditlog` (
+  `id` INTEGER UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user` VARCHAR(255) DEFAULT NULL,
+  `ipAddress` VARCHAR(64) NOT NULL,
+  `action` VARCHAR(32) NOT NULL,
+  `details` TEXT NOT NULL DEFAULT '',
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)
+);
 ```

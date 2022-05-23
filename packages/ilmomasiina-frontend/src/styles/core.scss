@@ -29,6 +29,23 @@ h3 {
   font-size: 16px;
 }
 
+.title-nav {
+  display: flex;
+  align-items: center;
+
+  :first-child {
+    flex: 1 0 auto;
+  }
+  @include media-breakpoint-down(xs) {
+    flex-wrap: wrap;
+    padding-bottom: $spacer;
+
+    :first-child {
+      flex: 1 0 100%;
+    }
+  }
+}
+
 p {
   margin-bottom: 1.5em;
 }

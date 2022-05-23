@@ -20,16 +20,16 @@ export const adminEventService: Partial<ServiceMethods<AdminEventsServiceTypes>>
     return getEventDetailsForAdmin(String(id));
   },
 
-  create(data: AdminEventCreateBody) {
-    return createEvent(data);
+  create(data: AdminEventCreateBody, params) {
+    return createEvent(data, params);
   },
 
-  patch(id, data: Partial<AdminEventUpdateBody>) {
-    return updateEvent(String(id), data);
+  patch(id, data: Partial<AdminEventUpdateBody>, params) {
+    return updateEvent(String(id), data, params);
   },
 
-  remove(id) {
-    return deleteEvent(String(id));
+  remove(id, params) {
+    return deleteEvent(String(id), params);
   },
 };
 

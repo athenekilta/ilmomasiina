@@ -13,6 +13,7 @@ const paths = {
   adminEventsList: `${urlPrefix}/admin`,
   adminEditEvent: (id: AdminEvent.Id) => `${urlPrefix}/admin/edit/${id}`,
   adminUsersList: `${urlPrefix}/admin/users`,
+  adminAuditLog: `${urlPrefix}/admin/auditlog`,
 };
 
 export default paths;

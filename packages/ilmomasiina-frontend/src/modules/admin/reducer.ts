@@ -1,4 +1,7 @@
 import {
+  AUDIT_LOG_LOAD_FAILED,
+  AUDIT_LOG_LOADED,
+  AUDIT_LOG_QUERY,
   EVENTS_LOAD_FAILED,
   EVENTS_LOADED,
   RESET,
@@ -16,6 +19,9 @@ const initialState: AdminState = {
   users: null,
   usersLoadError: false,
   userCreating: false,
+  auditLogQuery: {},
+  auditLog: null,
+  auditLogLoadError: false,
 };
 
 export default function reducer(
@@ -55,6 +61,25 @@ export default function reducer(
       return {
         ...state,
         userCreating: false,
+      };
+    case AUDIT_LOG_QUERY:
+      return {
+        ...state,
+        auditLogQuery: action.payload,
+        auditLog: null,
+        auditLogLoadError: false,
+      };
+    case AUDIT_LOG_LOADED:
+      return {
+        ...state,
+        auditLog: action.payload,
+        auditLogLoadError: false,
+      };
+    case AUDIT_LOG_LOAD_FAILED:
+      return {
+        ...state,
+        auditLog: null,
+        auditLogLoadError: true,
       };
     case RESET:
       return initialState;

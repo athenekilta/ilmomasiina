@@ -9,8 +9,6 @@ import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminEventListItem from './AdminEventListItem';
 
-import './AdminEventsList.scss';
-
 const AdminEventsList = () => {
   const dispatch = useTypedDispatch();
   const { events, eventsLoadError } = useTypedSelector((state) => state.admin, shallowEqual);
@@ -42,7 +40,18 @@ const AdminEventsList = () => {
 
   return (
     <div className="container">
-      <h1>Hallinta</h1>
+      <nav className="title-nav">
+        <h1>Hallinta</h1>
+        <Button as={Link} variant="secondary" to={paths.adminUsersList} className="ml-2">
+          Käyttäjät
+        </Button>
+        <Button as={Link} variant="secondary" to={paths.adminAuditLog} className="ml-2">
+          Toimintoloki
+        </Button>
+        <Button as={Link} variant="primary" to={paths.adminEditEvent('new')} className="ml-2">
+          + Uusi tapahtuma
+        </Button>
+      </nav>
       <table className="table">
         <thead>
           <tr>
@@ -62,14 +71,6 @@ const AdminEventsList = () => {
           ))}
         </tbody>
       </table>
-      <Button as={Link} variant="secondary" to={paths.adminEditEvent('new')}>
-        + Uusi tapahtuma
-      </Button>
-      <nav className="mt-3">
-        <Button as={Link} to={paths.adminUsersList}>
-          Käyttäjien hallintapaneeli
-        </Button>
-      </nav>
     </div>
   );
 };

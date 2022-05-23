@@ -11,6 +11,7 @@ const config = <const>{
   isAzure: process.env.WEBSITE_SITE_NAME !== undefined,
 
   enforceHttps: envBoolean('ENFORCE_HTTPS', false),
+  trustProxy: envBoolean('TRUST_PROXY', false),
   frontendFilesPath: frontendFilesPath(),
 
   clearDbUrl: envString('CLEARDB_DATABASE_URL', null),

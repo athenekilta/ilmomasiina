@@ -13,6 +13,7 @@ import paths from '../paths';
 import PageNotFound from '../routes/404/PageNotFound';
 import AdminEventsList from '../routes/Admin/AdminEventsList';
 import AdminUsersList from '../routes/Admin/AdminUsersList';
+import AuditLog from '../routes/Admin/AuditLog';
 import Editor from '../routes/Editor';
 import EditSignup from '../routes/EditSignup';
 import Events from '../routes/Events';
@@ -72,6 +73,11 @@ const AppContainer = ({ branding }: Props) => (
                 exact
                 path={paths.adminEditEvent(':id')}
                 component={requireAuth(Editor)}
+              />
+              <Route
+                exact
+                path={paths.adminAuditLog}
+                component={requireAuth(AuditLog)}
               />
               <Route
                 path="*"

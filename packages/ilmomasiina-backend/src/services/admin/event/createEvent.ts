@@ -1,3 +1,4 @@
+import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 
 import {
@@ -10,9 +11,10 @@ import { AdminEventGetResponse } from '@tietokilta/ilmomasiina-models/src/servic
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
+import { logEvent } from '../../../util/auditLog';
 import { getEventDetailsForAdmin } from '../../event/getEventDetails';
 
-export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse> => {
+export default async (data: AdminEventCreateBody, params: Params | undefined): Promise<AdminEventGetResponse> => {
   // Pick only allowed attributes and add order
   const attribs = {
     ..._.pick(data, adminEventCreateEventAttrs),
@@ -27,8 +29,8 @@ export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse
   };
 
   // Create the event with relations - Sequelize will handle validation
-  const event = await Event.sequelize!.transaction((transaction) => (
-    Event.create(attribs, {
+  const event = await Event.sequelize!.transaction(async (transaction) => {
+    const created = await Event.create(attribs, {
       transaction,
       include: [
         {
@@ -40,8 +42,12 @@ export default async (data: AdminEventCreateBody): Promise<AdminEventGetResponse
           required: false,
         },
       ],
-    })
-  ));
+    });
+
+    await logEvent('event.create', { event: created, params, transaction });
+
+    return created;
+  });
 
   return getEventDetailsForAdmin(event.id);
 };
