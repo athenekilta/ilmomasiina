@@ -31,7 +31,8 @@ export const resetState = () => <const>{
 export type AuthActions =
   | ReturnType<typeof loggingIn>
   | ReturnType<typeof loginSucceeded>
-  | ReturnType<typeof loginFailed>;
+  | ReturnType<typeof loginFailed>
+  | ReturnType<typeof resetState>;
 
 export const login = (email: string, password: string) => async (dispatch: DispatchAction) => {
   dispatch(loggingIn());
