@@ -32,12 +32,31 @@ const AdminUsersList = () => {
     );
   }
 
-  if (!users) {
-    return (
-      <div className="container">
-        <h1>Käyttäjien hallinta</h1>
-        <Spinner animation="border" />
-      </div>
+  let content = <Spinner animation="border" />;
+
+  if (users) {
+    content = (
+      <>
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Sähköposti</th>
+              <th>Toiminnot</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <AdminUserListItem
+                key={user.id}
+                user={user}
+              />
+            ))}
+          </tbody>
+        </table>
+
+        <h1>Luo uusi käyttäjä</h1>
+        <UserForm />
+      </>
     );
   }
 
@@ -45,25 +64,7 @@ const AdminUsersList = () => {
     <div className="container">
       <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
       <h1>Käyttäjien hallinta</h1>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Sähköposti</th>
-            <th>Toiminnot</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <AdminUserListItem
-              key={user.id}
-              user={user}
-            />
-          ))}
-        </tbody>
-      </table>
-
-      <h1>Luo uusi käyttäjä</h1>
-      <UserForm />
+      {content}
     </div>
   );
 };

@@ -115,6 +115,8 @@ const Editor = ({ history, match }: Props) => {
   if (!urlIsNew && !event) {
     return (
       <Container className="event-editor">
+        <h1>Muokkaa tapahtumaa</h1>
+        <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
         <div className="event-editor--loading-container">
           <Spinner animation="border" />
         </div>

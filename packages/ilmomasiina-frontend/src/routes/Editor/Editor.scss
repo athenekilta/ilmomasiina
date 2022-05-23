@@ -109,6 +109,8 @@
   display: flex;
   justify-content: flex-end;
   align-items: baseline;
+  flex-wrap: wrap;
+  row-gap: $spacer;
 
   .spinner-border {
     align-self: center;

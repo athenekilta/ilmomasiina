@@ -16,7 +16,7 @@ const AdminEventsList = () => {
   useEffect(() => {
     dispatch(getAdminEvents());
     return () => {
-      resetState();
+      dispatch(resetState());
     };
   }, [dispatch]);
 

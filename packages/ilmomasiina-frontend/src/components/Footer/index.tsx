@@ -17,12 +17,16 @@ const Footer = ({ branding }: Props) => (
       <Link to={paths.adminEventsList}>
         Hallinta
       </Link>
-      <a href={branding.footerGdprLink} className="navbar-link">
-        {branding.footerGdprText}
-      </a>
-      <a href={branding.footerHomeLink} className="navbar-link">
-        {branding.footerHomeText}
-      </a>
+      {branding.footerGdprText && (
+        <a href={branding.footerGdprLink} className="navbar-link">
+          {branding.footerGdprText}
+        </a>
+      )}
+      {branding.footerHomeText && (
+        <a href={branding.footerHomeLink} className="navbar-link">
+          {branding.footerHomeText}
+        </a>
+      )}
     </div>
   </footer>
 );

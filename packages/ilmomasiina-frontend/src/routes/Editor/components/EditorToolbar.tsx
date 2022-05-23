@@ -23,19 +23,23 @@ const EditorToolbar = ({ onSubmitClick }: Props) => {
 
   return (
     <>
-      <nav className="d-flex justify-content-end">
-        <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
-      </nav>
       <h1>
         {isNew
           ? 'Luo uusi tapahtuma'
           : 'Muokkaa tapahtumaa'}
       </h1>
       <div className="event-editor--buttons-wrapper">
+        <div className="flex-fill">
+          <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
+        </div>
         {isSubmitting && <Spinner animation="border" />}
         <div className="event-editor--public-status">
           <div className={`event-editor--bubble ${isDraft ? 'draft' : 'public'} event-editor--animated`} />
-          <span>{isDraft ? 'Luonnos' : 'Julkaistu'}</span>
+          <span>
+            {isDraft ? 'Luonnos' : (
+              <Link to={paths.eventDetails(event!.slug)} target="_blank">Julkaistu</Link>
+            )}
+          </span>
         </div>
         <ButtonGroup>
           {!isNew && (
