@@ -3,17 +3,11 @@ import React from 'react';
 import moment from 'moment';
 import Countdown from 'react-countdown-now';
 
-import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { useTypedSelector } from '../../../../store/reducers';
+import { useSingleEventContext } from '../state';
 import SignupButton from './SignupButton';
 
-type Props = {
-  beginSignup: (quotaId: Quota.Id) => void;
-};
-
-const SignupCountdown = (props: Props) => {
-  const { beginSignup } = props;
-  const event = useTypedSelector((state) => state.singleEvent.event)!;
+const SignupCountdown = () => {
+  const event = useSingleEventContext().event!;
   const openingTime = moment().add(event.millisTillOpening || 0, 'ms').toDate();
 
   return (
@@ -24,7 +18,6 @@ const SignupCountdown = (props: Props) => {
         <SignupButton
           isOpen={completed && !event.registrationClosed}
           isClosed={event.registrationClosed}
-          beginSignup={beginSignup}
           seconds={seconds}
           total={total}
         />

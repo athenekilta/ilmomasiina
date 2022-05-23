@@ -1,31 +1,27 @@
 import React from 'react';
 
-import { useTypedSelector } from '../../../../store/reducers';
-import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../../utils/signupUtils';
-import ViewProgress from '../ViewProgress';
+import { OPENQUOTA, WAITLIST } from '../../../utils/signupUtils';
+import { useSingleEventContext } from '../state';
+import QuotaProgress from './QuotaProgress';
 
-interface Props {
-  signups: QuotaSignups[];
-}
+const QuotaStatus = () => {
+  const { event, signupsByQuota } = useSingleEventContext();
 
-const QuotaStatus = ({ signups }: Props) => {
-  const event = useTypedSelector((state) => state.singleEvent.event)!;
-
-  if (!event.signupsPublic) {
+  if (!event!.signupsPublic) {
     return null;
   }
 
   return (
     <div className="sidebar-widget">
       <h3>Ilmoittautuneet</h3>
-      {signups.map((quota) => {
+      {signupsByQuota!.map((quota) => {
         if (quota.id === OPENQUOTA) {
           return (
-            <ViewProgress
+            <QuotaProgress
               key={quota.id}
               title="Avoin"
               value={quota.signups.length}
-              max={event.openQuotaSize}
+              max={event!.openQuotaSize}
             />
           );
         }
@@ -36,7 +32,7 @@ const QuotaStatus = ({ signups }: Props) => {
           return null;
         }
         return (
-          <ViewProgress
+          <QuotaProgress
             key={quota.id}
             title={quota.title!}
             value={quota.signups.length}

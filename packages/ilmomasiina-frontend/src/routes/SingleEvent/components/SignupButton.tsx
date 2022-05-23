@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Button } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { useTypedSelector } from '../../../../store/reducers';
-import signupState from '../../../../utils/signupStateText';
+import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import apiFetch from '../../../api';
+import paths from '../../../paths';
+import signupState from '../../../utils/signupStateText';
+import { useSingleEventContext } from '../state';
 
 // Show the countdown one minute before opening the signup.
 const COUNTDOWN_DURATION = 60 * 1000;
@@ -12,17 +17,34 @@ const COUNTDOWN_DURATION = 60 * 1000;
 type SignupButtonProps = {
   isOpen: boolean;
   isClosed: boolean;
-  beginSignup: (quotaId: Quota.Id) => void;
   seconds: number;
   total: number;
 };
 
 const SignupButton = ({
-  isOpen, isClosed, beginSignup, seconds, total,
+  isOpen, isClosed, seconds, total,
 }: SignupButtonProps) => {
-  const { registrationStartDate, registrationEndDate, quotas } = useTypedSelector((state) => state.singleEvent.event)!;
-  const submitting = useTypedSelector((state) => state.singleEvent.creatingSignup);
+  const history = useHistory();
+  const { registrationStartDate, registrationEndDate, quotas } = useSingleEventContext().event!;
+  const [submitting, setSubmitting] = useState(false);
   const isOnly = quotas.length === 1;
+
+  async function beginSignup(quotaId: Quota.Id) {
+    setSubmitting(true);
+    try {
+      const response = await apiFetch('signups', {
+        method: 'POST',
+        body: { quotaId },
+      }) as Signup.Create.Response;
+      setSubmitting(false);
+      history.push(paths.editSignup(response.id, response.editToken));
+    } catch (e) {
+      setSubmitting(false);
+      toast.error('Ilmoittautuminen epäonnistui.', {
+        autoClose: 5000,
+      });
+    }
+  }
 
   return (
     <div className="sidebar-widget">

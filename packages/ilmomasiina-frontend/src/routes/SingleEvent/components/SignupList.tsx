@@ -2,9 +2,9 @@ import React from 'react';
 
 import filter from 'lodash/filter';
 
-import { useTypedSelector } from '../../../../store/reducers';
-import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../../utils/signupUtils';
-import TableRow from './TableRow';
+import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../utils/signupUtils';
+import { useSingleEventContext } from '../state';
+import SignupListRow from './SignupListRow';
 
 import './SignupList.scss';
 
@@ -14,7 +14,7 @@ type Props = {
 
 const SignupList = ({ quota }: Props) => {
   const { signups } = quota;
-  const { questions, nameQuestion } = useTypedSelector((state) => state.singleEvent.event)!;
+  const { questions, nameQuestion } = useSingleEventContext().event!;
   const showQuotas = quota.id === OPENQUOTA || quota.id === WAITLIST;
   return (
     <div className="quota">
@@ -49,7 +49,7 @@ const SignupList = ({ quota }: Props) => {
             </thead>
             <tbody>
               {signups.map((signup, i) => (
-                <TableRow
+                <SignupListRow
                   index={i + 1}
                   signup={signup}
                   showQuota={showQuotas}

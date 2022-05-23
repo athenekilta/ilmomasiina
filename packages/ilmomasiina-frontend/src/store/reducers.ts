@@ -7,7 +7,6 @@ import admin from '../modules/admin/reducer';
 import auth from '../modules/auth/reducer';
 import editor from '../modules/editor/reducer';
 import editSignup from '../modules/editSignup/reducer';
-import singleEvent from '../modules/singleEvent/reducer';
 import { AppState, DispatchAction } from './types';
 
 export const makeRootReducer = (
@@ -17,7 +16,6 @@ export const makeRootReducer = (
   auth,
   admin,
   editor,
-  singleEvent,
   editSignup,
 });
 

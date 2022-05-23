@@ -4,8 +4,8 @@ import filter from 'lodash/filter';
 import find from 'lodash/find';
 import moment from 'moment-timezone';
 
-import { useTypedSelector } from '../../../../store/reducers';
-import { SignupWithQuota } from '../../../../utils/signupUtils';
+import { SignupWithQuota } from '../../../utils/signupUtils';
+import { useSingleEventContext } from '../state';
 
 type Props = {
   index: number;
@@ -13,7 +13,7 @@ type Props = {
   signup: SignupWithQuota;
 };
 
-const TableRow = ({ showQuota, signup, index }: Props) => {
+const SignupListRow = ({ showQuota, signup, index }: Props) => {
   const {
     firstName,
     lastName,
@@ -24,7 +24,7 @@ const TableRow = ({ showQuota, signup, index }: Props) => {
     confirmed,
   } = signup;
 
-  const { questions, nameQuestion } = useTypedSelector((state) => state.singleEvent.event)!;
+  const { questions, nameQuestion } = useSingleEventContext().event!;
 
   let fullName;
   if (!confirmed) {
@@ -65,4 +65,4 @@ const TableRow = ({ showQuota, signup, index }: Props) => {
   );
 };
 
-export default TableRow;
+export default SignupListRow;

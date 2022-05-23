@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ProgressBar } from 'react-bootstrap';
 
-import Separator from '../../../../components/Separator';
+import Separator from '../../../components/Separator';
 
-import './ViewProgress.scss';
+import './QuotaProgress.scss';
 
 type Props = {
   max: number;
@@ -12,7 +12,7 @@ type Props = {
   value: number;
 };
 
-const ViewProgress = ({ max, title, value }: Props) => (
+const QuotaProgress = ({ max, title, value }: Props) => (
   <div>
     {title}
     <ProgressBar
@@ -30,4 +30,4 @@ const ViewProgress = ({ max, title, value }: Props) => (
   </div>
 );
 
-export default ViewProgress;
+export default QuotaProgress;
