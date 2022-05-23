@@ -1,20 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
-import { shallowEqual } from 'react-redux';
+import { useFormikContext } from 'formik';
+import { toast } from 'react-toastify';
 
-import { deleteSignup } from '../../../../modules/editSignup/actions';
-import { useTypedDispatch, useTypedSelector } from '../../../../store/reducers';
-import NarrowContainer from '../NarrowContainer';
+import { useStateAndDispatch } from '../state';
+import { useDeleteSignup } from '../state/actions';
 
 const DELETE_CONFIRM_MS = 4000;
 
-type Props = {
-  editToken: string;
-};
+const DeleteSignup = () => {
+  const [{ event }] = useStateAndDispatch();
+  const deleteSignup = useDeleteSignup();
 
-const DeleteSignup = ({ editToken }: Props) => {
-  const dispatch = useTypedDispatch();
-  const { event, signup, submitting } = useTypedSelector((state) => state.editSignup, shallowEqual);
+  const { isSubmitting, setSubmitting } = useFormikContext();
 
   const [confirming, setConfirming] = useState(false);
 
@@ -26,17 +24,27 @@ const DeleteSignup = ({ editToken }: Props) => {
     return () => {};
   }, [confirming]);
 
+  async function doDelete() {
+    try {
+      setSubmitting(true);
+      await deleteSignup();
+    } catch (error) {
+      setSubmitting(false);
+      toast.error('Poisto epäonnistui', { autoClose: 5000 });
+    }
+  }
+
   function onDeleteClick() {
     if (confirming) {
       setConfirming(false);
-      dispatch(deleteSignup(signup!.id, editToken));
+      doDelete();
     } else {
       setConfirming(true);
     }
   }
 
   return (
-    <NarrowContainer className="text-center my-5">
+    <div className="text-center my-5">
       <h2>Poista ilmoittautuminen</h2>
       <p>
         Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan
@@ -53,10 +61,10 @@ const DeleteSignup = ({ editToken }: Props) => {
         {' '}
         <strong>Tätä toimintoa ei voi perua.</strong>
       </p>
-      <button type="button" disabled={submitting} onClick={onDeleteClick} className="btn btn-danger">
+      <button type="button" disabled={isSubmitting} onClick={onDeleteClick} className="btn btn-danger">
         {confirming ? 'Paina uudelleen varmistukseksi\u2026' : 'Poista ilmoittautuminen'}
       </button>
-    </NarrowContainer>
+    </div>
   );
 };
 

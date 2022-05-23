@@ -6,7 +6,6 @@ import { combineReducers } from 'redux';
 import admin from '../modules/admin/reducer';
 import auth from '../modules/auth/reducer';
 import editor from '../modules/editor/reducer';
-import editSignup from '../modules/editSignup/reducer';
 import { AppState, DispatchAction } from './types';
 
 export const makeRootReducer = (
@@ -16,7 +15,6 @@ export const makeRootReducer = (
   auth,
   admin,
   editor,
-  editSignup,
 });
 
 export const useTypedSelector: TypedUseSelectorHook<AppState> = useSelector;

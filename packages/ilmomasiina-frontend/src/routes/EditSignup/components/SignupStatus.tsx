@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { useTypedSelector } from '../../../../store/reducers';
+import { useStateAndDispatch } from '../state';
 
 const SignupStatus = () => {
-  const { status, position, quota } = useTypedSelector((state) => state.editSignup.signup)!;
-  const { openQuotaSize } = useTypedSelector((state) => state.editSignup.event)!;
+  const [{ event, signup }] = useStateAndDispatch();
+  const { status, position, quota } = signup!;
+  const { openQuotaSize } = event!;
 
   if (!status) return null;
 

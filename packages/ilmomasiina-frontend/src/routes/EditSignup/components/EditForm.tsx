@@ -1,39 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { push } from 'connected-react-router';
 import { Formik, FormikHelpers } from 'formik';
 import { Button, Form } from 'react-bootstrap';
-import { shallowEqual } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import FieldRow from '../../../../components/FieldRow';
-import { updateSignup } from '../../../../modules/editSignup/actions';
-import paths from '../../../../paths';
-import { useTypedDispatch, useTypedSelector } from '../../../../store/reducers';
-import NarrowContainer from '../NarrowContainer';
+import FieldRow from '../../../components/FieldRow';
+import paths from '../../../paths';
+import { useStateAndDispatch } from '../state';
+import { useUpdateSignup } from '../state/actions';
+import DeleteSignup from './DeleteSignup';
+import NarrowContainer from './NarrowContainer';
 import QuestionFields from './QuestionFields';
 import SignupStatus from './SignupStatus';
 
-type Props = {
-  editToken: string;
-};
+const EditForm = () => {
+  const history = useHistory();
 
-const EditForm = ({ editToken }: Props) => {
-  const dispatch = useTypedDispatch();
-  const {
-    event, signup, submitError, submitting,
-  } = useTypedSelector((state) => state.editSignup, shallowEqual);
+  const [{ event, signup }] = useStateAndDispatch();
   const isNew = signup!.confirmedAt === null;
+  const updateSignup = useUpdateSignup();
+
+  // TODO: actually use errors from API
+  const [submitError, setSubmitError] = useState(false);
 
   async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
-    const progressToast = toast.loading('Ilmoittautuminen käynnissä');
-
-    const success = await dispatch(updateSignup(signup!.id, answers, editToken));
-
     const action = isNew ? 'Ilmoittautuminen' : 'Muokkaus';
-    if (success) {
+    const progressToast = toast.loading(`${action} käynnissä`);
+
+    try {
+      await updateSignup(answers);
+
       toast.update(progressToast, {
         render: `${action} onnistui!`,
         type: toast.TYPE.SUCCESS,
@@ -42,8 +40,10 @@ const EditForm = ({ editToken }: Props) => {
         closeOnClick: true,
         isLoading: false,
       });
-      if (isNew) dispatch(push(paths.eventDetails(event!.slug)));
-    } else {
+      setSubmitError(false);
+      setSubmitting(false);
+      if (isNew) history.push(paths.eventDetails(event!.slug));
+    } catch (error) {
       toast.update(progressToast, {
         render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.`,
         type: toast.TYPE.ERROR,
@@ -52,6 +52,7 @@ const EditForm = ({ editToken }: Props) => {
         closeOnClick: true,
         isLoading: false,
       });
+      setSubmitError(true);
       setSubmitting(false);
     }
   }
@@ -61,7 +62,7 @@ const EditForm = ({ editToken }: Props) => {
       initialValues={signup! as Signup.Update.Body}
       onSubmit={onSubmit}
     >
-      {({ handleSubmit }) => (
+      {({ handleSubmit, isSubmitting }) => (
         <NarrowContainer>
           <h2>{isNew ? 'Ilmoittaudu' : 'Muokkaa ilmoittautumista'}</h2>
           <SignupStatus />
@@ -117,7 +118,7 @@ const EditForm = ({ editToken }: Props) => {
               {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä.'}
             </p>
 
-            <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={submitting}>
+            <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={isSubmitting}>
               {isNew ? 'Lähetä' : 'Päivitä'}
             </Button>
             {!isNew && (
@@ -127,6 +128,7 @@ const EditForm = ({ editToken }: Props) => {
             )}
             <div className="clearfix" />
           </Form>
+          <DeleteSignup />
         </NarrowContainer>
       )}
     </Formik>
