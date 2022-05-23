@@ -36,6 +36,7 @@ export const icalService: Partial<ServiceMethods<any>> = {
     });
 
     const { error, value } = createEvents(events.map((event) => ({
+      calName: config.icalCalendarName,
       uid: `${event.id}@${uidDomain}`,
       start: dateToArray(event.date!),
       startInputType: 'utc',
