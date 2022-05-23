@@ -2,7 +2,7 @@ import express, { json, rest, urlencoded } from '@feathersjs/express';
 import feathers from '@feathersjs/feathers';
 import compress from 'compression';
 import historyApiFallback from 'connect-history-api-fallback';
-import { NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import enforce from 'express-sslify';
 import cron from 'node-cron';
 
@@ -14,6 +14,23 @@ import removeDeletedData from './cron/removeDeletedData';
 import setupDatabase from './models';
 import services from './services';
 import { remoteIp } from './util/auditLog';
+
+// Format iCalendar requests
+function formatResponse(req: Request, res: Response, next: NextFunction) {
+  if (res.data === undefined) {
+    next();
+    return;
+  }
+
+  if (req.path === '/api/ical') {
+    res.set('Content-Type', 'text/calendar');
+    res.send(res.data);
+    return;
+  }
+
+  res.set('Content-Type', 'application/json');
+  res.json(res.data);
+}
 
 export default async function initApp() {
   await setupDatabase();
@@ -30,7 +47,7 @@ export default async function initApp() {
     .use(json())
     .use(urlencoded({ extended: true }))
     .use(remoteIp)
-    .configure(rest())
+    .configure(rest(formatResponse))
     .configure(services);
 
   if (config.nodeEnv !== 'production') {
