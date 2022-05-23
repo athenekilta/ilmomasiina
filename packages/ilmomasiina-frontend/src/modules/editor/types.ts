@@ -33,11 +33,12 @@ export enum EditorEventType {
 
 /** Root form data type for event editor */
 export interface EditorEvent extends Omit<
-AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'registrationStartDate' | 'registrationEndDate'
+AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
 > {
   eventType: EditorEventType;
 
   date: Date | undefined;
+  endDate: Date | undefined;
 
   questions: EditorQuestion[];
 

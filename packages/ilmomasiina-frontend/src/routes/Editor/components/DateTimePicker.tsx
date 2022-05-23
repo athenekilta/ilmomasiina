@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentPropsWithoutRef } from 'react';
 
 import fi from 'date-fns/locale/fi';
 import { useField } from 'formik';
@@ -8,16 +8,25 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 registerLocale('fi', fi);
 
-type Props = {
+type Props = Pick<
+ComponentPropsWithoutRef<typeof DatePicker>,
+'selectsStart' | 'selectsEnd' | 'startDate' | 'endDate'
+> & {
   name: string;
 };
 
-export default function DateTimePicker({ name }: Props) {
+export default function DateTimePicker({
+  name, selectsStart, selectsEnd, startDate, endDate,
+}: Props) {
   const [{ value, onBlur }, , { setValue }] = useField(name);
   return (
     <DatePicker
       name={name}
       selected={value}
+      startDate={selectsStart ? value : startDate}
+      endDate={selectsEnd ? value : endDate}
+      selectsStart={selectsStart}
+      selectsEnd={selectsEnd}
       showTimeSelect
       showWeekNumbers
       className="form-control"

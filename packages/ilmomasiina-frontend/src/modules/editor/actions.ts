@@ -25,6 +25,7 @@ export const defaultEvent = (): EditorEvent => ({
   title: '',
   slug: '',
   date: undefined,
+  endDate: undefined,
   webpageUrl: '',
   facebookUrl: '',
   category: '',
@@ -153,6 +154,7 @@ export const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => (
   ...event,
   eventType: eventType(event),
   date: event.date ? new Date(event.date) : undefined,
+  endDate: event.endDate ? new Date(event.endDate) : undefined,
   registrationStartDate: event.registrationStartDate ? new Date(event.registrationStartDate) : undefined,
   registrationEndDate: event.registrationEndDate ? new Date(event.registrationEndDate) : undefined,
   quotas: event.quotas.map((quota) => ({
@@ -170,6 +172,7 @@ export const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => (
 const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   ...form,
   date: form.eventType === EditorEventType.ONLY_SIGNUP ? null : form.date?.toISOString() ?? null,
+  endDate: form.eventType === EditorEventType.ONLY_SIGNUP ? null : form.endDate?.toISOString() ?? null,
   registrationStartDate:
     form.eventType === EditorEventType.ONLY_EVENT ? null : form.registrationStartDate?.toISOString() ?? null,
   registrationEndDate:

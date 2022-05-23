@@ -24,7 +24,9 @@ const BasicDetailsTab = () => {
   } = useTypedSelector((state) => state.editor, shallowEqual);
 
   const {
-    values: { title, slug, eventType },
+    values: {
+      title, slug, eventType, date, endDate,
+    },
     touched: { slug: slugTouched },
     setFieldValue,
   } = useFormikContext<EditorEvent>();
@@ -69,6 +71,9 @@ const BasicDetailsTab = () => {
     }
   }
 
+  // require endDate with date, but only if it's not an old event that doesn't have endDate set
+  const endDateRequired = !event || event.endDate !== null;
+
   return (
     <div>
       <FieldRow
@@ -110,10 +115,26 @@ const BasicDetailsTab = () => {
       {eventType !== EditorEventType.ONLY_SIGNUP && (
         <FieldRow
           name="date"
-          label="Ajankohta"
+          label="Alkuaika"
           as={DateTimePicker}
+          selectsStart
+          endDate={endDate}
           required
-          alternateError="* Ajankohta vaaditaan."
+          alternateError="* Alkuaika vaaditaan."
+        />
+      )}
+      {eventType !== EditorEventType.ONLY_SIGNUP && (
+        <FieldRow
+          name="endDate"
+          label="Loppuaika"
+          as={DateTimePicker}
+          selectsEnd
+          startDate={date}
+          required={endDateRequired}
+          alternateError="* Loppuaika vaaditaan."
+          help={
+            endDateRequired ? undefined : 'Tapahtuma näkyy kalenteriviennissä vain, jos sille on asetettu loppuaika.'
+          }
         />
       )}
       <FieldRow

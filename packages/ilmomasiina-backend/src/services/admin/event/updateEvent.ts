@@ -1,4 +1,4 @@
-import { NotFound } from '@feathersjs/errors';
+import { BadRequest, NotFound } from '@feathersjs/errors';
 import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Op, Transaction } from 'sequelize';
@@ -75,6 +75,12 @@ export default async (
       || deletedQuotas.length
     ) {
       throw new EditConflict(event.updatedAt, deletedQuotas, deletedQuestions);
+    }
+
+    // Check that endDate isn't unset if date is present
+    const newDate = data.date === undefined ? event.date : data.date;
+    if (newDate !== null && event.endDate !== null && data.endDate === null) {
+      throw new BadRequest('Events must have endDate after it has been set once with date');
     }
 
     // Update the Event

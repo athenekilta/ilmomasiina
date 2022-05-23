@@ -22,3 +22,8 @@
 
   $components: ('Combobox'),
 );
+
+// Stop combobox input showing through datepicker
+.rw-combobox-input {
+  z-index: auto !important;
+}

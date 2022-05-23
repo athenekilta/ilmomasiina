@@ -7,6 +7,7 @@ export const adminEventCreateEventAttrs = [
   'title',
   'slug',
   'date',
+  'endDate',
   'registrationStartDate',
   'registrationEndDate',
   'openQuotaSize',
