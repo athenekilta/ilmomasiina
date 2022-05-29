@@ -9,6 +9,7 @@ import adminSlug, { adminSlugService } from './admin/slug';
 import auditLog, { AuditLogService } from './auditlog';
 import authentication from './authentication';
 import event, { eventService } from './event';
+import ical, { icalService } from './ical';
 import signup, { signupService } from './signup';
 import user, { UsersService } from './user';
 
@@ -22,6 +23,7 @@ export interface IlmoServices {
   '/api/admin/slug': WrapService<typeof adminSlugService>;
   '/api/auditlog': AuditLogService;
   '/api/authentication': AuthenticationService;
+  '/api/ical': WrapService<typeof icalService>;
   '/api/events': WrapService<typeof eventService>;
   '/api/signups': WrapService<typeof signupService>;
   '/api/users': UsersService;
@@ -37,6 +39,7 @@ export default function setupServices(this: IlmoApplication) {
   app.configure(adminSlug);
   app.configure(auditLog);
   app.configure(event);
+  app.configure(ical);
   app.configure(signup);
   app.configure(user);
 }

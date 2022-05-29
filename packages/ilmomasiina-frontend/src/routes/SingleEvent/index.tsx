@@ -91,9 +91,16 @@ const SingleEvent = ({ match }: Props) => {
             )}
             {event.date && (
               <p>
-                <strong>Ajankohta:</strong>
+                <strong>{event.endDate ? 'Alkaa:' : 'Ajankohta:'}</strong>
                 {' '}
                 {moment(event.date).format('D.M.Y [klo] HH:mm')}
+              </p>
+            )}
+            {event.endDate && (
+              <p>
+                <strong>Loppuu:</strong>
+                {' '}
+                {moment(event.endDate).format('D.M.Y [klo] HH:mm')}
               </p>
             )}
             {event.location && (

@@ -24,6 +24,7 @@ export class Event extends Model<EventManualAttributes, EventCreationAttributes>
   public title!: string;
   public slug!: string;
   public date!: Date | null;
+  public endDate!: Date | null;
   public registrationStartDate!: Date | null;
   public registrationEndDate!: Date | null;
   public openQuotaSize!: number;
@@ -93,6 +94,9 @@ export default function setupEventModel(sequelize: Sequelize) {
         },
       },
       date: {
+        type: DataTypes.DATE,
+      },
+      endDate: {
         type: DataTypes.DATE,
       },
       registrationStartDate: {
@@ -167,6 +171,9 @@ export default function setupEventModel(sequelize: Sequelize) {
           if (this.date === null && this.registrationStartDate === null) {
             throw new Error('either date or registrationStartDate/registrationEndDate must be set');
           }
+          if (this.date === null && this.endDate !== null) {
+            throw new Error('endDate may only be set with date');
+          }
           if ((this.registrationStartDate === null) !== (this.registrationEndDate === null)) {
             throw new Error('only neither or both of registrationStartDate and registrationEndDate may be set');
           }
@@ -181,18 +188,21 @@ export default function setupEventModel(sequelize: Sequelize) {
               draft: false,
               // and either:
               [Op.or]: {
-                // have no date and closed less than a week ago
-                [Op.and]: {
-                  date: null,
-                  registrationEndDate: {
-                    [Op.gt]: moment()
-                      .tz('Europe/Helsinki')
-                      .subtract(7, 'days')
-                      .format(),
-                  },
+                // closed less than a week ago
+                registrationEndDate: {
+                  [Op.gt]: moment()
+                    .tz('Europe/Helsinki')
+                    .subtract(7, 'days')
+                    .format(),
                 },
-                // or happen later than a week ago
+                // or happened less than a week ago
                 date: {
+                  [Op.gt]: moment()
+                    .tz('Europe/Helsinki')
+                    .subtract(7, 'days')
+                    .format(),
+                },
+                endDate: {
                   [Op.gt]: moment()
                     .tz('Europe/Helsinki')
                     .subtract(7, 'days')

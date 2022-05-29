@@ -30,6 +30,7 @@ const config = <const>{
   mailFrom: envString('MAIL_FROM'),
   brandingMailFooterText: envString('BRANDING_MAIL_FOOTER_TEXT'),
   brandingMailFooterLink: envString('BRANDING_MAIL_FOOTER_LINK'),
+  icalCalendarName: envString('BRANDING_ICAL_CALENDAR_NAME', 'Ilmomasiina'),
   mailUrlBase: envString('EMAIL_BASE_URL'),
   pathPrefix: envString('PATH_PREFIX', ''),
 

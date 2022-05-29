@@ -62,6 +62,7 @@
     "express-sslify": "^1.2.0",
     "feathers-hooks-common": "^5.0.5",
     "feathers-sequelize": "^6.3.2",
+    "ics": "^2.35.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",

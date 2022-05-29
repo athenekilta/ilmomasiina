@@ -115,4 +115,9 @@ CREATE TABLE `auditlog` (
   `updatedAt` DATETIME NOT NULL,
   PRIMARY KEY (`id`)
 );
+
+-- add end date to events
+
+ALTER TABLE `event`
+ADD `endDate` DATETIME DEFAULT NULL AFTER `date`;
 ```
