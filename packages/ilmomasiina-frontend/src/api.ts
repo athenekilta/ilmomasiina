@@ -1,4 +1,4 @@
-const apiUrl = API_URL || `${PREFIX_URL}/api`;
+import { paths } from './paths';
 
 interface FetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -46,7 +46,7 @@ export default async function apiFetch(uri: string, {
     allHeaders['Content-Type'] = 'application/json; charset=utf-8';
   }
 
-  const response = await fetch(`${apiUrl}/${uri}`, {
+  const response = await fetch(`${paths().api}/${uri}`, {
     method,
     body: body === undefined ? undefined : JSON.stringify(body),
     headers: allHeaders,

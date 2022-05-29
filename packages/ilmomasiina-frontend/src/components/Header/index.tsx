@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { Branding } from '../../branding';
 import { redirectToLogin } from '../../modules/auth/actions';
-import paths from '../../paths';
+import { paths } from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
 import './Header.scss';
@@ -21,7 +21,7 @@ const Header = ({ branding }: Props) => {
   return (
     <Navbar>
       <Container>
-        <Link to={paths.eventsList} className="navbar-brand">
+        <Link to={paths().eventsList} className="navbar-brand">
           {branding.headerTitle}
         </Link>
         {loggedIn && (

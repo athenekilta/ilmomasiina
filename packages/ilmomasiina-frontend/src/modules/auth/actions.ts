@@ -2,7 +2,7 @@ import { push } from 'connected-react-router';
 
 import { Auth } from '@tietokilta/ilmomasiina-models/src/services/auth';
 import apiFetch from '../../api';
-import paths from '../../paths';
+import { fullPaths } from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {
   LOGGING_IN,
@@ -47,7 +47,7 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
       },
     }) as Auth.Response;
     dispatch(loginSucceeded(response));
-    dispatch(push(paths.adminEventsList));
+    dispatch(push(fullPaths().adminEventsList));
     return true;
   } catch (e) {
     dispatch(loginFailed());
@@ -57,5 +57,5 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
 
 export const redirectToLogin = () => (dispatch: DispatchAction) => {
   dispatch(resetState());
-  dispatch(push(paths.adminLogin));
+  dispatch(push(fullPaths().adminLogin));
 };

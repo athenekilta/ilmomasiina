@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import Separator from '../../components/Separator';
 import { deleteEvent, getAdminEvents } from '../../modules/adminEvents/actions';
-import paths from '../../paths';
+import { fullPaths } from '../../paths';
 import { useTypedDispatch } from '../../store/reducers';
 import { isEventInPast } from '../../utils/eventState';
 
@@ -45,19 +45,19 @@ const AdminEventListItem = ({ event }: Props) => {
   } else if (!listed) {
     status = 'Piilotettu';
   } else {
-    status = <Link to={paths.eventDetails(slug)}>Julkaistu</Link>;
+    status = <Link to={fullPaths().eventDetails(slug)}>Julkaistu</Link>;
   }
 
   return (
     <tr>
       <td>
-        <Link to={paths.adminEditEvent(id)}>{title}</Link>
+        <Link to={fullPaths().adminEditEvent(id)}>{title}</Link>
       </td>
       <td>{date ? moment(date).format('DD.MM.YYYY') : ''}</td>
       <td>{status}</td>
       <td>{sumBy(quotas, 'signupCount')}</td>
       <td>
-        <Link to={paths.adminEditEvent(id)}>
+        <Link to={fullPaths().adminEditEvent(id)}>
           Muokkaa tapahtumaa
         </Link>
 

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import FieldRow from '../../../components/FieldRow';
-import paths from '../../../paths';
+import { paths } from '../../../paths';
 import { useStateAndDispatch } from '../state';
 import { useUpdateSignup } from '../state/actions';
 import DeleteSignup from './DeleteSignup';
@@ -42,7 +42,7 @@ const EditForm = () => {
       });
       setSubmitError(false);
       setSubmitting(false);
-      if (isNew) history.push(paths.eventDetails(event!.slug));
+      if (isNew) history.push(paths().eventDetails(event!.slug));
     } catch (error) {
       toast.update(progressToast, {
         render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.`,
@@ -122,7 +122,7 @@ const EditForm = () => {
               {isNew ? 'Lähetä' : 'Päivitä'}
             </Button>
             {!isNew && (
-              <Button as={Link} variant="link" className="float-right" to={paths.eventDetails(event!.slug)}>
+              <Button as={Link} variant="link" className="float-right" to={paths().eventDetails(event!.slug)}>
                 Peruuta
               </Button>
             )}

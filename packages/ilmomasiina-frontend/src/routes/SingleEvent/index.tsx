@@ -3,7 +3,7 @@ import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
-import paths from '../../paths';
+import { paths } from '../../paths';
 import EventDescription from './components/EventDescription';
 import QuotaStatus from './components/QuotaStatus';
 import SignupCountdown from './components/SignupCountdown';
@@ -25,7 +25,7 @@ const SingleEventView = () => {
           <p>
             Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
           </p>
-          <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
+          <Link to={paths().eventsList}>Palaa tapahtumalistaukseen</Link>
         </div>
       </div>
     );
@@ -43,7 +43,7 @@ const SingleEventView = () => {
 
   return (
     <div className="container single-event">
-      <Link to={paths.eventsList} style={{ margin: 0 }}>
+      <Link to={paths().eventsList} style={{ margin: 0 }}>
         &#8592; Takaisin
       </Link>
       <div className="row">

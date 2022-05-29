@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Branding } from '../../branding';
-import paths from '../../paths';
+import { fullPaths } from '../../paths';
 
 import './Footer.scss';
 
@@ -14,7 +14,7 @@ type Props = {
 const Footer = ({ branding }: Props) => (
   <footer className="page-footer">
     <div className="container">
-      <Link to={paths.adminEventsList}>
+      <Link to={fullPaths().adminEventsList}>
         Hallinta
       </Link>
       {branding.footerGdprText && (

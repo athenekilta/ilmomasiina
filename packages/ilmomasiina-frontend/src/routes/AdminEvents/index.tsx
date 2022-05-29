@@ -5,7 +5,7 @@ import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getAdminEvents, resetState } from '../../modules/adminEvents/actions';
-import paths from '../../paths';
+import { fullPaths } from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminEventListItem from './AdminEventListItem';
 
@@ -42,13 +42,13 @@ const AdminEventsList = () => {
     <div className="container">
       <nav className="title-nav">
         <h1>Hallinta</h1>
-        <Button as={Link} variant="secondary" to={paths.adminUsersList} className="ml-2">
+        <Button as={Link} variant="secondary" to={fullPaths().adminUsersList} className="ml-2">
           Käyttäjät
         </Button>
-        <Button as={Link} variant="secondary" to={paths.adminAuditLog} className="ml-2">
+        <Button as={Link} variant="secondary" to={fullPaths().adminAuditLog} className="ml-2">
           Toimintoloki
         </Button>
-        <Button as={Link} variant="primary" to={paths.adminEditEvent('new')} className="ml-2">
+        <Button as={Link} variant="primary" to={fullPaths().adminEditEvent('new')} className="ml-2">
           + Uusi tapahtuma
         </Button>
       </nav>

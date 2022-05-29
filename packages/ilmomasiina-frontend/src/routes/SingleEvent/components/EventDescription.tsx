@@ -6,19 +6,20 @@ import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 import remarkGfm from 'remark-gfm';
 
-import paths from '../../../paths';
+import { paths } from '../../../paths';
 import { useTypedSelector } from '../../../store/reducers';
 import { useSingleEventContext } from '../state';
 
 const EventDescription = () => {
   const event = useSingleEventContext().event!;
   const loggedIn = useTypedSelector((state) => state.auth.loggedIn);
+  const adminPaths = paths();
   return (
     <>
       <nav className="title-nav">
         <h1>{event.title}</h1>
-        {loggedIn && (
-          <Button as={Link} variant="primary" to={paths.adminEditEvent(event.id)} className="ml-2">
+        {loggedIn && adminPaths.hasAdmin && (
+          <Button as={Link} variant="primary" to={adminPaths.adminEditEvent(event.id)} className="ml-2">
             Muokkaa
           </Button>
         )}

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import apiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';

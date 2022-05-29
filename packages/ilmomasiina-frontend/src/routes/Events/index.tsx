@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import paths from '../../paths';
+import { paths } from '../../paths';
 import signupState from '../../utils/signupStateText';
 import TableRow from './components/TableRow';
 import { EventListProvider, useEventListContext, useEventListState } from './state';
@@ -43,7 +43,7 @@ const EventListView = () => {
     const rows = [
       <TableRow
         className={eventState.class}
-        title={<Link to={paths.eventDetails(slug)}>{title}</Link>}
+        title={<Link to={paths().eventDetails(slug)}>{title}</Link>}
         date={date ? moment(date).format('DD.MM.YYYY') : ''}
         signupStatus={eventState.label}
         signupCount={

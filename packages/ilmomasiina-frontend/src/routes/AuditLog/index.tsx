@@ -5,7 +5,7 @@ import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getAuditLogs, resetState } from '../../modules/auditLog/actions';
-import paths from '../../paths';
+import { fullPaths } from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AuditLogActionFilter from './AuditLogActionFilter';
 import AuditLogFilter from './AuditLogFilter';
@@ -29,7 +29,7 @@ const AuditLog = () => {
 
   return (
     <div className="container audit-log">
-      <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
+      <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
       <h1>Toimintoloki</h1>
       <AuditLogPagination />
       <table className="table">

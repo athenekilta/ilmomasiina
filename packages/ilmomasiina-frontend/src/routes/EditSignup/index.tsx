@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Container, Spinner } from 'react-bootstrap';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
-import paths from '../../paths';
+import { paths } from '../../paths';
 import EditForm from './components/EditForm';
 import NarrowContainer from './components/NarrowContainer';
 import { Provider, useEditSignupState, useStateAndDispatch } from './state';
@@ -40,7 +40,7 @@ const EditSignupView = () => {
     return (
       <Container className="text-center">
         <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-        <Button as={Link} to={paths.eventDetails(event!.slug)} variant="secondary">
+        <Button as={Link} to={paths().eventDetails(event!.slug)} variant="secondary">
           Takaisin
         </Button>
       </Container>
@@ -56,7 +56,7 @@ const EditSignupView = () => {
             Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
             ilmoittautuminen on sulkeutunut.
           </p>
-          <Button as={Link} to={paths.eventsList} variant="secondary">
+          <Button as={Link} to={paths().eventsList} variant="secondary">
             Takaisin etusivulle
           </Button>
         </NarrowContainer>

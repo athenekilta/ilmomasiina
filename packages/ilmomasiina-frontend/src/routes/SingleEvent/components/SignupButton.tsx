@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch from '../../../api';
-import paths from '../../../paths';
+import { paths } from '../../../paths';
 import signupState from '../../../utils/signupStateText';
 import { useSingleEventContext } from '../state';
 
@@ -37,7 +37,7 @@ const SignupButton = ({
         body: { quotaId },
       }) as Signup.Create.Response;
       setSubmitting(false);
-      history.push(paths.editSignup(response.id, response.editToken));
+      history.push(paths().editSignup(response.id, response.editToken));
     } catch (e) {
       setSubmitting(false);
       toast.error('Ilmoittautuminen epäonnistui.', {

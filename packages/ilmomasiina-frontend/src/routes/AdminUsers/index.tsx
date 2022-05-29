@@ -5,7 +5,7 @@ import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { getUsers, resetState } from '../../modules/adminUsers/actions';
-import paths from '../../paths';
+import { fullPaths } from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminUserListItem from './AdminUserListItem';
 import UserForm from './UserForm';
@@ -62,7 +62,7 @@ const AdminUsersList = () => {
 
   return (
     <div className="container">
-      <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
+      <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
       <h1>Käyttäjien hallinta</h1>
       {content}
     </div>

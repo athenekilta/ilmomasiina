@@ -3,7 +3,7 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import paths from '../../paths';
+import { paths } from '../../paths';
 
 const PageNotFound = () => (
   <Container className="text-center">
@@ -12,7 +12,7 @@ const PageNotFound = () => (
       Sivua ei löydy.
     </p>
     <p>
-      <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
+      <Link to={paths().eventsList}>Palaa tapahtumalistaukseen</Link>
     </p>
   </Container>
 );

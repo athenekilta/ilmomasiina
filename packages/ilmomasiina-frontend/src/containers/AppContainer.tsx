@@ -9,7 +9,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { Branding } from '../branding';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import paths from '../paths';
+import { fullPaths } from '../paths';
 import PageNotFound from '../routes/404/PageNotFound';
 import AdminEventsList from '../routes/AdminEvents';
 import AdminUsersList from '../routes/AdminUsers';
@@ -41,42 +41,42 @@ const AppContainer = ({ branding }: Props) => (
             <Switch>
               <Route
                 exact
-                path={paths.eventsList}
+                path={fullPaths().eventsList}
                 component={Events}
               />
               <Route
                 exact
-                path={paths.eventDetails(':slug')}
+                path={fullPaths().eventDetails(':slug')}
                 component={SingleEvent}
               />
               <Route
                 exact
-                path={paths.editSignup(':id', ':editToken')}
+                path={fullPaths().editSignup(':id', ':editToken')}
                 component={EditSignup}
               />
               <Route
                 exact
-                path={paths.adminLogin}
+                path={fullPaths().adminLogin}
                 component={Login}
               />
               <Route
                 exact
-                path={paths.adminEventsList}
+                path={fullPaths().adminEventsList}
                 component={requireAuth(AdminEventsList)}
               />
               <Route
                 exact
-                path={paths.adminUsersList}
+                path={fullPaths().adminUsersList}
                 component={requireAuth(AdminUsersList)}
               />
               <Route
                 exact
-                path={paths.adminEditEvent(':id')}
+                path={fullPaths().adminEditEvent(':id')}
                 component={requireAuth(Editor)}
               />
               <Route
                 exact
-                path={paths.adminAuditLog}
+                path={fullPaths().adminAuditLog}
                 component={requireAuth(AuditLog)}
               />
               <Route
