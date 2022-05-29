@@ -19,6 +19,14 @@ services:
     build:
       context: .
       dockerfile: "Dockerfile"
+      args:
+        #- PREFIX_URL=
+        #- API_URL=
+        - BRANDING_HEADER_TITLE_TEXT=Tietokillan ilmomasiina
+        - BRANDING_FOOTER_GDPR_TEXT=Tietosuoja
+        - BRANDING_FOOTER_GDPR_LINK=https://tietokilta.fi/kilta/hallinto/viralliset-asiat/rekisteriselosteet/
+        - BRANDING_FOOTER_HOME_TEXT=Tietokilta.fi
+        - BRANDING_FOOTER_HOME_LINK=https://tietokilta.fi
     restart: always
     depends_on:
       - database
@@ -26,17 +34,25 @@ services:
       - DB_HOST=database
       - NODE_ENV=production
       - ENFORCE_HTTPS=false
+      - PORT=3000
       # When deploying to production, either set ENFORCE_HTTPS true (default) or
       # configure the reverse proxy to enforce HTTPS communication with the clients.
     env_file:
       - .env
     ports:
       - "8000:3000"
-    volumes:
-    - "frontend:/opt/ilmomasiina/frontend"
+#    volumes:
+      #- "frontend:/opt/ilmomasiina/frontend"
 
-volumes:
-  frontend:
+#  nginx:
+#    image: nginx:latest
+#    ports:
+#      - "8888:80"
+#    volumes:
+#      - "frontend:/usr/share/nginx/html"
+
+#volumes:
+#  frontend:
     # Contains static files of the ilmomasiina-frontend.
     # To achieve better performance under high loads, these files
     # can be served using a more performant web server or even a CDN.
