@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import { Branding } from '../../branding';
@@ -12,22 +13,22 @@ type Props = {
 };
 
 const Footer = ({ branding }: Props) => (
-  <footer className="page-footer">
-    <div className="container">
+  <footer>
+    <Container>
       <Link to={fullPaths().adminEventsList}>
         Hallinta
       </Link>
       {branding.footerGdprText && (
-        <a href={branding.footerGdprLink} className="navbar-link">
+        <a href={branding.footerGdprLink} target="_blank" rel="noreferrer">
           {branding.footerGdprText}
         </a>
       )}
       {branding.footerHomeText && (
-        <a href={branding.footerHomeLink} className="navbar-link">
+        <a href={branding.footerHomeLink} target="_blank" rel="noreferrer">
           {branding.footerHomeText}
         </a>
       )}
-    </div>
+    </Container>
   </footer>
 );
 

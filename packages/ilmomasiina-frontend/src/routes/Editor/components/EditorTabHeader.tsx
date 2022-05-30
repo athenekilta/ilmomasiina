@@ -30,7 +30,7 @@ const EditorTabHeader = ({ activeTab, setActiveTab }: Props) => {
   const { values: { eventType } } = useFormikContext<EditorEvent>();
 
   return (
-    <Nav variant="tabs" activeKey={activeTab} className="event-editor--nav">
+    <Nav variant="tabs" activeKey={activeTab} role="tablist">
       {TABS.flatMap(([id, label]) => {
         if (id !== EditorTab.BASIC_DETAILS && eventType === EditorEventType.ONLY_EVENT) {
           return [];

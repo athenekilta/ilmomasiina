@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { ConnectedRouter } from 'connected-react-router';
+import { Container } from 'react-bootstrap';
 import { Provider } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { Flip, ToastContainer } from 'react-toastify';
@@ -23,7 +24,7 @@ import configureStore, { history } from '../store/configureStore';
 import requireAuth from './requireAuth';
 
 import 'react-toastify/scss/main.scss';
-import '../styles/core.scss';
+import '../styles/app.scss';
 
 const { store, persistor } = configureStore();
 
@@ -37,7 +38,7 @@ const AppContainer = ({ branding }: Props) => (
       <PersistGate persistor={persistor}>
         <ConnectedRouter history={history}>
           <Header branding={branding} />
-          <div className="page-wrapper">
+          <Container>
             <Switch>
               <Route
                 exact
@@ -84,7 +85,7 @@ const AppContainer = ({ branding }: Props) => (
                 component={PageNotFound}
               />
             </Switch>
-          </div>
+          </Container>
           <Footer branding={branding} />
         </ConnectedRouter>
         <ToastContainer

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Spinner } from 'react-bootstrap';
+import { Col, Row, Spinner } from 'react-bootstrap';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 import { paths } from '../../paths';
@@ -19,44 +19,40 @@ const SingleEventView = () => {
 
   if (error) {
     return (
-      <div className="single-event">
-        <div className="single-event--loading-container">
-          <h1>Hups, jotain meni pieleen</h1>
-          <p>
-            Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
-          </p>
-          <Link to={paths().eventsList}>Palaa tapahtumalistaukseen</Link>
-        </div>
+      <div className="loading-container">
+        <h1>Hups, jotain meni pieleen</h1>
+        <p>
+          Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
+        </p>
+        <Link to={paths().eventsList}>Palaa tapahtumalistaukseen</Link>
       </div>
     );
   }
 
   if (pending) {
     return (
-      <div className="single-event">
-        <div className="single-event--loading-container">
-          <Spinner animation="border" />
-        </div>
+      <div className="loading-container">
+        <Spinner animation="border" />
       </div>
     );
   }
 
   return (
-    <div className="container single-event">
+    <>
       <Link to={paths().eventsList} style={{ margin: 0 }}>
         &#8592; Takaisin
       </Link>
-      <div className="row">
-        <div className="col-xs-12 col-sm-8">
+      <Row>
+        <Col xs={12} sm={8}>
           <EventDescription />
-        </div>
-        <div className="col-xs-12 col-sm-4 pull-right">
+        </Col>
+        <Col xs={12} sm={4}>
           <SignupCountdown />
           <QuotaStatus />
-        </div>
-      </div>
+        </Col>
+      </Row>
       {event!.signupsPublic && (
-        <div className="event-signups">
+        <>
           <h2>Ilmoittautuneet</h2>
           {signupsByQuota!.map((quota) => (
             <SignupList
@@ -64,9 +60,9 @@ const SingleEventView = () => {
               quota={quota}
             />
           ))}
-        </div>
+        </>
       )}
-    </div>
+    </>
   );
 };
 

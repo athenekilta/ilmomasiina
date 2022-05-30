@@ -6,8 +6,6 @@ import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../utils/signupUtils';
 import { useSingleEventContext } from '../state';
 import SignupListRow from './SignupListRow';
 
-import './SignupList.scss';
-
 type Props = {
   quota: QuotaSignups;
 };

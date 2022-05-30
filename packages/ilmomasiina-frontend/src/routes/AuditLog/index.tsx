@@ -28,11 +28,11 @@ const AuditLog = () => {
   }, [dispatch]);
 
   return (
-    <div className="container audit-log">
+    <>
       <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
       <h1>Toimintoloki</h1>
       <AuditLogPagination />
-      <table className="table">
+      <table className="table audit-log--table">
         <thead>
           <tr>
             <th>
@@ -40,19 +40,19 @@ const AuditLog = () => {
             </th>
             <th>
               Käyttäjä
-              <nav className="filter">
+              <nav className="audit-log--filter">
                 <AuditLogFilter name="user" />
               </nav>
             </th>
             <th>
               IP-osoite
-              <nav className="filter">
+              <nav className="audit-log--filter">
                 <AuditLogFilter name="ip" />
               </nav>
             </th>
             <th>
               Toiminto
-              <nav className="filter">
+              <nav className="audit-log--filter">
                 <AuditLogActionFilter />
                 <AuditLogFilter name="event" placeHolder="Tapahtuma&hellip;" />
                 <AuditLogFilter name="signup" placeHolder="Ilmoittautuminen&hellip;" />
@@ -83,7 +83,7 @@ const AuditLog = () => {
           ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 };
 

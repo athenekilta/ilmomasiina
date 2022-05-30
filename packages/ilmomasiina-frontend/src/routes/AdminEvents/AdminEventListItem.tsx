@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import Separator from '../../components/Separator';
 import { deleteEvent, getAdminEvents } from '../../modules/adminEvents/actions';
 import { fullPaths } from '../../paths';
 import { useTypedDispatch } from '../../store/reducers';
@@ -60,9 +59,7 @@ const AdminEventListItem = ({ event }: Props) => {
         <Link to={fullPaths().adminEditEvent(id)}>
           Muokkaa tapahtumaa
         </Link>
-
-        <Separator />
-
+        &ensp;/&ensp;
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <a href="#" onClick={onDelete} role="button">
           Poista tapahtuma

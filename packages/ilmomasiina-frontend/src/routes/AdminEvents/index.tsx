@@ -22,24 +22,24 @@ const AdminEventsList = () => {
 
   if (eventsLoadError) {
     return (
-      <div className="container">
+      <>
         <h1>Hups, jotain meni pieleen</h1>
         <p>Tapahtumien lataus epäonnistui</p>
-      </div>
+      </>
     );
   }
 
   if (!events) {
     return (
-      <div className="container">
+      <>
         <h1>Hallinta</h1>
         <Spinner animation="border" />
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="container">
+    <>
       <nav className="title-nav">
         <h1>Hallinta</h1>
         <Button as={Link} variant="secondary" to={fullPaths().adminUsersList} className="ml-2">
@@ -71,7 +71,7 @@ const AdminEventsList = () => {
           ))}
         </tbody>
       </table>
-    </div>
+    </>
   );
 };
 

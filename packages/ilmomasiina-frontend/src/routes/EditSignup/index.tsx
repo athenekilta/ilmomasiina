@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button, Container, Spinner } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 import { paths } from '../../paths';
@@ -15,60 +15,52 @@ const EditSignupView = () => {
 
   if (error) {
     return (
-      <Container className="text-center">
-        <NarrowContainer>
-          <h1>Hups, jotain meni pieleen</h1>
-          <p>
-            Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
-            sitten jotain muuta kummallista tapahtui. Jos ilmoittautumisesi ei
-            ole vielä poistunut, yritä kohta uudestaan.
-          </p>
-        </NarrowContainer>
-      </Container>
+      <NarrowContainer className="text-center">
+        <h1>Hups, jotain meni pieleen</h1>
+        <p>
+          Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
+          sitten jotain muuta kummallista tapahtui. Jos ilmoittautumisesi ei
+          ole vielä poistunut, yritä kohta uudestaan.
+        </p>
+      </NarrowContainer>
     );
   }
 
   if (pending) {
     return (
-      <Container className="text-center">
+      <div className="loading-container">
         <Spinner animation="border" />
-      </Container>
+      </div>
     );
   }
 
   if (deleted) {
     return (
-      <Container className="text-center">
+      <div className="text-center">
         <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
         <Button as={Link} to={paths().eventDetails(event!.slug)} variant="secondary">
           Takaisin
         </Button>
-      </Container>
+      </div>
     );
   }
 
   if (event!.registrationEndDate === null || new Date(event!.registrationEndDate) < new Date()) {
     return (
-      <Container className="text-center">
-        <NarrowContainer>
-          <h1>Hups, jotain meni pieleen</h1>
-          <p>
-            Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
-            ilmoittautuminen on sulkeutunut.
-          </p>
-          <Button as={Link} to={paths().eventsList} variant="secondary">
-            Takaisin etusivulle
-          </Button>
-        </NarrowContainer>
-      </Container>
+      <NarrowContainer className="text-center">
+        <h1>Hups, jotain meni pieleen</h1>
+        <p>
+          Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
+          ilmoittautuminen on sulkeutunut.
+        </p>
+        <Button as={Link} to={paths().eventsList} variant="secondary">
+          Takaisin etusivulle
+        </Button>
+      </NarrowContainer>
     );
   }
 
-  return (
-    <Container>
-      <EditForm />
-    </Container>
-  );
+  return <EditForm />;
 };
 
 export interface MatchParams {

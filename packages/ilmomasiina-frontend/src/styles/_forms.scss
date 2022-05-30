@@ -1,0 +1,34 @@
+@use "definitions" as *;
+
+label {
+  font-weight: 600;
+}
+
+label[data-required]:not([data-required=false])::after {
+  content: '\00A0*';
+  color: $red;
+  font-weight: 600;
+}
+
+label.form-check-label {
+  font-weight: 400;
+}
+
+.col-form-label.col-sm-3 {
+  @include media-breakpoint-up(sm) {
+    text-align: right;
+  }
+}
+
+.required-symbol {
+  color: $red;
+  font-weight: 600;
+}
+
+textarea {
+  max-width: 100%;
+}
+
+.btn[disabled] {
+  opacity: 0.35;
+}

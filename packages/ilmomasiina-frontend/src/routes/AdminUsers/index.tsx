@@ -25,10 +25,10 @@ const AdminUsersList = () => {
 
   if (usersLoadError) {
     return (
-      <div className="container">
+      <>
         <h1>Hups, jotain meni pieleen</h1>
         <p>Käyttäjien lataus epäonnistui</p>
-      </div>
+      </>
     );
   }
 
@@ -61,11 +61,11 @@ const AdminUsersList = () => {
   }
 
   return (
-    <div className="container">
+    <>
       <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
       <h1>Käyttäjien hallinta</h1>
       {content}
-    </div>
+    </>
   );
 };
 

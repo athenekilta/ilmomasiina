@@ -1,7 +1,5 @@
 import React, { ReactNode } from 'react';
 
-import Separator from '../../../components/Separator';
-
 type Props = {
   className: string;
   title: ReactNode;
@@ -30,7 +28,7 @@ const TableRow = ({
       data-xs-prefix={signupCount !== undefined ? 'Ilmoittautuneita: ' : ''}
     >
       {signupCount}
-      {quotaSize && <Separator />}
+      {quotaSize && <>&ensp;/&ensp;</>}
       {quotaSize || ''}
     </td>
   </tr>

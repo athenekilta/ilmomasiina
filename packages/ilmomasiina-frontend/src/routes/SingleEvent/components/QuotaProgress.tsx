@@ -2,10 +2,6 @@ import React from 'react';
 
 import { ProgressBar } from 'react-bootstrap';
 
-import Separator from '../../../components/Separator';
-
-import './QuotaProgress.scss';
-
 type Props = {
   max: number;
   title: string;
@@ -22,7 +18,7 @@ const QuotaProgress = ({ max, title, value }: Props) => (
       label={(
         <>
           {value}
-          <Separator />
+          &ensp;/&ensp;
           {max !== Infinity ? max : <span title="Unlimited">&infin;</span>}
         </>
       )}

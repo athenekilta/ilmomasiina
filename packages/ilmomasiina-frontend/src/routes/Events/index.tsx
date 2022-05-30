@@ -18,19 +18,19 @@ const EventListView = () => {
 
   if (error) {
     return (
-      <div className="container">
+      <>
         <h1>Hups, jotain meni pieleen</h1>
         <p>Tapahtumien lataus epäonnistui</p>
-      </div>
+      </>
     );
   }
 
   if (pending) {
     return (
-      <div className="container">
+      <>
         <h1>Tapahtumat</h1>
         <Spinner animation="border" />
-      </div>
+      </>
     );
   }
 
@@ -85,7 +85,7 @@ const EventListView = () => {
   });
 
   return (
-    <div className="container">
+    <>
       <h1>Tapahtumat</h1>
       <table className="table eventlist">
         <thead>
@@ -98,7 +98,7 @@ const EventListView = () => {
         </thead>
         <tbody>{tableRows}</tbody>
       </table>
-    </div>
+    </>
   );
 };
 

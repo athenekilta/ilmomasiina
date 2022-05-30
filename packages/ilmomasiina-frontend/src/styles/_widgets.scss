@@ -1,24 +1,24 @@
-@use "base";
+@use "definitions" as *;
 
 // Map react-widgets variables to Bootstrap theme
 @use "react-widgets/scss/styles.scss" with (
-  $widget-bg:                         base.$input-bg,
-  $widget-disabled-bg:                base.$input-disabled-bg,
-  $widget-border-color:               base.$input-border-color,
-  $widget-focus-box-shadow:           base.$input-focus-box-shadow,
+  $widget-bg:                         $input-bg,
+  $widget-disabled-bg:                $input-disabled-bg,
+  $widget-border-color:               $input-border-color,
+  $widget-focus-box-shadow:           $input-focus-box-shadow,
 
-  $input-bg:                          base.$input-bg,
-  $input-disabled-bg:                 base.$input-disabled-bg,
-  $input-color:                       base.$input-color,
-  $input-placeholder-color:           base.$input-placeholder-color,
-  $input-disabled-placeholder-color:  base.$input-placeholder-color,
-  $input-border-color:                base.$input-border-color,
-  $input-focus-border-color:          base.$input-focus-border-color,
+  $input-bg:                          $input-bg,
+  $input-disabled-bg:                 $input-disabled-bg,
+  $input-color:                       $input-color,
+  $input-placeholder-color:           $input-placeholder-color,
+  $input-disabled-placeholder-color:  $input-placeholder-color,
+  $input-border-color:                $input-border-color,
+  $input-focus-border-color:          $input-focus-border-color,
 
-  $list-selected-bg:                  base.$dropdown-link-active-bg,
-  $list-selected-color:               base.$dropdown-link-active-color,
-  $list-focus-bg:                     base.$dropdown-link-hover-bg,
-  $list-focus-color:                  base.$dropdown-link-hover-color,
+  $list-selected-bg:                  $dropdown-link-active-bg,
+  $list-selected-color:               $dropdown-link-active-color,
+  $list-focus-bg:                     $dropdown-link-hover-bg,
+  $list-focus-color:                  $dropdown-link-hover-color,
 
   $components: ('Combobox'),
 );

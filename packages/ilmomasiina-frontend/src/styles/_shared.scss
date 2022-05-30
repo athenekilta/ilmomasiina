@@ -1,0 +1,42 @@
+@use "definitions" as *;
+@use "forms";
+
+.title-nav {
+  display: flex;
+  align-items: center;
+
+  :first-child {
+    flex: 1 0 auto;
+  }
+
+  // on narrow screens, always wrap the button(s)
+  @include media-breakpoint-down(xs) {
+    flex-wrap: wrap;
+    padding-bottom: $spacer;
+
+    :first-child {
+      flex: 1 0 100%;
+    }
+  }
+}
+
+p {
+  margin-bottom: 1.5em;
+}
+
+table.table {
+  thead {
+    th {
+      border-bottom-width: 1px;
+      font-weight: 600;
+    }
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}

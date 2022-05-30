@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 
 import { Formik, FormikHelpers } from 'formik';
-import { Container, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -102,37 +102,33 @@ const Editor = ({ history, match }: Props) => {
 
   if (loadError) {
     return (
-      <Container className="event-editor">
-        <div className="event-editor--loading-container">
-          <h1>Hups, jotain meni pieleen</h1>
-          <p>{`Tapahtumaa id:llä "${urlEventId}" ei löytynyt`}</p>
-          <Link to={fullPaths().adminEventsList}>Palaa tapahtumalistaukseen</Link>
-        </div>
-      </Container>
+      <div className="loading-container">
+        <h1>Hups, jotain meni pieleen</h1>
+        <p>{`Tapahtumaa id:llä "${urlEventId}" ei löytynyt`}</p>
+        <Link to={fullPaths().adminEventsList}>Palaa tapahtumalistaukseen</Link>
+      </div>
     );
   }
 
   if (!urlIsNew && !event) {
     return (
-      <Container className="event-editor">
+      <>
         <h1>Muokkaa tapahtumaa</h1>
         <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
-        <div className="event-editor--loading-container">
+        <div className="loading-container">
           <Spinner animation="border" />
         </div>
-      </Container>
+      </>
     );
   }
 
   return (
-    <Container className="event-editor" role="tablist">
-      <Formik
-        initialValues={initialFormData!}
-        onSubmit={onSubmit}
-      >
-        {(props) => <EditForm {...props} submitOptions={submitOptions} />}
-      </Formik>
-    </Container>
+    <Formik
+      initialValues={initialFormData!}
+      onSubmit={onSubmit}
+    >
+      {(props) => <EditForm {...props} submitOptions={submitOptions} />}
+    </Formik>
   );
 };
 
