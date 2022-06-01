@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { readFile, readFileSync } from 'fs';
+import { existsSync, readFileSync, statSync } from 'fs';
 import { createServer, request } from 'http';
 import * as path from 'path';
 
@@ -20,11 +20,23 @@ if (!BUILD_DIR) {
   process.exit(1);
 }
 
+// <script type="module"> requires us to return a Content-Type
+const CONTENT_TYPES: Record<string, string> = {
+  '.html': 'text/html',
+  '.js': 'text/javascript',
+  '.css': 'text/css',
+  '.png': 'image/png',
+  '.svg': 'image/svg+xml',
+  '.ico': 'image/vnd.microsoft.icon',
+  '.txt': 'text/plain',
+};
+
 build({
   ...config,
+  minify: false,
   watch: {
-    onRebuild(error) {
-      if (error) console.error('watch build failed:', error);
+    onRebuild() {
+      // TODO: auto-refresh
     },
   },
 })
@@ -43,38 +55,47 @@ build({
           },
           (proxyRes) => {
             // Forward the response to the client
-            if (proxyRes.statusCode) {
-              res.writeHead(proxyRes.statusCode, proxyRes.headers);
-              proxyRes.pipe(res, { end: true });
-            } else {
-              res.writeHead(500);
-              res.write('Internal Server Error');
-            }
+            res.writeHead(proxyRes.statusCode!, proxyRes.headers);
+            proxyRes.pipe(res, { end: true });
           },
         );
+
+        // Handle errors
+        proxyReq.once('error', (err) => {
+          console.error('Proxy request failed', err);
+          res.writeHead(502);
+          res.end('Proxy request failed');
+        });
 
         // Forward the body of the request to the upstream
         req.pipe(proxyReq, { end: true });
       } else {
-        // Serve built frontend files
-        readFile(BUILD_DIR + req.url!, (err, data) => {
-          if (err) {
-            try {
-              const file = readFileSync(path.join(BUILD_DIR, 'index.html'));
-              res.writeHead(200);
-              res.end(file);
-            } catch {
-              res.writeHead(404);
-              console.error(err);
-              res.end();
-            }
+        // Serve built frontend files, falling back to index.html
+        const target = [
+          path.join(BUILD_DIR, req.url!),
+          path.join(BUILD_DIR, '/index.html'),
+        ].find((file) => existsSync(file) && !statSync(file).isDirectory());
 
-            return;
+        if (!target) {
+          console.error(`Not Found: ${req.url}`);
+          res.writeHead(404);
+          res.end();
+        } else {
+          try {
+            // Guess a Content-Type
+            const [extension] = target.match(/\.(\w+)$/) || ['.txt'];
+            // Send the file contents
+            const data = readFileSync(target);
+            res.writeHead(200, {
+              'Content-Type': CONTENT_TYPES[extension],
+            });
+            res.end(data);
+          } catch (err) {
+            console.error(err);
+            res.writeHead(500);
+            res.end();
           }
-
-          res.writeHead(200);
-          res.end(data);
-        });
+        }
       }
     });
 

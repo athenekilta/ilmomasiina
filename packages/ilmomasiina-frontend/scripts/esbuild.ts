@@ -4,16 +4,28 @@ import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+const ENV = process.env.NODE_ENV || 'development';
+if (!['development', 'production', 'test'].includes(ENV)) {
+  console.error('NODE_ENV must be one of \'development\', \'production\', \'test\'');
+  process.exit(1);
+}
+
+const PATH_PREFIX = process.env.PATH_PREFIX || '';
+if (PATH_PREFIX.endsWith('/')) {
+  console.error('PATH_PREFIX must omit the final /');
+  process.exit(1);
+}
+
 function definitionsFromEnv(): Record<string, string> {
   const env = { // Globals defined in src/global.d.ts.
-    DEV: (process.env.NODE_ENV || 'development') === 'development',
-    PROD: process.env.NODE_ENV === 'production',
-    TEST: process.env.NODE_ENV === 'test',
-    COVERAGE: process.env.NODE_ENV === 'test',
+    DEV: ENV === 'development',
+    PROD: ENV === 'production',
+    TEST: ENV === 'test',
+    COVERAGE: ENV === 'test',
 
     SENTRY_DSN: process.env.SENTRY_DSN || '',
 
-    PREFIX_URL: process.env.PATH_PREFIX || '',
+    PREFIX_URL: PATH_PREFIX,
     API_URL: process.env.API_URL || '',
     BRANDING_HEADER_TITLE_TEXT: process.env.BRANDING_HEADER_TITLE_TEXT,
     BRANDING_FOOTER_GDPR_TEXT: process.env.BRANDING_FOOTER_GDPR_TEXT,
@@ -52,6 +64,7 @@ const config: BuildOptions = {
           ],
           filename: 'index.html',
           htmlTemplate: readFileSync(resolve('src/index.html')).toString(),
+          scriptLoading: 'module',
         },
       ],
     }),
@@ -61,6 +74,7 @@ const config: BuildOptions = {
     '.svg': 'dataurl',
   },
   outdir: 'build/',
+  publicPath: `${PATH_PREFIX}/`,
   target: [
     'es2020',
     // "chrome58",
