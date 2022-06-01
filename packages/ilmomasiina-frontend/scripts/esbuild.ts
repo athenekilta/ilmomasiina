@@ -1,8 +1,8 @@
-import { sassPlugin } from 'esbuild-sass-plugin';
 import { htmlPlugin } from '@craftamap/esbuild-plugin-html';
+import { BuildOptions } from 'esbuild';
+import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { BuildOptions } from "esbuild";
 
 function definitionsFromEnv(): Record<string, string> {
   const env = { // Globals defined in src/global.d.ts.
@@ -23,7 +23,7 @@ function definitionsFromEnv(): Record<string, string> {
   };
 
   // Stringify values
-  let config: Record<string, string> = {};
+  const config: Record<string, string> = {};
   for (const [key, value] of Object.entries(env)) {
     config[key] = JSON.stringify(value);
   }
@@ -36,42 +36,43 @@ function definitionsFromEnv(): Record<string, string> {
  *
  * Documentation: https://esbuild.github.io/api/
  */
-export const config: BuildOptions = {
-  logLevel: "info",
-  entryPoints: ["src/index.tsx"],
+const config: BuildOptions = {
+  logLevel: 'info',
+  entryPoints: ['src/index.tsx'],
   bundle: true,
   minify: true,
   metafile: true,
   plugins: [
     sassPlugin(),
     htmlPlugin({
-        files: [
-          {
-            entryPoints: [
-              'src/index.tsx',
-            ],
-            filename: 'index.html',
-            htmlTemplate: readFileSync(resolve("src/index.html")).toString(),
-          },
-        ]
-      }
-    )
+      files: [
+        {
+          entryPoints: [
+            'src/index.tsx',
+          ],
+          filename: 'index.html',
+          htmlTemplate: readFileSync(resolve('src/index.html')).toString(),
+        },
+      ],
+    }),
   ],
   loader: {
-    ".html": "text",
-    ".svg": "dataurl",
+    '.html': 'text',
+    '.svg': 'dataurl',
   },
-  outdir: "build/",
+  outdir: 'build/',
   target: [
-    "es2020",
+    'es2020',
     // "chrome58",
     // "firefox57",
     // "safari11",
     // "edge16",
   ],
-  format: "esm",
+  format: 'esm',
   splitting: true,
   define: definitionsFromEnv(),
-  sourcemap: "external",
+  sourcemap: 'external',
   treeShaking: true,
 };
+
+export default config;

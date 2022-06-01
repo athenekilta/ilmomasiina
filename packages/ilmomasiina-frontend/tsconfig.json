@@ -22,7 +22,7 @@
     "outDir": "dist",
     "rootDirs": [
       "src",
-      "config"
+      "scripts"
     ],
     "noEmit": true
   },
@@ -31,6 +31,7 @@
     "dist"
   ],
   "include": [
-    "src"
+    "src",
+    "scripts"
   ]
 }

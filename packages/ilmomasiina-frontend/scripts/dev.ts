@@ -1,29 +1,30 @@
-import { build } from "esbuild";
-import { createServer, request } from "http";
-import { config } from "./esbuild";
+import { build } from 'esbuild';
 import { readFile, readFileSync } from 'fs';
+import { createServer, request } from 'http';
 import * as path from 'path';
 
+import config from './esbuild';
+
 // Frontend (dev-server / proxy)
-const HOST = process.env.HOST || "127.0.0.1";
+const HOST = process.env.HOST || '127.0.0.1';
 const PORT = 3000;
 
 // Backend
-const BACKEND_HOST = process.env.HOST || "127.0.0.1";
+const BACKEND_HOST = process.env.HOST || '127.0.0.1';
 const BACKEND_PORT = 3001;
 
-const BUILD_DIR = config.outdir
+const BUILD_DIR = config.outdir;
 
 if (!BUILD_DIR) {
-  console.error("Build directory not specified in esbuild config")
+  console.error('Build directory not specified in esbuild config');
   process.exit(1);
 }
 
 build({
   ...config,
   watch: {
-    onRebuild(error, res) {
-      if (error) console.error('watch build failed:', error)
+    onRebuild(error) {
+      if (error) console.error('watch build failed:', error);
     },
   },
 })
@@ -40,16 +41,16 @@ build({
             method: req.method,
             headers: req.headers,
           },
-          proxyRes => {
+          (proxyRes) => {
             // Forward the response to the client
             if (proxyRes.statusCode) {
               res.writeHead(proxyRes.statusCode, proxyRes.headers);
               proxyRes.pipe(res, { end: true });
             } else {
               res.writeHead(500);
-              res.write("Internal Server Error");
+              res.write('Internal Server Error');
             }
-          }
+          },
         );
 
         // Forward the body of the request to the upstream
@@ -59,7 +60,7 @@ build({
         readFile(BUILD_DIR + req.url!, (err, data) => {
           if (err) {
             try {
-              const file = readFileSync(path.join(BUILD_DIR, 'index.html'))
+              const file = readFileSync(path.join(BUILD_DIR, 'index.html'));
               res.writeHead(200);
               res.end(file);
             } catch {
@@ -75,15 +76,15 @@ build({
           res.end(data);
         });
       }
-    })
+    });
 
-    server.once("listening", () => {
+    server.once('listening', () => {
       console.info(`Listening on http://${HOST}:${PORT}\n`);
     });
 
     server.listen(PORT, HOST);
   })
   .catch((err) => {
-    console.error(err)
+    console.error(err);
     process.exit(1);
   });

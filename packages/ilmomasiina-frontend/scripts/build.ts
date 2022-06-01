@@ -1,5 +1,6 @@
-import { build } from "esbuild";
-import { config } from "./esbuild";
+import { build } from 'esbuild';
+
+import config from './esbuild';
 
 build(config)
   .catch((err) => {
