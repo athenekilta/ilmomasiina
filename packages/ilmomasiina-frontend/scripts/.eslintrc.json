@@ -19,6 +19,13 @@
       }
     ],
     // Not relevant for build scripts.
-    "no-console": "off"
+    "no-console": "off",
+    // Allow importing devDependencies from build scripts.
+    "import/no-extraneous-dependencies": [
+      "error", {
+        "devDependencies": true,
+        "optionalDependencies": false
+      }
+    ]
   }
 }

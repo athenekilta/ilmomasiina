@@ -2,6 +2,7 @@ import { build } from 'esbuild';
 import { existsSync, readFileSync, statSync } from 'fs';
 import { createServer, request } from 'http';
 import * as path from 'path';
+import { WebSocketServer } from 'ws';
 
 import config from './esbuild';
 
@@ -31,12 +32,19 @@ const CONTENT_TYPES: Record<string, string> = {
   '.txt': 'text/plain',
 };
 
+let wsServer: WebSocketServer;
+
 build({
   ...config,
   minify: false,
+  inject: [
+    path.join(__dirname, 'autoreload.js'),
+  ],
   watch: {
     onRebuild() {
-      // TODO: auto-refresh
+      wsServer.clients.forEach((client) => {
+        client.send('reload');
+      });
     },
   },
 })
@@ -97,6 +105,12 @@ build({
           }
         }
       }
+    });
+
+    wsServer = new WebSocketServer({
+      server,
+      path: '/dev-server',
+      clientTracking: true,
     });
 
     server.once('listening', () => {

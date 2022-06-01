@@ -140,6 +140,7 @@ importers:
       '@types/react-dom': ^17.0.9
       '@types/react-redux': ^7.1.20
       '@types/react-router-dom': ^5.3.2
+      '@types/ws': ^8.5.3
       '@welldone-software/why-did-you-render': ^6.2.1
       bootstrap: ^4.6.1
       connected-react-router: ^6.7.0
@@ -174,6 +175,7 @@ importers:
       sass: ^1.45.1
       ts-node: ^10.8.0
       typescript: ~4.3.5
+      ws: ^8.7.0
     dependencies:
       '@craftamap/esbuild-plugin-html': 0.4.0_esbuild@0.14.39
       '@sentry/browser': 6.19.7
@@ -222,7 +224,9 @@ importers:
       ts-node: 10.8.0_meihz5kz56yc4ai2xheda6gd54
       typescript: 4.3.5
     devDependencies:
+      '@types/ws': 8.5.3
       rimraf: 3.0.2
+      ws: 8.7.0
 
   packages/ilmomasiina-models:
     specifiers:
@@ -882,7 +886,6 @@ packages:
 
   /@types/node/17.0.35:
     resolution: {integrity: sha512-vu1SrqBjbbZ3J6vwY17jBs8Sr/BKA+/a/WtjRG+whKg1iuLFOosq872EXS0eXWILdO36DHQQeku/ZcL6hz2fpg==}
-    dev: false
 
   /@types/nodemailer-mailgun-transport/1.4.3:
     resolution: {integrity: sha512-1/bgvb5L5BCBDujKGoDUUSb/IlLpnqqbxq4nW5zXHZEcMGEtq3GsgL3vglshvSwshYJaseOUhZn4ThpVDDVQ2Q==}
@@ -997,6 +1000,12 @@ packages:
   /@types/warning/3.0.0:
     resolution: {integrity: sha512-t/Tvs5qR47OLOr+4E9ckN8AmP2Tf16gWq+/qA4iUGS/OOyHVO8wv2vjJuX8SNOUTJyWb+2t7wJm6cXILFnOROA==}
     dev: false
+
+  /@types/ws/8.5.3:
+    resolution: {integrity: sha512-6YOoWjruKj1uLf3INHH7D3qTXwFfEsg1kf3c0uDdSBJwfa/llkwIjrAGV7j7mVgGNbzTQ3HiHKKDXl6bJPD97w==}
+    dependencies:
+      '@types/node': 17.0.35
+    dev: true
 
   /@typescript-eslint/eslint-plugin/5.25.0_uyuku2cv5vglqo5fvimkicagd4:
     resolution: {integrity: sha512-icYrFnUzvm+LhW0QeJNKkezBu6tJs9p/53dpPLFH8zoM9w1tfaKzVurkPotEpAqQ8Vf8uaFyL5jHd0Vs6Z0ZQg==}
@@ -7330,7 +7339,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-    dev: false
 
   /xml-name-validator/3.0.0:
     resolution: {integrity: sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==}
