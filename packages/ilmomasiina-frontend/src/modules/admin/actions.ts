@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import entries from 'lodash/entries';
 
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AuditLog } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
@@ -157,7 +157,7 @@ export const getAuditLogs = (query: AuditLog.List.Query = {}) => async (
 
   dispatch(auditLogQuery(query));
 
-  const queryString = _.entries(query)
+  const queryString = entries(query)
     .filter(([, value]) => value)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
     .join('&');

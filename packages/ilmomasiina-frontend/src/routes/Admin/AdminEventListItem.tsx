@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
 
-import _ from 'lodash';
+import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -55,7 +55,7 @@ const AdminEventListItem = ({ event }: Props) => {
       </td>
       <td>{date ? moment(date).format('DD.MM.YYYY') : ''}</td>
       <td>{status}</td>
-      <td>{_.sumBy(quotas, 'signupCount')}</td>
+      <td>{sumBy(quotas, 'signupCount')}</td>
       <td>
         <Link to={paths.adminEditEvent(id)}>
           Muokkaa tapahtumaa
