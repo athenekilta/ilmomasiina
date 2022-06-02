@@ -4,8 +4,9 @@ import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-const ENV = process.env.NODE_ENV || 'development';
-if (!['development', 'production', 'test'].includes(ENV)) {
+type Environment = 'development' | 'production' | 'test';
+
+if (process.env.NODE_ENV && !['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
   console.error('NODE_ENV must be one of \'development\', \'production\', \'test\'');
   process.exit(1);
 }
@@ -16,12 +17,12 @@ if (PATH_PREFIX.endsWith('/')) {
   process.exit(1);
 }
 
-function definitionsFromEnv(): Record<string, string> {
+function definitionsFromEnv(environment: Environment): Record<string, string> {
   const env = { // Globals defined in src/global.d.ts.
-    DEV: ENV === 'development',
-    PROD: ENV === 'production',
-    TEST: ENV === 'test',
-    COVERAGE: ENV === 'test',
+    DEV: environment === 'development',
+    PROD: environment === 'production',
+    TEST: environment === 'test',
+    COVERAGE: environment === 'test',
 
     SENTRY_DSN: process.env.SENTRY_DSN || '',
 
@@ -48,45 +49,46 @@ function definitionsFromEnv(): Record<string, string> {
  *
  * Documentation: https://esbuild.github.io/api/
  */
-const config: BuildOptions = {
-  logLevel: 'info',
-  entryPoints: ['src/index.tsx'],
-  bundle: true,
-  minify: true,
-  metafile: true,
-  plugins: [
-    sassPlugin(),
-    htmlPlugin({
-      files: [
-        {
-          entryPoints: [
-            'src/index.tsx',
-          ],
-          filename: 'index.html',
-          htmlTemplate: readFileSync(resolve('src/index.html')).toString(),
-          scriptLoading: 'module',
-        },
-      ],
-    }),
-  ],
-  loader: {
-    '.html': 'text',
-    '.svg': 'dataurl',
-  },
-  outdir: 'build/',
-  publicPath: `${PATH_PREFIX}/`,
-  target: [
-    'es2020',
-    // "chrome58",
-    // "firefox57",
-    // "safari11",
-    // "edge16",
-  ],
-  format: 'esm',
-  splitting: true,
-  define: definitionsFromEnv(),
-  sourcemap: 'external',
-  treeShaking: true,
-};
-
-export default config;
+export default function configure(defaultEnv: Environment): BuildOptions {
+  const environment = process.env.NODE_ENV as Environment || defaultEnv;
+  return {
+    logLevel: 'info',
+    entryPoints: ['src/index.tsx'],
+    bundle: true,
+    minify: true,
+    metafile: true,
+    plugins: [
+      sassPlugin(),
+      htmlPlugin({
+        files: [
+          {
+            entryPoints: [
+              'src/index.tsx',
+            ],
+            filename: 'index.html',
+            htmlTemplate: readFileSync(resolve('src/index.html')).toString(),
+            scriptLoading: 'module',
+          },
+        ],
+      }),
+    ],
+    loader: {
+      '.html': 'text',
+      '.svg': 'dataurl',
+    },
+    outdir: 'build/',
+    publicPath: `${PATH_PREFIX}/`,
+    target: [
+      'es2020',
+      // "chrome58",
+      // "firefox57",
+      // "safari11",
+      // "edge16",
+    ],
+    format: 'esm',
+    splitting: true,
+    define: definitionsFromEnv(environment),
+    sourcemap: 'external',
+    treeShaking: true,
+  };
+}

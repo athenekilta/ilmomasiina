@@ -4,7 +4,9 @@ import { createServer, request } from 'http';
 import * as path from 'path';
 import { WebSocketServer } from 'ws';
 
-import config from './esbuild';
+import configure from './esbuild';
+
+const config = configure('development');
 
 // Frontend (dev-server / proxy)
 const HOST = process.env.HOST || '127.0.0.1';
