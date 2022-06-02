@@ -56,9 +56,9 @@ const TableRow = ({ showQuota, signup, index }: Props) => {
         </td>
       )}
       <td>
-        {moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss')}
+        {moment.tz(createdAt, TIMEZONE).format('DD.MM.YYYY HH:mm:ss')}
         <span className="hover">
-          {moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}
+          {moment.tz(createdAt, TIMEZONE).format('.SSS')}
         </span>
       </td>
     </tr>

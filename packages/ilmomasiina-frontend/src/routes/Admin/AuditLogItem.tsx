@@ -59,7 +59,7 @@ function describeAction(item: AuditLog.List.Item) {
 
 const AuditLogItem = ({ item }: Props) => (
   <tr>
-    <td>{moment(item.createdAt).tz('Europe/Helsinki').format('YYYY-MM-DD HH:mm:ss')}</td>
+    <td>{moment(item.createdAt).tz(TIMEZONE).format('YYYY-MM-DD HH:mm:ss')}</td>
     <td>{item.user || '-'}</td>
     <td>{item.ipAddress || '-'}</td>
     <td>{describeAction(item)}</td>

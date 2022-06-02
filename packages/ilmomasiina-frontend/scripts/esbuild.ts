@@ -4,6 +4,8 @@ import { sassPlugin } from 'esbuild-sass-plugin';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
+import momentPlugin from './momentPlugin';
+
 type Environment = 'development' | 'production' | 'test';
 
 if (process.env.NODE_ENV && !['development', 'production', 'test'].includes(process.env.NODE_ENV)) {
@@ -16,6 +18,8 @@ if (PATH_PREFIX.endsWith('/')) {
   console.error('PATH_PREFIX must omit the final /');
   process.exit(1);
 }
+
+const TIMEZONE = process.env.APP_TIMEZONE || 'Europe/Helsinki';
 
 function definitionsFromEnv(environment: Environment): Record<string, string> {
   const env = { // Globals defined in src/global.d.ts.
@@ -33,6 +37,7 @@ function definitionsFromEnv(environment: Environment): Record<string, string> {
     BRANDING_FOOTER_GDPR_LINK: process.env.BRANDING_FOOTER_GDPR_LINK,
     BRANDING_FOOTER_HOME_TEXT: process.env.BRANDING_FOOTER_HOME_TEXT,
     BRANDING_FOOTER_HOME_LINK: process.env.BRANDING_FOOTER_HOME_LINK,
+    TIMEZONE,
   };
 
   // Stringify values
@@ -70,6 +75,9 @@ export default function configure(defaultEnv: Environment): BuildOptions {
             scriptLoading: 'module',
           },
         ],
+      }),
+      momentPlugin({
+        timezone: TIMEZONE,
       }),
     ],
     loader: {

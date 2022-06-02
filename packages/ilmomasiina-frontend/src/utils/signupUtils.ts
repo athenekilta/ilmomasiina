@@ -115,7 +115,7 @@ export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSign
     return {
       ...signup,
       createdAt: moment(signup.createdAt)
-        .tz('Europe/Helsinki')
+        .tz(TIMEZONE)
         .format('DD.MM.YYYY HH:mm:ss'),
       quota: `${signup.quotaName}${quotaType}`,
       answers: getAnswersFromSignup(event, signup),
