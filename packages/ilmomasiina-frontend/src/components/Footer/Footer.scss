@@ -1,0 +1,18 @@
+@import '../../styles/base';
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 1em 0;
+  background: $secondary-background;
+  color: $alt-text;
+  text-align: center;
+
+  a {
+    display: inline-block;
+    color: $alt-text;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}

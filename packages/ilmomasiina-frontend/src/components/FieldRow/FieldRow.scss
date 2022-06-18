@@ -1,0 +1,8 @@
+// Make forms look nicer when labels wrap
+.form-group.row {
+  margin-bottom: 0;
+
+  > :last-child {
+    margin-bottom: 1rem;
+  }
+}

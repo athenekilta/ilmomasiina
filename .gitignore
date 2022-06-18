@@ -1,16 +1,17 @@
 .DS_STORE
 *.log
 
-node_modules
+node_modules/
 
-dist
-coverage
+dist/
+build/
+coverage/
 
 .idea/
 .vscode/
 
 .env
 
-.mariapassword
-custom.patch
-v8-compile-cache-0/
+src/react-app-env.d.ts
+
+package-lock.json

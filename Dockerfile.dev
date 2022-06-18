@@ -1,0 +1,32 @@
+# This Dockerfile is intended for development use only.
+
+# Only the files required to bootstrap the project will be copied to the container.
+# Node modules will be installed at the build phase and included in the container image.
+# Sources and other files are intended to be provided using bind mounts.
+
+FROM node:14-alpine
+
+WORKDIR /opt/ilmomasiina
+
+# Copy static resources from the repository root
+COPY .eslint* .postcssrc package.json pnpm-*.yaml ./
+
+# Copy static resources from each package
+COPY packages/ilmomasiina-frontend/package*.json \
+     packages/ilmomasiina-frontend/tsconfig.json \
+     packages/ilmomasiina-frontend/.eslint* \
+     packages/ilmomasiina-frontend/
+
+COPY packages/ilmomasiina-backend/package*.json \
+     packages/ilmomasiina-backend/tsconfig.json \
+     packages/ilmomasiina-backend/.eslint* \
+     packages/ilmomasiina-backend/
+
+COPY packages/ilmomasiina-models/package*.json \
+     packages/ilmomasiina-models/tsconfig.json \
+     packages/ilmomasiina-models/
+
+ENV NODE_ENV=development
+
+# Install dependencies (we're running as root, so the postinstall script doesn't run automatically)
+RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile

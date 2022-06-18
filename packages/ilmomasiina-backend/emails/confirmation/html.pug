@@ -1,0 +1,27 @@
+extends ../layout.pug
+
+block mainContent
+	div.content-block
+		p.bodyText #{event.verificationEmail}
+	div.content-block
+		p.bodyText Tapahtuman tiedot / Event info:
+		ul
+			li
+				strong Tapahtuma / Event:
+				| #{event.title}
+			li
+				strong Sijainti: 
+				| #{event.location}
+			if date
+				li
+					strong Aika: 
+					| #{date}
+	div.content-block
+		p.bodyText Ilmoittautumisesi tiedot / Registraion:
+		ul
+			each val in answers
+				li
+					strong #{val.label}:
+					| #{val.answer}
+	div.content-block
+		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].

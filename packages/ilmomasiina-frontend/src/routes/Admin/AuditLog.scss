@@ -1,0 +1,30 @@
+@import "../../styles/base";
+
+.audit-log {
+  .pagination {
+    display: flex;
+    align-items: baseline;
+
+    .form-control {
+      width: 10ch;
+    }
+  }
+  table {
+    td {
+      font-size: 0.9em;
+    }
+
+    thead th {
+      vertical-align: top;
+    }
+  }
+  .filter {
+    display: flex;
+    margin-top: $spacer * .5;
+
+    > * {
+      width: 0;
+      flex: 1 1;
+    }
+  }
+}

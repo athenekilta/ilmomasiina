@@ -1,5 +1,6 @@
-blueprints/**/files/**
-coverage/**
 node_modules/**
-dist/**
-src/index.html
+**/dist/**
+**/build/**
+packages/ilmomasiina-frontend/scripts/**
+packages/ilmomasiina-frontend/config/**
+.eslintrc.js
