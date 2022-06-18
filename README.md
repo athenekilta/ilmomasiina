@@ -53,7 +53,7 @@ Only follow this if you don't use the Docker container.
 6. Type `exit` to exit the mysql terminal, and sign in with your new user e.g. `mysql -u juuso -p password`
 7. Create the `ilmomasiina` database with `CREATE DATABASE ilmomasiina;`
 
-#### Ubuntu
+### Ubuntu
 1. Install mysql with `sudo apt install mysql-server`
 2. Service should start automatically
 3. Same as with Mac, but use `sudo mysql -u root`
@@ -160,7 +160,7 @@ Running production version within pm2 is recommended
 ### Updating production
 
 ```
-git pull
+git pull otax/master
 npm run compile
 pm2 restart prod-server
 ```

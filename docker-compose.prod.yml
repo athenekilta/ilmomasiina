@@ -7,23 +7,12 @@ version: '3.2'
 # Remember to create your own .env file (see .env.example)!
 
 services:
-  database:
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_PASSWORD=$DB_PASSWORD
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_DB=$DB_DATABASE
-
   ilmomasiina:
     build:
       context: .
       dockerfile: "Dockerfile"
     restart: always
-    depends_on:
-      - database
     environment:
-      - DB_HOST=database
       - NODE_ENV=production
       - ENFORCE_HTTPS=false
       # When deploying to production, either set ENFORCE_HTTPS true (default) or

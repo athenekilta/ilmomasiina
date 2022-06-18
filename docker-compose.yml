@@ -11,25 +11,14 @@ version: '3.2'
 # The database will use the DB_USER, DB_PASSWORD and DB_DATABASE provided by you.
 
 services:
-  database:
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_PASSWORD=$DB_PASSWORD
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_DB=$DB_DATABASE
-
   ilmomasiina-dev:
     build:
       context: .
       dockerfile: "Dockerfile.dev"
     command: "npm start"
     restart: always
-    depends_on:
-      - database
     environment:
       - DB_DIALECT=postgres
-      - DB_HOST=database
       - NODE_ENV=development
     env_file:
       - .env
