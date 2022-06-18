@@ -108,6 +108,7 @@ function getClientEnvironment(publicUrl) {
     BRANDING_FOOTER_GDPR_LINK: process.env.BRANDING_FOOTER_GDPR_LINK,
     BRANDING_FOOTER_HOME_TEXT: process.env.BRANDING_FOOTER_HOME_TEXT,
     BRANDING_FOOTER_HOME_LINK: process.env.BRANDING_FOOTER_HOME_LINK,
+    BRANDING_LOGO_URL: process.env.BRANDING_LOGO_URL,
   };
 
   // Stringify all values so we can feed into webpack DefinePlugin
