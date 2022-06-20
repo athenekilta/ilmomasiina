@@ -6,8 +6,8 @@ and package files.
 To prepare for development, pnpm must bootstrap the cross-dependencies between projects. To do this, install pnpm and
 then simply run `pnpm install` or `npm run bootstrap`.
 
-The project is configured to run development servers for the frontend and backend with `npm start`. In development, the
-Webpack development server serves the frontend and proxies API calls to the backend server.
+The project is configured to run development servers for the frontend and backend with `npm start`. In development,
+the frontend's `scripts/dev.ts` serves the frontend and proxies API calls to the backend server.
 
 In production, the backend server can optionally serve the compiled frontend bundle, but ideally a separate reverse
 proxy such as Nginx is used for this purpose.
@@ -45,6 +45,15 @@ if it benefits the project.
 - [Nodemailer](https://nodemailer.com/about/) to send emails
 
 ### Frontend
+
+The frontend is built with [ESBuild](https://esbuild.github.io/) instead of Webpack. This has its advantages and
+disadvantages:
+
+- Much faster startup and build times
+- [Proper support for pnpm workspaces](https://github.com/facebook/create-react-app/issues/1333), meaning we can put
+  components in different packages and still have watching etc. work properly
+
+Libraries:
 
 - [React](https://reactjs.org/) with mostly functional components
 - `react-scripts` for building (unfortunately, ejected with slight customizations)
