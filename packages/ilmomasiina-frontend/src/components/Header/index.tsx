@@ -20,6 +20,7 @@ const Header = ({ branding }: Props) => {
 
   return (
     <Navbar>
+      <img alt="Logo" src={branding.headerLogoUrl} />
       <Container>
         <Link to={paths.eventsList} className="navbar-brand">
           {branding.headerTitle}

@@ -4,4 +4,5 @@ export type Branding = {
   footerGdprLink: string;
   footerHomeText: string;
   footerHomeLink: string;
+  headerLogoUrl: string;
 };

@@ -21,6 +21,7 @@ const branding = {
   footerGdprLink: BRANDING_FOOTER_GDPR_LINK,
   footerHomeText: BRANDING_FOOTER_HOME_TEXT,
   footerHomeLink: BRANDING_FOOTER_HOME_LINK,
+  headerLogoUrl: BRANDING_LOGO_URL,
 };
 
 ReactDOM.render(<AppContainer branding={branding} />, document.getElementById('root'));

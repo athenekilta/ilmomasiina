@@ -3,11 +3,19 @@
 .navbar {
   background: $primary;
   margin-bottom: 1.5rem;
+
+  img {
+    max-width: 3.2rem;
+    float: left;
+    vertical-align: middle;
+    margin-right: 1rem;
+  }
 }
 
 .navbar-brand {
   color: #fff !important;
-  text-transform: uppercase;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 1px;
+  font-size: 18px;
+  padding-right: 25px;
 }
