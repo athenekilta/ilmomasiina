@@ -1,17 +1,20 @@
 // Colors
-$primary: #319236;
-$secondary: #0288d1;
-$secondary-background: #f1f1f1;
+$primary: #201E1E;
+$secondary: #FF8A04;
+$secondary-background: #F1F1F1;
 $alt-text: #7a7a7a;
 $text-muted: #888;
 $red: #d74949;
 $green: #319236;
+$brown: #DA690D;
 
 $border-radius-base: 0;
 $btn-border-radius-large: 2px;
 
 // Typography
-$font-family-sans-serif: "Open Sans", sans-serif;
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i|Source+Sans+Pro&display=swap');
+$font-family-sans-serif: 'Source Sans Pro', sans-serif;
+$font-family-serif: 'Lora', 'Georgia', serif;
 //$font-size-base: 14px;
 $line-height-base: 1.618;
 //$font-size-large: 16px;
@@ -25,3 +28,12 @@ $input-height-base: 33px;
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+
+.eventlist {
+    a {
+        color: $secondary;
+    }
+    a:hover {
+        color: $brown;
+    }
+}
