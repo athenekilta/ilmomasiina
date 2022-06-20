@@ -1,4 +1,4 @@
 # Force the following filetypes to have unix eols, so Windows does not break them
-*.* text eol=lf
+* text=auto eol=lf
 *.png binary
 *.ico binary
