@@ -11,6 +11,15 @@ services:
     build:
       context: .
       dockerfile: "Dockerfile"
+      args:
+        - SENTRY_DSN=${SENTRY_DSN}
+        - PREFIX_URL=${PREFIX_URL}
+        - BRANDING_HEADER_TITLE_TEXT=${BRANDING_HEADER_TITLE_TEXT}
+        - BRANDING_FOOTER_GDPR_TEXT=${BRANDING_FOOTER_GDPR_TEXT}
+        - BRANDING_FOOTER_GDPR_LINK=${BRANDING_FOOTER_GDPR_LINK}
+        - BRANDING_FOOTER_HOME_TEXT=${BRANDING_FOOTER_HOME_TEXT}
+        - BRANDING_FOOTER_HOME_LINK=${BRANDING_FOOTER_HOME_LINK}
+
     restart: always
     environment:
       - NODE_ENV=production
@@ -21,11 +30,11 @@ services:
       - .env
     ports:
       - "8000:3000"
-    volumes:
-    - "frontend:/opt/ilmomasiina/frontend"
+#     volumes:
+#     - "frontend:/opt/ilmomasiina/frontend"
 
-volumes:
-  frontend:
-    # Contains static files of the ilmomasiina-frontend.
-    # To achieve better performance under high loads, these files
-    # can be served using a more performant web server or even a CDN.
+# volumes:
+#   frontend:
+#     # Contains static files of the ilmomasiina-frontend.
+#     # To achieve better performance under high loads, these files
+#     # can be served using a more performant web server or even a CDN.
