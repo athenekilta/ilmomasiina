@@ -4,7 +4,7 @@ import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getUsers, resetState } from '../../modules/admin/actions';
+import { getUsers, resetState } from '../../modules/adminUsers/actions';
 import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminUserListItem from './AdminUserListItem';
@@ -14,7 +14,7 @@ import UserForm from './UserForm';
 
 const AdminUsersList = () => {
   const dispatch = useTypedDispatch();
-  const { users, usersLoadError } = useTypedSelector((state) => state.admin, shallowEqual);
+  const { users, usersLoadError } = useTypedSelector((state) => state.adminUsers, shallowEqual);
 
   useEffect(() => {
     dispatch(getUsers());

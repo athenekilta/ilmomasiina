@@ -4,7 +4,7 @@ import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getAuditLogs, resetState } from '../../modules/admin/actions';
+import { getAuditLogs, resetState } from '../../modules/auditLog/actions';
 import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AuditLogActionFilter from './AuditLogActionFilter';
@@ -16,7 +16,7 @@ import './AuditLog.scss';
 
 const AuditLog = () => {
   const dispatch = useTypedDispatch();
-  const { auditLog, auditLogLoadError } = useTypedSelector((state) => state.admin, shallowEqual);
+  const { auditLog, auditLogLoadError } = useTypedSelector((state) => state.auditLog, shallowEqual);
 
   useEffect(() => {
     dispatch(getAuditLogs({

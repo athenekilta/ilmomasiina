@@ -4,14 +4,14 @@ import { Button, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { getAdminEvents, resetState } from '../../modules/admin/actions';
+import { getAdminEvents, resetState } from '../../modules/adminEvents/actions';
 import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminEventListItem from './AdminEventListItem';
 
 const AdminEventsList = () => {
   const dispatch = useTypedDispatch();
-  const { events, eventsLoadError } = useTypedSelector((state) => state.admin, shallowEqual);
+  const { events, eventsLoadError } = useTypedSelector((state) => state.adminEvents, shallowEqual);
 
   useEffect(() => {
     dispatch(getAdminEvents());

@@ -2,13 +2,13 @@ import React from 'react';
 
 import { Button, Form } from 'react-bootstrap';
 
-import { setAuditLogQueryField } from '../../modules/admin/actions';
+import { setAuditLogQueryField } from '../../modules/auditLog/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
 export const LOGS_PER_PAGE = 100;
 
 const AuditLogPagination = () => {
-  const { auditLogQuery, auditLog } = useTypedSelector((state) => state.admin);
+  const { auditLogQuery, auditLog } = useTypedSelector((state) => state.auditLog);
   const dispatch = useTypedDispatch();
 
   const value = auditLogQuery.$offset || 0;

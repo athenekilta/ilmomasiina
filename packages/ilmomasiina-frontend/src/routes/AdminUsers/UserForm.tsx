@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { createUser, getUsers } from '../../modules/admin/actions';
+import { createUser, getUsers } from '../../modules/adminUsers/actions';
 import { useTypedDispatch } from '../../store/reducers';
 
 type FormData = {

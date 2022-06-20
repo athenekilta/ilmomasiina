@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import Separator from '../../components/Separator';
-import { deleteEvent, getAdminEvents } from '../../modules/admin/actions';
+import { deleteEvent, getAdminEvents } from '../../modules/adminEvents/actions';
 import paths from '../../paths';
 import { useTypedDispatch } from '../../store/reducers';
 import { isEventInPast } from '../../utils/eventState';

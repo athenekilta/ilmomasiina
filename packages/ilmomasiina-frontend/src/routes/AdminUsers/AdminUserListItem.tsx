@@ -3,7 +3,7 @@ import React, { MouseEvent } from 'react';
 import { toast } from 'react-toastify';
 
 import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
-import { deleteUser, getUsers } from '../../modules/admin/actions';
+import { deleteUser, getUsers } from '../../modules/adminUsers/actions';
 import { useTypedDispatch } from '../../store/reducers';
 
 type Props = {
