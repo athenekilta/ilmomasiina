@@ -1,8 +1,8 @@
 @use "../../styles/definitions" as *;
 
-table.eventlist {
-  tr.child {
-    td:first-child {
+table.ilmo--event-list {
+  tr.ilmo--quota-row {
+    td.ilmo--title {
       padding-left: 30px;
     }
     td {
@@ -10,25 +10,20 @@ table.eventlist {
       padding-top: 0;
     }
   }
-  tr.signup-opened {
-    td.signup { color: $green; }
-  }
-  tr.signup-closed {
-    td.signup { color: $red; }
-  }
-  tr.signup-disabled {
-    td.signup { opacity: 0.45; }
-  }
+  tr.ilmo--signup-not-opened td.ilmo--signup-state { color: $signup-state-not-opened; }
+  tr.ilmo--signup-opened td.ilmo--signup-state { color: $signup-state-opened; }
+  tr.ilmo--signup-closed td.ilmo--signup-state { color: $signup-state-closed; }
+  tr.ilmo--signup-disabled td.ilmo--signup-state { color: $signup-state-disabled; }
 }
 
 @include media-breakpoint-up(md) {
-  table.eventlist tr td:first-child {
+  table.ilmo--event-list td.ilmo--title {
     min-width: 300px;
   }
 }
 
 @include media-breakpoint-down(xs) {
-  table.eventlist {
+  table.ilmo--event-list {
     max-width: 100%;
     overflow: hidden;
 
@@ -38,41 +33,45 @@ table.eventlist {
 
     tbody {
       tr {
-        display: block;
-        padding: 10px 0 0;
-        margin-top: 10px;
+        // render events vertically
+        display: flex;
+        flex-direction: column;
+
+        &:not(:first-child):not(.ilmo--quota-row) {
+          padding: $spacer * 0.75 0 0;
+          margin-top: $spacer * 0.75;
+          border-top: 1px solid $border-color;
+        }
 
         td {
-          display: block;
           padding: 0;
           border-top: 0;
         }
 
-        td.title a {
+        td.ilmo--title a {
           font-weight: 600;
         }
-
       }
 
-      tr:not(:first-child) {
-        border-top: 1px solid $border-color;
+      // prevent similarity with link color
+      @if $signup-state-opened == $link-color {
+        tr.ilmo--signup-opened td.ilmo--signup-state {
+          color: $signup-state-not-opened;
+        }
       }
 
-      tr.child {
+      // smaller font in signup counts
+      tr.ilmo--quota-row td.ilmo--title, td.ilmo--signup-count {
+        font-size: 0.85em;
+      }
+
+      tr.ilmo--quota-row {
         padding-left: 15px;
-        padding-top: 0;
         margin-top: 5px;
-        border-top: 0;
 
-        td.title {
+        td.ilmo--title {
+          padding: 0;
           font-weight: 600;
-          padding-bottom: 0;
-        }
-
-        td, td:first-child {
-          padding-left: 0;
-          padding-top: 0;
-          font-size: 0.85em;
         }
       }
     }

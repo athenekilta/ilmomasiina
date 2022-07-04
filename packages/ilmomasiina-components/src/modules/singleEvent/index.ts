@@ -1,12 +1,15 @@
 import { useMemo } from 'react';
 
 import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import apiFetch from '../../../api';
-import { useAbortablePromise } from '../../../utils/abortable';
-import { getSignupsByQuota, QuotaSignups } from '../../../utils/signupUtils';
-import { createStateContext } from '../../../utils/stateContext';
-import useShallowMemo from '../../../utils/useShallowMemo';
-import { MatchParams } from '..';
+import apiFetch from '../../api';
+import { useAbortablePromise } from '../../utils/abortable';
+import { getSignupsByQuota, QuotaSignups } from '../../utils/signupUtils';
+import { createStateContext } from '../../utils/stateContext';
+import useShallowMemo from '../../utils/useShallowMemo';
+
+export interface SingleEventProps {
+  slug: string;
+}
 
 type State = {
   event?: Event.Details;
@@ -18,7 +21,7 @@ type State = {
 const { Provider, useStateContext } = createStateContext<State>();
 export { Provider as SingleEventProvider, useStateContext as useSingleEventContext };
 
-export function useSingleEventState({ slug }: MatchParams) {
+export function useSingleEventState({ slug }: SingleEventProps) {
   const fetchEvent = useAbortablePromise(async (signal) => (
     await apiFetch(`events/${slug}`, { signal }) as Event.Details
   ), [slug]);

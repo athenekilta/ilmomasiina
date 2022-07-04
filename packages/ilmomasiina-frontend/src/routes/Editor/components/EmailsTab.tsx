@@ -1,6 +1,6 @@
 import React from 'react';
 
-import FieldRow from '../../../components/FieldRow';
+import FieldRow from '@tietokilta/ilmomasiina-components/src/components/FieldRow';
 import Textarea from './Textarea';
 
 const EmailsTab = () => (

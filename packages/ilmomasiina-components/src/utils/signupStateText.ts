@@ -1,10 +1,16 @@
 import moment from 'moment';
 
+export interface SignupState {
+  class: string;
+  shortLabel: string;
+  fullLabel?: string;
+}
+
 const signupState = (starts: string | null, closes: string | null) => {
   if (starts === null || closes === null) {
     return {
-      label: 'Tapahtumaan ei voi ilmoittautua.',
-      class: 'signup-disabled',
+      shortLabel: 'Tapahtumaan ei voi ilmoittautua.',
+      class: 'ilmo--signup-disabled',
     };
   }
 
@@ -16,19 +22,21 @@ const signupState = (starts: string | null, closes: string | null) => {
 
   if (signupOpens.isSameOrAfter(now)) {
     return {
-      label: `Alkaa ${moment(signupOpens).format(timeFormat)}.`,
-      class: 'signup-not-opened',
+      shortLabel: `Alkaa ${moment(signupOpens).format(timeFormat)}.`,
+      fullLabel: `Ilmoittautuminen alkaa ${moment(signupOpens).format(timeFormat)}.`,
+      class: 'ilmo--signup-not-opened',
     };
   }
 
   if (signupCloses.isSameOrAfter(now)) {
     return {
-      label: `Auki ${moment(signupCloses).format(timeFormat)} asti.`,
-      class: 'signup-opened',
+      shortLabel: `Auki ${moment(signupCloses).format(timeFormat)} asti.`,
+      fullLabel: `Ilmoittautuminen auki ${moment(signupCloses).format(timeFormat)} asti.`,
+      class: 'ilmo--signup-opened',
     };
   }
 
-  return { label: 'Ilmoittautuminen on päättynyt.', class: 'signup-closed' };
+  return { shortLabel: 'Ilmoittautuminen on päättynyt.', class: 'ilmo--signup-closed' };
 };
 
 export default signupState;

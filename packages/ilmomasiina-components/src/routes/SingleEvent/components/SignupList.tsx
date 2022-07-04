@@ -1,9 +1,10 @@
 import React from 'react';
 
 import filter from 'lodash/filter';
+import { Table } from 'react-bootstrap';
 
+import { useSingleEventContext } from '../../../modules/singleEvent';
 import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../utils/signupUtils';
-import { useSingleEventContext } from '../state';
 import SignupListRow from './SignupListRow';
 
 type Props = {
@@ -15,13 +16,13 @@ const SignupList = ({ quota }: Props) => {
   const { questions, nameQuestion } = useSingleEventContext().event!;
   const showQuotas = quota.id === OPENQUOTA || quota.id === WAITLIST;
   return (
-    <div className="quota">
+    <div className="ilmo--quota-signups">
       <h3>{quota.title}</h3>
       {!signups?.length ? (
         <p>Ei ilmoittautumisia.</p>
       ) : (
         <div className="table-responsive">
-          <table className="table table-sm">
+          <Table size="sm">
             <thead className="thead-light">
               <tr>
                 <th key="position">Sija</th>
@@ -56,7 +57,7 @@ const SignupList = ({ quota }: Props) => {
                 />
               ))}
             </tbody>
-          </table>
+          </Table>
         </div>
       )}
     </div>

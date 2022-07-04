@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
+import apiFetch from '@tietokilta/ilmomasiina-components/src/api';
 import { AuditLog } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
-import apiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
   AUDIT_LOG_LOAD_FAILED,

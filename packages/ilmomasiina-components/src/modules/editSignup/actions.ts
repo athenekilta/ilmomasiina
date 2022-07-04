@@ -1,5 +1,5 @@
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import apiFetch from '../../../api';
+import apiFetch from '../../api';
 import { createThunk } from './reducer';
 
 export const useUpdateSignup = createThunk(({ signup, editToken }) => async (answers: Signup.Update.Body) => {

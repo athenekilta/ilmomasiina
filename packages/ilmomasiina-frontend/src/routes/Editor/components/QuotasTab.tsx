@@ -3,7 +3,7 @@ import React from 'react';
 import { useFormikContext } from 'formik';
 import { Form } from 'react-bootstrap';
 
-import FieldRow from '../../../components/FieldRow';
+import FieldRow from '@tietokilta/ilmomasiina-components/src/components/FieldRow';
 import { EditorEvent } from '../../../modules/editor/types';
 import DateTimePicker from './DateTimePicker';
 import Quotas from './Quotas';

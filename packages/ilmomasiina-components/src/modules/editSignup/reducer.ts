@@ -1,5 +1,5 @@
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import { createReducerContext } from '../../../utils/stateContext';
+import { createReducerContext } from '../../utils/stateContext';
 
 type ReducerState = {
   deleted: boolean;

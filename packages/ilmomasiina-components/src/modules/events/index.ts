@@ -1,9 +1,12 @@
 import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import apiFetch from '../../../api';
-import { useAbortablePromise } from '../../../utils/abortable';
-import { createStateContext } from '../../../utils/stateContext';
-import useShallowMemo from '../../../utils/useShallowMemo';
-import { EventListProps } from '..';
+import apiFetch from '../../api';
+import { useAbortablePromise } from '../../utils/abortable';
+import { createStateContext } from '../../utils/stateContext';
+import useShallowMemo from '../../utils/useShallowMemo';
+
+export type EventListProps = {
+  category?: string;
+};
 
 type State = {
   events?: Event.List;

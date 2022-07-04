@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import Countdown from 'react-countdown-now';
 
-import { useSingleEventContext } from '../state';
+import { useSingleEventContext } from '../../../modules/singleEvent';
 import SignupButton from './SignupButton';
 
 const SignupCountdown = () => {

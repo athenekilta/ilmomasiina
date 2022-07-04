@@ -1,25 +1,26 @@
 import React from 'react';
 
 import { Col, Row, Spinner } from 'react-bootstrap';
-import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { paths } from '../../paths';
+import { paths } from '../../config/paths';
+import { linkComponent, useParams } from '../../config/router';
+import {
+  SingleEventProps, SingleEventProvider, useSingleEventContext, useSingleEventState,
+} from '../../modules/singleEvent';
 import EventDescription from './components/EventDescription';
 import QuotaStatus from './components/QuotaStatus';
 import SignupCountdown from './components/SignupCountdown';
 import SignupList from './components/SignupList';
-import { SingleEventProvider, useSingleEventContext, useSingleEventState } from './state';
-
-import './SingleEvent.scss';
 
 const SingleEventView = () => {
   const {
     event, signupsByQuota, pending, error,
   } = useSingleEventContext();
+  const Link = linkComponent();
 
   if (error) {
     return (
-      <div className="loading-container">
+      <div className="ilmo--loading-container">
         <h1>Hups, jotain meni pieleen</h1>
         <p>
           Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
@@ -31,7 +32,7 @@ const SingleEventView = () => {
 
   if (pending) {
     return (
-      <div className="loading-container">
+      <div className="ilmo--loading-container">
         <Spinner animation="border" />
       </div>
     );
@@ -66,12 +67,9 @@ const SingleEventView = () => {
   );
 };
 
-export interface MatchParams {
-  slug: string;
-}
-
-const SingleEvent = ({ match }: RouteComponentProps<MatchParams>) => {
-  const state = useSingleEventState(match.params);
+const SingleEvent = () => {
+  const params = useParams<SingleEventProps>();
+  const state = useSingleEventState(params);
   return (
     <SingleEventProvider value={state}>
       <SingleEventView />

@@ -2,25 +2,25 @@ import React, { useState } from 'react';
 
 import { Formik, FormikHelpers } from 'formik';
 import { Button, Form } from 'react-bootstrap';
-import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import FieldRow from '../../../components/FieldRow';
-import { paths } from '../../../paths';
-import { useStateAndDispatch } from '../state';
-import { useUpdateSignup } from '../state/actions';
+import { paths } from '../../../config/paths';
+import { linkComponent, useNavigate } from '../../../config/router';
+import { useStateAndDispatch } from '../../../modules/editSignup';
+import { useUpdateSignup } from '../../../modules/editSignup/actions';
 import DeleteSignup from './DeleteSignup';
 import NarrowContainer from './NarrowContainer';
 import QuestionFields from './QuestionFields';
 import SignupStatus from './SignupStatus';
 
 const EditForm = () => {
-  const history = useHistory();
-
   const [{ event, signup }] = useStateAndDispatch();
   const isNew = signup!.confirmedAt === null;
   const updateSignup = useUpdateSignup();
+  const Link = linkComponent();
+  const navigate = useNavigate();
 
   // TODO: actually use errors from API
   const [submitError, setSubmitError] = useState(false);
@@ -42,7 +42,9 @@ const EditForm = () => {
       });
       setSubmitError(false);
       setSubmitting(false);
-      if (isNew) history.push(paths().eventDetails(event!.slug));
+      if (isNew) {
+        navigate(paths().eventDetails(event!.slug));
+      }
     } catch (error) {
       toast.update(progressToast, {
         render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.`,
@@ -67,9 +69,9 @@ const EditForm = () => {
           <h2>{isNew ? 'Ilmoittaudu' : 'Muokkaa ilmoittautumista'}</h2>
           <SignupStatus />
           {submitError && (
-            <p className="text-danger">Ilmoittautumisessasi on virheitä.</p>
+            <p className="ilmo--form-error">Ilmoittautumisessasi on virheitä.</p>
           )}
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} className="ilmo--form">
             {event!.nameQuestion && (
               <>
                 <FieldRow
@@ -118,15 +120,16 @@ const EditForm = () => {
               {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä.'}
             </p>
 
-            <Button type="submit" variant="primary" className="float-right" formNoValidate disabled={isSubmitting}>
-              {isNew ? 'Lähetä' : 'Päivitä'}
-            </Button>
-            {!isNew && (
-              <Button as={Link} variant="link" className="float-right" to={paths().eventDetails(event!.slug)}>
-                Peruuta
+            <nav className="ilmo--submit-buttons">
+              {!isNew && (
+                <Button as={Link} variant="link" to={paths().eventDetails(event!.slug)}>
+                  Peruuta
+                </Button>
+              )}
+              <Button type="submit" variant="primary" formNoValidate disabled={isSubmitting}>
+                {isNew ? 'Lähetä' : 'Päivitä'}
               </Button>
-            )}
-            <div className="clearfix" />
+            </nav>
           </Form>
           <DeleteSignup />
         </NarrowContainer>

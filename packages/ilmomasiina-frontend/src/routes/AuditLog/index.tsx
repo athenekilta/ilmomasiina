@@ -4,8 +4,9 @@ import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
+import requireAuth from '../../containers/requireAuth';
 import { getAuditLogs, resetState } from '../../modules/auditLog/actions';
-import { fullPaths } from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AuditLogActionFilter from './AuditLogActionFilter';
 import AuditLogFilter from './AuditLogFilter';
@@ -87,4 +88,4 @@ const AuditLog = () => {
   );
 };
 
-export default AuditLog;
+export default requireAuth(AuditLog);

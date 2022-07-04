@@ -3,6 +3,7 @@ module.exports = {
   "parserOptions": {
     "project": [
       "packages/ilmomasiina-models/tsconfig.json",
+      "packages/ilmomasiina-components/tsconfig.json",
       "packages/ilmomasiina-frontend/tsconfig.json",
       "packages/ilmomasiina-backend/tsconfig.json"
     ],

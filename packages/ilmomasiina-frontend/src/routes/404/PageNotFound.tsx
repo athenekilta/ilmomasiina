@@ -2,10 +2,10 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { paths } from '../../paths';
+import { paths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 
 const PageNotFound = () => (
-  <div className="text-center">
+  <div className="ilmo--status-container">
     <h1>404</h1>
     <p>
       Sivua ei löydy.

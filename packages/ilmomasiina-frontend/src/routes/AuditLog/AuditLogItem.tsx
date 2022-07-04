@@ -3,8 +3,8 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import { AuditLog } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
-import { fullPaths } from '../../paths';
 
 type Props = {
   item: AuditLog.List.Item;

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -13,24 +13,20 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "outDir": "dist",
-    "rootDirs": [
-      "src",
-      "scripts"
-    ],
-    "noEmit": true
+    "declaration": true,
+    "outDir": "dist"
   },
   "exclude": [
+    "node_modules",
     "dist"
   ],
   "include": [
-    "src",
-    "scripts"
+    "src"
   ]
 }

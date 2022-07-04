@@ -1,21 +1,22 @@
 import React from 'react';
 
 import { Button, Spinner } from 'react-bootstrap';
-import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { paths } from '../../paths';
+import { paths } from '../../config/paths';
+import { linkComponent, useParams } from '../../config/router';
+import { Provider, useEditSignupState, useStateAndDispatch } from '../../modules/editSignup';
 import EditForm from './components/EditForm';
 import NarrowContainer from './components/NarrowContainer';
-import { Provider, useEditSignupState, useStateAndDispatch } from './state';
 
 const EditSignupView = () => {
   const [{
     deleted, error, pending, event,
   }] = useStateAndDispatch();
+  const Link = linkComponent();
 
   if (error) {
     return (
-      <NarrowContainer className="text-center">
+      <NarrowContainer className="ilmo--status-container">
         <h1>Hups, jotain meni pieleen</h1>
         <p>
           Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
@@ -28,7 +29,7 @@ const EditSignupView = () => {
 
   if (pending) {
     return (
-      <div className="loading-container">
+      <div className="ilmo--loading-container">
         <Spinner animation="border" />
       </div>
     );
@@ -36,7 +37,7 @@ const EditSignupView = () => {
 
   if (deleted) {
     return (
-      <div className="text-center">
+      <div className="ilmo--status-container">
         <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
         <Button as={Link} to={paths().eventDetails(event!.slug)} variant="secondary">
           Takaisin
@@ -47,7 +48,7 @@ const EditSignupView = () => {
 
   if (event!.registrationEndDate === null || new Date(event!.registrationEndDate) < new Date()) {
     return (
-      <NarrowContainer className="text-center">
+      <NarrowContainer className="ilmo--status-container">
         <h1>Hups, jotain meni pieleen</h1>
         <p>
           Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
@@ -68,8 +69,9 @@ export interface MatchParams {
   editToken: string;
 }
 
-const EditSignup = ({ match }: RouteComponentProps<MatchParams>) => {
-  const state = useEditSignupState(match.params);
+const EditSignup = () => {
+  const params = useParams<MatchParams>();
+  const state = useEditSignupState(params);
   return (
     <Provider state={state}>
       <EditSignupView />

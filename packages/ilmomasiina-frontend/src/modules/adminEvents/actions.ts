@@ -1,5 +1,5 @@
+import apiFetch from '@tietokilta/ilmomasiina-components/src/api';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import apiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
   EVENTS_LOAD_FAILED,

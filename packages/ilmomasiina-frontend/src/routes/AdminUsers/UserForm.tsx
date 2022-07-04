@@ -38,9 +38,7 @@ const UserForm = () => {
     >
       {({ isSubmitting, handleSubmit }) => (
         <Form
-          /* THEMEUI sx={{
-            maxWidth: 256,
-          }} */
+          className="ilmo--form"
           onSubmit={handleSubmit}
         >
           <Field

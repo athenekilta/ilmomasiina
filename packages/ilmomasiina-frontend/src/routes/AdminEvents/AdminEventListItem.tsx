@@ -5,9 +5,9 @@ import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { deleteEvent, getAdminEvents } from '../../modules/adminEvents/actions';
-import { fullPaths } from '../../paths';
 import { useTypedDispatch } from '../../store/reducers';
 import { isEventInPast } from '../../utils/eventState';
 
@@ -52,7 +52,7 @@ const AdminEventListItem = ({ event }: Props) => {
       <td>
         <Link to={fullPaths().adminEditEvent(id)}>{title}</Link>
       </td>
-      <td>{date ? moment(date).format('DD.MM.YYYY') : ''}</td>
+      <td>{date ? moment(date).tz(TIMEZONE).format('DD.MM.YYYY') : ''}</td>
       <td>{status}</td>
       <td>{sumBy(quotas, 'signupCount')}</td>
       <td>

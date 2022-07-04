@@ -4,8 +4,9 @@ import { Button, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
+import requireAuth from '../../containers/requireAuth';
 import { getAdminEvents, resetState } from '../../modules/adminEvents/actions';
-import { fullPaths } from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminEventListItem from './AdminEventListItem';
 
@@ -40,15 +41,15 @@ const AdminEventsList = () => {
 
   return (
     <>
-      <nav className="title-nav">
+      <nav className="ilmo--title-nav">
         <h1>Hallinta</h1>
-        <Button as={Link} variant="secondary" to={fullPaths().adminUsersList} className="ml-2">
+        <Button as={Link} variant="secondary" to={fullPaths().adminUsersList}>
           Käyttäjät
         </Button>
-        <Button as={Link} variant="secondary" to={fullPaths().adminAuditLog} className="ml-2">
+        <Button as={Link} variant="secondary" to={fullPaths().adminAuditLog}>
           Toimintoloki
         </Button>
-        <Button as={Link} variant="primary" to={fullPaths().adminEditEvent('new')} className="ml-2">
+        <Button as={Link} variant="primary" to={fullPaths().adminEditEvent('new')}>
           + Uusi tapahtuma
         </Button>
       </nav>
@@ -75,4 +76,4 @@ const AdminEventsList = () => {
   );
 };
 
-export default AdminEventsList;
+export default requireAuth(AdminEventsList);

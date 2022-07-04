@@ -1,30 +1,32 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Button } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router-dom';
 import remarkGfm from 'remark-gfm';
 
-import { paths } from '../../../paths';
-import { useTypedSelector } from '../../../store/reducers';
-import { useSingleEventContext } from '../state';
+import { timezone } from '../../../config';
+import { paths } from '../../../config/paths';
+import { linkComponent } from '../../../config/router';
+import AuthContext from '../../../contexts/auth';
+import { useSingleEventContext } from '../../../modules/singleEvent';
 
 const EventDescription = () => {
   const event = useSingleEventContext().event!;
-  const loggedIn = useTypedSelector((state) => state.auth.loggedIn);
+  const { loggedIn } = useContext(AuthContext);
   const adminPaths = paths();
+  const Link = linkComponent();
   return (
     <>
-      <nav className="title-nav">
+      <nav className="ilmo--title-nav">
         <h1>{event.title}</h1>
         {loggedIn && adminPaths.hasAdmin && (
-          <Button as={Link} variant="primary" to={adminPaths.adminEditEvent(event.id)} className="ml-2">
+          <Button as={Link} variant="primary" to={adminPaths.adminEditEvent(event.id)}>
             Muokkaa
           </Button>
         )}
       </nav>
-      <div className="event-heading">
+      <div className="ilmo--event-heading">
         {event.category && (
           <p>
             <strong>Kategoria:</strong>
@@ -36,14 +38,14 @@ const EventDescription = () => {
           <p>
             <strong>{event.endDate ? 'Alkaa:' : 'Ajankohta:'}</strong>
             {' '}
-            {moment(event.date).format('D.M.Y [klo] HH:mm')}
+            {moment(event.date).tz(timezone()).format('D.M.Y [klo] HH:mm')}
           </p>
         )}
         {event.endDate && (
           <p>
             <strong>Loppuu:</strong>
             {' '}
-            {moment(event.endDate).format('D.M.Y [klo] HH:mm')}
+            {moment(event.endDate).tz(timezone()).format('D.M.Y [klo] HH:mm')}
           </p>
         )}
         {event.location && (
@@ -79,7 +81,7 @@ const EventDescription = () => {
           </p>
         )}
       </div>
-      <div className="event-description">
+      <div className="ilmo--event-description">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {event.description || ''}
         </ReactMarkdown>

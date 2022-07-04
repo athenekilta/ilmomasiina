@@ -4,8 +4,9 @@ import filter from 'lodash/filter';
 import find from 'lodash/find';
 import moment from 'moment-timezone';
 
+import { timezone } from '../../../config';
+import { useSingleEventContext } from '../../../modules/singleEvent';
 import { SignupWithQuota } from '../../../utils/signupUtils';
-import { useSingleEventContext } from '../state';
 
 type Props = {
   index: number;
@@ -36,12 +37,12 @@ const SignupListRow = ({ showQuota, signup, index }: Props) => {
   }
 
   return (
-    <tr className={!confirmed ? 'text-muted' : ''}>
+    <tr className={!confirmed ? 'ilmo--unconfirmed' : ''}>
       <td>
         {`${index}.`}
       </td>
       {nameQuestion && (
-        <td className={!confirmed || !namePublic ? 'text-muted font-italic' : ''}>
+        <td className={!confirmed || !namePublic ? 'ilmo--hidden-name' : ''}>
           {fullName}
         </td>
       )}
@@ -56,9 +57,9 @@ const SignupListRow = ({ showQuota, signup, index }: Props) => {
         </td>
       )}
       <td>
-        {moment.tz(createdAt, TIMEZONE).format('DD.MM.YYYY HH:mm:ss')}
-        <span className="hover">
-          {moment.tz(createdAt, TIMEZONE).format('.SSS')}
+        {moment(createdAt).tz(timezone()).format('DD.MM.YYYY HH:mm:ss')}
+        <span className="ilmo--hover-only">
+          {moment(createdAt).tz(timezone()).format('.SSS')}
         </span>
       </td>
     </tr>

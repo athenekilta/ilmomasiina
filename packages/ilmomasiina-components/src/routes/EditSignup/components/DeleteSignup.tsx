@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { useFormikContext } from 'formik';
+import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { useStateAndDispatch } from '../state';
-import { useDeleteSignup } from '../state/actions';
+import { useStateAndDispatch } from '../../../modules/editSignup';
+import { useDeleteSignup } from '../../../modules/editSignup/actions';
 
 const DELETE_CONFIRM_MS = 4000;
 
@@ -44,7 +45,7 @@ const DeleteSignup = () => {
   }
 
   return (
-    <div className="text-center my-5">
+    <div className="ilmo--delete-container">
       <h2>Poista ilmoittautuminen</h2>
       <p>
         Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan
@@ -61,9 +62,9 @@ const DeleteSignup = () => {
         {' '}
         <strong>Tätä toimintoa ei voi perua.</strong>
       </p>
-      <button type="button" disabled={isSubmitting} onClick={onDeleteClick} className="btn btn-danger">
+      <Button type="button" disabled={isSubmitting} onClick={onDeleteClick} variant="danger">
         {confirming ? 'Paina uudelleen varmistukseksi\u2026' : 'Poista ilmoittautuminen'}
-      </button>
+      </Button>
     </div>
   );
 };

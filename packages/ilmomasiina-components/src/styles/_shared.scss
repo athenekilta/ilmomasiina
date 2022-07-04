@@ -1,9 +1,21 @@
-@use "definitions" as *;
+@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
 @use "forms";
 
-.title-nav {
+@include media-breakpoint-up(sm) {
+  .ilmo--mobile-only {
+    display: none;
+  }
+}
+@include media-breakpoint-down(xs) {
+  .ilmo--desktop-only {
+    display: none;
+  }
+}
+
+.ilmo--title-nav {
   display: flex;
   align-items: center;
+  column-gap: $spacer * 0.5;
 
   :first-child {
     flex: 1 0 auto;
@@ -20,20 +32,13 @@
   }
 }
 
-p {
-  margin-bottom: 1.5em;
+.ilmo--narrow-container {
+  justify-content: center;
 }
-
-table.table {
-  thead {
-    th {
-      border-bottom-width: 1px;
-      font-weight: 600;
-    }
-  }
+.ilmo--status-container {
+  text-align: center;
 }
-
-.loading-container {
+.ilmo--loading-container {
   display: flex;
   flex-direction: column;
   justify-content: center;

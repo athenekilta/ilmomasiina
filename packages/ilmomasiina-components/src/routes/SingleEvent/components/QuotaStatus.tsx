@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { useSingleEventContext } from '../../../modules/singleEvent';
 import { OPENQUOTA, WAITLIST } from '../../../utils/signupUtils';
-import { useSingleEventContext } from '../state';
 import QuotaProgress from './QuotaProgress';
 
 const QuotaStatus = () => {
@@ -12,7 +12,7 @@ const QuotaStatus = () => {
   }
 
   return (
-    <div className="sidebar-widget">
+    <div className="ilmo--side-widget">
       <h3>Ilmoittautuneet</h3>
       {signupsByQuota!.map((quota) => {
         if (quota.id === OPENQUOTA) {

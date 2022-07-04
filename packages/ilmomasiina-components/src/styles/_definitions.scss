@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // Bootstrap override colors
 $primary: #319236 !default;
 $secondary: #0288d1 !default;
@@ -13,3 +15,8 @@ $secondary-text-color: #7a7a7a !default;
 @import "~bootstrap/scss/functions";
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
+
+$signup-state-not-opened: $body-color !default;
+$signup-state-opened: $green !default;
+$signup-state-closed: $red !default;
+$signup-state-disabled: color.change($body-color, $alpha: 0.45) !default;

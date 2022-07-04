@@ -1,6 +1,6 @@
 @use "../../styles/definitions" as *;
 
-.sidebar-widget {
+.ilmo--side-widget {
   display: flex;
   flex-direction: column;
   background-color: $secondary-background;
@@ -12,7 +12,7 @@
   }
 }
 
-.event-heading {
+.ilmo--event-heading {
   margin-bottom: 1em;
   padding: 1em 0;
   border-top: 1px solid $border-color;
@@ -23,7 +23,7 @@
   }
 }
 
-.quota {
+.ilmo--quota-signups {
   margin: $spacer 0 3 * $spacer;
   overflow-x: scroll;
 
@@ -44,23 +44,29 @@
       }
     }
   }
+
+  .ilmo--unconfirmed, .ilmo--hidden-name {
+    color: $text-muted;
+  }
+  .ilmo--hidden-name {
+    font-style: italic;
+  }
+  .ilmo--hover-only {
+    visibility: hidden;
+  }
+  td:hover .ilmo--hover-only {
+    visibility: visible;
+  }
 }
 
-td {
-  span.hover {
-      visibility: hidden;
-  }
-
-  &:hover {
-    span.hover {
-      visibility: visible;
-    }
-  }
+.ilmo--signup-button {
+  margin-bottom: $spacer;
 }
 
-.signup-progress {
+.ilmo--signup-progress {
   height: 1.8rem;
   font-size: .9rem;
+  margin-bottom: $spacer;
 
   .progress-bar {
     min-width: 5em;

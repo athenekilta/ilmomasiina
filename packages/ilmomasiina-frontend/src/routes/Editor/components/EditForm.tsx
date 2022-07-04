@@ -37,7 +37,7 @@ const EditForm = ({ handleSubmit, submitForm, submitOptions }: Props) => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit} role="tablist">
+      <Form onSubmit={handleSubmit} className="ilmo--form" role="tablist">
         <EditorToolbar onSubmitClick={onSubmitClick} />
         <EditorTabHeader activeTab={activeTab} setActiveTab={setActiveTab} />
         <div className="tab-content mt-4">

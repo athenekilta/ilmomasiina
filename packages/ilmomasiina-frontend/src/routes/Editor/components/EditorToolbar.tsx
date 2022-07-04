@@ -5,8 +5,8 @@ import { Button, ButtonGroup, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import { EditorEvent } from '../../../modules/editor/types';
-import { fullPaths } from '../../../paths';
 import { useTypedSelector } from '../../../store/reducers';
 
 interface EditorToolbarProps {

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
 import { Button } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch from '../../../api';
-import { paths } from '../../../paths';
+import { paths } from '../../../config/paths';
+import { useNavigate } from '../../../config/router';
+import { useSingleEventContext } from '../../../modules/singleEvent';
 import signupState from '../../../utils/signupStateText';
-import { useSingleEventContext } from '../state';
 
 // Show the countdown one minute before opening the signup.
 const COUNTDOWN_DURATION = 60 * 1000;
@@ -24,7 +24,7 @@ type SignupButtonProps = {
 const SignupButton = ({
   isOpen, isClosed, seconds, total,
 }: SignupButtonProps) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { registrationStartDate, registrationEndDate, quotas } = useSingleEventContext().event!;
   const [submitting, setSubmitting] = useState(false);
   const isOnly = quotas.length === 1;
@@ -37,7 +37,7 @@ const SignupButton = ({
         body: { quotaId },
       }) as Signup.Create.Response;
       setSubmitting(false);
-      history.push(paths().editSignup(response.id, response.editToken));
+      navigate(paths().editSignup(response.id, response.editToken));
     } catch (e) {
       setSubmitting(false);
       toast.error('Ilmoittautuminen epäonnistui.', {
@@ -47,10 +47,10 @@ const SignupButton = ({
   }
 
   return (
-    <div className="sidebar-widget">
+    <div className="ilmo--side-widget">
       <h3>Ilmoittautuminen</h3>
       <p>
-        {signupState(registrationStartDate, registrationEndDate).label}
+        {signupState(registrationStartDate, registrationEndDate).shortLabel}
         {total < COUNTDOWN_DURATION && !isOpen && !isClosed && (
           <span style={{ color: 'green' }}>
             {` (${seconds}  s)`}
@@ -63,7 +63,7 @@ const SignupButton = ({
           type="button"
           variant="secondary"
           disabled={!isOpen || submitting}
-          className="mb-3"
+          className="ilmo--signup-button"
           onClick={() => isOpen && beginSignup(quota.id)}
         >
           {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}

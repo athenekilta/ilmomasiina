@@ -1,4 +1,4 @@
-@use "definitions" as *;
+@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
 
 @use "~bootstrap/scss/bootstrap" with (
   // Colors
@@ -20,7 +20,7 @@
 );
 
 @use "widgets";
-@use "shared";
+@use "~@tietokilta/ilmomasiina-components/src/styles/all";
 
 // Global layout
 
@@ -66,4 +66,13 @@ h3 {
 
 strong {
   font-weight: 600;
+}
+
+table.table {
+  thead {
+    th {
+      border-bottom-width: 1px;
+      font-weight: 600;
+    }
+  }
 }

@@ -4,8 +4,9 @@ import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
+import requireAuth from '../../containers/requireAuth';
 import { getUsers, resetState } from '../../modules/adminUsers/actions';
-import { fullPaths } from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminUserListItem from './AdminUserListItem';
 import UserForm from './UserForm';
@@ -69,4 +70,4 @@ const AdminUsersList = () => {
   );
 };
 
-export default AdminUsersList;
+export default requireAuth(AdminUsersList);

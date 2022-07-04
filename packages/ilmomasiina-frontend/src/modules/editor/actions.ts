@@ -1,8 +1,8 @@
+import apiFetch, { ApiError } from '@tietokilta/ilmomasiina-components/src/api';
 import { AdminCategory } from '@tietokilta/ilmomasiina-models/src/services/admin/categories';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import apiFetch, { ApiError } from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
   CATEGORIES_LOADED,

@@ -1,8 +1,8 @@
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import apiFetch from '../../../api';
-import { useAbortablePromise } from '../../../utils/abortable';
-import useShallowMemo from '../../../utils/useShallowMemo';
-import { MatchParams } from '..';
+import apiFetch from '../../api';
+import { MatchParams } from '../../routes/EditSignup';
+import { useAbortablePromise } from '../../utils/abortable';
+import useShallowMemo from '../../utils/useShallowMemo';
 import { ExternalState } from './reducer';
 
 export { Provider, useStateAndDispatch } from './reducer';

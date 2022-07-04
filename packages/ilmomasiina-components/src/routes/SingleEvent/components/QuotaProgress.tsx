@@ -14,7 +14,7 @@ const QuotaProgress = ({ max, title, value }: Props) => (
     <ProgressBar
       now={Math.min(value, max)}
       max={max}
-      className="signup-progress mb-3"
+      className="ilmo--signup-progress"
       label={(
         <>
           {value}

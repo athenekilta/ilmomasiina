@@ -1,0 +1,14 @@
+@use "../../styles/definitions" as *;
+
+.ilmo--form-error {
+  color: $form-feedback-invalid-color;
+}
+.ilmo--submit-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+.ilmo--delete-container {
+  text-align: center;
+  margin-top: 3 * $spacer;
+  margin-bottom: 3 * $spacer;
+}

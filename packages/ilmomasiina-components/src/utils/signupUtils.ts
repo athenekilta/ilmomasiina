@@ -5,6 +5,7 @@ import moment from 'moment-timezone';
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
 import { Event, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import { timezone } from '../config';
 
 export const WAITLIST = '\x00waitlist';
 export const OPENQUOTA = '\x00open';
@@ -27,7 +28,7 @@ function getSignupsAsList(event: AnyEventDetails): SignupWithQuota[] {
         quotaId: quota.id,
         quotaName: quota.title,
         confirmed:
-          (signup as Event.Details.Signup).confirmed || (signup as AdminEvent.Details.Signup).confirmedAt !== null,
+          ('confirmed' in signup && signup.confirmed) || ('confirmedAt' in signup && signup.confirmedAt !== null),
       }),
     ) ?? [],
   );
@@ -115,7 +116,7 @@ export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSign
     return {
       ...signup,
       createdAt: moment(signup.createdAt)
-        .tz(TIMEZONE)
+        .tz(timezone())
         .format('DD.MM.YYYY HH:mm:ss'),
       quota: `${signup.quotaName}${quotaType}`,
       answers: getAnswersFromSignup(event, signup),

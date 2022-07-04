@@ -84,7 +84,6 @@ const QuestionFields = ({ name, questions }: Props) => {
             input = (
               <Form.Control
                 as="textarea"
-                className="form-control"
                 rows={3}
                 cols={40}
                 required={question.required}

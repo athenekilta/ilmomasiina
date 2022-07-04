@@ -8,7 +8,7 @@ type Props = {
 };
 
 const NarrowContainer = ({ children, className = '' }: Props) => (
-  <Row className={`justify-content-md-center ${className}`}>
+  <Row className={`ilmo--narrow-container ${className}`}>
     <Col xs="12" md="10" lg="8">
       {children}
     </Col>

@@ -1,4 +1,4 @@
-import { paths } from './paths';
+import { paths } from './config/paths';
 
 interface FetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

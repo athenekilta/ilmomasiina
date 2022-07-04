@@ -2,7 +2,7 @@ import React, {
   createContext, Dispatch, ReactNode, Reducer, useContext, useMemo, useReducer,
 } from 'react';
 
-const MISSING = Symbol('missing');
+export const MISSING = Symbol('missing');
 
 /** Creates a React context and an associated hook that only works inside the Provider. */
 export function createStateContext<State>() {

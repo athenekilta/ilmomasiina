@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useStateAndDispatch } from '../state';
+import { useStateAndDispatch } from '../../../modules/editSignup';
 
 const SignupStatus = () => {
   const [{ event, signup }] = useStateAndDispatch();
