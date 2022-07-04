@@ -42,6 +42,8 @@ module.exports = {
     "import/no-cycle": "off",
     // We are targeting ES5 or higher.
     "radix": ["error", "as-needed"],
+    // ...I know what I'm doing.
+    "no-control-regex": "off",
     // Not usable with formik.
     "react/jsx-props-no-spreading": "off",
     // TypeScript validates prop types, no need for this.

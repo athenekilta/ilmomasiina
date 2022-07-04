@@ -5,8 +5,24 @@ try {
     console.info('Connected to dev server');
   });
   ws.addEventListener('message', (e) => {
-    if (e.data === 'reload') {
+    const data = JSON.parse(e.data);
+    if (data.reload) {
       window.location.reload();
+      return;
+    }
+    if (data.error) {
+      console.error('Build failed!');
+    }
+    if (data.build) {
+      data.build.errors?.forEach((error) => {
+        console.error(error.text.replace(/\x1b\[.+?m/g, ''));
+      });
+      data.build.warnings?.forEach((warning) => {
+        console.warn(warning.text.replace(/\x1b\[.+?m/g, ''));
+      });
+      if (!data.build.errors?.length && !data.build.warnings?.length) {
+        console.info('No errors!');
+      }
     }
   });
   ws.addEventListener('close', (e) => {

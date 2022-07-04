@@ -1,6 +1,7 @@
-import { build } from 'esbuild';
+import { build, BuildResult } from 'esbuild';
 import { existsSync, readFileSync, statSync } from 'fs';
 import { createServer, request } from 'http';
+import { pick } from 'lodash';
 import * as path from 'path';
 import { WebSocketServer } from 'ws';
 
@@ -32,9 +33,11 @@ const CONTENT_TYPES: Record<string, string> = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/vnd.microsoft.icon',
   '.txt': 'text/plain',
+  '.map': 'application/json',
 };
 
 let wsServer: WebSocketServer;
+let buildResult: BuildResult | null;
 
 build({
   ...config,
@@ -43,14 +46,21 @@ build({
     path.join(__dirname, 'autoreload.js'),
   ],
   watch: {
-    onRebuild() {
-      wsServer.clients.forEach((client) => {
-        client.send('reload');
-      });
+    onRebuild(error, result) {
+      if (error) {
+        wsServer.clients.forEach((client) => {
+          client.send(JSON.stringify({ error: true, build: error }));
+        });
+      } else {
+        buildResult = result;
+        wsServer.clients.forEach((client) => {
+          client.send(JSON.stringify({ reload: true }));
+        });
+      }
     },
   },
 })
-  .then(() => {
+  .then((result) => {
     // Construct a simple HTTP-server to serve built files & proxy api request to the backend
     const server = createServer((req, res) => {
       if (req.url && /^\/api\//.test(req.url)) {
@@ -109,6 +119,8 @@ build({
       }
     });
 
+    buildResult = result;
+
     wsServer = new WebSocketServer({
       server,
       path: '/dev-server',
@@ -117,6 +129,9 @@ build({
 
     server.once('listening', () => {
       console.info(`Listening on http://${HOST}:${PORT}\n`);
+    });
+    wsServer.on('connection', (client) => {
+      client.send(JSON.stringify({ build: pick(buildResult, 'errors', 'warnings') }));
     });
 
     server.listen(PORT, HOST);
