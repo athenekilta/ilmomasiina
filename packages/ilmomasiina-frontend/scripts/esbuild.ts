@@ -63,7 +63,10 @@ export default function configure(defaultEnv: Environment): BuildOptions {
     minify: true,
     metafile: true,
     plugins: [
-      sassPlugin(),
+      sassPlugin({
+        sourceMap: true,
+        sourceMapIncludeSources: true,
+      }),
       htmlPlugin({
         files: [
           {
@@ -96,7 +99,7 @@ export default function configure(defaultEnv: Environment): BuildOptions {
     format: 'esm',
     splitting: true,
     define: definitionsFromEnv(environment),
-    sourcemap: 'external',
+    sourcemap: 'linked',
     treeShaking: true,
   };
 }
