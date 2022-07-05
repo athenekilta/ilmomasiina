@@ -78,12 +78,15 @@ jobs:
         run: pnpm run --filter @tietokilta/ilmomasiina-models build
       -
         name: Publish to NPM
-        run: pnpm publish --filter @tietokilta/ilmomasiina-models --no-git-checks
+        run: |
+          pnpm publish --filter @tietokilta/ilmomasiina-models --no-git-checks
+          pnpm publish --filter @tietokilta/ilmomasiina-components --no-git-checks
       -
         name: Publish to GitHub Packages
         run: |
           npm set @tietokilta:registry https://npm.pkg.github.com/
           pnpm publish --filter @tietokilta/ilmomasiina-models --no-git-checks
+          pnpm publish --filter @tietokilta/ilmomasiina-components --no-git-checks
 
   deploy:
     name: Push update to App Service

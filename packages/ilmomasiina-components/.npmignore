@@ -1,0 +1,4 @@
+/*
+!/dist
+*.tsbuildinfo
+!README.md
