@@ -44,10 +44,10 @@ const SingleEventView = () => {
         &#8592; Takaisin
       </Link>
       <Row>
-        <Col xs={12} sm={8}>
+        <Col sm={12} md={8}>
           <EventDescription />
         </Col>
-        <Col xs={12} sm={4}>
+        <Col sm={12} md={4}>
           <SignupCountdown />
           <QuotaStatus />
         </Col>
