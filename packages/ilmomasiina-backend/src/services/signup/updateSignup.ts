@@ -8,7 +8,6 @@ import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
-import { generateRandomId } from '../../models/randomId';
 import { Signup } from '../../models/signup';
 import { logEvent } from '../../util/auditLog';
 import { signupsAllowed } from './createNewSignup';
