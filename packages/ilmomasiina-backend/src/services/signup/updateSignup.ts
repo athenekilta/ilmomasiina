@@ -114,7 +114,6 @@ export default async (
       }
 
       return {
-        id: generateRandomId(), // https://github.com/sequelize/sequelize/issues/2140
         questionId: question.id,
         answer,
         signupId: signup.id,
