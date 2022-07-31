@@ -1,6 +1,7 @@
 import React from 'react';
 
-import _ from 'lodash';
+import filter from 'lodash/filter';
+import find from 'lodash/find';
 import moment from 'moment-timezone';
 
 import { useTypedSelector } from '../../../../store/reducers';
@@ -44,9 +45,9 @@ const TableRow = ({ showQuota, signup, index }: Props) => {
           {fullName}
         </td>
       )}
-      {_.filter(questions, 'public').map((question) => (
+      {filter(questions, 'public').map((question) => (
         <td key={question.id}>
-          {_.find(answers, { questionId: question.id })?.answer || ''}
+          {find(answers, { questionId: question.id })?.answer || ''}
         </td>
       ))}
       {showQuota && (
@@ -55,9 +56,9 @@ const TableRow = ({ showQuota, signup, index }: Props) => {
         </td>
       )}
       <td>
-        {moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss')}
+        {moment.tz(createdAt, TIMEZONE).format('DD.MM.YYYY HH:mm:ss')}
         <span className="hover">
-          {moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}
+          {moment.tz(createdAt, TIMEZONE).format('.SSS')}
         </span>
       </td>
     </tr>

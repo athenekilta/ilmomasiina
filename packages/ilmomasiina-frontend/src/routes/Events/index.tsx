@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 
-import _ from 'lodash';
+import sum from 'lodash/sum';
+import sumBy from 'lodash/sumBy';
 import moment from 'moment';
 import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
@@ -60,7 +61,7 @@ const EventList = ({ category }: Props) => {
         date={date ? moment(date).format('DD.MM.YYYY') : ''}
         signupStatus={eventState.label}
         signupCount={
-          (quotas.length < 2 ? _.sumBy(quotas, 'signupCount') : undefined)
+          (quotas.length < 2 ? sumBy(quotas, 'signupCount') : undefined)
         }
         quotaSize={quotas.length === 1 ? quotas[0].size : undefined}
         key={slug}
@@ -85,7 +86,7 @@ const EventList = ({ category }: Props) => {
           className="child"
           title="Avoin"
           signupCount={Math.min(
-            _.sum(quotas.map((quota) => (quota.size ? Math.max(0, quota.signupCount - quota.size) : 0))),
+            sum(quotas.map((quota) => (quota.size ? Math.max(0, quota.signupCount - quota.size) : 0))),
             openQuotaSize,
           )}
           quotaSize={openQuotaSize}

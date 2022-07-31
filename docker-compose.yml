@@ -31,15 +31,13 @@ services:
       - DB_DIALECT=postgres
       - DB_HOST=database
       - NODE_ENV=development
+      - HOST=0.0.0.0
     env_file:
       - .env
     volumes:
       - type: bind
         source: ./packages/ilmomasiina-models/src
         target: /opt/ilmomasiina/packages/ilmomasiina-models/src
-      - type: bind
-        source: ./packages/ilmomasiina-frontend/config
-        target: /opt/ilmomasiina/packages/ilmomasiina-frontend/config
       - type: bind
         source: ./packages/ilmomasiina-frontend/public
         target: /opt/ilmomasiina/packages/ilmomasiina-frontend/public

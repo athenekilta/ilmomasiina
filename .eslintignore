@@ -1,6 +1,4 @@
 node_modules/**
 **/dist/**
 **/build/**
-packages/ilmomasiina-frontend/scripts/**
-packages/ilmomasiina-frontend/config/**
 .eslintrc.js

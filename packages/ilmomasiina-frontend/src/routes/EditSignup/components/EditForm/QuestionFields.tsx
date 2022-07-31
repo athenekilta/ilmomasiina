@@ -1,7 +1,10 @@
 import React, { ReactNode } from 'react';
 
 import { useField } from 'formik';
-import _ from 'lodash';
+import filter from 'lodash/filter';
+import find from 'lodash/find';
+import reject from 'lodash/reject';
+import without from 'lodash/without';
 import { Form } from 'react-bootstrap';
 
 import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
@@ -19,18 +22,18 @@ const QuestionFields = ({ name, questions }: Props) => {
   return (
     <>
       {questions.map((question) => {
-        const currentAnswer = _.find(value, { questionId: question.id })?.answer || '';
+        const currentAnswer = find(value, { questionId: question.id })?.answer || '';
 
         function updateAnswer(answer: string) {
-          setValue(_.reject(value, { questionId: question.id }).concat({
+          setValue(reject(value, { questionId: question.id }).concat({
             questionId: question.id,
             answer,
           }));
         }
 
         function toggleChecked(option: string, checked: boolean) {
-          const currentAnswers = _.filter(currentAnswer.split(';'));
-          const newAnswers = checked ? _.concat(currentAnswers, option) : _.without(currentAnswers, option);
+          const currentAnswers = filter(currentAnswer.split(';'));
+          const newAnswers = checked ? [...currentAnswers, option] : without(currentAnswers, option);
           updateAnswer(newAnswers.join(';'));
         }
 

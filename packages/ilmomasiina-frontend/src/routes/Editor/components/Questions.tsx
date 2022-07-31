@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useField } from 'formik';
-import _ from 'lodash';
+import reject from 'lodash/reject';
 import {
   Button, Col, Form, InputGroup, Row,
 } from 'react-bootstrap';
@@ -59,7 +59,7 @@ const Questions = () => {
     }
 
     function removeQuestion() {
-      setValue(_.reject(questions, { key: thisQuestion }));
+      setValue(reject(questions, { key: thisQuestion }));
     }
 
     function updateOption(optIndex: number, value: string) {

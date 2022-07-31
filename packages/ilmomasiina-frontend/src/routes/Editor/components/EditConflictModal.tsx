@@ -79,7 +79,7 @@ const EditConflictModal = () => {
           {' '}
           <strong>
             {modal && moment(modal.updatedAt)
-              .tz('Europe/Helsinki')
+              .tz(TIMEZONE)
               .format('DD.MM.YYYY HH:mm:ss')}
           </strong>
           {deletedQuotas.length || deletedQuestions.length ? ' ja poistanut seuraavat kiintiöt tai kysymykset:' : '.'}

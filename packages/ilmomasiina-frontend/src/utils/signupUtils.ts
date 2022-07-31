@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import find from 'lodash/find';
+import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 
 import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
@@ -79,7 +80,7 @@ function getAnswersFromSignup(event: AdminEvent.Details, signup: AnySignupDetail
   const answers: Record<AnyQuestionDetails['id'], string> = {};
 
   event.questions.forEach((question) => {
-    const answer = _.find(signup.answers, { questionId: question.id });
+    const answer = find(signup.answers, { questionId: question.id });
     answers[question.id] = answer?.answer || '';
   });
 
@@ -99,7 +100,7 @@ type FormattedSignup = {
 
 export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSignup[] {
   const signupsArray = getSignupsAsList(event);
-  const sorted = _.orderBy(signupsArray, [
+  const sorted = orderBy(signupsArray, [
     (signup) => ['in-quota', 'in-open', 'in-queue', null].indexOf(signup.status),
     'createdAt',
   ]);
@@ -114,7 +115,7 @@ export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSign
     return {
       ...signup,
       createdAt: moment(signup.createdAt)
-        .tz('Europe/Helsinki')
+        .tz(TIMEZONE)
         .format('DD.MM.YYYY HH:mm:ss'),
       quota: `${signup.quotaName}${quotaType}`,
       answers: getAnswersFromSignup(event, signup),

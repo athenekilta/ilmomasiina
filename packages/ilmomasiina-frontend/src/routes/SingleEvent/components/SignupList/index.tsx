@@ -1,6 +1,6 @@
 import React from 'react';
 
-import _ from 'lodash';
+import filter from 'lodash/filter';
 
 import { useTypedSelector } from '../../../../store/reducers';
 import { OPENQUOTA, QuotaSignups, WAITLIST } from '../../../../utils/signupUtils';
@@ -32,7 +32,7 @@ const SignupList = ({ quota }: Props) => {
                     Nimi
                   </th>
                 )}
-                {_.filter(questions, 'public').map((question) => (
+                {filter(questions, 'public').map((question) => (
                   <th key={question.id}>
                     {question.question}
                   </th>
