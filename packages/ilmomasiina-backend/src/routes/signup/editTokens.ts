@@ -1,6 +1,6 @@
-import { Forbidden } from '@feathersjs/errors';
 import base32Encode from 'base32-encode';
 import { createHash, createHmac } from 'crypto';
+import { Forbidden } from 'http-errors';
 
 import config from '../../config';
 import { Signup } from '../../models/signup';

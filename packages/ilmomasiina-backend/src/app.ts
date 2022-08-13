@@ -1,11 +1,8 @@
-import express, { json, rest, urlencoded } from '@feathersjs/express';
-import feathers from '@feathersjs/feathers';
-import compress from 'compression';
-import historyApiFallback from 'connect-history-api-fallback';
-import cors from 'cors';
-import { NextFunction, Request, Response } from 'express';
-import enforce from 'express-sslify';
+import fastifySensible from '@fastify/sensible';
+import fastifyStatic from '@fastify/static';
+import fastify, { FastifyInstance } from 'fastify';
 import cron from 'node-cron';
+import path from 'path';
 
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
@@ -13,64 +10,24 @@ import deleteOldAuditLogs from './cron/deleteOldAuditLogs';
 import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
 import removeDeletedData from './cron/removeDeletedData';
 import setupDatabase from './models';
-import services from './services';
-import { remoteIp } from './util/auditLog';
+import setupRoutes from './routes';
 
-// Format iCalendar requests
-function formatResponse(req: Request, res: Response, next: NextFunction) {
-  if (res.data === undefined) {
-    next();
-    return;
-  }
-
-  if (req.path === '/api/ical') {
-    res.set('Content-Type', 'text/calendar');
-    res.send(res.data);
-    return;
-  }
-
-  res.set('Content-Type', 'application/json');
-  res.json(res.data);
-}
-
-const corsOrigins = config.allowOrigin === '*' ? '*' : (config.allowOrigin?.split(',') ?? []);
-
-export default async function initApp() {
+export default async function initApp(): Promise<FastifyInstance> {
   await setupDatabase();
 
-  const app = express(feathers());
+  const server = fastify({
+    trustProxy: config.isAzure || config.trustProxy, // Get IPs from X-Forwarded-For
+    logger: true, // Enable logger
+  });
 
-  // Get IPs from X-Forwarded-For
-  if (config.isAzure || config.trustProxy) {
-    app.set('trust proxy', true);
-  }
-
-  app
-    .use(compress())
-    .use(json())
-    .use('/api', cors({
-      origin: corsOrigins,
-    }))
-    .use(urlencoded({ extended: true }))
-    .use(remoteIp)
-    .configure(rest(formatResponse))
-    .configure(services);
-
-  if (config.nodeEnv !== 'production') {
-    // Development: log error messages
-    app.use((error: any, req: any, res: any, next: NextFunction) => {
-      console.error(error);
-      next(error);
-    });
-  }
-
-  // Always convert errors to JSON
-  app.use(express.errorHandler());
+  // Register fastify-sensible (https://github.com/fastify/fastify-sensible)
+  server.register(fastifySensible);
 
   // Enforce HTTPS connections in production
   if (config.nodeEnv === 'production') {
     if (config.enforceHttps) {
-      app.use(enforce.HTTPS({ trustProtoHeader: true }));
+      // app.use(enforce.HTTPS({ trustProtoHeader: true }));
+      // TODO: Enforce HTTPS
       console.info(
         'Enforcing HTTPS connections.\nEnsure your load balancer or reverse proxy sets X-Forwarded-Proto.',
       );
@@ -83,14 +40,21 @@ export default async function initApp() {
     }
   }
 
-  app.use(historyApiFallback());
+  // TODO: Add on-the-fly compression
+
+  server.register(setupRoutes, {
+    prefix: '/api',
+  });
 
   // Serving frontend files if frontendFilesPath is not null.
   // Ideally these files should be served by a web server and not the app server,
   // but this helps run a low-effort server.
   if (config.frontendFilesPath) {
     console.info(`Serving frontend files from '${config.frontendFilesPath}'`);
-    app.use(express.static(config.frontendFilesPath));
+    // TODO: Enable historyApiFallback mode (serve index.html for non-existing routes)
+    server.register(fastifyStatic, {
+      root: path.resolve(config.frontendFilesPath),
+    });
   }
 
   // Every minute, remove signups that haven't been confirmed fast enough
@@ -105,5 +69,5 @@ export default async function initApp() {
   // Daily at 8am, delete old audit logs
   cron.schedule('0 8 * * *', deleteOldAuditLogs);
 
-  return app;
+  return server;
 }

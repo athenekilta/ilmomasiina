@@ -1,21 +1,26 @@
-import { NotFound } from '@feathersjs/errors';
-import { Params } from '@feathersjs/feathers';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { AdminEventPathParams } from '@tietokilta/ilmomasiina-models/src/schema';
 import { Event } from '../../../models/event';
 import { logEvent } from '../../../util/auditLog';
 
-export default async (id: Event['id'], params: Params | undefined): Promise<null> => {
-  const event = await Event.findByPk(id);
+export default async function deleteEvent(
+  request: FastifyRequest<{ Params: AdminEventPathParams }>,
+  response: FastifyReply,
+): Promise<void> {
+  const event = await Event.findByPk(request.params.id);
   if (event === null) {
-    throw new NotFound('No event found with id');
+    // TODO: Replace with 404 error
+    response.status(404);
+    response.send('No event found with id');
   }
 
   // Delete the DB object
   await event?.destroy();
 
   if (event) {
-    await logEvent('event.delete', { params, event });
+    await logEvent('event.delete', { params: request.params, event });
   }
 
-  return null;
-};
+  response.status(200);
+}

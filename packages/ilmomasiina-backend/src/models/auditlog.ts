@@ -60,7 +60,7 @@ export default function setupAuditLogModel(sequelize: Sequelize) {
       },
       extra: {
         type: DataTypes.TEXT,
-        allowNull: true,
+        allowNull: true, // TODO: Typo?
       },
     },
     {

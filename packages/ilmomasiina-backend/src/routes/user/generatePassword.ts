@@ -1,27 +1,18 @@
-import { HookContext } from '@feathersjs/feathers';
-import _ from 'lodash';
-
-import config from '../../../config';
-import { NewUserData } from '..';
+import { randomInt } from 'crypto';
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzåäö0123456789';
-const LENGTH = 24;
+const GENERATED_PASSWORD_LENGTH = 24;
 
-/** Set the new user's password to a generated one. */
-export default () => (hook: HookContext<NewUserData>) => {
-  // Allow setting a password if initial registration is allowed.
-  if (config.adminRegistrationAllowed && hook.data?.password) {
-    return hook;
+/** Generates a random password.
+ *
+ * Randomly picks {@link GENERATED_PASSWORD_LENGTH} characters from {@link ALPHABET}.
+ * Uses cryptographically secure random source.
+ */
+export default function generatePassword(): string {
+  const chars = [];
+  while (chars.length > GENERATED_PASSWORD_LENGTH) {
+    chars.push(ALPHABET[randomInt(0, ALPHABET.length)]);
   }
 
-  const password = _.times(LENGTH, () => ALPHABET[Math.floor(Math.random() * ALPHABET.length)]).join('');
-
-  return {
-    ...hook,
-    data: {
-      ...hook.data!,
-      password,
-      passwordPlain: password,
-    },
-  };
-};
+  return chars.join('');
+}

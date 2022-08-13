@@ -1,22 +1,16 @@
-import { Forbidden, NotFound } from '@feathersjs/errors';
-import { Params } from '@feathersjs/feathers';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { Forbidden, NotFound } from 'http-errors';
 
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
 import { logEvent } from '../../util/auditLog';
 import { refreshSignupPositions } from './computeSignupPosition';
 import { signupsAllowed } from './createNewSignup';
-import { verifyToken } from './editTokens';
 
-type AdminParams = { adminAuthenticated?: boolean };
-
-export default async (id: string, params?: Params & AdminParams): Promise<null> => {
-  if (!params?.adminAuthenticated) {
-    const editToken = (params as Params)?.query?.editToken;
-    verifyToken(id, editToken);
-  }
-
+/** Requires admin authentication OR editTokenVerification */
+async function deleteSignup(id: string, admin: boolean = false): Promise<void> {
   const signup = await Signup.scope('active').findByPk(id, {
     include: [
       {
@@ -34,7 +28,7 @@ export default async (id: string, params?: Params & AdminParams): Promise<null> 
   if (signup === null) {
     throw new NotFound('No signup found with id');
   }
-  if (!params?.adminAuthenticated && !signupsAllowed(signup.quota!.event!)) {
+  if (!admin && !signupsAllowed(signup.quota!.event!)) {
     throw new Forbidden('Signups closed for this event.');
   }
 
@@ -44,7 +38,24 @@ export default async (id: string, params?: Params & AdminParams): Promise<null> 
   // Advance the queue and send emails to people that were accepted
   await refreshSignupPositions(signup.quota!.event!);
 
-  await logEvent('signup.delete', { signup, params });
+  // TODO: Improve
+  await logEvent('signup.delete', { signup, params: { adminAuthenticated: admin } });
+}
 
-  return null;
-};
+// TODO: Require admin authentication
+export async function deleteSignupAsAdmin(
+  request: FastifyRequest<{ Params: schema.SignupPathParams }>,
+  reply: FastifyReply,
+): Promise<void> {
+  await deleteSignup(request.params.id, true);
+  reply.status(200);
+}
+
+// TODO: Require editTokenVerification
+export async function deleteSignupAsUser(
+  request: FastifyRequest<{ Params: schema.SignupPathParams }>,
+  reply: FastifyReply,
+): Promise<void> {
+  await deleteSignup(request.params.id);
+  reply.status(200);
+}

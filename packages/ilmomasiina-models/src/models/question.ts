@@ -1,7 +1,12 @@
 import EventAttributes from './event';
 
-export const questionTypes = ['text', 'textarea', 'number', 'select', 'checkbox'] as const;
-export type QuestionType = typeof questionTypes[number];
+export enum QuestionType {
+  Text = 'text',
+  TextArea = 'textarea',
+  Number = 'number',
+  Select = 'select',
+  Checkbox = 'checkbox',
+}
 
 export default interface QuestionAttributes {
   id: string;

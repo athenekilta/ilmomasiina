@@ -1,27 +1,20 @@
-import { NotFound } from '@feathersjs/errors';
-import { Params } from '@feathersjs/feathers';
-import _ from 'lodash';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { NotFound } from 'http-errors';
 
-import {
-  signupGetAnswerAttrs,
-  signupGetEventAttrs,
-  signupGetQuestionAttrs,
-  signupGetQuotaAttrs,
-  SignupGetResponse,
-  signupGetSignupAttrs,
-} from '@tietokilta/ilmomasiina-models/dist/services/signups/getForEdit';
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { verifyToken } from './editTokens';
+import { nullsToUndef, stringifyDates } from '../utils';
 
-export default async (id: string, params?: Params): Promise<SignupGetResponse> => {
-  const editToken = params?.query?.editToken;
-  verifyToken(id, editToken);
-
-  const signup = await Signup.scope('active').findByPk(id, {
+// TODO: Require editTokenVerification
+export default async function getSignupForEdit(
+  request: FastifyRequest<{ Params: schema.SignupPathParams }>,
+  reply: FastifyReply,
+): Promise<schema.UserSignupForEditSchema> {
+  const signup = await Signup.scope('active').findByPk(request.params.id, {
     include: [
       {
         model: Answer,
@@ -46,24 +39,32 @@ export default async (id: string, params?: Params): Promise<SignupGetResponse> =
   });
   if (signup === null) {
     // Event not found with id, probably deleted
-    throw new NotFound('No signup found with id');
+    throw new NotFound('No signup found with given id');
   }
 
   const event = signup.quota!.event!;
 
-  return {
+  const response = {
     signup: {
-      ..._.pick(signup, signupGetSignupAttrs),
-      quota: _.pick(signup.quota!, signupGetQuotaAttrs),
-      answers: signup.answers!.map((answer) => _.pick(answer, signupGetAnswerAttrs)),
+      ...stringifyDates(signup.get({ plain: true })),
+      firstName: nullsToUndef(signup.firstName),
+      lastName: nullsToUndef(signup.lastName),
+      email: nullsToUndef(signup.email),
+      confirmed: !!signup.confirmedAt,
+      answers: signup.answers!,
+      quota: signup.quota!,
     },
     event: {
-      ..._.pick(event, signupGetEventAttrs),
+      ...stringifyDates(event.get({ plain: true })),
       questions: event.questions!.map((question) => ({
-        ..._.pick(question, signupGetQuestionAttrs),
+        ...question.get({ plain: true }),
         // Split answer options into array
         options: question.options ? question.options.split(';') : null,
       })),
     },
   };
-};
+
+  reply.status(200);
+  // @ts-ignore
+  return response;
+}

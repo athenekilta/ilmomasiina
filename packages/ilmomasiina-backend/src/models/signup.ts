@@ -7,7 +7,8 @@ import {
   Model, Op, Optional, Sequelize,
 } from 'sequelize';
 
-import SignupAttributes, { SignupStatus, signupStatuses } from '@tietokilta/ilmomasiina-models/dist/models/signup';
+import SignupAttributes from '@tietokilta/ilmomasiina-models/src/models/signup';
+import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/schema';
 import { Answer } from './answer';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
@@ -86,7 +87,7 @@ export default function setupSignupModel(sequelize: Sequelize) {
         type: DataTypes.DATE(3),
       },
       status: {
-        type: DataTypes.ENUM(...signupStatuses),
+        type: DataTypes.ENUM(...Object.values(SignupStatus)),
       },
       position: {
         type: DataTypes.INTEGER,

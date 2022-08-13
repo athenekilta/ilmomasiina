@@ -1,6 +1,7 @@
-import { Forbidden, NotFound } from '@feathersjs/errors';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { Forbidden, NotFound } from 'http-errors';
 
-import { SignupCreateBody, SignupCreateResponse } from '@tietokilta/ilmomasiina-models/dist/services/signups/create';
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
@@ -16,9 +17,12 @@ export const signupsAllowed = (event: Event) => {
   return now >= event.registrationStartDate && now <= event.registrationEndDate;
 };
 
-export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateResponse> => {
+export default async function createSignup(
+  request: FastifyRequest<{ Body: schema.SignupCreateSchema }>,
+  response: FastifyReply,
+): Promise<schema.CreatedSignupSchema> {
   // Find the given quota and event.
-  const quota = await Quota.findByPk(quotaId, {
+  const quota = await Quota.findByPk(request.body.quotaId, {
     attributes: [],
     include: [
       {
@@ -29,21 +33,23 @@ export default async ({ quotaId }: SignupCreateBody): Promise<SignupCreateRespon
   });
 
   // Do some validation.
-  if (quota === null) {
+  if (!quota) {
     throw new NotFound('Quota doesn\'t exist.');
   }
+
   if (!signupsAllowed(quota.event!)) {
     throw new Forbidden('Signups closed for this event.');
   }
 
   // Create the signup.
-  const newSignup = await Signup.create({ quotaId });
+  const newSignup = await Signup.create({ quotaId: request.body.quotaId });
   await refreshSignupPositions(quota.event!);
 
   const editToken = generateToken(newSignup);
 
+  response.status(201);
   return {
     id: newSignup.id,
     editToken,
   };
-};
+}

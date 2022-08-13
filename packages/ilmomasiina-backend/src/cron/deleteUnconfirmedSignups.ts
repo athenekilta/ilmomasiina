@@ -6,7 +6,7 @@ import { Op } from 'sequelize';
 import { Event } from '../models/event';
 import { Quota } from '../models/quota';
 import { Signup } from '../models/signup';
-import { refreshSignupPositions } from '../services/signup/computeSignupPosition';
+import { refreshSignupPositions } from '../routes/signup/computeSignupPosition';
 
 const debugLog = debug('app:cron:unconfirmed');
 

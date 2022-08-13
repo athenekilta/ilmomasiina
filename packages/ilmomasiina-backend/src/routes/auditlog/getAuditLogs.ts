@@ -1,64 +1,68 @@
-import { Params, Service } from '@feathersjs/feathers';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { Op, WhereOptions } from 'sequelize';
 
-import { AuditLogResponse } from '@tietokilta/ilmomasiina-models/dist/services/auditlog';
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { AuditLog } from '../../models/auditlog';
-
-export type AuditLogService = Service<AuditLog>;
 
 const MAX_LOGS = 100;
 
-export default async (params?: Params): Promise<AuditLogResponse> => {
+export default async function getAuditLogItems(
+  request: FastifyRequest<{ Querystring: schema.AuditLoqQuery }>,
+  response: FastifyReply,
+): Promise<schema.AuditLogQueryResponse> {
   let where: WhereOptions<AuditLog>[] = [];
-  if (params?.query?.user) {
+  if (request.query.user) {
     where = [
       ...where,
-      { user: { [Op.like]: `%${params.query.user}%` } },
+      { user: { [Op.like]: `%${request.query.user}%` } },
     ];
   }
-  if (params?.query?.ip) {
+  if (request.query.ip) {
     where = [
       ...where,
-      { ipAddress: { [Op.like]: `%${params.query.ip}%` } },
+      { ipAddress: { [Op.like]: `%${request.query.ip}%` } },
     ];
   }
-  if (params?.query?.action) {
+  if (request.query.action) {
     where = [
       ...where,
-      { action: { [Op.in]: params.query.action.split(',') } },
+      { action: { [Op.in]: request.query.action } },
     ];
   }
-  if (params?.query?.event) {
-    where = [
-      ...where,
-      {
-        [Op.or]: [
-          { eventId: params.query.event },
-          { eventName: { [Op.like]: `%${params.query.event}%` } },
-        ],
-      },
-    ];
-  }
-  if (params?.query?.signup) {
+  if (request.query.event) {
     where = [
       ...where,
       {
         [Op.or]: [
-          { signupId: params.query.signup },
-          { signupName: { [Op.like]: `%${params.query.signup}%` } },
+          { eventId: request.query.event },
+          { eventName: { [Op.like]: `%${request.query.event}%` } },
         ],
       },
     ];
   }
-  const offset = Number(params?.query?.$offset) || 0;
-  const limit = Math.min(MAX_LOGS, Number(params?.query?.$limit) || MAX_LOGS);
+  if (request.query.signup) {
+    where = [
+      ...where,
+      {
+        [Op.or]: [
+          { signupId: request.query.signup },
+          { signupName: { [Op.like]: `%${request.query.signup}%` } },
+        ],
+      },
+    ];
+  }
 
   const logs = await AuditLog.findAndCountAll({
     where,
     order: [['createdAt', 'DESC']],
-    offset,
-    limit,
+    offset: request.query.offset,
+    limit: Math.min(MAX_LOGS, request.query.limit),
   });
 
-  return logs;
-};
+  response.status(200);
+  return {
+    // @ts-ignore
+    rows: logs.rows.map((r) => r.get({ plain: true })),
+    count: logs.count,
+  };
+}

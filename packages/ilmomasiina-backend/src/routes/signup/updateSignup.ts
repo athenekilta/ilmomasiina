@@ -1,29 +1,26 @@
-import { BadRequest, Forbidden, NotFound } from '@feathersjs/errors';
-import { Params } from '@feathersjs/feathers';
-import _ from 'lodash';
+import { FastifyReply, FastifyRequest } from 'fastify';
+import { BadRequest, Forbidden, NotFound } from 'http-errors';
 import { Transaction } from 'sequelize';
 
-import { SignupUpdateBody, SignupUpdateResponse } from '@tietokilta/ilmomasiina-models/dist/services/signups/update';
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Signup } from '../../models/signup';
 import { logEvent } from '../../util/auditLog';
+import { stringifyDates } from '../utils';
 import { signupsAllowed } from './createNewSignup';
-import { verifyToken } from './editTokens';
 
-export default async (
-  id: string,
-  data: SignupUpdateBody,
-  params: Params | undefined,
-): Promise<SignupUpdateResponse> => {
-  const editToken = params?.query?.editToken || data.editToken;
-  verifyToken(id, editToken);
-
+// TODO: Require editTokenVerification
+// TODO: Edit tokens from query should not be accepted anymore
+export default async function updateSignup(
+  request: FastifyRequest<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateSchema }>,
+  reply: FastifyReply,
+): Promise<schema.UpdatedSignupSchema> {
   const updatedSignup = await Signup.sequelize!.transaction(async (transaction) => {
     // Retrieve event data and lock the row for editing
-    const signup = await Signup.scope('active').findByPk(id, {
+    const signup = await Signup.scope('active').findByPk(request.params.id, {
       attributes: ['id', 'quotaId', 'confirmedAt', 'firstName', 'lastName', 'email'],
       transaction,
       lock: Transaction.LOCK.UPDATE,
@@ -50,26 +47,38 @@ export default async (
       throw new Forbidden('Signups closed for this event.');
     }
 
+    /** Is this signup already confirmed (i.e. is this the first update for this signup) */
+    const notConfirmedYet = !signup.confirmedAt;
     const questions = event.questions!;
 
     // Check that required common fields are present (if first time confirming)
-    if (!signup.confirmedAt) {
-      if (event.nameQuestion) {
-        if (!data.firstName) {
-          throw new BadRequest('Missing first name');
-        }
-        if (!data.lastName) {
-          throw new BadRequest('Missing last name');
-        }
+    const nameFields = (() => {
+      if (notConfirmedYet && event.nameQuestion) {
+        const { firstName, lastName } = request.body;
+        if (!firstName) { throw new BadRequest('Missing first name'); }
+        if (!lastName) { throw new BadRequest('Missing last name'); }
+        return { firstName, lastName };
       }
-      if (event.emailQuestion && !data.email) {
-        throw new BadRequest('Missing email');
+      return {};
+    })();
+
+    const emailField = (() => {
+      if (notConfirmedYet && event.emailQuestion) {
+        const { email } = request.body;
+        if (!email) { throw new BadRequest('Missing email'); }
+        return { email };
       }
-    }
+      return {};
+    })();
 
     // Check that all questions are answered with a valid answer
     const newAnswers = questions.map((question) => {
-      const answer = _.find(data.answers, { questionId: question.id })?.answer || '';
+      const answer = (() => {
+        // Parse answer from answers or return an empty string if it doesn't exist
+        if (!request.body.answers) { return ''; }
+        const ans = request.body.answers.find((a) => a.questionId === question.id);
+        return ans ? ans.answer : '';
+      })();
 
       if (!answer) {
         if (question.required) {
@@ -120,16 +129,13 @@ export default async (
     });
 
     // Update fields for the signup (name and email only editable on first confirmation)
-    const firstUpdate = !signup.confirmedAt;
-    const nameFields = firstUpdate && event.nameQuestion ? _.pick(data, 'firstName', 'lastName') : {};
-    const emailField = firstUpdate && event.emailQuestion ? _.pick(data, 'email') : {};
-
     const updatedFields = {
       ...nameFields,
       ...emailField,
-      ..._.pick(data, 'namePublic'),
+      namePublic: !!request.body.namePublic,
       confirmedAt: new Date(),
     };
+
     await signup.update(updatedFields, { transaction });
 
     // Update the Answers for the Signup
@@ -144,7 +150,7 @@ export default async (
     await logEvent('signup.edit', {
       signup,
       event: quota.event,
-      params,
+      params: request.body,
       transaction,
     });
 
@@ -155,8 +161,11 @@ export default async (
   await sendSignupConfirmationEmail(updatedSignup);
 
   // Return data
-  return {
+  const res = stringifyDates({
     id: updatedSignup.id,
     confirmedAt: updatedSignup.confirmedAt!,
-  };
-};
+  });
+
+  reply.status(200);
+  return res;
+}
