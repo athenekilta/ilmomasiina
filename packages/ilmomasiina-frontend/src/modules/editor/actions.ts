@@ -203,7 +203,7 @@ export const reloadEvent = () => (dispatch: DispatchAction, getState: GetState) 
 
 export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch(`admin/slug/${slug}`, {}, () => dispatch(loginExpired())) as AdminSlug.Check;
+    const response = await apiFetch(`admin/slugs/${slug}`, {}, () => dispatch(loginExpired())) as AdminSlug.Check;
     dispatch(slugAvailabilityChecked(response));
   } catch (e) {
     dispatch(slugAvailabilityChecked(null));

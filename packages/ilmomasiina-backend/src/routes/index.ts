@@ -153,7 +153,7 @@ export default async function setupRoutes(
 
     /** Admin routes for event slugs */
     server.get<{ Params: schema.CheckSlugParams }>(
-      '/slugs/:id',
+      '/slugs/:slug',
       {
         schema: {
           params: schema.checkSlugParams,

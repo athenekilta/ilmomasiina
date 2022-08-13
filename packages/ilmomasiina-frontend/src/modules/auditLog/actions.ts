@@ -46,7 +46,7 @@ export const getAuditLogs = (query: AuditLog.List.Query = {}) => async (
     .join('&');
 
   try {
-    const response = await apiFetch(`auditlog?${queryString}`, {}, () => dispatch(loginExpired()));
+    const response = await apiFetch(`admin/auditlog?${queryString}`, {}, () => dispatch(loginExpired()));
     dispatch(auditLogLoaded(response as AuditLog.List));
   } catch (e) {
     dispatch(auditLogLoadFailed());

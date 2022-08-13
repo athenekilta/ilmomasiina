@@ -46,7 +46,7 @@ export type AdminUsersActions =
 
 export const getUsers = () => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch('users', {}, () => dispatch(loginExpired()));
+    const response = await apiFetch('admin/users', {}, () => dispatch(loginExpired()));
     dispatch(usersLoaded(response as User.List));
   } catch (e) {
     dispatch(usersLoadFailed());
@@ -57,7 +57,7 @@ export const createUser = (data: User.Create.Body) => async (dispatch: DispatchA
   dispatch(userCreating());
 
   try {
-    await apiFetch('users', {
+    await apiFetch('admin/users', {
       method: 'POST',
       body: data,
     }, () => dispatch(loginExpired()));
@@ -71,7 +71,7 @@ export const createUser = (data: User.Create.Body) => async (dispatch: DispatchA
 
 export const deleteUser = (id: User.Id) => async (dispatch: DispatchAction) => {
   try {
-    await apiFetch(`users/${id}`, {
+    await apiFetch(`admin/users/${id}`, {
       method: 'DELETE',
     }, () => dispatch(loginExpired()));
     return true;
