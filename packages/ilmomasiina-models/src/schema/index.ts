@@ -43,12 +43,14 @@ export {
   userCreateSchema, userInviteSchema, userSchema, userLoginSchema, userPathParams, userListSchema,
 } from './user';
 export type {
-  UserCreateSchema, UserInviteSchema, UserSchema, UserLoginSchema, UserPathParams, UserListSchema,
+  UserID, UserCreateSchema, UserInviteSchema, UserSchema, UserLoginSchema, UserPathParams, UserListSchema,
 } from './user';
 export { errorResponseSchema, editConflictErrorSchema, wouldMoveSignupsToQueue } from './errors';
 export type { ErrorResponseSchema, EditConflictErrorSchema, WouldMoveSignupsToQueue } from './errors';
 export type { SignupQuotaID } from './signupQuota';
 export type { SignupQuestionID } from './signupQuestion';
+export { adminLoginSchema } from './login';
+export type { AdminLoginSchema } from './login';
 
 // export type { AdminCategory } from './services/admin/categories';
 // export type { AdminEvent } from './services/admin/events';

@@ -1,6 +1,7 @@
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { User } from '@tietokilta/ilmomasiina-models';
-import { DispatchAction, GetState } from '../../store/types';
+import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
+import { DispatchAction } from '../../store/types';
+import { loginExpired } from '../auth/actions';
 import {
   RESET,
   USER_CREATE_FAILED,
@@ -43,28 +44,23 @@ export type AdminUsersActions =
   | ReturnType<typeof userCreated>
   | ReturnType<typeof resetState>;
 
-export const getUsers = () => async (dispatch: DispatchAction, getState: GetState) => {
-  const { accessToken } = getState().auth;
-
+export const getUsers = () => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch('users', { accessToken });
+    const response = await apiFetch('users', {}, () => dispatch(loginExpired()));
     dispatch(usersLoaded(response as User.List));
   } catch (e) {
     dispatch(usersLoadFailed());
   }
 };
 
-export const createUser = (data: User.Create.Body) => async (dispatch: DispatchAction, getState: GetState) => {
+export const createUser = (data: User.Create.Body) => async (dispatch: DispatchAction) => {
   dispatch(userCreating());
-
-  const { accessToken } = getState().auth;
 
   try {
     await apiFetch('users', {
-      accessToken,
       method: 'POST',
       body: data,
-    });
+    }, () => dispatch(loginExpired()));
     dispatch(userCreated());
     return true;
   } catch (e) {
@@ -73,14 +69,11 @@ export const createUser = (data: User.Create.Body) => async (dispatch: DispatchA
   }
 };
 
-export const deleteUser = (id: User.Id) => async (_dispatch: DispatchAction, getState: GetState) => {
-  const { accessToken } = getState().auth;
-
+export const deleteUser = (id: User.Id) => async (dispatch: DispatchAction) => {
   try {
     await apiFetch(`users/${id}`, {
-      accessToken,
       method: 'DELETE',
-    });
+    }, () => dispatch(loginExpired()));
     return true;
   } catch (e) {
     return false;

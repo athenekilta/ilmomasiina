@@ -4,7 +4,7 @@ import { Button, Container, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import branding from '../../branding';
-import { redirectToLogin } from '../../modules/auth/actions';
+import { logout } from '../../modules/auth/actions';
 import appPaths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
@@ -22,7 +22,7 @@ const Header = () => {
         </Link>
         {loggedIn && (
           <Button
-            onClick={() => dispatch(redirectToLogin())}
+            onClick={() => dispatch(logout())}
           >
             Logout
           </Button>

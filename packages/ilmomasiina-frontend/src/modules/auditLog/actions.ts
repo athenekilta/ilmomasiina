@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
 import { AuditLog } from '@tietokilta/ilmomasiina-models';
 import { DispatchAction, GetState } from '../../store/types';
+import { loginExpired } from '../auth/actions';
 import {
   AUDIT_LOG_LOAD_FAILED,
   AUDIT_LOG_LOADED,
@@ -36,10 +37,7 @@ export type AuditLogActions =
 
 export const getAuditLogs = (query: AuditLog.List.Query = {}) => async (
   dispatch: DispatchAction,
-  getState: GetState,
 ) => {
-  const { accessToken } = getState().auth;
-
   dispatch(auditLogQuery(query));
 
   const queryString = _.entries(query)
@@ -48,7 +46,7 @@ export const getAuditLogs = (query: AuditLog.List.Query = {}) => async (
     .join('&');
 
   try {
-    const response = await apiFetch(`auditlog?${queryString}`, { accessToken });
+    const response = await apiFetch(`auditlog?${queryString}`, {}, () => dispatch(loginExpired()));
     dispatch(auditLogLoaded(response as AuditLog.List));
   } catch (e) {
     dispatch(auditLogLoadFailed());

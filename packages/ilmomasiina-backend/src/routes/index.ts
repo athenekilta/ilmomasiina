@@ -3,6 +3,8 @@ import { Type } from '@sinclair/typebox';
 import { FastifyInstance } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AdminAuthSession } from '../authentication/adminSession';
+import config from '../config';
 import getCategoriesList from './admin/categories/categories';
 import createEvent from './admin/event/createEvent';
 import deleteEvent from './admin/event/deleteEvent';
@@ -15,11 +17,12 @@ import {
 } from './event/getEventDetails';
 import getEventsListForUser, { getEventsListForAdmin } from './event/getEventsList';
 import { sendICalFeed } from './ical';
+import { addSessionValidationHook, adminLogin, adminLogout } from './login/adminLogin';
 import createSignup from './signup/createNewSignup';
 import { deleteSignupAsAdmin, deleteSignupAsUser } from './signup/deleteSignup';
 import getSignupForEdit from './signup/getSignupForEdit';
 import updateSignup from './signup/updateSignup';
-import { inviteUser } from './user/createUser';
+import createUser, { inviteUser } from './user/createUser';
 import deleteUser from './user/deleteUser';
 import listUsers from './user/listUsers';
 
@@ -28,11 +31,23 @@ const errorResponses = {
   '5XX': schema.errorResponseSchema,
 };
 
-export default async function setupRoutes(fastifyInstance: FastifyInstance): Promise<void> {
+export interface RouteOptions {
+  adminSession: AdminAuthSession
+}
+
+export default async function setupRoutes(
+  fastifyInstance: FastifyInstance,
+  opts: RouteOptions,
+): Promise<void> {
   const fastify = fastifyInstance.withTypeProvider<TypeBoxTypeProvider>();
 
   // Setup admin routes (prefixed with '/admin')
   fastify.register(async (instance) => {
+    // Add session validation hook:
+    // All the following routes require a valid session. The route functions are called only if the session is valid.
+    // For invalid sessions, the hook automatically responds with a proper error response.
+    addSessionValidationHook(opts.adminSession, instance);
+
     const server = instance.withTypeProvider<TypeBoxTypeProvider>();
 
     /** Routes for categories */
@@ -264,6 +279,34 @@ export default async function setupRoutes(fastifyInstance: FastifyInstance): Pro
   // Setup public routes
   const server = fastify;
 
+  /** Admin session management routes */
+  server.post<{ Body: schema.AdminLoginSchema }>(
+    '/authentication',
+    {
+      schema: {
+        body: schema.adminLoginSchema,
+        response: {
+          ...errorResponses,
+          204: {},
+        },
+      },
+    },
+    adminLogin(opts.adminSession),
+  );
+
+  server.delete(
+    '/authentication',
+    {
+      schema: {
+        response: {
+          ...errorResponses,
+          204: {},
+        },
+      },
+    },
+    adminLogout(opts.adminSession),
+  );
+
   /** Public routes for events */
   server.get<{ Querystring: schema.EventListQuery }>(
     '/events',
@@ -314,4 +357,20 @@ export default async function setupRoutes(fastifyInstance: FastifyInstance): Pro
     {},
     sendICalFeed,
   );
+
+  if (config.adminRegistrationAllowed) {
+    server.post<{ Body: schema.UserCreateSchema }>(
+      '/users',
+      {
+        schema: {
+          body: schema.userCreateSchema,
+          response: {
+            ...errorResponses,
+            201: schema.userSchema,
+          },
+        },
+      },
+      createUser,
+    );
+  }
 }

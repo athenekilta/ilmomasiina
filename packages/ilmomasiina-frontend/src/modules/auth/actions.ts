@@ -1,4 +1,5 @@
 import { push } from 'connected-react-router';
+import { toast } from 'react-toastify';
 
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
 import { Auth } from '@tietokilta/ilmomasiina-models';
@@ -41,7 +42,6 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
     const response = await apiFetch('authentication', {
       method: 'POST',
       body: {
-        strategy: 'local',
         email,
         password,
       },
@@ -58,4 +58,27 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
 export const redirectToLogin = () => (dispatch: DispatchAction) => {
   dispatch(resetState());
   dispatch(push(appPaths.adminLogin));
+};
+
+export const logout = () => async (dispatch: DispatchAction) => {
+  try {
+    await apiFetch('authentication', {
+      method: 'DELETE',
+    });
+    dispatch(redirectToLogin());
+    toast.success('Uloskirjautuminen onnistui.', {
+      autoClose: 10000,
+    });
+  } catch (e) {
+    toast.error('Uloskirjautuminen epäonnistui.', {
+      autoClose: 10000,
+    });
+  }
+};
+
+export const loginExpired = () => (dispatch: DispatchAction) => {
+  toast.error('Sisäänkirjautumisesi on vanhentunut. Kirjaudu sisään uudelleen.', {
+    autoClose: 10000,
+  });
+  dispatch(redirectToLogin());
 };

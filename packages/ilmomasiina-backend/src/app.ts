@@ -1,9 +1,11 @@
+import fastifyCookie from '@fastify/cookie';
 import fastifySensible from '@fastify/sensible';
 import fastifyStatic from '@fastify/static';
 import fastify, { FastifyInstance } from 'fastify';
 import cron from 'node-cron';
 import path from 'path';
 
+import { AdminAuthSession } from './authentication/adminSession';
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
 import deleteOldAuditLogs from './cron/deleteOldAuditLogs';
@@ -18,6 +20,11 @@ export default async function initApp(): Promise<FastifyInstance> {
   const server = fastify({
     trustProxy: config.isAzure || config.trustProxy, // Get IPs from X-Forwarded-For
     logger: true, // Enable logger
+  });
+
+  server.register(fastifyCookie, {
+    // secret: 'my-secret', // for cookies signature
+    // parseOptions: {}, // options for parsing cookies
   });
 
   // Register fastify-sensible (https://github.com/fastify/fastify-sensible)
@@ -44,6 +51,7 @@ export default async function initApp(): Promise<FastifyInstance> {
 
   server.register(setupRoutes, {
     prefix: '/api',
+    adminSession: new AdminAuthSession(config.feathersAuthSecret),
   });
 
   // Serving frontend files if frontendFilesPath is not null.

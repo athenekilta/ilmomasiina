@@ -38,14 +38,11 @@ export function configureApi(url: string) {
 }
 
 export default async function apiFetch(uri: string, {
-  method = 'GET', body, headers, accessToken, signal,
-}: FetchOptions = {}) {
+  method = 'GET', body, headers, signal,
+}: FetchOptions = {}, onUnauthenticated?: () => void) {
   const allHeaders = {
     ...headers || {},
   };
-  if (accessToken) {
-    allHeaders.Authorization = accessToken;
-  }
   if (body !== undefined) {
     allHeaders['Content-Type'] = 'application/json; charset=utf-8';
   }
@@ -56,6 +53,8 @@ export default async function apiFetch(uri: string, {
     headers: allHeaders,
     signal,
   });
+
+  if (response.status === 401 && onUnauthenticated) { onUnauthenticated(); }
 
   if (response.status > 299) {
     throw await ApiError.fromResponse(response);

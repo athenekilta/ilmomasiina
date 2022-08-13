@@ -1,6 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { Conflict } from 'http-errors';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AdminPasswordAuth } from '../../authentication/adminPassword';
 import EmailService from '../../mail';
 import { User } from '../../models/user';
 import { logEvent } from '../../util/auditLog';
@@ -18,15 +20,13 @@ async function create(params: schema.UserCreateSchema): Promise<schema.UserSchem
       transaction,
     });
 
-    if (existing) {
-      // TODO: throw new Error('User with given email already exists')
-    }
+    if (existing) { throw new Conflict('User with given email already exists'); }
 
     // Create new user with hashed password
     return User.create(
       {
         ...params,
-        password: '', // TODO: Hash password
+        password: AdminPasswordAuth.createHash(params.password),
       },
       { transaction },
     );

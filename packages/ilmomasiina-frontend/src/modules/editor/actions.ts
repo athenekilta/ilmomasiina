@@ -3,6 +3,7 @@ import {
   AdminCategory, AdminEvent, AdminSlug, Signup,
 } from '@tietokilta/ilmomasiina-models';
 import { DispatchAction, GetState } from '../../store/types';
+import { loginExpired } from '../auth/actions';
 import {
   CATEGORIES_LOADED,
   EDIT_CONFLICT,
@@ -184,10 +185,9 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   })),
 });
 
-export const getEvent = (id: AdminEvent.Id) => async (dispatch: DispatchAction, getState: GetState) => {
-  const { accessToken } = getState().auth;
+export const getEvent = (id: AdminEvent.Id) => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch(`admin/events/${id}`, { accessToken }) as AdminEvent.Details;
+    const response = await apiFetch(`admin/events/${id}`, {}, () => dispatch(loginExpired())) as AdminEvent.Details;
     dispatch(loaded(response));
   } catch (e) {
     dispatch(loadFailed());
@@ -201,24 +201,18 @@ export const reloadEvent = () => (dispatch: DispatchAction, getState: GetState) 
   dispatch(getEvent(event.id));
 };
 
-export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction, getState: GetState) => {
-  const { accessToken } = getState().auth;
+export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch(`admin/slug/${slug}`, {
-      accessToken,
-    }) as AdminSlug.Check;
+    const response = await apiFetch(`admin/slug/${slug}`, {}, () => dispatch(loginExpired())) as AdminSlug.Check;
     dispatch(slugAvailabilityChecked(response));
   } catch (e) {
     dispatch(slugAvailabilityChecked(null));
   }
 };
 
-export const loadCategories = () => async (dispatch: DispatchAction, getState: GetState) => {
-  const { accessToken } = getState().auth;
+export const loadCategories = () => async (dispatch: DispatchAction) => {
   try {
-    const response = await apiFetch('admin/categories', {
-      accessToken,
-    }) as AdminCategory.List;
+    const response = await apiFetch('admin/categories', {}, () => dispatch(loginExpired())) as AdminCategory.List;
     dispatch(categoriesLoaded(response));
   } catch (e) {
     dispatch(categoriesLoaded([]));
@@ -226,18 +220,16 @@ export const loadCategories = () => async (dispatch: DispatchAction, getState: G
   }
 };
 
-export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchAction, getState: GetState) => {
+export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchAction) => {
   dispatch(saving());
 
   const cleaned = editorEventToServer(data);
-  const { accessToken } = getState().auth;
 
   try {
     const response = await apiFetch('admin/events', {
-      accessToken,
       method: 'POST',
       body: cleaned,
-    }) as AdminEvent.Details;
+    }, () => dispatch(loginExpired())) as AdminEvent.Details;
     dispatch(loaded(response));
     return response;
   } catch (e) {
@@ -250,21 +242,19 @@ export const publishEventUpdate = (
   id: AdminEvent.Id,
   data: EditorEvent,
   moveSignupsToQueue: boolean = false,
-) => async (dispatch: DispatchAction, getState: GetState) => {
+) => async (dispatch: DispatchAction) => {
   dispatch(saving());
 
   const cleaned = editorEventToServer(data);
-  const { accessToken } = getState().auth;
 
   try {
     const response = await apiFetch(`admin/events/${id}`, {
-      accessToken,
       method: 'PATCH',
       body: {
         ...cleaned,
         moveSignupsToQueue,
       },
-    }) as AdminEvent.Details;
+    }, () => dispatch(loginExpired())) as AdminEvent.Details;
     dispatch(loaded(response));
     return response;
   } catch (e) {
@@ -281,17 +271,11 @@ export const publishEventUpdate = (
   }
 };
 
-export const deleteSignup = (id: Signup.Id) => async (
-  dispatch: DispatchAction,
-  getState: GetState,
-) => {
-  const { accessToken } = getState().auth;
-
+export const deleteSignup = (id: Signup.Id) => async (dispatch: DispatchAction) => {
   try {
     await apiFetch(`admin/signups/${id}`, {
-      accessToken,
       method: 'DELETE',
-    });
+    }, () => dispatch(loginExpired()));
     return true;
   } catch (e) {
     return false;

@@ -65,6 +65,7 @@ export const userPathParams = Type.Object({
   id: userID,
 });
 
+export type UserID = Static<typeof userID>;
 export type UserCreateSchema = Static<typeof userCreateSchema>;
 export type UserInviteSchema = Static<typeof userInviteSchema>;
 export type UserSchema = Static<typeof userSchema>;
