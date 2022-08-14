@@ -31,8 +31,8 @@ export class AdminAuthSession {
 
   constructor(secret: string, cookieOptions?: CookieSerializeOptions) {
     this.sign = createSigner({ key: secret });
-    this.verifySoft = createVerifier({ key: secret, maxAge: AdminAuthSession.TTL * 1000 });
-    this.verifyHard = createVerifier({ key: secret, maxAge: Math.floor(AdminAuthSession.TTL * 0.5 * 1000) });
+    this.verifySoft = createVerifier({ key: secret, maxAge: Math.floor(AdminAuthSession.TTL * 0.5 * 1000) });
+    this.verifyHard = createVerifier({ key: secret, maxAge: AdminAuthSession.TTL * 1000 });
 
     if (cookieOptions) { this.cookieOptions = cookieOptions; }
   }
@@ -52,7 +52,7 @@ export class AdminAuthSession {
     const token = parsed[AdminAuthSession.COOKIE];
 
     try { // Try first against soft limit
-      const data = this.verifyHard(token);
+      const data = this.verifySoft(token);
       return { user: parseInt(data.user) };
     } catch { /* ignore errors */ }
 
