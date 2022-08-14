@@ -1,8 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import * as schema from './index';
-import { signupQuestionID } from './signupQuestion';
-import { signupQuotaID } from './signupQuota';
+import { signupQuestionID } from './question';
+import { signupQuotaID } from './quota';
 
 export const errorResponseSchema = Type.Object({
   statusCode: Type.Number(),

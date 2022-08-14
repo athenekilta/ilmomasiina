@@ -15,20 +15,19 @@ export function nullsToUndef<T>(val: T | null): T | undefined {
 }
 
 export function stringifyDates<T extends object>(o: T): StringifyApi<T> {
-  // const s = {};
-  // for (const [key, val] of Object.entries(o)) {
-  //   if (val instanceof Date) {
-  //     // @ts-ignore
-  //     s[key] = val.toISOString();
-  //   } else if (typeof val !== 'object' || val == null) {
-  //     // @ts-ignore
-  //     s[key] = val;
-  //   } else {
-  //     console.log(val);
-  //     // @ts-ignore
-  //     s[key] = stringifyDates(val);
-  //   }
-  // }
+  const s = {};
+  for (const [key, val] of Object.entries(o)) {
+    if (val instanceof Date) {
+      // @ts-ignore
+      s[key] = val.toISOString();
+    } else if (typeof val !== 'object' || val == null) {
+      // @ts-ignore
+      s[key] = val;
+    } else {
+      // @ts-ignore
+      s[key] = stringifyDates(val);
+    }
+  }
 
   // @ts-ignore
   return o;

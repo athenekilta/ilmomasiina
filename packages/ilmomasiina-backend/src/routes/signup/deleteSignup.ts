@@ -48,7 +48,7 @@ export async function deleteSignupAsAdmin(
   reply: FastifyReply,
 ): Promise<void> {
   await deleteSignup(request.params.id, true);
-  reply.status(200);
+  reply.status(204);
 }
 
 // TODO: Require editTokenVerification
@@ -57,5 +57,5 @@ export async function deleteSignupAsUser(
   reply: FastifyReply,
 ): Promise<void> {
   await deleteSignup(request.params.id);
-  reply.status(200);
+  reply.status(204);
 }

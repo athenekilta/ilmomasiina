@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { signupQuestionID } from './signupQuestion';
-import { signupQuotaID, singleSignupQuota } from './signupQuota';
+import { signupQuestionID } from './question';
+import { signupQuotaID, singleSignupQuota } from './quota';
 
 export enum SignupStatus {
   IN_QUOTA = 'in-quota',
@@ -60,10 +60,17 @@ const namePublic = Type.Boolean({
   description: 'is allowed to show `firstName` and `lastName` publicly',
 });
 
-const confirmedAt = Type.String({
+const confirmedAt = Type.Union([
+  Type.String({
+    title: 'confimation time',
+    format: 'date-time',
+    description: 'time when the signup details were added (i.e. first update after signup creation)',
+  }),
+  Type.Null({
+    title: 'not confirmed yet',
+  }),
+], {
   title: 'time when the signup was confirmed',
-  format: 'date-time',
-  description: 'time when the signup details were added (i.e. first update after signup creation)',
 });
 
 export const editToken = Type.String({
@@ -146,7 +153,6 @@ export const updatedSignupSchema = Type.Object({
 
 export const publicSignupSchema = Type.Intersect(
   [
-    signupIdentity, // TODO: Exclude for users?
     userNonEditableSignupAttributes,
     reducedEditableSignupAttributes,
     reducedSignupAnswers,
@@ -168,7 +174,7 @@ export const userSignupSchema = Type.Intersect(
 export const adminSignupSchema = Type.Intersect([
   signupIdentity,
   adminNonEditableSignupAttributes,
-  editableSignupAttributes,
+  Type.Partial(editableSignupAttributes),
   signupAnswers,
 ]);
 

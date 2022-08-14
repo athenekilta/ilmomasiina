@@ -16,7 +16,8 @@ import SignupStatus from './SignupStatus';
 
 const EditForm = () => {
   const { event, signup, registrationClosed } = useEditSignupContext();
-  const isNew = signup!.confirmedAt === null;
+  // @ts-ignore
+  const isNew = !signup!.confirmed;
   const updateSignup = useUpdateSignup();
   const Link = linkComponent();
   const navigate = useNavigate();

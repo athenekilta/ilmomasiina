@@ -47,8 +47,8 @@ export type {
 } from './user';
 export { errorResponseSchema, editConflictErrorSchema, wouldMoveSignupsToQueue } from './errors';
 export type { ErrorResponseSchema, EditConflictErrorSchema, WouldMoveSignupsToQueue } from './errors';
-export type { SignupQuotaID } from './signupQuota';
-export type { SignupQuestionID } from './signupQuestion';
+export type { SignupQuotaID } from './quota';
+export type { SignupQuestionID } from './question';
 export { adminLoginSchema } from './login';
 export type { AdminLoginSchema } from './login';
 

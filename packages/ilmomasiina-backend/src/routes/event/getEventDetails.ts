@@ -16,7 +16,7 @@ import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { stringifyDates } from '../utils';
+import { nullsToUndef, stringifyDates } from '../utils';
 
 const eventOrdering: Order = [
   [Question, 'order', 'ASC'],
@@ -24,7 +24,7 @@ const eventOrdering: Order = [
   [Quota, Signup, 'createdAt', 'ASC'],
 ];
 
-export default async function eventDetailsForUser(
+export async function eventDetailsForUser(
   eventSlug: schema.EventSlug,
 ): Promise<schema.UserEventSchema> {
   const event = await Event.scope('user').findOne({
@@ -97,29 +97,24 @@ export default async function eventDetailsForUser(
     ...stringifyDates(event.get({ plain: true })),
     questions,
 
-    quotas: event.quotas!.map((quota) => {
-      // Hide all signups from non-admins if answers are not public
-      let signups = null;
-
-      if (event.signupsPublic) {
-        signups = quota.signups!.map((signup) => ({
-          ...signup.get({ plain: true }),
+    quotas: event.quotas!.map((quota) => ({
+      ...quota.get({ plain: true }),
+      signups: event.signupsPublic // Hide all signups from non-admins if answers are not public
+      // When signups are public:
+        ? quota.signups!.map((signup) => ({
+          ...stringifyDates(signup.get({ plain: true })),
           // Hide name if necessary
           firstName: event.nameQuestion && signup.namePublic ? signup.firstName : null,
           lastName: event.nameQuestion && signup.namePublic ? signup.lastName : null,
           // Hide answers of non-public questions
           answers: signup.answers!.filter((answer) => publicQuestions.has(answer.questionId)),
-
+          status: signup.status,
           confirmed: signup.confirmedAt !== null,
-        }));
-      }
-
-      return {
-        ...quota.get({ plain: true }),
-        signups,
-        signupCount: quota.signups!.length,
-      };
-    }),
+        }))
+      // When signups are not public:
+        : [],
+      signupCount: quota.signups!.length,
+    })),
 
     millisTillOpening,
     registrationClosed,
@@ -150,7 +145,7 @@ export async function eventDetailsForAdmin(
         include: [
           {
             model: Signup.scope('active'),
-            attributes: [...eventGetSignupAttrs, 'confirmedAt'],
+            attributes: [...eventGetSignupAttrs, 'confirmedAt', 'id', 'email'],
             required: false,
             // ... and answers of signups
             include: [
@@ -187,11 +182,15 @@ export async function eventDetailsForAdmin(
     })),
 
     quotas: event.quotas!.map((quota) => ({
-      ...quota.get({ plain: true }),
-
+      ...stringifyDates(quota.get({ plain: true })),
       signups: quota.signups!.map((signup) => ({
-        ...signup.get({ plain: true }),
+        ...stringifyDates(signup.get({ plain: true })),
         answers: signup.answers!,
+        status: signup.status,
+        firstName: nullsToUndef(signup.firstName),
+        lastName: nullsToUndef(signup.lastName),
+        email: nullsToUndef(signup.email),
+        confirmed: !!signup.confirmedAt,
       })),
       signupCount: quota.signups!.length,
     })),

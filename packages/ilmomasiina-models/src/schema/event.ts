@@ -4,12 +4,12 @@ import {
   signupQuestions,
   signupQuestionsCreate,
   signupQuestionsUpdate,
-} from './signupQuestion';
+} from './question';
 import {
   signupQuotasCreate, signupQuotasUpdate,
   signupQuotasWithSignupCount,
-  signupQuotasWithSignups,
-} from './signupQuota';
+} from './quota';
+import { signupQuotasWithSignupsForAdmin, signupQuotasWithSignupsForUser } from './quotaWithSignups';
 
 const eventSlug = Type.String({
   title: 'event slug',
@@ -197,6 +197,7 @@ const adminEventAttributesBasic = Type.Intersect(
 const adminEventAttributesExtended = Type.Intersect(
   [
     userEventAttributesExtended,
+    adminEventAttributesBasic,
     Type.Object({
       verificationEmail: Type.Union(
         [
@@ -252,7 +253,7 @@ export const adminEventSchema = Type.Intersect(
     eventIdentity,
     adminEventAttributesExtended,
     signupQuestions,
-    signupQuotasWithSignups,
+    signupQuotasWithSignupsForAdmin,
   ],
 );
 
@@ -273,7 +274,7 @@ export const userEventSchema = Type.Intersect([
   eventIdentity,
   userEventAttributesExtended,
   signupQuestions,
-  signupQuotasWithSignups,
+  signupQuotasWithSignupsForUser,
   eventExtraInformation,
 ], {
   title: 'Full event details for normal users',

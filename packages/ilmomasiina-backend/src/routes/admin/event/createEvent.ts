@@ -17,6 +17,11 @@ export default async function createEvent(
     const created = await Event.create(
       {
         ...request.body,
+        // @ts-ignore
+        questions: request.body.questions ? request.body.questions.map((q, order) => ({
+          ...q, options: (q.options && q.options.length) ? q.options.join(';') : null, order,
+        })) : [],
+        quotas: request.body.quotas ? request.body.quotas.map((q, order) => ({ ...q, order })) : [],
         date: toDate(request.body.date),
         endDate: toDate(request.body.endDate),
         registrationStartDate: toDate(request.body.registrationStartDate),

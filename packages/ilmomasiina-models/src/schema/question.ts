@@ -41,7 +41,7 @@ export const signupQuestionID = Type.String({
   description: 'provide question ID to edit an existing question',
 });
 
-const signupQuestion = Type.Intersect(
+const question = Type.Intersect(
   [
     signupQuestionCreate,
     Type.Object({
@@ -60,7 +60,7 @@ const signupQuestionUpdate = Type.Intersect(
 );
 
 export const signupQuestions = Type.Object({
-  questions: Type.Array(signupQuestion, {
+  questions: Type.Array(question, {
     title: 'additional questions',
   }),
 });

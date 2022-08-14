@@ -38,19 +38,10 @@ export const signupQuotaSchema = Type.Intersect(
   ],
 );
 
-const signupQuotaWithSignupCount = Type.Intersect(
+export const signupQuotaWithSignupCount = Type.Intersect(
   [
     signupQuotaSchema,
     signupCount,
-  ],
-);
-
-const signupQuotaWithSignups = Type.Intersect(
-  [
-    signupQuotaWithSignupCount,
-    Type.Object({
-      // signups: TODO,
-    }),
   ],
 );
 
@@ -86,12 +77,6 @@ export const signupQuotasCreate = Type.Object({
 export const signupQuotasUpdate = Type.Object({
   quotas: Type.Array(signupQuotaUpdate, {
     title: 'quota definitions',
-  }),
-});
-
-export const signupQuotasWithSignups = Type.Object({
-  quotas: Type.Array(signupQuotaWithSignups, {
-    title: 'quota definitions including signups',
   }),
 });
 

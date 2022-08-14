@@ -22,5 +22,5 @@ export default async function deleteEvent(
     await logEvent('event.delete', { params: request.params, event });
   }
 
-  response.status(200);
+  response.status(204);
 }

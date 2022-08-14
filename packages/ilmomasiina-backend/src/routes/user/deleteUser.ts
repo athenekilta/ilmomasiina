@@ -30,5 +30,5 @@ export default async function deleteUser(
     }
   });
 
-  reply.status(200);
+  reply.status(204);
 }

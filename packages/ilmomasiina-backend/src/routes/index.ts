@@ -100,7 +100,7 @@ export default async function setupRoutes(
           params: schema.adminEventPathParams,
           response: {
             ...errorResponses,
-            200: schema.adminListCategoriesResponse,
+            200: schema.adminEventSchema,
           },
         },
       },
@@ -129,7 +129,7 @@ export default async function setupRoutes(
           params: schema.adminEventPathParams,
           response: {
             ...errorResponses,
-            200: {},
+            204: {},
           },
         },
       },
@@ -144,7 +144,7 @@ export default async function setupRoutes(
           params: schema.signupPathParams,
           response: {
             ...errorResponses,
-            200: {},
+            204: {},
           },
         },
       },
@@ -216,7 +216,7 @@ export default async function setupRoutes(
           params: schema.userPathParams,
           response: {
             ...errorResponses,
-            200: {},
+            204: {},
           },
         },
       },
@@ -266,7 +266,7 @@ export default async function setupRoutes(
           params: schema.signupPathParams,
           response: {
             ...errorResponses,
-            200: {},
+            204: {},
           },
         },
       },
@@ -341,7 +341,7 @@ export default async function setupRoutes(
     '/signups',
     {
       schema: {
-        params: schema.signupCreateSchema,
+        body: schema.signupCreateSchema,
         response: {
           ...errorResponses,
           201: schema.createdSignupSchema,
