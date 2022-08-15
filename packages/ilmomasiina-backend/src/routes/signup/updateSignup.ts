@@ -3,12 +3,12 @@ import { BadRequest, Forbidden, NotFound } from 'http-errors';
 import { Transaction } from 'sequelize';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Signup } from '../../models/signup';
-import { logEvent } from '../../util/auditLog';
 import { stringifyDates } from '../utils';
 import { signupsAllowed } from './createNewSignup';
 
@@ -147,10 +147,9 @@ export default async function updateSignup(
     });
     await Answer.bulkCreate(newAnswers, { transaction });
 
-    await logEvent('signup.edit', {
+    await request.logEvent(AuditEvent.EDIT_SIGNUP, {
       signup,
       event: quota.event,
-      params: request.body,
       transaction,
     });
 

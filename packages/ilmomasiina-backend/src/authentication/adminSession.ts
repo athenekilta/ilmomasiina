@@ -9,6 +9,7 @@ import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 
 export interface AdminTokenData {
   user: schema.UserID
+  email: schema.UserSchema['email']
 }
 
 export class AdminAuthSession {
@@ -53,12 +54,12 @@ export class AdminAuthSession {
 
     try { // Try first against soft limit
       const data = this.verifySoft(token);
-      return { user: parseInt(data.user) };
+      return { user: parseInt(data.user), email: data.email || '' };
     } catch { /* ignore errors */ }
 
     try { // The token is expiring. Replace it with a new one if it is still within the hard limit.
       const rawData = this.verifyHard(token);
-      const data = { user: parseInt(rawData.user) };
+      const data = { user: parseInt(rawData.user), email: rawData.email || '' };
       this.createSession(data, reply);
       return data;
     } catch (e) {

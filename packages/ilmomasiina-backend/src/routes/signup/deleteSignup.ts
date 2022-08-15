@@ -2,15 +2,16 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { Forbidden, NotFound } from 'http-errors';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
+import { AuditLogger } from '../../auditlog';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { logEvent } from '../../util/auditLog';
 import { refreshSignupPositions } from './computeSignupPosition';
 import { signupsAllowed } from './createNewSignup';
 
 /** Requires admin authentication OR editTokenVerification */
-async function deleteSignup(id: string, admin: boolean = false): Promise<void> {
+async function deleteSignup(id: string, auditLogger: AuditLogger, admin: boolean = false): Promise<void> {
   const signup = await Signup.scope('active').findByPk(id, {
     include: [
       {
@@ -39,7 +40,7 @@ async function deleteSignup(id: string, admin: boolean = false): Promise<void> {
   await refreshSignupPositions(signup.quota!.event!);
 
   // TODO: Improve
-  await logEvent('signup.delete', { signup, params: { adminAuthenticated: admin } });
+  await auditLogger(AuditEvent.DELETE_SIGNUP, { signup });
 }
 
 // TODO: Require admin authentication
@@ -47,7 +48,7 @@ export async function deleteSignupAsAdmin(
   request: FastifyRequest<{ Params: schema.SignupPathParams }>,
   reply: FastifyReply,
 ): Promise<void> {
-  await deleteSignup(request.params.id, true);
+  await deleteSignup(request.params.id, request.logEvent, true);
   reply.status(204);
 }
 
@@ -56,6 +57,6 @@ export async function deleteSignupAsUser(
   request: FastifyRequest<{ Params: schema.SignupPathParams }>,
   reply: FastifyReply,
 ): Promise<void> {
-  await deleteSignup(request.params.id);
+  await deleteSignup(request.params.id, request.logEvent);
   reply.status(204);
 }

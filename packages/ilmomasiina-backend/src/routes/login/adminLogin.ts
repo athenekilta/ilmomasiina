@@ -14,13 +14,13 @@ export function adminLogin(session: AdminAuthSession) {
     // Verify user
     const user = await User.findOne({
       where: { email: request.body.email },
-      attributes: ['id', 'password'],
+      attributes: ['id', 'password', 'email'],
     });
 
     if (user && AdminPasswordAuth.verifyHash(request.body.password, user.password)) {
       // Authentication success -> generate auth token
       reply.status(204);
-      session.createSession({ user: user.id }, reply);
+      session.createSession({ user: user.id, email: user.email }, reply);
     } else {
       reply.unauthorized('Invalid email or password');
     }

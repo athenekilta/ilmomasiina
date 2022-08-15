@@ -1,12 +1,13 @@
 import moment from 'moment-timezone';
 import { Transaction, WhereOptions } from 'sequelize';
 
-import { SignupStatus } from '@tietokilta/ilmomasiina-models/dist/models/signup';
+import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/models/signup';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
+import { internalAuditLogger } from '../../auditlog';
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { logEvent } from '../../util/auditLog';
 import { WouldMoveSignupsToQueue } from '../admin/event/errors';
 
 async function sendPromotedFromQueueEmail(signup: Signup, eventId: Event['id']) {
@@ -115,10 +116,9 @@ export async function refreshSignupPositions(
     if (signup.status === 'in-queue' && status !== 'in-queue') {
       sendPromotedFromQueueEmail(signup, event.id);
 
-      await logEvent('signup.queuePromote', {
+      await internalAuditLogger(AuditEvent.PROMOTE_SIGNUP, {
         signup,
         event,
-        params: undefined, // let's not require params to be passed here
         transaction,
       });
     }

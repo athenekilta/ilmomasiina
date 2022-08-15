@@ -1,5 +1,26 @@
 import { Static, Type } from '@sinclair/typebox';
 
+/** Describes all possible actions that can be logged into audit log */
+export enum AuditEvent {
+  CREATE_EVENT = 'event.create',
+  DELETE_EVENT = 'event.delete',
+  PUBLISH_EVENT = 'event.publish',
+  UNPUBLISH_EVENT = 'event.unpublish',
+  EDIT_EVENT = 'event.edit',
+  PROMOTE_SIGNUP = 'signup.queuePromote',
+  DELETE_SIGNUP = 'signup.delete',
+  EDIT_SIGNUP = 'signup.edit',
+  CREATE_USER = 'user.create',
+  DELETE_USER = 'user.delete',
+}
+
+const auditEventAction = Type.Enum(
+  AuditEvent,
+  {
+    title: 'logged action type',
+  },
+);
+
 export const auditLoqQuery = Type.Object({
   user: Type.Optional(Type.String({
     title: 'filter events by username',
@@ -9,10 +30,7 @@ export const auditLoqQuery = Type.Object({
   })),
   action: Type.Optional(
     Type.Array( // TODO: Requires Ajv to be in coerce array mode
-      Type.String({
-        title: 'action type',
-        // TODO: Include action type validation here (using Type.Enum for example)
-      }),
+      auditEventAction,
       {
         title: 'filter events by actions',
       },
@@ -53,10 +71,7 @@ export const auditLogItem = Type.Object({
   ipAddress: Type.String({
     title: 'IP address of where the request came from',
   }),
-  action: Type.String({
-    title: 'action',
-    description: 'what happened',
-  }),
+  action: auditEventAction,
   eventId: Type.Union([
     Type.String({
       title: 'event ID',

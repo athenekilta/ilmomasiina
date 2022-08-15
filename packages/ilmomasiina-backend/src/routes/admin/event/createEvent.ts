@@ -1,10 +1,10 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
-import { logEvent } from '../../../util/auditLog';
 import { eventDetailsForAdmin } from '../../event/getEventDetails';
 import { stringifyDates, toDate } from '../../utils';
 
@@ -42,7 +42,7 @@ export default async function createEvent(
       },
     );
 
-    await logEvent('event.create', { event: created, params: request.body, transaction });
+    await request.logEvent(AuditEvent.CREATE_EVENT, { event: created, transaction });
 
     return created;
   });

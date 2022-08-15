@@ -3,10 +3,10 @@ import { NotFound } from 'http-errors';
 import { Op, Transaction } from 'sequelize';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
-import { logEvent } from '../../../util/auditLog';
 import { eventDetailsForAdmin } from '../../event/getEventDetails';
 import { refreshSignupPositions } from '../../signup/computeSignupPosition';
 import { toDate } from '../../utils';
@@ -161,11 +161,11 @@ export default async function updateEvent(
       await refreshSignupPositions(event, transaction, request.body.moveSignupsToQueue);
 
       const isPublic = !event.draft;
-      let action;
-      if (isPublic === wasPublic) action = 'event.edit';
-      else action = isPublic ? 'event.publish' : 'event.unpublish';
+      let action: AuditEvent;
+      if (isPublic === wasPublic) action = AuditEvent.EDIT_EVENT;
+      else action = isPublic ? AuditEvent.PUBLISH_EVENT : AuditEvent.UNPUBLISH_EVENT;
 
-      await logEvent(action, { event, params: request.body, transaction });
+      await request.logEvent(action, { event, transaction });
     });
   } catch (e) {
     if (e instanceof EditConflict || e instanceof WouldMoveSignupsToQueue) {

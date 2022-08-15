@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { AdminEventPathParams } from '@tietokilta/ilmomasiina-models/src/schema';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { Event } from '../../../models/event';
-import { logEvent } from '../../../util/auditLog';
 
 export default async function deleteEvent(
   request: FastifyRequest<{ Params: AdminEventPathParams }>,
@@ -19,7 +19,7 @@ export default async function deleteEvent(
   await event?.destroy();
 
   if (event) {
-    await logEvent('event.delete', { params: request.params, event });
+    await request.logEvent(AuditEvent.DELETE_EVENT, { event });
   }
 
   response.status(204);

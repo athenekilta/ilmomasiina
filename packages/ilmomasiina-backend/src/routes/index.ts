@@ -3,6 +3,7 @@ import { Type } from '@sinclair/typebox';
 import { FastifyInstance } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { addLogEventHook } from '../auditlog';
 import { AdminAuthSession } from '../authentication/adminSession';
 import config from '../config';
 import getCategoriesList from './admin/categories/categories';
@@ -39,6 +40,8 @@ export default async function setupRoutes(
   fastifyInstance: FastifyInstance,
   opts: RouteOptions,
 ): Promise<void> {
+  addLogEventHook(fastifyInstance);
+
   const fastify = fastifyInstance.withTypeProvider<TypeBoxTypeProvider>();
 
   // Setup admin routes (prefixed with '/admin')

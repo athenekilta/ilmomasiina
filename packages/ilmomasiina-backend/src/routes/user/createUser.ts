@@ -2,18 +2,20 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { Conflict } from 'http-errors';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
+import { AuditLogger } from '../../auditlog';
 import { AdminPasswordAuth } from '../../authentication/adminPassword';
 import EmailService from '../../mail';
 import { User } from '../../models/user';
-import { logEvent } from '../../util/auditLog';
 import generatePassword from './generatePassword';
 
 /**
  * Private helper function to create a new user and save it to the database
  *
  * @param params user parameters
+ * @param auditLogger audit logger function from the originating request
  */
-async function create(params: schema.UserCreateSchema): Promise<schema.UserSchema> {
+async function create(params: schema.UserCreateSchema, auditLogger: AuditLogger): Promise<schema.UserSchema> {
   const user = await User.sequelize!.transaction(async (transaction) => {
     const existing = await User.findOne({
       where: { email: params.email },
@@ -37,9 +39,8 @@ async function create(params: schema.UserCreateSchema): Promise<schema.UserSchem
     email: user.email,
   };
 
-  await logEvent('user.create', {
+  await auditLogger(AuditEvent.CREATE_USER, {
     extra: res,
-    params: {},
   });
 
   return res;
@@ -55,7 +56,7 @@ export default async function createUser(
   request: FastifyRequest<{ Body: schema.UserCreateSchema }>,
   reply: FastifyReply,
 ): Promise<schema.UserSchema> {
-  const user = await create(request.body);
+  const user = await create(request.body, request.logEvent);
   reply.status(201);
   return user;
 }
@@ -70,10 +71,13 @@ export async function inviteUser(
   // Generate secure password
   const password = generatePassword();
 
-  const user = await create({
-    email: request.body.email,
-    password,
-  });
+  const user = await create(
+    {
+      email: request.body.email,
+      password,
+    },
+    request.logEvent,
+  );
 
   // Send invitation mail
   EmailService.sendNewUserMail(user.email, {

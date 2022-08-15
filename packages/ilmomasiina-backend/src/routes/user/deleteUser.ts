@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { User } from '../../models/user';
-import { logEvent } from '../../util/auditLog';
 
 export default async function deleteUser(
   request: FastifyRequest<{ Params: schema.UserPathParams }>,
@@ -20,12 +20,11 @@ export default async function deleteUser(
     } else {
       // Delete user
       await existing.destroy({ transaction });
-      await logEvent('user.delete', {
+      await request.logEvent(AuditEvent.DELETE_USER, {
         extra: {
           id: existing.email,
           email: existing.email,
         },
-        params: {},
       });
     }
   });
