@@ -57,9 +57,10 @@ export class AdminAuthSession {
     } catch { /* ignore errors */ }
 
     try { // The token is expiring. Replace it with a new one if it is still within the hard limit.
-      const data = this.verifyHard(token);
+      const rawData = this.verifyHard(token);
+      const data = { user: parseInt(rawData.user) };
       this.createSession(data, reply);
-      return { user: parseInt(data.user) };
+      return data;
     } catch (e) {
       throw new Unauthorized('Invalid session');
     }
