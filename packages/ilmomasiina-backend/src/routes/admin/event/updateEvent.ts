@@ -15,7 +15,7 @@ import { EditConflict, WouldMoveSignupsToQueue } from './errors';
 export default async function updateEvent(
   request: FastifyRequest<{ Params: schema.AdminEventPathParams, Body: schema.EventEditSchema }>,
   response: FastifyReply,
-): Promise<schema.AdminEventSchema | schema.EditConflictErrorSchema | schema.WouldMoveSignupsToQueue> {
+): Promise<schema.AdminEventSchema | schema.EditConflictError | schema.WouldMoveSignupsToQueueError> {
   try {
     await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update

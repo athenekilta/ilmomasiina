@@ -2,22 +2,24 @@ import { Type } from '@sinclair/typebox';
 
 import { QuestionType } from '../../enum';
 
+/** Unique identifier for question */
 export const questionID = Type.String({
   title: 'question ID',
-  description: 'provide question ID to edit an existing question',
 });
 
+/** Non-editable identity attributes of question */
 export const questionIdentity = Type.Object({
   id: questionID,
 });
 
+/** Editable attributes of question */
 export const questionAttributes = Type.Object({
   question: Type.String({
     title: 'question to ask',
   }),
   type: Type.Enum(QuestionType, {
     title: 'question type',
-    description: '', // TODO: describe question types here
+    description: 'describes the type of the question',
   }),
   options: Type.Union([
     Type.Array(

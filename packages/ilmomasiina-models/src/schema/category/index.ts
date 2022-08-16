@@ -5,7 +5,8 @@ export const eventCategory = Type.String({
   description: 'used to categorize Events',
 });
 
-export const adminListCategoriesResponse = Type.Array(
+/** Describes the response body for GET categories endpoint */
+export const listCategoriesResponse = Type.Array(
   eventCategory,
   {
     title: 'Category list',
@@ -13,5 +14,5 @@ export const adminListCategoriesResponse = Type.Array(
   },
 );
 
-export type AdminListCategoriesResponse = Static<typeof adminListCategoriesResponse>;
+export type ListCategoriesResponse = Static<typeof listCategoriesResponse>;
 export type EventCategory = Static<typeof eventCategory>;

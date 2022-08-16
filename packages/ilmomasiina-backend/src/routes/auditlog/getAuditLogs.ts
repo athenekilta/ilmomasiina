@@ -9,7 +9,7 @@ const MAX_LOGS = 100;
 export default async function getAuditLogItems(
   request: FastifyRequest<{ Querystring: schema.AuditLoqQuery }>,
   response: FastifyReply,
-): Promise<schema.AuditLogQueryResponse> {
+): Promise<schema.AuditLogResponse> {
   let where: WhereOptions<AuditLog>[] = [];
   if (request.query.user) {
     where = [

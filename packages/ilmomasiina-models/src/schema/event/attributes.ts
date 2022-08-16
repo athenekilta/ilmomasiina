@@ -13,6 +13,7 @@ export const eventIdentity = Type.Object({
   id: eventID,
 });
 
+/** Event attributes that are included in event lists for normal users */
 export const userEventAttributesBasic = Type.Object({
   title: Type.String({
     title: 'Event title',
@@ -80,14 +81,15 @@ export const userEventAttributesBasic = Type.Object({
   ),
   openQuotaSize: Type.Integer({
     title: 'size limit for open quota',
-    description: '', // TODO: Describe briefly how open quota works
+    description: 'this quota will be populated by signups not fitting into their primary quota ',
   }),
   category: Type.Optional(Type.String({
     title: 'event category',
-    description: '', // TODO: Describe briefly how category works
+    description: 'A short category label',
   })),
 });
 
+/** Event attributes that are included only per event for normal users */
 export const userEventAttributesExtended = Type.Intersect(
   [
     userEventAttributesBasic,
@@ -163,7 +165,7 @@ export const userEventAttributesExtended = Type.Intersect(
       ),
       signupsPublic: Type.Boolean({
         title: 'show signups',
-        description: '', // TODO: Describe the usage of signupsPublic
+        description: 'should the signups to be shown for all users',
       }),
       nameQuestion: Type.Boolean({
         title: 'ask name for signup',
@@ -175,22 +177,25 @@ export const userEventAttributesExtended = Type.Intersect(
   ],
 );
 
+/** Event attributes that are included in event lists for admins */
 export const adminEventAttributesBasic = Type.Intersect(
   [
     userEventAttributesBasic,
     Type.Object({
       draft: Type.Boolean({
         title: 'is draft',
-        description: '', // TODO: Describe briefly how draft events work
+        description: 'Draft events are not yet published and are shown only for signed-in admins.',
       }),
       listed: Type.Boolean({
         title: 'visibility in the event list',
-        description: 'Listed events are publicly visible in the front page of Ilmomasiina',
+        description: 'Listed events are publicly visible in the front page of Ilmomasiina.'
+          + ' Unlisted events will be accessible only using a direct link',
       }),
     }),
   ],
 );
 
+/** Event attributes that are included only per event for admins */
 export const adminEventAttributesExtended = Type.Intersect(
   [
     userEventAttributesExtended,
@@ -217,6 +222,7 @@ export const adminEventAttributesExtended = Type.Intersect(
   ],
 );
 
+/** Event attributes that are calculated by the system and thus not directly editable via the API */
 export const eventExtraInformation = Type.Object({
   millisTillOpening: Type.Union(
     [

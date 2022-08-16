@@ -2,7 +2,7 @@ import { Type } from '@sinclair/typebox';
 
 export const signupID = Type.String({
   title: 'signup id',
-  // TODO: Validation?
+  // TODO: Validation? max-length?
 });
 
 export const firstName = Type.String({
@@ -37,5 +37,5 @@ export const confirmedAt = Type.Union([
 
 export const editToken = Type.String({
   title: 'edit token',
-  description: 'use to make changes to this signup',
+  description: 'Needed when making changes to this signup',
 });

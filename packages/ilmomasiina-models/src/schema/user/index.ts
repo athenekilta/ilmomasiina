@@ -2,6 +2,7 @@ import { Static, Type } from '@sinclair/typebox';
 
 import * as attributes from './attributes';
 
+/** Defines field `password` for changing or setting a password for user */
 export const userEditPassword = Type.Object({
   password: Type.String({
     title: 'new password as a plain text',
@@ -9,6 +10,7 @@ export const userEditPassword = Type.Object({
   }),
 });
 
+/** Describes request body for login endpoint */
 export const userLoginSchema = Type.Object({
   username: Type.String({
     title: 'username',
@@ -20,26 +22,24 @@ export const userLoginSchema = Type.Object({
   }),
 });
 
-export const userPasswordHash = Type.Object({
-  password: Type.String({
-    title: 'password hash',
-  }),
-});
-
+/** Describes request body for creating a new user */
 export const userCreateSchema = Type.Intersect([
   attributes.userAttributes,
   userEditPassword,
 ]);
 
+/** Describes request body for inviting a user */
 export const userInviteSchema = Type.Intersect([
   attributes.userAttributes,
 ]);
 
+/** Describes a schema for a single user */
 export const userSchema = Type.Intersect([
   attributes.userIdentity,
   attributes.userAttributes,
 ]);
 
+/** Describes response body for GET users endpoint */
 export const userListSchema = Type.Array(
   userSchema,
   {
@@ -47,6 +47,7 @@ export const userListSchema = Type.Array(
   },
 );
 
+/** Describes path params for user endpoints */
 export const userPathParams = Type.Object({
   id: attributes.userID,
 });

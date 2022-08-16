@@ -2,6 +2,7 @@ import { Type } from '@sinclair/typebox';
 
 import { AuditEvent } from '../../enum';
 
+/** Describes action of the audit event */
 export const auditEventAction = Type.Enum(
   AuditEvent,
   {
@@ -9,6 +10,7 @@ export const auditEventAction = Type.Enum(
   },
 );
 
+/** All attributes of audit log item */
 export const auditLogItemAttributes = Type.Object({
   id: Type.Integer({
     title: 'audit log event ID',

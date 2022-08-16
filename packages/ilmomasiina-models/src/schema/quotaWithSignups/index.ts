@@ -1,11 +1,12 @@
 import { Type } from '@sinclair/typebox';
 
-import { signupQuotaWithSignupCount } from '../quota';
+import { quotaWithSignupCount } from '../quota';
 import { adminSignupSchema, publicSignupSchema } from '../signup';
 
+/** Describes a schema for quota including public information about the signups in that quota */
 const quotaWithSignupsForUser = Type.Intersect(
   [
-    signupQuotaWithSignupCount,
+    quotaWithSignupCount,
     Type.Object({
       signups: Type.Array(
         publicSignupSchema,
@@ -18,9 +19,10 @@ const quotaWithSignupsForUser = Type.Intersect(
   ],
 );
 
+/** Describes a schema for quota including all information about the signups in that quota */
 const quotaWithSignupsForAdmin = Type.Intersect(
   [
-    signupQuotaWithSignupCount,
+    quotaWithSignupCount,
     Type.Object({
       signups: Type.Array(
         adminSignupSchema,
@@ -33,12 +35,14 @@ const quotaWithSignupsForAdmin = Type.Intersect(
   ],
 );
 
+/** Defines field `quotas` containing all quotas and public information about related signups */
 export const signupQuotasWithSignupsForUser = Type.Object({
   quotas: Type.Array(quotaWithSignupsForUser, {
     title: 'quota definitions including signups',
   }),
 });
 
+/** Defines field `quotas` containing all quotas and all information about related signups */
 export const signupQuotasWithSignupsForAdmin = Type.Object({
   quotas: Type.Array(quotaWithSignupsForAdmin, {
     title: 'quota definitions including signups',

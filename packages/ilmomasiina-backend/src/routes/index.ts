@@ -60,7 +60,7 @@ export default async function setupRoutes(
         schema: {
           response: {
             ...errorResponses,
-            200: schema.adminListCategoriesResponse,
+            200: schema.listCategoriesResponse,
           },
         },
       },
@@ -177,7 +177,7 @@ export default async function setupRoutes(
           querystring: schema.auditLoqQuery,
           response: {
             ...errorResponses,
-            200: schema.auditLogQueryResponse,
+            200: schema.auditLogResponse,
           },
         },
       },
@@ -254,7 +254,7 @@ export default async function setupRoutes(
           body: schema.signupUpdateSchema,
           response: {
             ...errorResponses,
-            409: Type.Union([schema.editConflictErrorSchema, schema.wouldMoveSignupsToQueue]),
+            409: Type.Union([schema.editConflictError, schema.wouldMoveSignupsToQueueError]),
             200: schema.updatedSignupSchema,
           },
         },

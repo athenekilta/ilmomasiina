@@ -1,13 +1,13 @@
 import { Static, Type } from '@sinclair/typebox';
 
 import {
-  signupQuestions,
-  signupQuestionsCreate,
-  signupQuestionsUpdate,
+  questions,
+  questionsCreate,
+  questionsUpdate,
 } from '../question';
 import {
-  signupQuotasCreate, signupQuotasUpdate,
-  signupQuotasWithSignupCount,
+  quotasCreate, quotasUpdate,
+  quotasWithSignupCount,
 } from '../quota';
 import { signupQuotasWithSignupsForAdmin, signupQuotasWithSignupsForUser } from '../quotaWithSignups';
 import {
@@ -20,15 +20,17 @@ import {
   userEventAttributesBasic, userEventAttributesExtended,
 } from './attributes';
 
+/** Describes the event used in responses for admins */
 export const adminEventSchema = Type.Intersect(
   [
     eventIdentity,
     adminEventAttributesExtended,
-    signupQuestions,
+    questions,
     signupQuotasWithSignupsForAdmin,
   ],
 );
 
+/** Describes the event used in responses for admins when the responses contain multiple events */
 export const adminEventListItemSchema = Type.Intersect(
   [
     eventIdentity,
@@ -36,16 +38,11 @@ export const adminEventListItemSchema = Type.Intersect(
   ],
 );
 
-export const userEventForSignupSchema = Type.Intersect([
-  eventIdentity,
-  userEventAttributesExtended,
-  signupQuestions,
-]);
-
+/** Describes the event used in responses for users */
 export const userEventSchema = Type.Intersect([
   eventIdentity,
   userEventAttributesExtended,
-  signupQuestions,
+  questions,
   signupQuotasWithSignupsForUser,
   eventExtraInformation,
 ], {
@@ -53,31 +50,32 @@ export const userEventSchema = Type.Intersect([
   description: 'Contains details for a single event',
 });
 
+/** Describes the event used in responses for users when the responses contain multiple events */
 export const userEventListItemSchema = Type.Intersect([
   eventIdentity,
   userEventAttributesBasic,
-  signupQuotasWithSignupCount,
+  quotasWithSignupCount,
 ]);
 
-// Schema used in POST /api/events for Event instances.
+/** Define response body for successful event edit */
 export const eventCreateSchema = Type.Intersect(
   [
     adminEventAttributesExtended,
-    signupQuestionsCreate,
-    signupQuotasCreate,
+    questionsCreate,
+    quotasCreate,
   ],
 );
 
+/** Define request body for editing an existing event */
 export const eventEditSchema = Type.Partial(
   Type.Intersect(
     [
-      eventIdentity, // TODO: Required (maybe not?)
       adminEventAttributesExtended,
-      signupQuestionsUpdate,
-      signupQuotasUpdate,
+      questionsUpdate,
+      quotasUpdate,
       Type.Object({
         moveSignupsToQueue: Type.Boolean({
-          title: 'allow moving signups back to queue', // TODO: Correct interpretation?
+          title: 'allow moving signups back to queue',
           description: 'Allow to move signups back queue if necessary to meet updated quotas.',
           default: false,
         }),
@@ -86,10 +84,19 @@ export const eventEditSchema = Type.Partial(
   ),
 );
 
+/** Special form of event to provide all necessary information for user to edit their signup */
+export const userEventForSignupSchema = Type.Intersect([
+  eventIdentity,
+  userEventAttributesExtended,
+  questions,
+]);
+
+/** Describes path parameters for admin routes */
 export const adminEventPathParams = Type.Object({
   id: eventID,
 });
 
+/** Describes path parameters for user routes */
 export const userEventPathParams = Type.Object({
   slug: eventSlug,
 });

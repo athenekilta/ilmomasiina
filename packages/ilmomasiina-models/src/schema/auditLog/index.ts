@@ -2,6 +2,7 @@ import { Static, Type } from '@sinclair/typebox';
 
 import * as attributes from './attributes';
 
+/** Describes query params used with audit log query endpoint */
 export const auditLoqQuery = Type.Object({
   user: Type.Optional(Type.String({
     title: 'filter events by username',
@@ -37,7 +38,8 @@ export const auditLoqQuery = Type.Object({
 
 export const auditLogItem = attributes.auditLogItemAttributes;
 
-export const auditLogQueryResponse = Type.Object({
+/** Describes the response body for audit log GET endpoint */
+export const auditLogResponse = Type.Object({
   rows: Type.Array(
     auditLogItem,
     {
@@ -52,4 +54,4 @@ export const auditLogQueryResponse = Type.Object({
 
 export type AuditLoqQuery = Static<typeof auditLoqQuery>;
 export type AuditLogItem = Static<typeof auditLogItem>;
-export type AuditLogQueryResponse = Static<typeof auditLogQueryResponse>;
+export type AuditLogResponse = Static<typeof auditLogResponse>;

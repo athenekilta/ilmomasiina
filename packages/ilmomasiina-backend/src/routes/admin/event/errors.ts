@@ -12,12 +12,12 @@ export abstract class CustomError extends Error {
   }
 }
 
-export class EditConflict extends CustomError implements schema.EditConflictErrorSchema {
+export class EditConflict extends CustomError implements schema.EditConflictError {
   public readonly updatedAt: string; // in date-time format
-  public readonly deletedQuotas: schema.SignupQuotaID[];
-  public readonly deletedQuestions: schema.SignupQuestionID[];
+  public readonly deletedQuotas: schema.QuotaID[];
+  public readonly deletedQuestions: schema.QuestionID[];
 
-  constructor(updatedAt: Date, deletedQuotas: schema.SignupQuotaID[], deletedQuestions: schema.SignupQuestionID[]) {
+  constructor(updatedAt: Date, deletedQuotas: schema.QuotaID[], deletedQuestions: schema.QuestionID[]) {
     const updatedAtStr = updatedAt.toISOString();
     super(
       409,
@@ -30,7 +30,7 @@ export class EditConflict extends CustomError implements schema.EditConflictErro
   }
 }
 
-export class WouldMoveSignupsToQueue extends CustomError implements schema.WouldMoveSignupsToQueue {
+export class WouldMoveSignupsToQueue extends CustomError implements schema.WouldMoveSignupsToQueueError {
   public readonly count: number;
 
   constructor(count: number) {

@@ -6,7 +6,7 @@ import { Event } from '../../../models/event';
 export default async function getCategoriesList(
   request: FastifyRequest,
   response: FastifyReply,
-): Promise<schema.AdminListCategoriesResponse> {
+): Promise<schema.ListCategoriesResponse> {
   const results = await Event.findAll({
     attributes: ['category'],
     group: ['category'],
