@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import { AdminEventPathParams } from '@tietokilta/ilmomasiina-models/src/schema';
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { Event } from '../../../models/event';
 
 export default async function deleteEvent(

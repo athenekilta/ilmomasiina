@@ -2,8 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { NotFound } from 'http-errors';
 import { Op, Transaction } from 'sequelize';
 
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';

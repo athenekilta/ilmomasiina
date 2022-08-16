@@ -1,27 +1,12 @@
 import { Static, Type } from '@sinclair/typebox';
 
-export const signupQuotaID = Type.String({
-  title: 'quota ID',
-  description: 'a unique identifier for quota',
-  // TODO: Add validation?
-});
+import * as attributes from './attributes';
 
-const signupQuotaCreate = Type.Object({
-  title: Type.String({
-    title: 'title of the quota',
-  }),
-  size: Type.Union([
-    Type.Integer({
-      title: 'size limit',
-      minimum: 1,
-    }),
-    Type.Null({
-      title: 'unlimited quota',
-    }),
-  ], {
-    title: 'size limit of the quota',
-  }),
-});
+export { quotaID } from './attributes';
+
+const signupQuotaCreate = Type.Intersect([
+  attributes.quotaAttributes,
+]);
 
 const signupCount = Type.Object({
   signupCount: Type.Integer({
@@ -31,10 +16,8 @@ const signupCount = Type.Object({
 
 export const signupQuotaSchema = Type.Intersect(
   [
-    signupQuotaCreate,
-    Type.Object({
-      id: signupQuotaID,
-    }),
+    attributes.quotaIdentity,
+    attributes.quotaAttributes,
   ],
 );
 
@@ -48,9 +31,7 @@ export const signupQuotaWithSignupCount = Type.Intersect(
 const signupQuotaUpdate = Type.Intersect(
   [
     signupQuotaCreate,
-    Type.Object({
-      id: Type.Optional(signupQuotaID),
-    }),
+    Type.Partial(attributes.quotaIdentity),
   ],
   {
     title: 'updated quota',
@@ -80,4 +61,4 @@ export const signupQuotasUpdate = Type.Object({
   }),
 });
 
-export type SignupQuotaID = Static<typeof signupQuotaID>;
+export type SignupQuotaID = Static<typeof attributes.quotaID>;

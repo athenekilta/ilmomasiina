@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { signupQuestionID } from './question';
-import { signupQuotaID } from './quota';
+import { signupQuestionID } from '../question';
+import { quotaID } from '../quota';
 
 export const errorResponseSchema = Type.Object({
   statusCode: Type.Number(),
@@ -16,7 +16,7 @@ export const editConflictErrorSchema = Type.Intersect([
       title: '', // TODO: ???
       format: 'date-time',
     }),
-    deletedQuotas: Type.Array(signupQuotaID),
+    deletedQuotas: Type.Array(quotaID),
     deletedQuestions: Type.Array(signupQuestionID),
   }),
 ]);

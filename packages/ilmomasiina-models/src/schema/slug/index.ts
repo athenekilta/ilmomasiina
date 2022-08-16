@@ -1,9 +1,9 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { eventID } from './event';
+import { eventID, eventSlug } from '../event/attributes';
 
 export const checkSlugParams = Type.Object({
-  slug: Type.String(), // TODO: Create own schema for slug
+  slug: eventSlug,
 });
 
 export const checkSlugResponse = Type.Object({

@@ -2,8 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { BadRequest, Forbidden, NotFound } from 'http-errors';
 import { Transaction } from 'sequelize';
 
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';

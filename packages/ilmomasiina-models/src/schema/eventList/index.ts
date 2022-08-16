@@ -1,6 +1,6 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { adminEventListItemSchema, userEventListItemSchema } from './event';
+import { adminEventListItemSchema, userEventListItemSchema } from '../event';
 
 export const adminEventListSchema = Type.Array(
   adminEventListItemSchema,

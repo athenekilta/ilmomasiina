@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Conflict } from 'http-errors';
 
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { AuditLogger } from '../../auditlog';
 import { AdminPasswordAuth } from '../../authentication/adminPassword';
 import EmailService from '../../mail';

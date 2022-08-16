@@ -1,8 +1,8 @@
 import moment from 'moment-timezone';
 import { Transaction, WhereOptions } from 'sequelize';
 
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/models/signup';
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { internalAuditLogger } from '../../auditlog';
 import EmailService from '../../mail';
 import { Event } from '../../models/event';

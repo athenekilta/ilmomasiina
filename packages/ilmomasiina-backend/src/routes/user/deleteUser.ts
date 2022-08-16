@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { NotFound } from 'http-errors';
 
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
 import { User } from '../../models/user';
 
 export default async function deleteUser(

@@ -5,7 +5,8 @@ import {
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import QuestionAttributes, { QuestionType } from '@tietokilta/ilmomasiina-models/src/models/question';
+import { QuestionType } from '@tietokilta/ilmomasiina-models/src/enum';
+import QuestionAttributes from '@tietokilta/ilmomasiina-models/src/models/question';
 import { Answer } from './answer';
 import { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';

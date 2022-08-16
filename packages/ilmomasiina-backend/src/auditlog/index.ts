@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { Transaction } from 'sequelize';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import { AuditLog } from '../models/auditlog';
 import { Event } from '../models/event';
 import { Signup } from '../models/signup';

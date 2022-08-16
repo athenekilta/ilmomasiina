@@ -7,8 +7,8 @@ import {
   Model, Op, Optional, Sequelize,
 } from 'sequelize';
 
+import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/enum';
 import SignupAttributes from '@tietokilta/ilmomasiina-models/src/models/signup';
-import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/schema';
 import { Answer } from './answer';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';

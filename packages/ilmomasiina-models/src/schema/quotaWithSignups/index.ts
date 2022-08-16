@@ -1,7 +1,7 @@
 import { Type } from '@sinclair/typebox';
 
-import { signupQuotaWithSignupCount } from './quota';
-import { adminSignupSchema, publicSignupSchema } from './signup';
+import { signupQuotaWithSignupCount } from '../quota';
+import { adminSignupSchema, publicSignupSchema } from '../signup';
 
 const quotaWithSignupsForUser = Type.Intersect(
   [

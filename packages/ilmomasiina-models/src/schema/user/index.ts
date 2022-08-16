@@ -1,20 +1,6 @@
 import { Static, Type } from '@sinclair/typebox';
 
-const userID = Type.Integer({
-  title: 'user id',
-});
-
-const userIdentity = Type.Object({
-  id: userID,
-});
-
-export const userAttributes = Type.Object({
-  email: Type.String({
-    title: 'email',
-    description: 'Used as a username in login',
-    // TODO: Add validation RegExp for email
-  }),
-});
+import * as attributes from './attributes';
 
 export const userEditPassword = Type.Object({
   password: Type.String({
@@ -41,17 +27,17 @@ export const userPasswordHash = Type.Object({
 });
 
 export const userCreateSchema = Type.Intersect([
-  userAttributes,
+  attributes.userAttributes,
   userEditPassword,
 ]);
 
 export const userInviteSchema = Type.Intersect([
-  userAttributes,
+  attributes.userAttributes,
 ]);
 
 export const userSchema = Type.Intersect([
-  userIdentity,
-  userAttributes,
+  attributes.userIdentity,
+  attributes.userAttributes,
 ]);
 
 export const userListSchema = Type.Array(
@@ -62,10 +48,10 @@ export const userListSchema = Type.Array(
 );
 
 export const userPathParams = Type.Object({
-  id: userID,
+  id: attributes.userID,
 });
 
-export type UserID = Static<typeof userID>;
+export type UserID = Static<typeof attributes.userID>;
 export type UserCreateSchema = Static<typeof userCreateSchema>;
 export type UserInviteSchema = Static<typeof userInviteSchema>;
 export type UserSchema = Static<typeof userSchema>;

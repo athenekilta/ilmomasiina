@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { userEventForSignupSchema } from './event';
-import { userSignupSchema } from './signup';
+import { userEventForSignupSchema } from '../event';
+import { userSignupSchema } from '../signup';
 
 export const userSignupForEditSchema = Type.Object({
   signup: userSignupSchema,
