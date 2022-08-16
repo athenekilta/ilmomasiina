@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { NotFound } from 'http-errors';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/schema/auditLog';
@@ -16,7 +17,7 @@ export default async function deleteUser(
     );
 
     if (!existing) {
-      // TODO: throw new 404 Error('User does not exist')
+      throw new NotFound('User does not exist');
     } else {
       // Delete user
       await existing.destroy({ transaction });

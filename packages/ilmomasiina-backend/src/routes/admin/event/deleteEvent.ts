@@ -10,9 +10,8 @@ export default async function deleteEvent(
 ): Promise<void> {
   const event = await Event.findByPk(request.params.id);
   if (event === null) {
-    // TODO: Replace with 404 error
-    response.status(404);
-    response.send('No event found with id');
+    response.notFound('No event found with id');
+    return;
   }
 
   // Delete the DB object

@@ -12,7 +12,7 @@ import { Signup } from '../../models/signup';
 import { stringifyDates } from '../utils';
 import { signupsAllowed } from './createNewSignup';
 
-// TODO: Require editTokenVerification
+/** Requires editTokenVerification */
 // TODO: Edit tokens from query should not be accepted anymore
 export default async function updateSignup(
   request: FastifyRequest<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateSchema }>,

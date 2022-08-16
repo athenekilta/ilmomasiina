@@ -39,11 +39,11 @@ async function deleteSignup(id: string, auditLogger: AuditLogger, admin: boolean
   // Advance the queue and send emails to people that were accepted
   await refreshSignupPositions(signup.quota!.event!);
 
-  // TODO: Improve
+  // Create an audit log event
   await auditLogger(AuditEvent.DELETE_SIGNUP, { signup });
 }
 
-// TODO: Require admin authentication
+/** Requires admin authentication */
 export async function deleteSignupAsAdmin(
   request: FastifyRequest<{ Params: schema.SignupPathParams }>,
   reply: FastifyReply,
@@ -52,7 +52,7 @@ export async function deleteSignupAsAdmin(
   reply.status(204);
 }
 
-// TODO: Require editTokenVerification
+/** Requires editTokenVerification */
 export async function deleteSignupAsUser(
   request: FastifyRequest<{ Params: schema.SignupPathParams }>,
   reply: FastifyReply,
