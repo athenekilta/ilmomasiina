@@ -39,7 +39,7 @@ export default async (signup: Signup) => {
   const edited = answers.some((answer) => answer.createdAt.getTime() !== answer.updatedAt.getTime());
   const date = event.date && moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm');
 
-  const editToken = generateToken(signup);
+  const editToken = generateToken(signup.id);
   const cancelLink = config.editSignupUrl
     .replace(/\{id\}/g, signup.id)
     .replace(/\{editToken\}/g, editToken);

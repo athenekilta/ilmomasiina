@@ -5,15 +5,18 @@ import { createThunk } from './state';
 export const useUpdateSignup = createThunk(({ signup, editToken }) => async (answers: SignupUpdateSchema) => {
   await apiFetch(`signups/${signup!.id}`, {
     method: 'PATCH',
-    body: {
-      ...answers,
-      editToken,
+    body: answers,
+    headers: {
+      'X-Edit-Token': editToken,
     },
   });
 });
 
 export const useDeleteSignup = createThunk(({ signup, editToken }) => async () => {
-  await apiFetch(`signups/${signup!.id}?editToken=${editToken}`, {
+  await apiFetch(`signups/${signup!.id}`, {
     method: 'DELETE',
+    headers: {
+      'X-Edit-Token': editToken,
+    },
   });
 });

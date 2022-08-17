@@ -21,6 +21,7 @@ import { sendICalFeed } from './ical';
 import { addSessionValidationHook, adminLogin, adminLogout } from './login/adminLogin';
 import createSignup from './signup/createNewSignup';
 import { deleteSignupAsAdmin, deleteSignupAsUser } from './signup/deleteSignup';
+import { requireValidEditToken } from './signup/editTokens';
 import getSignupForEdit from './signup/getSignupForEdit';
 import updateSignup from './signup/updateSignup';
 import createUser, { inviteUser } from './user/createUser';
@@ -227,60 +228,59 @@ export default async function setupRoutes(
     );
   }, { prefix: '/admin' });
 
-  // Setup routes requiring a signup edit token
-  fastify.register(async (instance) => {
-    const server = instance.withTypeProvider<TypeBoxTypeProvider>();
-
-    /** Routes for signup that require a signup edit token */
-    server.get<{ Params: schema.SignupPathParams }>(
-      '/signups/:id',
-      {
-        schema: {
-          params: schema.signupPathParams,
-          response: {
-            ...errorResponses,
-            200: schema.userSignupForEditSchema,
-          },
-        },
-      },
-      getSignupForEdit,
-    );
-
-    server.patch<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateSchema }>(
-      '/signups/:id',
-      {
-        schema: {
-          params: schema.signupPathParams,
-          body: schema.signupUpdateSchema,
-          response: {
-            ...errorResponses,
-            409: Type.Union([schema.editConflictError, schema.wouldMoveSignupsToQueueError]),
-            200: schema.updatedSignupSchema,
-          },
-        },
-      },
-      updateSignup,
-    );
-
-    server.delete<{ Params: schema.SignupPathParams }>(
-      '/signups/:id',
-      {
-        schema: {
-          params: schema.signupPathParams,
-          response: {
-            ...errorResponses,
-            204: {},
-          },
-        },
-      },
-      deleteSignupAsUser,
-    );
-
-    // TODO: Pass edit token in headers
-  });
-
   // Setup public routes
   const server = fastify;
+
+  /** Routes for signup that require a signup edit token */
+  server.get<{ Params: schema.SignupPathParams }>(
+    '/signups/:id',
+    {
+      schema: {
+        params: schema.signupPathParams,
+        response: {
+          ...errorResponses,
+          200: schema.userSignupForEditSchema,
+        },
+      },
+      // Require valid edit token:
+      preHandler: requireValidEditToken,
+    },
+    getSignupForEdit,
+  );
+
+  server.patch<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateSchema }>(
+    '/signups/:id',
+    {
+      schema: {
+        params: schema.signupPathParams,
+        body: schema.signupUpdateSchema,
+        response: {
+          ...errorResponses,
+          409: Type.Union([schema.editConflictError, schema.wouldMoveSignupsToQueueError]),
+          200: schema.updatedSignupSchema,
+        },
+      },
+      // Require valid edit token:
+      preHandler: requireValidEditToken,
+    },
+    updateSignup,
+  );
+
+  server.delete<{ Params: schema.SignupPathParams }>(
+    '/signups/:id',
+    {
+      schema: {
+        params: schema.signupPathParams,
+        response: {
+          ...errorResponses,
+          204: {},
+        },
+      },
+      // Require valid edit token:
+      preHandler: requireValidEditToken,
+    },
+    deleteSignupAsUser,
+  );
 
   /** Admin session management routes */
   server.post<{ Body: schema.AdminLoginSchema }>(

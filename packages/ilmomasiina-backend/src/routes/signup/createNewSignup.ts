@@ -45,7 +45,7 @@ export default async function createSignup(
   const newSignup = await Signup.create({ quotaId: request.body.quotaId });
   await refreshSignupPositions(quota.event!);
 
-  const editToken = generateToken(newSignup);
+  const editToken = generateToken(newSignup.id);
 
   response.status(201);
   return {

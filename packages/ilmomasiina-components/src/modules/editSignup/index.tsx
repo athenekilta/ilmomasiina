@@ -16,7 +16,12 @@ export { useDeleteSignup, useUpdateSignup } from './actions';
 
 export function useEditSignupState({ id, editToken }: EditSignupProps) {
   const fetchSignup = useAbortablePromise(async (signal) => {
-    const response = await apiFetch(`signups/${id}?editToken=${editToken}`, { signal }) as UserSignupForEditSchema;
+    const response = await apiFetch(`signups/${id}`, {
+      signal,
+      headers: {
+        'X-Edit-Token': editToken,
+      },
+    }) as UserSignupForEditSchema;
     return {
       ...response,
       signup: {
