@@ -3,6 +3,7 @@ import { Op, WhereOptions } from 'sequelize';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { AuditLog } from '../../models/auditlog';
+import { stringifyDates } from '../utils';
 
 const MAX_LOGS = 100;
 
@@ -55,14 +56,16 @@ export default async function getAuditLogItems(
   const logs = await AuditLog.findAndCountAll({
     where,
     order: [['createdAt', 'DESC']],
-    offset: request.query.offset,
-    limit: Math.min(MAX_LOGS, request.query.limit),
+    offset: request.query.offset || schema.auditLoqQuery.properties.offset.default,
+    limit: Math.min(MAX_LOGS, request.query.limit || schema.auditLoqQuery.properties.limit.default),
   });
 
   response.status(200);
   return {
-    // @ts-ignore
-    rows: logs.rows.map((r) => r.get({ plain: true })),
+    rows: logs.rows.map((r) => stringifyDates({
+      ...r.get({ plain: true }),
+      createdAt: r.createdAt,
+    })),
     count: logs.count,
   };
 }

@@ -1,5 +1,5 @@
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
+import { UserID, UserInviteSchema, UserListSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import { DispatchAction } from '../../store/types';
 import { loginExpired } from '../auth/actions';
 import {
@@ -15,7 +15,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const usersLoaded = (users: User.List) => <const>{
+export const usersLoaded = (users: UserListSchema) => <const>{
   type: USERS_LOADED,
   payload: users,
 };
@@ -47,13 +47,13 @@ export type AdminUsersActions =
 export const getUsers = () => async (dispatch: DispatchAction) => {
   try {
     const response = await apiFetch('admin/users', {}, () => dispatch(loginExpired()));
-    dispatch(usersLoaded(response as User.List));
+    dispatch(usersLoaded(response as UserListSchema));
   } catch (e) {
     dispatch(usersLoadFailed());
   }
 };
 
-export const createUser = (data: User.Create.Body) => async (dispatch: DispatchAction) => {
+export const createUser = (data: UserInviteSchema) => async (dispatch: DispatchAction) => {
   dispatch(userCreating());
 
   try {
@@ -69,7 +69,7 @@ export const createUser = (data: User.Create.Body) => async (dispatch: DispatchA
   }
 };
 
-export const deleteUser = (id: User.Id) => async (dispatch: DispatchAction) => {
+export const deleteUser = (id: UserID) => async (dispatch: DispatchAction) => {
   try {
     await apiFetch(`admin/users/${id}`, {
       method: 'DELETE',

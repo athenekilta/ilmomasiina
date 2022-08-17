@@ -69,7 +69,14 @@ export const auditLogItemAttributes = Type.Object({
   ], {
     title: 'name of the signup related to this log item',
   }),
-  extra: Type.String({
-    title: 'Additional information',
+  extra: Type.Union([
+    Type.String({
+      title: 'additional info',
+    }),
+    Type.Null({
+      title: 'no additional info',
+    }),
+  ], {
+    title: 'additional information',
   }),
 });

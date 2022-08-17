@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { CreationAttributes } from 'sequelize';
 
 import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
@@ -17,7 +18,6 @@ export default async function createEvent(
     const created = await Event.create(
       {
         ...request.body,
-        // @ts-ignore
         questions: request.body.questions ? request.body.questions.map((q, order) => ({
           ...q, options: (q.options && q.options.length) ? q.options.join(';') : null, order,
         })) : [],
@@ -26,7 +26,7 @@ export default async function createEvent(
         endDate: toDate(request.body.endDate),
         registrationStartDate: toDate(request.body.registrationStartDate),
         registrationEndDate: toDate(request.body.registrationEndDate),
-      },
+      } as CreationAttributes<Event>,
       {
         transaction,
         include: [

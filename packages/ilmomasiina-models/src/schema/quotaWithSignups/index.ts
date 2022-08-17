@@ -1,4 +1,4 @@
-import { Type } from '@sinclair/typebox';
+import { Static, Type } from '@sinclair/typebox';
 
 import { quotaWithSignupCount } from '../quota';
 import { adminSignupSchema, publicSignupSchema } from '../signup';
@@ -48,3 +48,6 @@ export const signupQuotasWithSignupsForAdmin = Type.Object({
     title: 'quota definitions including signups',
   }),
 });
+
+export type QuotaWithSignupsForAdmin = Static<typeof quotaWithSignupsForAdmin>;
+export type QuotaWithSignupsForUser = Static<typeof quotaWithSignupsForUser>;

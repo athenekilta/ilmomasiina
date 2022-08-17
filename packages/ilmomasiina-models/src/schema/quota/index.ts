@@ -71,3 +71,4 @@ export const quotasUpdate = Type.Object({
 });
 
 export type QuotaID = Static<typeof attributes.quotaID>;
+export type QuotaUpdateSchema = Static<typeof quotaUpdateSchema>;

@@ -3,11 +3,11 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
-import { AuditLog } from '@tietokilta/ilmomasiina-models';
+import { AuditLogItemSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import appPaths from '../../paths';
 
 type Props = {
-  item: AuditLog.List.Item;
+  item: AuditLogItemSchema;
 };
 
 const ACTION_STRINGS = {
@@ -23,7 +23,7 @@ const ACTION_STRINGS = {
   'user.delete': 'poisti käyttäjän ',
 };
 
-function describeAction(item: AuditLog.List.Item) {
+function describeAction(item: AuditLogItemSchema) {
   let extra: any = {};
   try {
     extra = JSON.parse(item.extra || '');

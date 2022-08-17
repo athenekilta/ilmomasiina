@@ -1,7 +1,7 @@
-import { AdminEvent } from '@tietokilta/ilmomasiina-models';
+import { AdminEventList } from '@tietokilta/ilmomasiina-models/src/schema';
 
 export interface AdminState {
-  events: AdminEvent.List | null;
+  events: AdminEventList | null;
   eventsLoadError: boolean;
 }
 

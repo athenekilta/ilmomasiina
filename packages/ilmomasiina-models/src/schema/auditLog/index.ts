@@ -24,24 +24,32 @@ export const auditLoqQuery = Type.Object({
   signup: Type.Optional(Type.String({
     title: 'filter events by signup name or ID',
   })),
-  limit: Type.Integer({
+  limit: Type.Optional(Type.Integer({
     title: 'maximum amount of log entries to return',
     minimum: 0,
     default: Number.MAX_SAFE_INTEGER, // TODO: Better limits?
-  }),
-  offset: Type.Integer({
+  })),
+  offset: Type.Optional(Type.Integer({
     title: 'how many (matched) log entries to exclude at the beginning',
     minimum: 0,
     default: 0,
-  }),
+  })),
 });
 
-export const auditLogItem = attributes.auditLogItemAttributes;
+export const auditLogItemSchema = Type.Intersect([
+  attributes.auditLogItemAttributes,
+  Type.Object({
+    createdAt: Type.String({
+      format: 'date-time',
+      title: 'timestamp for audit event',
+    }),
+  }),
+]);
 
 /** Describes the response body for audit log GET endpoint */
 export const auditLogResponse = Type.Object({
   rows: Type.Array(
-    auditLogItem,
+    auditLogItemSchema,
     {
       title: 'found audit log items',
     },
@@ -53,5 +61,5 @@ export const auditLogResponse = Type.Object({
 });
 
 export type AuditLoqQuery = Static<typeof auditLoqQuery>;
-export type AuditLogItem = Static<typeof auditLogItem>;
+export type AuditLogItemSchema = Static<typeof auditLogItemSchema>;
 export type AuditLogResponse = Static<typeof auditLogResponse>;

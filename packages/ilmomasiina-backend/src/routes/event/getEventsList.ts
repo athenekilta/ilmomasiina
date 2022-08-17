@@ -1,11 +1,11 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { col, fn, Order } from 'sequelize';
 
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import {
   adminEventListEventAttrs,
   eventListEventAttrs,
-} from '@tietokilta/ilmomasiina-models/src/services/events/list';
+} from '@tietokilta/ilmomasiina-models/src/attrs/event';
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';

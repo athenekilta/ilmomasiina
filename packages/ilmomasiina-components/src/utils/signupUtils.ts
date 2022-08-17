@@ -4,19 +4,21 @@ import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 
 import {
-  AdminEvent, Event, Quota, Signup,
-} from '@tietokilta/ilmomasiina-models';
+  AdminEventSchema, QuestionID,
+  QuotaID,
+  SignupID,
+  UserEventSchema,
+} from '@tietokilta/ilmomasiina-models/src/schema';
 import { timezone } from '../config';
 
 export const WAITLIST = '\x00waitlist';
 export const OPENQUOTA = '\x00open';
 
-type AnyEventDetails = AdminEvent.Details | Event.Details;
-type AnySignupDetails = AdminEvent.Details.Signup | Event.Details.Signup;
-type AnyQuestionDetails = AdminEvent.Details.Question | Event.Details.Question;
+type AnyEventDetails = AdminEventSchema | UserEventSchema;
+export type AnySignupDetails = AnyEventDetails['quotas'][number]['signups'][number];
 
 export type SignupWithQuota = AnySignupDetails & {
-  quotaId: Quota.Id;
+  quotaId: QuotaID;
   quotaName: string;
   confirmed: boolean;
 };
@@ -35,7 +37,7 @@ function getSignupsAsList(event: AnyEventDetails): SignupWithQuota[] {
   );
 }
 
-export type QuotaCounts = Pick<Event.Details.Quota, 'size' | 'signupCount'>;
+export type QuotaCounts = Pick<UserEventSchema['quotas'][number], 'size' | 'signupCount'>;
 
 /** Computes the number of signups in the open quota and queue. */
 export function countOverflowSignups(quotas: QuotaCounts[], openQuotaSize: number) {
@@ -47,7 +49,7 @@ export function countOverflowSignups(quotas: QuotaCounts[], openQuotaSize: numbe
 }
 
 export type QuotaSignups = {
-  id: Quota.Id | typeof OPENQUOTA | typeof WAITLIST;
+  id: QuotaID | typeof OPENQUOTA | typeof WAITLIST;
   title: string;
   size: number | null;
   signups: SignupWithQuota[];
@@ -99,8 +101,8 @@ export function getSignupsByQuota(event: AnyEventDetails): QuotaSignups[] {
   ];
 }
 
-function getAnswersFromSignup(event: AdminEvent.Details, signup: AnySignupDetails) {
-  const answers: Record<AnyQuestionDetails['id'], string> = {};
+function getAnswersFromSignup(event: AdminEventSchema, signup: AnySignupDetails) {
+  const answers: Record<QuestionID, string> = {};
 
   event.questions.forEach((question) => {
     const answer = find(signup.answers, { questionId: question.id });
@@ -111,17 +113,17 @@ function getAnswersFromSignup(event: AdminEvent.Details, signup: AnySignupDetail
 }
 
 type FormattedSignup = {
-  id?: Signup.Id;
-  firstName: string | null;
-  lastName: string | null;
+  id?: SignupID;
+  firstName?: string | null;
+  lastName?: string | null;
   email?: string | null;
-  answers: Record<AnyQuestionDetails['id'], string>;
+  answers: Record<QuestionID, string>;
   quota: string;
   createdAt: string;
   confirmed: boolean;
 };
 
-export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSignup[] {
+export function getSignupsForAdminList(event: AdminEventSchema): FormattedSignup[] {
   const signupsArray = getSignupsAsList(event);
   const sorted = orderBy(signupsArray, [
     (signup) => ['in-quota', 'in-open', 'in-queue', null].indexOf(signup.status),
@@ -146,7 +148,7 @@ export function getSignupsForAdminList(event: AdminEvent.Details): FormattedSign
   });
 }
 
-export function convertSignupsToCSV(event: AdminEvent.Details, signups: FormattedSignup[]): string[][] {
+export function convertSignupsToCSV(event: AdminEventSchema, signups: FormattedSignup[]): string[][] {
   return [
     // Headers
     [

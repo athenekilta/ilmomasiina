@@ -1,7 +1,7 @@
-import { User } from '@tietokilta/ilmomasiina-models';
+import { UserListSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 
 export interface AdminUsersState {
-  users: User.List | null;
+  users: UserListSchema | null;
   usersLoadError: boolean;
   userCreating: boolean;
 }

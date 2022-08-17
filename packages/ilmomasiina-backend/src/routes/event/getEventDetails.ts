@@ -2,7 +2,6 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { NotFound } from 'http-errors';
 import { Order } from 'sequelize';
 
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import {
   adminEventGetEventAttrs,
   eventGetAnswerAttrs,
@@ -10,7 +9,8 @@ import {
   eventGetQuestionAttrs,
   eventGetQuotaAttrs,
   eventGetSignupAttrs,
-} from '@tietokilta/ilmomasiina-models/dist/services/events/details';
+} from '@tietokilta/ilmomasiina-models/src/attrs/event';
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
@@ -171,16 +171,15 @@ export async function eventDetailsForAdmin(
   }
 
   // Admins get a simple result with many columns
-  // @ts-ignore
-  return {
-    ...stringifyDates(event.get({ plain: true })),
+  return stringifyDates({
+    ...event.get({ plain: true }),
     questions: event.questions!.map((question) => ({
       ...question.get({ plain: true }),
       // Split answer options into array
       // TODO: Splitting by semicolon might cause problems - requires better solution
       options: question.options ? question.options.split(';') : null,
     })),
-
+    updatedAt: event.updatedAt,
     quotas: event.quotas!.map((quota) => ({
       ...stringifyDates(quota.get({ plain: true })),
       signups: quota.signups!.map((signup) => ({
@@ -194,7 +193,7 @@ export async function eventDetailsForAdmin(
       })),
       signupCount: quota.signups!.length,
     })),
-  };
+  });
 }
 
 export async function getEventDetailsForUser(

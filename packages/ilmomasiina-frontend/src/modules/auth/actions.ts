@@ -2,7 +2,6 @@ import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { Auth } from '@tietokilta/ilmomasiina-models';
 import appPaths from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {
@@ -16,9 +15,8 @@ export const loggingIn = () => <const>{
   type: LOGGING_IN,
 };
 
-export const loginSucceeded = (payload: Auth.Response) => <const>{
+export const loginSucceeded = () => <const>{
   type: LOGIN_SUCCEEDED,
-  payload,
 };
 
 export const loginFailed = () => <const>{
@@ -39,14 +37,14 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
   dispatch(loggingIn());
 
   try {
-    const response = await apiFetch('authentication', {
+    await apiFetch('authentication', {
       method: 'POST',
       body: {
         email,
         password,
       },
-    }) as Auth.Response;
-    dispatch(loginSucceeded(response));
+    });
+    dispatch(loginSucceeded());
     dispatch(push(appPaths.adminEventsList));
     return true;
   } catch (e) {

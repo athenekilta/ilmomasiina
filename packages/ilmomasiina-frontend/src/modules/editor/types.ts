@@ -1,29 +1,36 @@
 import {
-  AdminEvent, AdminSlug, Question, Quota,
-} from '@tietokilta/ilmomasiina-models';
+  AdminEventSchema,
+  CheckSlugResponse,
+  EditConflictError,
+  EventEditSchema,
+  QuestionID,
+  QuestionUpdateSchema,
+  QuotaID,
+  QuotaUpdateSchema,
+} from '@tietokilta/ilmomasiina-models/src/schema';
 
 export interface EditorState {
-  event: AdminEvent.Details | null;
+  event: AdminEventSchema | null;
   isNew: boolean;
   loadError: boolean;
-  slugAvailability: null | 'checking' | AdminSlug.Check;
+  slugAvailability: null | 'checking' | CheckSlugResponse;
   allCategories: null | string[];
   saving: boolean;
   saveError: boolean;
   moveToQueueModal: { count: number } | null;
-  editConflictModal: EditConflictData | null;
+  editConflictModal: EditConflictError | null;
 }
 
 /** Question type for event editor */
-export interface EditorQuestion extends Omit<AdminEvent.Update.Question, 'options'> {
-  key: Question.Id;
+export interface EditorQuestion extends Omit<QuestionUpdateSchema, 'options'> {
+  key: QuestionID;
   options: string[];
 }
 
 /** Quota type for event editor */
-export interface EditorQuota extends AdminEvent.Update.Quota {
-  key: Quota.Id;
-}
+export type EditorQuota = QuotaUpdateSchema & {
+  key: QuotaID;
+};
 
 export enum EditorEventType {
   ONLY_EVENT = 'event',
@@ -33,7 +40,7 @@ export enum EditorEventType {
 
 /** Root form data type for event editor */
 export interface EditorEvent extends Omit<
-AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
+EventEditSchema, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
 > {
   eventType: EditorEventType;
 
@@ -46,12 +53,6 @@ AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrat
   registrationEndDate: Date | undefined;
   quotas: EditorQuota[];
   useOpenQuota: boolean;
-}
-
-export interface EditConflictData {
-  updatedAt: string;
-  deletedQuotas: Quota.Id[];
-  deletedQuestions: Quota.Id[];
 }
 
 export type { EditorActions } from './actions';

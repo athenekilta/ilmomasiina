@@ -2,12 +2,12 @@ import React, { MouseEvent } from 'react';
 
 import { toast } from 'react-toastify';
 
-import { User } from '@tietokilta/ilmomasiina-models';
+import { UserListSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import { deleteUser, getUsers } from '../../modules/adminUsers/actions';
 import { useTypedDispatch } from '../../store/reducers';
 
 type Props = {
-  user: User.List.User;
+  user: UserListSchema[number];
 };
 
 const AdminUserListItem = ({ user }: Props) => {

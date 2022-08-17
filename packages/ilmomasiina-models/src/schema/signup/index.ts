@@ -2,6 +2,9 @@ import { Static, Type } from '@sinclair/typebox';
 
 import { quotaID, singleQuota } from '../quota';
 import * as attributes from './attributes';
+import { editToken } from './fields';
+
+export { signupID } from './attributes';
 
 /** Defines boolean field `confirmed` */
 const signupBooleanConfirmed = Type.Object({
@@ -66,6 +69,8 @@ export const signupPathParams = Type.Object({
   id: attributes.signupID,
 });
 
+export type SignupID = Static<typeof attributes.signupID>;
+export type SignupEditToken = Static<typeof editToken>;
 export type SignupCreateSchema = Static<typeof signupCreateSchema>;
 export type CreatedSignupSchema = Static<typeof createdSignupSchema>;
 export type SignupUpdateSchema = Static<typeof signupUpdateSchema>;

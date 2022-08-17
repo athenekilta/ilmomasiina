@@ -1,8 +1,8 @@
-import { AuditLog } from '@tietokilta/ilmomasiina-models';
+import { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models/src/schema';
 
 export interface AuditLogState {
-  auditLogQuery: AuditLog.List.Query;
-  auditLog: AuditLog.List | null;
+  auditLogQuery: AuditLoqQuery;
+  auditLog: AuditLogResponse | null;
   auditLogLoadError: boolean;
 }
 

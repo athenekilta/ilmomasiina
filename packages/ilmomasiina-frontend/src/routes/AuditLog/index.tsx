@@ -21,7 +21,7 @@ const AuditLog = () => {
 
   useEffect(() => {
     dispatch(getAuditLogs({
-      $limit: LOGS_PER_PAGE,
+      limit: LOGS_PER_PAGE,
     }));
     return () => {
       resetState();

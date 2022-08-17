@@ -1,5 +1,5 @@
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
+import { AdminEventList, EventID } from '@tietokilta/ilmomasiina-models/src/schema';
 import { DispatchAction } from '../../store/types';
 import { loginExpired } from '../auth/actions';
 import {
@@ -12,7 +12,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const eventsLoaded = (events: AdminEvent.List) => <const>{
+export const eventsLoaded = (events: AdminEventList) => <const>{
   type: EVENTS_LOADED,
   payload: events,
 };
@@ -29,13 +29,13 @@ export type AdminEventsActions =
 export const getAdminEvents = () => async (dispatch: DispatchAction) => {
   try {
     const response = await apiFetch('admin/events', {}, () => dispatch(loginExpired()));
-    dispatch(eventsLoaded(response as AdminEvent.List));
+    dispatch(eventsLoaded(response as AdminEventList));
   } catch (e) {
     dispatch(eventsLoadFailed());
   }
 };
 
-export const deleteEvent = (id: AdminEvent.Id) => async (dispatch: DispatchAction) => {
+export const deleteEvent = (id: EventID) => async (dispatch: DispatchAction) => {
   try {
     await apiFetch(`admin/events/${id}`, {
       method: 'DELETE',

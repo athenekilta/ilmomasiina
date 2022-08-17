@@ -11,11 +11,11 @@ const AuditLogPagination = () => {
   const { auditLogQuery, auditLog } = useTypedSelector((state) => state.auditLog);
   const dispatch = useTypedDispatch();
 
-  const value = auditLogQuery.$offset || 0;
-  const perPage = auditLogQuery.$limit || LOGS_PER_PAGE;
+  const value = auditLogQuery.offset || 0;
+  const perPage = auditLogQuery.limit || LOGS_PER_PAGE;
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setAuditLogQueryField('$offset', Number(e.target.value) - 1));
+    dispatch(setAuditLogQueryField('offset', Number(e.target.value) - 1));
   };
 
   return (
@@ -23,7 +23,7 @@ const AuditLogPagination = () => {
       <Button
         className="mr-3"
         type="button"
-        onClick={() => dispatch(setAuditLogQueryField('$offset', value - perPage))}
+        onClick={() => dispatch(setAuditLogQueryField('offset', value - perPage))}
         aria-label="Edellinen sivu"
         disabled={value <= 0}
       >
@@ -39,7 +39,7 @@ const AuditLogPagination = () => {
       <Button
         className="ml-3"
         type="button"
-        onClick={() => dispatch(setAuditLogQueryField('$offset', value + perPage))}
+        onClick={() => dispatch(setAuditLogQueryField('offset', value + perPage))}
         aria-label="Seuraava sivu"
         disabled={!auditLog || value + perPage >= auditLog.count}
       >

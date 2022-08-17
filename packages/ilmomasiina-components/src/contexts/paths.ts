@@ -1,17 +1,22 @@
 import { createContext, useContext } from 'react';
 
-import type { AdminEvent, Event, Signup } from '@tietokilta/ilmomasiina-models';
+import {
+  AdminEventPathParams,
+  SignupEditToken,
+  SignupPathParams,
+  UserEventPathParams,
+} from '@tietokilta/ilmomasiina-models/src/schema';
 
 export type UserPaths = {
   eventsList: string;
-  eventDetails: (slug: Event.Slug) => string;
-  editSignup: (id: Signup.Id, editToken: string) => string;
+  eventDetails: (slug: UserEventPathParams['slug']) => string;
+  editSignup: (id: SignupPathParams['id'], editToken: SignupEditToken) => string;
 };
 
 export type AdminPaths = {
   adminLogin: string;
   adminEventsList: string;
-  adminEditEvent: (id: AdminEvent.Id) => string,
+  adminEditEvent: (id: AdminEventPathParams['id']) => string,
   adminUsersList: string;
   adminAuditLog: string;
 };
@@ -24,8 +29,8 @@ export const defaultPaths: IlmoPaths = {
   hasAdmin: false,
 
   eventsList: '/',
-  eventDetails: (slug: Event.Slug) => `/events/${slug}`,
-  editSignup: (id: Signup.Id, editToken: string) => `/signup/${id}/${editToken}`,
+  eventDetails: (slug: UserEventPathParams['slug']) => `/events/${slug}`,
+  editSignup: (id: SignupPathParams['id'], editToken: SignupEditToken) => `/signup/${id}/${editToken}`,
 };
 
 export const PathsContext = createContext<IlmoPaths>(defaultPaths);

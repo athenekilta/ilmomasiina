@@ -47,6 +47,7 @@ export default async function getSignupForEdit(
   const response = {
     signup: {
       ...stringifyDates(signup.get({ plain: true })),
+      status: signup.status,
       firstName: nullsToUndef(signup.firstName),
       lastName: nullsToUndef(signup.lastName),
       email: nullsToUndef(signup.email),
@@ -65,6 +66,6 @@ export default async function getSignupForEdit(
   };
 
   reply.status(200);
-  // @ts-ignore
+
   return response;
 }

@@ -35,6 +35,7 @@ export const adminEventListItemSchema = Type.Intersect(
   [
     eventIdentity,
     adminEventAttributesBasic,
+    quotasWithSignupCount,
   ],
 );
 

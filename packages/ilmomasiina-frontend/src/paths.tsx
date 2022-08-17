@@ -1,7 +1,12 @@
 import React, { PropsWithChildren } from 'react';
 
 import { FullPaths, PathsContext } from '@tietokilta/ilmomasiina-components';
-import { AdminEvent, Event, Signup } from '@tietokilta/ilmomasiina-models';
+import {
+  AdminEventPathParams,
+  SignupEditToken,
+  SignupPathParams,
+  UserEventPathParams,
+} from '@tietokilta/ilmomasiina-models/src/schema';
 
 export const urlPrefix = PATH_PREFIX;
 
@@ -9,12 +14,12 @@ const appPaths: FullPaths = {
   hasAdmin: true,
 
   eventsList: `${urlPrefix}/`,
-  eventDetails: (slug: Event.Slug) => `${urlPrefix}/events/${slug}`,
-  editSignup: (id: Signup.Id, editToken: string) => `${urlPrefix}/signup/${id}/${editToken}`,
+  eventDetails: (slug: UserEventPathParams['slug']) => `${urlPrefix}/events/${slug}`,
+  editSignup: (id: SignupPathParams['id'], editToken: SignupEditToken) => `${urlPrefix}/signup/${id}/${editToken}`,
 
   adminLogin: `${urlPrefix}/login`,
   adminEventsList: `${urlPrefix}/admin`,
-  adminEditEvent: (id: AdminEvent.Id) => `${urlPrefix}/admin/edit/${id}`,
+  adminEditEvent: (id: AdminEventPathParams['id']) => `${urlPrefix}/admin/edit/${id}`,
   adminUsersList: `${urlPrefix}/admin/users`,
   adminAuditLog: `${urlPrefix}/admin/auditlog`,
 };
