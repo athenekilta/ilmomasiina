@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import { UserSignupForEditSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import { EDIT_TOKEN_HEADER_NAME, UserSignupForEditSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import useShallowMemo from '../../utils/useShallowMemo';
@@ -19,7 +19,7 @@ export function useEditSignupState({ id, editToken }: EditSignupProps) {
     const response = await apiFetch(`signups/${id}`, {
       signal,
       headers: {
-        'X-Edit-Token': editToken,
+        [EDIT_TOKEN_HEADER_NAME]: editToken,
       },
     }) as UserSignupForEditSchema;
     return {

@@ -2,22 +2,22 @@ import base32Encode from 'base32-encode';
 import { createHash, createHmac } from 'crypto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import { SignupID, SignupPathParams } from '@tietokilta/ilmomasiina-models/src/schema';
+import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import config from '../../config';
 
-function generateLegacyToken(signupId: SignupID): string {
+function generateLegacyToken(signupId: schema.SignupID): string {
   const data = Buffer.from(`${signupId}${config.oldEditTokenSalt}`, 'utf-8');
   return createHash('md5').update(data).digest().toString('hex');
 }
 
-export function generateToken(signupId: SignupID) {
+export function generateToken(signupId: schema.SignupID) {
   const key = Buffer.from(config.newEditTokenSecret!, 'utf-8');
   const data = Buffer.from(signupId, 'utf-8');
   const mac = createHmac('sha256', key).update(data).digest();
   return base32Encode(mac, 'RFC4648').substring(0, 13).toLowerCase();
 }
 
-function verifyToken(signupId: SignupID, token: string): boolean {
+function verifyToken(signupId: schema.SignupID, token: string): boolean {
   let expectedToken;
   if (token && config.oldEditTokenSalt && token.length === 32) {
     expectedToken = generateLegacyToken(signupId);
@@ -28,7 +28,7 @@ function verifyToken(signupId: SignupID, token: string): boolean {
 }
 
 /** Signup edit token header name in lower case */
-const EDIT_TOKEN_HEADER = 'x-edit-token';
+const EDIT_TOKEN_HEADER = schema.EDIT_TOKEN_HEADER_NAME.toLowerCase();
 
 /**
  * A preHandler hook that validates signup edit token
@@ -37,7 +37,7 @@ const EDIT_TOKEN_HEADER = 'x-edit-token';
  * The request processing ends here, and the actual route function won't be called.
  */
 export async function requireValidEditToken(
-  request: FastifyRequest<{ Params: SignupPathParams }>,
+  request: FastifyRequest<{ Params: schema.SignupPathParams }>,
   reply: FastifyReply,
 ): Promise<void> {
   const headers = request.headers[EDIT_TOKEN_HEADER]; // NOTE: Fastify converts header names into lower case
