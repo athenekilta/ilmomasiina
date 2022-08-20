@@ -55,13 +55,14 @@ if it benefits the project.
 - [pnpm](https://pnpm.io/) to manage the multiple packages
 - [Lodash](https://lodash.com/) used where necessary, but preferring native methods
 
+### Models
+
+- [TypeBox](https://github.com/sinclairzx81/typebox) to create JSON Schema with TS typings
+
 ### Backend
 
 - [Sequelize](https://sequelize.org/master/) as ORM
-- [Feathers](https://docs.feathersjs.com/)-based API
-    - Explicitly *not* using `feathers-sequelize`, as it permits everything by default and its hooks are impossible
-      to type properly
-- [Express](https://expressjs.com/) as REST backend
+- [Fastify](https://www.fastify.io/) as REST backend
 - [Nodemailer](https://nodemailer.com/about/) to send emails
 
 ### Frontend
