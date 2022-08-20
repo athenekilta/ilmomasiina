@@ -1,7 +1,8 @@
+import fastifyCompress from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
 import fastifySensible from '@fastify/sensible';
 import fastifyStatic from '@fastify/static';
-import fastify, { FastifyInstance } from 'fastify';
+import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import cron from 'node-cron';
 import path from 'path';
 
@@ -48,7 +49,13 @@ export default async function initApp(): Promise<FastifyInstance> {
     }
   }
 
-  // TODO: Add on-the-fly compression
+  // Add on-the-fly compression
+  server.register(fastifyCompress, {
+    onUnsupportedEncoding: (encoding: string, request: FastifyRequest, reply: FastifyReply) => {
+      reply.status(406);
+      return `Encoding '${encoding}' not supported`;
+    },
+  });
 
   server.register(setupRoutes, {
     prefix: '/api',
@@ -63,6 +70,7 @@ export default async function initApp(): Promise<FastifyInstance> {
     // With fastify-static, historyApiFallback mode works out of the box
     server.register(fastifyStatic, {
       root: path.resolve(config.frontendFilesPath),
+      preCompressed: true,
     });
   }
 
