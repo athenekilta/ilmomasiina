@@ -60,7 +60,7 @@ export default async function initApp(): Promise<FastifyInstance> {
   // but this helps run a low-effort server.
   if (config.frontendFilesPath) {
     console.info(`Serving frontend files from '${config.frontendFilesPath}'`);
-    // TODO: Enable historyApiFallback mode (serve index.html for non-existing routes)
+    // With fastify-static, historyApiFallback mode works out of the box
     server.register(fastifyStatic, {
       root: path.resolve(config.frontendFilesPath),
     });
