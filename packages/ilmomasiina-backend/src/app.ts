@@ -11,6 +11,7 @@ import anonymizeOldSignups from './cron/anonymizeOldSignups';
 import deleteOldAuditLogs from './cron/deleteOldAuditLogs';
 import deleteUnconfirmedSignups from './cron/deleteUnconfirmedSignups';
 import removeDeletedData from './cron/removeDeletedData';
+import enforceHTTPS from './enforceHTTPS';
 import setupDatabase from './models';
 import setupRoutes from './routes';
 
@@ -33,12 +34,12 @@ export default async function initApp(): Promise<FastifyInstance> {
   // Enforce HTTPS connections in production
   if (config.nodeEnv === 'production') {
     if (config.enforceHttps) {
-      // app.use(enforce.HTTPS({ trustProtoHeader: true }));
-      // TODO: Enforce HTTPS
+      server.addHook('onRequest', enforceHTTPS(config));
       console.info(
-        'Enforcing HTTPS connections.\nEnsure your load balancer or reverse proxy sets X-Forwarded-Proto.',
+        'Enforcing HTTPS connections.\n'
+        + 'Ensure your load balancer or reverse proxy sets X-Forwarded-Proto (or X-ARR-SSL in Azure).',
       );
-    } else if (!config.isAzure) {
+    } else {
       console.warn(
         'HTTPS connections are not enforced by Ilmomasiina.\n'
         + 'For security reasons, please set ENFORCE_HTTPS=proxy and configure your load balancer or reverse proxy to '
