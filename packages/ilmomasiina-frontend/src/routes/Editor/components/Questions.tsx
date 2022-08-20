@@ -8,15 +8,16 @@ import {
 import { SortEnd } from 'react-sortable-hoc';
 
 import { FieldRow } from '@tietokilta/ilmomasiina-components';
+import { QuestionType } from '@tietokilta/ilmomasiina-models/src/enum';
 import { EditorQuestion } from '../../../modules/editor/types';
 import Sortable from './Sortable';
 
 const QUESTION_TYPES: { value: EditorQuestion['type'], label: string }[] = [
-  { value: 'text', label: 'Teksti (lyhyt)' },
-  { value: 'textarea', label: 'Teksti (pitkä)' },
-  { value: 'number', label: 'Numero' },
-  { value: 'select', label: 'Monivalinta (voi valita yhden)' },
-  { value: 'checkbox', label: 'Monivalinta (voi valita monta)' },
+  { value: QuestionType.Text, label: 'Teksti (lyhyt)' },
+  { value: QuestionType.TextArea, label: 'Teksti (pitkä)' },
+  { value: QuestionType.Number, label: 'Numero' },
+  { value: QuestionType.Select, label: 'Monivalinta (voi valita yhden)' },
+  { value: QuestionType.Checkbox, label: 'Monivalinta (voi valita monta)' },
 ];
 
 const Questions = () => {
@@ -30,7 +31,7 @@ const Questions = () => {
         required: false,
         public: false,
         question: '',
-        type: 'text',
+        type: QuestionType.Text,
         options: [''],
       },
     ]);

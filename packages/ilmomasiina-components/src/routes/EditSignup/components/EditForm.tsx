@@ -4,7 +4,7 @@ import { Formik, FormikHelpers } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { Signup } from '@tietokilta/ilmomasiina-models';
+import { SignupUpdateSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import FieldRow from '../../../components/FieldRow';
 import { linkComponent, useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';
@@ -26,7 +26,7 @@ const EditForm = () => {
   // TODO: actually use errors from API
   const [submitError, setSubmitError] = useState(false);
 
-  async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
+  async function onSubmit(answers: SignupUpdateSchema, { setSubmitting }: FormikHelpers<SignupUpdateSchema>) {
     const action = isNew ? 'Ilmoittautuminen' : 'Muokkaus';
     const progressToast = toast.loading(`${action} käynnissä`);
 
@@ -62,7 +62,7 @@ const EditForm = () => {
 
   return (
     <Formik
-      initialValues={signup! as Signup.Update.Body}
+      initialValues={signup! as SignupUpdateSchema}
       onSubmit={onSubmit}
     >
       {({ handleSubmit, isSubmitting }) => (

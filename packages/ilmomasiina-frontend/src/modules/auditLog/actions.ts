@@ -62,7 +62,7 @@ export const setAuditLogQueryField = <K extends keyof AuditLoqQuery>(
       [key]: value,
     };
     if (!key.startsWith('$')) {
-      delete newQuery.$offset;
+      delete newQuery.offset;
     }
     await dispatch(getAuditLogs(newQuery));
   };

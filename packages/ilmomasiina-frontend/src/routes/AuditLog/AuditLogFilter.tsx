@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
-import { AuditLog } from '@tietokilta/ilmomasiina-models';
+import { AuditLoqQuery } from '@tietokilta/ilmomasiina-models/src/schema';
 import { setAuditLogQueryField } from '../../modules/auditLog/actions';
 import { useTypedDispatch } from '../../store/reducers';
 import useThrottled from '../../utils/useThrottled';
@@ -10,7 +10,7 @@ import useThrottled from '../../utils/useThrottled';
 const UPDATE_DELAY = 500;
 
 type Props = Omit<React.ComponentProps<typeof Form.Control>, 'name' | 'value' | 'onChange'> & {
-  name: keyof AuditLog.List.Query;
+  name: keyof AuditLoqQuery;
 };
 
 const AuditLogFilter = ({ name, ...props }: Props) => {

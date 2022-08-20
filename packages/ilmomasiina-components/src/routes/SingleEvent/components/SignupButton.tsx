@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { Quota } from '@tietokilta/ilmomasiina-models';
+import { QuotaID } from '@tietokilta/ilmomasiina-models/src/schema';
 import { useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';
 import { beginSignup, useSingleEventContext } from '../../../modules/singleEvent';
@@ -29,7 +29,7 @@ const SignupButton = ({
   const [submitting, setSubmitting] = useState(false);
   const isOnly = quotas.length === 1;
 
-  const onClick = useCallback(async (quotaId: Quota.Id) => {
+  const onClick = useCallback(async (quotaId: QuotaID) => {
     if (!isOpen) return;
     setSubmitting(true);
     const progressToast = toast.loading('Ilmoittautuminen käynnissä');

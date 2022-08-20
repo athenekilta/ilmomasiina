@@ -47,4 +47,5 @@ export const questionsUpdate = Type.Object({
 });
 
 export type QuestionID = Static<typeof attributes.questionID>;
+export type Question = Static<typeof question>;
 export type QuestionUpdateSchema = Static<typeof questionUpdateSchema>;
