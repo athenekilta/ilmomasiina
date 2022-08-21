@@ -2,6 +2,15 @@
 FROM node:14-alpine as builder
 
 # Build-time env variables
+
+# Copy source files
+COPY .eslint* package.json pnpm-*.yaml /opt/ilmomasiina/
+COPY packages /opt/ilmomasiina/packages
+WORKDIR /opt/ilmomasiina
+
+# Install dependencies (we're running as root, so the postinstall script doesn't run automatically)
+RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile
+
 ARG SENTRY_DSN
 ARG PREFIX_URL
 ARG API_URL
@@ -11,14 +20,6 @@ ARG BRANDING_FOOTER_GDPR_TEXT
 ARG BRANDING_FOOTER_GDPR_LINK
 ARG BRANDING_FOOTER_HOME_TEXT
 ARG BRANDING_FOOTER_HOME_LINK
-
-# Copy source files
-COPY .eslint* package.json pnpm-*.yaml /opt/ilmomasiina/
-COPY packages /opt/ilmomasiina/packages
-WORKDIR /opt/ilmomasiina
-
-# Install dependencies (we're running as root, so the postinstall script doesn't run automatically)
-RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile
 
 # Default to production (after pnpm install, so we get our types etc.)
 ENV NODE_ENV=production

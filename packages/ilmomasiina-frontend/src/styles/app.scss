@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i|Source+Sans+Pro&display=swap');
+
 @use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
 
 @use "~bootstrap/scss/bootstrap" with (
@@ -12,6 +14,8 @@
   $btn-border-radius-lg: 2px,
 
   // Typography
+  $font-family-sans-serif: ('Source Sans Pro', sans-serif),
+  $font-family-serif: ('Lora', 'Georgia', serif),
   $font-family-sans-serif: ("Open Sans", sans-serif),
   $line-height-base: 1.618,
   $h1-font-size: 2rem,
