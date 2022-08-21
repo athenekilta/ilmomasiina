@@ -1,13 +1,13 @@
 import React from 'react';
 
 import { useField } from 'formik';
-import _ from 'lodash';
+import reject from 'lodash/reject';
 import {
   Button, Col, Form, InputGroup, Row,
 } from 'react-bootstrap';
 import { SortEnd } from 'react-sortable-hoc';
 
-import FieldRow from '../../../components/FieldRow';
+import FieldRow from '@tietokilta/ilmomasiina-components/src/components/FieldRow';
 import { EditorQuestion } from '../../../modules/editor/types';
 import Sortable from './Sortable';
 
@@ -59,7 +59,7 @@ const Questions = () => {
     }
 
     function removeQuestion() {
-      setValue(_.reject(questions, { key: thisQuestion }));
+      setValue(reject(questions, { key: thisQuestion }));
     }
 
     function updateOption(optIndex: number, value: string) {

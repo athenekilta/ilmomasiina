@@ -12,6 +12,7 @@ services:
       context: .
       dockerfile: "Dockerfile"
       args:
+        - API_URL=${API_URL}
         - SENTRY_DSN=${SENTRY_DSN}
         - PREFIX_URL=${PREFIX_URL}
         - BRANDING_HEADER_TITLE_TEXT=${BRANDING_HEADER_TITLE_TEXT}
@@ -24,17 +25,11 @@ services:
     environment:
       - NODE_ENV=production
       - ENFORCE_HTTPS=false
+      - PORT=3000
       # When deploying to production, either set ENFORCE_HTTPS true (default) or
       # configure the reverse proxy to enforce HTTPS communication with the clients.
     env_file:
       - .env
     ports:
       - "8000:3000"
-#     volumes:
-#     - "frontend:/opt/ilmomasiina/frontend"
 
-# volumes:
-#   frontend:
-#     # Contains static files of the ilmomasiina-frontend.
-#     # To achieve better performance under high loads, these files
-#     # can be served using a more performant web server or even a CDN.

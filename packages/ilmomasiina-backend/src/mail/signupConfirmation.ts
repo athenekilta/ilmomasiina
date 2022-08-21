@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import config from '../config';
 import { Signup } from '../models/signup';

@@ -1,0 +1,78 @@
+@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
+
+@use "~bootstrap/scss/bootstrap" with (
+  // Colors
+  $primary: $primary,
+  $secondary: $secondary,
+  $text-muted: $text-muted,
+  $red: $red,
+  $green: $green,
+
+  // Just for the sake of Athene legacy
+  $btn-border-radius-lg: 2px,
+
+  // Typography
+  $font-family-sans-serif: ("Open Sans", sans-serif),
+  $line-height-base: 1.618,
+  $h1-font-size: 2rem,
+  $h2-font-size: 1.45rem,
+  $h3-font-size: 1.15rem,
+);
+
+@use "widgets";
+@use "~@tietokilta/ilmomasiina-components/src/styles/all";
+
+// Global layout
+
+body,
+html {
+  height: 100%;
+}
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 4em;
+
+  > .container {
+    flex: 1 0 auto;
+  }
+}
+
+footer {
+  flex-shrink: 0;
+}
+
+// Typography
+
+h1 {
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 1em 0;
+}
+
+h2 {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: $secondary-text-color;
+}
+
+h3 {
+  font-weight: 600;
+}
+
+strong {
+  font-weight: 600;
+}
+
+table.table {
+  thead {
+    th {
+      border-bottom-width: 1px;
+      font-weight: 600;
+    }
+  }
+}

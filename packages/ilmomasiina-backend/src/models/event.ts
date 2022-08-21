@@ -1,4 +1,4 @@
-import moment from 'moment-timezone';
+import moment from 'moment';
 import {
   DataTypes, HasManyAddAssociationMixin, HasManyAddAssociationsMixin, HasManyCountAssociationsMixin,
   HasManyCreateAssociationMixin, HasManyGetAssociationsMixin, HasManyHasAssociationMixin, HasManyHasAssociationsMixin,
@@ -191,22 +191,19 @@ export default function setupEventModel(sequelize: Sequelize) {
                 // closed less than a week ago
                 registrationEndDate: {
                   [Op.gt]: moment()
-                    .tz('Europe/Helsinki')
                     .subtract(7, 'days')
-                    .format(),
+                    .toDate(),
                 },
                 // or happened less than a week ago
                 date: {
                   [Op.gt]: moment()
-                    .tz('Europe/Helsinki')
                     .subtract(7, 'days')
-                    .format(),
+                    .toDate(),
                 },
                 endDate: {
                   [Op.gt]: moment()
-                    .tz('Europe/Helsinki')
                     .subtract(7, 'days')
-                    .format(),
+                    .toDate(),
                 },
               },
             },

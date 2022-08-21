@@ -9,20 +9,25 @@ FROM node:14-alpine
 WORKDIR /opt/ilmomasiina
 
 # Copy static resources from the repository root
-COPY .eslint* .postcssrc package.json pnpm-*.yaml ./
+COPY .eslint* package.json pnpm-*.yaml ./
 
 # Copy static resources from each package
-COPY packages/ilmomasiina-frontend/package*.json \
+COPY packages/ilmomasiina-frontend/package.json \
      packages/ilmomasiina-frontend/tsconfig.json \
      packages/ilmomasiina-frontend/.eslint* \
      packages/ilmomasiina-frontend/
 
-COPY packages/ilmomasiina-backend/package*.json \
+COPY packages/ilmomasiina-components/package.json \
+     packages/ilmomasiina-components/tsconfig.json \
+     packages/ilmomasiina-components/.eslint* \
+     packages/ilmomasiina-components/
+
+COPY packages/ilmomasiina-backend/package.json \
      packages/ilmomasiina-backend/tsconfig.json \
      packages/ilmomasiina-backend/.eslint* \
      packages/ilmomasiina-backend/
 
-COPY packages/ilmomasiina-models/package*.json \
+COPY packages/ilmomasiina-models/package.json \
      packages/ilmomasiina-models/tsconfig.json \
      packages/ilmomasiina-models/
 

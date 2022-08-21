@@ -1,17 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 
 import { Formik, FormikHelpers } from 'formik';
-import { Container, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
+import requireAuth from '../../containers/requireAuth';
 import {
   getEvent, newEvent, publishEventUpdate, publishNewEvent, resetState, serverEventToEditor,
 } from '../../modules/editor/actions';
 import { selectFormData as selectInitialFormData } from '../../modules/editor/selectors';
 import { EditorEvent } from '../../modules/editor/types';
-import paths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import EditForm from './components/EditForm';
 
@@ -26,16 +27,15 @@ interface MatchParams {
   id: string;
 }
 
-type Props = RouteComponentProps<MatchParams>;
-
-const Editor = ({ history, match }: Props) => {
+const Editor = () => {
   const dispatch = useTypedDispatch();
   const {
     event, isNew, loadError,
   } = useTypedSelector((state) => state.editor, shallowEqual);
   const initialFormData = useTypedSelector(selectInitialFormData);
+  const history = useHistory();
 
-  const urlEventId = match.params.id;
+  const urlEventId = useParams<MatchParams>().id;
   const urlIsNew = urlEventId === 'new';
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const Editor = ({ history, match }: Props) => {
       let saved;
       if (isNew) {
         saved = await dispatch(publishNewEvent(modifiedEvent));
-        history.push(paths.adminEditEvent(saved.id));
+        history.push(fullPaths().adminEditEvent(saved.id));
         toast.success('Tapahtuma luotiin onnistuneesti!', {
           autoClose: 2000,
         });
@@ -102,40 +102,36 @@ const Editor = ({ history, match }: Props) => {
 
   if (loadError) {
     return (
-      <Container className="event-editor">
-        <div className="event-editor--loading-container">
-          <h1>Hups, jotain meni pieleen</h1>
-          <p>{`Tapahtumaa id:llä "${urlEventId}" ei löytynyt`}</p>
-          <Link to={paths.adminEventsList}>Palaa tapahtumalistaukseen</Link>
-        </div>
-      </Container>
+      <div className="ilmo--loading-container">
+        <h1>Hups, jotain meni pieleen</h1>
+        <p>{`Tapahtumaa id:llä "${urlEventId}" ei löytynyt`}</p>
+        <Link to={fullPaths().adminEventsList}>Palaa tapahtumalistaukseen</Link>
+      </div>
     );
   }
 
   if (!urlIsNew && !event) {
     return (
-      <Container className="event-editor">
+      <>
         <h1>Muokkaa tapahtumaa</h1>
-        <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
-        <div className="event-editor--loading-container">
+        <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
+        <div className="ilmo--loading-container">
           <Spinner animation="border" />
         </div>
-      </Container>
+      </>
     );
   }
 
   return (
-    <Container className="event-editor" role="tablist">
-      <Formik
-        initialValues={initialFormData!}
-        onSubmit={onSubmit}
-      >
-        {(props) => <EditForm {...props} submitOptions={submitOptions} />}
-      </Formik>
-    </Container>
+    <Formik
+      initialValues={initialFormData!}
+      onSubmit={onSubmit}
+    >
+      {(props) => <EditForm {...props} submitOptions={submitOptions} />}
+    </Formik>
   );
 };
 
 // Editor.whyDidYouRender = true;
 
-export default Editor;
+export default requireAuth(Editor);

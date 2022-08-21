@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Transaction, WhereOptions } from 'sequelize';
 
 import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/models/signup';

@@ -1,4 +1,4 @@
-@import "../../styles/base";
+@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
 
 .tab {
   border-left: 1px solid grey;
@@ -24,8 +24,8 @@
   .handler {
     position: relative;
     width: 40px;
-    background: #fff;
-    border-right: 1px solid #ddd;
+    background: $body-bg;
+    border-right: 1px solid $card-border-color;
     cursor: move;
 
     &:after {
@@ -36,7 +36,7 @@
       right: 5px;
       top: 50%;
       height: 1px;
-      background: #ddd;
+      background: $card-border-color;
     }
 
     &:before {
@@ -47,18 +47,11 @@
       right: 5px;
       top: calc(50% - 10px);
       height: 21px;
-      border-top: 1px solid #ddd;
-      border-bottom: 1px solid #ddd;
+      border-top: 1px solid $card-border-color;
+      border-bottom: 1px solid $card-border-color;
     }
   }
 }
-
-.event-editor {
-  .tab-content {
-    margin-top: 20px;
-  }
-}
-
 
 @include media-breakpoint-down(xs) {
   .event-editor--question-buttons {
@@ -75,42 +68,13 @@
   }
 }
 
-.event-editor--valid-notice {
-  display: flex;
-  position: absolute;
-  right: 20px;
-  top: 170px;
-  justify-content: flex-end;
-  align-items: center;
-  height: 40px;
-  overflow: hidden;
-  transition: all 0.5s ease;
-
-  &.collapsed {
-    height: 0;
-    opacity: 0;
-  }
-
-  span b {
-    color: #d74949;
-    margin-right: 5px;
-    font-weight: normal;
-  }
-}
-
-.event-editor--saving-event {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 44px;
-}
-
 .event-editor--buttons-wrapper {
   display: flex;
   justify-content: flex-end;
   align-items: baseline;
   flex-wrap: wrap;
   row-gap: $spacer;
+  margin-bottom: $spacer;
 
   .spinner-border {
     align-self: center;
@@ -140,21 +104,4 @@
 
 .event-editor--animated {
   transition: all 0.3s ease;
-}
-
-.event-editor--loading-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 50px;
-}
-
-.event-editor--nav {
-  clear: both;
-  padding-top: 1em;
-}
-
-.event-editor--signup-table {
-  overflow-y: scroll;
 }

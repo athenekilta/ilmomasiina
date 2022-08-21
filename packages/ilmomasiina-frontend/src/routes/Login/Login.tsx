@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Field, Formik, FormikHelpers } from 'formik';
-import { Button, Container, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 import { login } from '../../modules/auth/actions';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
@@ -24,7 +24,7 @@ const Login = () => {
   }
 
   return (
-    <Container className="login-container">
+    <div className="login-container">
       <h1>Kirjaudu</h1>
       {loginError && (
         <p className="text-invalid">Kirjautuminen epäonnistui</p>
@@ -72,7 +72,7 @@ const Login = () => {
           </Form>
         )}
       </Formik>
-    </Container>
+    </div>
   );
 };
 

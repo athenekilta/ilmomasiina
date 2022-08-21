@@ -20,15 +20,13 @@ services:
     environment:
       - DB_DIALECT=postgres
       - NODE_ENV=development
+      - HOST=0.0.0.0
     env_file:
       - .env
     volumes:
       - type: bind
         source: ./packages/ilmomasiina-models/src
         target: /opt/ilmomasiina/packages/ilmomasiina-models/src
-      - type: bind
-        source: ./packages/ilmomasiina-frontend/config
-        target: /opt/ilmomasiina/packages/ilmomasiina-frontend/config
       - type: bind
         source: ./packages/ilmomasiina-frontend/public
         target: /opt/ilmomasiina/packages/ilmomasiina-frontend/public
@@ -38,6 +36,9 @@ services:
       - type: bind
         source: ./packages/ilmomasiina-frontend/src
         target: /opt/ilmomasiina/packages/ilmomasiina-frontend/src
+      - type: bind
+        source: ./packages/ilmomasiina-components/src
+        target: /opt/ilmomasiina/packages/ilmomasiina-components/src
       - type: bind
         source: ./packages/ilmomasiina-backend/src
         target: /opt/ilmomasiina/packages/ilmomasiina-backend/src

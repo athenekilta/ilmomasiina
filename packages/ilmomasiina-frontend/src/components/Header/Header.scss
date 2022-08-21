@@ -1,21 +1,24 @@
-@import "../../styles/base";
+@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
 
 .navbar {
   background: $primary;
   margin-bottom: 1.5rem;
-
   img {
-    max-width: 3.2rem;
-    float: left;
-    vertical-align: middle;
-    margin-right: 2rem;
-  }
-  a.navbar-brand {
-    color: #fff !important;
-    font-weight: 700;
-    letter-spacing: 1px;
-    font-size: 18px;
-    padding-right: 25px;
-    margin: -1.5rem;
-  }
+      max-width: 3.2rem;
+      float: left;
+      vertical-align: middle;
+      margin-right: 2rem;
+    }
+}
+
+.navbar-brand {
+  color: color-yiq($primary) !important;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  font-size: 18px;
+  padding-right: 25px;
+  margin: -1.5rem;
 }

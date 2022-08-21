@@ -15,3 +15,4 @@ declare const BRANDING_FOOTER_GDPR_LINK: string;
 declare const BRANDING_FOOTER_HOME_TEXT: string;
 declare const BRANDING_FOOTER_HOME_LINK: string;
 declare const BRANDING_LOGO_URL: string;
+declare const TIMEZONE: string;

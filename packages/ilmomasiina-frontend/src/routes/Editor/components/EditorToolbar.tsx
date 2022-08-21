@@ -5,8 +5,8 @@ import { Button, ButtonGroup, Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 
+import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import { EditorEvent } from '../../../modules/editor/types';
-import paths from '../../../paths';
 import { useTypedSelector } from '../../../store/reducers';
 
 interface EditorToolbarProps {
@@ -30,14 +30,14 @@ const EditorToolbar = ({ onSubmitClick }: Props) => {
       </h1>
       <div className="event-editor--buttons-wrapper">
         <div className="flex-fill">
-          <Link to={paths.adminEventsList}>&#8592; Takaisin</Link>
+          <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
         </div>
         {isSubmitting && <Spinner animation="border" />}
         <div className="event-editor--public-status">
           <div className={`event-editor--bubble ${isDraft ? 'draft' : 'public'} event-editor--animated`} />
           <span>
             {isDraft ? 'Luonnos' : (
-              <Link to={paths.eventDetails(event!.slug)} target="_blank">Julkaistu</Link>
+              <Link to={fullPaths().eventDetails(event!.slug)} target="_blank">Julkaistu</Link>
             )}
           </span>
         </div>

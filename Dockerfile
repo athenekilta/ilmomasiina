@@ -1,8 +1,18 @@
 # Build stage:
 FROM node:14-alpine as builder
 
+# Build-time env variables
+ARG SENTRY_DSN
+ARG PREFIX_URL
+ARG API_URL
+ARG BRANDING_HEADER_TITLE_TEXT
+ARG BRANDING_FOOTER_GDPR_TEXT
+ARG BRANDING_FOOTER_GDPR_LINK
+ARG BRANDING_FOOTER_HOME_TEXT
+ARG BRANDING_FOOTER_HOME_LINK
+
 # Copy source files
-COPY .eslint* .postcssrc package.json pnpm-*.yaml /opt/ilmomasiina/
+COPY .eslint* package.json pnpm-*.yaml /opt/ilmomasiina/
 COPY packages /opt/ilmomasiina/packages
 WORKDIR /opt/ilmomasiina
 
@@ -11,15 +21,6 @@ RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile
 
 # Default to production (after pnpm install, so we get our types etc.)
 ENV NODE_ENV=production
-
-# Build-time env variables
-ARG SENTRY_DSN
-ARG PREFIX_URL
-ARG BRANDING_HEADER_TITLE_TEXT
-ARG BRANDING_FOOTER_GDPR_TEXT
-ARG BRANDING_FOOTER_GDPR_LINK
-ARG BRANDING_FOOTER_HOME_TEXT
-ARG BRANDING_FOOTER_HOME_LINK
 
 # Build all packages
 RUN npm run build
