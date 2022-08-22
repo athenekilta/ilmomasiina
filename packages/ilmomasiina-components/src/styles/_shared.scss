@@ -1,0 +1,47 @@
+@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
+@use "forms";
+
+@include media-breakpoint-up(sm) {
+  .ilmo--mobile-only {
+    display: none;
+  }
+}
+@include media-breakpoint-down(xs) {
+  .ilmo--desktop-only {
+    display: none;
+  }
+}
+
+.ilmo--title-nav {
+  display: flex;
+  align-items: center;
+  column-gap: $spacer * 0.5;
+
+  :first-child {
+    flex: 1 0 auto;
+  }
+
+  // on narrow screens, always wrap the button(s)
+  @include media-breakpoint-down(xs) {
+    flex-wrap: wrap;
+    padding-bottom: $spacer;
+
+    :first-child {
+      flex: 1 0 100%;
+    }
+  }
+}
+
+.ilmo--narrow-container {
+  justify-content: center;
+}
+.ilmo--status-container {
+  text-align: center;
+}
+.ilmo--loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}

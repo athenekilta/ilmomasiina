@@ -3,6 +3,7 @@ module.exports = {
   "parserOptions": {
     "project": [
       "packages/ilmomasiina-models/tsconfig.json",
+      "packages/ilmomasiina-components/tsconfig.json",
       "packages/ilmomasiina-frontend/tsconfig.json",
       "packages/ilmomasiina-backend/tsconfig.json"
     ],
@@ -40,6 +41,8 @@ module.exports = {
     // does not currently handle properly.
     // see https://github.com/benmosher/eslint-plugin-import/issues/1453
     "import/no-cycle": "off",
+    // Allow i++ in for loops.
+    "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     // We are targeting ES5 or higher.
     "radix": ["error", "as-needed"],
     // ...I know what I'm doing.
@@ -52,6 +55,10 @@ module.exports = {
     // a giant PITA - the default config ignores arrow functions but they don't solve
     // the problem at all, and useCallback is just plain ugly.
     "react/jsx-no-bind": "off",
+    // Add any custom hooks here
+    "react-hooks/exhaustive-deps": ["error", {
+      additionalHooks: "useAbortableEffect|useAbortablePromise",
+    }],
     // Prefer arrow functions to functions expressions, as that's what was done
     // when this rule was introduced.
     "react/function-component-definition": ["error", {

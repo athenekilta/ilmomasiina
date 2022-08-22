@@ -12,7 +12,7 @@ ARG BRANDING_FOOTER_HOME_TEXT
 ARG BRANDING_FOOTER_HOME_LINK
 
 # Copy source files
-COPY .eslint* .postcssrc package.json pnpm-*.yaml /opt/ilmomasiina/
+COPY .eslint* package.json pnpm-*.yaml /opt/ilmomasiina/
 COPY packages /opt/ilmomasiina/packages
 WORKDIR /opt/ilmomasiina
 

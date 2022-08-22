@@ -4,7 +4,7 @@ import { useFormikContext } from 'formik';
 import { Form } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 
-import FieldRow from '../../../components/FieldRow';
+import FieldRow from '@tietokilta/ilmomasiina-components/src/components/FieldRow';
 import { checkingSlugAvailability, checkSlugAvailability, loadCategories } from '../../../modules/editor/actions';
 import { EditorEvent, EditorEventType } from '../../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';

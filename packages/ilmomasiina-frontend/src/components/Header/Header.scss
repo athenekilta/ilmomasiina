@@ -1,4 +1,4 @@
-@import "../../styles/base";
+@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
 
 .navbar {
   background: $primary;
@@ -6,7 +6,7 @@
 }
 
 .navbar-brand {
-  color: #fff !important;
+  color: color-yiq($primary) !important;
   text-transform: uppercase;
   font-weight: 600;
   letter-spacing: 1px;

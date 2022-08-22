@@ -48,6 +48,9 @@ services:
         source: ./packages/ilmomasiina-frontend/src
         target: /opt/ilmomasiina/packages/ilmomasiina-frontend/src
       - type: bind
+        source: ./packages/ilmomasiina-components/src
+        target: /opt/ilmomasiina/packages/ilmomasiina-components/src
+      - type: bind
         source: ./packages/ilmomasiina-backend/src
         target: /opt/ilmomasiina/packages/ilmomasiina-backend/src
     ports:

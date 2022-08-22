@@ -37,17 +37,10 @@ const EditForm = ({ handleSubmit, submitForm, submitOptions }: Props) => {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} className="ilmo--form" role="tablist">
         <EditorToolbar onSubmitClick={onSubmitClick} />
         <EditorTabHeader activeTab={activeTab} setActiveTab={setActiveTab} />
-
-        <div className="event-editor--valid-notice collapsed">
-          <span>
-            <b>*</b>
-            Tähdellä merkityt kentät ovat pakollisia
-          </span>
-        </div>
-        <div className="tab-content">
+        <div className="tab-content mt-4">
           <EditorTabBody id={EditorTab.BASIC_DETAILS} activeTab={activeTab} component={BasicDetailsTab} />
           <EditorTabBody id={EditorTab.QUOTAS} activeTab={activeTab} component={QuotasTab} />
           <EditorTabBody id={EditorTab.QUESTIONS} activeTab={activeTab} component={QuestionsTab} />

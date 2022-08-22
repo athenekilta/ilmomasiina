@@ -1,0 +1,79 @@
+@use "../../styles/definitions" as *;
+
+table.ilmo--event-list {
+  tr.ilmo--quota-row {
+    td.ilmo--title {
+      padding-left: 30px;
+    }
+    td {
+      border-top: 0;
+      padding-top: 0;
+    }
+  }
+  tr.ilmo--signup-not-opened td.ilmo--signup-state { color: $signup-state-not-opened; }
+  tr.ilmo--signup-opened td.ilmo--signup-state { color: $signup-state-opened; }
+  tr.ilmo--signup-closed td.ilmo--signup-state { color: $signup-state-closed; }
+  tr.ilmo--signup-disabled td.ilmo--signup-state { color: $signup-state-disabled; }
+}
+
+@include media-breakpoint-up(md) {
+  table.ilmo--event-list td.ilmo--title {
+    min-width: 300px;
+  }
+}
+
+@include media-breakpoint-down(xs) {
+  table.ilmo--event-list {
+    max-width: 100%;
+    overflow: hidden;
+
+    thead {
+      display: none;
+    }
+
+    tbody {
+      tr {
+        // render events vertically
+        display: flex;
+        flex-direction: column;
+
+        &:not(:first-child):not(.ilmo--quota-row) {
+          padding: $spacer * 0.75 0 0;
+          margin-top: $spacer * 0.75;
+          border-top: 1px solid $border-color;
+        }
+
+        td {
+          padding: 0;
+          border-top: 0;
+        }
+
+        td.ilmo--title a {
+          font-weight: 600;
+        }
+      }
+
+      // prevent similarity with link color
+      @if $signup-state-opened == $link-color {
+        tr.ilmo--signup-opened td.ilmo--signup-state {
+          color: $signup-state-not-opened;
+        }
+      }
+
+      // smaller font in signup counts
+      tr.ilmo--quota-row td.ilmo--title, td.ilmo--signup-count {
+        font-size: 0.85em;
+      }
+
+      tr.ilmo--quota-row {
+        padding-left: 15px;
+        margin-top: 5px;
+
+        td.ilmo--title {
+          padding: 0;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
