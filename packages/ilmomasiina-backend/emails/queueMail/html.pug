@@ -2,19 +2,19 @@ extends ../layout.pug
 
 block mainContent
 	div.content-block
-		p.bodyText Olet päässyt mukaan tapahtumaan #{event.title} varasijalta.
+		p.bodyText Olet päässyt mukaan tapahtumaan / your registration to event #{event.title} varasijalta / has been approved from the queue.
 	div.content-block
-		p.bodyText Tapahtuman tiedot:
+		p.bodyText Tapahtuman tiedot / Even information:
 		ul
 			li
-				strong Tapahtuma: 
+				strong Tapahtuma / Event: 
 				| #{event.title}
 			li 
-				strong Sijainti: 
+				strong Sijainti / Location: 
 				| #{event.location}
 			if date
 				li 
-					strong Aika: 
+					strong Aika / Date: 
 					| #{date}
 	div.content-block
-		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].
+		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä]. Click the link to edit / cancel your registration.

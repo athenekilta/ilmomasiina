@@ -29,7 +29,7 @@ const EventDescription = () => {
       <div className="ilmo--event-heading">
         {event.category && (
           <p>
-            <strong>Kategoria:</strong>
+            <strong>Kategoria / Category:</strong>
             {' '}
             {event.category}
           </p>
@@ -43,28 +43,28 @@ const EventDescription = () => {
         )}
         {event.endDate && (
           <p>
-            <strong>Loppuu:</strong>
+            <strong>Loppuu / Ends:</strong>
             {' '}
             {moment(event.endDate).tz(timezone()).format('D.M.Y [klo] HH:mm')}
           </p>
         )}
         {event.location && (
           <p>
-            <strong>Sijainti:</strong>
+            <strong>Sijainti / Location:</strong>
             {' '}
             {event.location}
           </p>
         )}
         {event.price && (
           <p>
-            <strong>Hinta:</strong>
+            <strong>Hinta / Price:</strong>
             {' '}
             {event.price}
           </p>
         )}
         {event.webpageUrl && (
           <p>
-            <strong>Kotisivut:</strong>
+            <strong>Kotisivut / Home page:</strong>
             {' '}
             <a href={event.webpageUrl} title="Kotisivut / Home page">
               {event.webpageUrl}
@@ -73,7 +73,7 @@ const EventDescription = () => {
         )}
         {event.facebookUrl && (
           <p>
-            <strong>Facebook-tapahtuma:</strong>
+            <strong>Facebook-tapahtuma / Facebook event:</strong>
             {' '}
             <a href={event.facebookUrl} title="Facebook-tapahtuma / Facebook event">
               {event.facebookUrl}

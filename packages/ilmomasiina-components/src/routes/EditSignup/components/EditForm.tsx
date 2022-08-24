@@ -116,18 +116,22 @@ const EditForm = () => {
             <QuestionFields name="answers" questions={event!.questions} />
 
             <p>
-              Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin tallentamalla tämän sivun URL-osoitteen / You can edit your registration or remove it later by saving this page's URL address.
-              {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä / The link will also be sent to your email in a confimation message.'}
+              Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin tallentamalla tämän sivun URL-osoitteen.
+              {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä'}
+            </p>
+            <p>
+              You can edit your registration or remove it later by saving this page's URL address.
+              {event!.emailQuestion && ' The link will also be sent to your email in a confimation message.'}
             </p>
 
             <nav className="ilmo--submit-buttons">
               {!isNew && (
                 <Button as={Link} variant="link" to={paths().eventDetails(event!.slug)}>
-                  Peruuta
+                  Peruuta / Cancel
                 </Button>
               )}
               <Button type="submit" variant="primary" formNoValidate disabled={isSubmitting}>
-                {isNew ? 'Lähetä / Subbit' : 'Päivitä / Update'}
+                {isNew ? 'Lähetä / Submit' : 'Päivitä / Update'}
               </Button>
             </nav>
           </Form>

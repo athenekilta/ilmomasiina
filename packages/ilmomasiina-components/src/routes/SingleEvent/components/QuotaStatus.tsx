@@ -13,7 +13,7 @@ const QuotaStatus = () => {
 
   return (
     <div className="ilmo--side-widget">
-      <h3>Ilmoittautuneet</h3>
+      <h3>Ilmoittautuneet / Registrations</h3>
       {signupsByQuota!.map((quota) => {
         if (quota.id === OPENQUOTA) {
           return (

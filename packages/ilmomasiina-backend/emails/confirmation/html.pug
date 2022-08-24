@@ -10,11 +10,11 @@ block mainContent
 				strong Tapahtuma / Event:
 				| #{event.title}
 			li
-				strong Sijainti: 
+				strong Sijainti / Location: 
 				| #{event.location}
 			if date
 				li
-					strong Aika: 
+					strong Aika / Date: 
 					| #{date}
 	div.content-block
 		p.bodyText Ilmoittautumisesi tiedot / Registraion:
@@ -24,4 +24,4 @@ block mainContent
 					strong #{val.label}:
 					| #{val.answer}
 	div.content-block
-		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].
+		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä]. Click the link to edit / cancel your registration.
