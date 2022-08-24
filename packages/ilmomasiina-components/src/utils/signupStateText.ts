@@ -23,7 +23,7 @@ const signupState = (starts: string | null, closes: string | null) => {
   if (signupOpens.isSameOrAfter(now)) {
     return {
       shortLabel: `Alkaa ${moment(signupOpens).format(timeFormat)}.`,
-      fullLabel: `Ilmoittautuminen alkaa ${moment(signupOpens).format(timeFormat)}.`,
+      fullLabel: `Ilmoittautuminen alkaa / registration begins: ${moment(signupOpens).format(timeFormat)}.`,
       class: 'ilmo--signup-not-opened',
     };
   }
@@ -31,12 +31,12 @@ const signupState = (starts: string | null, closes: string | null) => {
   if (signupCloses.isSameOrAfter(now)) {
     return {
       shortLabel: `Auki ${moment(signupCloses).format(timeFormat)} asti.`,
-      fullLabel: `Ilmoittautuminen auki ${moment(signupCloses).format(timeFormat)} asti.`,
+      fullLabel: `Ilmoittautuminen auki / registraion is open until ${moment(signupCloses).format(timeFormat)} asti.`,
       class: 'ilmo--signup-opened',
     };
   }
 
-  return { shortLabel: 'Ilmoittautuminen on päättynyt.', class: 'ilmo--signup-closed' };
+  return { shortLabel: 'Ilmoittautuminen on päättynyt / Registration has closed.', class: 'ilmo--signup-closed' };
 };
 
 export default signupState;

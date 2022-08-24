@@ -46,9 +46,10 @@ const DeleteSignup = () => {
 
   return (
     <div className="ilmo--delete-container">
-      <h2>Poista ilmoittautuminen</h2>
+      <h2>Poista ilmoittautuminen / Delete registration</h2>
       <p>
-        Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan
+        Oletko varma, että haluat poistaa ilmoittautumisesi tapahtumaan / 
+        Are you sure you want to remove your registration to event
         {' '}
         <strong>
           {event!.title}
@@ -58,12 +59,15 @@ const DeleteSignup = () => {
       <p>
         Jos poistat ilmoittautumisesi, menetät paikkasi jonossa. Jos
         muutat mielesi, voit aina ilmoittautua tapahtumaan uudelleen
-        myöhemmin, mutta siirryt silloin jonon hännille.
+        myöhemmin, mutta siirryt silloin jonon hännille. / 
+        You will lose your place in the queue if you remove your registration.
+        If you change your mind later, you can always sign up againg,
+        but you will be placed at the end of the queue.
         {' '}
-        <strong>Tätä toimintoa ei voi perua.</strong>
+        <strong>Tätä toimintoa ei voi perua / This action can not be undone.</strong>
       </p>
       <Button type="button" disabled={isSubmitting} onClick={onDeleteClick} variant="danger">
-        {confirming ? 'Paina uudelleen varmistukseksi\u2026' : 'Poista ilmoittautuminen'}
+        {confirming ? 'Paina uudelleen varmistukseksi / Click again to confim\u2026' : 'Poista ilmoittautuminen / Delete registration'}
       </Button>
     </div>
   );

@@ -25,10 +25,10 @@ const SignupList = ({ quota }: Props) => {
           <Table size="sm">
             <thead className="thead-light">
               <tr>
-                <th key="position">Sija</th>
+                <th key="position">Sija / position</th>
                 {nameQuestion && (
                   <th key="attendee" style={{ minWidth: 90 }}>
-                    Nimi
+                    Nimi / Name
                   </th>
                 )}
                 {filter(questions, 'public').map((question) => (
@@ -38,11 +38,11 @@ const SignupList = ({ quota }: Props) => {
                 ))}
                 {showQuotas && (
                   <th key="quota">
-                    Kiintiö
+                    Kiintiö / Quota
                   </th>
                 )}
                 <th key="datetime" style={{ minWidth: 130 }}>
-                  Ilmoittautumisaika
+                  Ilmoittautumisaika / Registration time
                 </th>
               </tr>
             </thead>

@@ -26,14 +26,14 @@ const EditForm = () => {
   const [submitError, setSubmitError] = useState(false);
 
   async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
-    const action = isNew ? 'Ilmoittautuminen' : 'Muokkaus';
-    const progressToast = toast.loading(`${action} käynnissä`);
+    const action = isNew ? 'Ilmoittautuminen / Registration' : 'Muokkaus / Edit';
+    const progressToast = toast.loading(`${action} käynnissä / in progress`);
 
     try {
       await updateSignup(answers);
 
       toast.update(progressToast, {
-        render: `${action} onnistui!`,
+        render: `${action} onnistui / succesfull!`,
         type: toast.TYPE.SUCCESS,
         autoClose: 5000,
         closeButton: true,
@@ -47,7 +47,7 @@ const EditForm = () => {
       }
     } catch (error) {
       toast.update(progressToast, {
-        render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.`,
+        render: `${action} ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan / did not succeed. Check that all mandatory fields are filled and try again.`,
         type: toast.TYPE.ERROR,
         autoClose: 5000,
         closeButton: true,
@@ -66,10 +66,10 @@ const EditForm = () => {
     >
       {({ handleSubmit, isSubmitting }) => (
         <NarrowContainer>
-          <h2>{isNew ? 'Ilmoittaudu' : 'Muokkaa ilmoittautumista'}</h2>
+          <h2>{isNew ? 'Ilmoittaudu / Register' : 'Muokkaa ilmoittautumista / Edit registration'}</h2>
           <SignupStatus />
           {submitError && (
-            <p className="ilmo--form-error">Ilmoittautumisessasi on virheitä.</p>
+            <p className="ilmo--form-error">Ilmoittautumisessasi on virheitä / Registration has errors.</p>
           )}
           <Form onSubmit={handleSubmit} className="ilmo--form">
             {event!.nameQuestion && (
@@ -116,8 +116,8 @@ const EditForm = () => {
             <QuestionFields name="answers" questions={event!.questions} />
 
             <p>
-              Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin tallentamalla tämän sivun URL-osoitteen.
-              {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä.'}
+              Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin tallentamalla tämän sivun URL-osoitteen / You can edit your registration or remove it later by saving this page's URL address.
+              {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä / The link will also be sent to your email in a confimation message.'}
             </p>
 
             <nav className="ilmo--submit-buttons">
@@ -127,7 +127,7 @@ const EditForm = () => {
                 </Button>
               )}
               <Button type="submit" variant="primary" formNoValidate disabled={isSubmitting}>
-                {isNew ? 'Lähetä' : 'Päivitä'}
+                {isNew ? 'Lähetä / Subbit' : 'Päivitä / Update'}
               </Button>
             </nav>
           </Form>

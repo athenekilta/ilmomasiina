@@ -29,7 +29,7 @@ const TableRow = ({
       key="signups"
       className="ilmo--signup-count"
     >
-      {signupCount !== undefined && <span className="ilmo--mobile-only">Ilmoittautuneita: </span>}
+      {signupCount !== undefined && <span className="ilmo--mobile-only">Ilmoittautuneita / signups: </span>}
       {signupCount}
       {quotaSize && <>&ensp;/&ensp;</>}
       {quotaSize || ''}

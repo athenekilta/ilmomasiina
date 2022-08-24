@@ -17,11 +17,12 @@ const EditSignupView = () => {
   if (error) {
     return (
       <NarrowContainer className="ilmo--status-container">
-        <h1>Hups, jotain meni pieleen</h1>
+        <h1>Hups, jotain meni pieleen / Something went wrong</h1>
         <p>
           Ilmoittautumistasi ei löytynyt. Se saattaa olla jo poistettu, tai
           sitten jotain muuta kummallista tapahtui. Jos ilmoittautumisesi ei
-          ole vielä poistunut, yritä kohta uudestaan.
+          ole vielä poistunut, yritä kohta uudestaan. / 
+          Registration was not found. It may be already removed.
         </p>
       </NarrowContainer>
     );
@@ -38,9 +39,9 @@ const EditSignupView = () => {
   if (deleted) {
     return (
       <div className="ilmo--status-container">
-        <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
+        <h1>Ilmoittautumisesi poistettiin onnistuneesti / Registration deleted successfully</h1>
         <Button as={Link} to={paths().eventDetails(event!.slug)} variant="secondary">
-          Takaisin
+          Takaisin / Back
         </Button>
       </div>
     );
@@ -49,13 +50,14 @@ const EditSignupView = () => {
   if (event!.registrationEndDate === null || new Date(event!.registrationEndDate) < new Date()) {
     return (
       <NarrowContainer className="ilmo--status-container">
-        <h1>Hups, jotain meni pieleen</h1>
+        <h1>Hups, jotain meni pieleen / Something went wrong</h1>
         <p>
           Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
-          ilmoittautuminen on sulkeutunut.
+          ilmoittautuminen on sulkeutunut / Registration can't be edited or deleted
+          as the signup is already closed.
         </p>
         <Button as={Link} to={paths().eventsList} variant="secondary">
-          Takaisin etusivulle
+          Takaisin etusivulle / Back to home page
         </Button>
       </NarrowContainer>
     );

@@ -40,7 +40,7 @@ const SignupButton = ({
       navigate(paths().editSignup(response.id, response.editToken));
     } catch (e) {
       setSubmitting(false);
-      toast.error('Ilmoittautuminen epäonnistui.', {
+      toast.error('Ilmoittautuminen epäonnistui / Registration failed.', {
         autoClose: 5000,
       });
     }
@@ -48,7 +48,7 @@ const SignupButton = ({
 
   return (
     <div className="ilmo--side-widget">
-      <h3>Ilmoittautuminen</h3>
+      <h3>Ilmoittautuminen / Registration</h3>
       <p>
         {signupState(registrationStartDate, registrationEndDate).shortLabel}
         {total < COUNTDOWN_DURATION && !isOpen && !isClosed && (
@@ -66,7 +66,7 @@ const SignupButton = ({
           className="ilmo--signup-button"
           onClick={() => isOpen && beginSignup(quota.id)}
         >
-          {isOnly ? 'Ilmoittaudu nyt' : `Ilmoittaudu: ${quota.title}`}
+          {isOnly ? 'Ilmoittaudu nyt / Register now' : `Ilmoittaudu / Register: ${quota.title}`}
         </Button>
       ))}
     </div>

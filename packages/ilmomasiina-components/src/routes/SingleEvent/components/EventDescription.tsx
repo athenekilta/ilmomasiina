@@ -36,7 +36,7 @@ const EventDescription = () => {
         )}
         {event.date && (
           <p>
-            <strong>{event.endDate ? 'Alkaa:' : 'Ajankohta:'}</strong>
+            <strong>{event.endDate ? 'Alkaa / Begins:' : 'Ajankohta / Date:'}</strong>
             {' '}
             {moment(event.date).tz(timezone()).format('D.M.Y [klo] HH:mm')}
           </p>
@@ -66,7 +66,7 @@ const EventDescription = () => {
           <p>
             <strong>Kotisivut:</strong>
             {' '}
-            <a href={event.webpageUrl} title="Kotisivut">
+            <a href={event.webpageUrl} title="Kotisivut / Home page">
               {event.webpageUrl}
             </a>
           </p>
@@ -75,7 +75,7 @@ const EventDescription = () => {
           <p>
             <strong>Facebook-tapahtuma:</strong>
             {' '}
-            <a href={event.facebookUrl} title="Facebook-tapahtuma">
+            <a href={event.facebookUrl} title="Facebook-tapahtuma / Facebook event">
               {event.facebookUrl}
             </a>
           </p>

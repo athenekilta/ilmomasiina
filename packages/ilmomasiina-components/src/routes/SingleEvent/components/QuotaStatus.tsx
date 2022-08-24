@@ -27,7 +27,7 @@ const QuotaStatus = () => {
         }
         if (quota.id === WAITLIST) {
           if (quota.signups.length > 0) {
-            return <p key={quota.id}>{`Jonossa: ${quota.signups.length}`}</p>;
+            return <p key={quota.id}>{`Jonossa / in queue: ${quota.signups.length}`}</p>;
           }
           return null;
         }

@@ -21,11 +21,11 @@ const SingleEventView = () => {
   if (error) {
     return (
       <div className="ilmo--loading-container">
-        <h1>Hups, jotain meni pieleen</h1>
+        <h1>Hups, jotain meni pieleen / Something went wrong</h1>
         <p>
-          Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
+          Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu. / Event could not be found.
         </p>
-        <Link to={paths().eventsList}>Palaa tapahtumalistaukseen</Link>
+        <Link to={paths().eventsList}>Palaa tapahtumalistaukseen / Back to event list</Link>
       </div>
     );
   }
@@ -54,7 +54,7 @@ const SingleEventView = () => {
       </Row>
       {event!.signupsPublic && (
         <>
-          <h2>Ilmoittautuneet</h2>
+          <h2>Ilmoittautuneet / Registered</h2>
           {signupsByQuota!.map((quota) => (
             <SignupList
               key={quota.id}
