@@ -50,6 +50,9 @@ COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-backend/dist /opt/ilmo
 # Copy built frontend from build stage
 COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-frontend/build /opt/ilmomasiina/frontend
 
+# copy static files
+COPY packages/ilmomasiina-frontend/public/ /opt/ilmomasiina/frontend
+
 # Create user for running
 RUN adduser -D -h /opt/ilmomasiina ilmomasiina
 USER ilmomasiina
