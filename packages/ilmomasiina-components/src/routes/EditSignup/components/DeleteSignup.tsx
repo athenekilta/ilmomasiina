@@ -54,7 +54,7 @@ const DeleteSignup = () => {
           {event!.title}
         </strong>
         ?
-        <br>
+        <br/>
         Are you sure you want to remove your registration to event
         {' '}
         <strong>
@@ -68,7 +68,7 @@ const DeleteSignup = () => {
         myöhemmin, mutta siirryt silloin jonon hännille.
         {' '}
         <strong>Tätä toimintoa ei voi perua.</strong>
-        <br>
+        <br/>
         You will lose your place in the queue if you remove your registration.
         If you change your mind later, you can always sign up againg,
         but you will be placed at the end of the queue.
