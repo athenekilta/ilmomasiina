@@ -21,7 +21,7 @@ export default function setupAuthentication(this: IlmoApplication) {
   const app = this;
 
   // Generate super-long-lived JWTs in development mode
-  const expiresIn = config.nodeEnv === 'development' ? '365d' : '1h';
+  const expiresIn = config.nodeEnv === 'development' ? '365d' : '7d';
 
   // Set up authentication with the secret
   app.set('authentication', {
