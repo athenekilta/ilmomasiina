@@ -19,6 +19,7 @@
 
   :first-child {
     flex: 1 0 auto;
+    flex-shrink: 1;
   }
 
   // on narrow screens, always wrap the button(s)
