@@ -113,7 +113,7 @@ class BasicDetailsTab extends React.Component {
         <Checkbox
           name="signupsPublic"
           value={event.signupsPublic ? event.signupsPublic : false}
-          label="Ilmoittautumiset ovat julkisia"
+          label="Ilmoittautumiset ovat julkisia (huom. tätä ei voi valita tapahtuman julkaisun jälkeen)"
           onChange={this.props.onDataChange}
         />
       </div>

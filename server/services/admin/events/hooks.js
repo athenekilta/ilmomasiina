@@ -7,14 +7,15 @@ const formatOptionsAsArray = require('./hooks/formatOptionsAsArray');
 // const createEvent = require('./hooks/createEvent');
 const updateQuotas = require('./hooks/updateQuotas');
 const updateQuestions = require('./hooks/updateQuestions');
+const preservePrivacy = require('./hooks/preservePrivacy.js');
 
 exports.before = {
   all: [authentication.hooks.authenticate('jwt')],
   find: [includeQuotas()],
   get: [includeAllEventData()],
   create: [includeAllEventData()],
-  update: [includeAllEventData()],
-  patch: [includeAllEventData()],
+  update: [includeAllEventData(), preservePrivacy()],
+  patch: [includeAllEventData(), preservePrivacy()],
   remove: [],
 };
 
