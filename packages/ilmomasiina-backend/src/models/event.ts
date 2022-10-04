@@ -191,18 +191,18 @@ export default function setupEventModel(sequelize: Sequelize) {
                 // closed less than a week ago
                 registrationEndDate: {
                   [Op.gt]: moment()
-                    .subtract(7, 'days')
+                    .subtract(2, 'days')
                     .toDate(),
                 },
                 // or happened less than a week ago
                 date: {
                   [Op.gt]: moment()
-                    .subtract(7, 'days')
+                    .subtract(2, 'days')
                     .toDate(),
                 },
                 endDate: {
                   [Op.gt]: moment()
-                    .subtract(7, 'days')
+                    .subtract(2, 'days')
                     .toDate(),
                 },
               },
