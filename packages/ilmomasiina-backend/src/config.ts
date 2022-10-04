@@ -60,7 +60,7 @@ if (config.frontendFilesPath === null) {
   }
 }
 
-if (config.oldEditTokenSalt === config.newEditTokenSecret) {
+if (config.oldEditTokenSalt && config.oldEditTokenSalt === config.newEditTokenSecret) {
   throw new Error(
     'Don\'t use the same secret for EDIT_TOKEN_SALT and NEW_EDIT_TOKEN_SECRET.\n'
     + 'If this is a new installation, leave EDIT_TOKEN_SALT empty. If this is an old installation, '
