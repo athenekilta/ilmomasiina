@@ -12,7 +12,7 @@ import {
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { ascNullsFirst } from '../../models/util';
+import { descNullsFirst } from '../../models/util';
 
 export type EventListResponseType<A extends boolean> = true extends A ? AdminEventListResponse : EventListResponse;
 
@@ -51,7 +51,7 @@ async function getEventsList<A extends boolean>(admin: A, params?: Params): Prom
     group: [col('event.id'), col('quotas.id')],
     order: [
       // events without signup (date=NULL) come first
-      ['date', ascNullsFirst()],
+      ['date', descNullsFirst()],
       ['registrationEndDate', 'ASC'],
       ['title', 'ASC'],
       [Quota, 'order', 'ASC'],
