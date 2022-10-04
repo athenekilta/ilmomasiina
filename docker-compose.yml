@@ -51,3 +51,5 @@ services:
     environment:
       POSTGRES_USER: ilmomasiina
       POSTGRES_PASSWORD: secret
+    volumes:
+    - ./pg-data:/var/lib/postgresql/data
