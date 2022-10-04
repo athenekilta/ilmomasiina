@@ -77,4 +77,8 @@ if (config.adminRegistrationAllowed) {
   );
 }
 
+if (!config.feathersAuthSecret) {
+  throw new Error('Env variable FEATHERS_AUTH_SECRET must be set');
+}
+
 export default config;
