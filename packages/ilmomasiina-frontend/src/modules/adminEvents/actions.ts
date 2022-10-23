@@ -1,6 +1,6 @@
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
 import { AdminEventList, EventID } from '@tietokilta/ilmomasiina-models/src/schema';
-import { DispatchAction } from '../../store/types';
+import { DispatchAction, GetState } from '../../store/types';
 import { loginExpired } from '../auth/actions';
 import {
   EVENTS_LOAD_FAILED,
@@ -26,18 +26,21 @@ export type AdminEventsActions =
   | ReturnType<typeof eventsLoadFailed>
   | ReturnType<typeof resetState>;
 
-export const getAdminEvents = () => async (dispatch: DispatchAction) => {
+export const getAdminEvents = () => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
   try {
-    const response = await apiFetch('admin/events', {}, () => dispatch(loginExpired()));
+    const response = await apiFetch('admin/events', { accessToken }, () => dispatch(loginExpired()));
     dispatch(eventsLoaded(response as AdminEventList));
   } catch (e) {
     dispatch(eventsLoadFailed());
   }
 };
 
-export const deleteEvent = (id: EventID) => async (dispatch: DispatchAction) => {
+export const deleteEvent = (id: EventID) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
   try {
     await apiFetch(`admin/events/${id}`, {
+      accessToken,
       method: 'DELETE',
     }, () => dispatch(loginExpired()));
     return true;

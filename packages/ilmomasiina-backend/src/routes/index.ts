@@ -3,6 +3,7 @@ import { Type } from '@sinclair/typebox';
 import { FastifyInstance } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { adminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import { addLogEventHook } from '../auditlog';
 import { AdminAuthSession } from '../authentication/adminSession';
 import config from '../config';
@@ -18,7 +19,7 @@ import {
 } from './event/getEventDetails';
 import getEventsListForUser, { getEventsListForAdmin } from './event/getEventsList';
 import { sendICalFeed } from './ical';
-import { addSessionValidationHook, adminLogin, adminLogout } from './login/adminLogin';
+import { addSessionValidationHook, adminLogin, renewAdminToken } from './login/adminLogin';
 import createSignup from './signup/createNewSignup';
 import { deleteSignupAsAdmin, deleteSignupAsUser } from './signup/deleteSignup';
 import { requireValidEditToken } from './signup/editTokens';
@@ -290,24 +291,24 @@ export default async function setupRoutes(
         body: schema.adminLoginSchema,
         response: {
           ...errorResponses,
-          204: {},
+          201: adminSessionSchema,
         },
       },
     },
     adminLogin(opts.adminSession),
   );
 
-  server.delete(
+  server.patch(
     '/authentication',
     {
       schema: {
         response: {
           ...errorResponses,
-          204: {},
+          200: adminSessionSchema,
         },
       },
     },
-    adminLogout(opts.adminSession),
+    renewAdminToken(opts.adminSession),
   );
 
   /** Public routes for events */

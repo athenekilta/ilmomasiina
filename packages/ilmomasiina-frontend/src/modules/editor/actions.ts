@@ -190,9 +190,15 @@ const editorEventToServer = (form: EditorEvent): EventEditSchema => ({
   })),
 });
 
-export const getEvent = (id: EventID) => async (dispatch: DispatchAction) => {
+export const getEvent = (id: EventID) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+
   try {
-    const response = await apiFetch(`admin/events/${id}`, {}, () => dispatch(loginExpired())) as AdminEventSchema;
+    const response = await apiFetch(
+      `admin/events/${id}`,
+      { accessToken },
+      () => dispatch(loginExpired()),
+    ) as AdminEventSchema;
     dispatch(loaded(response));
   } catch (e) {
     dispatch(loadFailed());
@@ -206,18 +212,30 @@ export const reloadEvent = () => (dispatch: DispatchAction, getState: GetState) 
   dispatch(getEvent(event.id));
 };
 
-export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction) => {
+export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+
   try {
-    const response = await apiFetch(`admin/slugs/${slug}`, {}, () => dispatch(loginExpired())) as CheckSlugResponse;
+    const response = await apiFetch(
+      `admin/slugs/${slug}`,
+      { accessToken },
+      () => dispatch(loginExpired()),
+    ) as CheckSlugResponse;
     dispatch(slugAvailabilityChecked(response));
   } catch (e) {
     dispatch(slugAvailabilityChecked(null));
   }
 };
 
-export const loadCategories = () => async (dispatch: DispatchAction) => {
+export const loadCategories = () => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+
   try {
-    const response = await apiFetch('admin/categories', {}, () => dispatch(loginExpired())) as ListCategoriesResponse;
+    const response = await apiFetch(
+      'admin/categories',
+      { accessToken },
+      () => dispatch(loginExpired()),
+    ) as ListCategoriesResponse;
     dispatch(categoriesLoaded(response));
   } catch (e) {
     dispatch(categoriesLoaded([]));
@@ -225,13 +243,15 @@ export const loadCategories = () => async (dispatch: DispatchAction) => {
   }
 };
 
-export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchAction) => {
+export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 
   const cleaned = editorEventToServer(data);
+  const { accessToken } = getState().auth;
 
   try {
     const response = await apiFetch('admin/events', {
+      accessToken,
       method: 'POST',
       body: cleaned,
     }, () => dispatch(loginExpired())) as AdminEventSchema;
@@ -247,13 +267,15 @@ export const publishEventUpdate = (
   id: EventID,
   data: EditorEvent,
   moveSignupsToQueue: boolean = false,
-) => async (dispatch: DispatchAction) => {
+) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(saving());
 
   const cleaned = editorEventToServer(data);
+  const { accessToken } = getState().auth;
 
   try {
     const response = await apiFetch(`admin/events/${id}`, {
+      accessToken,
       method: 'PATCH',
       body: {
         ...cleaned,
@@ -276,9 +298,12 @@ export const publishEventUpdate = (
   }
 };
 
-export const deleteSignup = (id: SignupID) => async (dispatch: DispatchAction) => {
+export const deleteSignup = (id: SignupID) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+
   try {
     await apiFetch(`admin/signups/${id}`, {
+      accessToken,
       method: 'DELETE',
     }, () => dispatch(loginExpired()));
     return true;

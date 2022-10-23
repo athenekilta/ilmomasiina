@@ -10,4 +10,13 @@ export const adminLoginSchema = Type.Object({
   }),
 });
 
+/** Describes login response body */
+export const adminSessionSchema = Type.Object({
+  accessToken: Type.String({
+    title: 'JWT access token',
+    description: 'Place it into `Authorization` header to authorize your requests.',
+  }),
+});
+
 export type AdminLoginSchema = Static<typeof adminLoginSchema>;
+export type AdminSessionSchema = Static<typeof adminSessionSchema>;

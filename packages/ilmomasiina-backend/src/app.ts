@@ -1,5 +1,4 @@
 import fastifyCompress from '@fastify/compress';
-import fastifyCookie from '@fastify/cookie';
 import fastifySensible from '@fastify/sensible';
 import fastifyStatic from '@fastify/static';
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
@@ -22,11 +21,6 @@ export default async function initApp(): Promise<FastifyInstance> {
   const server = fastify({
     trustProxy: config.isAzure || config.trustProxy, // Get IPs from X-Forwarded-For
     logger: true, // Enable logger
-  });
-
-  server.register(fastifyCookie, {
-    // secret: 'my-secret', // for cookies signature
-    // parseOptions: {}, // options for parsing cookies
   });
 
   // Register fastify-sensible (https://github.com/fastify/fastify-sensible)

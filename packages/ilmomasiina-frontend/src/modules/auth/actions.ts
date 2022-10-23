@@ -2,6 +2,7 @@ import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
+import { AdminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import appPaths from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {
@@ -15,8 +16,9 @@ export const loggingIn = () => <const>{
   type: LOGGING_IN,
 };
 
-export const loginSucceeded = () => <const>{
+export const loginSucceeded = (payload: AdminSessionSchema) => <const>{
   type: LOGIN_SUCCEEDED,
+  payload,
 };
 
 export const loginFailed = () => <const>{
@@ -37,14 +39,14 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
   dispatch(loggingIn());
 
   try {
-    await apiFetch('authentication', {
+    const sessionResponse = await apiFetch('authentication', {
       method: 'POST',
       body: {
         email,
         password,
       },
-    });
-    dispatch(loginSucceeded());
+    }) as AdminSessionSchema;
+    dispatch(loginSucceeded(sessionResponse));
     dispatch(push(appPaths.adminEventsList));
     return true;
   } catch (e) {
@@ -59,19 +61,11 @@ export const redirectToLogin = () => (dispatch: DispatchAction) => {
 };
 
 export const logout = () => async (dispatch: DispatchAction) => {
-  try {
-    await apiFetch('authentication', {
-      method: 'DELETE',
-    });
-    dispatch(redirectToLogin());
-    toast.success('Uloskirjautuminen onnistui.', {
-      autoClose: 10000,
-    });
-  } catch (e) {
-    toast.error('Uloskirjautuminen epäonnistui.', {
-      autoClose: 10000,
-    });
-  }
+  dispatch(resetState());
+  dispatch(redirectToLogin());
+  toast.success('Uloskirjautuminen onnistui.', {
+    autoClose: 10000,
+  });
 };
 
 export const loginExpired = () => (dispatch: DispatchAction) => {

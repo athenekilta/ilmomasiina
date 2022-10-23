@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { HttpError } from 'http-errors';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import { AdminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import { AdminPasswordAuth } from '../../authentication/adminPassword';
 import { AdminAuthSession, AdminTokenData } from '../../authentication/adminSession';
 import { User } from '../../models/user';
@@ -10,7 +11,7 @@ export function adminLogin(session: AdminAuthSession) {
   return async (
     request: FastifyRequest<{ Body: schema.AdminLoginSchema }>,
     reply: FastifyReply,
-  ): Promise<void> => {
+  ): Promise<AdminSessionSchema | void> => {
     // Verify user
     const user = await User.findOne({
       where: { email: request.body.email },
@@ -19,21 +20,27 @@ export function adminLogin(session: AdminAuthSession) {
 
     if (user && AdminPasswordAuth.verifyHash(request.body.password, user.password)) {
       // Authentication success -> generate auth token
-      reply.status(204);
-      session.createSession({ user: user.id, email: user.email }, reply);
-    } else {
-      reply.unauthorized('Invalid email or password');
+      const accessToken = session.createSession({ user: user.id, email: user.email });
+      reply.status(200);
+      return { accessToken };
     }
+    reply.unauthorized('Invalid email or password');
+    return undefined;
   };
 }
 
-export function adminLogout(session: AdminAuthSession) {
+export function renewAdminToken(session: AdminAuthSession) {
   return async (
-    request: FastifyRequest,
+    request: FastifyRequest<{ Body: schema.AdminLoginSchema }>,
     reply: FastifyReply,
-  ): Promise<void> => {
-    session.endSession(reply);
-    reply.status(204);
+  ): Promise<AdminSessionSchema | void> => {
+    // Verify existing token
+    const sessionData = session.verifySession(request);
+
+    // Create a new one
+    const accessToken = session.createSession(sessionData);
+    reply.status(200);
+    return { accessToken };
   };
 }
 
@@ -43,7 +50,7 @@ export function addSessionValidationHook(session: AdminAuthSession, fastify: Fas
     .addHook('onRequest', async (request: FastifyRequest, reply) => {
       try {
         // Validate session & decorate request with session data
-        (request.sessionData as AdminTokenData) = session.verifySession(request, reply);
+        (request.sessionData as AdminTokenData) = session.verifySession(request);
       } catch (err) {
         // Throwing inside hook is not safe, so the errors must be converted to actual reply here
         fastify.log.error(err);

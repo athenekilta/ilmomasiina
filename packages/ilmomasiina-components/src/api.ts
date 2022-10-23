@@ -38,11 +38,14 @@ export function configureApi(url: string) {
 }
 
 export default async function apiFetch(uri: string, {
-  method = 'GET', body, headers, signal,
+  method = 'GET', body, headers, accessToken, signal,
 }: FetchOptions = {}, onUnauthenticated?: () => void) {
   const allHeaders = {
     ...headers || {},
   };
+  if (accessToken) {
+    allHeaders.Authorization = accessToken;
+  }
   if (body !== undefined) {
     allHeaders['Content-Type'] = 'application/json; charset=utf-8';
   }

@@ -37,6 +37,7 @@ export type AuditLogActions =
 
 export const getAuditLogs = (query: AuditLoqQuery = {} as AuditLoqQuery) => async (
   dispatch: DispatchAction,
+  getState: GetState,
 ) => {
   dispatch(auditLogQuery(query));
 
@@ -45,8 +46,10 @@ export const getAuditLogs = (query: AuditLoqQuery = {} as AuditLoqQuery) => asyn
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string | number | boolean)}`)
     .join('&');
 
+  const { accessToken } = getState().auth;
+
   try {
-    const response = await apiFetch(`admin/auditlog?${queryString}`, {}, () => dispatch(loginExpired()));
+    const response = await apiFetch(`admin/auditlog?${queryString}`, { accessToken }, () => dispatch(loginExpired()));
     dispatch(auditLogLoaded(response as AuditLogResponse));
   } catch (e) {
     dispatch(auditLogLoadFailed());
