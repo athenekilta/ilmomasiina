@@ -3,8 +3,8 @@ import { HttpError } from 'http-errors';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { AdminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import AdminAuthSession, { AdminTokenData } from '../../authentication/adminAuthSession';
 import { AdminPasswordAuth } from '../../authentication/adminPassword';
-import { AdminAuthSession, AdminTokenData } from '../../authentication/adminSession';
 import { User } from '../../models/user';
 
 export function adminLogin(session: AdminAuthSession) {

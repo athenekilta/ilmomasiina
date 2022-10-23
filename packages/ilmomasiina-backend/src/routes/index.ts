@@ -5,7 +5,7 @@ import { FastifyInstance } from 'fastify';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { adminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import { addLogEventHook } from '../auditlog';
-import { AdminAuthSession } from '../authentication/adminSession';
+import AdminAuthSession from '../authentication/adminAuthSession';
 import config from '../config';
 import getCategoriesList from './admin/categories/categories';
 import createEvent from './admin/event/createEvent';

@@ -11,7 +11,7 @@ export interface AdminTokenData {
   email: schema.UserSchema['email']
 }
 
-export class AdminAuthSession {
+export default class AdminAuthSession {
   /** Session lifetime in seconds */
   static TTL = 10 * 60;
 

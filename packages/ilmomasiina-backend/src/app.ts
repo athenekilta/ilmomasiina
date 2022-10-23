@@ -5,7 +5,7 @@ import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import cron from 'node-cron';
 import path from 'path';
 
-import { AdminAuthSession } from './authentication/adminSession';
+import AdminAuthSession from './authentication/adminAuthSession';
 import config from './config';
 import anonymizeOldSignups from './cron/anonymizeOldSignups';
 import deleteOldAuditLogs from './cron/deleteOldAuditLogs';
