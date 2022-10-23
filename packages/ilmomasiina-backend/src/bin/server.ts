@@ -9,9 +9,7 @@ const debugLog = debug('app:bin:server');
 initApp().then((server) => {
   const port = config.port || 3000;
 
-  server.listen({
-    port,
-  }).then();
+  server.listen({ port });
 
   server.ready().then(() => {
     const url = config.nodeEnv === 'development'

@@ -18,9 +18,13 @@ export default async function createEvent(
     const created = await Event.create(
       {
         ...request.body,
+        // add order to questions and stringify answer options
         questions: request.body.questions ? request.body.questions.map((q, order) => ({
-          ...q, options: (q.options && q.options.length) ? q.options.join(';') : null, order,
+          ...q,
+          order,
+          options: (q.options && q.options.length) ? q.options.join(';') : null,
         })) : [],
+        // add order to quotas
         quotas: request.body.quotas ? request.body.quotas.map((q, order) => ({ ...q, order })) : [],
         date: toDate(request.body.date),
         endDate: toDate(request.body.endDate),
