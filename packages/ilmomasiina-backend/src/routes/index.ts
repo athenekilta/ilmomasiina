@@ -19,7 +19,7 @@ import {
 } from './event/getEventDetails';
 import getEventsListForUser, { getEventsListForAdmin } from './event/getEventsList';
 import { sendICalFeed } from './ical';
-import { addSessionValidationHook, adminLogin, renewAdminToken } from './login/adminLogin';
+import { addSessionValidationHook, adminLogin } from './login/adminLogin';
 import createSignup from './signup/createNewSignup';
 import { deleteSignupAsAdmin, deleteSignupAsUser } from './signup/deleteSignup';
 import { requireValidEditToken } from './signup/editTokens';
@@ -298,18 +298,19 @@ export default async function setupRoutes(
     adminLogin(opts.adminSession),
   );
 
-  server.patch(
-    '/authentication',
-    {
-      schema: {
-        response: {
-          ...errorResponses,
-          200: adminSessionSchema,
-        },
-      },
-    },
-    renewAdminToken(opts.adminSession),
-  );
+  // TODO: Add an API endpoint for session token renewal
+  // server.patch(
+  //   '/authentication',
+  //   {
+  //     schema: {
+  //       response: {
+  //         ...errorResponses,
+  //         200: adminSessionSchema,
+  //       },
+  //     },
+  //   },
+  //   renewAdminToken(opts.adminSession),
+  // );
 
   /** Public routes for events */
   server.get<{ Querystring: schema.EventListQuery }>(
