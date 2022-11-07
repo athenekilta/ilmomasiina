@@ -82,6 +82,7 @@ jobs:
       -
         name: Build packages
         run: pnpm run --filter @tietokilta/ilmomasiina-models build
+        run: pnpm run --filter @tietokilta/ilmomasiina-components build
       -
         name: Publish to NPM
         run: |
