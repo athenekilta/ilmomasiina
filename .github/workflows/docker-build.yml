@@ -67,12 +67,18 @@ jobs:
     steps:
       -
         name: Check out the repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+      -
+        name: Setup Node.js for NPM
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://registry.npmjs.org'
+          node-version: '14'
       -
         name: Install dependencies
         run: |
           npm install -g pnpm@7
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --ignore-scripts
       -
         name: Build packages
         run: pnpm run --filter @tietokilta/ilmomasiina-models build
@@ -81,12 +87,20 @@ jobs:
         run: |
           pnpm publish --filter @tietokilta/ilmomasiina-models --no-git-checks
           pnpm publish --filter @tietokilta/ilmomasiina-components --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      -
+        name: Setup Node.js for GitHub Packages
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://npm.pkg.github.com'
       -
         name: Publish to GitHub Packages
         run: |
-          npm set @tietokilta:registry https://npm.pkg.github.com/
           pnpm publish --filter @tietokilta/ilmomasiina-models --no-git-checks
           pnpm publish --filter @tietokilta/ilmomasiina-components --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy:
     name: Push update to App Service
