@@ -18,6 +18,8 @@ services:
       - POSTGRES_PASSWORD=$DB_PASSWORD
       - POSTGRES_USER=$DB_USER
       - POSTGRES_DB=$DB_DATABASE
+    volumes:
+      - ./data:/var/lib/postgresql/data
 
   ilmomasiina-dev:
     build:
@@ -32,8 +34,6 @@ services:
       - DB_HOST=database
       - NODE_ENV=development
       - HOST=0.0.0.0
-    env_file:
-      - .env
     volumes:
       - type: bind
         source: ./packages/ilmomasiina-models/src

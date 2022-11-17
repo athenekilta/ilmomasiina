@@ -12,6 +12,8 @@ coverage/
 
 .env
 
+data/
+
 src/react-app-env.d.ts
 
 package-lock.json
