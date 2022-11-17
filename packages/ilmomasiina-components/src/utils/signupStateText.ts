@@ -8,10 +8,10 @@ export enum SignupState {
 }
 
 export type SignupStateInfo =
-  | { state: typeof SignupState['disabled'] }
-  | { state: typeof SignupState['not_opened'], opens: Moment }
-  | { state: typeof SignupState['open'], closes: Moment }
-  | { state: typeof SignupState['closed'] };
+  | { state: SignupState.disabled }
+  | { state: SignupState.not_opened, opens: Moment }
+  | { state: SignupState.open, closes: Moment }
+  | { state: SignupState.closed };
 
 export function signupState(starts: string | null, closes: string | null): SignupStateInfo {
   if (starts === null || closes === null) {
