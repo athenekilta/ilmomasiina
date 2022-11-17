@@ -5,7 +5,7 @@ import { Col, Row, Spinner } from 'react-bootstrap';
 import { linkComponent, useParams } from '../../config/router';
 import { usePaths } from '../../contexts/paths';
 import {
-  SingleEventProps, SingleEventProvider, useSingleEventContext, useSingleEventState,
+  SingleEventProps, SingleEventProvider, useSingleEventContext,
 } from '../../modules/singleEvent';
 import EventDescription from './components/EventDescription';
 import QuotaStatus from './components/QuotaStatus';
@@ -69,10 +69,9 @@ const SingleEventView = () => {
 };
 
 const SingleEvent = () => {
-  const params = useParams<SingleEventProps>();
-  const state = useSingleEventState(params);
+  const { slug } = useParams<SingleEventProps>();
   return (
-    <SingleEventProvider value={state}>
+    <SingleEventProvider slug={slug}>
       <SingleEventView />
     </SingleEventProvider>
   );

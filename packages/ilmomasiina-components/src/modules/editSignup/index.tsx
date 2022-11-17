@@ -1,13 +1,19 @@
+import React, { PropsWithChildren } from 'react';
+
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch from '../../api';
-import { MatchParams } from '../../routes/EditSignup';
 import { useAbortablePromise } from '../../utils/abortable';
 import useShallowMemo from '../../utils/useShallowMemo';
-import { ExternalState } from './reducer';
+import { ExternalState, Provider } from './reducer';
 
-export { Provider, useStateAndDispatch } from './reducer';
+export interface EditSignupProps {
+  id: string;
+  editToken: string;
+}
 
-export function useEditSignupState({ id, editToken }: MatchParams) {
+export { useStateAndDispatch } from './reducer';
+
+export function useEditSignupState({ id, editToken }: EditSignupProps) {
   const fetchSignup = useAbortablePromise(async (signal) => {
     const response = await apiFetch(`signups/${id}?editToken=${editToken}`, { signal }) as Signup.Details;
     return {
@@ -27,4 +33,13 @@ export function useEditSignupState({ id, editToken }: MatchParams) {
     error: fetchSignup.error,
     ...fetchSignup.result,
   });
+}
+
+export function EditSignupProvider({ id, editToken, children }: PropsWithChildren<EditSignupProps>) {
+  const state = useEditSignupState({ id, editToken });
+  return (
+    <Provider state={state}>
+      {children}
+    </Provider>
+  );
 }

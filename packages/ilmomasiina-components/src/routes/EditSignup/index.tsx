@@ -4,7 +4,7 @@ import { Button, Spinner } from 'react-bootstrap';
 
 import { linkComponent, useParams } from '../../config/router';
 import { usePaths } from '../../contexts/paths';
-import { Provider, useEditSignupState, useStateAndDispatch } from '../../modules/editSignup';
+import { EditSignupProps, EditSignupProvider, useStateAndDispatch } from '../../modules/editSignup';
 import EditForm from './components/EditForm';
 import NarrowContainer from './components/NarrowContainer';
 
@@ -65,18 +65,12 @@ const EditSignupView = () => {
   return <EditForm />;
 };
 
-export interface MatchParams {
-  id: string;
-  editToken: string;
-}
-
 const EditSignup = () => {
-  const params = useParams<MatchParams>();
-  const state = useEditSignupState(params);
+  const { id, editToken } = useParams<EditSignupProps>();
   return (
-    <Provider state={state}>
+    <EditSignupProvider id={id} editToken={editToken}>
       <EditSignupView />
-    </Provider>
+    </EditSignupProvider>
   );
 };
 

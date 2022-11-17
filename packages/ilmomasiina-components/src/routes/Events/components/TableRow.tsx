@@ -1,12 +1,12 @@
 import React, { ReactNode } from 'react';
 
-import { SignupState } from '../../../utils/signupStateText';
+import { SignupStateText } from '../../../utils/signupStateText';
 
 type Props = {
   className: string;
   title: ReactNode;
   date?: string;
-  signupStatus?: SignupState;
+  signupStatus?: SignupStateText;
   signupCount?: number;
   quotaSize?: number | null;
 };

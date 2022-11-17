@@ -1,18 +1,15 @@
 import React from 'react';
 
-import sum from 'lodash/sum';
-import sumBy from 'lodash/sumBy';
-import moment from 'moment-timezone';
 import { Spinner, Table } from 'react-bootstrap';
 
 import { timezone } from '../../config';
 import { linkComponent } from '../../config/router';
 import { usePaths } from '../../contexts/paths';
-import {
-  EventListProps, EventListProvider, useEventListContext, useEventListState,
-} from '../../modules/events';
-import signupState from '../../utils/signupStateText';
+import { EventListProps, EventListProvider, useEventListContext } from '../../modules/events';
+import { signupStateText } from '../../utils/signupStateText';
+import { OPENQUOTA, WAITLIST } from '../../utils/signupUtils';
 import TableRow from './components/TableRow';
+import { eventsToRows } from './table';
 
 const EventListView = () => {
   const { events, error, pending } = useEventListContext();
@@ -37,54 +34,39 @@ const EventListView = () => {
     );
   }
 
-  const tableRows = events!.flatMap((event) => {
-    const {
-      id, slug, title, date, registrationStartDate, registrationEndDate, quotas, openQuotaSize,
-    } = event;
-    const eventState = signupState(registrationStartDate, registrationEndDate);
-
-    const rows = [
-      <TableRow
-        className={eventState.class}
-        title={<Link to={paths.eventDetails(slug)}>{title}</Link>}
-        date={date ? moment(date).tz(timezone()).format('DD.MM.YYYY') : ''}
-        signupStatus={eventState}
-        signupCount={
-          (quotas.length < 2 ? sumBy(quotas, 'signupCount') : undefined)
-        }
-        quotaSize={quotas.length === 1 ? quotas[0].size : undefined}
-        key={id}
-      />,
-    ];
-
-    if (quotas.length > 1) {
-      quotas.map((quota) => rows.push(
+  const tableRows = eventsToRows(events!).map((row, index) => {
+    if (row.isEvent) {
+      const {
+        slug, title, date, signupState, signupCount, quotaSize,
+      } = row;
+      const stateText = signupStateText(signupState);
+      return (
         <TableRow
-          className="ilmo--quota-row"
-          title={quota.title}
-          signupCount={quota.size ? Math.min(quota.signupCount, quota.size) : quota.signupCount}
-          quotaSize={quota.size}
-          key={`${id}-${quota.id}`}
-        />,
-      ));
-    }
-
-    if (openQuotaSize > 0) {
-      rows.push(
-        <TableRow
-          className="ilmo--quota-row"
-          title="Avoin"
-          signupCount={Math.min(
-            sum(quotas.map((quota) => (quota.size ? Math.max(0, quota.signupCount - quota.size) : 0))),
-            openQuotaSize,
-          )}
-          quotaSize={openQuotaSize}
-          key={`${id}-open`}
-        />,
+          className={stateText.class}
+          title={<Link to={paths.eventDetails(slug)}>{title}</Link>}
+          date={date ? date.tz(timezone()).format('DD.MM.YYYY') : ''}
+          signupStatus={stateText}
+          signupCount={signupCount}
+          quotaSize={quotaSize}
+          key={slug}
+        />
       );
     }
-
-    return rows;
+    if (row.title !== WAITLIST) {
+      const { title, signupCount, quotaSize } = row;
+      return (
+        <TableRow
+          className="ilmo--quota-row"
+          title={title === OPENQUOTA ? 'Avoin' : title}
+          signupCount={signupCount}
+          quotaSize={quotaSize}
+          // No real alternatives for key :(
+          // eslint-disable-next-line react/no-array-index-key
+          key={index}
+        />
+      );
+    }
+    return null;
   });
 
   return (
@@ -105,13 +87,10 @@ const EventListView = () => {
   );
 };
 
-const EventList = ({ category }: EventListProps) => {
-  const state = useEventListState({ category });
-  return (
-    <EventListProvider value={state}>
-      <EventListView />
-    </EventListProvider>
-  );
-};
+const EventList = ({ category }: EventListProps) => (
+  <EventListProvider category={category}>
+    <EventListView />
+  </EventListProvider>
+);
 
 export default EventList;
