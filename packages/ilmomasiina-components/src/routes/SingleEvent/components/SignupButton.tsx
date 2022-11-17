@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import apiFetch from '../../../api';
-import { paths } from '../../../config/paths';
 import { useNavigate } from '../../../config/router';
+import { usePaths } from '../../../contexts/paths';
 import { useSingleEventContext } from '../../../modules/singleEvent';
 import signupState from '../../../utils/signupStateText';
 
@@ -25,6 +25,7 @@ const SignupButton = ({
   isOpen, isClosed, seconds, total,
 }: SignupButtonProps) => {
   const navigate = useNavigate();
+  const paths = usePaths();
   const { registrationStartDate, registrationEndDate, quotas } = useSingleEventContext().event!;
   const [submitting, setSubmitting] = useState(false);
   const isOnly = quotas.length === 1;
@@ -37,7 +38,7 @@ const SignupButton = ({
         body: { quotaId },
       }) as Signup.Create.Response;
       setSubmitting(false);
-      navigate(paths().editSignup(response.id, response.editToken));
+      navigate(paths.editSignup(response.id, response.editToken));
     } catch (e) {
       setSubmitting(false);
       toast.error('Ilmoittautuminen epäonnistui.', {

@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 
 import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
 import FieldRow from '../../../components/FieldRow';
-import { paths } from '../../../config/paths';
 import { linkComponent, useNavigate } from '../../../config/router';
+import { usePaths } from '../../../contexts/paths';
 import { useStateAndDispatch } from '../../../modules/editSignup';
 import { useUpdateSignup } from '../../../modules/editSignup/actions';
 import DeleteSignup from './DeleteSignup';
@@ -21,6 +21,7 @@ const EditForm = () => {
   const updateSignup = useUpdateSignup();
   const Link = linkComponent();
   const navigate = useNavigate();
+  const paths = usePaths();
 
   // TODO: actually use errors from API
   const [submitError, setSubmitError] = useState(false);
@@ -43,7 +44,7 @@ const EditForm = () => {
       setSubmitError(false);
       setSubmitting(false);
       if (isNew) {
-        navigate(paths().eventDetails(event!.slug));
+        navigate(paths.eventDetails(event!.slug));
       }
     } catch (error) {
       toast.update(progressToast, {
@@ -122,7 +123,7 @@ const EditForm = () => {
 
             <nav className="ilmo--submit-buttons">
               {!isNew && (
-                <Button as={Link} variant="link" to={paths().eventDetails(event!.slug)}>
+                <Button as={Link} variant="link" to={paths.eventDetails(event!.slug)}>
                   Peruuta
                 </Button>
               )}

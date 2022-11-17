@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Col, Row, Spinner } from 'react-bootstrap';
 
-import { paths } from '../../config/paths';
 import { linkComponent, useParams } from '../../config/router';
+import { usePaths } from '../../contexts/paths';
 import {
   SingleEventProps, SingleEventProvider, useSingleEventContext, useSingleEventState,
 } from '../../modules/singleEvent';
@@ -17,6 +17,7 @@ const SingleEventView = () => {
     event, signupsByQuota, pending, error,
   } = useSingleEventContext();
   const Link = linkComponent();
+  const paths = usePaths();
 
   if (error) {
     return (
@@ -25,7 +26,7 @@ const SingleEventView = () => {
         <p>
           Tapahtumaa ei löytynyt. Se saattaa olla menneisyydessä tai poistettu.
         </p>
-        <Link to={paths().eventsList}>Palaa tapahtumalistaukseen</Link>
+        <Link to={paths.eventsList}>Palaa tapahtumalistaukseen</Link>
       </div>
     );
   }
@@ -40,7 +41,7 @@ const SingleEventView = () => {
 
   return (
     <>
-      <Link to={paths().eventsList} style={{ margin: 0 }}>
+      <Link to={paths.eventsList} style={{ margin: 0 }}>
         &#8592; Takaisin
       </Link>
       <Row>

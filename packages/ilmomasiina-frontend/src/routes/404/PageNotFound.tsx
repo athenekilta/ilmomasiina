@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { paths } from '@tietokilta/ilmomasiina-components/src/config/paths';
+import appPaths from '../../paths';
 
 const PageNotFound = () => (
   <div className="ilmo--status-container">
@@ -11,7 +11,7 @@ const PageNotFound = () => (
       Sivua ei löydy.
     </p>
     <p>
-      <Link to={paths().eventsList}>Palaa tapahtumalistaukseen</Link>
+      <Link to={appPaths.eventsList}>Palaa tapahtumalistaukseen</Link>
     </p>
   </div>
 );

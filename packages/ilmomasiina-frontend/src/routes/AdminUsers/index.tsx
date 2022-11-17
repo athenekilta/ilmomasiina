@@ -4,9 +4,9 @@ import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import requireAuth from '../../containers/requireAuth';
 import { getUsers, resetState } from '../../modules/adminUsers/actions';
+import appPaths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminUserListItem from './AdminUserListItem';
 import UserForm from './UserForm';
@@ -63,7 +63,7 @@ const AdminUsersList = () => {
 
   return (
     <>
-      <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
+      <Link to={appPaths.adminEventsList}>&#8592; Takaisin</Link>
       <h1>Käyttäjien hallinta</h1>
       {content}
     </>

@@ -3,9 +3,9 @@ import React from 'react';
 import { Button, Container, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { paths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import branding from '../../branding';
 import { redirectToLogin } from '../../modules/auth/actions';
+import appPaths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 
 import './Header.scss';
@@ -17,7 +17,7 @@ const Header = () => {
   return (
     <Navbar>
       <Container>
-        <Link to={paths().eventsList} className="navbar-brand">
+        <Link to={appPaths.eventsList} className="navbar-brand">
           {branding.headerTitle}
         </Link>
         {loggedIn && (

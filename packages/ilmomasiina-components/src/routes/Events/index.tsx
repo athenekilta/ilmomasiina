@@ -6,8 +6,8 @@ import moment from 'moment-timezone';
 import { Spinner, Table } from 'react-bootstrap';
 
 import { timezone } from '../../config';
-import { paths } from '../../config/paths';
 import { linkComponent } from '../../config/router';
+import { usePaths } from '../../contexts/paths';
 import {
   EventListProps, EventListProvider, useEventListContext, useEventListState,
 } from '../../modules/events';
@@ -17,6 +17,7 @@ import TableRow from './components/TableRow';
 const EventListView = () => {
   const { events, error, pending } = useEventListContext();
   const Link = linkComponent();
+  const paths = usePaths();
 
   if (error) {
     return (
@@ -45,7 +46,7 @@ const EventListView = () => {
     const rows = [
       <TableRow
         className={eventState.class}
-        title={<Link to={paths().eventDetails(slug)}>{title}</Link>}
+        title={<Link to={paths.eventDetails(slug)}>{title}</Link>}
         date={date ? moment(date).tz(timezone()).format('DD.MM.YYYY') : ''}
         signupStatus={eventState}
         signupCount={

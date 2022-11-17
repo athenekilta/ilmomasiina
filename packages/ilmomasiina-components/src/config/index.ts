@@ -1,16 +1,16 @@
-import { configurePaths, IlmoPaths } from './paths';
+import { configureApi } from '../api';
 import { configureRouter, RouterConfig } from './router';
 
 export interface IlmoConfig {
   router: RouterConfig;
-  paths: IlmoPaths;
+  api: string;
   timezone: string;
 }
 
 let configuredTimezone = 'Europe/Helsinki';
 
 export function configure(config: IlmoConfig) {
-  configurePaths(config.paths);
+  configureApi(config.api);
   configureRouter(config.router);
   configuredTimezone = config.timezone;
 }
