@@ -60,6 +60,14 @@ if (config.frontendFilesPath === null) {
   }
 }
 
+if (config.newEditTokenSecret === '') {
+  throw new Error('Env variable NEW_EDIT_TOKEN_SECRET must be set to a nonempty value.');
+}
+
+if (!config.feathersAuthSecret) {
+  throw new Error('Env variable FEATHERS_AUTH_SECRET must be set to a nonempty value.');
+}
+
 if (config.oldEditTokenSalt === config.newEditTokenSecret) {
   throw new Error(
     'Don\'t use the same secret for EDIT_TOKEN_SALT and NEW_EDIT_TOKEN_SECRET.\n'
