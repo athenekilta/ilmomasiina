@@ -26,7 +26,7 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # Main stage:
-FROM node:14-alpine
+FROM node:16-alpine
 
 # Default to production
 ENV NODE_ENV=production
@@ -39,8 +39,8 @@ WORKDIR /opt/ilmomasiina
 # Install dependencies for backend only
 RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile --prod --filter @tietokilta/ilmomasiina-backend
 
-# Copy compiled ilmomasiina-models into src (TODO: figure out a better solution)
-COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-models/dist /opt/ilmomasiina/packages/ilmomasiina-models/src
+# Copy compiled ilmomasiina-models from build stage
+COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-models/dist /opt/ilmomasiina/packages/ilmomasiina-models/dist
 
 # Copy built backend from build stage
 COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-backend/dist /opt/ilmomasiina/packages/ilmomasiina-backend/dist
