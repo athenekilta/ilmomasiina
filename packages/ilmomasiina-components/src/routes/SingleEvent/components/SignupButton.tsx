@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
+import { Quota } from '@tietokilta/ilmomasiina-models';
 import { useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';
 import { useSingleEventContext } from '../../../modules/singleEvent';

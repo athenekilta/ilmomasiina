@@ -2,9 +2,11 @@ import every from 'lodash/every';
 import sumBy from 'lodash/sumBy';
 import moment, { Moment } from 'moment-timezone';
 
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { signupState, SignupStateInfo } from '../../utils/signupStateText';
-import { OPENQUOTA, WAITLIST } from '../../utils/signupUtils';
+import { Event } from '@tietokilta/ilmomasiina-models';
+import { signupState, SignupStateInfo } from './signupStateText';
+import { OPENQUOTA, WAITLIST } from './signupUtils';
+
+export { OPENQUOTA, WAITLIST };
 
 export interface EventTableOptions {
   /** If true, quotas are not placed on separate rows. */

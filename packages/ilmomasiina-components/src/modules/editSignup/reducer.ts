@@ -1,4 +1,4 @@
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import { Signup } from '@tietokilta/ilmomasiina-models';
 import { createReducerContext } from '../../utils/stateContext';
 
 type ReducerState = {

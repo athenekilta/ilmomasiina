@@ -2,9 +2,9 @@ import find from 'lodash/find';
 import orderBy from 'lodash/orderBy';
 import moment from 'moment-timezone';
 
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { Event, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import {
+  AdminEvent, Event, Quota, Signup,
+} from '@tietokilta/ilmomasiina-models';
 import { timezone } from '../config';
 
 export const WAITLIST = '\x00waitlist';

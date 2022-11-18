@@ -7,8 +7,7 @@ import reject from 'lodash/reject';
 import without from 'lodash/without';
 import { Form } from 'react-bootstrap';
 
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import { Event, Signup } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 
 type Props = {

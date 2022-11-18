@@ -6,10 +6,9 @@ import { timezone } from '../../config';
 import { linkComponent } from '../../config/router';
 import { usePaths } from '../../contexts/paths';
 import { EventListProps, EventListProvider, useEventListContext } from '../../modules/events';
+import { eventsToRows, OPENQUOTA, WAITLIST } from '../../utils/eventListUtils';
 import { signupStateText } from '../../utils/signupStateText';
-import { OPENQUOTA, WAITLIST } from '../../utils/signupUtils';
 import TableRow from './components/TableRow';
-import { eventsToRows } from './table';
 
 const EventListView = () => {
   const { events, error, pending } = useEventListContext();

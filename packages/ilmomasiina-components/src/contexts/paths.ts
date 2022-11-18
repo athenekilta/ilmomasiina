@@ -1,8 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import type { AdminEvent, Event, Signup } from '@tietokilta/ilmomasiina-models';
 
 export type UserPaths = {
   eventsList: string;

@@ -1,6 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import { Quota, Signup } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 
 export function beginSignup(quotaId: Quota.Id) {

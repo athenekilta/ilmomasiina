@@ -1,4 +1,4 @@
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import type { Signup } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { createThunk } from './reducer';
 

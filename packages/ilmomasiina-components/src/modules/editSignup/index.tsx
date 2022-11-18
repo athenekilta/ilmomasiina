@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import { Signup } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import useShallowMemo from '../../utils/useShallowMemo';
