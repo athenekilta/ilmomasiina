@@ -1,6 +1,8 @@
 import { configureApi } from '../api';
 import { configureRouter, RouterConfig } from './router';
 
+export type { RouterConfig };
+
 export interface IlmoConfig {
   router: RouterConfig;
   api: string;
