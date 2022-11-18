@@ -1,9 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
-import { FullPaths, PathsContext } from '@tietokilta/ilmomasiina-components/src/contexts/paths';
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import { FullPaths, PathsContext } from '@tietokilta/ilmomasiina-components';
+import { AdminEvent, Event, Signup } from '@tietokilta/ilmomasiina-models';
 
 export const urlPrefix = PREFIX_URL;
 

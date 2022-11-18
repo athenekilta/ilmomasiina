@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router';
 
-import apiFetch from '@tietokilta/ilmomasiina-components/src/api';
-import { Auth } from '@tietokilta/ilmomasiina-models/src/services/auth';
+import { apiFetch } from '@tietokilta/ilmomasiina-components';
+import { Auth } from '@tietokilta/ilmomasiina-models';
 import appPaths from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {

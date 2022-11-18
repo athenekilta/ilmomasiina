@@ -5,7 +5,7 @@
     "build": "ts-node -O '{\"module\":\"commonjs\"}' scripts/build.ts",
     "clean": "rimraf build dist",
     "start": "ts-node -O '{\"module\":\"commonjs\"}' scripts/dev.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --build"
   },
   "proxy": "http://localhost:3001",
   "repository": {

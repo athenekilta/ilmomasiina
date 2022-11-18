@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
-import { AuditLog } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
+import { AuditLog } from '@tietokilta/ilmomasiina-models';
 import appPaths from '../../paths';
 
 type Props = {

@@ -1,6 +1,6 @@
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { AdminSlug } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
-import { Question, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
+import {
+  AdminEvent, AdminSlug, Question, Quota,
+} from '@tietokilta/ilmomasiina-models';
 
 export interface EditorState {
   event: AdminEvent.Details | null;

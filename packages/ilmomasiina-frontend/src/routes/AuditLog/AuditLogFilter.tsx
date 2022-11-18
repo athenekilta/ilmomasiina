@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
-import { AuditLog } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
+import { AuditLog } from '@tietokilta/ilmomasiina-models';
 import { setAuditLogQueryField } from '../../modules/auditLog/actions';
 import { useTypedDispatch } from '../../store/reducers';
 import useThrottled from '../../utils/useThrottled';

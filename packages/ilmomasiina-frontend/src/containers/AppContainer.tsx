@@ -7,9 +7,7 @@ import { Route, Switch } from 'react-router-dom';
 import { Flip, ToastContainer } from 'react-toastify';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import EditSignup from '@tietokilta/ilmomasiina-components/src/routes/EditSignup';
-import Events from '@tietokilta/ilmomasiina-components/src/routes/Events';
-import SingleEvent from '@tietokilta/ilmomasiina-components/src/routes/SingleEvent';
+import { EditSignup, Events, SingleEvent } from '@tietokilta/ilmomasiina-components';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import appPaths, { PathsProvider } from '../paths';

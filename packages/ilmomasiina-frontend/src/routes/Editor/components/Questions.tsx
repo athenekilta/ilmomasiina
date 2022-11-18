@@ -7,7 +7,7 @@ import {
 } from 'react-bootstrap';
 import { SortEnd } from 'react-sortable-hoc';
 
-import FieldRow from '@tietokilta/ilmomasiina-components/src/components/FieldRow';
+import { FieldRow } from '@tietokilta/ilmomasiina-components';
 import { EditorQuestion } from '../../../modules/editor/types';
 import Sortable from './Sortable';
 
