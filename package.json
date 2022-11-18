@@ -4,8 +4,8 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": "^14.19.0",
-    "npm": "^6.14.13"
+    "node": "^16",
+    "npm": "^7"
   },
   "scripts": {
     "bootstrap": "pnpm install",
