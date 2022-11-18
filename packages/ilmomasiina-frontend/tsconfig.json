@@ -24,6 +24,7 @@
       "src",
       "scripts"
     ],
+    "baseUrl": ".",
     "paths": {
       "@tietokilta/ilmomasiina-components": ["../ilmomasiina-components/src/index.ts"],
       "@tietokilta/ilmomasiina-components/dist/*": ["../ilmomasiina-components/src/*"],
