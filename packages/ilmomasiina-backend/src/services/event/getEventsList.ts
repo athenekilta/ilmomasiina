@@ -8,7 +8,7 @@ import {
   eventListEventAttrs,
   eventListQuotaAttrs,
   EventListResponse,
-} from '@tietokilta/ilmomasiina-models/src/services/events/list';
+} from '@tietokilta/ilmomasiina-models/dist/services/events/list';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';

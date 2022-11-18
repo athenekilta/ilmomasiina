@@ -3,7 +3,7 @@ import { Params } from '@feathersjs/feathers';
 import _ from 'lodash';
 import { Transaction } from 'sequelize';
 
-import { SignupUpdateBody, SignupUpdateResponse } from '@tietokilta/ilmomasiina-models/src/services/signups/update';
+import { SignupUpdateBody, SignupUpdateResponse } from '@tietokilta/ilmomasiina-models/dist/services/signups/update';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';

@@ -2,7 +2,7 @@ import {
   DataTypes, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import UserAttributes from '@tietokilta/ilmomasiina-models/src/models/user';
+import UserAttributes from '@tietokilta/ilmomasiina-models/dist/models/user';
 
 export interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 

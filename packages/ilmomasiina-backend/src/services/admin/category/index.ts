@@ -1,7 +1,7 @@
 import { hooks as authHooks } from '@feathersjs/authentication';
 import { ServiceMethods } from '@feathersjs/feathers';
 
-import { AdminCategoriesServiceTypes } from '@tietokilta/ilmomasiina-models/src/services/admin/categories';
+import { AdminCategoriesServiceTypes } from '@tietokilta/ilmomasiina-models/dist/services/admin/categories';
 import { IlmoApplication } from '../../../defs';
 import getCategoriesList from './getCategoriesList';
 

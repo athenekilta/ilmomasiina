@@ -9,7 +9,7 @@ import {
   signupGetQuotaAttrs,
   SignupGetResponse,
   signupGetSignupAttrs,
-} from '@tietokilta/ilmomasiina-models/src/services/signups/getForEdit';
+} from '@tietokilta/ilmomasiina-models/dist/services/signups/getForEdit';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';

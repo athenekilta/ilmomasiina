@@ -2,7 +2,7 @@ import {
   DataTypes, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import AuditLogAttributes from '@tietokilta/ilmomasiina-models/src/models/auditlog';
+import AuditLogAttributes from '@tietokilta/ilmomasiina-models/dist/models/auditlog';
 import { RANDOM_ID_LENGTH } from './randomId';
 
 export interface AuditLogCreationAttributes extends Optional<AuditLogAttributes, 'id'> {}

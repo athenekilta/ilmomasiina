@@ -1,6 +1,6 @@
 import { Forbidden, NotFound } from '@feathersjs/errors';
 
-import { SignupCreateBody, SignupCreateResponse } from '@tietokilta/ilmomasiina-models/src/services/signups/create';
+import { SignupCreateBody, SignupCreateResponse } from '@tietokilta/ilmomasiina-models/dist/services/signups/create';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';

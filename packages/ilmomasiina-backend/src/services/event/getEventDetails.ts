@@ -11,7 +11,7 @@ import {
   eventGetQuotaAttrs,
   EventGetResponse,
   eventGetSignupAttrs,
-} from '@tietokilta/ilmomasiina-models/src/services/events/details';
+} from '@tietokilta/ilmomasiina-models/dist/services/events/details';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';

@@ -1,7 +1,7 @@
 import { hooks as authHooks } from '@feathersjs/authentication';
 import { ServiceMethods } from '@feathersjs/feathers';
 
-import { AdminSlugServiceTypes } from '@tietokilta/ilmomasiina-models/src/services/admin/slug';
+import { AdminSlugServiceTypes } from '@tietokilta/ilmomasiina-models/dist/services/admin/slug';
 import { IlmoApplication } from '../../../defs';
 import checkSlugAvailability from './checkSlugAvailability';
 

@@ -3,7 +3,7 @@ import {
   Sequelize,
 } from 'sequelize';
 
-import AnswerAttributes from '@tietokilta/ilmomasiina-models/src/models/answer';
+import AnswerAttributes from '@tietokilta/ilmomasiina-models/dist/models/answer';
 import { Question } from './question';
 import { RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';

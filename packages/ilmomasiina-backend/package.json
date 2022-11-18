@@ -10,15 +10,15 @@
     "start": "bnr start:dev",
     "start:dev": "bnr start:dev",
     "start:prod": "bnr start:prod",
-    "stop:prod": "bnr stop:prod",
-    "monit:prod": "bnr monit:prod",
-    "build": "bnr build",
+    "stop:prod": "pm2 stop 0",
+    "monit:prod": "pm2 monit",
+    "build": "tsc --build",
     "clean": "rimraf dist",
-    "typecheck": "bnr typecheck"
+    "typecheck": "tsc --build"
   },
   "betterScripts": {
     "start:dev": {
-      "command": "ts-node-dev --respawn --project tsconfig.json src/bin/server.ts",
+      "command": "ts-node-dev -r tsconfig-paths/register --respawn --project tsconfig.json src/bin/server.ts",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*",
@@ -26,23 +26,11 @@
       }
     },
     "start:prod": {
-      "command": "pm2 start node_modules/.bin/ts-node -- --transpile-only src/bin/server.ts",
+      "command": "pm2 start dist/bin/server.js",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
-    },
-    "stop:prod": {
-      "command": "pm2 stop 0"
-    },
-    "monit:prod": {
-      "command": "pm2 monit"
-    },
-    "build": {
-      "command": "tsc --build"
-    },
-    "typecheck": {
-      "command": "tsc --noEmit"
     }
   },
   "dependencies": {
@@ -88,7 +76,9 @@
     "@types/nodemailer": "^6.4.4",
     "@types/nodemailer-mailgun-transport": "^1.4.3",
     "rimraf": "^3.0.2",
-    "ts-node-dev": "^1.1.8",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2",
+    "tsconfig-paths": "^4.1.0",
     "typescript": "~4.3.5"
   }
 }

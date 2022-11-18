@@ -1,8 +1,8 @@
 import { ServiceMethods } from '@feathersjs/feathers';
 
-import { SignupServiceTypes } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import { SignupCreateBody } from '@tietokilta/ilmomasiina-models/src/services/signups/create';
-import { SignupUpdateBody } from '@tietokilta/ilmomasiina-models/src/services/signups/update';
+import { SignupServiceTypes } from '@tietokilta/ilmomasiina-models/dist/services/signups';
+import { SignupCreateBody } from '@tietokilta/ilmomasiina-models/dist/services/signups/create';
+import { SignupUpdateBody } from '@tietokilta/ilmomasiina-models/dist/services/signups/update';
 import { IlmoApplication } from '../../defs';
 import createNewSignup from './createNewSignup';
 import deleteSignup from './deleteSignup';

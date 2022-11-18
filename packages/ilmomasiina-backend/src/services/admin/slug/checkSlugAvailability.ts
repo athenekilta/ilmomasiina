@@ -1,4 +1,4 @@
-import { AdminCheckSlugResponse } from '@tietokilta/ilmomasiina-models/src/services/admin/slug/get';
+import { AdminCheckSlugResponse } from '@tietokilta/ilmomasiina-models/dist/services/admin/slug/get';
 import { Event } from '../../../models/event';
 
 export default async function checkSlugAvailability(slug: string): Promise<AdminCheckSlugResponse> {
