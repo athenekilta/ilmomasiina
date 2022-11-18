@@ -74,6 +74,7 @@ jobs:
         with:
           registry-url: 'https://registry.npmjs.org'
           node-version: '16'
+          cache: 'pnpm'
       -
         name: Install dependencies
         run: |
