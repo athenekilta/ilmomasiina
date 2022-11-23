@@ -42,7 +42,7 @@ export async function requireValidEditToken(
 ): Promise<void> {
   const headers = request.headers[EDIT_TOKEN_HEADER]; // NOTE: Fastify converts header names into lower case
   const header = Array.isArray(headers) ? headers[0] : headers;
-  if (verifyToken(request.params.id, header || '')) { return; }
+  if (verifyToken(request.params.id, header || '')) return;
 
   // Default to 403 response
   reply.forbidden('Invalid editToken');

@@ -5,11 +5,11 @@ export enum SignupStatus {
 }
 
 export enum QuestionType {
-  Text = 'text',
-  TextArea = 'textarea',
-  Number = 'number',
-  Select = 'select',
-  Checkbox = 'checkbox',
+  TEXT = 'text',
+  TEXT_AREA = 'textarea',
+  NUMBER = 'number',
+  SELECT = 'select',
+  CHECKBOX = 'checkbox',
 }
 
 /** Describes all possible actions that can be logged into audit log */

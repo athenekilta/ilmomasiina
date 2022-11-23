@@ -189,7 +189,7 @@ export async function eventDetailsForAdmin(
         firstName: nullsToUndef(signup.firstName),
         lastName: nullsToUndef(signup.lastName),
         email: nullsToUndef(signup.email),
-        confirmed: !!signup.confirmedAt,
+        confirmed: Boolean(signup.confirmedAt),
       })),
       signupCount: quota.signups!.length,
     })),

@@ -6,7 +6,8 @@ import {
   questionsUpdate,
 } from '../question';
 import {
-  quotasCreate, quotasUpdate,
+  quotasCreate,
+  quotasUpdate,
   quotasWithSignupCount,
 } from '../quota';
 import { signupQuotasWithSignupsForAdmin, signupQuotasWithSignupsForUser } from '../quotaWithSignups';
@@ -17,7 +18,8 @@ import {
   eventID,
   eventIdentity,
   eventSlug,
-  userEventAttributesBasic, userEventAttributesExtended,
+  userEventAttributesBasic,
+  userEventAttributesExtended,
 } from './attributes';
 
 /** Describes the event used in responses for admins */

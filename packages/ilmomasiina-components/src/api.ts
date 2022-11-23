@@ -57,7 +57,7 @@ export default async function apiFetch(uri: string, {
     signal,
   });
 
-  if (response.status === 401 && onUnauthenticated) { onUnauthenticated(); }
+  if (response.status === 401 && onUnauthenticated) onUnauthenticated();
 
   if (response.status > 299) {
     throw await ApiError.fromResponse(response);

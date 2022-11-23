@@ -12,7 +12,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
  */
 export default function enforceHTTPS(config: { trustProxy: boolean, isAzure: boolean }) {
   return async (request: FastifyRequest, reply: FastifyReply): Promise<void> => {
-    if (request.protocol === 'https') { return; }
+    if (request.protocol === 'https') return;
 
     let forwardedProto = '';
 

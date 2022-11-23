@@ -5,17 +5,13 @@ import { adminEventListItemSchema, userEventListItemSchema } from '../event';
 /** Describes request body for sending information about multiple events for admin */
 export const adminEventListSchema = Type.Array(
   adminEventListItemSchema,
-  {
-
-  },
+  {},
 );
 
 /** Describes request body for sending information about multiple events for user */
 export const userEventListSchema = Type.Array(
   userEventListItemSchema,
-  {
-
-  },
+  {},
 );
 
 /** Describes query parameters for GET events endpoint */

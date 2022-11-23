@@ -42,7 +42,7 @@ export const getAuditLogs = (query: AuditLoqQuery = {} as AuditLoqQuery) => asyn
   dispatch(auditLogQuery(query));
 
   const queryString = _.entries(query)
-    .filter(([, value]) => !!value)
+    .filter(([, value]) => value)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value as string | number | boolean)}`)
     .join('&');
 

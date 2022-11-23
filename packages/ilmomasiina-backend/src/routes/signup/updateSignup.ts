@@ -13,7 +13,6 @@ import { stringifyDates } from '../utils';
 import { signupsAllowed } from './createNewSignup';
 
 /** Requires editTokenVerification */
-// TODO: Edit tokens from query should not be accepted anymore
 export default async function updateSignup(
   request: FastifyRequest<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateSchema }>,
   reply: FastifyReply,
@@ -52,33 +51,27 @@ export default async function updateSignup(
     const questions = event.questions!;
 
     // Check that required common fields are present (if first time confirming)
-    const nameFields = (() => {
-      if (notConfirmedYet && event.nameQuestion) {
-        const { firstName, lastName } = request.body;
-        if (!firstName) { throw new BadRequest('Missing first name'); }
-        if (!lastName) { throw new BadRequest('Missing last name'); }
-        return { firstName, lastName };
-      }
-      return {};
-    })();
+    let nameFields = {};
+    if (notConfirmedYet && event.nameQuestion) {
+      const { firstName, lastName } = request.body;
+      if (!firstName) throw new BadRequest('Missing first name');
+      if (!lastName) throw new BadRequest('Missing last name');
+      nameFields = { firstName, lastName };
+    }
 
-    const emailField = (() => {
-      if (notConfirmedYet && event.emailQuestion) {
-        const { email } = request.body;
-        if (!email) { throw new BadRequest('Missing email'); }
-        return { email };
-      }
-      return {};
-    })();
+    let emailField = {};
+    if (notConfirmedYet && event.emailQuestion) {
+      const { email } = request.body;
+      if (!email) throw new BadRequest('Missing email');
+      emailField = { email };
+    }
 
     // Check that all questions are answered with a valid answer
     const newAnswers = questions.map((question) => {
-      const answer = (() => {
-        // Parse answer from answers or return an empty string if it doesn't exist
-        if (!request.body.answers) { return ''; }
-        const ans = request.body.answers.find((a) => a.questionId === question.id);
-        return ans ? ans.answer : '';
-      })();
+      const answer = request.body.answers
+        ?.find((a) => a.questionId === question.id)
+        ?.answer
+        || '';
 
       if (!answer) {
         if (question.required) {
@@ -132,7 +125,7 @@ export default async function updateSignup(
     const updatedFields = {
       ...nameFields,
       ...emailField,
-      namePublic: !!request.body.namePublic,
+      namePublic: Boolean(request.body.namePublic),
       confirmedAt: new Date(),
     };
 
