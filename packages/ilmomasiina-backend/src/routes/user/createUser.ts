@@ -16,34 +16,34 @@ import generatePassword from './generatePassword';
  * @param auditLogger audit logger function from the originating request
  */
 async function create(params: schema.UserCreateSchema, auditLogger: AuditLogger): Promise<schema.UserSchema> {
-  const user = await User.sequelize!.transaction(async (transaction) => {
+  return User.sequelize!.transaction(async (transaction) => {
     const existing = await User.findOne({
       where: { email: params.email },
       transaction,
     });
 
-    if (existing) { throw new Conflict('User with given email already exists'); }
+    if (existing) throw new Conflict('User with given email already exists');
 
     // Create new user with hashed password
-    return User.create(
+    const user = await User.create(
       {
         ...params,
         password: AdminPasswordAuth.createHash(params.password),
       },
       { transaction },
     );
+
+    const res = {
+      id: user.id,
+      email: user.email,
+    };
+
+    await auditLogger(AuditEvent.CREATE_USER, {
+      extra: res,
+    });
+
+    return res;
   });
-
-  const res = {
-    id: user.id,
-    email: user.email,
-  };
-
-  await auditLogger(AuditEvent.CREATE_USER, {
-    extra: res,
-  });
-
-  return res;
 }
 
 /**
