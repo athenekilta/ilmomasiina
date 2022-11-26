@@ -40,8 +40,6 @@
     "@fastify/type-provider-typebox": "^2.3.0",
     "@sinclair/typebox": "^0.24.22",
     "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha11",
-    "@types/bcrypt": "^5.0.0",
-    "@types/http-errors": "^1.8.2",
     "base32-encode": "^1.2.0",
     "bcrypt": "^5.0.1",
     "better-npm-run": "^0.1.1",
@@ -64,9 +62,11 @@
     "umzug": "^3.1.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
     "@types/debug": "^4.1.7",
     "@types/email-templates": "^8.0.4",
+    "@types/http-errors": "^1.8.2",
     "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.41",
     "@types/node-cron": "^3.0.1",

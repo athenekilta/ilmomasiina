@@ -2,7 +2,7 @@ import moment from 'moment-timezone';
 
 import config from '../config';
 import { Signup } from '../models/signup';
-import { generateToken } from '../routes/signup/editTokens';
+import { generateToken } from '../routes/signups/editTokens';
 import EmailService from '.';
 
 export default async (signup: Signup) => {

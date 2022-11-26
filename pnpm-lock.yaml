@@ -84,8 +84,6 @@ importers:
       '@fastify/type-provider-typebox': 2.3.0_gn4psg6oqy3csz3ntpslqj66ya
       '@sinclair/typebox': 0.24.22
       '@tietokilta/ilmomasiina-models': link:../ilmomasiina-models
-      '@types/bcrypt': 5.0.0
-      '@types/http-errors': 1.8.2
       base32-encode: 1.2.0
       bcrypt: 5.0.1
       better-npm-run: 0.1.1
@@ -107,9 +105,11 @@ importers:
       sequelize: 6.21.0_ek64ldxalhadmdq3ipl6ljgiqu
       umzug: 3.1.1
     devDependencies:
+      '@types/bcrypt': 5.0.0
       '@types/compression': 1.7.2
       '@types/debug': 4.1.7
       '@types/email-templates': 8.0.4
+      '@types/http-errors': 1.8.2
       '@types/lodash': 4.14.182
       '@types/node': 16.11.41
       '@types/node-cron': 3.0.1
@@ -676,7 +676,7 @@ packages:
     resolution: {integrity: sha512-agtcFKaruL8TmcvqbndlqHPSJgsolhf/qPWchFlgnW1gECTN/nKbFcoFnvKAQRFfKbh+BO6A3SWdJu9t+xF3Lw==}
     dependencies:
       '@types/node': 16.11.41
-    dev: false
+    dev: true
 
   /@types/body-parser/1.19.2:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
@@ -759,7 +759,7 @@ packages:
 
   /@types/http-errors/1.8.2:
     resolution: {integrity: sha512-EqX+YQxINb+MeXaIqYDASb6U6FCHbWjkj4a1CKDBks3d/QiB2+PqBLyO72vLDgAO1wUI4O+9gweRcQK11bTL/w==}
-    dev: false
+    dev: true
 
   /@types/invariant/2.2.35:
     resolution: {integrity: sha512-DxX1V9P8zdJPYQat1gHyY0xj3efl8gnMVjiM9iCY6y27lj+PoQWkgjt8jDqmovPqULkKVpKRg8J36iQiA+EtEg==}

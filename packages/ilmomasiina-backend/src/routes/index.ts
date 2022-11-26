@@ -7,27 +7,27 @@ import { adminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
 import { addLogEventHook } from '../auditlog';
 import AdminAuthSession from '../authentication/adminAuthSession';
 import config from '../config';
-import getCategoriesList from './admin/categories/categories';
-import createEvent from './admin/event/createEvent';
-import deleteEvent from './admin/event/deleteEvent';
-import updateEvent from './admin/event/updateEvent';
-import checkSlugAvailability from './admin/slug/checkSlugAvailability';
-import getAuditLogItems from './auditlog/getAuditLogs';
+import getAuditLogItems from './admin/auditlog/getAuditLogs';
+import getCategoriesList from './admin/categories/getCategoriesList';
+import createEvent from './admin/events/createEvent';
+import deleteEvent from './admin/events/deleteEvent';
+import updateEvent from './admin/events/updateEvent';
+import checkSlugAvailability from './admin/slugs/checkSlugAvailability';
+import { createUser, inviteUser } from './admin/users/createUser';
+import deleteUser from './admin/users/deleteUser';
+import listUsers from './admin/users/listUsers';
+import { adminLogin, requireAdmin } from './authentication/adminLogin';
 import {
   getEventDetailsForAdmin,
   getEventDetailsForUser,
-} from './event/getEventDetails';
-import getEventsListForUser, { getEventsListForAdmin } from './event/getEventsList';
+} from './events/getEventDetails';
+import { getEventsListForAdmin, getEventsListForUser } from './events/getEventsList';
 import { sendICalFeed } from './ical';
-import { addSessionValidationHook, adminLogin } from './login/adminLogin';
-import createSignup from './signup/createNewSignup';
-import { deleteSignupAsAdmin, deleteSignupAsUser } from './signup/deleteSignup';
-import { requireValidEditToken } from './signup/editTokens';
-import getSignupForEdit from './signup/getSignupForEdit';
-import updateSignup from './signup/updateSignup';
-import createUser, { inviteUser } from './user/createUser';
-import deleteUser from './user/deleteUser';
-import listUsers from './user/listUsers';
+import createSignup from './signups/createNewSignup';
+import { deleteSignupAsAdmin, deleteSignupAsUser } from './signups/deleteSignup';
+import { requireValidEditToken } from './signups/editTokens';
+import getSignupForEdit from './signups/getSignupForEdit';
+import updateSignup from './signups/updateSignup';
 
 const errorResponses = {
   '4XX': schema.errorResponseSchema,
@@ -38,201 +38,200 @@ export interface RouteOptions {
   adminSession: AdminAuthSession
 }
 
-export default async function setupRoutes(
+/** Setup admin routes (prefixed with '/admin') */
+async function setupAdminRoutes(
   fastifyInstance: FastifyInstance,
   opts: RouteOptions,
-): Promise<void> {
-  addLogEventHook(fastifyInstance);
+) {
+  // Add session validation hook:
+  // All the following routes require a valid session. The route functions are called only if the session is valid.
+  // For invalid sessions, the hook automatically responds with a proper error response.
+  requireAdmin(opts.adminSession, fastifyInstance);
 
-  const fastify = fastifyInstance.withTypeProvider<TypeBoxTypeProvider>();
+  const server = fastifyInstance.withTypeProvider<TypeBoxTypeProvider>();
 
-  // Setup admin routes (prefixed with '/admin')
-  fastify.register(async (instance) => {
-    // Add session validation hook:
-    // All the following routes require a valid session. The route functions are called only if the session is valid.
-    // For invalid sessions, the hook automatically responds with a proper error response.
-    addSessionValidationHook(opts.adminSession, instance);
-
-    const server = instance.withTypeProvider<TypeBoxTypeProvider>();
-
-    /** Routes for categories */
-    server.get<{/* Params: types.UserID */}>(
-      '/categories',
-      {
-        schema: {
-          response: {
-            ...errorResponses,
-            200: schema.listCategoriesResponse,
-          },
+  /** Routes for categories */
+  server.get<{/* Params: types.UserID */}>(
+    '/categories',
+    {
+      schema: {
+        response: {
+          ...errorResponses,
+          200: schema.listCategoriesResponse,
         },
       },
-      getCategoriesList,
-    );
+    },
+    getCategoriesList,
+  );
 
-    /** Admin routes for events */
-    server.post<{ Body: schema.EventCreateSchema }>(
-      '/events',
-      {
-        schema: {
-          body: schema.eventCreateSchema,
-          response: {
-            ...errorResponses,
-            201: schema.adminEventSchema,
-          },
+  /** Admin routes for events */
+  server.post<{ Body: schema.EventCreateSchema }>(
+    '/events',
+    {
+      schema: {
+        body: schema.eventCreateSchema,
+        response: {
+          ...errorResponses,
+          201: schema.adminEventSchema,
         },
       },
-      createEvent,
-    );
+    },
+    createEvent,
+  );
 
-    server.get(
-      '/events',
-      {
-        schema: {
-          querystring: schema.eventListQuery,
-          response: {
-            ...errorResponses,
-            200: schema.adminEventListSchema,
-          },
+  server.get(
+    '/events',
+    {
+      schema: {
+        querystring: schema.eventListQuery,
+        response: {
+          ...errorResponses,
+          200: schema.adminEventListSchema,
         },
       },
-      getEventsListForAdmin,
-    );
+    },
+    getEventsListForAdmin,
+  );
 
-    server.get<{ Params: schema.AdminEventPathParams }>(
-      '/events/:id',
-      {
-        schema: {
-          params: schema.adminEventPathParams,
-          response: {
-            ...errorResponses,
-            200: schema.adminEventSchema,
-          },
+  server.get<{ Params: schema.AdminEventPathParams }>(
+    '/events/:id',
+    {
+      schema: {
+        params: schema.adminEventPathParams,
+        response: {
+          ...errorResponses,
+          200: schema.adminEventSchema,
         },
       },
-      getEventDetailsForAdmin,
-    );
+    },
+    getEventDetailsForAdmin,
+  );
 
-    server.patch<{ Params: schema.AdminEventPathParams, Body: schema.EventEditSchema }>(
-      '/events/:id',
-      {
-        schema: {
-          params: schema.adminEventPathParams,
-          body: schema.eventEditSchema,
-          response: {
-            ...errorResponses,
-            200: schema.adminEventSchema,
-          },
+  server.patch<{ Params: schema.AdminEventPathParams, Body: schema.EventEditSchema }>(
+    '/events/:id',
+    {
+      schema: {
+        params: schema.adminEventPathParams,
+        body: schema.eventEditSchema,
+        response: {
+          ...errorResponses,
+          200: schema.adminEventSchema,
         },
       },
-      updateEvent,
-    );
+    },
+    updateEvent,
+  );
 
-    server.delete<{ Params: schema.AdminEventPathParams }>(
-      '/events/:id',
-      {
-        schema: {
-          params: schema.adminEventPathParams,
-          response: {
-            ...errorResponses,
-            204: {},
-          },
+  server.delete<{ Params: schema.AdminEventPathParams }>(
+    '/events/:id',
+    {
+      schema: {
+        params: schema.adminEventPathParams,
+        response: {
+          ...errorResponses,
+          204: {},
         },
       },
-      deleteEvent,
-    );
+    },
+    deleteEvent,
+  );
 
-    /** Admin routes for signups */
-    server.delete<{ Params: schema.SignupPathParams }>(
-      '/signups/:id',
-      {
-        schema: {
-          params: schema.signupPathParams,
-          response: {
-            ...errorResponses,
-            204: {},
-          },
+  /** Admin routes for signups */
+  server.delete<{ Params: schema.SignupPathParams }>(
+    '/signups/:id',
+    {
+      schema: {
+        params: schema.signupPathParams,
+        response: {
+          ...errorResponses,
+          204: {},
         },
       },
-      deleteSignupAsAdmin,
-    );
+    },
+    deleteSignupAsAdmin,
+  );
 
-    /** Admin routes for event slugs */
-    server.get<{ Params: schema.CheckSlugParams }>(
-      '/slugs/:slug',
-      {
-        schema: {
-          params: schema.checkSlugParams,
-          response: {
-            ...errorResponses,
-            200: schema.checkSlugResponse,
-          },
+  /** Admin routes for event slugs */
+  server.get<{ Params: schema.CheckSlugParams }>(
+    '/slugs/:slug',
+    {
+      schema: {
+        params: schema.checkSlugParams,
+        response: {
+          ...errorResponses,
+          200: schema.checkSlugResponse,
         },
       },
-      checkSlugAvailability,
-    );
+    },
+    checkSlugAvailability,
+  );
 
-    /** Admin routes for audit logs */
-    server.get<{ Querystring: schema.AuditLoqQuery }>(
-      '/auditlog',
-      {
-        schema: {
-          querystring: schema.auditLoqQuery,
-          response: {
-            ...errorResponses,
-            200: schema.auditLogResponse,
-          },
+  /** Admin routes for audit logs */
+  server.get<{ Querystring: schema.AuditLoqQuery }>(
+    '/auditlog',
+    {
+      schema: {
+        querystring: schema.auditLoqQuery,
+        response: {
+          ...errorResponses,
+          200: schema.auditLogResponse,
         },
       },
-      getAuditLogItems,
-    );
+    },
+    getAuditLogItems,
+  );
 
-    /** Admin routes for user management */
-    server.get(
-      '/users',
-      {
-        schema: {
-          response: {
-            ...errorResponses,
-            200: schema.userListSchema,
-          },
+  /** Admin routes for user management */
+  server.get(
+    '/users',
+    {
+      schema: {
+        response: {
+          ...errorResponses,
+          200: schema.userListSchema,
         },
       },
-      listUsers,
-    );
+    },
+    listUsers,
+  );
 
-    server.post<{ Body: schema.UserInviteSchema }>(
-      '/users',
-      {
-        schema: {
-          body: schema.userInviteSchema,
-          response: {
-            ...errorResponses,
-            201: schema.userSchema,
-          },
+  server.post<{ Body: schema.UserInviteSchema }>(
+    '/users',
+    {
+      schema: {
+        body: schema.userInviteSchema,
+        response: {
+          ...errorResponses,
+          201: schema.userSchema,
         },
       },
-      inviteUser,
-    );
+    },
+    inviteUser,
+  );
 
-    server.delete<{ Params: schema.UserPathParams }>(
-      '/users/:id',
-      {
-        schema: {
-          params: schema.userPathParams,
-          response: {
-            ...errorResponses,
-            204: {},
-          },
+  server.delete<{ Params: schema.UserPathParams }>(
+    '/users/:id',
+    {
+      schema: {
+        params: schema.userPathParams,
+        response: {
+          ...errorResponses,
+          204: {},
         },
       },
-      deleteUser,
-    );
-  }, { prefix: '/admin' });
+    },
+    deleteUser,
+  );
+}
 
-  // Setup public routes
-  const server = fastify;
+function setupPublicRoutes(
+  fastifyInstance: FastifyInstance,
+  opts: RouteOptions,
+) {
+  const server = fastifyInstance.withTypeProvider<TypeBoxTypeProvider>();
 
-  /** Routes for signup that require a signup edit token */
+  // Routes that require a signup edit token
+
   server.get<{ Params: schema.SignupPathParams }>(
     '/signups/:id',
     {
@@ -283,7 +282,8 @@ export default async function setupRoutes(
     deleteSignupAsUser,
   );
 
-  /** Admin session management routes */
+  // Admin session management routes
+
   server.post<{ Body: schema.AdminLoginSchema }>(
     '/authentication',
     {
@@ -298,21 +298,10 @@ export default async function setupRoutes(
     adminLogin(opts.adminSession),
   );
 
-  // TODO: Add an API endpoint for session token renewal
-  // server.patch(
-  //   '/authentication',
-  //   {
-  //     schema: {
-  //       response: {
-  //         ...errorResponses,
-  //         200: adminSessionSchema,
-  //       },
-  //     },
-  //   },
-  //   renewAdminToken(opts.adminSession),
-  // );
+  // TODO: Add an API endpoint for session token renewal as variant of adminLoginSchema
 
-  /** Public routes for events */
+  // Public routes for events
+
   server.get<{ Querystring: schema.EventListQuery }>(
     '/events',
     {
@@ -341,7 +330,7 @@ export default async function setupRoutes(
     getEventDetailsForUser,
   );
 
-  /** Public route for signup creation */
+  // Public route for signup creation
   server.post<{ Body: schema.SignupCreateSchema }>(
     '/signups',
     {
@@ -356,7 +345,7 @@ export default async function setupRoutes(
     createSignup,
   );
 
-  /** Public route for iCal feed */
+  // Public route for iCal feed
   server.get(
     '/ical',
     {},
@@ -364,6 +353,7 @@ export default async function setupRoutes(
   );
 
   if (config.adminRegistrationAllowed) {
+    // Public route for initial admin user creation
     server.post<{ Body: schema.UserCreateSchema }>(
       '/users',
       {
@@ -378,4 +368,14 @@ export default async function setupRoutes(
       createUser,
     );
   }
+}
+
+export default async function setupRoutes(
+  instance: FastifyInstance,
+  opts: RouteOptions,
+): Promise<void> {
+  addLogEventHook(instance);
+
+  instance.register(setupAdminRoutes, { ...opts, prefix: '/admin' });
+  instance.register(setupPublicRoutes, { ...opts });
 }

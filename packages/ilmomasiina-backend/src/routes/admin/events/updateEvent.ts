@@ -7,8 +7,8 @@ import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
-import { eventDetailsForAdmin } from '../../event/getEventDetails';
-import { refreshSignupPositions } from '../../signup/computeSignupPosition';
+import { eventDetailsForAdmin } from '../../events/getEventDetails';
+import { refreshSignupPositions } from '../../signups/computeSignupPosition';
 import { toDate } from '../../utils';
 import { EditConflict, WouldMoveSignupsToQueue } from './errors';
 
@@ -62,13 +62,11 @@ export default async function updateEvent(
       ?? [];
 
       // Check for edit conflicts
-
-      // TODO: Is this necessary anymore?
-      // const expectedUpdatedAt = new Date(request.body.updatedAt ?? '');
+      const expectedUpdatedAt = new Date(request.body.updatedAt ?? '');
       if (
-      /* event.updatedAt.getTime() !== expectedUpdatedAt.getTime()
-      || */ deletedQuestions.length
-      || deletedQuotas.length
+        event.updatedAt.getTime() !== expectedUpdatedAt.getTime()
+        || deletedQuestions.length
+        || deletedQuotas.length
       ) {
         throw new EditConflict(event.updatedAt, deletedQuotas, deletedQuestions);
       }

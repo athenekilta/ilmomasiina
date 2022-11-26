@@ -3,10 +3,10 @@ import { Conflict } from 'http-errors';
 
 import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { AuditLogger } from '../../auditlog';
-import AdminPasswordAuth from '../../authentication/adminPasswordAuth';
-import EmailService from '../../mail';
-import { User } from '../../models/user';
+import { AuditLogger } from '../../../auditlog';
+import AdminPasswordAuth from '../../../authentication/adminPasswordAuth';
+import EmailService from '../../../mail';
+import { User } from '../../../models/user';
 import generatePassword from './generatePassword';
 
 /**
@@ -52,7 +52,7 @@ async function create(params: schema.UserCreateSchema, auditLogger: AuditLogger)
  * Supposed to be used only for initial user creation.
  * For additional users, use {@link inviteUser} instead.
  */
-export default async function createUser(
+export async function createUser(
   request: FastifyRequest<{ Body: schema.UserCreateSchema }>,
   reply: FastifyReply,
 ): Promise<schema.UserSchema> {

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { User } from '../../models/user';
+import { User } from '../../../models/user';
 
 export default async function listUsers(
   request: FastifyRequest,

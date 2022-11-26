@@ -3,7 +3,7 @@ import { NotFound } from 'http-errors';
 
 import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { User } from '../../models/user';
+import { User } from '../../../models/user';
 
 export default async function deleteUser(
   request: FastifyRequest<{ Params: schema.UserPathParams }>,

@@ -22,7 +22,7 @@ function eventOrder(): Order {
   ];
 }
 
-export default async function getEventsListForUser(
+export async function getEventsListForUser(
   request: FastifyRequest<{ Querystring: schema.EventListQuery }>,
   reply: FastifyReply,
 ): Promise<schema.UserEventList> {

@@ -2,8 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { Op, WhereOptions } from 'sequelize';
 
 import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { AuditLog } from '../../models/auditlog';
-import { stringifyDates } from '../utils';
+import { AuditLog } from '../../../models/auditlog';
+import { stringifyDates } from '../../utils';
 
 const MAX_LOGS = 100;
 
@@ -11,7 +11,7 @@ export default async function getAuditLogItems(
   request: FastifyRequest<{ Querystring: schema.AuditLoqQuery }>,
   response: FastifyReply,
 ): Promise<schema.AuditLogResponse> {
-  let where: WhereOptions<AuditLog>[] = [];
+  let where: WhereOptions<AuditLog> & unknown[] = [];
   if (request.query.user) {
     where = [
       ...where,

@@ -44,8 +44,8 @@ export function renewAdminToken(session: AdminAuthSession) {
   };
 }
 
-export function addSessionValidationHook(session: AdminAuthSession, fastify: FastifyInstance): void {
-  fastify.decorateRequest('userID', null);
+/** Adds a request hook that verifies the user's session and raises a 401 error if invalid. */
+export function requireAdmin(session: AdminAuthSession, fastify: FastifyInstance): void {
   fastify
     .addHook('onRequest', async (request: FastifyRequest, reply) => {
       try {

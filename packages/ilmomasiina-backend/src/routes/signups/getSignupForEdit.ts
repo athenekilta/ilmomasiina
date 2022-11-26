@@ -9,7 +9,7 @@ import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
 import { nullsToUndef, stringifyDates } from '../utils';
 
-// TODO: Require editTokenVerification
+/** Requires editTokenVerification */
 export default async function getSignupForEdit(
   request: FastifyRequest<{ Params: schema.SignupPathParams }>,
   reply: FastifyReply,

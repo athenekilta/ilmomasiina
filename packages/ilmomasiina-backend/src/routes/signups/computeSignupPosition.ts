@@ -8,7 +8,7 @@ import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { WouldMoveSignupsToQueue } from '../admin/event/errors';
+import { WouldMoveSignupsToQueue } from '../admin/events/errors';
 
 async function sendPromotedFromQueueEmail(signup: Signup, eventId: Event['id']) {
   if (signup.email === null) return;
