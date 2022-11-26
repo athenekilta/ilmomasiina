@@ -181,9 +181,9 @@ export async function eventDetailsForAdmin(
     })),
     updatedAt: event.updatedAt,
     quotas: event.quotas!.map((quota) => ({
-      ...stringifyDates(quota.get({ plain: true })),
+      ...quota.get({ plain: true }),
       signups: quota.signups!.map((signup) => ({
-        ...stringifyDates(signup.get({ plain: true })),
+        ...signup.get({ plain: true }),
         answers: signup.answers!,
         status: signup.status,
         firstName: nullsToUndef(signup.firstName),
