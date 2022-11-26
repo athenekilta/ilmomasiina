@@ -12,35 +12,38 @@ import { signupsAllowed } from './createNewSignup';
 
 /** Requires admin authentication OR editTokenVerification */
 async function deleteSignup(id: string, auditLogger: AuditLogger, admin: boolean = false): Promise<void> {
-  const signup = await Signup.scope('active').findByPk(id, {
-    include: [
-      {
-        model: Quota,
-        attributes: ['id'],
-        include: [
-          {
-            model: Event,
-            attributes: ['id', 'title', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
-          },
-        ],
-      },
-    ],
+  await Signup.sequelize!.transaction(async (transaction) => {
+    const signup = await Signup.scope('active').findByPk(id, {
+      include: [
+        {
+          model: Quota,
+          attributes: ['id'],
+          include: [
+            {
+              model: Event,
+              attributes: ['id', 'title', 'registrationStartDate', 'registrationEndDate', 'openQuotaSize'],
+            },
+          ],
+        },
+      ],
+      transaction,
+    });
+    if (signup === null) {
+      throw new NotFound('No signup found with id');
+    }
+    if (!admin && !signupsAllowed(signup.quota!.event!)) {
+      throw new Forbidden('Signups closed for this event.');
+    }
+
+    // Delete the DB object
+    await signup.destroy({ transaction });
+
+    // Advance the queue and send emails to people that were accepted
+    await refreshSignupPositions(signup.quota!.event!, transaction);
+
+    // Create an audit log event
+    await auditLogger(AuditEvent.DELETE_SIGNUP, { signup, transaction });
   });
-  if (signup === null) {
-    throw new NotFound('No signup found with id');
-  }
-  if (!admin && !signupsAllowed(signup.quota!.event!)) {
-    throw new Forbidden('Signups closed for this event.');
-  }
-
-  // Delete the DB object
-  await signup.destroy();
-
-  // Advance the queue and send emails to people that were accepted
-  await refreshSignupPositions(signup.quota!.event!);
-
-  // Create an audit log event
-  await auditLogger(AuditEvent.DELETE_SIGNUP, { signup });
 }
 
 /** Requires admin authentication */

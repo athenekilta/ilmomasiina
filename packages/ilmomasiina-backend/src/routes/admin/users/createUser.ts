@@ -40,6 +40,7 @@ async function create(params: schema.UserCreateSchema, auditLogger: AuditLogger)
 
     await auditLogger(AuditEvent.CREATE_USER, {
       extra: res,
+      transaction,
     });
 
     return res;

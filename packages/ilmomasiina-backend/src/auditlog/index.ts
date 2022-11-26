@@ -46,7 +46,7 @@ function eventLogger(ipAddress: string, user?: () => (string | null)) {
 export function addLogEventHook(fastify: FastifyInstance): void {
   fastify.decorateRequest('logEvent', () => { throw new Error('Not initialized'); });
   fastify.addHook('onRequest', async (req) => {
-    (req.logEvent as ReturnType<typeof eventLogger>) = eventLogger(req.ip, () => req.sessionData?.email || null);
+    (req.logEvent as AuditLogger) = eventLogger(req.ip, () => req.sessionData?.email || null);
   });
 }
 

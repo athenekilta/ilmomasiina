@@ -26,6 +26,7 @@ export default async function deleteUser(
           id: existing.email,
           email: existing.email,
         },
+        transaction,
       });
     }
   });
