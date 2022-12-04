@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { useStateAndDispatch } from '../../../modules/editSignup';
+import { useEditSignupContext } from '../../../modules/editSignup';
 
 const SignupStatus = () => {
-  const [{ event, signup }] = useStateAndDispatch();
+  const [{ event, signup }] = useEditSignupContext();
   const { status, position, quota } = signup!;
   const { openQuotaSize } = event!;
 

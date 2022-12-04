@@ -4,13 +4,13 @@ import { useFormikContext } from 'formik';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { useStateAndDispatch } from '../../../modules/editSignup';
+import { useEditSignupContext } from '../../../modules/editSignup';
 import { useDeleteSignup } from '../../../modules/editSignup/actions';
 
 const DELETE_CONFIRM_MS = 4000;
 
 const DeleteSignup = () => {
-  const [{ event }] = useStateAndDispatch();
+  const [{ event }] = useEditSignupContext();
   const deleteSignup = useDeleteSignup();
 
   const { isSubmitting, setSubmitting } = useFormikContext();

@@ -8,7 +8,7 @@ import { Signup } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 import { linkComponent, useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';
-import { useStateAndDispatch } from '../../../modules/editSignup';
+import { useEditSignupContext } from '../../../modules/editSignup';
 import { useUpdateSignup } from '../../../modules/editSignup/actions';
 import DeleteSignup from './DeleteSignup';
 import NarrowContainer from './NarrowContainer';
@@ -16,7 +16,7 @@ import QuestionFields from './QuestionFields';
 import SignupStatus from './SignupStatus';
 
 const EditForm = () => {
-  const [{ event, signup }] = useStateAndDispatch();
+  const [{ event, signup }] = useEditSignupContext();
   const isNew = signup!.confirmedAt === null;
   const updateSignup = useUpdateSignup();
   const Link = linkComponent();

@@ -11,7 +11,8 @@ export interface EditSignupProps {
   editToken: string;
 }
 
-export { useStateAndDispatch } from './reducer';
+export { useStateAndDispatch as useEditSignupContext } from './reducer';
+export { useDeleteSignup, useUpdateSignup } from './actions';
 
 export function useEditSignupState({ id, editToken }: EditSignupProps) {
   const fetchSignup = useAbortablePromise(async (signal) => {

@@ -4,14 +4,14 @@ import { Button, Spinner } from 'react-bootstrap';
 
 import { linkComponent, useParams } from '../../config/router';
 import { usePaths } from '../../contexts/paths';
-import { EditSignupProps, EditSignupProvider, useStateAndDispatch } from '../../modules/editSignup';
+import { EditSignupProps, EditSignupProvider, useEditSignupContext } from '../../modules/editSignup';
 import EditForm from './components/EditForm';
 import NarrowContainer from './components/NarrowContainer';
 
 const EditSignupView = () => {
   const [{
     deleted, error, pending, event,
-  }] = useStateAndDispatch();
+  }] = useEditSignupContext();
   const Link = linkComponent();
   const paths = usePaths();
 
