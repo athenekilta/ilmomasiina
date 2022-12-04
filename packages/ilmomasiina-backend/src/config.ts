@@ -13,6 +13,7 @@ const config = <const>{
   enforceHttps: envBoolean('ENFORCE_HTTPS', false),
   trustProxy: envBoolean('TRUST_PROXY', false),
   frontendFilesPath: frontendFilesPath(),
+  allowOrigin: envString('ALLOW_ORIGIN', null),
 
   clearDbUrl: envString('CLEARDB_DATABASE_URL', null),
   dbDialect: envString('DB_DIALECT', null),
