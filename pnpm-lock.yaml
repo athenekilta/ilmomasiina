@@ -41,7 +41,7 @@ importers:
       '@feathersjs/errors': ^4.5.15
       '@feathersjs/express': ^4.5.15
       '@feathersjs/feathers': ^4.5.15
-      '@tietokilta/ilmomasiina-models': workspace:2.0.0-alpha5
+      '@tietokilta/ilmomasiina-models': workspace:2.0.0-alpha6
       '@types/compression': ^1.7.2
       '@types/connect-history-api-fallback': ^1.3.5
       '@types/cors': ^2.8.12
@@ -133,7 +133,7 @@ importers:
 
   packages/ilmomasiina-components:
     specifiers:
-      '@tietokilta/ilmomasiina-models': workspace:2.0.0-alpha5
+      '@tietokilta/ilmomasiina-models': workspace:2.0.0-alpha6
       '@types/lodash': ^4.14.182
       '@types/react': ^17 || ^18
       bootstrap: ^4.6.1
@@ -174,8 +174,8 @@ importers:
     specifiers:
       '@craftamap/esbuild-plugin-html': ^0.4.0
       '@sentry/browser': ^6.19.7
-      '@tietokilta/ilmomasiina-components': workspace:2.0.0-alpha5
-      '@tietokilta/ilmomasiina-models': workspace:2.0.0-alpha5
+      '@tietokilta/ilmomasiina-components': workspace:2.0.0-alpha6
+      '@tietokilta/ilmomasiina-models': workspace:2.0.0-alpha6
       '@types/history': ^4.7.11
       '@types/lodash': ^4.14.182
       '@types/node': ^16.11.41
