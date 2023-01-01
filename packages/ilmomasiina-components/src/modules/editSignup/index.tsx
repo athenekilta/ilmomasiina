@@ -28,10 +28,15 @@ export function useEditSignupState({ id, editToken }: EditSignupProps) {
     };
   }, [id, editToken]);
 
+  // TODO: use data from server about editing end time
+  const registrationClosed = !fetchSignup.result?.event.registrationEndDate
+    || new Date(fetchSignup.result?.event.registrationEndDate) < new Date();
+
   return useShallowMemo<State>({
     editToken,
     pending: fetchSignup.pending,
     error: fetchSignup.error,
+    registrationClosed,
     ...fetchSignup.result,
   });
 }
