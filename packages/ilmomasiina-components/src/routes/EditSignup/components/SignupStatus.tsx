@@ -3,7 +3,7 @@ import React from 'react';
 import { useEditSignupContext } from '../../../modules/editSignup';
 
 const SignupStatus = () => {
-  const [{ event, signup }] = useEditSignupContext();
+  const { event, signup } = useEditSignupContext();
   const { status, position, quota } = signup!;
   const { openQuotaSize } = event!;
 

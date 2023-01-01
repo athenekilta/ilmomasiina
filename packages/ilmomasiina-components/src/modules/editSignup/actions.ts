@@ -1,6 +1,6 @@
 import type { Signup } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
-import { createThunk } from './reducer';
+import { createThunk } from './state';
 
 export const useUpdateSignup = createThunk(({ signup, editToken }) => async (answers: Signup.Update.Body) => {
   await apiFetch(`signups/${signup!.id}`, {
@@ -12,9 +12,8 @@ export const useUpdateSignup = createThunk(({ signup, editToken }) => async (ans
   });
 });
 
-export const useDeleteSignup = createThunk(({ signup, editToken }, dispatch) => async () => {
+export const useDeleteSignup = createThunk(({ signup, editToken }) => async () => {
   await apiFetch(`signups/${signup!.id}?editToken=${editToken}`, {
     method: 'DELETE',
   });
-  dispatch({ type: 'DELETED' });
 });

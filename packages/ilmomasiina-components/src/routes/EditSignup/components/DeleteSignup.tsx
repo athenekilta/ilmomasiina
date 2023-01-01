@@ -1,48 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback } from 'react';
 
 import { useFormikContext } from 'formik';
-import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { useEditSignupContext } from '../../../modules/editSignup';
-import { useDeleteSignup } from '../../../modules/editSignup/actions';
+import ConfirmButton from '../../../components/ConfirmButton';
+import { useNavigate } from '../../../config/router';
+import { usePaths } from '../../../contexts';
+import { useDeleteSignup, useEditSignupContext } from '../../../modules/editSignup';
 
 const DELETE_CONFIRM_MS = 4000;
 
 const DeleteSignup = () => {
-  const [{ event }] = useEditSignupContext();
+  const { event } = useEditSignupContext();
   const deleteSignup = useDeleteSignup();
+  const navigate = useNavigate();
+  const paths = usePaths();
 
   const { isSubmitting, setSubmitting } = useFormikContext();
 
-  const [confirming, setConfirming] = useState(false);
-
-  useEffect(() => {
-    if (confirming) {
-      const timer = setTimeout(() => setConfirming(false), DELETE_CONFIRM_MS);
-      return () => clearTimeout(timer);
-    }
-    return () => {};
-  }, [confirming]);
-
-  async function doDelete() {
+  const doDelete = useCallback(async () => {
+    const progressToast = toast.loading('Ilmoittautumista poistetaan');
     try {
       setSubmitting(true);
       await deleteSignup();
+      toast.update(progressToast, {
+        render: 'Ilmoittautumisesi poistettiin onnistuneesti.',
+        type: toast.TYPE.SUCCESS,
+        closeButton: true,
+        closeOnClick: true,
+        isLoading: false,
+      });
+      navigate(paths.eventDetails(event!.slug));
     } catch (error) {
       setSubmitting(false);
-      toast.error('Poisto epäonnistui', { autoClose: 5000 });
+      toast.update(progressToast, {
+        render: 'Poisto epäonnistui.',
+        type: toast.TYPE.ERROR,
+        autoClose: 5000,
+        closeButton: true,
+        closeOnClick: true,
+        isLoading: false,
+      });
     }
-  }
-
-  function onDeleteClick() {
-    if (confirming) {
-      setConfirming(false);
-      doDelete();
-    } else {
-      setConfirming(true);
-    }
-  }
+  }, [deleteSignup, event, navigate, paths, setSubmitting]);
 
   return (
     <div className="ilmo--delete-container">
@@ -62,9 +62,16 @@ const DeleteSignup = () => {
         {' '}
         <strong>Tätä toimintoa ei voi perua.</strong>
       </p>
-      <Button type="button" disabled={isSubmitting} onClick={onDeleteClick} variant="danger">
-        {confirming ? 'Paina uudelleen varmistukseksi\u2026' : 'Poista ilmoittautuminen'}
-      </Button>
+      <ConfirmButton
+        type="button"
+        disabled={isSubmitting}
+        onClick={doDelete}
+        variant="danger"
+        confirmDelay={DELETE_CONFIRM_MS}
+        confirmLabel="Paina uudelleen varmistukseksi&hellip;"
+      >
+        Poista ilmoittautuminen
+      </ConfirmButton>
     </div>
   );
 };

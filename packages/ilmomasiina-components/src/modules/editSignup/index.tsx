@@ -4,14 +4,14 @@ import { Signup } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import useShallowMemo from '../../utils/useShallowMemo';
-import { ExternalState, Provider } from './reducer';
+import { Provider, State } from './state';
 
 export interface EditSignupProps {
   id: string;
   editToken: string;
 }
 
-export { useStateAndDispatch as useEditSignupContext } from './reducer';
+export { useStateContext as useEditSignupContext } from './state';
 export { useDeleteSignup, useUpdateSignup } from './actions';
 
 export function useEditSignupState({ id, editToken }: EditSignupProps) {
@@ -28,7 +28,7 @@ export function useEditSignupState({ id, editToken }: EditSignupProps) {
     };
   }, [id, editToken]);
 
-  return useShallowMemo<ExternalState>({
+  return useShallowMemo<State>({
     editToken,
     pending: fetchSignup.pending,
     error: fetchSignup.error,
@@ -39,7 +39,7 @@ export function useEditSignupState({ id, editToken }: EditSignupProps) {
 export function EditSignupProvider({ id, editToken, children }: PropsWithChildren<EditSignupProps>) {
   const state = useEditSignupState({ id, editToken });
   return (
-    <Provider state={state}>
+    <Provider value={state}>
       {children}
     </Provider>
   );

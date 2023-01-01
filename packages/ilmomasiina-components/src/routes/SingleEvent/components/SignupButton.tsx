@@ -6,8 +6,7 @@ import { toast } from 'react-toastify';
 import { Quota } from '@tietokilta/ilmomasiina-models';
 import { useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';
-import { useSingleEventContext } from '../../../modules/singleEvent';
-import { beginSignup } from '../../../modules/singleEvent/actions';
+import { beginSignup, useSingleEventContext } from '../../../modules/singleEvent';
 import { signupState, signupStateText } from '../../../utils/signupStateText';
 
 // Show the countdown one minute before opening the signup.
@@ -33,14 +32,21 @@ const SignupButton = ({
   const onClick = useCallback(async (quotaId: Quota.Id) => {
     if (!isOpen) return;
     setSubmitting(true);
+    const progressToast = toast.loading('Ilmoittautuminen käynnissä');
     try {
       const response = await beginSignup(quotaId);
       setSubmitting(false);
       navigate(paths.editSignup(response.id, response.editToken));
+      toast.dismiss(progressToast);
     } catch (e) {
       setSubmitting(false);
-      toast.error('Ilmoittautuminen epäonnistui.', {
+      toast.update(progressToast, {
+        render: 'Ilmoittautuminen epäonnistui.',
+        type: toast.TYPE.ERROR,
         autoClose: 5000,
+        closeButton: true,
+        closeOnClick: true,
+        isLoading: false,
       });
     }
   }, [navigate, paths, isOpen]);

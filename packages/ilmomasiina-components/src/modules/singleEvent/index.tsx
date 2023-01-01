@@ -20,6 +20,7 @@ type State = {
 
 const { Provider, useStateContext } = createStateContext<State>();
 export { useStateContext as useSingleEventContext };
+export { beginSignup } from './actions';
 
 export function useSingleEventState({ slug }: SingleEventProps) {
   const fetchEvent = useAbortablePromise(async (signal) => (

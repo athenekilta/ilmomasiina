@@ -9,9 +9,7 @@ import EditForm from './components/EditForm';
 import NarrowContainer from './components/NarrowContainer';
 
 const EditSignupView = () => {
-  const [{
-    deleted, error, pending, event,
-  }] = useEditSignupContext();
+  const { error, pending, event } = useEditSignupContext();
   const Link = linkComponent();
   const paths = usePaths();
 
@@ -32,17 +30,6 @@ const EditSignupView = () => {
     return (
       <div className="ilmo--loading-container">
         <Spinner animation="border" />
-      </div>
-    );
-  }
-
-  if (deleted) {
-    return (
-      <div className="ilmo--status-container">
-        <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-        <Button as={Link} to={paths.eventDetails(event!.slug)} variant="secondary">
-          Takaisin
-        </Button>
       </div>
     );
   }
