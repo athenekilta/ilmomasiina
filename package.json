@@ -10,11 +10,11 @@
   "scripts": {
     "bootstrap": "pnpm install",
     "clean": "pnpm run -r clean",
-    "build": "pnpm run -r build",
+    "build": "pnpm run -r --workspace-concurrency=1 build",
     "start": "pnpm run -r --parallel start",
     "lint": "eslint packages",
     "lint:fix": "npm run lint -- --fix",
-    "typecheck": "pnpm run -r typecheck",
+    "typecheck": "pnpm run -r --workspace-concurrency=1 typecheck",
     "test": "pnpm run -r test"
   },
   "repository": {
