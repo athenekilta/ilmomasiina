@@ -1,6 +1,6 @@
 {
   "name": "@tietokilta/ilmomasiina-models",
-  "version": "2.0.0-alpha6",
+  "version": "2.0.0-alpha7",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Tietokilta/ilmomasiina.git"
