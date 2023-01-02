@@ -6,15 +6,9 @@ block mainContent
 	div.content-block
 		p.bodyText Tapahtuman tiedot:
 		ul
-			li
-				strong Tapahtuma: 
-				| #{event.title}
-			li 
-				strong Sijainti: 
-				| #{event.location}
+			li #[strong Tapahtuma:] #{event.title}
+			li #[strong Sijainti:] #{event.location}
 			if date
-				li 
-					strong Aika: 
-					| #{date}
+				li #[strong Aika:] #{date}
 	div.content-block
-		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].
+		p.bodyText Mikäli haluat muokata tai perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a(href=cancelLink) linkkiä].
