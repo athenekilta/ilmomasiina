@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 import { FullPaths, PathsContext } from '@tietokilta/ilmomasiina-components';
 import { AdminEvent, Event, Signup } from '@tietokilta/ilmomasiina-models';
 
-export const urlPrefix = PREFIX_URL;
+export const urlPrefix = PATH_PREFIX;
 
 const appPaths: FullPaths = {
   hasAdmin: true,

@@ -75,10 +75,10 @@ export default class EmailService {
       const email = new Email(TEMPLATE_OPTIONS);
       const brandedParams = {
         ...params,
+        siteUrl: config.baseUrl,
         branding: {
           footerText: config.brandingMailFooterText,
           footerLink: config.brandingMailFooterLink,
-          siteUrl: `${config.mailUrlBase}${config.pathPrefix}`,
         },
       };
       const html = await email.render(path.join(TEMPLATE_DIR, 'newUser/html'), brandedParams);
