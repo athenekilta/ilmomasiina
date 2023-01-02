@@ -133,7 +133,7 @@ const EditForm = () => {
               <nav className="ilmo--submit-buttons">
                 {!isNew && (
                   <Button as={Link} variant="link" to={paths.eventDetails(event!.slug)}>
-                    {registrationClosed ? 'Takaisin' : 'Peruuta'}
+                    Peruuta
                   </Button>
                 )}
                 <Button type="submit" variant="primary" formNoValidate disabled={isSubmitting}>
