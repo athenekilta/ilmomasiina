@@ -19,7 +19,7 @@ type State = {
 const { Provider, useStateContext } = createStateContext<State>();
 export { useStateContext as useEventListContext };
 
-export function useEventListState({ category }: EventListProps) {
+export function useEventListState({ category }: EventListProps = {}) {
   const fetchEvents = useAbortablePromise(async (signal) => {
     const query = category === undefined ? '' : `?${new URLSearchParams({ category })}`;
     return await apiFetch(`events${query}`, { signal }) as Event.List;
