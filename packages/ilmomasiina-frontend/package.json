@@ -1,6 +1,6 @@
 {
   "name": "@tietokilta/ilmomasiina-frontend",
-  "version": "2.0.0-alpha9",
+  "version": "2.0.0-alpha10",
   "scripts": {
     "build": "ts-node -O '{\"module\":\"commonjs\"}' scripts/build.ts",
     "clean": "rimraf build dist",
@@ -16,8 +16,8 @@
   "dependencies": {
     "@craftamap/esbuild-plugin-html": "^0.4.0",
     "@sentry/browser": "^6.19.7",
-    "@tietokilta/ilmomasiina-components": "workspace:2.0.0-alpha9",
-    "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha9",
+    "@tietokilta/ilmomasiina-components": "workspace:2.0.0-alpha10",
+    "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha10",
     "@types/history": "^4.7.11",
     "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.41",

@@ -1,6 +1,6 @@
 {
   "name": "@tietokilta/ilmomasiina-components",
-  "version": "2.0.0-alpha9",
+  "version": "2.0.0-alpha10",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Tietokilta/ilmomasiina.git"
@@ -25,7 +25,7 @@
     "typecheck": "tsc --build"
   },
   "dependencies": {
-    "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha9",
+    "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha10",
     "@types/lodash": "^4.14.182",
     "@types/react": "^17 || ^18",
     "bootstrap": "^4.6.1",
