@@ -94,6 +94,8 @@ const config = {
   mailgunApiKey: envString('MAILGUN_API_KEY', null),
   /** Domain for Mailgun email sending. */
   mailgunDomain: envString('MAILGUN_DOMAIN', null),
+  /** Host for Mailgun API server. */
+  mailgunHost: envString('MAILGUN_HOST', 'api.eu.mailgun.net'),
 
   /** Whether or not new admin accounts can be added. */
   adminRegistrationAllowed: envBoolean('ADMIN_REGISTRATION_ALLOWED', false),
