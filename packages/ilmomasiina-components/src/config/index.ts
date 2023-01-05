@@ -4,17 +4,20 @@ import { configureRouter, RouterConfig } from './router';
 export type { RouterConfig };
 
 export interface IlmoConfig {
-  router: RouterConfig;
-  api: string;
-  timezone: string;
+  /** Integrate with your client-side router. Necessary only if you use React components. */
+  router?: RouterConfig;
+  /** API base path. Defaults to /api. */
+  api?: string;
+  /** Time zone. Defaults to Europe/Helsinki. */
+  timezone?: string;
 }
 
 let configuredTimezone = 'Europe/Helsinki';
 
 export function configure(config: IlmoConfig) {
-  configureApi(config.api);
-  configureRouter(config.router);
-  configuredTimezone = config.timezone;
+  if (config.api !== undefined) configureApi(config.api);
+  if (config.router !== undefined) configureRouter(config.router);
+  if (config.timezone !== undefined) configuredTimezone = config.timezone;
 }
 
 export function timezone() {
