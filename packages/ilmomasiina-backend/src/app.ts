@@ -1,4 +1,5 @@
 import fastifyCompress from '@fastify/compress';
+import fastifyCors from '@fastify/cors';
 import fastifySensible from '@fastify/sensible';
 import fastifyStatic from '@fastify/static';
 import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
@@ -25,6 +26,14 @@ export default async function initApp(): Promise<FastifyInstance> {
 
   // Register fastify-sensible (https://github.com/fastify/fastify-sensible)
   server.register(fastifySensible);
+
+  // Enable configurable CORS
+  if (config.allowOrigin) {
+    const corsOrigins = config.allowOrigin === '*' ? '*' : (config.allowOrigin?.split(',') ?? []);
+    await server.register(fastifyCors, {
+      origin: corsOrigins,
+    });
+  }
 
   // Enforce HTTPS connections in production
   if (config.nodeEnv === 'production') {
