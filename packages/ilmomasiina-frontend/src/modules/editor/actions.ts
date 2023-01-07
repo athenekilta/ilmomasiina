@@ -1,10 +1,10 @@
-import { ApiError, apiFetch } from '@tietokilta/ilmomasiina-components';
+import { ApiError } from '@tietokilta/ilmomasiina-components';
 import type {
   AdminEventSchema, CheckSlugResponse, EditConflictError, EventEditSchema,
   EventID, ListCategoriesResponse, SignupID,
 } from '@tietokilta/ilmomasiina-models';
+import adminApiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
-import { loginExpired } from '../auth/actions';
 import {
   CATEGORIES_LOADED,
   EDIT_CONFLICT,
@@ -190,11 +190,7 @@ export const getEvent = (id: EventID) => async (dispatch: DispatchAction, getSta
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch(
-      `admin/events/${id}`,
-      { accessToken },
-      () => dispatch(loginExpired()),
-    ) as AdminEventSchema;
+    const response = await adminApiFetch(`admin/events/${id}`, { accessToken }, dispatch) as AdminEventSchema;
     dispatch(loaded(response));
   } catch (e) {
     dispatch(loadFailed());
@@ -212,11 +208,7 @@ export const checkSlugAvailability = (slug: string) => async (dispatch: Dispatch
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch(
-      `admin/slugs/${slug}`,
-      { accessToken },
-      () => dispatch(loginExpired()),
-    ) as CheckSlugResponse;
+    const response = await adminApiFetch(`admin/slugs/${slug}`, { accessToken }, dispatch) as CheckSlugResponse;
     dispatch(slugAvailabilityChecked(response));
   } catch (e) {
     dispatch(slugAvailabilityChecked(null));
@@ -227,11 +219,7 @@ export const loadCategories = () => async (dispatch: DispatchAction, getState: G
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch(
-      'admin/categories',
-      { accessToken },
-      () => dispatch(loginExpired()),
-    ) as ListCategoriesResponse;
+    const response = await adminApiFetch('admin/categories', { accessToken }, dispatch) as ListCategoriesResponse;
     dispatch(categoriesLoaded(response));
   } catch (e) {
     dispatch(categoriesLoaded([]));
@@ -246,11 +234,11 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch('admin/events', {
+    const response = await adminApiFetch('admin/events', {
       accessToken,
       method: 'POST',
       body: cleaned,
-    }, () => dispatch(loginExpired())) as AdminEventSchema;
+    }, dispatch) as AdminEventSchema;
     dispatch(loaded(response));
     return response;
   } catch (e) {
@@ -270,14 +258,14 @@ export const publishEventUpdate = (
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch(`admin/events/${id}`, {
+    const response = await adminApiFetch(`admin/events/${id}`, {
       accessToken,
       method: 'PATCH',
       body: {
         ...cleaned,
         moveSignupsToQueue,
       },
-    }, () => dispatch(loginExpired())) as AdminEventSchema;
+    }, dispatch) as AdminEventSchema;
     dispatch(loaded(response));
     return response;
   } catch (e) {
@@ -298,10 +286,10 @@ export const deleteSignup = (id: SignupID) => async (dispatch: DispatchAction, g
   const { accessToken } = getState().auth;
 
   try {
-    await apiFetch(`admin/signups/${id}`, {
+    await adminApiFetch(`admin/signups/${id}`, {
       accessToken,
       method: 'DELETE',
-    }, () => dispatch(loginExpired()));
+    }, dispatch);
     return true;
   } catch (e) {
     return false;

@@ -1,7 +1,6 @@
-import { apiFetch } from '@tietokilta/ilmomasiina-components';
 import type { UserID, UserInviteSchema, UserListSchema } from '@tietokilta/ilmomasiina-models';
+import adminApiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
-import { loginExpired } from '../auth/actions';
 import {
   RESET,
   USER_CREATE_FAILED,
@@ -47,7 +46,7 @@ export type AdminUsersActions =
 export const getUsers = () => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
   try {
-    const response = await apiFetch('admin/users', { accessToken }, () => dispatch(loginExpired()));
+    const response = await adminApiFetch('admin/users', { accessToken }, dispatch);
     dispatch(usersLoaded(response as UserListSchema));
   } catch (e) {
     dispatch(usersLoadFailed());
@@ -60,11 +59,11 @@ export const createUser = (data: UserInviteSchema) => async (dispatch: DispatchA
   const { accessToken } = getState().auth;
 
   try {
-    await apiFetch('admin/users', {
+    await adminApiFetch('admin/users', {
       accessToken,
       method: 'POST',
       body: data,
-    }, () => dispatch(loginExpired()));
+    }, dispatch);
     dispatch(userCreated());
     return true;
   } catch (e) {
@@ -77,10 +76,10 @@ export const deleteUser = (id: UserID) => async (dispatch: DispatchAction, getSt
   const { accessToken } = getState().auth;
 
   try {
-    await apiFetch(`admin/users/${id}`, {
+    await adminApiFetch(`admin/users/${id}`, {
       accessToken,
       method: 'DELETE',
-    }, () => dispatch(loginExpired()));
+    }, dispatch);
     return true;
   } catch (e) {
     return false;

@@ -7,11 +7,13 @@ export interface FetchOptions {
 }
 
 export class ApiError extends Error {
+  status: number;
   className?: string;
   data?: any;
 
-  constructor(data: any) {
+  constructor(status: number, data: any) {
     super(data.message);
+    this.status = status;
     this.name = 'ApiError';
     this.className = data.className;
     this.data = data.data;
@@ -22,12 +24,16 @@ export class ApiError extends Error {
     try {
       const data = await response.json();
       if (data.message) {
-        error = new ApiError(data);
+        error = new ApiError(response.status, data);
       }
     } catch (e) {
       /* fall through */
     }
     return error;
+  }
+
+  get isUnauthenticated() {
+    return this.status === 401;
   }
 }
 
@@ -39,7 +45,7 @@ export function configureApi(url: string) {
 
 export default async function apiFetch(uri: string, {
   method = 'GET', body, headers, accessToken, signal,
-}: FetchOptions = {}, onUnauthenticated?: () => void) {
+}: FetchOptions = {}) {
   const allHeaders = {
     ...headers || {},
   };
@@ -57,9 +63,7 @@ export default async function apiFetch(uri: string, {
     signal,
   });
 
-  if (response.status === 401 && onUnauthenticated) onUnauthenticated();
-
-  if (response.status > 299) {
+  if (!response.ok) {
     throw await ApiError.fromResponse(response);
   }
   return response.status === 204 ? null : response.json();

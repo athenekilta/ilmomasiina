@@ -1,9 +1,8 @@
 import _ from 'lodash';
 
-import { apiFetch } from '@tietokilta/ilmomasiina-components';
 import type { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models';
+import adminApiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
-import { loginExpired } from '../auth/actions';
 import {
   AUDIT_LOG_LOAD_FAILED,
   AUDIT_LOG_LOADED,
@@ -49,7 +48,7 @@ export const getAuditLogs = (query: AuditLoqQuery = {} as AuditLoqQuery) => asyn
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch(`admin/auditlog?${queryString}`, { accessToken }, () => dispatch(loginExpired()));
+    const response = await adminApiFetch(`admin/auditlog?${queryString}`, { accessToken }, dispatch);
     dispatch(auditLogLoaded(response as AuditLogResponse));
   } catch (e) {
     dispatch(auditLogLoadFailed());
