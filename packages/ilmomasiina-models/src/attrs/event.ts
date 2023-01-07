@@ -1,5 +1,4 @@
-/** User */
-// Attributes included in GET /api/events/ID for Event instances.
+/** Attributes included in GET /api/events/ID for Event instances. */
 export const eventGetEventAttrs = [
   'id',
   'title',
@@ -20,7 +19,7 @@ export const eventGetEventAttrs = [
   'emailQuestion',
 ] as const;
 
-// Attributes included in GET /api/admin/events/ID for Event instances.
+/** Attributes included in GET /api/admin/events/ID for Event instances. */
 export const adminEventGetEventAttrs = [
   ...eventGetEventAttrs,
   'draft',
@@ -29,7 +28,7 @@ export const adminEventGetEventAttrs = [
   'updatedAt',
 ] as const;
 
-// Attributes included in results for Question instances.
+/** Attributes included in results for Question instances. */
 export const eventGetQuestionAttrs = [
   'id',
   'question',
@@ -39,14 +38,14 @@ export const eventGetQuestionAttrs = [
   'public',
 ] as const;
 
-// Attributes included in results for Quota instances.
+/** Attributes included in results for Quota instances. */
 export const eventGetQuotaAttrs = [
   'id',
   'title',
   'size',
 ] as const;
 
-// Attributes included in GET /api/events/ID for Signup instances.
+/** Attributes included in GET /api/events/ID for Signup instances. */
 export const eventGetSignupAttrs = [
   'firstName',
   'lastName',
@@ -56,15 +55,13 @@ export const eventGetSignupAttrs = [
   'createdAt',
 ] as const;
 
-// Attributes included in results for Answer instances.
+/** Attributes included in results for Answer instances. */
 export const eventGetAnswerAttrs = [
   'questionId',
   'answer',
 ] as const;
 
-/** Lists */
-
-// Attributes included in GET /api/events for Event instances.
+/** Attributes included in GET /api/events for Event instances. */
 export const eventListEventAttrs = [
   'id',
   'slug',
@@ -77,7 +74,7 @@ export const eventListEventAttrs = [
   'signupsPublic',
 ] as const;
 
-// Attributes included in GET /api/admin/events for Event instances.
+/** Attributes included in GET /api/admin/events for Event instances. */
 export const adminEventListEventAttrs = [
   ...eventListEventAttrs,
   'draft',

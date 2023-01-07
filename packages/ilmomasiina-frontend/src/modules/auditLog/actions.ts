@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models';
 import { DispatchAction, GetState } from '../../store/types';
 import { loginExpired } from '../auth/actions';
 import {

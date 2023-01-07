@@ -1,4 +1,4 @@
-import { UserListSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserListSchema } from '@tietokilta/ilmomasiina-models';
 
 export interface AdminUsersState {
   users: UserListSchema | null;

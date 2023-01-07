@@ -1,12 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { NotFound } from 'http-errors';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserPathParams } from '@tietokilta/ilmomasiina-models';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { User } from '../../../models/user';
 
 export default async function deleteUser(
-  request: FastifyRequest<{ Params: schema.UserPathParams }>,
+  request: FastifyRequest<{ Params: UserPathParams }>,
   reply: FastifyReply,
 ): Promise<void> {
   await User.sequelize!.transaction(async (transaction) => {

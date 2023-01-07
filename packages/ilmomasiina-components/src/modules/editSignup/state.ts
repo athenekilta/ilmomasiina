@@ -1,7 +1,7 @@
-import { Signup } from '@tietokilta/ilmomasiina-models';
+import type { UserSignupForEditSchema } from '@tietokilta/ilmomasiina-models';
 import { createStateContext } from '../../utils/stateContext';
 
-export type State = Partial<Signup.Details> & {
+export type State = Partial<UserSignupForEditSchema> & {
   pending: boolean;
   error: boolean;
   editToken: string;

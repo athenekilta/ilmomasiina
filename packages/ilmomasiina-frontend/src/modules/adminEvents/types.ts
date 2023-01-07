@@ -1,4 +1,4 @@
-import { AdminEventList } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AdminEventList } from '@tietokilta/ilmomasiina-models';
 
 export interface AdminState {
   events: AdminEventList | null;

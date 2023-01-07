@@ -2,8 +2,7 @@ import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox';
 import { Type } from '@sinclair/typebox';
 import { FastifyInstance } from 'fastify';
 
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { adminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import * as schema from '@tietokilta/ilmomasiina-models';
 import { addLogEventHook } from '../auditlog';
 import AdminAuthSession from '../authentication/adminAuthSession';
 import config from '../config';
@@ -291,7 +290,7 @@ function setupPublicRoutes(
         body: schema.adminLoginSchema,
         response: {
           ...errorResponses,
-          201: adminSessionSchema,
+          201: schema.adminSessionSchema,
         },
       },
     },

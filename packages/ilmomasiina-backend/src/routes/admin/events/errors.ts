@@ -1,5 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type {
+  EditConflictError, QuestionID, QuotaID, WouldMoveSignupsToQueueError,
+} from '@tietokilta/ilmomasiina-models';
 
 export abstract class CustomError extends Error {
   public readonly statusCode: number;
@@ -12,12 +14,12 @@ export abstract class CustomError extends Error {
   }
 }
 
-export class EditConflict extends CustomError implements schema.EditConflictError {
+export class EditConflict extends CustomError implements EditConflictError {
   public readonly updatedAt: string; // in date-time format
-  public readonly deletedQuotas: schema.QuotaID[];
-  public readonly deletedQuestions: schema.QuestionID[];
+  public readonly deletedQuotas: QuotaID[];
+  public readonly deletedQuestions: QuestionID[];
 
-  constructor(updatedAt: Date, deletedQuotas: schema.QuotaID[], deletedQuestions: schema.QuestionID[]) {
+  constructor(updatedAt: Date, deletedQuotas: QuotaID[], deletedQuestions: QuestionID[]) {
     const updatedAtStr = updatedAt.toISOString();
     super(
       409,
@@ -30,7 +32,7 @@ export class EditConflict extends CustomError implements schema.EditConflictErro
   }
 }
 
-export class WouldMoveSignupsToQueue extends CustomError implements schema.WouldMoveSignupsToQueueError {
+export class WouldMoveSignupsToQueue extends CustomError implements WouldMoveSignupsToQueueError {
   public readonly count: number;
 
   constructor(count: number) {

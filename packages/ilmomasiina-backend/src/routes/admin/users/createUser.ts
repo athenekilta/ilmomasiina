@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Conflict } from 'http-errors';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserCreateSchema, UserInviteSchema, UserSchema } from '@tietokilta/ilmomasiina-models';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { AuditLogger } from '../../../auditlog';
 import AdminPasswordAuth from '../../../authentication/adminPasswordAuth';
 import EmailService from '../../../mail';
@@ -15,7 +15,7 @@ import generatePassword from './generatePassword';
  * @param params user parameters
  * @param auditLogger audit logger function from the originating request
  */
-async function create(params: schema.UserCreateSchema, auditLogger: AuditLogger): Promise<schema.UserSchema> {
+async function create(params: UserCreateSchema, auditLogger: AuditLogger): Promise<UserSchema> {
   return User.sequelize!.transaction(async (transaction) => {
     const existing = await User.findOne({
       where: { email: params.email },
@@ -54,9 +54,9 @@ async function create(params: schema.UserCreateSchema, auditLogger: AuditLogger)
  * For additional users, use {@link inviteUser} instead.
  */
 export async function createUser(
-  request: FastifyRequest<{ Body: schema.UserCreateSchema }>,
+  request: FastifyRequest<{ Body: UserCreateSchema }>,
   reply: FastifyReply,
-): Promise<schema.UserSchema> {
+): Promise<UserSchema> {
   const user = await create(request.body, request.logEvent);
   reply.status(201);
   return user;
@@ -66,9 +66,9 @@ export async function createUser(
  * Creates a new user and sends an invitation mail to their email
  */
 export async function inviteUser(
-  request: FastifyRequest<{ Body: schema.UserInviteSchema }>,
+  request: FastifyRequest<{ Body: UserInviteSchema }>,
   reply: FastifyReply,
-): Promise<schema.UserSchema> {
+): Promise<UserSchema> {
   // Generate secure password
   const password = generatePassword();
 

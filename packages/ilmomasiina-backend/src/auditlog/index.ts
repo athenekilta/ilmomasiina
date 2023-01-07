@@ -1,10 +1,10 @@
 import { FastifyInstance } from 'fastify';
 import { Transaction } from 'sequelize';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
+import type { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { AuditLog } from '../models/auditlog';
-import { Event } from '../models/event';
-import { Signup } from '../models/signup';
+import type { Event } from '../models/event';
+import type { Signup } from '../models/signup';
 
 /**
  * Creates an {@link AuditLogger}

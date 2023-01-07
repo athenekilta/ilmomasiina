@@ -7,7 +7,8 @@ import reject from 'lodash/reject';
 import without from 'lodash/without';
 import { Form } from 'react-bootstrap';
 
-import { Question, SignupUpdateSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { Question, SignupUpdateSchema } from '@tietokilta/ilmomasiina-models';
+import { QuestionType } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 
 type Props = {
@@ -42,7 +43,7 @@ const QuestionFields = ({ name, questions, disabled }: Props) => {
         let input: ReactNode;
         let isCheckboxes = false;
         switch (question.type) {
-          case 'text':
+          case QuestionType.TEXT:
             input = (
               <Form.Control
                 type="text"
@@ -53,7 +54,7 @@ const QuestionFields = ({ name, questions, disabled }: Props) => {
               />
             );
             break;
-          case 'number':
+          case QuestionType.NUMBER:
             input = (
               <Form.Control
                 type="number"
@@ -64,7 +65,7 @@ const QuestionFields = ({ name, questions, disabled }: Props) => {
               />
             );
             break;
-          case 'checkbox': {
+          case QuestionType.CHECKBOX: {
             const currentAnswers = currentAnswer.split(';');
             input = question.options?.map((option, optIndex) => (
               <Form.Check
@@ -83,7 +84,7 @@ const QuestionFields = ({ name, questions, disabled }: Props) => {
             isCheckboxes = true;
             break;
           }
-          case 'textarea':
+          case QuestionType.TEXT_AREA:
             input = (
               <Form.Control
                 as="textarea"
@@ -96,7 +97,7 @@ const QuestionFields = ({ name, questions, disabled }: Props) => {
               />
             );
             break;
-          case 'select':
+          case QuestionType.SELECT:
             if (question.options && question.options.length > 3) {
               input = (
                 <Form.Control

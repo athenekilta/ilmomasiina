@@ -1,4 +1,4 @@
-import { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models';
 
 export interface AuditLogState {
   auditLogQuery: AuditLoqQuery;

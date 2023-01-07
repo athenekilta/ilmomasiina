@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { setAuditLogQueryField } from '../../modules/auditLog/actions';
 import { useTypedDispatch } from '../../store/reducers';
 

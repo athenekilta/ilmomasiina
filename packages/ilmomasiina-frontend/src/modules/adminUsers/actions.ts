@@ -1,5 +1,5 @@
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { UserID, UserInviteSchema, UserListSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserID, UserInviteSchema, UserListSchema } from '@tietokilta/ilmomasiina-models';
 import { DispatchAction, GetState } from '../../store/types';
 import { loginExpired } from '../auth/actions';
 import {

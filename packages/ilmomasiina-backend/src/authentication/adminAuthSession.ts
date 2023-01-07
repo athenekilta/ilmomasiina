@@ -4,11 +4,11 @@ import {
 import { FastifyRequest } from 'fastify';
 import { Unauthorized } from 'http-errors';
 
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserID, UserSchema } from '@tietokilta/ilmomasiina-models';
 
 export interface AdminTokenData {
-  user: schema.UserID
-  email: schema.UserSchema['email']
+  user: UserID;
+  email: UserSchema['email'];
 }
 
 export default class AdminAuthSession {

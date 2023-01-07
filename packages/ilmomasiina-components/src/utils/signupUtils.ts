@@ -3,12 +3,9 @@ import orderBy from 'lodash/orderBy';
 import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 
-import {
-  AdminEventSchema, QuestionID,
-  QuotaID,
-  SignupID,
-  UserEventSchema,
-} from '@tietokilta/ilmomasiina-models/src/schema';
+import type {
+  AdminEventSchema, QuestionID, QuotaID, SignupID, UserEventSchema,
+} from '@tietokilta/ilmomasiina-models';
 import { timezone } from '../config';
 
 export const WAITLIST = '\x00waitlist';

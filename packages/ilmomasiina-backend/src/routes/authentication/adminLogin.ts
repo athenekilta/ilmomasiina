@@ -1,15 +1,14 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { HttpError } from 'http-errors';
 
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
-import { AdminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AdminLoginSchema, AdminSessionSchema } from '@tietokilta/ilmomasiina-models';
 import AdminAuthSession, { AdminTokenData } from '../../authentication/adminAuthSession';
 import AdminPasswordAuth from '../../authentication/adminPasswordAuth';
 import { User } from '../../models/user';
 
 export function adminLogin(session: AdminAuthSession) {
   return async (
-    request: FastifyRequest<{ Body: schema.AdminLoginSchema }>,
+    request: FastifyRequest<{ Body: AdminLoginSchema }>,
     reply: FastifyReply,
   ): Promise<AdminSessionSchema | void> => {
     // Verify user
@@ -31,7 +30,7 @@ export function adminLogin(session: AdminAuthSession) {
 
 export function renewAdminToken(session: AdminAuthSession) {
   return async (
-    request: FastifyRequest<{ Body: schema.AdminLoginSchema }>,
+    request: FastifyRequest<{ Body: AdminLoginSchema }>,
     reply: FastifyReply,
   ): Promise<AdminSessionSchema | void> => {
     // Verify existing token

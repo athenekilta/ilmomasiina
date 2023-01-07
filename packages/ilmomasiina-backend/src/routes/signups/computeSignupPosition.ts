@@ -1,8 +1,7 @@
 import moment from 'moment-timezone';
 import { Transaction, WhereOptions } from 'sequelize';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
-import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/models/signup';
+import { AuditEvent, SignupStatus } from '@tietokilta/ilmomasiina-models';
 import { internalAuditLogger } from '../../auditlog';
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
@@ -89,17 +88,17 @@ export async function refreshSignupPositions(
     if (inChosenQuota < chosenQuotaSize) {
       inChosenQuota += 1;
       quotaSignups.set(signup.quotaId, inChosenQuota);
-      status = 'in-quota';
+      status = SignupStatus.IN_QUOTA;
       position = inChosenQuota;
     } else if (inOpenQuota < event.openQuotaSize) {
       inOpenQuota += 1;
-      status = 'in-open';
+      status = SignupStatus.IN_OPEN_QUOTA;
       position = inOpenQuota;
     } else {
       inQueue += 1;
-      status = 'in-queue';
+      status = SignupStatus.IN_QUEUE;
       position = inQueue;
-      if (signup.status !== 'in-queue') {
+      if (signup.status !== SignupStatus.IN_QUEUE) {
         movedToQueue += 1;
       }
     }

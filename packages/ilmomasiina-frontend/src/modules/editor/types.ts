@@ -1,13 +1,7 @@
-import {
-  AdminEventSchema,
-  CheckSlugResponse,
-  EditConflictError,
-  EventEditSchema,
-  QuestionID,
-  QuestionUpdateSchema,
-  QuotaID,
-  QuotaUpdateSchema,
-} from '@tietokilta/ilmomasiina-models/src/schema';
+import type {
+  AdminEventSchema, CheckSlugResponse, EditConflictError, EventEditSchema,
+  QuestionID, QuestionUpdateSchema, QuotaID, QuotaUpdateSchema,
+} from '@tietokilta/ilmomasiina-models';
 
 export interface EditorState {
   event: AdminEventSchema | null;

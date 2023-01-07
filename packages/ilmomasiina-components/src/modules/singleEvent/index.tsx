@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useMemo } from 'react';
 
-import { UserEventSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserEventSchema } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import { getSignupsByQuota, QuotaSignups } from '../../utils/signupUtils';

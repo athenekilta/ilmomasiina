@@ -1,5 +1,5 @@
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { AdminEventList, EventID } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AdminEventList, EventID } from '@tietokilta/ilmomasiina-models';
 import { DispatchAction, GetState } from '../../store/types';
 import { loginExpired } from '../auth/actions';
 import {

@@ -2,8 +2,10 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { NotFound } from 'http-errors';
 import { Op, Transaction } from 'sequelize';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type {
+  AdminEventPathParams, AdminEventSchema, EditConflictError, EventEditSchema, WouldMoveSignupsToQueueError,
+} from '@tietokilta/ilmomasiina-models';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';
@@ -13,9 +15,9 @@ import { toDate } from '../../utils';
 import { EditConflict, WouldMoveSignupsToQueue } from './errors';
 
 export default async function updateEvent(
-  request: FastifyRequest<{ Params: schema.AdminEventPathParams, Body: schema.EventEditSchema }>,
+  request: FastifyRequest<{ Params: AdminEventPathParams, Body: EventEditSchema }>,
   response: FastifyReply,
-): Promise<schema.AdminEventSchema | schema.EditConflictError | schema.WouldMoveSignupsToQueueError> {
+): Promise<AdminEventSchema | EditConflictError | WouldMoveSignupsToQueueError> {
   try {
     await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update

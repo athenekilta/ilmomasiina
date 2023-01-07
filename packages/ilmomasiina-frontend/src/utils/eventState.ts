@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-import { AdminEventList } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AdminEventList } from '@tietokilta/ilmomasiina-models';
 
 // eslint-disable-next-line import/prefer-default-export
 export function isEventInPast(event: Pick<AdminEventList[number], 'date' | 'endDate' | 'registrationEndDate'>) {

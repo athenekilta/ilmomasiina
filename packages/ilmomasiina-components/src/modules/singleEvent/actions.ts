@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { CreatedSignupSchema, QuotaID } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { CreatedSignupSchema, QuotaID } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 
 export function beginSignup(quotaId: QuotaID) {

@@ -2,8 +2,8 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { BadRequest, Forbidden, NotFound } from 'http-errors';
 import { Transaction } from 'sequelize';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type { SignupPathParams, SignupUpdateSchema, UpdatedSignupSchema } from '@tietokilta/ilmomasiina-models';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
@@ -14,9 +14,9 @@ import { signupsAllowed } from './createNewSignup';
 
 /** Requires editTokenVerification */
 export default async function updateSignup(
-  request: FastifyRequest<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateSchema }>,
+  request: FastifyRequest<{ Params: SignupPathParams, Body: SignupUpdateSchema }>,
   reply: FastifyReply,
-): Promise<schema.UpdatedSignupSchema> {
+): Promise<UpdatedSignupSchema> {
   const updatedSignup = await Signup.sequelize!.transaction(async (transaction) => {
     // Retrieve event data and lock the row for editing
     const signup = await Signup.scope('active').findByPk(request.params.id, {

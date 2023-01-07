@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
-import { AuditLoqQuery } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AuditLoqQuery } from '@tietokilta/ilmomasiina-models';
 import { setAuditLogQueryField } from '../../modules/auditLog/actions';
 import { useTypedDispatch } from '../../store/reducers';
 import useThrottled from '../../utils/useThrottled';

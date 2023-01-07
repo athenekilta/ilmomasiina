@@ -1,8 +1,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Forbidden, NotFound } from 'http-errors';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type { SignupPathParams } from '@tietokilta/ilmomasiina-models';
+import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { AuditLogger } from '../../auditlog';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
@@ -48,7 +48,7 @@ async function deleteSignup(id: string, auditLogger: AuditLogger, admin: boolean
 
 /** Requires admin authentication */
 export async function deleteSignupAsAdmin(
-  request: FastifyRequest<{ Params: schema.SignupPathParams }>,
+  request: FastifyRequest<{ Params: SignupPathParams }>,
   reply: FastifyReply,
 ): Promise<void> {
   await deleteSignup(request.params.id, request.logEvent, true);
@@ -57,7 +57,7 @@ export async function deleteSignupAsAdmin(
 
 /** Requires editTokenVerification */
 export async function deleteSignupAsUser(
-  request: FastifyRequest<{ Params: schema.SignupPathParams }>,
+  request: FastifyRequest<{ Params: SignupPathParams }>,
   reply: FastifyReply,
 ): Promise<void> {
   await deleteSignup(request.params.id, request.logEvent);

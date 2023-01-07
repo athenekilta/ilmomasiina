@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
-import { EDIT_TOKEN_HEADER_NAME, UserSignupForEditSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserSignupForEditSchema } from '@tietokilta/ilmomasiina-models';
+import { EDIT_TOKEN_HEADER_NAME } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import useShallowMemo from '../../utils/useShallowMemo';

@@ -1,12 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type { ListCategoriesResponse } from '@tietokilta/ilmomasiina-models';
 import { Event } from '../../../models/event';
 
 export default async function getCategoriesList(
   request: FastifyRequest,
   response: FastifyReply,
-): Promise<schema.ListCategoriesResponse> {
+): Promise<ListCategoriesResponse> {
   const results = await Event.findAll({
     attributes: ['category'],
     group: ['category'],

@@ -1,4 +1,5 @@
-import { EDIT_TOKEN_HEADER_NAME, SignupUpdateSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { SignupUpdateSchema } from '@tietokilta/ilmomasiina-models';
+import { EDIT_TOKEN_HEADER_NAME } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { createThunk } from './state';
 

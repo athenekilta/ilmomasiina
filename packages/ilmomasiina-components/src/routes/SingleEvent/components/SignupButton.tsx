@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { QuotaID } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { QuotaID } from '@tietokilta/ilmomasiina-models';
 import { useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';
 import { beginSignup, useSingleEventContext } from '../../../modules/singleEvent';

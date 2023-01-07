@@ -2,7 +2,7 @@ import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import { AdminSessionSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AdminSessionSchema } from '@tietokilta/ilmomasiina-models';
 import appPaths from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {

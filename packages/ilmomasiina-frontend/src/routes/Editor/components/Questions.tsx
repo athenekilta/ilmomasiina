@@ -8,7 +8,7 @@ import {
 import { SortEnd } from 'react-sortable-hoc';
 
 import { FieldRow } from '@tietokilta/ilmomasiina-components';
-import { QuestionType } from '@tietokilta/ilmomasiina-models/src/enum';
+import { QuestionType } from '@tietokilta/ilmomasiina-models';
 import { EditorQuestion } from '../../../modules/editor/types';
 import Sortable from './Sortable';
 

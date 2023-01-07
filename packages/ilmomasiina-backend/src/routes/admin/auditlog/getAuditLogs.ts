@@ -1,16 +1,17 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Op, WhereOptions } from 'sequelize';
 
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models';
+import { auditLoqQuery } from '@tietokilta/ilmomasiina-models';
 import { AuditLog } from '../../../models/auditlog';
 import { stringifyDates } from '../../utils';
 
 const MAX_LOGS = 100;
 
 export default async function getAuditLogItems(
-  request: FastifyRequest<{ Querystring: schema.AuditLoqQuery }>,
+  request: FastifyRequest<{ Querystring: AuditLoqQuery }>,
   response: FastifyReply,
-): Promise<schema.AuditLogResponse> {
+): Promise<AuditLogResponse> {
   let where: WhereOptions<AuditLog> & unknown[] = [];
   if (request.query.user) {
     where = [
@@ -56,8 +57,8 @@ export default async function getAuditLogItems(
   const logs = await AuditLog.findAndCountAll({
     where,
     order: [['createdAt', 'DESC']],
-    offset: request.query.offset || schema.auditLoqQuery.properties.offset.default,
-    limit: Math.min(MAX_LOGS, request.query.limit || schema.auditLoqQuery.properties.limit.default),
+    offset: request.query.offset || auditLoqQuery.properties.offset.default,
+    limit: Math.min(MAX_LOGS, request.query.limit || auditLoqQuery.properties.limit.default),
   });
 
   response.status(200);

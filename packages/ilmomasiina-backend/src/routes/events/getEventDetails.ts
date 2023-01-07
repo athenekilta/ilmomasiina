@@ -2,6 +2,9 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { NotFound } from 'http-errors';
 import { Order } from 'sequelize';
 
+import type {
+  AdminEventPathParams, AdminEventSchema, EventID, EventSlug, UserEventPathParams, UserEventSchema,
+} from '@tietokilta/ilmomasiina-models';
 import {
   adminEventGetEventAttrs,
   eventGetAnswerAttrs,
@@ -9,8 +12,7 @@ import {
   eventGetQuestionAttrs,
   eventGetQuotaAttrs,
   eventGetSignupAttrs,
-} from '@tietokilta/ilmomasiina-models/src/attrs/event';
-import * as schema from '@tietokilta/ilmomasiina-models/src/schema';
+} from '@tietokilta/ilmomasiina-models/dist/attrs/event';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
@@ -25,8 +27,8 @@ const eventOrdering: Order = [
 ];
 
 export async function eventDetailsForUser(
-  eventSlug: schema.EventSlug,
-): Promise<schema.UserEventSchema> {
+  eventSlug: EventSlug,
+): Promise<UserEventSchema> {
   const event = await Event.scope('user').findOne({
     where: { slug: eventSlug },
     attributes: [...eventGetEventAttrs],
@@ -122,8 +124,8 @@ export async function eventDetailsForUser(
 }
 
 export async function eventDetailsForAdmin(
-  eventID: schema.EventID,
-): Promise<schema.AdminEventSchema> {
+  eventID: EventID,
+): Promise<AdminEventSchema> {
   // Admin queries include internal data such as confirmation email contents
   // Admin queries include emails and signup IDs
   // Admin queries also show past and draft events.
@@ -197,18 +199,18 @@ export async function eventDetailsForAdmin(
 }
 
 export async function getEventDetailsForUser(
-  request: FastifyRequest<{ Params: schema.UserEventPathParams }>,
+  request: FastifyRequest<{ Params: UserEventPathParams }>,
   reply: FastifyReply,
-): Promise<schema.UserEventSchema> {
+): Promise<UserEventSchema> {
   const res = await eventDetailsForUser(request.params.slug);
   reply.status(200);
   return res;
 }
 
 export async function getEventDetailsForAdmin(
-  request: FastifyRequest<{ Params: schema.AdminEventPathParams }>,
+  request: FastifyRequest<{ Params: AdminEventPathParams }>,
   reply: FastifyReply,
-): Promise<schema.AdminEventSchema> {
+): Promise<AdminEventSchema> {
   const res = await eventDetailsForAdmin(request.params.id);
   reply.status(200);
   return res;

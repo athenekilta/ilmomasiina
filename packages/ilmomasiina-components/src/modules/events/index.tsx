@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import { UserEventList } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { UserEventList } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import { createStateContext } from '../../utils/stateContext';

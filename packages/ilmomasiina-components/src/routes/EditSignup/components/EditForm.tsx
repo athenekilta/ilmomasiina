@@ -4,7 +4,7 @@ import { Formik, FormikHelpers } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { SignupUpdateSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { SignupUpdateSchema } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 import { linkComponent, useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';

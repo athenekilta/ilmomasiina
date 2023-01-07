@@ -3,7 +3,7 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
-import { AuditLogItemSchema } from '@tietokilta/ilmomasiina-models/src/schema';
+import type { AuditLogItemSchema } from '@tietokilta/ilmomasiina-models';
 import appPaths from '../../paths';
 
 type Props = {

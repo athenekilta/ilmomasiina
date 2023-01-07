@@ -1,12 +1,8 @@
 import { ApiError, apiFetch } from '@tietokilta/ilmomasiina-components';
-import {
-  AdminEventSchema,
-  CheckSlugResponse, EditConflictError,
-  EventEditSchema,
-  EventID,
-  ListCategoriesResponse,
-  SignupID,
-} from '@tietokilta/ilmomasiina-models/src/schema';
+import type {
+  AdminEventSchema, CheckSlugResponse, EditConflictError, EventEditSchema,
+  EventID, ListCategoriesResponse, SignupID,
+} from '@tietokilta/ilmomasiina-models';
 import { DispatchAction, GetState } from '../../store/types';
 import { loginExpired } from '../auth/actions';
 import {

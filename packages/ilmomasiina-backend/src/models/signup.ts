@@ -7,10 +7,10 @@ import {
   Model, Op, Optional, Sequelize,
 } from 'sequelize';
 
-import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/enum';
-import SignupAttributes from '@tietokilta/ilmomasiina-models/src/models/signup';
-import { Answer } from './answer';
-import { Quota } from './quota';
+import { SignupStatus } from '@tietokilta/ilmomasiina-models';
+import type { SignupAttributes } from '@tietokilta/ilmomasiina-models/dist/models';
+import type { Answer } from './answer';
+import type { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
 export interface SignupCreationAttributes

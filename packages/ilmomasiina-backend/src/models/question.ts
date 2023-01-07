@@ -5,10 +5,10 @@ import {
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import { QuestionType } from '@tietokilta/ilmomasiina-models/src/enum';
-import QuestionAttributes from '@tietokilta/ilmomasiina-models/src/models/question';
-import { Answer } from './answer';
-import { Event } from './event';
+import { QuestionType } from '@tietokilta/ilmomasiina-models';
+import type { QuestionAttributes } from '@tietokilta/ilmomasiina-models/dist/models';
+import type { Answer } from './answer';
+import type { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
 export interface QuestionCreationAttributes

@@ -2,8 +2,8 @@ import {
   DataTypes, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import { AuditEvent } from '@tietokilta/ilmomasiina-models/src/enum';
-import AuditLogAttributes from '@tietokilta/ilmomasiina-models/src/models/auditlog';
+import type { AuditEvent } from '@tietokilta/ilmomasiina-models';
+import type { AuditLogAttributes } from '@tietokilta/ilmomasiina-models/dist/models';
 import { RANDOM_ID_LENGTH } from './randomId';
 
 export interface AuditLogCreationAttributes extends Optional<AuditLogAttributes, 'id'> {}
