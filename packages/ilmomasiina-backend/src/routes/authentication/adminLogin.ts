@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { HttpError } from 'http-errors';
+import { HttpError, Unauthorized } from 'http-errors';
 
 import type { AdminLoginSchema, AdminSessionSchema } from '@tietokilta/ilmomasiina-models';
 import AdminAuthSession, { AdminTokenData } from '../../authentication/adminAuthSession';
@@ -17,14 +17,17 @@ export function adminLogin(session: AdminAuthSession) {
       attributes: ['id', 'password', 'email'],
     });
 
-    if (user && AdminPasswordAuth.verifyHash(request.body.password, user.password)) {
-      // Authentication success -> generate auth token
-      const accessToken = session.createSession({ user: user.id, email: user.email });
-      reply.status(200);
-      return { accessToken };
+    // Verify password
+    if (!user || !AdminPasswordAuth.verifyHash(request.body.password, user.password)) {
+      // Mitigate user enumeration by timing: waste some time if we didn't actually verify a password
+      if (!user) AdminPasswordAuth.createHash('hunter2');
+      throw new Unauthorized('Invalid email or password');
     }
-    reply.unauthorized('Invalid email or password');
-    return undefined;
+
+    // Authentication success -> generate auth token
+    const accessToken = session.createSession({ user: user.id, email: user.email });
+    reply.status(200);
+    return { accessToken };
   };
 }
 
@@ -35,6 +38,12 @@ export function renewAdminToken(session: AdminAuthSession) {
   ): Promise<AdminSessionSchema | void> => {
     // Verify existing token
     const sessionData = session.verifySession(request);
+
+    // Verify that the user exists
+    const user = await User.findByPk(sessionData.user);
+    if (!user) {
+      throw new Unauthorized('User no longer exists');
+    }
 
     // Create a new one
     const accessToken = session.createSession(sessionData);
