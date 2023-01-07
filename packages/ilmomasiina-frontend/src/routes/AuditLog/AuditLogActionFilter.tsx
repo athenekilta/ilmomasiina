@@ -23,11 +23,9 @@ const AuditLogActionFilter = () => {
   const dispatch = useTypedDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const event = e.target.value;
-    dispatch(setAuditLogQueryField(
-      'action',
-      (Object.values(AuditEvent) as string[]).includes(event) ? event as unknown as [AuditEvent] : undefined,
-    ));
+    // Since e.target.value comes from the <select> below, we can assume the type
+    const event = e.target.value ? [e.target.value as AuditEvent] : undefined;
+    dispatch(setAuditLogQueryField('action', event));
   };
 
   return (
