@@ -3,8 +3,8 @@ import React, { RefObject, useState } from 'react';
 import { FormikProps } from 'formik';
 import { Form } from 'react-bootstrap';
 
-import { EditorEvent } from '../../../modules/editor/types';
-import { EditorSubmitOptions } from '..';
+import type { EditorEvent } from '../../../modules/editor/types';
+import type { EditorSubmitOptions } from '..';
 import BasicDetailsTab from './BasicDetailsTab';
 import EditConflictModal from './EditConflictModal';
 import EditorTabBody from './EditorTabBody';

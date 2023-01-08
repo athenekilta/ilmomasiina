@@ -37,10 +37,6 @@ module.exports = {
     "@typescript-eslint/lines-between-class-members": "off",
     // Doesn't increase code quality with redux.
     "@typescript-eslint/default-param-last": "off",
-    // TypeScript causes lots of circular imports for types, which the plugin
-    // does not currently handle properly.
-    // see https://github.com/benmosher/eslint-plugin-import/issues/1453
-    "import/no-cycle": "off",
     // Allow i++ in for loops.
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     // We are targeting ES5 or higher.

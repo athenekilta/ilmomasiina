@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
 import { adminListEventAttributes, eventIdentity, userListEventAttributes } from '../event/attributes';
-import { quotaWithSignupCount } from '../quota';
+import { quotaWithSignupCount } from '../quotaWithSignups';
 
 /** Schema for an item of an event list from the admin API. */
 const adminEventListItemSchema = Type.Intersect([

@@ -1,12 +1,10 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { quota, quotaID } from '../quota';
+import { quotaID } from '../quota/attributes';
 import {
   editableSignupAttributes, editToken, publicEditableSignupAttributes, signupDynamicAttributes,
   signupID, signupIdentity,
 } from './attributes';
-
-export { signupID } from './attributes';
 
 /** Request body for creating a signup. */
 export const signupCreateBody = Type.Object({
@@ -38,16 +36,6 @@ export const adminSignupSchema = Type.Intersect([
   signupDynamicAttributes,
 ]);
 
-/** Schema for fetching a signup for editing. */
-export const signupForEdit = Type.Intersect([
-  signupIdentity,
-  editableSignupAttributes,
-  Type.Object({
-    quota,
-  }),
-  signupDynamicAttributes,
-]);
-
 /** Path parameters necessary to fetch and manipulate signups. */
 export const signupPathParams = Type.Object({
   id: signupID,
@@ -75,5 +63,3 @@ export type SignupUpdateResponse = Static<typeof signupUpdateResponse>;
 export type PublicSignupSchema = Static<typeof publicSignupSchema>;
 /** Schema for signups in event details from the admin API. */
 export type AdminSignupSchema = Static<typeof adminSignupSchema>;
-/** Schema for fetching a signup for editing. */
-export type SignupForEdit = Static<typeof signupForEdit>;

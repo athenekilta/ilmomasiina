@@ -1,7 +1,7 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { questionID } from '../question';
-import { quotaID } from '../quota';
+import { questionID } from '../question/attributes';
+import { quotaID } from '../quota/attributes';
 
 /** Response schema for a generic error. */
 export const errorResponse = Type.Object({

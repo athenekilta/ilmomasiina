@@ -3,7 +3,7 @@ import moment, { Moment } from 'moment';
 import {
   LOGGING_IN, LOGIN_FAILED, LOGIN_SUCCEEDED, RESET,
 } from './actionTypes';
-import { AuthActions, AuthState } from './types';
+import type { AuthActions, AuthState } from './types';
 
 const initialState: AuthState = {
   accessToken: undefined,

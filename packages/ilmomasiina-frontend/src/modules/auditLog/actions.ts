@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import type { AuditLogResponse, AuditLoqQuery } from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
-import { DispatchAction, GetState } from '../../store/types';
+import type { DispatchAction, GetState } from '../../store/types';
 import {
   AUDIT_LOG_LOAD_FAILED,
   AUDIT_LOG_LOADED,

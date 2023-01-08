@@ -1,6 +1,6 @@
 import type { UserID, UserInviteSchema, UserListResponse } from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
-import { DispatchAction, GetState } from '../../store/types';
+import type { DispatchAction, GetState } from '../../store/types';
 import {
   RESET,
   USER_CREATE_FAILED,

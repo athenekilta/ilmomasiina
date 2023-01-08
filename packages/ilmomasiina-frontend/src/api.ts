@@ -1,6 +1,6 @@
 import { ApiError, apiFetch, FetchOptions } from '@tietokilta/ilmomasiina-components';
 import { loginExpired } from './modules/auth/actions';
-import { DispatchAction } from './store/types';
+import type { DispatchAction } from './store/types';
 
 /** Wrapper for apiFetch that checks for Unauthenticated responses and dispatches a loginExpired
  * action if necessary.

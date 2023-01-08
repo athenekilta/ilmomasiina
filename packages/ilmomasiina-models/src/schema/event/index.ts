@@ -1,11 +1,8 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import {
-  question, questionCreate, questionUpdate,
-} from '../question';
-import {
-  adminQuotaWithSignups, quotaCreate, quotaUpdate, userQuotaWithSignups,
-} from '../quota';
+import { question, questionCreate, questionUpdate } from '../question';
+import { quotaCreate, quotaUpdate } from '../quota';
+import { adminQuotaWithSignups, userQuotaWithSignups } from '../quotaWithSignups';
 import {
   adminFullEventAttributes,
   eventDynamicAttributes,

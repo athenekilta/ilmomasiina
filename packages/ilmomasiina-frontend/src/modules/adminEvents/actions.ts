@@ -1,6 +1,6 @@
 import type { AdminEventListResponse, EventID } from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
-import { DispatchAction, GetState } from '../../store/types';
+import type { DispatchAction, GetState } from '../../store/types';
 import {
   EVENTS_LOAD_FAILED,
   EVENTS_LOADED,

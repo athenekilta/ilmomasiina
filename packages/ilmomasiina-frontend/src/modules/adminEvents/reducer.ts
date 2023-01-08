@@ -3,7 +3,7 @@ import {
   EVENTS_LOADED,
   RESET,
 } from './actionTypes';
-import { AdminEventsActions, AdminState } from './types';
+import type { AdminEventsActions, AdminState } from './types';
 
 const initialState: AdminState = {
   events: null,

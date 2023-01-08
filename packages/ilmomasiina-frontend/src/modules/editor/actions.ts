@@ -3,7 +3,7 @@ import type {
   AdminEventResponse, CategoriesResponse, CheckSlugResponse, EditConflictError, EventID, EventUpdateBody, SignupID,
 } from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
-import { DispatchAction, GetState } from '../../store/types';
+import type { DispatchAction, GetState } from '../../store/types';
 import {
   CATEGORIES_LOADED,
   EDIT_CONFLICT,
@@ -18,7 +18,13 @@ import {
   MOVE_TO_QUEUE_WARNING,
   RESET,
 } from './actionTypes';
-import { EditorEvent, EditorEventType } from './types';
+import type { EditorEvent } from './types';
+
+export enum EditorEventType {
+  ONLY_EVENT = 'event',
+  EVENT_WITH_SIGNUP = 'event+signup',
+  ONLY_SIGNUP = 'signup',
+}
 
 export const defaultEvent = (): EditorEvent => ({
   eventType: EditorEventType.EVENT_WITH_SIGNUP,

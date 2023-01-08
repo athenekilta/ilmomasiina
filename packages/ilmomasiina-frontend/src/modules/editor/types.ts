@@ -2,6 +2,7 @@ import type {
   AdminEventResponse, CheckSlugResponse, EditConflictError, EventUpdateBody,
   QuestionID, QuestionUpdate, QuotaID, QuotaUpdate,
 } from '@tietokilta/ilmomasiina-models';
+import type { EditorEventType } from './actions';
 
 export interface EditorState {
   event: AdminEventResponse | null;
@@ -26,12 +27,6 @@ export type EditorQuota = QuotaUpdate & {
   key: QuotaID;
 };
 
-export enum EditorEventType {
-  ONLY_EVENT = 'event',
-  EVENT_WITH_SIGNUP = 'event+signup',
-  ONLY_SIGNUP = 'signup',
-}
-
 /** Root form data type for event editor */
 export interface EditorEvent extends Omit<
 EventUpdateBody, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
@@ -50,3 +45,4 @@ EventUpdateBody, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStar
 }
 
 export type { EditorActions } from './actions';
+export { EditorEventType } from './actions';

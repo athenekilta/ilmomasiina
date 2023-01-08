@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
 import type { AdminLoginResponse } from '@tietokilta/ilmomasiina-models';
 import appPaths from '../../paths';
-import { DispatchAction } from '../../store/types';
+import type { DispatchAction } from '../../store/types';
 import {
   LOGGING_IN,
   LOGIN_FAILED,

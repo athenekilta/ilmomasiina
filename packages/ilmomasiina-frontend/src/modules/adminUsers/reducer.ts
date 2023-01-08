@@ -6,7 +6,7 @@ import {
   USERS_LOAD_FAILED,
   USERS_LOADED,
 } from './actionTypes';
-import { AdminUsersActions, AdminUsersState } from './types';
+import type { AdminUsersActions, AdminUsersState } from './types';
 
 const initialState: AdminUsersState = {
   users: null,
