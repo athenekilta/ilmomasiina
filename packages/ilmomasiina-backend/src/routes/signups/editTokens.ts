@@ -3,7 +3,7 @@ import { createHash, createHmac } from 'crypto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import type { SignupID, SignupPathParams } from '@tietokilta/ilmomasiina-models';
-import { EDIT_TOKEN_HEADER_NAME } from '@tietokilta/ilmomasiina-models';
+import { EDIT_TOKEN_HEADER } from '@tietokilta/ilmomasiina-models';
 import config from '../../config';
 
 function generateLegacyToken(signupId: SignupID): string {
@@ -39,7 +39,7 @@ export async function requireValidEditToken(
   reply: FastifyReply,
 ): Promise<void> {
   // Fastify converts header names into lower case
-  const headers = request.headers[EDIT_TOKEN_HEADER_NAME.toLowerCase()];
+  const headers = request.headers[EDIT_TOKEN_HEADER.toLowerCase()];
   const header = Array.isArray(headers) ? headers[0] : headers;
   if (verifyToken(request.params.id, header || '')) return;
 

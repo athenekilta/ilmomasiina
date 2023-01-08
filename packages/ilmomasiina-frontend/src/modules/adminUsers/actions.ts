@@ -1,4 +1,4 @@
-import type { UserID, UserInviteSchema, UserListSchema } from '@tietokilta/ilmomasiina-models';
+import type { UserID, UserInviteSchema, UserListResponse } from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
@@ -14,7 +14,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const usersLoaded = (users: UserListSchema) => <const>{
+export const usersLoaded = (users: UserListResponse) => <const>{
   type: USERS_LOADED,
   payload: users,
 };
@@ -47,7 +47,7 @@ export const getUsers = () => async (dispatch: DispatchAction, getState: GetStat
   const { accessToken } = getState().auth;
   try {
     const response = await adminApiFetch('admin/users', { accessToken }, dispatch);
-    dispatch(usersLoaded(response as UserListSchema));
+    dispatch(usersLoaded(response as UserListResponse));
   } catch (e) {
     dispatch(usersLoadFailed());
   }

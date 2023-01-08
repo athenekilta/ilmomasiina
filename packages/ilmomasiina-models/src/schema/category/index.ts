@@ -1,18 +1,14 @@
 import { Static, Type } from '@sinclair/typebox';
 
+/** Type of an event category. */
 export const eventCategory = Type.String({
-  title: 'category',
-  description: 'used to categorize Events',
+  description: 'Category tag for events.',
 });
 
-/** Describes the response body for GET categories endpoint */
-export const listCategoriesResponse = Type.Array(
-  eventCategory,
-  {
-    title: 'Category list',
-    description: 'a list of all categories',
-  },
-);
+/** Response schema for fetching event categories. */
+export const categoriesResponse = Type.Array(eventCategory);
 
-export type ListCategoriesResponse = Static<typeof listCategoriesResponse>;
+/** Type of an event category. */
 export type EventCategory = Static<typeof eventCategory>;
+/** Response schema for fetching event categories. */
+export type CategoriesResponse = Static<typeof categoriesResponse>;

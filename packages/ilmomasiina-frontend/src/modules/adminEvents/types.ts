@@ -1,7 +1,7 @@
-import type { AdminEventList } from '@tietokilta/ilmomasiina-models';
+import type { AdminEventListResponse } from '@tietokilta/ilmomasiina-models';
 
 export interface AdminState {
-  events: AdminEventList | null;
+  events: AdminEventListResponse | null;
   eventsLoadError: boolean;
 }
 

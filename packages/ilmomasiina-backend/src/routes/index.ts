@@ -29,8 +29,8 @@ import getSignupForEdit from './signups/getSignupForEdit';
 import updateSignup from './signups/updateSignup';
 
 const errorResponses = {
-  '4XX': schema.errorResponseSchema,
-  '5XX': schema.errorResponseSchema,
+  '4XX': schema.errorResponse,
+  '5XX': schema.errorResponse,
 };
 
 export interface RouteOptions {
@@ -56,7 +56,7 @@ async function setupAdminRoutes(
       schema: {
         response: {
           ...errorResponses,
-          200: schema.listCategoriesResponse,
+          200: schema.categoriesResponse,
         },
       },
     },
@@ -64,14 +64,14 @@ async function setupAdminRoutes(
   );
 
   /** Admin routes for events */
-  server.post<{ Body: schema.EventCreateSchema }>(
+  server.post<{ Body: schema.EventCreateBody }>(
     '/events',
     {
       schema: {
-        body: schema.eventCreateSchema,
+        body: schema.eventCreateBody,
         response: {
           ...errorResponses,
-          201: schema.adminEventSchema,
+          201: schema.adminEventResponse,
         },
       },
     },
@@ -85,7 +85,7 @@ async function setupAdminRoutes(
         querystring: schema.eventListQuery,
         response: {
           ...errorResponses,
-          200: schema.adminEventListSchema,
+          200: schema.adminEventListResponse,
         },
       },
     },
@@ -99,22 +99,23 @@ async function setupAdminRoutes(
         params: schema.adminEventPathParams,
         response: {
           ...errorResponses,
-          200: schema.adminEventSchema,
+          200: schema.adminEventResponse,
         },
       },
     },
     getEventDetailsForAdmin,
   );
 
-  server.patch<{ Params: schema.AdminEventPathParams, Body: schema.EventEditSchema }>(
+  server.patch<{ Params: schema.AdminEventPathParams, Body: schema.EventUpdateBody }>(
     '/events/:id',
     {
       schema: {
         params: schema.adminEventPathParams,
-        body: schema.eventEditSchema,
+        body: schema.eventUpdateBody,
         response: {
           ...errorResponses,
-          200: schema.adminEventSchema,
+          200: schema.adminEventResponse,
+          409: Type.Union([schema.editConflictError, schema.wouldMoveSignupsToQueueError]),
         },
       },
     },
@@ -187,7 +188,7 @@ async function setupAdminRoutes(
       schema: {
         response: {
           ...errorResponses,
-          200: schema.userListSchema,
+          200: schema.userListResponse,
         },
       },
     },
@@ -238,7 +239,7 @@ function setupPublicRoutes(
         params: schema.signupPathParams,
         response: {
           ...errorResponses,
-          200: schema.userSignupForEditSchema,
+          200: schema.signupForEditResponse,
         },
       },
       // Require valid edit token:
@@ -247,16 +248,15 @@ function setupPublicRoutes(
     getSignupForEdit,
   );
 
-  server.patch<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateSchema }>(
+  server.patch<{ Params: schema.SignupPathParams, Body: schema.SignupUpdateBody }>(
     '/signups/:id',
     {
       schema: {
         params: schema.signupPathParams,
-        body: schema.signupUpdateSchema,
+        body: schema.signupUpdateBody,
         response: {
           ...errorResponses,
-          409: Type.Union([schema.editConflictError, schema.wouldMoveSignupsToQueueError]),
-          200: schema.updatedSignupSchema,
+          200: schema.signupUpdateResponse,
         },
       },
       // Require valid edit token:
@@ -283,14 +283,14 @@ function setupPublicRoutes(
 
   // Admin session management routes
 
-  server.post<{ Body: schema.AdminLoginSchema }>(
+  server.post<{ Body: schema.AdminLoginBody }>(
     '/authentication',
     {
       schema: {
-        body: schema.adminLoginSchema,
+        body: schema.adminLoginBody,
         response: {
           ...errorResponses,
-          201: schema.adminSessionSchema,
+          201: schema.adminLoginResponse,
         },
       },
     },
@@ -308,7 +308,7 @@ function setupPublicRoutes(
         querystring: schema.eventListQuery,
         response: {
           ...errorResponses,
-          200: schema.userEventListSchema,
+          200: schema.userEventListResponse,
         },
       },
     },
@@ -322,7 +322,7 @@ function setupPublicRoutes(
         params: schema.userEventPathParams,
         response: {
           ...errorResponses,
-          200: schema.userEventSchema,
+          200: schema.userEventResponse,
         },
       },
     },
@@ -330,14 +330,14 @@ function setupPublicRoutes(
   );
 
   // Public route for signup creation
-  server.post<{ Body: schema.SignupCreateSchema }>(
+  server.post<{ Body: schema.SignupCreateBody }>(
     '/signups',
     {
       schema: {
-        body: schema.signupCreateSchema,
+        body: schema.signupCreateBody,
         response: {
           ...errorResponses,
-          201: schema.createdSignupSchema,
+          201: schema.signupCreateResponse,
         },
       },
     },

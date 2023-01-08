@@ -1,7 +1,7 @@
-import type { UserListSchema } from '@tietokilta/ilmomasiina-models';
+import type { UserListResponse } from '@tietokilta/ilmomasiina-models';
 
 export interface AdminUsersState {
-  users: UserListSchema | null;
+  users: UserListResponse | null;
   usersLoadError: boolean;
   userCreating: boolean;
 }

@@ -1,10 +1,10 @@
 import type {
-  AdminEventSchema, CheckSlugResponse, EditConflictError, EventEditSchema,
-  QuestionID, QuestionUpdateSchema, QuotaID, QuotaUpdateSchema,
+  AdminEventResponse, CheckSlugResponse, EditConflictError, EventUpdateBody,
+  QuestionID, QuestionUpdate, QuotaID, QuotaUpdate,
 } from '@tietokilta/ilmomasiina-models';
 
 export interface EditorState {
-  event: AdminEventSchema | null;
+  event: AdminEventResponse | null;
   isNew: boolean;
   loadError: boolean;
   slugAvailability: null | 'checking' | CheckSlugResponse;
@@ -16,13 +16,13 @@ export interface EditorState {
 }
 
 /** Question type for event editor */
-export interface EditorQuestion extends Omit<QuestionUpdateSchema, 'options'> {
+export interface EditorQuestion extends Omit<QuestionUpdate, 'options'> {
   key: QuestionID;
   options: string[];
 }
 
 /** Quota type for event editor */
-export type EditorQuota = QuotaUpdateSchema & {
+export type EditorQuota = QuotaUpdate & {
   key: QuotaID;
 };
 
@@ -34,7 +34,7 @@ export enum EditorEventType {
 
 /** Root form data type for event editor */
 export interface EditorEvent extends Omit<
-EventEditSchema, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
+EventUpdateBody, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
 > {
   eventType: EditorEventType;
 

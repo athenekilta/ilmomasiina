@@ -1,4 +1,4 @@
-import type { AdminEventList, EventID } from '@tietokilta/ilmomasiina-models';
+import type { AdminEventListResponse, EventID } from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
 import {
@@ -11,7 +11,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const eventsLoaded = (events: AdminEventList) => <const>{
+export const eventsLoaded = (events: AdminEventListResponse) => <const>{
   type: EVENTS_LOADED,
   payload: events,
 };
@@ -29,7 +29,7 @@ export const getAdminEvents = () => async (dispatch: DispatchAction, getState: G
   const { accessToken } = getState().auth;
   try {
     const response = await adminApiFetch('admin/events', { accessToken }, dispatch);
-    dispatch(eventsLoaded(response as AdminEventList));
+    dispatch(eventsLoaded(response as AdminEventListResponse));
   } catch (e) {
     dispatch(eventsLoadFailed());
   }

@@ -1,7 +1,6 @@
 import { ApiError } from '@tietokilta/ilmomasiina-components';
 import type {
-  AdminEventSchema, CheckSlugResponse, EditConflictError, EventEditSchema,
-  EventID, ListCategoriesResponse, SignupID,
+  AdminEventResponse, CategoriesResponse, CheckSlugResponse, EditConflictError, EventID, EventUpdateBody, SignupID,
 } from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
 import { DispatchAction, GetState } from '../../store/types';
@@ -64,7 +63,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const loaded = (event: AdminEventSchema) => <const>{
+export const loaded = (event: AdminEventResponse) => <const>{
   type: EVENT_LOADED,
   payload: {
     event,
@@ -141,7 +140,7 @@ export type EditorActions =
   | ReturnType<typeof editConflictDismissed>
   | ReturnType<typeof categoriesLoaded>;
 
-function eventType(event: AdminEventSchema): EditorEventType {
+function eventType(event: AdminEventResponse): EditorEventType {
   if (event.date === null) {
     return EditorEventType.ONLY_SIGNUP;
   }
@@ -151,7 +150,7 @@ function eventType(event: AdminEventSchema): EditorEventType {
   return EditorEventType.EVENT_WITH_SIGNUP;
 }
 
-export const serverEventToEditor = (event: AdminEventSchema): EditorEvent => ({
+export const serverEventToEditor = (event: AdminEventResponse): EditorEvent => ({
   ...event,
   eventType: eventType(event),
   date: event.date ? new Date(event.date) : undefined,
@@ -170,7 +169,7 @@ export const serverEventToEditor = (event: AdminEventSchema): EditorEvent => ({
   })),
 });
 
-const editorEventToServer = (form: EditorEvent): EventEditSchema => ({
+const editorEventToServer = (form: EditorEvent): EventUpdateBody => ({
   ...form,
   date: form.eventType === EditorEventType.ONLY_SIGNUP ? null : form.date?.toISOString() ?? null,
   endDate: form.eventType === EditorEventType.ONLY_SIGNUP ? null : form.endDate?.toISOString() ?? null,
@@ -190,7 +189,7 @@ export const getEvent = (id: EventID) => async (dispatch: DispatchAction, getSta
   const { accessToken } = getState().auth;
 
   try {
-    const response = await adminApiFetch(`admin/events/${id}`, { accessToken }, dispatch) as AdminEventSchema;
+    const response = await adminApiFetch(`admin/events/${id}`, { accessToken }, dispatch) as AdminEventResponse;
     dispatch(loaded(response));
   } catch (e) {
     dispatch(loadFailed());
@@ -219,7 +218,7 @@ export const loadCategories = () => async (dispatch: DispatchAction, getState: G
   const { accessToken } = getState().auth;
 
   try {
-    const response = await adminApiFetch('admin/categories', { accessToken }, dispatch) as ListCategoriesResponse;
+    const response = await adminApiFetch('admin/categories', { accessToken }, dispatch) as CategoriesResponse;
     dispatch(categoriesLoaded(response));
   } catch (e) {
     dispatch(categoriesLoaded([]));
@@ -238,7 +237,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
       accessToken,
       method: 'POST',
       body: cleaned,
-    }, dispatch) as AdminEventSchema;
+    }, dispatch) as AdminEventResponse;
     dispatch(loaded(response));
     return response;
   } catch (e) {
@@ -265,7 +264,7 @@ export const publishEventUpdate = (
         ...cleaned,
         moveSignupsToQueue,
       },
-    }, dispatch) as AdminEventSchema;
+    }, dispatch) as AdminEventResponse;
     dispatch(loaded(response));
     return response;
   } catch (e) {

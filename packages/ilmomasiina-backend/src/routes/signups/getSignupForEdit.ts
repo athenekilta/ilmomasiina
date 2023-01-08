@@ -1,19 +1,19 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { NotFound } from 'http-errors';
 
-import type { SignupPathParams, UserSignupForEditSchema } from '@tietokilta/ilmomasiina-models';
+import type { SignupForEditResponse, SignupPathParams } from '@tietokilta/ilmomasiina-models';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { nullsToUndef, stringifyDates } from '../utils';
+import { stringifyDates } from '../utils';
 
 /** Requires editTokenVerification */
 export default async function getSignupForEdit(
   request: FastifyRequest<{ Params: SignupPathParams }>,
   reply: FastifyReply,
-): Promise<UserSignupForEditSchema> {
+): Promise<SignupForEditResponse> {
   const signup = await Signup.scope('active').findByPk(request.params.id, {
     include: [
       {
@@ -47,11 +47,8 @@ export default async function getSignupForEdit(
   const response = {
     signup: {
       ...stringifyDates(signup.get({ plain: true })),
+      confirmed: Boolean(signup.confirmedAt),
       status: signup.status,
-      firstName: nullsToUndef(signup.firstName),
-      lastName: nullsToUndef(signup.lastName),
-      email: nullsToUndef(signup.email),
-      confirmed: !!signup.confirmedAt,
       answers: signup.answers!,
       quota: signup.quota!,
     },

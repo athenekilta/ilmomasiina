@@ -1,65 +1,53 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import * as attributes from './attributes';
+import { AuditEvent } from '../../enum';
+import { auditLogItemAttributes } from './attributes';
 
-/** Describes query params used with audit log query endpoint */
+/** Query parameters applicable to the audit log API. */
 export const auditLoqQuery = Type.Object({
   user: Type.Optional(Type.String({
-    title: 'filter events by username',
+    description: 'Filter events by username.',
   })),
   ip: Type.Optional(Type.String({
-    title: 'filter events by IP address',
+    description: 'Filter events by IP address.',
   })),
   action: Type.Optional(
     Type.Array( // TODO: Requires Ajv to be in coerce array mode
-      attributes.auditEventAction,
-      {
-        title: 'filter events by actions',
-      },
+      Type.Enum(
+        AuditEvent,
+        { description: 'Filter events by actions.' },
+      ),
     ),
   ),
   event: Type.Optional(Type.String({
-    title: 'filter events by event name or ID',
+    description: 'Filter events by event name or ID.',
   })),
   signup: Type.Optional(Type.String({
-    title: 'filter events by signup name or ID',
+    description: 'Filter events by signup name or ID.',
   })),
   limit: Type.Optional(Type.Integer({
-    title: 'maximum amount of log entries to return',
     minimum: 0,
     default: Number.MAX_SAFE_INTEGER, // TODO: Better limits?
+    description: 'Maximum number of log events to return.',
   })),
   offset: Type.Optional(Type.Integer({
-    title: 'how many (matched) log entries to exclude at the beginning',
     minimum: 0,
     default: 0,
+    description: 'Number of log events to skip at the start of results.',
   })),
 });
 
-export const auditLogItemSchema = Type.Intersect([
-  attributes.auditLogItemAttributes,
-  Type.Object({
-    createdAt: Type.String({
-      format: 'date-time',
-      title: 'timestamp for audit event',
-    }),
-  }),
-]);
-
-/** Describes the response body for audit log GET endpoint */
+/** Response schema for fetching audit logs. */
 export const auditLogResponse = Type.Object({
-  rows: Type.Array(
-    auditLogItemSchema,
-    {
-      title: 'found audit log items',
-    },
-  ),
+  rows: Type.Array(auditLogItemAttributes),
   count: Type.Integer({
-    title: 'amount of all found rows',
-    description: 'also counts those not included in this response due to offset & limit parameters',
+    description: 'Total number of log events found, including those omitted due to the offset/limit parameters.',
   }),
 });
 
+/** Query parameters applicable to the audit log API. */
 export type AuditLoqQuery = Static<typeof auditLoqQuery>;
-export type AuditLogItemSchema = Static<typeof auditLogItemSchema>;
+/** Schema for an audit log event. */
+export type AuditLogItemSchema = Static<typeof auditLogItemAttributes>;
+/** Response schema for fetching a audit logs. */
 export type AuditLogResponse = Static<typeof auditLogResponse>;

@@ -2,7 +2,7 @@ import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 
 import { apiFetch } from '@tietokilta/ilmomasiina-components';
-import type { AdminSessionSchema } from '@tietokilta/ilmomasiina-models';
+import type { AdminLoginResponse } from '@tietokilta/ilmomasiina-models';
 import appPaths from '../../paths';
 import { DispatchAction } from '../../store/types';
 import {
@@ -16,7 +16,7 @@ export const loggingIn = () => <const>{
   type: LOGGING_IN,
 };
 
-export const loginSucceeded = (payload: AdminSessionSchema) => <const>{
+export const loginSucceeded = (payload: AdminLoginResponse) => <const>{
   type: LOGIN_SUCCEEDED,
   payload,
 };
@@ -45,7 +45,7 @@ export const login = (email: string, password: string) => async (dispatch: Dispa
         email,
         password,
       },
-    }) as AdminSessionSchema;
+    }) as AdminLoginResponse;
     dispatch(loginSucceeded(sessionResponse));
     dispatch(push(appPaths.adminEventsList));
     return true;

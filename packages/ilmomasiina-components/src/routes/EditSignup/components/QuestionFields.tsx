@@ -7,7 +7,7 @@ import reject from 'lodash/reject';
 import without from 'lodash/without';
 import { Form } from 'react-bootstrap';
 
-import type { Question, SignupUpdateSchema } from '@tietokilta/ilmomasiina-models';
+import type { Question, SignupUpdateBody } from '@tietokilta/ilmomasiina-models';
 import { QuestionType } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 
@@ -19,7 +19,7 @@ type Props = {
 
 const QuestionFields = ({ name, questions, disabled }: Props) => {
   // TODO: add formik-based validation
-  const [{ value }, , { setValue }] = useField<SignupUpdateSchema['answers']>(name);
+  const [{ value }, , { setValue }] = useField<SignupUpdateBody['answers']>(name);
   return (
     <>
       {questions.map((question) => {

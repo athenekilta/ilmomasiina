@@ -1,244 +1,130 @@
 import { Type } from '@sinclair/typebox';
 
+import { Nullable } from '../utils';
+
 export const eventSlug = Type.String({
-  title: 'event slug',
-  description: 'Used in event url',
+  description: 'Event slug, used for accessing the event by URL.',
 });
 
+/** Event ID type. Randomly generated alphanumeric string. */
 export const eventID = Type.String({
-  title: 'event ID',
+  title: 'EventID',
+  description: 'Event ID. Randomly generated alphanumeric string.',
 });
 
+/** Non-editable identity attributes for events. */
 export const eventIdentity = Type.Object({
   id: eventID,
 });
 
-/** Event attributes that are included in event lists for normal users */
-export const userEventAttributesBasic = Type.Object({
+/** Event attributes that are included in public event lists. */
+export const userListEventAttributes = Type.Object({
   title: Type.String({
-    title: 'Event title',
-    description: 'title for the event',
+    description: 'Event title.',
   }),
   slug: eventSlug,
-  date: Type.Union(
-    [
-      Type.String({
-        title: 'start date',
-        format: 'date-time',
-      }),
-      Type.Null({
-        title: 'no start date',
-      }),
-    ],
+  date: Nullable(
+    Type.String({ format: 'date-time' }),
     {
-      title: 'event start date',
-      description: 'Consider as a start date if endDate is defined',
+      description: 'Event start date. Considered to be the start date if endDate is also set. If null, '
+        + 'the event is signup-only.',
     },
   ),
-  endDate: Type.Union(
-    [
-      Type.String({
-        title: 'end date',
-        format: 'date-time',
-      }),
-      Type.Null({
-        title: 'no end date',
-      }),
-    ],
-    {
-      title: 'event end date',
-    },
+  endDate: Nullable(
+    Type.String({ format: 'date-time' }),
+    { description: 'Event end date. If null, the event will not appear in iCalendar exports.' },
   ),
-  registrationStartDate: Type.Union(
-    [
-      Type.String({
-        title: 'registration start date',
-        format: 'date-time',
-      }),
-      Type.Null({
-        title: 'no registration start date',
-      }),
-    ],
-    {
-      title: 'registration start date',
-      description: 'time when the registration starts',
-    },
+  registrationStartDate: Nullable(
+    Type.String({ format: 'date-time' }),
+    { description: 'Event signup opening date. If null, the event does not have a signup.' },
   ),
-  registrationEndDate: Type.Union(
-    [
-      Type.String({
-        title: 'registration end date',
-        format: 'date-time',
-      }),
-      Type.Null({
-        title: 'no registration end date',
-      }),
-    ],
-    {
-      title: 'registration end date',
-      description: 'time when the registration ends',
-    },
+  registrationEndDate: Nullable(
+    Type.String({ format: 'date-time' }),
+    { description: 'Event signup closing date.' },
   ),
   openQuotaSize: Type.Integer({
-    title: 'size limit for open quota',
-    description: 'this quota will be populated by signups not fitting into their primary quota ',
+    description: 'The size of the open quota, which will be filled with signups overflowing their dedicated quota.',
   }),
-  category: Type.Optional(Type.String({
-    title: 'event category',
-    description: 'A short category label',
-  })),
+  category: Type.String({
+    description: 'Category tag for the event. Can be used for filtering.',
+  }),
+  description: Nullable(
+    Type.String(),
+    { description: 'Description for the event. Supports Markdown.' },
+  ),
+  price: Nullable(
+    Type.String(),
+    { description: 'Free-form pricing information for the event.' },
+  ),
+  location: Nullable(
+    Type.String(),
+    { description: 'Free-form location information for the event.' },
+  ),
+  webpageUrl: Nullable(
+    Type.String(),
+    { description: 'Link to an external event webpage.' },
+  ),
+  facebookUrl: Nullable(
+    Type.String(),
+    { description: 'Link to a Facebook page for the event.' },
+  ),
+  signupsPublic: Type.Boolean({
+    description: 'Whether signups should be shown to all users.',
+  }),
 });
 
-/** Event attributes that are included only per event for normal users */
-export const userEventAttributesExtended = Type.Intersect(
+/** Event attributes that are included in public event details. */
+export const userFullEventAttributes = Type.Intersect(
   [
-    userEventAttributesBasic,
+    userListEventAttributes,
     Type.Object({
-      description: Type.Union(
-        [
-          Type.Null({
-            title: 'no description',
-          }),
-          Type.String({
-            title: 'description string',
-          }),
-        ],
-        {
-          title: 'event description',
-          description: 'Description text to be shown in event page. Supports basic features of Markdown.',
-        },
-      ),
-      price: Type.Union(
-        [
-          Type.String({
-            title: 'price for the event',
-          }),
-          Type.Null({
-            title: 'no price information',
-          }),
-        ],
-        {
-          description: 'Short pricing information for the event',
-        },
-      ),
-      location: Type.Union(
-        [
-          Type.String({
-            title: 'location',
-          }),
-          Type.Null({
-            title: 'no location',
-          }),
-        ],
-        {
-          title: 'event location',
-          description: 'Short description about the location of the event',
-        },
-      ),
-      webpageUrl: Type.Union(
-        [
-          Type.String({
-            title: 'URL',
-          }),
-          Type.Null({
-            title: 'no external webpage',
-          }),
-        ],
-        {
-          title: 'external webpage URL',
-          description: 'Provides a link to an external event webpage',
-        },
-      ),
-      facebookUrl: Type.Union(
-        [
-          Type.String({
-            title: 'URL',
-          }),
-          Type.Null({
-            title: 'no facebook event',
-          }),
-        ],
-        {
-          title: 'facebook event URL',
-          description: 'Provides a facebook event link for the event',
-        },
-      ),
-      signupsPublic: Type.Boolean({
-        title: 'show signups',
-        description: 'should the signups to be shown for all users',
-      }),
       nameQuestion: Type.Boolean({
-        title: 'ask name for signup',
+        description: 'Whether signups should contain a name field.',
       }),
       emailQuestion: Type.Boolean({
-        title: 'ask email for signup',
+        description: 'Whether signups should contain an email field. Also enables confirmation emails.',
       }),
     }),
   ],
 );
 
-/** Event attributes that are included in event lists for admins */
-export const adminEventAttributesBasic = Type.Intersect(
+/** Event attributes that are included for admins in event lists. */
+export const adminListEventAttributes = Type.Intersect(
   [
-    userEventAttributesBasic,
+    userListEventAttributes,
     Type.Object({
       draft: Type.Boolean({
-        title: 'is draft',
-        description: 'Draft events are not yet published and are shown only for signed-in admins.',
+        description: 'Whether the event is a draft, shown only to signed-in admins.',
       }),
       listed: Type.Boolean({
-        title: 'visibility in the event list',
-        description: 'Listed events are publicly visible in the front page of Ilmomasiina.'
-          + ' Unlisted events will be accessible only using a direct link',
+        description: 'Whether the event is publicly visible on the front page of Ilmomasiina.'
+          + ' Unlisted events are only accessible with a direct link',
       }),
     }),
   ],
 );
 
-/** Event attributes that are included only per event for admins */
-export const adminEventAttributesExtended = Type.Intersect(
+/** Event attributes that are included for admins in event details. */
+export const adminFullEventAttributes = Type.Intersect(
   [
-    userEventAttributesExtended,
-    adminEventAttributesBasic,
+    userFullEventAttributes,
+    adminListEventAttributes,
     Type.Object({
-      verificationEmail: Type.Union(
-        [
-          Type.String({
-            title: 'confirmation email text',
-          }),
-          Type.Null({
-            title: 'no verification email',
-          }),
-        ],
-        {
-          title: 'email to send after a successful signup',
-        },
+      verificationEmail: Nullable(
+        Type.String(),
+        { description: 'Custom message for the signup confirmation email.' },
       ),
-      updatedAt: Type.String({
-        title: 'last updated timestamp',
-        format: 'date-time',
-      }),
     }),
   ],
 );
 
-/** Event attributes that are calculated by the system and thus not directly editable via the API */
-export const eventExtraInformation = Type.Object({
-  millisTillOpening: Type.Union(
-    [
-      Type.Integer({
-        title: 'remaining time in milliseconds',
-        description: 'in milliseconds',
-      }),
-      Type.Null({
-        title: 'signup is already opened or closed',
-      }),
-    ],
-    {
-      title: 'time remaining till registration opening',
-    },
+/** Event attributes that are dynamically calculated in public event details. */
+export const eventDynamicAttributes = Type.Object({
+  millisTillOpening: Nullable(
+    Type.Integer(),
+    { description: 'Time in ms until signup opens. If null, the signup will not open in the future.' },
   ),
   registrationClosed: Type.Boolean({
-    title: 'is the registration closed',
+    description: 'Whether the signup has closed.',
   }),
 });

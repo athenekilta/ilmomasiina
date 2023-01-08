@@ -1,82 +1,51 @@
 import { Type } from '@sinclair/typebox';
 
 import { AuditEvent } from '../../enum';
+import { Nullable } from '../utils';
 
-/** Describes action of the audit event */
-export const auditEventAction = Type.Enum(
-  AuditEvent,
-  {
-    title: 'logged action type',
-  },
-);
+/* eslint-disable import/prefer-default-export */
 
-/** All attributes of audit log item */
+/** Schema for an audit log item. */
 export const auditLogItemAttributes = Type.Object({
   id: Type.Integer({
     title: 'audit log event ID',
   }),
-  user: Type.Union([
-    Type.String({
-      title: 'username',
-    }),
-    Type.Null({
-      title: 'no users related to this log item',
-    }),
-  ], {
-    title: 'user related to this log event',
-  }),
+  user: Nullable(
+    Type.String(),
+    { description: 'Email of the user causing the log event.' },
+  ),
   ipAddress: Type.String({
-    title: 'IP address of where the request came from',
+    description: 'IP address causing the log event.',
   }),
-  action: auditEventAction,
-  eventId: Type.Union([
-    Type.String({
-      title: 'event ID',
-    }),
-    Type.Null({
-      title: 'no events related to this log item',
-    }),
-  ], {
-    title: 'ID of the event related to this log item',
-  }),
-  eventName: Type.Union([
-    Type.String({
-      title: 'event name',
-    }),
-    Type.Null({
-      title: 'no events related to this log item',
-    }),
-  ], {
-    title: 'name of the event related to this log item',
-  }),
-  signupId: Type.Union([
-    Type.String({
-      title: 'signup ID',
-    }),
-    Type.Null({
-      title: 'no signups related to this log item',
-    }),
-  ], {
-    title: 'ID of the signup related to this log item',
-  }),
-  signupName: Type.Union([
-    Type.String({
-      title: 'signup name',
-    }),
-    Type.Null({
-      title: 'no signups related to this log item',
-    }),
-  ], {
-    title: 'name of the signup related to this log item',
-  }),
-  extra: Type.Union([
-    Type.String({
-      title: 'additional info',
-    }),
-    Type.Null({
-      title: 'no additional info',
-    }),
-  ], {
-    title: 'additional information',
+  action: Type.Enum(
+    AuditEvent,
+    {
+      title: 'AuditEvent',
+      description: 'The type of action logged.',
+    },
+  ),
+  eventId: Nullable(
+    Type.String(),
+    { description: 'ID of the event related to this log event.' },
+  ),
+  eventName: Nullable(
+    Type.String(),
+    { description: 'Title of the event related to this log event.' },
+  ),
+  signupId: Nullable(
+    Type.String(),
+    { description: 'ID of the signup related to this log event.' },
+  ),
+  signupName: Nullable(
+    Type.String(),
+    { description: 'Name of the signup related to this log event.' },
+  ),
+  extra: Nullable(
+    Type.String(),
+    { description: 'Additional information related to this log event as JSON.' },
+  ),
+  createdAt: Type.String({
+    format: 'date-time',
+    description: 'Timestamp for the log event.',
   }),
 });

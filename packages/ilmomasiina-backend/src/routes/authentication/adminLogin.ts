@@ -1,16 +1,16 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { HttpError, Unauthorized } from 'http-errors';
 
-import type { AdminLoginSchema, AdminSessionSchema } from '@tietokilta/ilmomasiina-models';
+import type { AdminLoginBody, AdminLoginResponse } from '@tietokilta/ilmomasiina-models';
 import AdminAuthSession, { AdminTokenData } from '../../authentication/adminAuthSession';
 import AdminPasswordAuth from '../../authentication/adminPasswordAuth';
 import { User } from '../../models/user';
 
 export function adminLogin(session: AdminAuthSession) {
   return async (
-    request: FastifyRequest<{ Body: AdminLoginSchema }>,
+    request: FastifyRequest<{ Body: AdminLoginBody }>,
     reply: FastifyReply,
-  ): Promise<AdminSessionSchema | void> => {
+  ): Promise<AdminLoginResponse | void> => {
     // Verify user
     const user = await User.findOne({
       where: { email: request.body.email },
@@ -33,9 +33,9 @@ export function adminLogin(session: AdminAuthSession) {
 
 export function renewAdminToken(session: AdminAuthSession) {
   return async (
-    request: FastifyRequest<{ Body: AdminLoginSchema }>,
+    request: FastifyRequest<{ Body: AdminLoginBody }>,
     reply: FastifyReply,
-  ): Promise<AdminSessionSchema | void> => {
+  ): Promise<AdminLoginResponse | void> => {
     // Verify existing token
     const sessionData = session.verifySession(request);
 

@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { Forbidden, NotFound } from 'http-errors';
 
-import type { CreatedSignupSchema, SignupCreateSchema } from '@tietokilta/ilmomasiina-models';
+import type { SignupCreateBody, SignupCreateResponse } from '@tietokilta/ilmomasiina-models';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
@@ -18,9 +18,9 @@ export const signupsAllowed = (event: Event) => {
 };
 
 export default async function createSignup(
-  request: FastifyRequest<{ Body: SignupCreateSchema }>,
+  request: FastifyRequest<{ Body: SignupCreateBody }>,
   response: FastifyReply,
-): Promise<CreatedSignupSchema> {
+): Promise<SignupCreateResponse> {
   // Find the given quota and event.
   const quota = await Quota.findByPk(request.body.quotaId, {
     attributes: [],

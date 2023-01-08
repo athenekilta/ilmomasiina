@@ -2,7 +2,7 @@ import every from 'lodash/every';
 import sumBy from 'lodash/sumBy';
 import moment, { Moment } from 'moment-timezone';
 
-import type { EventSlug, UserEventList } from '@tietokilta/ilmomasiina-models';
+import type { EventSlug, UserEventListItem, UserEventListResponse } from '@tietokilta/ilmomasiina-models';
 import { signupState, SignupStateInfo } from './signupStateText';
 import { OPENQUOTA, WAITLIST } from './signupUtils';
 
@@ -31,7 +31,7 @@ export type TableRow = {
 };
 
 /** Converts an event to rows to be shown in the event list. */
-export function eventToRows(event: UserEventList[number], { compact }: EventTableOptions = {}) {
+export function eventToRows(event: UserEventListItem, { compact }: EventTableOptions = {}) {
   const {
     slug, title, date, registrationStartDate, registrationEndDate, quotas, openQuotaSize,
   } = event;
@@ -89,6 +89,6 @@ export function eventToRows(event: UserEventList[number], { compact }: EventTabl
 }
 
 /** Converts a list of events to a flat list of rows to be shown in the event list. */
-export function eventsToRows(events: UserEventList, options?: EventTableOptions) {
+export function eventsToRows(events: UserEventListResponse, options?: EventTableOptions) {
   return events.flatMap((event) => eventToRows(event, options));
 }

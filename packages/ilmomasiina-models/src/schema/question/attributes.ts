@@ -1,48 +1,35 @@
 import { Type } from '@sinclair/typebox';
 
 import { QuestionType } from '../../enum';
+import { Nullable } from '../utils';
 
-/** Unique identifier for question */
 export const questionID = Type.String({
-  title: 'question ID',
+  title: 'QuestionID',
+  description: 'Question ID. Randomly generated alphanumeric string.',
 });
 
-/** Non-editable identity attributes of question */
+/** Non-editable identity attributes of a question. */
 export const questionIdentity = Type.Object({
   id: questionID,
 });
 
-/** Editable attributes of question */
+/** Editable attributes of a question. */
 export const questionAttributes = Type.Object({
   question: Type.String({
-    title: 'question to ask',
+    description: 'The question shown to attendees.',
   }),
   type: Type.Enum(QuestionType, {
-    title: 'question type',
-    description: 'describes the type of the question',
+    title: 'QuestionType',
+    description: 'The type of answer expected.',
   }),
-  options: Type.Union([
-    Type.Array(
-      Type.String({
-        title: 'selectable option',
-      }),
-      {
-        title: 'selectable options',
-        description: 'use this for question `select` questions',
-      },
-    ),
-    Type.Null({
-      title: 'no selections',
-      description: 'use this for question types other than `select`',
-    }),
-  ], {
-    title: 'question options',
-    description: 'when the type is `select`, options defines the selectable items',
-  }),
+  options: Nullable(
+    Type.Array(Type.String()),
+    { description: 'For select or checkbox questions, the options available.' },
+  ),
   required: Type.Boolean({
-    title: 'require answer to this question',
+    description: 'Whether to require an answer to this question from all attendees.',
   }),
   public: Type.Boolean({
-    title: 'are the answers for this question public',
+    description: 'Whether to show the answers to this question publicly.',
   }),
 });

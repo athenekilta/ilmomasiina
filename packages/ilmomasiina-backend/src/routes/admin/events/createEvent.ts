@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { CreationAttributes } from 'sequelize';
 
-import type { AdminEventSchema, EventCreateSchema } from '@tietokilta/ilmomasiina-models';
+import type { AdminEventResponse, EventCreateBody } from '@tietokilta/ilmomasiina-models';
 import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
@@ -10,9 +10,9 @@ import { eventDetailsForAdmin } from '../../events/getEventDetails';
 import { stringifyDates, toDate } from '../../utils';
 
 export default async function createEvent(
-  request: FastifyRequest<{ Body: EventCreateSchema }>,
+  request: FastifyRequest<{ Body: EventCreateBody }>,
   response: FastifyReply,
-): Promise<AdminEventSchema> {
+): Promise<AdminEventResponse> {
   // Create the event with relations - Sequelize will handle validation
   const event = await Event.sequelize!.transaction(async (transaction) => {
     const created = await Event.create(

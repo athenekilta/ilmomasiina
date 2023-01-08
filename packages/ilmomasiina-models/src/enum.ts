@@ -1,9 +1,11 @@
+/** Possible statuses for a signup. */
 export enum SignupStatus {
   IN_QUOTA = 'in-quota',
   IN_OPEN_QUOTA = 'in-open',
   IN_QUEUE = 'in-queue',
 }
 
+/** Possible question types. */
 export enum QuestionType {
   TEXT = 'text',
   TEXT_AREA = 'textarea',
@@ -12,7 +14,7 @@ export enum QuestionType {
   CHECKBOX = 'checkbox',
 }
 
-/** Describes all possible actions that can be logged into audit log */
+/** Event types that can be audit logged. */
 export enum AuditEvent {
   CREATE_EVENT = 'event.create',
   DELETE_EVENT = 'event.delete',

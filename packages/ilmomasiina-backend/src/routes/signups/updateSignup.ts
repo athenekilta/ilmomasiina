@@ -2,21 +2,20 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { BadRequest, Forbidden, NotFound } from 'http-errors';
 import { Transaction } from 'sequelize';
 
-import type { SignupPathParams, SignupUpdateSchema, UpdatedSignupSchema } from '@tietokilta/ilmomasiina-models';
+import type { SignupPathParams, SignupUpdateBody, SignupUpdateResponse } from '@tietokilta/ilmomasiina-models';
 import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import sendSignupConfirmationEmail from '../../mail/signupConfirmation';
 import { Answer } from '../../models/answer';
 import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Signup } from '../../models/signup';
-import { stringifyDates } from '../utils';
 import { signupsAllowed } from './createNewSignup';
 
 /** Requires editTokenVerification */
 export default async function updateSignup(
-  request: FastifyRequest<{ Params: SignupPathParams, Body: SignupUpdateSchema }>,
+  request: FastifyRequest<{ Params: SignupPathParams, Body: SignupUpdateBody }>,
   reply: FastifyReply,
-): Promise<UpdatedSignupSchema> {
+): Promise<SignupUpdateResponse> {
   const updatedSignup = await Signup.sequelize!.transaction(async (transaction) => {
     // Retrieve event data and lock the row for editing
     const signup = await Signup.scope('active').findByPk(request.params.id, {
@@ -153,11 +152,8 @@ export default async function updateSignup(
   await sendSignupConfirmationEmail(updatedSignup);
 
   // Return data
-  const res = stringifyDates({
-    id: updatedSignup.id,
-    confirmedAt: updatedSignup.confirmedAt!,
-  });
-
   reply.status(200);
-  return res;
+  return {
+    id: updatedSignup.id,
+  };
 }

@@ -1,74 +1,69 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import * as attributes from './attributes';
+import { adminSignupSchema, publicSignupSchema } from '../signup';
+import { quotaAttributes, quotaID, quotaIdentity } from './attributes';
 
 export { quotaID } from './attributes';
 
-/** Describes a schema for creating a single quota for event */
-const quotaCreate = Type.Intersect([
-  attributes.quotaAttributes,
+/** Schema for a quota. */
+export const quota = Type.Intersect([
+  quotaIdentity,
+  quotaAttributes,
 ]);
 
-/** Defines a field for signupCount */
-const signupCount = Type.Object({
-  signupCount: Type.Integer({
-    title: 'total number of signups in this quota',
-  }),
-});
+/** Schema for creating a quota. */
+export const quotaCreate = quotaAttributes;
 
-/** Describes a schema for a single quota */
-export const quotaSchema = Type.Intersect(
+/** Schema for updating a quota. */
+export const quotaUpdate = Type.Intersect(
   [
-    attributes.quotaIdentity,
-    attributes.quotaAttributes,
-  ],
-);
-
-/** Describes a schema for a single quota, including a count of its signups */
-export const quotaWithSignupCount = Type.Intersect(
-  [
-    quotaSchema,
-    signupCount,
-  ],
-);
-
-/** Describes a schema for updating a quota */
-const quotaUpdateSchema = Type.Intersect(
-  [
+    Type.Partial(quotaIdentity),
     quotaCreate,
-    Type.Partial(attributes.quotaIdentity),
   ],
-  {
-    title: 'updated quota',
-    description: 'provide id to edit an existing quota',
-  },
+  { description: 'Set id to reuse an existing quota, or leave it empty to create a new one.' },
 );
 
-/** Provides field `quota` describing a single quota */
-export const singleQuota = Type.Object({
-  quota: quotaSchema,
-});
-
-/** Provides field `quotas` describing multiple quotas along including signup counts */
-export const quotasWithSignupCount = Type.Object({
-  quotas: Type.Array(quotaWithSignupCount, {
-    title: 'quota definitions',
+/** Schema for a quota with a count of its signups. */
+export const quotaWithSignupCount = Type.Intersect([
+  quota,
+  Type.Object({
+    signupCount: Type.Integer({
+      description: 'Total number of signups in this quota.',
+    }),
   }),
-});
+]);
 
-/** Describes schema for creating quotas for a single event */
-export const quotasCreate = Type.Object({
-  quotas: Type.Array(quotaCreate, {
-    title: 'quota definitions',
+/** Schema for a quota with public information of its signups. */
+export const userQuotaWithSignups = Type.Intersect([
+  quotaWithSignupCount,
+  Type.Object({
+    signups: Type.Array(
+      publicSignupSchema,
+      { description: 'Public information of signups in the quota.' },
+    ),
   }),
-});
+]);
 
-/** Describes schema for updating quotas for a single event */
-export const quotasUpdate = Type.Object({
-  quotas: Type.Array(quotaUpdateSchema, {
-    title: 'quota definitions',
+/** Schema for a quota with full information of its signups. */
+export const adminQuotaWithSignups = Type.Intersect([
+  quotaWithSignupCount,
+  Type.Object({
+    signups: Type.Array(
+      adminSignupSchema,
+      { description: 'Signups in the quota.' },
+    ),
   }),
-});
+]);
 
-export type QuotaID = Static<typeof attributes.quotaID>;
-export type QuotaUpdateSchema = Static<typeof quotaUpdateSchema>;
+/** Quota ID type. Randomly generated alphanumeric string. */
+export type QuotaID = Static<typeof quotaID>;
+
+/** Schema for updating a quota. */
+export type QuotaUpdate = Static<typeof quotaUpdate>;
+
+/** Schema for a quota with a count of its signups. */
+export type QuotaWithSignupCount = Static<typeof quotaWithSignupCount>;
+/** Schema for a quota, with public information of its signups. */
+export type UserQuotaWithSignups = Static<typeof userQuotaWithSignups>;
+/** Schema for a quota, with full information of its signups. */
+export type AdminQuotaWithSignups = Static<typeof adminQuotaWithSignups>;

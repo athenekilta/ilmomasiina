@@ -1,51 +1,30 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import * as attributes from './attributes';
+import { questionAttributes, questionID, questionIdentity } from './attributes';
 
 export { questionID } from './attributes';
 
-/** Describes a schema for creating a single question for event */
-export const questionCreate = attributes.questionAttributes;
+/** Schema for a question. */
+export const question = Type.Intersect([
+  questionIdentity,
+  questionAttributes,
+]);
 
-/** Describes a schema for a single question */
-const question = Type.Intersect(
+/** Schema for creating a question. */
+export const questionCreate = questionAttributes;
+
+/** Schema for updating a question. */
+export const questionUpdate = Type.Intersect(
   [
-    attributes.questionAttributes,
-    attributes.questionIdentity,
+    Type.Partial(questionIdentity),
+    questionCreate,
   ],
+  { description: 'Set id to reuse an existing question, or leave it empty to create a new one.' },
 );
 
-/** Describes schema for updating question */
-const questionUpdateSchema = Type.Intersect(
-  [
-    attributes.questionAttributes,
-    Type.Partial(attributes.questionIdentity, {
-      description: 'provide question ID to edit an existing question',
-    }),
-  ],
-);
-
-/** Describes schema questions to be used in response bodies */
-export const questions = Type.Object({
-  questions: Type.Array(question, {
-    title: 'additional questions',
-  }),
-});
-
-/** Describes schema for creating questions for a single event */
-export const questionsCreate = Type.Object({
-  questions: Type.Array(questionCreate, {
-    title: 'additional questions',
-  }),
-});
-
-/** Describes schema for updating questions for a single event */
-export const questionsUpdate = Type.Object({
-  questions: Type.Array(questionUpdateSchema, {
-    title: 'additional questions',
-  }),
-});
-
-export type QuestionID = Static<typeof attributes.questionID>;
+/** Question ID type. Randomly generated alphanumeric string. */
+export type QuestionID = Static<typeof questionID>;
+/** Schema for a question. */
 export type Question = Static<typeof question>;
-export type QuestionUpdateSchema = Static<typeof questionUpdateSchema>;
+/** Schema for updating a question. */
+export type QuestionUpdate = Static<typeof questionUpdate>;

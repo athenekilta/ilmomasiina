@@ -71,6 +71,12 @@ export const eventListEventAttrs = [
   'registrationStartDate',
   'registrationEndDate',
   'openQuotaSize',
+  'description',
+  'price',
+  'location',
+  'webpageUrl',
+  'facebookUrl',
+  'category',
   'signupsPublic',
 ] as const;
 

@@ -1,22 +1,23 @@
 import { Static, Type } from '@sinclair/typebox';
 
-/** Describes login request body */
-export const adminLoginSchema = Type.Object({
+/** Request body for login. */
+export const adminLoginBody = Type.Object({
   email: Type.String({
-    title: 'email address',
+    description: 'Email address.',
   }),
   password: Type.String({
-    title: 'plaintext password',
+    description: 'Plaintext password.',
   }),
 });
 
-/** Describes login response body */
-export const adminSessionSchema = Type.Object({
+/** Response schema for a successful login. */
+export const adminLoginResponse = Type.Object({
   accessToken: Type.String({
-    title: 'JWT access token',
-    description: 'Place it into `Authorization` header to authorize your requests.',
+    description: 'JWT access token. Used in `Authorization` header to authorize requests.',
   }),
 });
 
-export type AdminLoginSchema = Static<typeof adminLoginSchema>;
-export type AdminSessionSchema = Static<typeof adminSessionSchema>;
+/** Request body for login. */
+export type AdminLoginBody = Static<typeof adminLoginBody>;
+/** Response schema for a successful login. */
+export type AdminLoginResponse = Static<typeof adminLoginResponse>;

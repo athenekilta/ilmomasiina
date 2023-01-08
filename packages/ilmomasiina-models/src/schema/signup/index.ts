@@ -1,81 +1,79 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { quotaID, singleQuota } from '../quota';
-import * as attributes from './attributes';
-import { editToken } from './fields';
+import { quota, quotaID } from '../quota';
+import {
+  editableSignupAttributes, editToken, publicEditableSignupAttributes, signupDynamicAttributes,
+  signupID, signupIdentity,
+} from './attributes';
 
 export { signupID } from './attributes';
 
-/** Defines boolean field `confirmed` */
-const signupBooleanConfirmed = Type.Object({
-  confirmed: Type.Boolean({ title: 'is the signup confirmed' }),
-});
-
-/** Describes request body for creating a signup */
-export const signupCreateSchema = Type.Object({
+/** Request body for creating a signup. */
+export const signupCreateBody = Type.Object({
   quotaId: quotaID,
 });
 
-/** Describes response body for a successful creation of signup */
-export const createdSignupSchema = Type.Intersect([
-  attributes.signupIdentity,
-  attributes.tokenForEdit,
-]);
-
-/** Describes request body for editing an existing signup */
-export const signupUpdateSchema = Type.Intersect([
-  Type.Partial(attributes.editableSignupAttributes),
-  Type.Partial(attributes.signupAnswers),
-]);
-
-/** Describes a request body for a successful edit of a signup */
-export const updatedSignupSchema = Type.Intersect([
-  attributes.signupIdentity,
-  attributes.confirmationTimestamp,
-]);
-
-/** Defines a schema for signup that can be shown publicly */
-export const publicSignupSchema = Type.Intersect(
-  [
-    attributes.userNonEditableSignupAttributes,
-    attributes.reducedEditableSignupAttributes,
-    attributes.reducedSignupAnswers,
-    signupBooleanConfirmed,
-  ],
-);
-
-/** Defines a schema for signup for the one who created the signup */
-export const userSignupSchema = Type.Intersect(
-  [
-    attributes.signupIdentity,
-    attributes.userNonEditableSignupAttributes,
-    Type.Partial(attributes.editableSignupAttributes),
-    attributes.signupAnswers,
-    singleQuota,
-    signupBooleanConfirmed,
-  ],
-);
-
-/** Defines a schema for signup for admins */
-export const adminSignupSchema = Type.Intersect([
-  attributes.signupIdentity,
-  attributes.adminNonEditableSignupAttributes,
-  Type.Partial(attributes.editableSignupAttributes),
-  attributes.signupAnswers,
-]);
-
-/** Defines path parameters for signup endpoints */
-export const signupPathParams = Type.Object({
-  id: attributes.signupID,
+/** Response schema for successfully creating a signup. */
+export const signupCreateResponse = Type.Object({
+  id: signupID,
+  editToken,
 });
 
-export type SignupID = Static<typeof attributes.signupID>;
+/** Request body for editing an existing signup. */
+export const signupUpdateBody = Type.Partial(editableSignupAttributes);
+
+/** Response schema for successfully editing a signup. */
+export const signupUpdateResponse = signupIdentity;
+
+/** Schema for signups in event details from the public API. */
+export const publicSignupSchema = Type.Intersect([
+  publicEditableSignupAttributes,
+  signupDynamicAttributes,
+]);
+
+/** Schema for signups in event details from the admin API. */
+export const adminSignupSchema = Type.Intersect([
+  signupIdentity,
+  editableSignupAttributes,
+  signupDynamicAttributes,
+]);
+
+/** Schema for fetching a signup for editing. */
+export const signupForEdit = Type.Intersect([
+  signupIdentity,
+  editableSignupAttributes,
+  Type.Object({
+    quota,
+  }),
+  signupDynamicAttributes,
+]);
+
+/** Path parameters necessary to fetch and manipulate signups. */
+export const signupPathParams = Type.Object({
+  id: signupID,
+});
+
+/** Signup ID type. Randomly generated alphanumeric string. */
+export type SignupID = Static<typeof signupID>;
+/** Signup edit token type. */
 export type SignupEditToken = Static<typeof editToken>;
-export type SignupCreateSchema = Static<typeof signupCreateSchema>;
-export type CreatedSignupSchema = Static<typeof createdSignupSchema>;
-export type SignupUpdateSchema = Static<typeof signupUpdateSchema>;
-export type UpdatedSignupSchema = Static<typeof updatedSignupSchema>;
-export type PublicSignupSchema = Static<typeof publicSignupSchema>;
-export type UserSignupSchema = Static<typeof userSignupSchema>;
-export type AdminSignupSchema = Static<typeof adminSignupSchema>;
+
+/** Path parameters necessary to fetch and manipulate signups. */
 export type SignupPathParams = Static<typeof signupPathParams>;
+
+/** Request body for creating a signup. */
+export type SignupCreateBody = Static<typeof signupCreateBody>;
+/** Response schema for successfully creating a signup. */
+export type SignupCreateResponse = Static<typeof signupCreateResponse>;
+
+/** Request body for editing an existing signup. */
+export type SignupUpdateBody = Static<typeof signupUpdateBody>;
+/** Response schema for successfully editing a signup. */
+export type SignupUpdateResponse = Static<typeof signupUpdateResponse>;
+
+/** Schema for signups in event details from the public API. */
+export type PublicSignupSchema = Static<typeof publicSignupSchema>;
+/** Schema for signups in event details from the admin API. */
+export type AdminSignupSchema = Static<typeof adminSignupSchema>;
+/** Schema for fetching a signup for editing. */
+export type SignupForEdit = Static<typeof signupForEdit>;

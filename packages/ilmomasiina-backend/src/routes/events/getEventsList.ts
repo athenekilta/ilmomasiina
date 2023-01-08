@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { col, fn, Order } from 'sequelize';
 
-import type { AdminEventList, EventListQuery, UserEventList } from '@tietokilta/ilmomasiina-models';
+import type { AdminEventListResponse, EventListQuery, UserEventListResponse } from '@tietokilta/ilmomasiina-models';
 import {
   adminEventListEventAttrs,
   eventListEventAttrs,
@@ -25,7 +25,7 @@ function eventOrder(): Order {
 export async function getEventsListForUser(
   request: FastifyRequest<{ Querystring: EventListQuery }>,
   reply: FastifyReply,
-): Promise<UserEventList> {
+): Promise<UserEventListResponse> {
   const eventAttrs = eventListEventAttrs;
   const filter = { ...request.query };
 
@@ -70,7 +70,7 @@ export async function getEventsListForUser(
 export async function getEventsListForAdmin(
   request: FastifyRequest<{ Querystring: EventListQuery }>,
   reply: FastifyReply,
-): Promise<AdminEventList> {
+): Promise<AdminEventListResponse> {
   // Admin view also shows id, draft and listed fields.
   const eventAttrs = adminEventListEventAttrs;
   const filter = { ...request.query };

@@ -1,12 +1,12 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 
-import type { UserListSchema } from '@tietokilta/ilmomasiina-models';
+import type { UserListResponse } from '@tietokilta/ilmomasiina-models';
 import { User } from '../../../models/user';
 
 export default async function listUsers(
   request: FastifyRequest,
   reply: FastifyReply,
-): Promise<UserListSchema> {
+): Promise<UserListResponse> {
   const users = await User.findAll({
     attributes: ['id', 'email'],
   });

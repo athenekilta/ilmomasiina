@@ -3,7 +3,7 @@ import { NotFound } from 'http-errors';
 import { Order } from 'sequelize';
 
 import type {
-  AdminEventPathParams, AdminEventSchema, EventID, EventSlug, UserEventPathParams, UserEventSchema,
+  AdminEventPathParams, AdminEventResponse, EventID, EventSlug, UserEventPathParams, UserEventResponse,
 } from '@tietokilta/ilmomasiina-models';
 import {
   adminEventGetEventAttrs,
@@ -18,7 +18,7 @@ import { Event } from '../../models/event';
 import { Question } from '../../models/question';
 import { Quota } from '../../models/quota';
 import { Signup } from '../../models/signup';
-import { nullsToUndef, stringifyDates } from '../utils';
+import { stringifyDates } from '../utils';
 
 const eventOrdering: Order = [
   [Question, 'order', 'ASC'],
@@ -28,7 +28,7 @@ const eventOrdering: Order = [
 
 export async function eventDetailsForUser(
   eventSlug: EventSlug,
-): Promise<UserEventSchema> {
+): Promise<UserEventResponse> {
   const event = await Event.scope('user').findOne({
     where: { slug: eventSlug },
     attributes: [...eventGetEventAttrs],
@@ -125,7 +125,7 @@ export async function eventDetailsForUser(
 
 export async function eventDetailsForAdmin(
   eventID: EventID,
-): Promise<AdminEventSchema> {
+): Promise<AdminEventResponse> {
   // Admin queries include internal data such as confirmation email contents
   // Admin queries include emails and signup IDs
   // Admin queries also show past and draft events.
@@ -186,11 +186,8 @@ export async function eventDetailsForAdmin(
       ...quota.get({ plain: true }),
       signups: quota.signups!.map((signup) => ({
         ...signup.get({ plain: true }),
-        answers: signup.answers!,
         status: signup.status,
-        firstName: nullsToUndef(signup.firstName),
-        lastName: nullsToUndef(signup.lastName),
-        email: nullsToUndef(signup.email),
+        answers: signup.answers!,
         confirmed: Boolean(signup.confirmedAt),
       })),
       signupCount: quota.signups!.length,
@@ -201,7 +198,7 @@ export async function eventDetailsForAdmin(
 export async function getEventDetailsForUser(
   request: FastifyRequest<{ Params: UserEventPathParams }>,
   reply: FastifyReply,
-): Promise<UserEventSchema> {
+): Promise<UserEventResponse> {
   const res = await eventDetailsForUser(request.params.slug);
   reply.status(200);
   return res;
@@ -210,7 +207,7 @@ export async function getEventDetailsForUser(
 export async function getEventDetailsForAdmin(
   request: FastifyRequest<{ Params: AdminEventPathParams }>,
   reply: FastifyReply,
-): Promise<AdminEventSchema> {
+): Promise<AdminEventResponse> {
   const res = await eventDetailsForAdmin(request.params.id);
   reply.status(200);
   return res;

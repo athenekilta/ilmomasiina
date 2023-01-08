@@ -3,7 +3,7 @@ import { NotFound } from 'http-errors';
 import { Op, Transaction } from 'sequelize';
 
 import type {
-  AdminEventPathParams, AdminEventSchema, EditConflictError, EventEditSchema, WouldMoveSignupsToQueueError,
+  AdminEventPathParams, AdminEventResponse, EditConflictError, EventUpdateBody, WouldMoveSignupsToQueueError,
 } from '@tietokilta/ilmomasiina-models';
 import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { Event } from '../../../models/event';
@@ -15,9 +15,9 @@ import { toDate } from '../../utils';
 import { EditConflict, WouldMoveSignupsToQueue } from './errors';
 
 export default async function updateEvent(
-  request: FastifyRequest<{ Params: AdminEventPathParams, Body: EventEditSchema }>,
+  request: FastifyRequest<{ Params: AdminEventPathParams, Body: EventUpdateBody }>,
   response: FastifyReply,
-): Promise<AdminEventSchema | EditConflictError | WouldMoveSignupsToQueueError> {
+): Promise<AdminEventResponse | EditConflictError | WouldMoveSignupsToQueueError> {
   try {
     await Event.sequelize!.transaction(async (transaction) => {
     // Get the event with all relevant information for the update

@@ -1,20 +1,19 @@
 import { Type } from '@sinclair/typebox';
 
-/** Unique identifier for user */
 export const userID = Type.Integer({
-  title: 'user id',
+  title: 'UserID',
 });
 
-/** Non-editable identity attributes of user */
+/** Non-editable identity attributes of a user. */
 export const userIdentity = Type.Object({
   id: userID,
 });
 
-/** Editable attributes of user */
+/** Editable attributes of a user. */
 export const userAttributes = Type.Object({
   email: Type.String({
-    title: 'email',
-    description: 'Used as a username in login',
+    format: 'email',
+    description: 'Email address, used as username.',
     // TODO: Add validation RegExp for email
   }),
 });

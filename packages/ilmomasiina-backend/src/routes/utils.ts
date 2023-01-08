@@ -3,11 +3,6 @@ export function toDate<T>(s: T): Date | Exclude<T, string> {
   return typeof s === 'string' ? new Date(s) : s as Exclude<T, string>;
 }
 
-/** Returns `undefined` when passed `null`, and the argument otherwise. */
-export function nullsToUndef<T>(val: T | null): T | undefined {
-  return val !== null ? val : undefined;
-}
-
 /** Utility type that converts fields in the imported API to string. */
 export type StringifyApi<T> = {
   [P in keyof T]: (

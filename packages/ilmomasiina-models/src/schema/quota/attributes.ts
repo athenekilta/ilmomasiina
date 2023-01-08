@@ -1,31 +1,25 @@
 import { Type } from '@sinclair/typebox';
 
-/** Unique identifier for quota */
+import { Nullable } from '../utils';
+
 export const quotaID = Type.String({
-  title: 'quota ID',
-  description: 'a unique identifier for quota',
+  title: 'QuotaID',
+  description: 'Quota ID. Randomly generated alphanumeric string.',
   // TODO: Add validation? max-length?
 });
 
-/** Non-editable identity attributes of quota */
+/** Non-editable identity attributes of a quota. */
 export const quotaIdentity = Type.Object({
   id: quotaID,
 });
 
-/** Editable attributes of quota */
+/** Editable attributes of a quota. */
 export const quotaAttributes = Type.Object({
   title: Type.String({
-    title: 'title of the quota',
+    description: 'Quota name.',
   }),
-  size: Type.Union([
-    Type.Integer({
-      title: 'size limit',
-      minimum: 1,
-    }),
-    Type.Null({
-      title: 'unlimited quota',
-    }),
-  ], {
-    title: 'size limit of the quota',
-  }),
+  size: Nullable(
+    Type.Integer({ minimum: 1 }),
+    { description: 'Maximum number of signups in the quota. If null, the size is unlimited.' },
+  ),
 });

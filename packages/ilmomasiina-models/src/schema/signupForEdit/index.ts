@@ -1,12 +1,13 @@
 import { Static, Type } from '@sinclair/typebox';
 
-import { userEventForSignupSchema } from '../event';
-import { userSignupSchema } from '../signup';
+import { userEventForSignup } from '../event';
+import { signupForEdit } from '../signup';
 
-/** Describes response body for GET signup for edit (contains all required information to edit an existing signup) */
-export const userSignupForEditSchema = Type.Object({
-  signup: userSignupSchema,
-  event: userEventForSignupSchema,
+/** Response schema for fetching a signup for editing. */
+export const signupForEditResponse = Type.Object({
+  signup: signupForEdit,
+  event: userEventForSignup,
 });
 
-export type UserSignupForEditSchema = Static<typeof userSignupForEditSchema>;
+/** Response schema for fetching a signup for editing. */
+export type SignupForEditResponse = Static<typeof signupForEditResponse>;
