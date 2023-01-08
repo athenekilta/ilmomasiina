@@ -224,7 +224,7 @@ async function setupAdminRoutes(
   );
 }
 
-function setupPublicRoutes(
+async function setupPublicRoutes(
   fastifyInstance: FastifyInstance,
   opts: RouteOptions,
 ) {
@@ -375,6 +375,6 @@ export default async function setupRoutes(
 ): Promise<void> {
   addLogEventHook(instance);
 
-  instance.register(setupAdminRoutes, { ...opts, prefix: '/admin' });
-  instance.register(setupPublicRoutes, { ...opts });
+  await instance.register(setupAdminRoutes, { ...opts, prefix: '/admin' });
+  await instance.register(setupPublicRoutes, { ...opts, prefix: undefined });
 }
