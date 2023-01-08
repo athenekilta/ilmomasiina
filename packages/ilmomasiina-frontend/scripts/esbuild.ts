@@ -5,6 +5,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import momentPlugin from './momentPlugin';
+import tsconfigPathsResolverPlugin from './tsconfigPathsResolverPlugin';
 
 type Environment = 'development' | 'production' | 'test';
 
@@ -82,6 +83,7 @@ export default function configure(defaultEnv: Environment): BuildOptions {
       momentPlugin({
         timezone: TIMEZONE,
       }),
+      tsconfigPathsResolverPlugin(),
     ],
     loader: {
       '.html': 'text',
