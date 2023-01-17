@@ -83,7 +83,9 @@ export default function configure(defaultEnv: Environment): BuildOptions {
       momentPlugin({
         timezone: TIMEZONE,
       }),
-      tsconfigPathsResolverPlugin(),
+      tsconfigPathsResolverPlugin({
+        tsconfigPath: resolve('tsconfig.json'),
+      }),
     ],
     loader: {
       '.html': 'text',
