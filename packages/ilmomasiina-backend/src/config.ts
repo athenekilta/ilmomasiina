@@ -67,15 +67,22 @@ const config = {
   icalCalendarName: envString('BRANDING_ICAL_CALENDAR_NAME', 'Ilmomasiina'),
 
   /** Canonical base URL for the app. Includes $PATH_PREFIX, but NOT a final "/".
+   *
    * @example "http://example.com"
    * @example "http://example.com/ilmo"
    */
   baseUrl: envString('BASE_URL'),
   /** URL template for an event details page. Used for iCalendar exports. Contains `{slug}`.
+   *
+   * This is intended for custom frontends; the default is for the frontend included in the repo.
+   *
    * @example "http://example.com/events/{slug}"
    */
   eventDetailsUrl: envString('EVENT_DETAILS_URL', `${envString('BASE_URL')}/events/{slug}`),
   /** URL template for a signup edit page. Used for emails. Contains `{id}` and `{editToken}`.
+   *
+   * This is intended for custom frontends; the default is for the frontend included in the repo.
+   *
    * @example "http://example.com/signup/{id}/{editToken}"
    */
   editSignupUrl: envString('EDIT_SIGNUP_URL', `${envString('BASE_URL')}/signup/{id}/{editToken}`),
