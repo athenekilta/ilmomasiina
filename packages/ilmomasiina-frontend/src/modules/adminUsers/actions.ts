@@ -1,5 +1,5 @@
-import apiFetch from '@tietokilta/ilmomasiina-components/src/api';
-import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
+import { apiFetch } from '@tietokilta/ilmomasiina-components';
+import { User } from '@tietokilta/ilmomasiina-models';
 import { DispatchAction, GetState } from '../../store/types';
 import {
   RESET,

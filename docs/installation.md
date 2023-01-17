@@ -105,7 +105,7 @@ configure SMTP servers via env variables if you wish.
 
 If you want to serve ilmomasiina from a subdirectory of your website, you need to set up reverse proxying.
 
-**Note:** This will also require changing the `PREFIX_URL` env variable when building the frontend or container.
+**Note:** This will also require changing the `PATH_PREFIX` env variable when building the frontend or container.
 
 For example, in Apache `.htaccess`:
 

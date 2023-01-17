@@ -20,7 +20,7 @@ services:
       context: .
       dockerfile: "Dockerfile"
       args:
-        #- PREFIX_URL=
+        #- PATH_PREFIX=
         #- API_URL=
         - BRANDING_HEADER_TITLE_TEXT=Tietokillan ilmomasiina
         - BRANDING_FOOTER_GDPR_TEXT=Tietosuoja

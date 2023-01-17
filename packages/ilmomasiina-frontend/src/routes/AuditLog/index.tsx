@@ -4,9 +4,9 @@ import { Spinner } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import requireAuth from '../../containers/requireAuth';
 import { getAuditLogs, resetState } from '../../modules/auditLog/actions';
+import appPaths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AuditLogActionFilter from './AuditLogActionFilter';
 import AuditLogFilter from './AuditLogFilter';
@@ -30,7 +30,7 @@ const AuditLog = () => {
 
   return (
     <>
-      <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
+      <Link to={appPaths.adminEventsList}>&#8592; Takaisin</Link>
       <h1>Toimintoloki</h1>
       <AuditLogPagination />
       <table className="table audit-log--table">

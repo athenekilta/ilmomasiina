@@ -1,4 +1,4 @@
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
+import { AdminEvent } from '@tietokilta/ilmomasiina-models';
 
 export interface AdminState {
   events: AdminEvent.List | null;

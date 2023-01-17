@@ -1,4 +1,6 @@
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
+import React, { PropsWithChildren } from 'react';
+
+import { Event } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import { createStateContext } from '../../utils/stateContext';
@@ -15,9 +17,9 @@ type State = {
 };
 
 const { Provider, useStateContext } = createStateContext<State>();
-export { useStateContext as useEventListContext, Provider as EventListProvider };
+export { useStateContext as useEventListContext };
 
-export function useEventListState({ category }: EventListProps) {
+export function useEventListState({ category }: EventListProps = {}) {
   const fetchEvents = useAbortablePromise(async (signal) => {
     const query = category === undefined ? '' : `?${new URLSearchParams({ category })}`;
     return await apiFetch(`events${query}`, { signal }) as Event.List;
@@ -28,4 +30,13 @@ export function useEventListState({ category }: EventListProps) {
     pending: fetchEvents.pending,
     error: fetchEvents.error,
   });
+}
+
+export function EventListProvider({ category, children }: PropsWithChildren<EventListProps>) {
+  const state = useEventListState({ category });
+  return (
+    <Provider value={state}>
+      {children}
+    </Provider>
+  );
 }

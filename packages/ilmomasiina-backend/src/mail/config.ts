@@ -12,8 +12,9 @@ const mailTransporter: Transporter = (() => {
     return nodemailer.createTransport(mailgun({
       auth: {
         api_key: config.mailgunApiKey,
-        domain: config.mailgunDomain!,
+        domain: config.mailgunDomain,
       },
+      host: config.mailgunHost,
     }));
   }
 

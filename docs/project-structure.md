@@ -8,6 +8,29 @@ and package files.
 To prepare for development, pnpm must bootstrap the cross-dependencies between projects. To do this, install pnpm and
 then simply run `pnpm install` or `npm run bootstrap`.
 
+## Package dependencies
+
+The package dependencies are slighly complicated to manage properly, so that all tooling understands them:
+
+- Each `package.json` refers to the packages it depends on. pnpm uses these for its symlinking.
+- All files are imported from `@tietokilta/ilmomasiina-foo` or `@tietokilta/ilmomasiina-foo/dist`, just as in
+  non-Ilmomasiina packages depending on them.
+- Each importable `package.json` specifies `exports`, including a root export and potentially other files in `./dist`.
+  These point to the compiled `.js` and `.d.ts` files under `./dist`.
+  `./src` is also exported and points to `.ts` files for TypeScript compilation.
+- The `references` field in each `tsconfig.json` points to another `tsconfig`, so that the TypeScript compiler
+  can find the source files for these imports (since `dist` will not exist yet when building).
+- `ts-node` (and by extension `ts-node-dev`), which we use for the backend, doesn't understand `references`.
+  Therefore, the cross-package imports are also defined in `paths` in `tsconfig.json`, which `ts-node` _does_ understand.
+- ESBuild, which we use for the frontend, doesn't understand either of these natively. `paths` is used again here,
+  along with a small ESBuild plugin to handle the resolving using it.
+
+Using `references` is the only way to dynamically compile missing imported dependencies automatically. This also requires
+us to use `tsc --build` for both type checking and building.
+
+To avoid mysterious errors from TypeScript compiler instances running simultaneously on the same folder, the root
+project's `package.json` specifies `--workspace-concurrency=1` to prevent pnpm from running those tasks in parallel.
+
 ## Packages
 
 The project is divided into four packages:

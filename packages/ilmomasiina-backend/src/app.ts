@@ -2,6 +2,7 @@ import express, { json, rest, urlencoded } from '@feathersjs/express';
 import feathers from '@feathersjs/feathers';
 import compress from 'compression';
 import historyApiFallback from 'connect-history-api-fallback';
+import cors from 'cors';
 import { NextFunction, Request, Response } from 'express';
 import enforce from 'express-sslify';
 import cron from 'node-cron';
@@ -32,6 +33,8 @@ function formatResponse(req: Request, res: Response, next: NextFunction) {
   res.json(res.data);
 }
 
+const corsOrigins = config.allowOrigin === '*' ? '*' : (config.allowOrigin?.split(',') ?? []);
+
 export default async function initApp() {
   await setupDatabase();
 
@@ -45,6 +48,9 @@ export default async function initApp() {
   app
     .use(compress())
     .use(json())
+    .use('/api', cors({
+      origin: corsOrigins,
+    }))
     .use(urlencoded({ extended: true }))
     .use(remoteIp)
     .configure(rest(formatResponse))

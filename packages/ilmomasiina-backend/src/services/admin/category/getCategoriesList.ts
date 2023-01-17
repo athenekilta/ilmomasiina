@@ -1,4 +1,4 @@
-import { AdminListCategoriesResponse } from '@tietokilta/ilmomasiina-models/src/services/admin/categories/list';
+import { AdminListCategoriesResponse } from '@tietokilta/ilmomasiina-models/dist/services/admin/categories/list';
 import { Event } from '../../../models/event';
 
 export default async function getCategoriesList(): Promise<AdminListCategoriesResponse> {

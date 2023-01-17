@@ -40,7 +40,9 @@ export default async (signup: Signup) => {
   const date = event.date && moment(event.date).tz('Europe/Helsinki').format('DD.MM.YYYY HH:mm');
 
   const editToken = generateToken(signup);
-  const cancelLink = `${config.mailUrlBase}${config.pathPrefix}/signup/${signup.id}/${editToken}`;
+  const cancelLink = config.editSignupUrl
+    .replace(/\{id\}/g, signup.id)
+    .replace(/\{editToken\}/g, editToken);
 
   const params = {
     answers: fields,

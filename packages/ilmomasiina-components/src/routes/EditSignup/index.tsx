@@ -1,18 +1,14 @@
 import React from 'react';
 
-import { Button, Spinner } from 'react-bootstrap';
+import { Spinner } from 'react-bootstrap';
 
-import { paths } from '../../config/paths';
-import { linkComponent, useParams } from '../../config/router';
-import { Provider, useEditSignupState, useStateAndDispatch } from '../../modules/editSignup';
+import { useParams } from '../../config/router';
+import { EditSignupProps, EditSignupProvider, useEditSignupContext } from '../../modules/editSignup';
 import EditForm from './components/EditForm';
 import NarrowContainer from './components/NarrowContainer';
 
 const EditSignupView = () => {
-  const [{
-    deleted, error, pending, event,
-  }] = useStateAndDispatch();
-  const Link = linkComponent();
+  const { error, pending } = useEditSignupContext();
 
   if (error) {
     return (
@@ -35,47 +31,15 @@ const EditSignupView = () => {
     );
   }
 
-  if (deleted) {
-    return (
-      <div className="ilmo--status-container">
-        <h1>Ilmoittautumisesi poistettiin onnistuneesti</h1>
-        <Button as={Link} to={paths().eventDetails(event!.slug)} variant="secondary">
-          Takaisin
-        </Button>
-      </div>
-    );
-  }
-
-  if (event!.registrationEndDate === null || new Date(event!.registrationEndDate) < new Date()) {
-    return (
-      <NarrowContainer className="ilmo--status-container">
-        <h1>Hups, jotain meni pieleen</h1>
-        <p>
-          Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
-          ilmoittautuminen on sulkeutunut.
-        </p>
-        <Button as={Link} to={paths().eventsList} variant="secondary">
-          Takaisin etusivulle
-        </Button>
-      </NarrowContainer>
-    );
-  }
-
   return <EditForm />;
 };
 
-export interface MatchParams {
-  id: string;
-  editToken: string;
-}
-
 const EditSignup = () => {
-  const params = useParams<MatchParams>();
-  const state = useEditSignupState(params);
+  const { id, editToken } = useParams<EditSignupProps>();
   return (
-    <Provider state={state}>
+    <EditSignupProvider id={id} editToken={editToken}>
       <EditSignupView />
-    </Provider>
+    </EditSignupProvider>
   );
 };
 

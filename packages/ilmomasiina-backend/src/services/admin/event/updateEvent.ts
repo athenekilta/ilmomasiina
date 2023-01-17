@@ -7,9 +7,9 @@ import {
   adminEventCreateEventAttrs,
   adminEventCreateQuestionAttrs,
   adminEventCreateQuotaAttrs,
-} from '@tietokilta/ilmomasiina-models/src/services/admin/events/create';
-import { AdminEventUpdateBody } from '@tietokilta/ilmomasiina-models/src/services/admin/events/update';
-import { AdminEventGetResponse } from '@tietokilta/ilmomasiina-models/src/services/events/details';
+} from '@tietokilta/ilmomasiina-models/dist/services/admin/events/create';
+import { AdminEventUpdateBody } from '@tietokilta/ilmomasiina-models/dist/services/admin/events/update';
+import { AdminEventGetResponse } from '@tietokilta/ilmomasiina-models/dist/services/events/details';
 import { Event } from '../../../models/event';
 import { Question } from '../../../models/question';
 import { Quota } from '../../../models/quota';

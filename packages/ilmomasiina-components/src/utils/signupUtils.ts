@@ -1,10 +1,11 @@
 import find from 'lodash/find';
 import orderBy from 'lodash/orderBy';
+import sumBy from 'lodash/sumBy';
 import moment from 'moment-timezone';
 
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { Event, Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import {
+  AdminEvent, Event, Quota, Signup,
+} from '@tietokilta/ilmomasiina-models';
 import { timezone } from '../config';
 
 export const WAITLIST = '\x00waitlist';
@@ -34,23 +35,42 @@ function getSignupsAsList(event: AnyEventDetails): SignupWithQuota[] {
   );
 }
 
+export type QuotaCounts = Pick<Event.Details.Quota, 'size' | 'signupCount'>;
+
+/** Computes the number of signups in the open quota and queue. */
+export function countOverflowSignups(quotas: QuotaCounts[], openQuotaSize: number) {
+  const overflow = sumBy(quotas, (quota) => Math.max(0, quota.signupCount - (quota.size ?? Infinity)));
+  return {
+    openQuotaCount: Math.min(overflow, openQuotaSize),
+    queueCount: Math.max(overflow - openQuotaSize, 0),
+  };
+}
+
 export type QuotaSignups = {
   id: Quota.Id | typeof OPENQUOTA | typeof WAITLIST;
   title: string;
   size: number | null;
   signups: SignupWithQuota[];
+  signupCount: number;
 };
 
 export function getSignupsByQuota(event: AnyEventDetails): QuotaSignups[] {
   const signups = getSignupsAsList(event);
   const quotas = [
     ...event.quotas.map(
-      (quota) => ({
-        ...quota,
-        signups: signups.filter((signup) => signup.quotaId === quota.id && signup.status === 'in-quota'),
-      }),
+      (quota) => {
+        const quotaSignups = signups.filter((signup) => signup.quotaId === quota.id && signup.status === 'in-quota');
+        return {
+          ...quota,
+          signups: quotaSignups,
+          // Trust signupCount and size, unless we have concrete information that more signups exist
+          signupCount: Math.max(quotaSignups.length, Math.min(quota.signupCount, quota.size ?? Infinity)),
+        };
+      },
     ),
   ];
+
+  const { openQuotaCount, queueCount } = countOverflowSignups(event.quotas, event.openQuotaSize);
 
   const openSignups = signups.filter((signup) => signup.status === 'in-open');
   // Open quota is shown if the event has one, or if signups have been assigned there nevertheless.
@@ -59,6 +79,7 @@ export function getSignupsByQuota(event: AnyEventDetails): QuotaSignups[] {
     title: 'Avoin kiintiö',
     size: event.openQuotaSize,
     signups: openSignups,
+    signupCount: Math.max(openQuotaCount, openSignups.length),
   }] : [];
 
   const queueSignups = signups.filter((signup) => signup.status === 'in-queue');
@@ -68,6 +89,7 @@ export function getSignupsByQuota(event: AnyEventDetails): QuotaSignups[] {
     title: 'Jonossa',
     size: null,
     signups: queueSignups,
+    signupCount: Math.max(queueCount, queueSignups.length),
   }] : [];
 
   return [

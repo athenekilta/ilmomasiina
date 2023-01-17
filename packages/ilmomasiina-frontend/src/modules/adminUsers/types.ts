@@ -1,4 +1,4 @@
-import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
+import { User } from '@tietokilta/ilmomasiina-models';
 
 export interface AdminUsersState {
   users: User.List | null;

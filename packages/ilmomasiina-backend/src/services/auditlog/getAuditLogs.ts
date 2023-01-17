@@ -1,7 +1,7 @@
 import { Params, Service } from '@feathersjs/feathers';
 import { Op, WhereOptions } from 'sequelize';
 
-import { AuditLogResponse } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
+import { AuditLogResponse } from '@tietokilta/ilmomasiina-models/dist/services/auditlog';
 import { AuditLog } from '../../models/auditlog';
 
 export type AuditLogService = Service<AuditLog>;

@@ -1,6 +1,4 @@
-import React, {
-  createContext, Dispatch, ReactNode, Reducer, useContext, useMemo, useReducer,
-} from 'react';
+import { createContext, useContext } from 'react';
 
 export const MISSING = Symbol('missing');
 
@@ -15,61 +13,18 @@ export function createStateContext<State>() {
     return context;
   }
 
-  return {
-    Context,
-    Provider: Context.Provider,
-    useStateContext,
-  };
-}
-
-/** Creates a React context that carries reducer-backed state, externally provided state,
- * as well as the reducer dispatch function.
- */
-export function createReducerContext<ReducerState, Actions, ExternalState = undefined>(
-  reducer: Reducer<ReducerState, Actions>,
-  initialState: ReducerState,
-) {
-  type State = ReducerState & ExternalState;
-  type ContextValue = readonly [State, Dispatch<Actions>];
-
-  const { Context, useStateContext } = createStateContext<ContextValue>();
-
-  type ProviderProps = {
-    children?: ReactNode;
-    state: ExternalState;
-  };
-
-  /** React component that provides state and dispatch via a context. */
-  function Provider({ children, state }: ProviderProps) {
-    const [reducerState, dispatch] = useReducer(reducer, initialState);
-
-    const value = useMemo(() => ([
-      {
-        ...reducerState,
-        ...state,
-      },
-      dispatch,
-    ] as const), [reducerState, state, dispatch]);
-
-    return (
-      <Context.Provider value={value}>
-        {children}
-      </Context.Provider>
-    );
-  }
-
-  /** Wraps a function into a React hook that provides it with state and dispatch. */
-  function createThunk<A extends any[], R>(action: (state: State, dispatch: Dispatch<Actions>) => (...args: A) => R) {
+  /** Wraps a function into a React hook that provides it with state. */
+  function createThunk<A extends any[], R>(action: (state: State) => (...args: A) => R) {
     return () => {
-      const [state, dispatch] = useStateContext();
-      return action(state, dispatch);
+      const state = useStateContext();
+      return action(state);
     };
   }
 
   return {
-    useStateAndDispatch: useStateContext,
-    createThunk,
     Context,
-    Provider,
+    Provider: Context.Provider,
+    useStateContext,
+    createThunk,
   };
 }

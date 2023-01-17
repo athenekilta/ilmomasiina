@@ -6,7 +6,7 @@ import {
 } from 'feathers-hooks-common';
 import sequelizeService from 'feathers-sequelize';
 
-import { userGetAttributes } from '@tietokilta/ilmomasiina-models/src/services/users/details';
+import { userGetAttributes } from '@tietokilta/ilmomasiina-models/dist/services/users/details';
 import config from '../../config';
 import { IlmoApplication } from '../../defs';
 import { User } from '../../models/user';

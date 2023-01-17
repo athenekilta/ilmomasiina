@@ -4,7 +4,7 @@ declare const TEST: boolean;
 declare const PROD: boolean;
 declare const COVERAGE: boolean;
 
-declare const PREFIX_URL: string;
+declare const PATH_PREFIX: string;
 declare const API_URL: string;
 
 declare const SENTRY_DSN: string;

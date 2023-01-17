@@ -1,9 +1,9 @@
 import { hooks as authHooks } from '@feathersjs/authentication';
 import { ServiceMethods } from '@feathersjs/feathers';
 
-import { AdminEventsServiceTypes } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { AdminEventCreateBody } from '@tietokilta/ilmomasiina-models/src/services/admin/events/create';
-import { AdminEventUpdateBody } from '@tietokilta/ilmomasiina-models/src/services/admin/events/update';
+import { AdminEventsServiceTypes } from '@tietokilta/ilmomasiina-models/dist/services/admin/events';
+import { AdminEventCreateBody } from '@tietokilta/ilmomasiina-models/dist/services/admin/events/create';
+import { AdminEventUpdateBody } from '@tietokilta/ilmomasiina-models/dist/services/admin/events/update';
 import { IlmoApplication } from '../../../defs';
 import { getEventDetailsForAdmin } from '../../event/getEventDetails';
 import { getEventsListForAdmin } from '../../event/getEventsList';

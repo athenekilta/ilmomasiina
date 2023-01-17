@@ -1,4 +1,4 @@
-import { AuditLog } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
+import { AuditLog } from '@tietokilta/ilmomasiina-models';
 
 export interface AuditLogState {
   auditLogQuery: AuditLog.List.Query;

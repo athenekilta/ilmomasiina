@@ -15,6 +15,6 @@ To start contributing to the project, read at least:
   since the Athene version.
 
 Other technical documentation:
-- [`createStateContext` and `createReducerContext`](state-context.md), the `useReducer` wrapper used instead
-  of Redux in `ilmomasiina-components`. Relevant if you want to develop that package.
+- [`createStateContext`](state-context.md), the `useContext` wrapper used in `ilmomasiina-components`.
+  Relevant if you want to develop that package.
 - [Signup logic](signup-logic.md), documents the exact business logic behind signups, quotas and queueing

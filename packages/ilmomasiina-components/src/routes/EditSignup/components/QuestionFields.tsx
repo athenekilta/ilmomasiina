@@ -7,16 +7,16 @@ import reject from 'lodash/reject';
 import without from 'lodash/without';
 import { Form } from 'react-bootstrap';
 
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import { Event, Signup } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 
 type Props = {
   name: string;
   questions: Event.Details.Question[];
+  disabled?: boolean;
 };
 
-const QuestionFields = ({ name, questions }: Props) => {
+const QuestionFields = ({ name, questions, disabled }: Props) => {
   // TODO: add formik-based validation
   const [{ value }, , { setValue }] = useField<Signup.Update.Body.Answer[]>(name);
   return (
@@ -47,6 +47,7 @@ const QuestionFields = ({ name, questions }: Props) => {
               <Form.Control
                 type="text"
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
@@ -57,6 +58,7 @@ const QuestionFields = ({ name, questions }: Props) => {
               <Form.Control
                 type="number"
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
@@ -73,6 +75,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                 value={option}
                 label={option}
                 required={question.required && !currentAnswers.some((answer) => answer !== option)}
+                disabled={disabled}
                 checked={currentAnswers.includes(option)}
                 onChange={(e) => toggleChecked(option, e.target.checked)}
               />
@@ -87,6 +90,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                 rows={3}
                 cols={40}
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
@@ -98,14 +102,16 @@ const QuestionFields = ({ name, questions }: Props) => {
                 <Form.Control
                   as="select"
                   required={question.required}
+                  disabled={disabled}
                   value={currentAnswer}
                   onChange={(e) => updateAnswer(e.target.value)}
                 >
-                  <option disabled={question.required}>
+                  <option value="" disabled={question.required}>
                     Valitse&hellip;
                   </option>
-                  {question.options?.map((option) => (
-                    <option key={question.id} value={option}>
+                  {question.options?.map((option, optIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <option key={optIndex} value={option}>
                       {option}
                     </option>
                   ))}
@@ -122,6 +128,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                   value={option}
                   label={option}
                   required={question.required}
+                  disabled={disabled}
                   checked={currentAnswer === option}
                   onChange={(e) => updateAnswer(e.target.value)}
                 />

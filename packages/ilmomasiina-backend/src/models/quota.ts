@@ -5,7 +5,7 @@ import {
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import QuotaAttributes from '@tietokilta/ilmomasiina-models/src/models/quota';
+import QuotaAttributes from '@tietokilta/ilmomasiina-models/dist/models/quota';
 import { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';

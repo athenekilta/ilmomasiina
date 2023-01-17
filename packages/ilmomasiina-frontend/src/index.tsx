@@ -4,9 +4,9 @@ import * as Sentry from '@sentry/browser';
 import ReactDOM from 'react-dom';
 import { Link, useHistory, useParams } from 'react-router-dom';
 
-import { configure } from '@tietokilta/ilmomasiina-components/src/config';
+import { configure } from '@tietokilta/ilmomasiina-components';
 import AppContainer from './containers/AppContainer';
-import appPaths from './paths';
+import { apiUrl } from './paths';
 
 if (!PROD) {
   // eslint-disable-next-line global-require
@@ -19,7 +19,7 @@ if (PROD && SENTRY_DSN) {
 }
 
 configure({
-  paths: appPaths,
+  api: apiUrl,
   router: {
     Link,
     useParams,

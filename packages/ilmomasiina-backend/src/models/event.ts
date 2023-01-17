@@ -6,7 +6,7 @@ import {
   Sequelize,
 } from 'sequelize';
 
-import EventAttributes from '@tietokilta/ilmomasiina-models/src/models/event';
+import EventAttributes from '@tietokilta/ilmomasiina-models/dist/models/event';
 import { Question } from './question';
 import { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';

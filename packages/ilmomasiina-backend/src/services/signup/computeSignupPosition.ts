@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 import { Transaction, WhereOptions } from 'sequelize';
 
-import { SignupStatus } from '@tietokilta/ilmomasiina-models/src/models/signup';
+import { SignupStatus } from '@tietokilta/ilmomasiina-models/dist/models/signup';
 import EmailService from '../../mail';
 import { Event } from '../../models/event';
 import { Quota } from '../../models/quota';

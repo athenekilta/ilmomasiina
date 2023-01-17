@@ -3,8 +3,8 @@ import React from 'react';
 import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 
-import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
-import { AuditLog } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
+import { AuditLog } from '@tietokilta/ilmomasiina-models';
+import appPaths from '../../paths';
 
 type Props = {
   item: AuditLog.List.Item;
@@ -37,7 +37,7 @@ function describeAction(item: AuditLog.List.Item) {
       return (
         <>
           {ACTION_STRINGS[item.action]}
-          {item.eventId && <Link to={fullPaths().adminEditEvent(item.eventId)}>{item.eventName}</Link>}
+          {item.eventId && <Link to={appPaths.adminEditEvent(item.eventId)}>{item.eventName}</Link>}
         </>
       );
     case 'signup.edit':
@@ -46,7 +46,7 @@ function describeAction(item: AuditLog.List.Item) {
       return (
         <>
           {`${ACTION_STRINGS[item.action]}${item.signupId} (${item.signupName}) tapahtumassa `}
-          {item.eventId && <Link to={fullPaths().adminEditEvent(item.eventId)}>{item.eventName}</Link>}
+          {item.eventId && <Link to={appPaths.adminEditEvent(item.eventId)}>{item.eventName}</Link>}
         </>
       );
     case 'user.create':

@@ -2,7 +2,7 @@ import React, { MouseEvent } from 'react';
 
 import { toast } from 'react-toastify';
 
-import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
+import { User } from '@tietokilta/ilmomasiina-models';
 import { deleteUser, getUsers } from '../../modules/adminUsers/actions';
 import { useTypedDispatch } from '../../store/reducers';
 

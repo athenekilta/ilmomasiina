@@ -12,7 +12,7 @@ initApp().then((app) => {
 
   const url = config.nodeEnv === 'development'
     ? `http://localhost:${port}`
-    : `${config.mailUrlBase}${config.pathPrefix}`;
+    : config.baseUrl;
 
   server.on('listening', () => debugLog(`Server is now running at ${url}.`));
 }).catch((err) => {

@@ -1,13 +1,12 @@
-import { FullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import React, { PropsWithChildren } from 'react';
 
-export const urlPrefix = PREFIX_URL;
+import { FullPaths, PathsContext } from '@tietokilta/ilmomasiina-components';
+import { AdminEvent, Event, Signup } from '@tietokilta/ilmomasiina-models';
+
+export const urlPrefix = PATH_PREFIX;
 
 const appPaths: FullPaths = {
   hasAdmin: true,
-  api: API_URL || `${urlPrefix}/api`,
 
   eventsList: `${urlPrefix}/`,
   eventDetails: (slug: Event.Slug) => `${urlPrefix}/events/${slug}`,
@@ -21,3 +20,11 @@ const appPaths: FullPaths = {
 };
 
 export default appPaths;
+
+export const apiUrl = `${urlPrefix}/api`;
+
+export const PathsProvider = ({ children }: PropsWithChildren<{}>) => (
+  <PathsContext.Provider value={appPaths}>
+    {children}
+  </PathsContext.Provider>
+);

@@ -6,22 +6,22 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 import { timezone } from '../../../config';
-import { paths } from '../../../config/paths';
 import { linkComponent } from '../../../config/router';
 import AuthContext from '../../../contexts/auth';
+import { usePaths } from '../../../contexts/paths';
 import { useSingleEventContext } from '../../../modules/singleEvent';
 
 const EventDescription = () => {
   const event = useSingleEventContext().event!;
   const { loggedIn } = useContext(AuthContext);
-  const adminPaths = paths();
   const Link = linkComponent();
+  const paths = usePaths();
   return (
     <>
       <nav className="ilmo--title-nav">
         <h1>{event.title}</h1>
-        {loggedIn && adminPaths.hasAdmin && (
-          <Button as={Link} variant="primary" to={adminPaths.adminEditEvent(event.id)}>
+        {loggedIn && paths.hasAdmin && (
+          <Button as={Link} variant="primary" to={paths.adminEditEvent(event.id)}>
             Muokkaa
           </Button>
         )}

@@ -1,7 +1,7 @@
 import { hooks as authHooks } from '@feathersjs/authentication';
 import { Service, ServiceMethods } from '@feathersjs/feathers';
 
-import { AuditLogResponse } from '@tietokilta/ilmomasiina-models/src/services/auditlog';
+import { AuditLogResponse } from '@tietokilta/ilmomasiina-models/dist/services/auditlog';
 import { IlmoApplication } from '../../defs';
 import { AuditLog } from '../../models/auditlog';
 import getAuditLogs from './getAuditLogs';

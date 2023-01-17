@@ -20,7 +20,11 @@
     "jsx": "react",
     "incremental": true,
     "declaration": true,
-    "outDir": "dist"
+    "declarationMap": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "composite": true
   },
   "exclude": [
     "node_modules",
@@ -28,5 +32,8 @@
   ],
   "include": [
     "src"
+  ],
+  "references": [
+    { "path": "../ilmomasiina-models" }
   ]
 }

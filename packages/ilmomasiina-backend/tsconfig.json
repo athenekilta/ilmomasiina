@@ -19,7 +19,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
-    "outDir": "dist"
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "baseUrl": ".",
+    "paths": {
+      "@tietokilta/ilmomasiina-models": ["../ilmomasiina-models/src/index.ts"],
+      "@tietokilta/ilmomasiina-models/dist/*": ["../ilmomasiina-models/src/*"]
+    }
   },
   "exclude": [
     "node_modules",
@@ -27,5 +34,8 @@
   ],
   "include": [
     "src/**/*"
+  ],
+  "references": [
+    { "path": "../ilmomasiina-models" }
   ]
 }

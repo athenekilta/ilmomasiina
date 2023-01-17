@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
+import React, { PropsWithChildren, useMemo } from 'react';
 
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
+import { Event } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import { getSignupsByQuota, QuotaSignups } from '../../utils/signupUtils';
@@ -19,7 +19,8 @@ type State = {
 };
 
 const { Provider, useStateContext } = createStateContext<State>();
-export { Provider as SingleEventProvider, useStateContext as useSingleEventContext };
+export { useStateContext as useSingleEventContext };
+export { beginSignup } from './actions';
 
 export function useSingleEventState({ slug }: SingleEventProps) {
   const fetchEvent = useAbortablePromise(async (signal) => (
@@ -36,4 +37,13 @@ export function useSingleEventState({ slug }: SingleEventProps) {
     pending: fetchEvent.pending,
     error: fetchEvent.error,
   });
+}
+
+export function SingleEventProvider({ slug, children }: PropsWithChildren<SingleEventProps>) {
+  const state = useSingleEventState({ slug });
+  return (
+    <Provider value={state}>
+      {children}
+    </Provider>
+  );
 }

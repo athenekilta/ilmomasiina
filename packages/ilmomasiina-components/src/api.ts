@@ -1,6 +1,4 @@
-import { paths } from './config/paths';
-
-interface FetchOptions {
+export interface FetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: any;
   headers?: Record<string, string>;
@@ -33,6 +31,12 @@ export class ApiError extends Error {
   }
 }
 
+let apiUrl = '/api';
+
+export function configureApi(url: string) {
+  apiUrl = url;
+}
+
 export default async function apiFetch(uri: string, {
   method = 'GET', body, headers, accessToken, signal,
 }: FetchOptions = {}) {
@@ -46,7 +50,7 @@ export default async function apiFetch(uri: string, {
     allHeaders['Content-Type'] = 'application/json; charset=utf-8';
   }
 
-  const response = await fetch(`${paths().api}/${uri}`, {
+  const response = await fetch(`${apiUrl}/${uri}`, {
     method,
     body: body === undefined ? undefined : JSON.stringify(body),
     headers: allHeaders,

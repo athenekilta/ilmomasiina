@@ -1,6 +1,6 @@
 import { ServiceMethods } from '@feathersjs/feathers';
 
-import { EventsServiceTypes } from '@tietokilta/ilmomasiina-models/src/services/events';
+import { EventsServiceTypes } from '@tietokilta/ilmomasiina-models/dist/services/events';
 import { IlmoApplication } from '../../defs';
 import getEventDetails from './getEventDetails';
 import getEventsList from './getEventsList';

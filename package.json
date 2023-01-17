@@ -1,20 +1,20 @@
 {
   "name": "ilmomasiina",
-  "version": "2.0.0-alpha1",
+  "version": "2.0.0-alpha11",
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": "^14.19.0",
-    "npm": "^6.14.13"
+    "node": "^16",
+    "npm": "^7"
   },
   "scripts": {
     "bootstrap": "pnpm install",
     "clean": "pnpm run -r clean",
-    "build": "pnpm run -r build",
+    "build": "pnpm run -r --workspace-concurrency=1 build",
     "start": "pnpm run -r --parallel start",
     "lint": "eslint packages",
     "lint:fix": "npm run lint -- --fix",
-    "typecheck": "pnpm run -r typecheck",
+    "typecheck": "pnpm run -r --workspace-concurrency=1 typecheck",
     "test": "pnpm run -r test"
   },
   "repository": {
