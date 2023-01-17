@@ -7,7 +7,9 @@ module.exports = {
       "packages/ilmomasiina-frontend/tsconfig.json",
       "packages/ilmomasiina-backend/tsconfig.json"
     ],
-    "tsconfigRootDir": __dirname
+    "tsconfigRootDir": __dirname,
+    // https://github.com/typescript-eslint/typescript-eslint/issues/2094
+    "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true
   },
   "settings": {
     "react": {
