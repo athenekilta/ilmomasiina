@@ -311,6 +311,11 @@ class SingleEvent extends React.Component {
                 </div>
                 <p className="description">
                   {description}</p>
+                  <hr/>
+                  <p>Ilmoittautumisen sulkeuduttua, ilmoittautuminen on sitova. Tämän jälkeen ilmoittautunut on velvollinen maksamaan osallistumismaksun tai löytämään paikalleen toisen osallistujan. Osallistumalla tapahtumaan sitoudut noudattamaan <a href="/periaatteet">Athenen yhteisiä periaatteita</a>.</p>
+
+                  <p>The sign up is binding when sign-up closes. After this, the person who has signed up is obligated to pay the participation fee or find another participant to attend in one’s place. <a href="/principles">Athene’s common principles</a> are to be followed in the event.</p>
+                  <hr/>
 
               </div>
               <div className="col-xs-12 col-sm-4 pull-right">
