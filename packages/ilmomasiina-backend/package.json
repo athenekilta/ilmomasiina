@@ -42,7 +42,7 @@
     "@sinclair/typebox": "^0.24.22",
     "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha11",
     "base32-encode": "^1.2.0",
-    "bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.0",
     "better-npm-run": "^0.1.1",
     "debug": "^4.3.4",
     "email-templates": "^8.1.0",
