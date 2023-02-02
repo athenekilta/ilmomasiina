@@ -147,6 +147,10 @@ if (config.oldEditTokenSalt === config.newEditTokenSecret) {
   );
 }
 
+if (!config.eventDetailsUrl.includes('{slug}')) {
+  throw new Error('EVENT_DETAILS_URL must contain {slug} if set.');
+}
+
 if (!config.editSignupUrl.includes('{id}') || !config.editSignupUrl.includes('{editToken}')) {
   throw new Error('EDIT_SIGNUP_URL must contain {id} and {editToken} if set.');
 }
