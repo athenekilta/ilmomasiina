@@ -1,6 +1,12 @@
+import dotenv from 'dotenv';
+import path from 'path';
+
 import {
   envBoolean, envEnum, envInteger, envString, frontendFilesPath,
 } from './util/config';
+
+// Load environment variables from .env file (from the root of repository)
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
 // Compatibility for older configs
 if (!process.env.BASE_URL && process.env.EMAIL_BASE_URL) {
