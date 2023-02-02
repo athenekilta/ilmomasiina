@@ -2,7 +2,7 @@ import fastifyCompress from '@fastify/compress';
 import fastifyCors from '@fastify/cors';
 import fastifySensible from '@fastify/sensible';
 import fastifyStatic from '@fastify/static';
-import fastify, { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import fastify, { FastifyInstance } from 'fastify';
 import cron from 'node-cron';
 import path from 'path';
 
@@ -53,12 +53,7 @@ export default async function initApp(): Promise<FastifyInstance> {
   }
 
   // Add on-the-fly compression
-  server.register(fastifyCompress, {
-    onUnsupportedEncoding: (encoding: string, request: FastifyRequest, reply: FastifyReply) => {
-      reply.status(406);
-      return `Encoding '${encoding}' not supported`;
-    },
-  });
+  server.register(fastifyCompress, { inflateIfDeflated: true });
 
   server.register(setupRoutes, {
     prefix: '/api',
