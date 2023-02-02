@@ -155,6 +155,20 @@ In development, we recommend running *without* Docker. It's easier to use in mos
 6. Access the app at <http://localhost:3000>.
 7. On first run, follow the instructions in [_Creating the first admin user_](#creating-the-first-admin-user).
 
+Currently Prettier is not supported, so here is a recommended `.vscode/settings.json`-workaround:
+
+```json
+// .vscode/settings.json
+{
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
+}
+```
 ### Docker Compose
 
 The entire development setup can also be run within Docker using Docker Compose. The
