@@ -3,8 +3,8 @@ import {
   Sequelize,
 } from 'sequelize';
 
-import AnswerAttributes from '@tietokilta/ilmomasiina-models/dist/models/answer';
-import { Question } from './question';
+import type { AnswerAttributes } from '@tietokilta/ilmomasiina-models/dist/models';
+import type { Question } from './question';
 import { RANDOM_ID_LENGTH } from './randomId';
 import { Signup } from './signup';
 

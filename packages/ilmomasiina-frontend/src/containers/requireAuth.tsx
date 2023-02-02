@@ -5,9 +5,10 @@ import { toast } from 'react-toastify';
 import { redirectToLogin } from '../modules/auth/actions';
 import { useTypedDispatch, useTypedSelector } from '../store/reducers';
 
-export default function requireAuth<P>(WrappedComponent: ComponentType<P>) {
+export default function requireAuth<P extends {}>(WrappedComponent: ComponentType<P>) {
   const RequireAuth = (props: P) => {
     const dispatch = useTypedDispatch();
+
     const { accessToken, accessTokenExpires } = useTypedSelector(
       (state) => state.auth,
     );

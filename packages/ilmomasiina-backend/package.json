@@ -34,24 +34,21 @@
     }
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.5.15",
-    "@feathersjs/authentication-local": "^4.5.15",
-    "@feathersjs/errors": "^4.5.15",
-    "@feathersjs/express": "^4.5.15",
-    "@feathersjs/feathers": "^4.5.15",
+    "@fastify/compress": "^6.1.0",
+    "@fastify/cors": "^8.2.0",
+    "@fastify/sensible": "^5.1.0",
+    "@fastify/static": "^6.5.0",
+    "@fastify/type-provider-typebox": "^2.3.0",
+    "@sinclair/typebox": "^0.24.22",
     "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha11",
-    "@types/cors": "^2.8.12",
     "base32-encode": "^1.2.0",
+    "bcrypt": "^5.0.1",
     "better-npm-run": "^0.1.1",
-    "compression": "^1.7.4",
-    "connect-history-api-fallback": "^1.6.0",
-    "cors": "^2.8.5",
     "debug": "^4.3.4",
     "email-templates": "^8.1.0",
-    "express": "^4.18.1",
-    "express-sslify": "^1.2.0",
-    "feathers-hooks-common": "^5.0.6",
-    "feathers-sequelize": "^6.3.4",
+    "fast-jwt": "^1.7.0",
+    "fastify": "^4.3.0",
+    "http-errors": "^2.0.0",
     "ics": "^2.35.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
@@ -66,12 +63,11 @@
     "umzug": "^3.1.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
-    "@types/connect-history-api-fallback": "^1.3.5",
     "@types/debug": "^4.1.7",
     "@types/email-templates": "^8.0.4",
-    "@types/express": "^4.17.13",
-    "@types/express-sslify": "^1.2.2",
+    "@types/http-errors": "^1.8.2",
     "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.41",
     "@types/node-cron": "^3.0.1",
@@ -81,6 +77,6 @@
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2",
     "tsconfig-paths": "^4.1.0",
-    "typescript": "~4.3.5"
+    "typescript": "~4.9"
   }
 }

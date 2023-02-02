@@ -1,39 +1,35 @@
-import {
-  AdminEvent, AdminSlug, Question, Quota,
+import type {
+  AdminEventResponse, CheckSlugResponse, EditConflictError, EventUpdateBody,
+  QuestionID, QuestionUpdate, QuotaID, QuotaUpdate,
 } from '@tietokilta/ilmomasiina-models';
+import type { EditorEventType } from './actions';
 
 export interface EditorState {
-  event: AdminEvent.Details | null;
+  event: AdminEventResponse | null;
   isNew: boolean;
   loadError: boolean;
-  slugAvailability: null | 'checking' | AdminSlug.Check;
+  slugAvailability: null | 'checking' | CheckSlugResponse;
   allCategories: null | string[];
   saving: boolean;
   saveError: boolean;
   moveToQueueModal: { count: number } | null;
-  editConflictModal: EditConflictData | null;
+  editConflictModal: EditConflictError | null;
 }
 
 /** Question type for event editor */
-export interface EditorQuestion extends Omit<AdminEvent.Update.Question, 'options'> {
-  key: Question.Id;
+export interface EditorQuestion extends Omit<QuestionUpdate, 'options'> {
+  key: QuestionID;
   options: string[];
 }
 
 /** Quota type for event editor */
-export interface EditorQuota extends AdminEvent.Update.Quota {
-  key: Quota.Id;
-}
-
-export enum EditorEventType {
-  ONLY_EVENT = 'event',
-  EVENT_WITH_SIGNUP = 'event+signup',
-  ONLY_SIGNUP = 'signup',
-}
+export type EditorQuota = QuotaUpdate & {
+  key: QuotaID;
+};
 
 /** Root form data type for event editor */
 export interface EditorEvent extends Omit<
-AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
+EventUpdateBody, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrationStartDate' | 'registrationEndDate'
 > {
   eventType: EditorEventType;
 
@@ -48,10 +44,5 @@ AdminEvent.Update.Body, 'quotas' | 'questions' | 'date' | 'endDate' | 'registrat
   useOpenQuota: boolean;
 }
 
-export interface EditConflictData {
-  updatedAt: string;
-  deletedQuotas: Quota.Id[];
-  deletedQuestions: Quota.Id[];
-}
-
 export type { EditorActions } from './actions';
+export { EditorEventType } from './actions';

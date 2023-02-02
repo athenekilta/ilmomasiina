@@ -12,7 +12,7 @@ import {
   MOVE_TO_QUEUE_WARNING,
   RESET,
 } from './actionTypes';
-import { EditorActions, EditorState } from './types';
+import type { EditorActions, EditorState } from './types';
 
 const initialState: EditorState = {
   event: null,

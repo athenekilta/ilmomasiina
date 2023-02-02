@@ -5,14 +5,14 @@ import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { AdminEvent } from '@tietokilta/ilmomasiina-models';
+import type { AdminEventListItem as AdminEventListItemSchema } from '@tietokilta/ilmomasiina-models';
 import { deleteEvent, getAdminEvents } from '../../modules/adminEvents/actions';
 import appPaths from '../../paths';
 import { useTypedDispatch } from '../../store/reducers';
 import { isEventInPast } from '../../utils/eventState';
 
 type Props = {
-  event: AdminEvent.List.Event;
+  event: AdminEventListItemSchema;
 };
 
 const AdminEventListItem = ({ event }: Props) => {

@@ -4,7 +4,7 @@ import { Formik, FormikHelpers } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { Signup } from '@tietokilta/ilmomasiina-models';
+import type { SignupUpdateBody } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 import { linkComponent, useNavigate } from '../../../config/router';
 import { usePaths } from '../../../contexts/paths';
@@ -16,7 +16,7 @@ import SignupStatus from './SignupStatus';
 
 const EditForm = () => {
   const { event, signup, registrationClosed } = useEditSignupContext();
-  const isNew = signup!.confirmedAt === null;
+  const isNew = !signup!.confirmed;
   const updateSignup = useUpdateSignup();
   const Link = linkComponent();
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const EditForm = () => {
   // TODO: actually use errors from API
   const [submitError, setSubmitError] = useState(false);
 
-  async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
+  async function onSubmit(answers: SignupUpdateBody, { setSubmitting }: FormikHelpers<SignupUpdateBody>) {
     const action = isNew ? 'Ilmoittautuminen' : 'Muokkaus';
     const progressToast = toast.loading(`${action} käynnissä`);
 
@@ -61,7 +61,7 @@ const EditForm = () => {
 
   return (
     <Formik
-      initialValues={signup! as Signup.Update.Body}
+      initialValues={signup! as SignupUpdateBody}
       onSubmit={onSubmit}
     >
       {({ handleSubmit, isSubmitting }) => (

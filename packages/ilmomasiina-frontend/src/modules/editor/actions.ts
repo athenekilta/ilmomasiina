@@ -1,8 +1,9 @@
-import { ApiError, apiFetch } from '@tietokilta/ilmomasiina-components';
-import {
-  AdminCategory, AdminEvent, AdminSlug, Signup,
+import { ApiError } from '@tietokilta/ilmomasiina-components';
+import type {
+  AdminEventResponse, CategoriesResponse, CheckSlugResponse, EditConflictError, EventID, EventUpdateBody, SignupID,
 } from '@tietokilta/ilmomasiina-models';
-import { DispatchAction, GetState } from '../../store/types';
+import adminApiFetch from '../../api';
+import type { DispatchAction, GetState } from '../../store/types';
 import {
   CATEGORIES_LOADED,
   EDIT_CONFLICT,
@@ -17,7 +18,13 @@ import {
   MOVE_TO_QUEUE_WARNING,
   RESET,
 } from './actionTypes';
-import { EditConflictData, EditorEvent, EditorEventType } from './types';
+import type { EditorEvent } from './types';
+
+export enum EditorEventType {
+  ONLY_EVENT = 'event',
+  EVENT_WITH_SIGNUP = 'event+signup',
+  ONLY_SIGNUP = 'signup',
+}
 
 export const defaultEvent = (): EditorEvent => ({
   eventType: EditorEventType.EVENT_WITH_SIGNUP,
@@ -62,7 +69,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const loaded = (event: AdminEvent.Details) => <const>{
+export const loaded = (event: AdminEventResponse) => <const>{
   type: EVENT_LOADED,
   payload: {
     event,
@@ -87,7 +94,7 @@ export const checkingSlugAvailability = () => <const>{
 };
 
 export const slugAvailabilityChecked = (
-  result: AdminSlug.Check | null,
+  result: CheckSlugResponse | null,
 ) => <const>{
   type: EVENT_SLUG_CHECKED,
   payload: result,
@@ -110,7 +117,7 @@ export const moveToQueueCanceled = () => <const>{
   type: MOVE_TO_QUEUE_CANCELED,
 };
 
-export const editConflictDetected = (data: EditConflictData) => <const>{
+export const editConflictDetected = (data: EditConflictError) => <const>{
   type: EDIT_CONFLICT,
   payload: data,
 };
@@ -139,7 +146,7 @@ export type EditorActions =
   | ReturnType<typeof editConflictDismissed>
   | ReturnType<typeof categoriesLoaded>;
 
-function eventType(event: AdminEvent.Details): EditorEventType {
+function eventType(event: AdminEventResponse): EditorEventType {
   if (event.date === null) {
     return EditorEventType.ONLY_SIGNUP;
   }
@@ -149,7 +156,7 @@ function eventType(event: AdminEvent.Details): EditorEventType {
   return EditorEventType.EVENT_WITH_SIGNUP;
 }
 
-export const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => ({
+export const serverEventToEditor = (event: AdminEventResponse): EditorEvent => ({
   ...event,
   eventType: eventType(event),
   date: event.date ? new Date(event.date) : undefined,
@@ -168,7 +175,7 @@ export const serverEventToEditor = (event: AdminEvent.Details): EditorEvent => (
   })),
 });
 
-const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
+const editorEventToServer = (form: EditorEvent): EventUpdateBody => ({
   ...form,
   date: form.eventType === EditorEventType.ONLY_SIGNUP ? null : form.date?.toISOString() ?? null,
   endDate: form.eventType === EditorEventType.ONLY_SIGNUP ? null : form.endDate?.toISOString() ?? null,
@@ -180,14 +187,15 @@ const editorEventToServer = (form: EditorEvent): AdminEvent.Update.Body => ({
   openQuotaSize: form.useOpenQuota ? form.openQuotaSize : 0,
   questions: form.questions.map((question) => ({
     ...question,
-    options: question.type === 'select' || question.type === 'checkbox' ? question.options.join(';') : null,
+    options: question.type === 'select' || question.type === 'checkbox' ? question.options : null,
   })),
 });
 
-export const getEvent = (id: AdminEvent.Id) => async (dispatch: DispatchAction, getState: GetState) => {
+export const getEvent = (id: EventID) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
+
   try {
-    const response = await apiFetch(`admin/events/${id}`, { accessToken }) as AdminEvent.Details;
+    const response = await adminApiFetch(`admin/events/${id}`, { accessToken }, dispatch) as AdminEventResponse;
     dispatch(loaded(response));
   } catch (e) {
     dispatch(loadFailed());
@@ -203,10 +211,9 @@ export const reloadEvent = () => (dispatch: DispatchAction, getState: GetState) 
 
 export const checkSlugAvailability = (slug: string) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
+
   try {
-    const response = await apiFetch(`admin/slug/${slug}`, {
-      accessToken,
-    }) as AdminSlug.Check;
+    const response = await adminApiFetch(`admin/slugs/${slug}`, { accessToken }, dispatch) as CheckSlugResponse;
     dispatch(slugAvailabilityChecked(response));
   } catch (e) {
     dispatch(slugAvailabilityChecked(null));
@@ -215,10 +222,9 @@ export const checkSlugAvailability = (slug: string) => async (dispatch: Dispatch
 
 export const loadCategories = () => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
+
   try {
-    const response = await apiFetch('admin/categories', {
-      accessToken,
-    }) as AdminCategory.List;
+    const response = await adminApiFetch('admin/categories', { accessToken }, dispatch) as CategoriesResponse;
     dispatch(categoriesLoaded(response));
   } catch (e) {
     dispatch(categoriesLoaded([]));
@@ -233,11 +239,11 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch('admin/events', {
+    const response = await adminApiFetch('admin/events', {
       accessToken,
       method: 'POST',
       body: cleaned,
-    }) as AdminEvent.Details;
+    }, dispatch) as AdminEventResponse;
     dispatch(loaded(response));
     return response;
   } catch (e) {
@@ -247,7 +253,7 @@ export const publishNewEvent = (data: EditorEvent) => async (dispatch: DispatchA
 };
 
 export const publishEventUpdate = (
-  id: AdminEvent.Id,
+  id: EventID,
   data: EditorEvent,
   moveSignupsToQueue: boolean = false,
 ) => async (dispatch: DispatchAction, getState: GetState) => {
@@ -257,14 +263,14 @@ export const publishEventUpdate = (
   const { accessToken } = getState().auth;
 
   try {
-    const response = await apiFetch(`admin/events/${id}`, {
+    const response = await adminApiFetch(`admin/events/${id}`, {
       accessToken,
       method: 'PATCH',
       body: {
         ...cleaned,
         moveSignupsToQueue,
       },
-    }) as AdminEvent.Details;
+    }, dispatch) as AdminEventResponse;
     dispatch(loaded(response));
     return response;
   } catch (e) {
@@ -281,17 +287,14 @@ export const publishEventUpdate = (
   }
 };
 
-export const deleteSignup = (id: Signup.Id) => async (
-  dispatch: DispatchAction,
-  getState: GetState,
-) => {
+export const deleteSignup = (id: SignupID) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
 
   try {
-    await apiFetch(`admin/signups/${id}`, {
+    await adminApiFetch(`admin/signups/${id}`, {
       accessToken,
       method: 'DELETE',
-    });
+    }, dispatch);
     return true;
   } catch (e) {
     return false;

@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 
-import { Signup } from '@tietokilta/ilmomasiina-models';
+import type { SignupForEditResponse } from '@tietokilta/ilmomasiina-models';
+import { EDIT_TOKEN_HEADER } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import useShallowMemo from '../../utils/useShallowMemo';
@@ -16,7 +17,12 @@ export { useDeleteSignup, useUpdateSignup } from './actions';
 
 export function useEditSignupState({ id, editToken }: EditSignupProps) {
   const fetchSignup = useAbortablePromise(async (signal) => {
-    const response = await apiFetch(`signups/${id}?editToken=${editToken}`, { signal }) as Signup.Details;
+    const response = await apiFetch(`signups/${id}`, {
+      signal,
+      headers: {
+        [EDIT_TOKEN_HEADER]: editToken,
+      },
+    }) as SignupForEditResponse;
     return {
       ...response,
       signup: {

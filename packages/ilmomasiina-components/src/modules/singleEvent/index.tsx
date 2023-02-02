@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useMemo } from 'react';
 
-import { Event } from '@tietokilta/ilmomasiina-models';
+import type { UserEventResponse } from '@tietokilta/ilmomasiina-models';
 import apiFetch from '../../api';
 import { useAbortablePromise } from '../../utils/abortable';
 import { getSignupsByQuota, QuotaSignups } from '../../utils/signupUtils';
@@ -12,7 +12,7 @@ export interface SingleEventProps {
 }
 
 type State = {
-  event?: Event.Details;
+  event?: UserEventResponse;
   signupsByQuota?: QuotaSignups[];
   pending: boolean;
   error: boolean;
@@ -24,7 +24,7 @@ export { beginSignup } from './actions';
 
 export function useSingleEventState({ slug }: SingleEventProps) {
   const fetchEvent = useAbortablePromise(async (signal) => (
-    await apiFetch(`events/${slug}`, { signal }) as Event.Details
+    await apiFetch(`events/${slug}`, { signal }) as UserEventResponse
   ), [slug]);
 
   const event = fetchEvent.result;
