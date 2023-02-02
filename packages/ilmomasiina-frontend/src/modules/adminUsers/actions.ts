@@ -85,3 +85,17 @@ export const deleteUser = (id: UserID) => async (dispatch: DispatchAction, getSt
     return false;
   }
 };
+
+export const resetUserPassword = (id: UserID) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+
+  try {
+    await adminApiFetch(`admin/users/${id}/resetpassword`, {
+      accessToken,
+      method: 'POST',
+    }, dispatch);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};

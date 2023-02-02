@@ -81,12 +81,12 @@ export async function inviteUser(
   );
 
   // Send invitation mail
-  EmailService.sendNewUserMail(user.email, {
+  await EmailService.sendNewUserMail(user.email, {
     fields: [
       { label: 'Sähköposti', answer: user.email },
       { label: 'Salasana', answer: password },
     ],
-  }).then();
+  });
 
   reply.status(201);
   return user;

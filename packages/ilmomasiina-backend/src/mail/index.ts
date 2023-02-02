@@ -89,6 +89,24 @@ export default class EmailService {
     }
   }
 
+  static async sendResetPasswordMail(to: string, params: NewUserMailParams) {
+    try {
+      const email = new Email(TEMPLATE_OPTIONS);
+      const brandedParams = {
+        ...params,
+        siteUrl: config.baseUrl,
+        branding: {
+          footerText: config.brandingMailFooterText,
+          footerLink: config.brandingMailFooterLink,
+        },
+      };
+      const html = await email.render(path.join(TEMPLATE_DIR, 'resetPassword/html'), brandedParams);
+      const subject = 'Salasanasi on nollattu Ilmomasiinaan';
+      await EmailService.send(to, subject, html);
+    } catch (error) {
+      console.error(error);
+    }
+  }
   static async sendPromotedFromQueueEmail(to: string, params: PromotedFromQueueMailParams) {
     try {
       const email = new Email(TEMPLATE_OPTIONS);

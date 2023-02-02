@@ -15,6 +15,7 @@ import checkSlugAvailability from './admin/slugs/checkSlugAvailability';
 import { createUser, inviteUser } from './admin/users/createUser';
 import deleteUser from './admin/users/deleteUser';
 import listUsers from './admin/users/listUsers';
+import resetPassword from './admin/users/resetPassword';
 import { adminLogin, requireAdmin } from './authentication/adminLogin';
 import {
   getEventDetailsForAdmin,
@@ -50,7 +51,7 @@ async function setupAdminRoutes(
   const server = fastifyInstance.withTypeProvider<TypeBoxTypeProvider>();
 
   /** Routes for categories */
-  server.get<{/* Params: types.UserID */}>(
+  server.get<{/* Params: types.UserID */ }>(
     '/categories',
     {
       schema: {
@@ -221,6 +222,20 @@ async function setupAdminRoutes(
       },
     },
     deleteUser,
+  );
+
+  server.post(
+    '/users/:id/resetpassword',
+    {
+      schema: {
+        params: schema.userPathParams,
+        response: {
+          ...errorResponses,
+          204: {},
+        },
+      },
+    },
+    resetPassword,
   );
 }
 
