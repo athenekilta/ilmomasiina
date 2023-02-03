@@ -23,7 +23,7 @@ export default async function deleteUser(
       await existing.destroy({ transaction });
       await request.logEvent(AuditEvent.DELETE_USER, {
         extra: {
-          id: existing.email,
+          id: existing.id,
           email: existing.email,
         },
         transaction,

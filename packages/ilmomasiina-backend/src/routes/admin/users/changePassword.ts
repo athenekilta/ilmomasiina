@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { BadRequest, NotFound } from 'http-errors';
+import { BadRequest, NotFound, Unauthorized } from 'http-errors';
 import AdminPasswordAuth from 'src/authentication/adminPasswordAuth';
 
 import type { UserChangePasswordSchema } from '@tietokilta/ilmomasiina-models';
@@ -13,6 +13,7 @@ export default async function changePassword(
   if (request.body.newPassword.length < 10) {
     throw new BadRequest('Password must be at least 10 characters long');
   }
+
   await User.sequelize!.transaction(async (transaction) => {
     // Try to fetch existing user
     const existing = await User.findByPk(
@@ -23,23 +24,23 @@ export default async function changePassword(
     if (!existing) {
       throw new NotFound('User does not exist');
     } else {
-      // Update user with a new password
-      const oldPasswordMatch = AdminPasswordAuth.verifyHash(request.body.oldPassword, existing.password);
-      if (!oldPasswordMatch) {
-        throw new BadRequest('Incorrect password');
+      // Verify old password
+      if (!AdminPasswordAuth.verifyHash(request.body.oldPassword, existing.password)) {
+        throw new Unauthorized('Incorrect password');
       }
-      await existing.update({ password: AdminPasswordAuth.createHash(request.body.newPassword) });
-      const res = {
-        passwordChanged: true,
-        id: existing.email,
-        email: existing.email,
-      };
+      // Update user with a new password
+      await existing.update(
+        { password: AdminPasswordAuth.createHash(request.body.newPassword) },
+        { transaction },
+      );
 
       await request.logEvent(AuditEvent.CHANGE_PASSWORD, {
-        extra: res,
+        extra: {
+          id: existing.id,
+          email: existing.email,
+        },
         transaction,
       });
-      return res;
     }
   });
 

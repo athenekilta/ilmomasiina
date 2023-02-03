@@ -58,7 +58,7 @@ const AdminUsersList = () => {
 
         <h1>Luo uusi käyttäjä</h1>
         <UserForm />
-        <h1>Vaihda salasasanasi</h1>
+        <h1>Vaihda salasanasi</h1>
         <ChangePasswordForm />
       </>
     );

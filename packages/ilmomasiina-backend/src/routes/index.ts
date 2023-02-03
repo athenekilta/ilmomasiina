@@ -3,7 +3,6 @@ import { Type } from '@sinclair/typebox';
 import { FastifyInstance } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models';
-import { userChangePasswordSchema } from '@tietokilta/ilmomasiina-models';
 import { addLogEventHook } from '../auditlog';
 import AdminAuthSession from '../authentication/adminAuthSession';
 import config from '../config';
@@ -243,7 +242,7 @@ async function setupAdminRoutes(
     '/users/self/changepassword',
     {
       schema: {
-        body: userChangePasswordSchema,
+        body: schema.userChangePasswordSchema,
         response: {
           ...errorResponses,
           204: {},

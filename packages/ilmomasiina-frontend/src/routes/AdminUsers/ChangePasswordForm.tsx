@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Field, Formik, FormikHelpers } from 'formik';
 import {
-  Alert,
-  Button, Form, Spinner,
+  Alert, Button, Form, Spinner,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
@@ -13,25 +12,23 @@ import { useTypedDispatch } from '../../store/reducers';
 type FormData = {
   oldPassword: string;
   newPassword: string;
-  newPasswordverify: string;
+  newPasswordVerify: string;
 };
 
 function validate(values: FormData) {
   const errors: Partial<FormData> = {};
   if (!values.oldPassword) {
-    errors.oldPassword = 'Vaadittu';
+    errors.oldPassword = 'Pakollinen kenttä';
   }
   if (!values.newPassword) {
-    errors.newPassword = 'Vaadittu';
+    errors.newPassword = 'Pakollinen kenttä';
+  } else if (values.newPassword.length < 10) {
+    errors.newPassword = 'Salasanassa täytyy olla vähintään 10 merkkiä';
   }
-  if (!values.newPasswordverify) {
-    errors.newPasswordverify = 'Vaadittu';
-  } else if (values.newPassword) {
-    if (values.newPassword.length < 10) {
-      errors.newPassword = 'Salasanassa täytyy olla vähintään 10 merkkiä';
-    } else if (values.newPassword !== values.newPasswordverify) {
-      errors.newPasswordverify = 'Salasanat eivät täsmää';
-    }
+  if (!values.newPasswordVerify) {
+    errors.newPasswordVerify = 'Pakollinen kenttä';
+  } else if (values.newPassword && values.newPassword !== values.newPasswordVerify) {
+    errors.newPasswordVerify = 'Salasanat eivät täsmää';
   }
   return errors;
 }
@@ -44,7 +41,7 @@ const ChangePasswordForm = () => {
     const success = await dispatch(changePassword(data));
     if (success) {
       resetForm();
-      toast.success('Salasana vaihdettiin onnistuneesti.,', { autoClose: 5000 });
+      toast.success('Salasana vaihdettiin onnistuneesti.', { autoClose: 5000 });
     } else {
       toast.error('Salasanan vaihto epäonnistui.', { autoClose: 5000 });
     }
@@ -56,7 +53,7 @@ const ChangePasswordForm = () => {
       initialValues={{
         oldPassword: '',
         newPassword: '',
-        newPasswordverify: '',
+        newPasswordVerify: '',
       }}
       onSubmit={onSubmit}
       validate={validate}
@@ -99,8 +96,8 @@ const ChangePasswordForm = () => {
             placeholder="Uusi salasana"
             aria-label="Uusi salasana"
           />
-          {errors.newPasswordverify && touched.newPasswordverify ? (
-            <Alert variant="danger">{errors.newPasswordverify}</Alert>
+          {errors.newPasswordVerify && touched.newPasswordVerify ? (
+            <Alert variant="danger">{errors.newPasswordVerify}</Alert>
           ) : null}
           <Button type="submit" variant="secondary" disabled={isSubmitting}>
             {isSubmitting ? <Spinner animation="border" /> : 'Vaihda salasana'}

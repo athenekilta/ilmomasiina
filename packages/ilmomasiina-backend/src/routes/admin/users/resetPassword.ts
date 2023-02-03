@@ -24,19 +24,24 @@ export default async function resetPassword(
     } else {
       // Update user with a new password
       const newPassword = generatePassword();
-      await existing.update({ password: AdminPasswordAuth.createHash(newPassword) });
+      await existing.update(
+        { password: AdminPasswordAuth.createHash(newPassword) },
+        { transaction },
+      );
+
+      await request.logEvent(AuditEvent.RESET_PASSWORD, {
+        extra: {
+          id: existing.id,
+          email: existing.email,
+        },
+        transaction,
+      });
+
       await EmailService.sendResetPasswordMail(existing.email, {
         fields: [
           { label: 'Sähköposti', answer: existing.email },
           { label: 'Uusi salasana', answer: newPassword },
         ],
-      });
-      await request.logEvent(AuditEvent.RESET_PASSWORD, {
-        extra: {
-          id: existing.email,
-          email: existing.email,
-        },
-        transaction,
       });
     }
   });

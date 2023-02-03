@@ -35,7 +35,7 @@ const AdminUserListItem = ({ user }: Props) => {
       if (!success) {
         toast.error('Salasanan nollaaminen epäonnistui :(', { autoClose: 5000 });
       } else {
-        toast.success('Salasanan nollaaminen onnistui :)', { autoClose: 5000 });
+        toast.success('Salasana nollattiin onnistuneesti.', { autoClose: 5000 });
       }
     }
   }

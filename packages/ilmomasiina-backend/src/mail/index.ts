@@ -101,12 +101,13 @@ export default class EmailService {
         },
       };
       const html = await email.render(path.join(TEMPLATE_DIR, 'resetPassword/html'), brandedParams);
-      const subject = 'Salasanasi on nollattu Ilmomasiinaan';
+      const subject = 'Salasanasi Ilmomasiinaan on nollattu';
       await EmailService.send(to, subject, html);
     } catch (error) {
       console.error(error);
     }
   }
+
   static async sendPromotedFromQueueEmail(to: string, params: PromotedFromQueueMailParams) {
     try {
       const email = new Email(TEMPLATE_OPTIONS);
