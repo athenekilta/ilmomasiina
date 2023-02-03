@@ -22,7 +22,7 @@ const ACTION_STRINGS: Record<AuditEvent, string> = {
   [AuditEvent.PROMOTE_SIGNUP]: 'ilmo nousi jonosta: ',
   [AuditEvent.CREATE_USER]: 'loi käyttäjän ',
   [AuditEvent.DELETE_USER]: 'poisti käyttäjän ',
-  [AuditEvent.RESET_PASSWORD]: 'resetoi käyttäjän salasanan',
+  [AuditEvent.RESET_PASSWORD]: 'nollasi salasanan käyttäjälle ',
   [AuditEvent.CHANGE_PASSWORD]: 'vaihtoi salasanansa',
 };
 
@@ -54,9 +54,10 @@ function describeAction(item: AuditLogItemSchema) {
       );
     case AuditEvent.CREATE_USER:
     case AuditEvent.DELETE_USER:
+    case AuditEvent.RESET_PASSWORD:
       return `${ACTION_STRINGS[item.action]}${extra.email}`;
     default:
-      return `tuntematon toiminto ${item.action}`;
+      return ACTION_STRINGS[item.action] ?? `tuntematon toiminto ${item.action}`;
   }
 }
 
