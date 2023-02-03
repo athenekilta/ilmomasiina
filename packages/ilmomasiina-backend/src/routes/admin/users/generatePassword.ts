@@ -10,7 +10,7 @@ const GENERATED_PASSWORD_LENGTH = 24;
  */
 export default function generatePassword(): string {
   const chars = [];
-  while (chars.length > GENERATED_PASSWORD_LENGTH) {
+  while (chars.length < GENERATED_PASSWORD_LENGTH) {
     chars.push(ALPHABET[randomInt(0, ALPHABET.length)]);
   }
 
