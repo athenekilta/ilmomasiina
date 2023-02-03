@@ -10,8 +10,8 @@ export default async function changePassword(
   request: FastifyRequest<{ Body: UserChangePasswordSchema }>,
   reply: FastifyReply,
 ): Promise<void> {
-  if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$/g).test(request.body.newPassword)) {
-    throw new BadRequest('Password must be at least 10 characters long, have 1 uppercase, 1 lowercase and a number');
+  if (request.body.newPassword.length < 10) {
+    throw new BadRequest('Password must be at least 10 characters long');
   }
   await User.sequelize!.transaction(async (transaction) => {
     // Try to fetch existing user

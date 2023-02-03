@@ -102,7 +102,10 @@ export const resetUserPassword = (id: UserID) => async (dispatch: DispatchAction
   }
 };
 
-export const changePassword = (data: UserChangePasswordSchema) => async (dispatch: DispatchAction, getState: GetState) => {
+export const changePassword = (data: UserChangePasswordSchema) => async (
+  dispatch: DispatchAction,
+  getState: GetState,
+) => {
   const { accessToken } = getState().auth;
 
   try {

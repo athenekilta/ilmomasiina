@@ -16,6 +16,26 @@ type FormData = {
   newPasswordverify: string;
 };
 
+function validate(values: FormData) {
+  const errors: Partial<FormData> = {};
+  if (!values.oldPassword) {
+    errors.oldPassword = 'Vaadittu';
+  }
+  if (!values.newPassword) {
+    errors.newPassword = 'Vaadittu';
+  }
+  if (!values.newPasswordverify) {
+    errors.newPasswordverify = 'Vaadittu';
+  } else if (values.newPassword) {
+    if (values.newPassword.length < 10) {
+      errors.newPassword = 'Salasanassa täytyy olla vähintään 10 merkkiä';
+    } else if (values.newPassword !== values.newPasswordverify) {
+      errors.newPasswordverify = 'Salasanat eivät täsmää';
+    }
+  }
+  return errors;
+}
+
 const ChangePasswordForm = () => {
   const dispatch = useTypedDispatch();
 
@@ -24,31 +44,13 @@ const ChangePasswordForm = () => {
     const success = await dispatch(changePassword(data));
     if (success) {
       resetForm();
-      toast.success('Salasanan vaihto onnistui,', { autoClose: 5000 });
+      toast.success('Salasana vaihdettiin onnistuneesti.,', { autoClose: 5000 });
     } else {
       toast.error('Salasanan vaihto epäonnistui.', { autoClose: 5000 });
     }
     setSubmitting(false);
   };
-  const validate = (values: FormData) => {
-    const errors: Partial<FormData> = {};
-    if (!values.oldPassword) {
-      errors.oldPassword = 'Vaadittu';
-    }
-    if (!values.newPassword) {
-      errors.newPassword = 'Vaadittu';
-    }
-    if (!values.newPasswordverify) {
-      errors.newPasswordverify = 'Vaadittu';
-    } else if (values.newPassword) {
-      if (!(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{10,}$/g).test(values.newPassword)) {
-        errors.newPassword = 'Salasanan täytyy olla vähintään 10 merkkiä pitkä ja sisältää 1 iso, 1 pieni kirjain ja 1 numero';
-      } else if (values.newPassword !== values.newPasswordverify) {
-        errors.newPasswordverify = 'Salasanat eivät täsmää';
-      }
-    }
-    return errors;
-  };
+
   return (
     <Formik
       initialValues={{
