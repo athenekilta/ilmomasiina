@@ -27,4 +27,5 @@ export enum AuditEvent {
   CREATE_USER = 'user.create',
   DELETE_USER = 'user.delete',
   RESET_PASSWORD = 'user.resetpassword',
+  CHANGE_PASSWORD = 'user.changepassword',
 }

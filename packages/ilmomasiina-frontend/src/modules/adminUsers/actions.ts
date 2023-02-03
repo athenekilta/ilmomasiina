@@ -1,4 +1,6 @@
-import type { UserID, UserInviteSchema, UserListResponse } from '@tietokilta/ilmomasiina-models';
+import type {
+  UserChangePasswordSchema, UserID, UserInviteSchema, UserListResponse,
+} from '@tietokilta/ilmomasiina-models';
 import adminApiFetch from '../../api';
 import type { DispatchAction, GetState } from '../../store/types';
 import {
@@ -93,6 +95,21 @@ export const resetUserPassword = (id: UserID) => async (dispatch: DispatchAction
     await adminApiFetch(`admin/users/${id}/resetpassword`, {
       accessToken,
       method: 'POST',
+    }, dispatch);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const changePassword = (data: UserChangePasswordSchema) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+
+  try {
+    await adminApiFetch('admin/users/self/changepassword', {
+      accessToken,
+      method: 'POST',
+      body: data,
     }, dispatch);
     return true;
   } catch (e) {

@@ -9,6 +9,7 @@ import { getUsers, resetState } from '../../modules/adminUsers/actions';
 import appPaths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import AdminUserListItem from './AdminUserListItem';
+import ChangePasswordForm from './ChangePasswordForm';
 import UserForm from './UserForm';
 
 // import './AdminUsersList.scss';
@@ -57,6 +58,8 @@ const AdminUsersList = () => {
 
         <h1>Luo uusi käyttäjä</h1>
         <UserForm />
+        <h1>Vaihda salasasanasi</h1>
+        <ChangePasswordForm />
       </>
     );
   }

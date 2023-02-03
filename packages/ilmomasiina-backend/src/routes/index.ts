@@ -3,6 +3,7 @@ import { Type } from '@sinclair/typebox';
 import { FastifyInstance } from 'fastify';
 
 import * as schema from '@tietokilta/ilmomasiina-models';
+import { userChangePasswordSchema } from '@tietokilta/ilmomasiina-models';
 import { addLogEventHook } from '../auditlog';
 import AdminAuthSession from '../authentication/adminAuthSession';
 import config from '../config';
@@ -12,6 +13,7 @@ import createEvent from './admin/events/createEvent';
 import deleteEvent from './admin/events/deleteEvent';
 import updateEvent from './admin/events/updateEvent';
 import checkSlugAvailability from './admin/slugs/checkSlugAvailability';
+import changePassword from './admin/users/changePassword';
 import { createUser, inviteUser } from './admin/users/createUser';
 import deleteUser from './admin/users/deleteUser';
 import listUsers from './admin/users/listUsers';
@@ -236,6 +238,19 @@ async function setupAdminRoutes(
       },
     },
     resetPassword,
+  );
+  server.post(
+    '/users/self/changepassword',
+    {
+      schema: {
+        body: userChangePasswordSchema,
+        response: {
+          ...errorResponses,
+          204: {},
+        },
+      },
+    },
+    changePassword,
   );
 }
 

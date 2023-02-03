@@ -23,6 +23,7 @@ const ACTION_STRINGS: Record<AuditEvent, string> = {
   [AuditEvent.CREATE_USER]: 'loi käyttäjän ',
   [AuditEvent.DELETE_USER]: 'poisti käyttäjän ',
   [AuditEvent.RESET_PASSWORD]: 'resetoi käyttäjän salasanan',
+  [AuditEvent.CHANGE_PASSWORD]: 'vaihtoi salasanansa',
 };
 
 function describeAction(item: AuditLogItemSchema) {

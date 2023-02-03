@@ -32,7 +32,7 @@ module.exports = {
     "browser": true
   },
   "rules": {
-    "max-len": ["error", 120, 2],
+    "max-len": ["error", 140, 2],
     "@typescript-eslint/semi": ["error", "always"],
     "@typescript-eslint/quotes": ["error", "single"],
     // To allow grouping of class members - especially for Models.
