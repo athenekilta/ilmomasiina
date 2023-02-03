@@ -17,3 +17,9 @@ export const userAttributes = Type.Object({
     // TODO: Add validation RegExp for email
   }),
 });
+
+/** Password of a user. */
+export const password = Type.String({
+  minLength: 10,
+  maxLength: 255,
+});
