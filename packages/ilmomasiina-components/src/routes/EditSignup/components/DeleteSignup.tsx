@@ -70,7 +70,7 @@ const DeleteSignup = () => {
         <strong>Tätä toimintoa ei voi perua.</strong>
         <br/>
         You will lose your place in the queue if you remove your registration.
-        If you change your mind later, you can always sign up againg,
+        If you change your mind later, you can always sign up again,
         but you will be placed at the end of the queue.
         {' '}
         <strong>This action can not be undone.</strong>
