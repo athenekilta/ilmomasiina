@@ -5,14 +5,14 @@ import moment from 'moment-timezone';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
+import type { AdminEventListItem as AdminEventListItemSchema } from '@tietokilta/ilmomasiina-models';
 import { deleteEvent, getAdminEvents } from '../../modules/adminEvents/actions';
+import appPaths from '../../paths';
 import { useTypedDispatch } from '../../store/reducers';
 import { isEventInPast } from '../../utils/eventState';
 
 type Props = {
-  event: AdminEvent.List.Event;
+  event: AdminEventListItemSchema;
 };
 
 const AdminEventListItem = ({ event }: Props) => {
@@ -44,19 +44,19 @@ const AdminEventListItem = ({ event }: Props) => {
   } else if (!listed) {
     status = 'Piilotettu';
   } else {
-    status = <Link to={fullPaths().eventDetails(slug)}>Julkaistu</Link>;
+    status = <Link to={appPaths.eventDetails(slug)}>Julkaistu</Link>;
   }
 
   return (
     <tr>
       <td>
-        <Link to={fullPaths().adminEditEvent(id)}>{title}</Link>
+        <Link to={appPaths.adminEditEvent(id)}>{title}</Link>
       </td>
       <td>{date ? moment(date).tz(TIMEZONE).format('DD.MM.YYYY') : ''}</td>
       <td>{status}</td>
       <td>{sumBy(quotas, 'signupCount')}</td>
       <td>
-        <Link to={fullPaths().adminEditEvent(id)}>
+        <Link to={appPaths.adminEditEvent(id)}>
           Muokkaa tapahtumaa
         </Link>
         &ensp;/&ensp;

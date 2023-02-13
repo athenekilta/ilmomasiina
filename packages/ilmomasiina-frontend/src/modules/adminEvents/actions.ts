@@ -1,6 +1,6 @@
-import apiFetch from '@tietokilta/ilmomasiina-components/src/api';
-import { AdminEvent } from '@tietokilta/ilmomasiina-models/src/services/admin/events';
-import { DispatchAction, GetState } from '../../store/types';
+import type { AdminEventListResponse, EventID } from '@tietokilta/ilmomasiina-models';
+import adminApiFetch from '../../api';
+import type { DispatchAction, GetState } from '../../store/types';
 import {
   EVENTS_LOAD_FAILED,
   EVENTS_LOADED,
@@ -11,7 +11,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const eventsLoaded = (events: AdminEvent.List) => <const>{
+export const eventsLoaded = (events: AdminEventListResponse) => <const>{
   type: EVENTS_LOADED,
   payload: events,
 };
@@ -27,23 +27,21 @@ export type AdminEventsActions =
 
 export const getAdminEvents = () => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
-
   try {
-    const response = await apiFetch('admin/events', { accessToken });
-    dispatch(eventsLoaded(response as AdminEvent.List));
+    const response = await adminApiFetch('admin/events', { accessToken }, dispatch);
+    dispatch(eventsLoaded(response as AdminEventListResponse));
   } catch (e) {
     dispatch(eventsLoadFailed());
   }
 };
 
-export const deleteEvent = (id: AdminEvent.Id) => async (_dispatch: DispatchAction, getState: GetState) => {
+export const deleteEvent = (id: EventID) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
-
   try {
-    await apiFetch(`admin/events/${id}`, {
+    await adminApiFetch(`admin/events/${id}`, {
       accessToken,
       method: 'DELETE',
-    });
+    }, dispatch);
     return true;
   } catch (e) {
     return false;

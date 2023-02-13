@@ -6,9 +6,9 @@ import {
   Sequelize,
 } from 'sequelize';
 
-import EventAttributes from '@tietokilta/ilmomasiina-models/src/models/event';
-import { Question } from './question';
-import { Quota } from './quota';
+import type { EventAttributes } from '@tietokilta/ilmomasiina-models/dist/models';
+import type { Question } from './question';
+import type { Quota } from './quota';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
 
 // Drop updatedAt so we don't need to define it manually in Event.init()

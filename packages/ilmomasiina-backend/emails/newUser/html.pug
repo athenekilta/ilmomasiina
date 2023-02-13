@@ -8,4 +8,4 @@ block mainContent
 				li
 					strong #{val.label}:
 					| #{val.answer}
-	p.bodyText Voit kirjautua sisään osoitteessa // You may log in at #{branding.siteUrl}
+	p.bodyText Voit kirjautua sisään osoitteessa // You may log in at #[a(href=siteUrl) #{siteUrl}].

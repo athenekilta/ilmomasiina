@@ -1,8 +1,10 @@
+import { AuditEvent } from '../enum';
+
 export default interface AuditLogAttributes {
   id: number;
   user: string | null;
   ipAddress: string;
-  action: string | null;
+  action: AuditEvent;
   eventId: string | null;
   eventName: string | null;
   signupId: string | null;

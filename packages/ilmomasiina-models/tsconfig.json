@@ -19,7 +19,11 @@
     "isolatedModules": true,
     "incremental": true,
     "declaration": true,
-    "outDir": "dist"
+    "declarationMap": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
+    "composite": true
   },
   "exclude": [
     "node_modules",

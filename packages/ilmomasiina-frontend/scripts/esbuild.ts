@@ -5,6 +5,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
 import momentPlugin from './momentPlugin';
+import tsconfigPathsResolverPlugin from './tsconfigPathsResolverPlugin';
 
 type Environment = 'development' | 'production' | 'test';
 
@@ -30,7 +31,7 @@ function definitionsFromEnv(environment: Environment): Record<string, string> {
 
     SENTRY_DSN: process.env.SENTRY_DSN || '',
 
-    PREFIX_URL: PATH_PREFIX,
+    PATH_PREFIX,
     API_URL: process.env.API_URL || '',
     BRANDING_HEADER_TITLE_TEXT: process.env.BRANDING_HEADER_TITLE_TEXT,
     BRANDING_FOOTER_GDPR_TEXT: process.env.BRANDING_FOOTER_GDPR_TEXT,
@@ -82,6 +83,9 @@ export default function configure(defaultEnv: Environment): BuildOptions {
       }),
       momentPlugin({
         timezone: TIMEZONE,
+      }),
+      tsconfigPathsResolverPlugin({
+        tsconfigPath: resolve('tsconfig.json'),
       }),
     ],
     loader: {

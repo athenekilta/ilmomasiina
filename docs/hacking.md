@@ -4,15 +4,19 @@ This document presents a few ways you might want to use Ilmomasiina outside our 
 
 ## Embedding
 
-To embed events on your site, import components from `ilmomasiina-components`, or go fully custom with API models
-from `ilmomasiina-models` (see [API](#api)).
+To embed events on your site, there are a few options:
 
-In order to allow style customization, styles are not imported by the TS files. You'll need to `@use` either
-`_all.scss` or individual component styles manually. You can
-[override variables](https://sass-lang.com/documentation/at-rules/use#reassigning-variables) from `_definitions.scss`
-before that.
+- Import ready-made components from `ilmomasiina-components`.
 
-In addition, you'll want to import suitable parts of Bootstrap's SCSS. (TODO: make a nice way of doing this)
+  In order to allow style customization, styles are not imported by our TS files. You'll need to `@use` either
+  `_all.scss` or individual component styles manually. You can
+  [override variables](https://sass-lang.com/documentation/at-rules/use#reassigning-variables) from `_definitions.scss`
+  before that.
+
+  In addition, you'll want to import suitable (or all) parts of Bootstrap 4's SCSS. This works best if you have a
+  Bootstrap 4 based app, or if you import Bootstrap nested inside your own wrapper CSS class.
+- Import the state hooks from `ilmomasiina-components` and write your own React frontend.
+- Go fully custom with API models from `ilmomasiina-models` (see [API](#api)).
 
 ## App customization
 

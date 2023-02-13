@@ -3,15 +3,15 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import branding from '../../branding';
+import appPaths from '../../paths';
 
 import './Footer.scss';
 
 const Footer = () => (
   <footer>
     <Container>
-      <Link to={fullPaths().adminEventsList}>
+      <Link to={appPaths.adminEventsList}>
         Hallinta
       </Link>
       {branding.footerGdprText && (

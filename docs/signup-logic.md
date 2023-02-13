@@ -32,7 +32,7 @@ locks, but such a change is not trivial due to transactions.
 The following actions currently trigger a refresh:
 - Creation of new signup (`POST /api/signups`)
 - Expiration of signups (`deleteUnconfirmedSignups.ts`)
-- Deletion of signups by user or admin (`DELETE /api/signups/<id>`)
+- Deletion of signups by user or admin (`DELETE /api/signups/<id>`, `DELETE /api/admin/signups/<id>`)
 - Any modifications on the event (`UPDATE /api/admin/events/<id>`)
 
 ## Expired signups

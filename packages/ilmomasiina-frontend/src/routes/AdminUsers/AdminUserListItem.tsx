@@ -1,38 +1,52 @@
-import React, { MouseEvent } from 'react';
+import React from 'react';
 
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
-import { deleteUser, getUsers } from '../../modules/adminUsers/actions';
+import type { UserSchema } from '@tietokilta/ilmomasiina-models';
+import { deleteUser, getUsers, resetUserPassword } from '../../modules/adminUsers/actions';
 import { useTypedDispatch } from '../../store/reducers';
 
 type Props = {
-  user: User.List.User;
+  user: UserSchema;
 };
 
 const AdminUserListItem = ({ user }: Props) => {
   const dispatch = useTypedDispatch();
 
-  async function onDelete(e: MouseEvent) {
-    e.preventDefault();
+  async function onDelete() {
     const confirmed = window.confirm(
       'Haluatko varmasti poistaa tämän käyttäjän? Tätä toimintoa ei voi perua.',
     );
     if (confirmed) {
       const success = await dispatch(deleteUser(user.id));
       if (!success) {
-        toast.error('Poisto epäonnistui :(', { autoClose: 2000 });
+        toast.error('Poisto epäonnistui :(', { autoClose: 5000 });
       }
       dispatch(getUsers());
     }
   }
-
+  async function onResetPassword() {
+    const confirmed = window.confirm(
+      'Haluatko varmasti nollata käyttäjän salasanan? Uusi salasana lähetetään käyttäjän sähköpostiin.',
+    );
+    if (confirmed) {
+      const success = await dispatch(resetUserPassword(user.id));
+      if (!success) {
+        toast.error('Salasanan nollaaminen epäonnistui :(', { autoClose: 5000 });
+      } else {
+        toast.success('Salasana nollattiin onnistuneesti.', { autoClose: 5000 });
+      }
+    }
+  }
   return (
     <tr>
       <td>{user.email}</td>
       <td>
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <a href="#" onClick={onDelete} role="button">Poista käyttäjä</a>
+        <ButtonGroup size="sm">
+          <Button type="button" onClick={onResetPassword} size="sm" variant="secondary">Nollaa salasana</Button>
+          <Button type="button" onClick={onDelete} size="sm" variant="danger">Poista käyttäjä</Button>
+        </ButtonGroup>
       </td>
     </tr>
   );

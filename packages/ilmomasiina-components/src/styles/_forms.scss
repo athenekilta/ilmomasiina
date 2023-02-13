@@ -1,6 +1,4 @@
-@use "~@tietokilta/ilmomasiina-components/src/styles/definitions" as *;
-
-
+@use "definitions" as *;
 
 .ilmo--form {
   // Make forms look nicer when labels wrap
@@ -17,7 +15,7 @@
   }
 
   label[data-required]:not([data-required=false])::after {
-    content: '\00A0*';
+    content: "\00A0*";
     color: $red;
     font-weight: 600;
   }

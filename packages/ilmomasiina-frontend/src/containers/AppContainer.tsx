@@ -7,12 +7,10 @@ import { Route, Switch } from 'react-router-dom';
 import { Flip, ToastContainer } from 'react-toastify';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
-import EditSignup from '@tietokilta/ilmomasiina-components/src/routes/EditSignup';
-import Events from '@tietokilta/ilmomasiina-components/src/routes/Events';
-import SingleEvent from '@tietokilta/ilmomasiina-components/src/routes/SingleEvent';
+import { EditSignup, Events, SingleEvent } from '@tietokilta/ilmomasiina-components';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
+import appPaths, { PathsProvider } from '../paths';
 import PageNotFound from '../routes/404/PageNotFound';
 import AdminEventsList from '../routes/AdminEvents';
 import AdminUsersList from '../routes/AdminUsers';
@@ -32,41 +30,43 @@ const AppContainer = () => (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <ConnectedRouter history={history}>
-          <AuthProvider>
-            <Header />
-            <Container>
-              <Switch>
-                <Route exact path={fullPaths().eventsList}>
-                  <Events />
-                </Route>
-                <Route exact path={fullPaths().eventDetails(':slug')}>
-                  <SingleEvent />
-                </Route>
-                <Route exact path={fullPaths().editSignup(':id', ':editToken')}>
-                  <EditSignup />
-                </Route>
-                <Route exact path={fullPaths().adminLogin}>
-                  <Login />
-                </Route>
-                <Route exact path={fullPaths().adminEventsList}>
-                  <AdminEventsList />
-                </Route>
-                <Route exact path={fullPaths().adminUsersList}>
-                  <AdminUsersList />
-                </Route>
-                <Route exact path={fullPaths().adminEditEvent(':id')}>
-                  <Editor />
-                </Route>
-                <Route exact path={fullPaths().adminAuditLog}>
-                  <AuditLog />
-                </Route>
-                <Route path="*">
-                  <PageNotFound />
-                </Route>
-              </Switch>
-            </Container>
-            <Footer />
-          </AuthProvider>
+          <PathsProvider>
+            <AuthProvider>
+              <Header />
+              <Container>
+                <Switch>
+                  <Route exact path={appPaths.eventsList}>
+                    <Events />
+                  </Route>
+                  <Route exact path={appPaths.eventDetails(':slug')}>
+                    <SingleEvent />
+                  </Route>
+                  <Route exact path={appPaths.editSignup(':id', ':editToken')}>
+                    <EditSignup />
+                  </Route>
+                  <Route exact path={appPaths.adminLogin}>
+                    <Login />
+                  </Route>
+                  <Route exact path={appPaths.adminEventsList}>
+                    <AdminEventsList />
+                  </Route>
+                  <Route exact path={appPaths.adminUsersList}>
+                    <AdminUsersList />
+                  </Route>
+                  <Route exact path={appPaths.adminEditEvent(':id')}>
+                    <Editor />
+                  </Route>
+                  <Route exact path={appPaths.adminAuditLog}>
+                    <AuditLog />
+                  </Route>
+                  <Route path="*">
+                    <PageNotFound />
+                  </Route>
+                </Switch>
+              </Container>
+              <Footer />
+            </AuthProvider>
+          </PathsProvider>
         </ConnectedRouter>
         <ToastContainer
           position="top-right"

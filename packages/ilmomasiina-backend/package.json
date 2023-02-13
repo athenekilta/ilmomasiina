@@ -1,6 +1,6 @@
 {
   "name": "@tietokilta/ilmomasiina-backend",
-  "version": "2.0.0-alpha1",
+  "version": "2.0.0-alpha11",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,15 +10,15 @@
     "start": "bnr start:dev",
     "start:dev": "bnr start:dev",
     "start:prod": "bnr start:prod",
-    "stop:prod": "bnr stop:prod",
-    "monit:prod": "bnr monit:prod",
-    "build": "bnr build",
+    "stop:prod": "pm2 stop 0",
+    "monit:prod": "pm2 monit",
+    "build": "tsc --build",
     "clean": "rimraf dist",
-    "typecheck": "bnr typecheck"
+    "typecheck": "tsc --build"
   },
   "betterScripts": {
     "start:dev": {
-      "command": "ts-node-dev --respawn --project tsconfig.json src/bin/server.ts",
+      "command": "ts-node-dev -r tsconfig-paths/register --respawn --project tsconfig.json src/bin/server.ts",
       "env": {
         "NODE_ENV": "development",
         "DEBUG": "app:*",
@@ -26,42 +26,30 @@
       }
     },
     "start:prod": {
-      "command": "pm2 start node_modules/.bin/ts-node -- --transpile-only src/bin/server.ts",
+      "command": "pm2 start dist/bin/server.js",
       "env": {
         "NODE_ENV": "production",
         "DEBUG": "app:*"
       }
-    },
-    "stop:prod": {
-      "command": "pm2 stop 0"
-    },
-    "monit:prod": {
-      "command": "pm2 monit"
-    },
-    "build": {
-      "command": "tsc --build"
-    },
-    "typecheck": {
-      "command": "tsc --noEmit"
     }
   },
   "dependencies": {
-    "@feathersjs/authentication": "^4.5.15",
-    "@feathersjs/authentication-local": "^4.5.15",
-    "@feathersjs/errors": "^4.5.15",
-    "@feathersjs/express": "^4.5.15",
-    "@feathersjs/feathers": "^4.5.15",
-    "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha1",
+    "@fastify/compress": "^6.1.0",
+    "@fastify/cors": "^8.2.0",
+    "@fastify/sensible": "^5.1.0",
+    "@fastify/static": "^6.5.0",
+    "@fastify/type-provider-typebox": "^2.3.0",
+    "@sinclair/typebox": "^0.24.22",
+    "@tietokilta/ilmomasiina-models": "workspace:2.0.0-alpha11",
     "base32-encode": "^1.2.0",
+    "bcrypt": "^5.1.0",
     "better-npm-run": "^0.1.1",
-    "compression": "^1.7.4",
-    "connect-history-api-fallback": "^1.6.0",
     "debug": "^4.3.4",
+    "dotenv": "^16.0.3",
     "email-templates": "^8.1.0",
-    "express": "^4.18.1",
-    "express-sslify": "^1.2.0",
-    "feathers-hooks-common": "^5.0.6",
-    "feathers-sequelize": "^6.3.4",
+    "fast-jwt": "^1.7.0",
+    "fastify": "^4.3.0",
+    "http-errors": "^2.0.0",
     "ics": "^2.35.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.3",
@@ -76,19 +64,20 @@
     "umzug": "^3.1.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
-    "@types/connect-history-api-fallback": "^1.3.5",
     "@types/debug": "^4.1.7",
     "@types/email-templates": "^8.0.4",
-    "@types/express": "^4.17.13",
-    "@types/express-sslify": "^1.2.2",
+    "@types/http-errors": "^1.8.2",
     "@types/lodash": "^4.14.182",
     "@types/node": "^16.11.41",
     "@types/node-cron": "^3.0.1",
     "@types/nodemailer": "^6.4.4",
     "@types/nodemailer-mailgun-transport": "^1.4.3",
     "rimraf": "^3.0.2",
-    "ts-node-dev": "^1.1.8",
-    "typescript": "~4.3.5"
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "~4.9"
   }
 }

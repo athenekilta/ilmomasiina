@@ -6,13 +6,13 @@ import { shallowEqual } from 'react-redux';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { fullPaths } from '@tietokilta/ilmomasiina-components/src/config/paths';
 import requireAuth from '../../containers/requireAuth';
 import {
   getEvent, newEvent, publishEventUpdate, publishNewEvent, resetState, serverEventToEditor,
 } from '../../modules/editor/actions';
 import { selectFormData as selectInitialFormData } from '../../modules/editor/selectors';
 import { EditorEvent } from '../../modules/editor/types';
+import appPaths from '../../paths';
 import { useTypedDispatch, useTypedSelector } from '../../store/reducers';
 import EditForm from './components/EditForm';
 
@@ -72,7 +72,7 @@ const Editor = () => {
       let saved;
       if (isNew) {
         saved = await dispatch(publishNewEvent(modifiedEvent));
-        history.push(fullPaths().adminEditEvent(saved.id));
+        history.push(appPaths.adminEditEvent(saved.id));
         toast.success('Tapahtuma luotiin onnistuneesti!', {
           autoClose: 2000,
         });
@@ -105,7 +105,7 @@ const Editor = () => {
       <div className="ilmo--loading-container">
         <h1>Hups, jotain meni pieleen</h1>
         <p>{`Tapahtumaa id:llä "${urlEventId}" ei löytynyt`}</p>
-        <Link to={fullPaths().adminEventsList}>Palaa tapahtumalistaukseen</Link>
+        <Link to={appPaths.adminEventsList}>Palaa tapahtumalistaukseen</Link>
       </div>
     );
   }
@@ -114,7 +114,7 @@ const Editor = () => {
     return (
       <>
         <h1>Muokkaa tapahtumaa</h1>
-        <Link to={fullPaths().adminEventsList}>&#8592; Takaisin</Link>
+        <Link to={appPaths.adminEventsList}>&#8592; Takaisin</Link>
         <div className="ilmo--loading-container">
           <Spinner animation="border" />
         </div>

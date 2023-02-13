@@ -7,18 +7,19 @@ import reject from 'lodash/reject';
 import without from 'lodash/without';
 import { Form } from 'react-bootstrap';
 
-import { Event } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import type { Question, SignupUpdateBody } from '@tietokilta/ilmomasiina-models';
+import { QuestionType } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
 
 type Props = {
   name: string;
-  questions: Event.Details.Question[];
+  questions: Question[];
+  disabled?: boolean;
 };
 
-const QuestionFields = ({ name, questions }: Props) => {
+const QuestionFields = ({ name, questions, disabled }: Props) => {
   // TODO: add formik-based validation
-  const [{ value }, , { setValue }] = useField<Signup.Update.Body.Answer[]>(name);
+  const [{ value }, , { setValue }] = useField<SignupUpdateBody['answers']>(name);
   return (
     <>
       {questions.map((question) => {
@@ -42,27 +43,29 @@ const QuestionFields = ({ name, questions }: Props) => {
         let input: ReactNode;
         let isCheckboxes = false;
         switch (question.type) {
-          case 'text':
+          case QuestionType.TEXT:
             input = (
               <Form.Control
                 type="text"
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
             );
             break;
-          case 'number':
+          case QuestionType.NUMBER:
             input = (
               <Form.Control
                 type="number"
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
             );
             break;
-          case 'checkbox': {
+          case QuestionType.CHECKBOX: {
             const currentAnswers = currentAnswer.split(';');
             input = question.options?.map((option, optIndex) => (
               <Form.Check
@@ -73,6 +76,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                 value={option}
                 label={option}
                 required={question.required && !currentAnswers.some((answer) => answer !== option)}
+                disabled={disabled}
                 checked={currentAnswers.includes(option)}
                 onChange={(e) => toggleChecked(option, e.target.checked)}
               />
@@ -80,32 +84,35 @@ const QuestionFields = ({ name, questions }: Props) => {
             isCheckboxes = true;
             break;
           }
-          case 'textarea':
+          case QuestionType.TEXT_AREA:
             input = (
               <Form.Control
                 as="textarea"
                 rows={3}
                 cols={40}
                 required={question.required}
+                readOnly={disabled}
                 value={currentAnswer}
                 onChange={(e) => updateAnswer(e.target.value)}
               />
             );
             break;
-          case 'select':
+          case QuestionType.SELECT:
             if (question.options && question.options.length > 3) {
               input = (
                 <Form.Control
                   as="select"
                   required={question.required}
+                  disabled={disabled}
                   value={currentAnswer}
                   onChange={(e) => updateAnswer(e.target.value)}
                 >
-                  <option disabled={question.required}>
+                  <option value="" disabled={question.required}>
                     Valitse&hellip;
                   </option>
-                  {question.options?.map((option) => (
-                    <option key={question.id} value={option}>
+                  {question.options?.map((option, optIndex) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <option key={optIndex} value={option}>
                       {option}
                     </option>
                   ))}
@@ -122,6 +129,7 @@ const QuestionFields = ({ name, questions }: Props) => {
                   value={option}
                   label={option}
                   required={question.required}
+                  disabled={disabled}
                   checked={currentAnswer === option}
                   onChange={(e) => updateAnswer(e.target.value)}
                 />

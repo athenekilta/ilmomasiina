@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-import AuthContext from '@tietokilta/ilmomasiina-components/src/contexts/auth';
+import { AuthContext } from '@tietokilta/ilmomasiina-components';
 import { useTypedSelector } from '../store/reducers';
 
 const AuthProvider = ({ children }: PropsWithChildren<{}>) => {

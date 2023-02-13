@@ -1,4 +1,7 @@
 /*
 !/dist
+!/src
+src/**/*.ts
+src/**/*.tsx
 *.tsbuildinfo
 !README.md

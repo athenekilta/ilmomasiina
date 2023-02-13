@@ -24,7 +24,12 @@
       "src",
       "scripts"
     ],
-    "noEmit": true
+    "baseUrl": ".",
+    "paths": {
+      "@tietokilta/ilmomasiina-components": ["../ilmomasiina-components/src/index.ts"],
+      "@tietokilta/ilmomasiina-components/dist/*": ["../ilmomasiina-components/src/*"],
+      "@tietokilta/ilmomasiina-models": ["../ilmomasiina-models/src/index.ts"]
+    }
   },
   "exclude": [
     "dist"
@@ -32,5 +37,9 @@
   "include": [
     "src",
     "scripts"
+  ],
+  "references": [
+    { "path": "../ilmomasiina-components" },
+    { "path": "../ilmomasiina-models" }
   ]
 }

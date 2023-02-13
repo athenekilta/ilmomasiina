@@ -2,7 +2,8 @@ import {
   DataTypes, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import AuditLogAttributes from '@tietokilta/ilmomasiina-models/src/models/auditlog';
+import type { AuditEvent } from '@tietokilta/ilmomasiina-models';
+import type { AuditLogAttributes } from '@tietokilta/ilmomasiina-models/dist/models';
 import { RANDOM_ID_LENGTH } from './randomId';
 
 export interface AuditLogCreationAttributes extends Optional<AuditLogAttributes, 'id'> {}
@@ -11,7 +12,7 @@ export class AuditLog extends Model<AuditLogAttributes, AuditLogCreationAttribut
   public id!: number;
   public user!: string | null;
   public ipAddress!: string;
-  public action!: string;
+  public action!: AuditEvent;
   public eventId!: string | null;
   public eventName!: string | null;
   public signupId!: string | null;

@@ -1,0 +1,39 @@
+name: Lint & type-check
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+    types: [synchronize, opened, reopened, ready_for_review]
+
+jobs:
+  lint:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+    -
+      name: Check out the repo
+      uses: actions/checkout@v3
+    -
+      uses: pnpm/action-setup@v2
+      with:
+        version: 7
+    -
+      name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'pnpm'
+    -
+      name: Install dependencies
+      run: |
+        npm install -g pnpm@7
+        pnpm install --frozen-lockfile --ignore-scripts
+    -
+      name: Run ESLint
+      run: npm run lint
+    -
+      name: Run type checking
+      run: npm run typecheck

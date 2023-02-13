@@ -11,7 +11,7 @@ import { SignupWithQuota } from '../../../utils/signupUtils';
 type Props = {
   index: number;
   showQuota: boolean;
-  signup: SignupWithQuota;
+  signup: Omit<SignupWithQuota, 'id'>;
 };
 
 const SignupListRow = ({ showQuota, signup, index }: Props) => {

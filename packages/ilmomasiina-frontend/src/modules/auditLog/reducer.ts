@@ -4,7 +4,7 @@ import {
   AUDIT_LOG_QUERY,
   RESET,
 } from './actionTypes';
-import { AuditLogActions, AuditLogState } from './types';
+import type { AuditLogActions, AuditLogState } from './types';
 
 const initialState: AuditLogState = {
   auditLogQuery: {},

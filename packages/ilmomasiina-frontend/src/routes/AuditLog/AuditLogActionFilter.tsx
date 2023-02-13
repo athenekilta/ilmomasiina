@@ -2,27 +2,30 @@ import React from 'react';
 
 import { Form } from 'react-bootstrap';
 
+import { AuditEvent } from '@tietokilta/ilmomasiina-models';
 import { setAuditLogQueryField } from '../../modules/auditLog/actions';
 import { useTypedDispatch } from '../../store/reducers';
 
 const ACTIONS = [
-  ['event.create', 'Tapahtuma: Luo'],
-  ['event.edit', 'Tapahtuma: Muokkaa'],
-  ['event.publish', 'Tapahtuma: Julkaise'],
-  ['event.unpublish', 'Tapahtuma: Luonnokseksi'],
-  ['event.delete', 'Tapahtuma: Poista'],
-  ['signup.edit', 'Ilmoittautuminen: Muokkaa'],
-  ['signup.delete', 'Ilmoittautuminen: Poista'],
-  ['signup.queuePromote', 'Ilmoittautuminen: Nousi jonosta'],
-  ['user.create', 'Käyttäjä: Luo'],
-  ['user.delete', 'Käyttäjä: Poista'],
+  [AuditEvent.CREATE_EVENT, 'Tapahtuma: Luo'],
+  [AuditEvent.EDIT_EVENT, 'Tapahtuma: Muokkaa'],
+  [AuditEvent.PUBLISH_EVENT, 'Tapahtuma: Julkaise'],
+  [AuditEvent.UNPUBLISH_EVENT, 'Tapahtuma: Luonnokseksi'],
+  [AuditEvent.DELETE_EVENT, 'Tapahtuma: Poista'],
+  [AuditEvent.EDIT_SIGNUP, 'Ilmoittautuminen: Muokkaa'],
+  [AuditEvent.DELETE_SIGNUP, 'Ilmoittautuminen: Poista'],
+  [AuditEvent.PROMOTE_SIGNUP, 'Ilmoittautuminen: Nousi jonosta'],
+  [AuditEvent.CREATE_USER, 'Käyttäjä: Luo'],
+  [AuditEvent.DELETE_USER, 'Käyttäjä: Poista'],
 ];
 
 const AuditLogActionFilter = () => {
   const dispatch = useTypedDispatch();
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setAuditLogQueryField('action', e.target.value));
+    // Since e.target.value comes from the <select> below, we can assume the type
+    const event = e.target.value ? [e.target.value as AuditEvent] : undefined;
+    dispatch(setAuditLogQueryField('action', event));
   };
 
   return (
