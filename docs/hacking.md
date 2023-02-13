@@ -32,3 +32,15 @@ Don't forget to submit a PR if your code might be useful to others!
 
 To build a new API client, import `ilmomasiina-models` and use your fetch library of choice. `dist/services` has
 type definitions for the API, while `dist/models` is intended for backend use.
+
+## Importing test data from live deployment
+
+On a host with PostgreSQL with at least the same version as the live deployment and the local database running via Docker compose, run:
+
+```sh
+$ ssh -L 5433:ilmomasiina.your_domain.com:5432
+$ docker-compose up db  # Backend must not be running
+$ docker-compose exec db dropdb -U ilmomasiina ilmomasiina
+$ docker-compose exec db createdb -U ilmomasiina -T template0 ilmomasiina
+$ pg_dump 'postgresql://DB_USER:DB_PASSWORD@localhost:5433/DB_NAME' | sudo docker-compose exec -i db psql -U ilmomasiina -d ilmomasiina
+```
