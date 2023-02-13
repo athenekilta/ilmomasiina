@@ -39,7 +39,7 @@ COPY packages /opt/ilmomasiina/packages
 WORKDIR /opt/ilmomasiina
 
 # Install dependencies for backend only
-RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile --prod --filter @tietokilta/ilmomasiina-backend
+RUN npm install -g pnpm@7 && pnpm install --frozen-lockfile --prod --filter @tietokilta/ilmomasiina-backend --filter @tietokilta/ilmomasiina-models
 
 # Copy compiled ilmomasiina-models from build stage
 COPY --from=builder /opt/ilmomasiina/packages/ilmomasiina-models/dist /opt/ilmomasiina/packages/ilmomasiina-models/dist
