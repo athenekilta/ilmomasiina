@@ -57,7 +57,7 @@ export function signupStateText(state: SignupStateInfo): SignupStateText {
     case SignupState.open:
       return {
         shortLabel: `Auki ${moment(state.closes).format(timeFormat)} asti.`,
-        fullLabel: `Ilmoittautuminen auki / registration is open until ${moment(state.opens).format(timeFormat)} asti.`,
+        fullLabel: `Ilmoittautuminen auki / registration is open until ${moment(state.closes).format(timeFormat)} asti.`,
         class: 'ilmo--signup-opened',
       };
     case SignupState.closed:
