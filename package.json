@@ -19,10 +19,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tietokilta/ilmomasiina"
+    "url": "git+https://github.com/Fyysikkokilta/ilmomasiina"
   },
   "bugs": {
-    "url": "https://github.com/Tietokilta/ilmomasiina/issues"
+    "url": "https://github.com/Fyysikkokilta/ilmomasiina/issues"
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^5.48.2",
