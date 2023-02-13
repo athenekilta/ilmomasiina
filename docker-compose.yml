@@ -48,6 +48,9 @@ services:
         target: /opt/ilmomasiina/.env
     ports:
      - "3000:3000"
+    env_file:
+      # Development server reads branding etc from process environment while building HTML.
+      - .env
 
   db:
     image: postgres:alpine

@@ -93,6 +93,7 @@ build({
         // Serve built frontend files, falling back to index.html
         const target = [
           path.join(BUILD_DIR, req.url!),
+          path.join('public/', req.url!),
           path.join(BUILD_DIR, '/index.html'),
         ].find((file) => existsSync(file) && !statSync(file).isDirectory());
 
