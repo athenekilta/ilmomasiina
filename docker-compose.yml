@@ -16,7 +16,6 @@ services:
       context: .
       dockerfile: "Dockerfile.dev"
     command: "npm start"
-    restart: always
     environment:
       - DB_DIALECT=postgres
       - DB_HOST=db
