@@ -4,28 +4,28 @@ import { Formik, FormikHelpers } from 'formik';
 import { Button, Form } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
+import type { SignupUpdateBody } from '@tietokilta/ilmomasiina-models';
 import FieldRow from '../../../components/FieldRow';
-import { paths } from '../../../config/paths';
 import { linkComponent, useNavigate } from '../../../config/router';
-import { useStateAndDispatch } from '../../../modules/editSignup';
-import { useUpdateSignup } from '../../../modules/editSignup/actions';
+import { usePaths } from '../../../contexts/paths';
+import { useEditSignupContext, useUpdateSignup } from '../../../modules/editSignup';
 import DeleteSignup from './DeleteSignup';
 import NarrowContainer from './NarrowContainer';
 import QuestionFields from './QuestionFields';
 import SignupStatus from './SignupStatus';
 
 const EditForm = () => {
-  const [{ event, signup }] = useStateAndDispatch();
-  const isNew = signup!.confirmedAt === null;
+  const { event, signup, registrationClosed } = useEditSignupContext();
+  const isNew = !signup!.confirmed;
   const updateSignup = useUpdateSignup();
   const Link = linkComponent();
   const navigate = useNavigate();
+  const paths = usePaths();
 
   // TODO: actually use errors from API
   const [submitError, setSubmitError] = useState(false);
 
-  async function onSubmit(answers: Signup.Update.Body, { setSubmitting }: FormikHelpers<Signup.Update.Body>) {
+  async function onSubmit(answers: SignupUpdateBody, { setSubmitting }: FormikHelpers<SignupUpdateBody>) {
     const action = isNew ? 'Ilmoittautuminen / Registration' : 'Muokkaus / Edit';
     const progressToast = toast.loading(`${action} käynnissä / in progress`);
 
@@ -43,7 +43,7 @@ const EditForm = () => {
       setSubmitError(false);
       setSubmitting(false);
       if (isNew) {
-        navigate(paths().eventDetails(event!.slug));
+        navigate(paths.eventDetails(event!.slug));
       }
     } catch (error) {
       toast.update(progressToast, {
@@ -61,7 +61,7 @@ const EditForm = () => {
 
   return (
     <Formik
-      initialValues={signup! as Signup.Update.Body}
+      initialValues={signup! as SignupUpdateBody}
       onSubmit={onSubmit}
     >
       {({ handleSubmit, isSubmitting }) => (
@@ -71,6 +71,12 @@ const EditForm = () => {
           {submitError && (
             <p className="ilmo--form-error">Ilmoittautumisessasi on virheitä / Registration has errors.</p>
           )}
+          {registrationClosed && (
+            <p className="ilmo--form-error">
+              Ilmoittautumistasi ei voi enää muokata tai perua, koska tapahtuman
+              ilmoittautuminen on sulkeutunut.
+            </p>
+          )}
           <Form onSubmit={handleSubmit} className="ilmo--form">
             {event!.nameQuestion && (
               <>
@@ -79,19 +85,20 @@ const EditForm = () => {
                   label="Etunimi / First name"
                   placeholder="Etunimi"
                   required
-                  disabled={!isNew}
+                  readOnly={!isNew || registrationClosed}
                 />
                 <FieldRow
                   name="lastName"
                   label="Sukunimi / Last name"
                   placeholder="Sukunimi"
                   required
-                  disabled={!isNew}
+                  readOnly={!isNew || registrationClosed}
                 />
                 <FieldRow
                   name="namePublic"
                   as={Form.Check}
                   type="checkbox"
+                  disabled={registrationClosed}
                   checkAlign
                   checkLabel={(
                     <>
@@ -109,33 +116,39 @@ const EditForm = () => {
                 label="Sähköposti / Email"
                 placeholder="Sähköpostisi"
                 required
-                disabled={!isNew}
+                readOnly={!isNew || registrationClosed}
               />
             )}
 
-            <QuestionFields name="answers" questions={event!.questions} />
+            <QuestionFields name="answers" questions={event!.questions} disabled={registrationClosed} />
 
-            <p>
-              Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin tallentamalla tämän sivun URL-osoitteen.
-              {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä'}
-            </p>
-            <p>
-              You can edit your registration or remove it later by saving this page's URL address.
-              {event!.emailQuestion && ' The link will also be sent to your email in a confimation message.'}
-            </p>
+            {!registrationClosed && (
+              <div>
+                <p>
+                  Voit muokata ilmoittautumistasi tai poistaa sen myöhemmin tallentamalla tämän sivun URL-osoitteen.
+                  {event!.emailQuestion && ' Linkki lähetetään myös sähköpostiisi vahvistusviestissä.'}
+                </p>
+                <p>
+                  You can edit your registration or remove it later by saving this page's URL address.
+                  {event!.emailQuestion && ' The link will also be sent to your email in a confimation message.'}
+                </p>
+              </div>
+            )}
 
-            <nav className="ilmo--submit-buttons">
-              {!isNew && (
-                <Button as={Link} variant="link" to={paths().eventDetails(event!.slug)}>
-                  Peruuta / Cancel
+            {!registrationClosed && (
+              <nav className="ilmo--submit-buttons">
+                {!isNew && (
+                  <Button as={Link} variant="link" to={paths.eventDetails(event!.slug)}>
+                    Peruuta
+                  </Button>
+                )}
+                <Button type="submit" variant="primary" formNoValidate disabled={isSubmitting}>
+                  {isNew ? 'Lähetä / Submit' : 'Päivitä / Update'}
                 </Button>
-              )}
-              <Button type="submit" variant="primary" formNoValidate disabled={isSubmitting}>
-                {isNew ? 'Lähetä / Submit' : 'Päivitä / Update'}
-              </Button>
-            </nav>
+              </nav>
+            )}
           </Form>
-          <DeleteSignup />
+          {!registrationClosed && <DeleteSignup />}
         </NarrowContainer>
       )}
     </Formik>

@@ -6,11 +6,6 @@ import QuotaProgress from './QuotaProgress';
 
 const QuotaStatus = () => {
   const { event, signupsByQuota } = useSingleEventContext();
-
-  if (!event!.signupsPublic) {
-    return null;
-  }
-
   return (
     <div className="ilmo--side-widget">
       <h3>Ilmoittautuneet / Registrations</h3>
@@ -20,14 +15,14 @@ const QuotaStatus = () => {
             <QuotaProgress
               key={quota.id}
               title="Avoin"
-              value={quota.signups.length}
+              value={quota.signupCount}
               max={event!.openQuotaSize}
             />
           );
         }
         if (quota.id === WAITLIST) {
-          if (quota.signups.length > 0) {
-            return <p key={quota.id}>{`Jonossa / in queue: ${quota.signups.length}`}</p>;
+          if (quota.signupCount > 0) {
+            return <p key={quota.id}>{`Jonossa / in queue: ${quota.signupCount}`}</p>;
           }
           return null;
         }
@@ -35,7 +30,7 @@ const QuotaStatus = () => {
           <QuotaProgress
             key={quota.id}
             title={quota.title!}
-            value={quota.signups.length}
+            value={quota.signupCount}
             max={quota.size || Infinity}
           />
         );

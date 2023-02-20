@@ -1,42 +1,71 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment-timezone';
 
-export interface SignupState {
-  class: string;
-  shortLabel: string;
-  fullLabel?: string;
+export enum SignupState {
+  disabled = 'disabled',
+  not_opened = 'not_opened',
+  open = 'open',
+  closed = 'closed',
 }
 
-const signupState = (starts: string | null, closes: string | null) => {
+export type SignupStateInfo =
+  | { state: SignupState.disabled }
+  | { state: SignupState.not_opened, opens: Moment }
+  | { state: SignupState.open, closes: Moment }
+  | { state: SignupState.closed };
+
+export function signupState(starts: string | null, closes: string | null): SignupStateInfo {
   if (starts === null || closes === null) {
-    return {
-      shortLabel: 'Tapahtumaan ei voi ilmoittautua.',
-      class: 'ilmo--signup-disabled',
-    };
+    return { state: SignupState.disabled };
   }
 
   const signupOpens = moment(starts);
   const signupCloses = moment(closes);
   const now = moment();
 
-  const timeFormat = 'D.M.Y [klo] HH:mm';
-
   if (signupOpens.isSameOrAfter(now)) {
-    return {
-      shortLabel: `Alkaa ${moment(signupOpens).format(timeFormat)}.`,
-      fullLabel: `Ilmoittautuminen alkaa / registration begins: ${moment(signupOpens).format(timeFormat)}.`,
-      class: 'ilmo--signup-not-opened',
-    };
+    return { state: SignupState.not_opened, opens: signupOpens };
   }
 
   if (signupCloses.isSameOrAfter(now)) {
-    return {
-      shortLabel: `Auki ${moment(signupCloses).format(timeFormat)} asti.`,
-      fullLabel: `Ilmoittautuminen auki / registraion is open until ${moment(signupCloses).format(timeFormat)} asti.`,
-      class: 'ilmo--signup-opened',
-    };
+    return { state: SignupState.open, closes: signupCloses };
   }
 
-  return { shortLabel: 'Ilmoittautuminen on päättynyt / Registration has closed.', class: 'ilmo--signup-closed' };
-};
+  return { state: SignupState.closed };
+}
 
-export default signupState;
+export interface SignupStateText {
+  class: string;
+  shortLabel: string;
+  fullLabel?: string;
+}
+
+export function signupStateText(state: SignupStateInfo): SignupStateText {
+  const timeFormat = 'D.M.Y [klo] HH:mm';
+
+  switch (state.state) {
+    case SignupState.disabled:
+      return {
+        shortLabel: 'Tapahtumaan ei voi ilmoittautua.',
+        class: 'ilmo--signup-disabled',
+      };
+    case SignupState.not_opened:
+      return {
+        shortLabel: `Alkaa ${moment(state.opens).format(timeFormat)}.`,
+        fullLabel: `Ilmoittautuminen alkaa / registration begins: ${moment(state.opens).format(timeFormat)}.`,
+        class: 'ilmo--signup-not-opened',
+      };
+    case SignupState.open:
+      return {
+        shortLabel: `Auki ${moment(state.closes).format(timeFormat)} asti.`,
+        fullLabel: `Ilmoittautuminen auki / registration is open until ${moment(state.closes).format(timeFormat)} asti.`,
+        class: 'ilmo--signup-opened',
+      };
+    case SignupState.closed:
+      return {
+        shortLabel: 'Ilmoittautuminen on päättynyt / Registration has closed',
+        class: 'ilmo--signup-closed',
+      };
+    default:
+      throw new Error('invalid state');
+  }
+}

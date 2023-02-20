@@ -1,6 +1,8 @@
-import apiFetch from '@tietokilta/ilmomasiina-components/src/api';
-import { User } from '@tietokilta/ilmomasiina-models/src/services/users';
-import { DispatchAction, GetState } from '../../store/types';
+import type {
+  UserChangePasswordSchema, UserID, UserInviteSchema, UserListResponse,
+} from '@tietokilta/ilmomasiina-models';
+import adminApiFetch from '../../api';
+import type { DispatchAction, GetState } from '../../store/types';
 import {
   RESET,
   USER_CREATE_FAILED,
@@ -14,7 +16,7 @@ export const resetState = () => <const>{
   type: RESET,
 };
 
-export const usersLoaded = (users: User.List) => <const>{
+export const usersLoaded = (users: UserListResponse) => <const>{
   type: USERS_LOADED,
   payload: users,
 };
@@ -45,26 +47,25 @@ export type AdminUsersActions =
 
 export const getUsers = () => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
-
   try {
-    const response = await apiFetch('users', { accessToken });
-    dispatch(usersLoaded(response as User.List));
+    const response = await adminApiFetch('admin/users', { accessToken }, dispatch);
+    dispatch(usersLoaded(response as UserListResponse));
   } catch (e) {
     dispatch(usersLoadFailed());
   }
 };
 
-export const createUser = (data: User.Create.Body) => async (dispatch: DispatchAction, getState: GetState) => {
+export const createUser = (data: UserInviteSchema) => async (dispatch: DispatchAction, getState: GetState) => {
   dispatch(userCreating());
 
   const { accessToken } = getState().auth;
 
   try {
-    await apiFetch('users', {
+    await adminApiFetch('admin/users', {
       accessToken,
       method: 'POST',
       body: data,
-    });
+    }, dispatch);
     dispatch(userCreated());
     return true;
   } catch (e) {
@@ -73,14 +74,46 @@ export const createUser = (data: User.Create.Body) => async (dispatch: DispatchA
   }
 };
 
-export const deleteUser = (id: User.Id) => async (_dispatch: DispatchAction, getState: GetState) => {
+export const deleteUser = (id: UserID) => async (dispatch: DispatchAction, getState: GetState) => {
   const { accessToken } = getState().auth;
 
   try {
-    await apiFetch(`users/${id}`, {
+    await adminApiFetch(`admin/users/${id}`, {
       accessToken,
       method: 'DELETE',
-    });
+    }, dispatch);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const resetUserPassword = (id: UserID) => async (dispatch: DispatchAction, getState: GetState) => {
+  const { accessToken } = getState().auth;
+
+  try {
+    await adminApiFetch(`admin/users/${id}/resetpassword`, {
+      accessToken,
+      method: 'POST',
+    }, dispatch);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const changePassword = (data: UserChangePasswordSchema) => async (
+  dispatch: DispatchAction,
+  getState: GetState,
+) => {
+  const { accessToken } = getState().auth;
+
+  try {
+    await adminApiFetch('admin/users/self/changepassword', {
+      accessToken,
+      method: 'POST',
+      body: data,
+    }, dispatch);
     return true;
   } catch (e) {
     return false;

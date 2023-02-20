@@ -7,7 +7,9 @@ module.exports = {
       "packages/ilmomasiina-frontend/tsconfig.json",
       "packages/ilmomasiina-backend/tsconfig.json"
     ],
-    "tsconfigRootDir": __dirname
+    "tsconfigRootDir": __dirname,
+    // https://github.com/typescript-eslint/typescript-eslint/issues/2094
+    "EXPERIMENTAL_useSourceOfProjectReferenceRedirect": true
   },
   "settings": {
     "react": {
@@ -37,10 +39,6 @@ module.exports = {
     "@typescript-eslint/lines-between-class-members": "off",
     // Doesn't increase code quality with redux.
     "@typescript-eslint/default-param-last": "off",
-    // TypeScript causes lots of circular imports for types, which the plugin
-    // does not currently handle properly.
-    // see https://github.com/benmosher/eslint-plugin-import/issues/1453
-    "import/no-cycle": "off",
     // Allow i++ in for loops.
     "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
     // We are targeting ES5 or higher.

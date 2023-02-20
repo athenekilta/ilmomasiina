@@ -4,7 +4,7 @@ import { useFormikContext } from 'formik';
 import { Form } from 'react-bootstrap';
 import { shallowEqual } from 'react-redux';
 
-import FieldRow from '@tietokilta/ilmomasiina-components/src/components/FieldRow';
+import { FieldRow } from '@tietokilta/ilmomasiina-components';
 import { checkingSlugAvailability, checkSlugAvailability, loadCategories } from '../../../modules/editor/actions';
 import { EditorEvent, EditorEventType } from '../../../modules/editor/types';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
@@ -32,7 +32,7 @@ const BasicDetailsTab = () => {
   } = useFormikContext<EditorEvent>();
 
   useEffect(() => {
-    if (isNew && !slugTouched) {
+    if (isNew && !slugTouched && title !== undefined) {
       const generatedSlug = title
         .normalize('NFD') // converts e.g. ä to a + umlaut
         .replace(/[^A-Za-z0-9]+/g, '')
@@ -47,7 +47,9 @@ const BasicDetailsTab = () => {
     dispatch(checkingSlugAvailability());
     window.clearTimeout(checkDelay.current);
     checkDelay.current = window.setTimeout(() => {
-      dispatch(checkSlugAvailability(slug));
+      if (slug) {
+        dispatch(checkSlugAvailability(slug));
+      }
     }, SLUG_CHECK_DELAY);
   }, [dispatch, slug]);
 

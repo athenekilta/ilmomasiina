@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 
-import { Quota } from '@tietokilta/ilmomasiina-models/src/services/events';
-import { Signup } from '@tietokilta/ilmomasiina-models/src/services/signups';
-import apiFetch from '../../../api';
-import { paths } from '../../../config/paths';
+import type { QuotaID } from '@tietokilta/ilmomasiina-models';
 import { useNavigate } from '../../../config/router';
-import { useSingleEventContext } from '../../../modules/singleEvent';
-import signupState from '../../../utils/signupStateText';
+import { usePaths } from '../../../contexts/paths';
+import { beginSignup, useSingleEventContext } from '../../../modules/singleEvent';
+import { signupState, signupStateText } from '../../../utils/signupStateText';
 
 // Show the countdown one minute before opening the signup.
 const COUNTDOWN_DURATION = 60 * 1000;
@@ -25,32 +23,39 @@ const SignupButton = ({
   isOpen, isClosed, seconds, total,
 }: SignupButtonProps) => {
   const navigate = useNavigate();
+  const paths = usePaths();
   const { registrationStartDate, registrationEndDate, quotas } = useSingleEventContext().event!;
+  const eventState = signupState(registrationStartDate, registrationEndDate);
   const [submitting, setSubmitting] = useState(false);
   const isOnly = quotas.length === 1;
 
-  async function beginSignup(quotaId: Quota.Id) {
+  const onClick = useCallback(async (quotaId: QuotaID) => {
+    if (!isOpen) return;
     setSubmitting(true);
+    const progressToast = toast.loading('Ilmoittautuminen käynnissä');
     try {
-      const response = await apiFetch('signups', {
-        method: 'POST',
-        body: { quotaId },
-      }) as Signup.Create.Response;
+      const response = await beginSignup(quotaId);
       setSubmitting(false);
-      navigate(paths().editSignup(response.id, response.editToken));
+      navigate(paths.editSignup(response.id, response.editToken));
+      toast.dismiss(progressToast);
     } catch (e) {
       setSubmitting(false);
-      toast.error('Ilmoittautuminen epäonnistui / Registration failed.', {
+      toast.update(progressToast, {
+        render: 'Ilmoittautuminen epäonnistui / Registration failed.',
+        type: toast.TYPE.ERROR,
         autoClose: 5000,
+        closeButton: true,
+        closeOnClick: true,
+        isLoading: false,
       });
     }
-  }
+  }, [navigate, paths, isOpen]);
 
   return (
     <div className="ilmo--side-widget">
       <h3>Ilmoittautuminen / Registration</h3>
       <p>
-        {signupState(registrationStartDate, registrationEndDate).shortLabel}
+        {signupStateText(eventState).shortLabel}
         {total < COUNTDOWN_DURATION && !isOpen && !isClosed && (
           <span style={{ color: 'green' }}>
             {` (${seconds}  s)`}
@@ -64,7 +69,7 @@ const SignupButton = ({
           variant="secondary"
           disabled={!isOpen || submitting}
           className="ilmo--signup-button"
-          onClick={() => isOpen && beginSignup(quota.id)}
+          onClick={() => onClick(quota.id)}
         >
           {isOnly ? 'Ilmoittaudu nyt / Register now' : `Ilmoittaudu / Register: ${quota.title}`}
         </Button>

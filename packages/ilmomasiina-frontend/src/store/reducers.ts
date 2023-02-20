@@ -8,7 +8,7 @@ import adminUsers from '../modules/adminUsers/reducer';
 import auditLog from '../modules/auditLog/reducer';
 import auth from '../modules/auth/reducer';
 import editor from '../modules/editor/reducer';
-import { AppState, DispatchAction } from './types';
+import type { AppState, DispatchAction } from './types';
 
 export const makeRootReducer = (
   history: History,

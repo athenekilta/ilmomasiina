@@ -119,4 +119,9 @@ CREATE TABLE `auditlog` (
 
 ALTER TABLE `event`
 ADD `endDate` DATETIME DEFAULT NULL AFTER `date`;
+
+-- change events with quotas with size 0 to have `null` size meaning unlimited.
+UPDATE `quota`
+SET `size` = NULL WHERE `size` = 0;
+
 ```

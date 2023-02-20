@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { Button } from 'react-bootstrap';
 import { CSVLink } from 'react-csv';
 
-import { convertSignupsToCSV, getSignupsForAdminList } from '@tietokilta/ilmomasiina-components/src/utils/signupUtils';
+import { convertSignupsToCSV, getSignupsForAdminList } from '@tietokilta/ilmomasiina-components/dist/utils/signupUtils';
 import { deleteSignup, getEvent } from '../../../modules/editor/actions';
 import { useTypedDispatch, useTypedSelector } from '../../../store/reducers';
 

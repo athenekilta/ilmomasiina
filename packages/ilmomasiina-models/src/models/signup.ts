@@ -1,7 +1,5 @@
+import { SignupStatus } from '../enum';
 import QuotaAttributes from './quota';
-
-export const signupStatuses = ['in-quota', 'in-open', 'in-queue'] as const;
-export type SignupStatus = typeof signupStatuses[number];
 
 export default interface SignupAttributes {
   id: string;

@@ -1,6 +1,4 @@
-import { paths } from './config/paths';
-
-interface FetchOptions {
+export interface FetchOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   body?: any;
   headers?: Record<string, string>;
@@ -9,11 +7,13 @@ interface FetchOptions {
 }
 
 export class ApiError extends Error {
+  status: number;
   className?: string;
   data?: any;
 
-  constructor(data: any) {
+  constructor(status: number, data: any) {
     super(data.message);
+    this.status = status;
     this.name = 'ApiError';
     this.className = data.className;
     this.data = data.data;
@@ -24,13 +24,23 @@ export class ApiError extends Error {
     try {
       const data = await response.json();
       if (data.message) {
-        error = new ApiError(data);
+        error = new ApiError(response.status, data);
       }
     } catch (e) {
       /* fall through */
     }
     return error;
   }
+
+  get isUnauthenticated() {
+    return this.status === 401;
+  }
+}
+
+let apiUrl = '/api';
+
+export function configureApi(url: string) {
+  apiUrl = url;
 }
 
 export default async function apiFetch(uri: string, {
@@ -46,14 +56,14 @@ export default async function apiFetch(uri: string, {
     allHeaders['Content-Type'] = 'application/json; charset=utf-8';
   }
 
-  const response = await fetch(`${paths().api}/${uri}`, {
+  const response = await fetch(`${apiUrl}/${uri}`, {
     method,
     body: body === undefined ? undefined : JSON.stringify(body),
     headers: allHeaders,
     signal,
   });
 
-  if (response.status > 299) {
+  if (!response.ok) {
     throw await ApiError.fromResponse(response);
   }
   return response.status === 204 ? null : response.json();

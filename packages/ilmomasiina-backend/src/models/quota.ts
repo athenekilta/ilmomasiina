@@ -5,10 +5,10 @@ import {
   HasOneCreateAssociationMixin, HasOneGetAssociationMixin, HasOneSetAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 
-import QuotaAttributes from '@tietokilta/ilmomasiina-models/src/models/quota';
-import { Event } from './event';
+import type { QuotaAttributes } from '@tietokilta/ilmomasiina-models/dist/models';
+import type { Event } from './event';
 import { generateRandomId, RANDOM_ID_LENGTH } from './randomId';
-import { Signup } from './signup';
+import type { Signup } from './signup';
 
 export interface QuotaCreationAttributes extends Optional<QuotaAttributes, 'id'> {}
 

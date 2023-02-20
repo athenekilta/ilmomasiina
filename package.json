@@ -1,44 +1,44 @@
 {
   "name": "ilmomasiina",
-  "version": "2.0.0-alpha1",
+  "version": "2.0.0-alpha11",
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": "^14.19.0",
-    "npm": "^6.14.13"
+    "node": "^16",
+    "npm": "^7"
   },
   "scripts": {
     "bootstrap": "pnpm install",
     "clean": "pnpm run -r clean",
-    "build": "pnpm run -r build",
+    "build": "pnpm run -r --workspace-concurrency=1 build",
     "start": "pnpm run -r --parallel start",
     "lint": "eslint packages",
     "lint:fix": "npm run lint -- --fix",
-    "typecheck": "pnpm run -r typecheck",
+    "typecheck": "pnpm run -r --workspace-concurrency=1 typecheck",
     "test": "pnpm run -r test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Tietokilta/ilmomasiina"
+    "url": "git+https://github.com/Fyysikkokilta/ilmomasiina"
   },
   "bugs": {
-    "url": "https://github.com/Tietokilta/ilmomasiina/issues"
+    "url": "https://github.com/Fyysikkokilta/ilmomasiina/issues"
   },
   "dependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
-    "@typescript-eslint/parser": "^5.28.0",
-    "eslint": "^8.18.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.2",
+    "@typescript-eslint/parser": "^5.48.2",
+    "eslint": "^8.32.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.5.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jest": "^26.9.0",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
-    "pnpm": "^7.3.0",
-    "typescript": "~4.3.5"
+    "pnpm": "^7.25.0",
+    "typescript": "~4.9"
   },
   "browserslist": {
     "production": [
