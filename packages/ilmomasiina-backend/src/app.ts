@@ -69,6 +69,7 @@ export default async function initApp(): Promise<FastifyInstance> {
     server.register(fastifyStatic, {
       root: path.resolve(config.frontendFilesPath),
       preCompressed: true,
+      wildcard: false,  // Disable wildcard matching, so that own index.html is served
     });
     server.get('*', (_req, reply) => {
       reply.sendFile('index.html');
