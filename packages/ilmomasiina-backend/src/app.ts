@@ -70,6 +70,9 @@ export default async function initApp(): Promise<FastifyInstance> {
       root: path.resolve(config.frontendFilesPath),
       preCompressed: true,
     });
+    server.get('*', (_req, reply) => {
+      reply.sendFile('index.html');
+    });
   }
 
   // Every minute, remove signups that haven't been confirmed fast enough
