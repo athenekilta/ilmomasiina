@@ -143,7 +143,7 @@
     "debug": "^2.2.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
-    "email-templates": "^4.0.4",
+    "email-templates": "^11.0.3",
     "express": "^4.14.0",
     "express-sslify": "^1.2.0",
     "extract-text-webpack-plugin": "^1.0.0",
@@ -199,7 +199,7 @@
     "style-loader": "^0.13.1",
     "then-request": "^2.2.0",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.14",
+    "webpack": "^5.75.0",
     "yargs": "^6.3.0"
   },
   "devDependencies": {
@@ -223,7 +223,7 @@
     "eslint-plugin-standard": "^2.0.0",
     "faker": "^3.1.0",
     "nodemon": "^1.18.10",
-    "pm2": "^3.3.1",
+    "pm2": "^5.2.2",
     "react-addons-test-utils": "^15.0.0",
     "redbox-react": "^1.2.10",
     "sinon": "^1.17.5",
