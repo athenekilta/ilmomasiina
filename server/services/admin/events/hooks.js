@@ -15,14 +15,16 @@ exports.before = {
   create: [includeAllEventData()],
   update: [includeAllEventData()],
   patch: [includeAllEventData()],
-  remove: [hooks.disable('external')],
+  remove: [],
 };
 
 exports.after = {
   all: [],
   find: [],
   get: [formatOptionsAsArray()],
-  create: [ /* createEvent() */ updateQuotas(), updateQuestions() ],
+  create: [
+    /* createEvent() */
+  ],
   update: [updateQuotas(), updateQuestions()],
   patch: [updateQuotas(), updateQuestions()],
   remove: [],

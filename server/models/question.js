@@ -13,6 +13,10 @@ module.exports = function () {
       type: Sequelize.STRING,
       allowNull: false,
     },
+    sortId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
     options: {
       type: Sequelize.STRING,
     },
@@ -27,20 +31,20 @@ module.exports = function () {
       defaultValue: false,
     },
   }, {
-    freezeTableName: true,
-    paranoid: true,
-    classMethods: {
-      associate() {
-        const models = app.get('models');
+      freezeTableName: true,
+      paranoid: true,
+      classMethods: {
+        associate() {
+          const models = app.get('models');
 
-        this.belongsTo(models.event, {});
+          this.belongsTo(models.event, {});
 
-        this.hasMany(models.answer, {
-          onDelete: 'CASCADE',
-        });
+          this.hasMany(models.answer, {
+            onDelete: 'CASCADE',
+          });
+        },
       },
-    },
-  });
+    });
 
   return Question;
 };

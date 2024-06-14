@@ -3,22 +3,6 @@ extends ../layout.pug
 block mainContent
 	div.content-block
 		p.bodyText #{event.verificationEmail}
-	div.content-block
-		p.bodyText Tapahtuman tiedot:
-		ul
-			li
-				strong Tapahtuma: 
-				| #{event.title}
-			li 
-				strong Sijainti: 
-				| #{event.location}
-	div.content-block
-		p.bodyText Ilmoittautumisesi tiedot:
-		ul
-			each val in answers
-				li
-					strong #{val.label}: 
-					| #{val.answer}
-	div.content-block
-		p.bodyText Mikäli haluat perua ilmoittautumisesi, voit tehdä sen painamalla tätä #[a( href=cancelLink ) linkkiä].
-	
+	include ../event_information.pug 
+	include ../signup_details.pug
+	include ../edit_or_cancel.pug

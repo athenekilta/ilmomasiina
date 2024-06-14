@@ -9,12 +9,18 @@ import { connect } from 'react-redux';
 
 import './Editor.scss';
 import * as EditorActions from '../../modules/editor/actions';
+import * as AdminSignupActions from '../../modules/admin/actions';
 
 import BasicDetailsTab from './components/BasicDetailsTab';
 import QuotasTab from './components/QuotasTab';
 import QuestionsTab from './components/QuestionsTab';
 import EmailsTab from './components/EmailsTab';
 import SignupsTab from './components/SignupsTab';
+import { getOpenQuotas } from '../../modules/singleEvent/selectors';
+import { getSignups } from '../../modules/admin/selectors';
+
+import { getSignupsByQuota } from '../../utils/signupUtils';
+
 
 async function minDelay(func, ms = 1000) {
   const res = await Promise.all([func, new Promise(resolve => setTimeout(resolve, ms))]);
@@ -34,6 +40,7 @@ class Editor extends React.Component {
     eventPublishLoading: PropTypes.bool,
     eventPublishError: PropTypes.bool,
     params: PropTypes.any,
+    adminToken: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -55,15 +62,17 @@ class Editor extends React.Component {
       },
       async () => {
         const eventId = this.props.params.id;
+        const { adminToken } = this.props;
 
         if (eventId === 'new') {
           // New event, clear any existing one from redux;
           this.props.setEvent({});
 
           // Set base quota field
-          this.props.updateEventField('quota', [{ title: 'Kiintiö' }]);
+          this.props.updateEventField('quota', [{ id: 0, title: 'Kiintiö', size: 20, existsInDb: false, sortId: 1 }]);
+          this.props.updateEventField('questions', []);
         } else {
-          this.props.getEventAsync(eventId);
+          this.props.getEventAsync(eventId, adminToken);
         }
       },
     );
@@ -93,10 +102,30 @@ class Editor extends React.Component {
       draft: isDraft,
     };
 
+    const { adminToken } = this.props;
+    if (typeof event.description !== 'undefined') {
+      if (event.description.includes('<img')) {
+        const height = event.description.split('height: ')
+          .pop()
+          .split('px')
+          .shift();
+        const width = event.description.split('width: ')
+          .pop()
+          .split('px')
+          .shift();
+        if (height >= 800) {
+          event.description = event.description.replace('height: ' + height, 'height: 800');
+        }
+        if (width >= 1000) {
+          event.description = event.description.replace('width: ' + width, 'width: 1000');
+        }
+      }
+    }
     if (this.props.params.id === 'new') {
       try {
-        const res = await minDelay(this.props.publishEventAsync(event), 1000);
-        browserHistory.push(`/admin/edit/${res.id}`);
+        const res = await minDelay(this.props.publishEventAsync(event, adminToken), 1000);
+        console.log('RES EDITOR', res);
+        browserHistory.push(`${PREFIX_URL}/admin/edit/${res.id}`);
       } catch (error) {
         console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman luonti epäonnistui.', { autoClose: 2000 });
@@ -106,7 +135,8 @@ class Editor extends React.Component {
       });
     } else {
       try {
-        await minDelay(this.props.updateEventAsync(event), 1000);
+        await minDelay(this.props.updateEventAsync(event, adminToken), 1000);
+        toast.success('Muutoksesi tallennettiin onnistuneesti!', { autoClose: 2000 });
       } catch (error) {
         console.log(error);
         toast.error('Jotain meni pieleen - tapahtuman päivittäminen epäonnistui.', { autoClose: 2000 });
@@ -218,7 +248,7 @@ class Editor extends React.Component {
           <div className="event-editor--loading-container">
             <h1>Hups, jotain meni pieleen</h1>
             <p>{`Tapahtumaa id:llä "${this.props.params.id}" ei löytynyt`}</p>
-            <Link to="/admin/">Palaa tapahtumalistaukseen</Link>
+            <Link to={`${PREFIX_URL}/admin/`}>Palaa tapahtumalistaukseen</Link>
           </div>
         </div>
       );
@@ -226,6 +256,7 @@ class Editor extends React.Component {
 
     return (
       <div className="event-editor">
+        <Link to={`${PREFIX_URL}/admin`}>&#8592; Takaisin</Link>
         <Formsy.Form
           onValid={() => this.setValidState(true)}
           onInvalid={() => this.setValidState(false)}
@@ -265,7 +296,7 @@ class Editor extends React.Component {
               <EmailsTab event={this.props.event} onDataChange={this.onDataChange} />
             </div>
             <div className={`tab-pane ${this.state.activeTab === 5 ? 'active' : ''}`}>
-              <SignupsTab event={this.props.event} onDataChange={this.onDataChange} />
+              <SignupsTab event={this.props.event} deleteSignup={this.props.deleteSignup} />
             </div>
           </div>
         </Formsy.Form>
@@ -280,6 +311,7 @@ const mapDispatchToProps = {
   getEventAsync: EditorActions.getEventAsync,
   setEvent: EditorActions.setEvent,
   updateEventField: EditorActions.updateEventField,
+  deleteSignup: AdminSignupActions.deleteSignupAsync,
 };
 
 const mapStateToProps = state => ({
@@ -288,6 +320,7 @@ const mapStateToProps = state => ({
   eventError: state.editor.eventError,
   eventPublishLoading: state.editor.eventPublishLoading,
   eventPublishError: state.editor.eventPublishError,
+  adminToken: state.admin.accessToken,
 });
 
 export default connect(

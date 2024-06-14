@@ -5,17 +5,20 @@ import moment from 'moment-timezone';
 
 export class SignupList extends React.Component {
   render() {
-    const getAnswer = (answers, questionId) => {
+    const getAnswer = (answers, questionId, quota) => {
+      if (questionId === "quota") {
+        return quota
+      }
       const answer = _.find(answers, { questionId });
       return (answer == null ? '' : answer.answer);
     };
 
-    const TableRow = ({ answers, firstName, lastName, createdAt, index }) =>
+    const TableRow = ({ answers, firstName, lastName, createdAt, index, quota }) =>
       <tr className={(firstName == null ? 'text-muted' : '')}>
         <td>{index}.</td>
         <td>{firstName || 'Vahvistamatta'} {lastName || ''}</td>
-        {this.props.questions.map((q, i) => <td key={i}>{getAnswer(answers, q.id) || ''}</td>)}
-        <td>{moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY hh:mm:ss')}<span className="hover">{moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}</span></td>
+        {this.props.questions.map((q, i) => <td key={i}>{getAnswer(answers, q.id, quota) || ''}</td>)}
+        <td>{moment.tz(createdAt, 'Europe/Helsinki').format('DD.MM.YYYY HH:mm:ss')}<span className="hover">{moment.tz(createdAt, 'Europe/Helsinki').format('.SSS')}</span></td>
       </tr>;
 
     return (
@@ -26,15 +29,17 @@ export class SignupList extends React.Component {
             <thead>
               <tr className='active'>
                 <th key="position">Sija</th>
-                <th key="attendee">Nimi</th>
+                <th key="attendee" style={{ minWidth: 90 }} >Nimi</th>
                 {this.props.questions.map((q, i) => <th key={i}>{q.question}</th>)}
-                <th key="datetime">Ilmoittautumisaika</th>
+                <th key="datetime" style={{ minWidth: 130 }}>Ilmoittautumisaika</th>
               </tr>
             </thead>
             <tbody>
               {this.props.rows.map((row, i) =>
+
                 <TableRow
                   answers={row.answers}
+                  quota={row.quota}
                   firstName={row.firstName}
                   lastName={row.lastName}
                   createdAt={row.createdAt}

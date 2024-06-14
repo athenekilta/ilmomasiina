@@ -24,7 +24,8 @@ const config = {
   // ----------------------------------
   // Server Configuration
   // ----------------------------------
-  server_host : ip.address(), // use string 'localhost' to prevent exposure on local network
+  // Prevents the use of ip address if ran in container, as the ip address is unreachable.
+  server_host : process.env.DOCKER_ENV || ip.address(), // use string 'localhost' to prevent exposure on local network
   server_port : process.env.PORT || 3000,
 
   // ----------------------------------
@@ -84,6 +85,12 @@ config.globals = {
   TEST     : config.env === 'test',
   COVERAGE : !argv.watch && config.env === 'test',
   BASENAME : JSON.stringify(process.env.BASENAME || ''),
+  PREFIX_URL : JSON.stringify(process.env.PREFIX_URL || ''),
+  BRANDING_HEADER_TITLE: JSON.stringify(process.env.BRANDING_HEADER_TITLE_TEXT),
+  BRANDING_FOOTER_GDPR_TEXT: JSON.stringify(process.env.BRANDING_FOOTER_GDPR_TEXT),
+  BRANDING_FOOTER_GDPR_LINK: JSON.stringify(process.env.BRANDING_FOOTER_GDPR_LINK),
+  BRANDING_FOOTER_HOME_TEXT: JSON.stringify(process.env.BRANDING_FOOTER_HOME_TEXT),
+  BRANDING_FOOTER_HOME_LINK: JSON.stringify(process.env.BRANDING_FOOTER_HOME_LINK),
 };
 
 // ------------------------------------

@@ -4,6 +4,8 @@ import { browserHistory } from 'react-router';
 import { makeRootReducer } from './reducers';
 import { updateLocation } from './location';
 import { routerMiddleware } from 'react-router-redux';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 export default (initialState = {}) => {
   // ======================================================
@@ -25,11 +27,22 @@ export default (initialState = {}) => {
     }
   }
 
-  // ======================================================¨
+  // ======================================================
+  // Redux Persist setup
+  // ======================================================
+  const persistConfig = {
+    key: DEV ? 'ilmomasiina-dev' : 'ilmomasiina',
+    storage,
+    blacklist: ['location', 'routing']
+  }
+
+  const persistedReducer = persistReducer(persistConfig, makeRootReducer());
+
+  // ======================================================
   // Store Instantiation and HMR Setup
   // ======================================================
   const store = createStore(
-    makeRootReducer(),
+    persistedReducer,
     initialState,
     composeEnhancers(applyMiddleware(...middleware), ...enhancers),
   );
@@ -45,5 +58,7 @@ export default (initialState = {}) => {
     });
   }
 
-  return store;
+  const persistor = persistStore(store);
+
+  return { store, persistor };
 };

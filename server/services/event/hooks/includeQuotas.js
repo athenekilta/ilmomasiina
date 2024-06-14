@@ -1,6 +1,8 @@
-module.exports = () => (hook) => {
+const moment = require('moment')
+module.exports = () => hook => {
   const sequelize = hook.app.get('sequelize');
 
+  const Op = sequelize.Op
   hook.params.sequelize = {
     attributes: [
       'id',
@@ -11,20 +13,35 @@ module.exports = () => (hook) => {
       'openQuotaSize',
       'signupsPublic',
     ],
+    order: [
+      [{ model: sequelize.models.quota }, 'sortId', 'ASC'],
+    ],
     distinct: true,
     raw: false,
     // Filter out events that are saved as draft
     where: {
       draft: 0,
+      date: {
+        [Op.gt]: moment().subtract(1, 'days').toDate()
+      }
     },
     // Include quotas of event and count of signups
     include: [
       {
         model: sequelize.models.quota,
-        attributes: ['title', 'size', [sequelize.fn('COUNT', sequelize.col('quota->signups.id')), 'signupCount']],
+        attributes: [
+          'title',
+          'size',
+          'sortId',
+          [
+            sequelize.fn('COUNT', sequelize.col('quota->signups.id')),
+            'signupCount',
+          ],
+        ],
         include: [
           {
             model: sequelize.models.signup,
+            required: false,
             attributes: [],
           },
         ],

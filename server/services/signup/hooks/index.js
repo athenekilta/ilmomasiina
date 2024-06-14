@@ -8,6 +8,7 @@ const insertAnswers = require('./insertAnswers.js');
 const sendConfirmationMail = require('./sendConfirmationMail.js');
 const getSignupAndEvent = require('./getSignupAndEvent.js');
 const deleteSignup = require('./deleteSignup.js');
+const sendEmailToQueue = require('./sendEmailToQueue.js');
 
 exports.before = {
   all: [],
@@ -26,5 +27,5 @@ exports.after = {
   create: [attachPosition(), attachEditToken()],
   update: [],
   patch: [insertAnswers(), sendConfirmationMail()],
-  remove: [],
+  remove: [sendEmailToQueue()],
 };

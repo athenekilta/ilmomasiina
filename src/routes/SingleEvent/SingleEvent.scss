@@ -9,6 +9,10 @@
     }
   }
 
+  .description {
+    white-space: pre-wrap;
+  }
+
   .event-heading {
     margin: 1em 0;
     padding: 1em 0;
@@ -17,6 +21,15 @@
 
     p {
       margin-bottom: 0;
+    }
+  }
+
+  .singleEventContainer {
+    overflow: hidden;
+    word-break: break-word;
+    img {
+      max-width: 100%;
+      object-fit: contain;
     }
   }
 }

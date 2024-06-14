@@ -1,17 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import nl2br from 'react-nl2br';
 import _ from 'lodash';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { connect } from 'react-redux';
+import ReactHtmlParser from 'react-html-parser';
 import * as SingleEventActions from '../../modules/singleEvent/actions';
 import SignupButton from './components/SignupButton';
 import SignupList from './components/SignupList';
 import ViewProgress from './components/ViewProgress';
 import EnrollForm from './components/EnrollForm';
 import signupState from '../../utils/signupStateText';
+import Autolinker from 'autolinker';
 import './SingleEvent.scss';
+import {
+  getQuotaData,
+  getFormattedQuestions,
+} from '../../modules/singleEvent/selectors';
+import { WAITLIST, OPENQUOTA } from '../../utils/signupUtils';
+import { Link } from 'react-router';
+import Countdown from 'react-countdown-now';
 
 class SingleEvent extends React.Component {
   static propTypes = {
@@ -39,20 +47,24 @@ class SingleEvent extends React.Component {
     this.submitForm = this.submitForm.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.updateEventAsync(this.props.params.id);
   }
-
   openForm(quota) {
     this.props.attachPositionAsync(quota.id);
     this.setState({ formOpened: true });
   }
 
   closeForm() {
-    const close = window.confirm('Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.');
+    const close = window.confirm(
+      'Oletko varma? Menetät paikkasi jonossa, jos suljet lomakkeen nyt.',
+    );
 
     if (close) {
-      this.props.cancelSignupAsync(this.props.signup.id, this.props.signup.editToken);
+      this.props.cancelSignupAsync(
+        this.props.signup.id,
+        this.props.signup.editToken,
+      );
       this.setState({ formOpened: false });
     }
     this.props.updateEventAsync(this.props.event.id);
@@ -61,11 +73,14 @@ class SingleEvent extends React.Component {
   async submitForm(answers) {
     this.toastId = toast.info('Ilmoittautuminen käynnissä', {});
 
-    const success = await this.props.completeSignupAsync(this.props.signup.id, {
-      editToken: this.props.signup.editToken,
-      ...answers,
-    });
-
+    const response = await this.props.completeSignupAsync(
+      this.props.signup.id,
+      {
+        editToken: this.props.signup.editToken,
+        ...answers,
+      },
+    );
+    let success = response === true;
     if (success) {
       toast.update(this.toastId, {
         render: 'Ilmoittautuminen onnistui!',
@@ -77,81 +92,167 @@ class SingleEvent extends React.Component {
         formOpened: false,
       });
     } else {
+      let toast_text =
+        'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.';
       toast.update(this.toastId, {
-        render:
-          'Ilmoittautuminen ei onnistunut. Tarkista, että kaikki pakolliset kentät on täytetty ja yritä uudestaan.',
+        render: toast_text,
         type: toast.TYPE.ERROR,
         autoClose: 5000,
       });
     }
   }
 
-  renderSignupLists(event) {
+  renderSignupLists() {
+    const { event, quotaData, formattedQuestions } = this.props;
+
+    if (!event.signupsPublic) {
+      return <p>Tapahtuman vastaukset eivät ole julkisia</p>;
+    }
+
     if (!event.quota) {
       return null;
     }
 
-    return event.quota.map((quota, index) => {
-      const signups = quota.signups.slice(0, quota.size);
+    return (
+      <div>
+        <h2>Ilmoittautuneet</h2>
+        {_.map(Object.keys(quotaData), quotaName => {
+          const quota = quotaData[quotaName];
 
-      return (
-        <SignupList
-          title={event.quota.length > 1 ? quota.title : ''}
-          questions={_.filter(event.questions, 'public')}
-          rows={signups}
-          key={index}
-        />
-      );
-    });
+          if (quotaName === WAITLIST) {
+            return (
+              <SignupList
+                title={'Jonossa'}
+                questions={_.filter(formattedQuestions, 'public')}
+                rows={quota.signups}
+                key={quotaName}
+              />
+            );
+          } else if (quotaName === OPENQUOTA) {
+            return (
+              <SignupList
+                title={'Avoin kiintiö'}
+                questions={_.filter(formattedQuestions, 'public')}
+                rows={quota.signups}
+                key={quotaName}
+              />
+            );
+          } else {
+            return (
+              <SignupList
+                title={quotaName}
+                questions={_.filter(event.questions, 'public')}
+                rows={quota.signups}
+                key={quotaName}
+              />
+            );
+          }
+        })}
+      </div>
+    );
   }
 
-  getOpenQuotas(event) {
-    if (!event.quota || !event.signupsPublic) {
-      return {
-        openQuota: [],
-        waitList: [],
-        formattedQuestions: null,
-      };
+  renderQuotaStatus() {
+    const { event, quotaData } = this.props;
+
+    if (!event.quota || event.quota.length === 0 || !event.signupsPublic) {
+      return null;
     }
 
-    const extraSignups = [];
+    return (
+      <div className="sidebar-widget">
+        <h3>Ilmoittautuneet</h3>
+        {_.map(Object.keys(quotaData), quotaName => {
+          const quota = quotaData[quotaName];
+          if (quotaName === OPENQUOTA) {
+            return (
+              <ViewProgress
+                title="Avoin"
+                value={quota.signups.length}
+                max={event.openQuotaSize}
+                key={quotaName}
+              />
+            );
+          } else if (quotaName === WAITLIST) {
+            if (quota.signups && quota.signups.length > 0) {
+              return <p>{`Jonossa: ${quota.signups.length}`}</p>;
+            }
+            return null;
+          } else {
+            return (
+              <ViewProgress
+                title={quotaName}
+                value={Math.min(quota.signups.length, quota.size)}
+                max={quota.size}
+                key={quotaName}
+              />
+            );
+          }
+        })}
+      </div>
+    );
+  }
+  signupButtonRenderer(event, isOpen, total, seconds,) {
 
-    _.each(event.quota, (quota) => {
-      _.each(quota.signups.slice(quota.size), (signup) => {
-        signup.answers.push({
-          questionId: 0,
-          answer: quota.title,
-        });
-        extraSignups.push(signup);
-      });
-    });
+    return (
+      <div className="sidebar-widget">
+        <h3>Ilmoittautuminen</h3>
+        <p>
+          {
+            signupState(
+              event.date,
+              event.registrationStartDate,
+              event.registrationEndDate,
+            ).label
+          }
+          {total < 60000 && !isOpen ? <span style={{ color: "green" }} > {` (${seconds}  s)`}</span> : null}
+        </p>
+        {event.quota
+          ? event.quota.map((quota, index) => (
+            <SignupButton
+              title={quota.title}
+              isOpen={isOpen && !event.registrationClosed}
+              openForm={() => this.openForm(quota)}
+              isOnly={event.quota.length === 1}
+              key={index} />
 
-    const byTimestamp = (a, b) => new Date(a.createdAt) - new Date(b.createdAt);
+          ))
+          : ''}
+      </div>
+    )
 
-    const openQuota = extraSignups.slice(0, event.openQuotaSize).sort(byTimestamp);
-    const waitList = extraSignups.slice(event.openQuotaSize).sort(byTimestamp);
+  }
+  renderSignupButtons() {
+    const { event } = this.props;
+    return (
+      <Countdown
+        daysInHours={true}
+        date={new Date(new Date().getTime() + event.millisTillOpening)}
+        precision={3}
+        intervalDelay={1}
+        renderer={props => this.signupButtonRenderer(event, props.completed, props.total, props.seconds)}>
+      </Countdown>
 
-    const formattedQuestions = event.questions.slice();
-
-    formattedQuestions.push({
-      id: 0,
-      options: null,
-      public: true,
-      question: 'Kiintiö',
-      type: 'text',
-    });
-
-    return {
-      openQuota,
-      waitList,
-      formattedQuestions,
-    };
+    );
   }
 
   render() {
     const { event, signup } = this.props;
+    // Autolinker, by default, does not support telegram, so we need to modify @ to redirect to telegram instead of twitter.
+    const linkedText = Autolinker.link(event.description, {
+        mention: 'twitter',
+        replaceFn: (match) => {
+          if (match.getType() === 'mention') {
+            const mention = match.getMention();
+            return '<a href="https://t.me/' + mention + '">@' + mention + '</a>';
+          } else {
+            return false;
+          }
+        },
+      },
+    );
 
-    const { openQuota, waitList, formattedQuestions } = this.getOpenQuotas(event);
+    const description = ReactHtmlParser(linkedText);
 
     return (
       <div>
@@ -164,16 +265,21 @@ class SingleEvent extends React.Component {
             loading={this.props.signupLoading}
             error={this.props.signupError}
             event={event}
+            key={event.id}
           />
         ) : (
-          <div className="container">
+          <div className="container singleEventContainer">
+            <Link to={`${PREFIX_URL}/`} style={{ margin: 0 }}>
+              &#8592; Takaisin
+            </Link>
             <div className="row">
               <div className="col-xs-12 col-sm-8">
                 <h1>{event.title}</h1>
                 <div className="event-heading">
                   {event.date ? (
                     <p>
-                      <strong>Ajankohta:</strong> {moment(event.date).format('D.M.Y [klo] HH:mm')}
+                      <strong>Ajankohta:</strong>{' '}
+                      {moment(event.date).format('D.M.Y [klo] HH:mm')}
                     </p>
                   ) : null}
                   {event.location ? (
@@ -186,11 +292,11 @@ class SingleEvent extends React.Component {
                       <strong>Hinta:</strong> {event.price}
                     </p>
                   ) : null}
-                  {event.homepage ? (
+                  {event.webpageUrl ? (
                     <p>
                       <strong>Kotisivut:</strong>{' '}
-                      <a href={event.homepage} title="Kotisivut">
-                        {event.homepage}
+                      <a href={event.webpageUrl} title="Kotisivut">
+                        {event.webpageUrl}
                       </a>
                     </p>
                   ) : null}
@@ -203,78 +309,24 @@ class SingleEvent extends React.Component {
                     </p>
                   ) : null}
                 </div>
-                <p>{nl2br(event.description)}</p>
+                <p className="description">
+                  {description}</p>
+                  <hr/>
+                  <p>Ilmoittautumisen sulkeuduttua ilmoittautuminen on sitova. Tämän jälkeen ilmoittautunut on velvollinen maksamaan osallistumismaksun tai löytämään paikalleen toisen osallistujan. Osallistumalla tapahtumaan sitoudut noudattamaan <a href="/periaatteet">Athenen yhteisiä periaatteita</a>.</p>
+
+                  <p>The sign up is binding when sign-up closes. After this, the person who has signed up is obligated to pay the participation fee or find another participant to attend in one’s place. <a href="/principles">Athene’s common principles</a> are to be followed in the event.</p>
+                  <hr/>
+
               </div>
               <div className="col-xs-12 col-sm-4 pull-right">
-                <div className="sidebar-widget">
-                  <h3>Ilmoittautuminen</h3>
-                  <p>{signupState(event.date, event.registrationStartDate, event.registrationEndDate).label}</p>
-                  {event.quota
-                    ? event.quota.map((quota, index) => (
-                      <SignupButton
-                        title={quota.title}
-                        opens={event.registrationStartDate}
-                        closes={event.registrationEndDate}
-                        openForm={() => this.openForm(quota)}
-                        isOnly={event.quota.length === 1}
-                        key={index}
-                        />
-                      ))
-                    : ''}
-                </div>
-                {(event.quota && event.quota.length) > 1 ? (
-                  <div className="sidebar-widget">
-                    <h3>Ilmoittautuneet</h3>
-                    {event.quota
-                      ? event.quota.map((quota, index) => (
-                        <ViewProgress
-                          title={quota.title}
-                          value={Math.min(quota.signups.length, quota.size)}
-                          max={quota.size}
-                          key={index}
-                          />
-                        ))
-                      : ''}
-                    {event.openQuotaSize > 0 ? (
-                      <ViewProgress title="Avoin" value={openQuota.length} max={event.openQuotaSize} key="open" />
-                    ) : (
-                      ''
-                    )}
-                    {waitList ? <p>{`Jonossa: ${waitList.length}`}</p> : null}
-                  </div>
-                ) : (
-                  ''
-                )}
+                {this.renderSignupButtons()}
+                {this.renderQuotaStatus()}
               </div>
-              <div className="col-xs-12">
-                {!event.signupsPublic ? (
-                  <p>Tapahtuman vastaukset eivät ole julkisia.</p>
-                ) : (
-                  <div>
-                    <h2>Ilmoittautuneet</h2>
-                    {this.renderSignupLists(event)}
-                    {event.openQuotaSize ? (
-                      <SignupList
-                        title={'Avoin kiintiö'}
-                        questions={_.filter(formattedQuestions, 'public')}
-                        rows={openQuota}
-                        key={'openQuota'}
-                      />
-                    ) : null}
-                    {waitList ? (
-                      <SignupList
-                        title={'Jonossa'}
-                        questions={_.filter(formattedQuestions, 'public')}
-                        rows={waitList}
-                        key={'waitList'}
-                      />
-                    ) : null}
-                  </div>
-                )}
-              </div>
+              <div className="col-xs-12">{this.renderSignupLists()}</div>
             </div>
           </div>
-        )}
+        )
+        }
       </div>
     );
   }
@@ -294,6 +346,8 @@ const mapStateToProps = state => ({
   signup: state.singleEvent.signup,
   signupLoading: state.singleEvent.signupLoading,
   signupError: state.singleEvent.signupError,
+  quotaData: getQuotaData(state),
+  formattedQuestions: getFormattedQuestions(state),
 });
 
 export default connect(
