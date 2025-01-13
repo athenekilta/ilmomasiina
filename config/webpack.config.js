@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const project = require('./project.config');
 const debug = require('debug')('app:config:webpack');
-
+require('dotenv').config();
 const DEV = project.globals.DEV;
 const PROD = project.globals.PROD;
 const TEST = project.globals.TEST;

@@ -3,7 +3,7 @@ const path = require('path');
 const debug = require('debug')('app:config:project');
 const argv = require('yargs').argv;
 const ip = require('ip');
-
+require('dotenv').config();
 debug('Creating default configuration.');
 // ========================================================
 // Default Configuration
@@ -25,7 +25,7 @@ const config = {
   // Server Configuration
   // ----------------------------------
   // Prevents the use of ip address if ran in container, as the ip address is unreachable.
-  server_host : process.env.DOCKER_ENV || ip.address(), // use string 'localhost' to prevent exposure on local network
+  server_host : process.env.DOCKER_ENV || '', // use string 'localhost' to prevent exposure on local network
   server_port : process.env.PORT || 3000,
 
   // ----------------------------------

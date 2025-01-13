@@ -9,7 +9,7 @@ module.exports = () => (hook) => {
   return models.quota.findById(quotaId)
     .then((quota) => {
       const query = {
-        attributes: ['id', 'openQuotaSize', 'signupsPublic', 'title', 'location'],
+        attributes: ['id', 'openQuotaSize', 'signupsPublic', 'title', 'location', 'date'],
         distinct: true,
         where: {
           id: quota.eventId,
