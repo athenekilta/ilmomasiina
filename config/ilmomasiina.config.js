@@ -1,4 +1,5 @@
 const _ = require('lodash');
+require('dotenv').config();
 
 const config = {
   mysqlUser: process.env.MYSQL_USER,

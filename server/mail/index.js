@@ -3,9 +3,19 @@ const Email = require('email-templates');
 const path = require('path');
 const nodemailer = require('nodemailer')
 
+require('dotenv').config();
+
+if(!process.env.GMAIL_PASSWORD) throw new Error('.env GMAIL_password not defined!')
+
 const transporter = nodemailer.createTransport({
-  host: 'smtp.ayy.fi',
-  port: 25,
+  service: "gmail",
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+	user: "ilmo@athene.fi",
+	pass: process.env.GMAIL_PASSWORD
+	}
 });
 
 const EmailService = {

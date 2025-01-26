@@ -123,7 +123,7 @@
   "dependencies": {
     "@feathersjs/express": "^1.3.1",
     "@sendgrid/mail": "^6.3.1",
-    "antd": "^3.8.2",
+    "antd": "3.8.2",
     "autolinker": "^3.15.0",
     "axios": "^0.21.2",
     "babel-core": "^6.17.0",
@@ -141,6 +141,7 @@
     "css-loader": "^0.26.0",
     "cssnano": "^3.7.4",
     "debug": "^2.2.0",
+    "dotenv": "^16.3.1",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "email-templates": "^4.0.4",
