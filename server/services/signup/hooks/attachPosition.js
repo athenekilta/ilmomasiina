@@ -75,8 +75,8 @@ module.exports = () => (hook) => {
             position = positionInOpen;
             status = "in-open";
           } else {
-            const positionInQueue = Math.min(
-              Math.max(0, positionInOpen - Number(event.openQuotaSize)),
+            const positionInQueue = Math.max(
+              positionInOpen - Number(event.openQuotaSize),
               Math.max(0, positionInQuota - currentQuota.size)
             );
             position = positionInQueue;
